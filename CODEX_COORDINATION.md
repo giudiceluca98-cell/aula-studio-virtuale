@@ -1,19 +1,21 @@
 # Coordinamento Codex
 
-Questo file registra assegnazioni, proprietà dei file e dipendenze tra agenti. Deve essere aggiornato nello stesso branch del lavoro a cui si riferisce.
+Questo file registra incarichi temporanei, proprietà dei file e dipendenze tra agenti. Gli agenti sono generalisti e possono passare a un'altra materia o funzione dopo la chiusura dell'attività corrente.
 
 ## Attività
 
-| Attività | Agente | Branch | Stato | File riservati | File condivisi richiesti | Pull request | Ultimo aggiornamento |
+| Attività | Assegnazione prevista | Branch | Stato | File riservati | File condivisi richiesti | Pull request | Ultimo aggiornamento |
 |---|---|---|---|---|---|---|---|
-| Programmazione da zero | Non assegnato | — | Disponibile | — | — | — | — |
-| Matematica da zero | Non assegnato | — | Disponibile | — | — | — | — |
+| Completamento Programmazione da zero | Altro computer, da prendere in carico | `codex/programming-zero` | Disponibile | Vedere scheda attività | Da dichiarare alla presa in carico | — | 2026-07-21 |
+| Matematica da zero | Qualunque Codex, non ancora assegnato | `codex/mathematics-zero` | Disponibile | Vedere scheda attività | Da dichiarare alla presa in carico | — | 2026-07-21 |
 
 Stati ammessi: `Disponibile`, `In corso`, `In revisione`, `Bloccato`, `Completato`.
 
+L'assegnazione è legata all'attività, non al computer. Dopo il merge, lo stesso Codex può prendere in carico un altro corso o una funzione diversa dell'app.
+
 ## File condivisi
 
-I seguenti percorsi hanno un impatto trasversale e devono essere modificati dall'agente integratore oppure prenotati esplicitamente prima dell'uso:
+I seguenti percorsi hanno un impatto trasversale e devono essere prenotati esplicitamente prima dell'uso:
 
 ```text
 src/lib/catalog/roadmap.ts
@@ -33,17 +35,20 @@ pnpm-lock.yaml
 Regole:
 
 1. Due agenti non modificano contemporaneamente lo stesso file condiviso.
-2. Una Draft Pull Request attiva che modifica un file condiviso lo riserva fino al merge, alla chiusura o a un accordo registrato qui.
-3. Le integrazioni nel registro delle materie, nella ricerca, nell'interfaccia comune e nelle migrazioni vengono raccolte in una pull request separata dell'agente integratore.
-4. Ogni agente lavora preferibilmente dentro la cartella della propria materia e nei relativi test.
+2. Il responsabile di un'attività può effettuare anche l'integrazione end-to-end nei file condivisi necessari, dopo averli dichiarati nella propria scheda e in questa tabella.
+3. Una Draft Pull Request attiva che modifica un file condiviso lo riserva fino al merge, alla chiusura o a un accordo registrato qui.
+4. Se un file è già prenotato, l'altro agente continua sui file non in conflitto oppure apre una successiva attività di integrazione.
+5. Le funzioni già operative dell'area di lavoro non devono essere riprogettate durante un'attività editoriale, salvo richiesta esplicita.
 
 ## Procedura di presa in carico
 
-1. Creare o aggiornare il file in `.codex/tasks/active/`.
-2. Indicare agente, branch, stato e file riservati nella tabella.
-3. Pubblicare il branch e aprire una Draft Pull Request all'inizio del lavoro.
-4. Annotare ogni nuova dipendenza da file condivisi prima di modificarli.
-5. Al completamento spostare il file del compito in `.codex/tasks/completed/` e aggiornare questa tabella.
+1. Scegliere un'attività con stato `Disponibile` in `.codex/tasks/active/`.
+2. Aggiornare la scheda con agente, branch, stato, file riservati e file condivisi indispensabili.
+3. Aggiornare questa tabella nello stesso branch.
+4. Pubblicare il branch e aprire una Draft Pull Request all'inizio del lavoro.
+5. Sviluppare e integrare l'attività soltanto nel perimetro dichiarato.
+6. Al completamento spostare la scheda in `.codex/tasks/completed/` e aggiornare questa tabella.
+7. Dopo il merge, l'agente torna libero e può prendere in carico qualsiasi altra attività disponibile.
 
 ## Fonte di verità
 
