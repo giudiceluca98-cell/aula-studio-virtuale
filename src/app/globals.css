@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --background: #f7f6f1;
+  --foreground: #17201b;
+  --font-sans: "Avenir Next", Avenir, "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-serif: Iowan Old Style, Baskerville, "Times New Roman", serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--background);
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  color: var(--foreground);
+  background:
+    radial-gradient(circle at 8% 0%, rgba(141, 184, 199, 0.16), transparent 28rem),
+    radial-gradient(circle at 90% 12%, rgba(241, 166, 106, 0.11), transparent 25rem),
+    var(--background);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  color: #17201b;
+  background: #c9ddc5;
+}
+
+button,
+a,
+input,
+textarea,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgba(95, 137, 89, 0.35);
+  outline-offset: 2px;
+}
+
+@layer components {
+  .panel {
+    @apply rounded-[1.4rem] border border-black/[0.06] bg-white/90 shadow-card backdrop-blur-sm;
+  }
+
+  .field {
+    @apply w-full rounded-xl border-black/10 bg-white px-3.5 py-2.5 text-sm text-ink placeholder:text-black/35 focus:border-moss-500 focus:ring-moss-500/20;
+  }
+
+  .button-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-moss-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-moss-800 active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .button-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-black/10 bg-white px-4 py-2.5 text-sm font-semibold text-ink shadow-sm transition hover:border-moss-300 hover:bg-moss-50 active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .eyebrow {
+    @apply text-[0.68rem] font-bold uppercase tracking-[0.18em] text-moss-700;
+  }
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.35); opacity: 0.45; }
+}
+
+.presence-pulse {
+  animation: breathe 2.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

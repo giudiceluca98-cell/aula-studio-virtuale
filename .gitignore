@@ -1,0 +1,40 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+
+# tests and build
+/coverage
+/.next
+/out
+/dist
+*.tsbuildinfo
+
+# local configuration
+.env
+.env.*
+!.env.example
+
+# logs and editors
+*.log
+.DS_Store
+Thumbs.db
+.idea
+.vscode
+
+# Vercel / Supabase local state
+.vercel
+supabase/.branches
+supabase/.temp
+
+# local databases, dumps, backups, and private certificates
+*.db
+*.sqlite
+*.sqlite3
+*.dump
+*.bak
+*.backup
+*.pem
+*.key
+*.p12
+*.pfx

@@ -1,0 +1,157 @@
+import { z } from "zod";
+import { findQuizQuestion, programmingLesson } from "@/lib/catalog/subjects/programming-zero-lesson";
+
+const responseSchema = z.string().trim().min(20).max(8000);
+
+export const lessonActionSchema = z.discriminatedUnion("type", [
+  z.object({ type: z.literal("lesson_opened"), eventId: z.string().uuid() }),
+  z.object({ type: z.literal("lesson_section_viewed"), eventId: z.string().uuid(), sectionId: z.string().max(80) }),
+  z.object({ type: z.literal("lesson_section_completed"), eventId: z.string().uuid(), sectionId: z.string().max(80) }),
+  z.object({ type: z.literal("guided_exercise_started"), eventId: z.string().uuid() }),
+  z.object({ type: z.literal("guided_exercise_completed"), eventId: z.string().uuid(), response: responseSchema }),
+  z.object({ type: z.literal("independent_exercise_completed"), eventId: z.string().uuid(), exerciseId: z.string().max(80), response: responseSchema }),
+  z.object({ type: z.literal("quiz_started"), eventId: z.string().uuid() }),
+  z.object({ type: z.literal("quiz_answer_submitted"), eventId: z.string().uuid(), questionId: z.string().max(80), choice: z.number().int().min(0).max(7), elapsedSeconds: z.number().int().min(0).max(7200) }),
+  z.object({ type: z.literal("quiz_completed"), eventId: z.string().uuid() }),
+  z.object({ type: z.literal("project_started"), eventId: z.string().uuid() }),
+  z.object({ type: z.literal("project_submitted"), eventId: z.string().uuid(), response: responseSchema }),
+  z.object({ type: z.literal("self_assessment_completed"), eventId: z.string().uuid(), response: responseSchema }),
+  z.object({ type: z.literal("review_requested"), eventId: z.string().uuid() }),
+]);
+
+export type LessonAction = z.infer<typeof lessonActionSchema>;
+
+export interface LessonAnswerState {
+  choice: number;
+  correct: boolean;
+  attempts: number;
+  elapsedSeconds: number;
+  concept: string;
+  explanation: string;
+  reviewSectionId: string;
+  answeredAt: string;
+}
+
+export interface LessonProgressState {
+  viewedSectionIds: string[];
+  completedSectionIds: string[];
+  currentSectionId: string | null;
+  guidedExercise: "not_started" | "started" | "completed";
+  independentExerciseIds: string[];
+  quizStarted: boolean;
+  quizAnswers: Record<string, LessonAnswerState>;
+  quizScore: number | null;
+  quizCompleted: boolean;
+  project: "not_started" | "started" | "submitted";
+  selfAssessmentCompleted: boolean;
+  lessonCompleted: boolean;
+  completionPercentage: number;
+  updatedAt: string | null;
+}
+
+export const emptyLessonProgress: LessonProgressState = {
+  viewedSectionIds: [], completedSectionIds: [], currentSectionId: null,
+  guidedExercise: "not_started", independentExerciseIds: [], quizStarted: false, quizAnswers: {},
+  quizScore: null, quizCompleted: false, project: "not_started", selfAssessmentCompleted: false,
+  lessonCompleted: false, completionPercentage: 0, updatedAt: null,
+};
+
+function strings(value: unknown, allowed: Set<string>) {
+  return Array.isArray(value) ? [...new Set(value.filter((item): item is string => typeof item === "string" && allowed.has(item)))] : [];
+}
+
+export function normalizeLessonProgress(value: unknown): LessonProgressState {
+  if (!value || typeof value !== "object") return { ...emptyLessonProgress };
+  const source = value as Partial<LessonProgressState>;
+  const sectionIds = new Set(programmingLesson.sections.map((section) => section.id));
+  const exerciseIds = new Set(programmingLesson.exercises.map((exercise) => exercise.id));
+  const answers: Record<string, LessonAnswerState> = {};
+  if (source.quizAnswers && typeof source.quizAnswers === "object") for (const [id, answer] of Object.entries(source.quizAnswers)) {
+    const question = findQuizQuestion(id);
+    if (!question || !answer || typeof answer !== "object") continue;
+    const candidate = answer as LessonAnswerState;
+    if (!Number.isInteger(candidate.choice)) continue;
+    answers[id] = { choice: candidate.choice, correct: candidate.choice === question.correctChoice, attempts: Math.max(1, Number(candidate.attempts) || 1), elapsedSeconds: Math.max(0, Number(candidate.elapsedSeconds) || 0), concept: question.concept, explanation: question.explanation, reviewSectionId: question.reviewSectionId, answeredAt: typeof candidate.answeredAt === "string" ? candidate.answeredAt : "" };
+  }
+  return {
+    viewedSectionIds: strings(source.viewedSectionIds, sectionIds), completedSectionIds: strings(source.completedSectionIds, sectionIds),
+    currentSectionId: typeof source.currentSectionId === "string" && sectionIds.has(source.currentSectionId) ? source.currentSectionId : null,
+    guidedExercise: source.guidedExercise === "completed" ? "completed" : source.guidedExercise === "started" ? "started" : "not_started",
+    independentExerciseIds: strings(source.independentExerciseIds, exerciseIds), quizStarted: Boolean(source.quizStarted), quizAnswers: answers,
+    quizScore: typeof source.quizScore === "number" ? Math.min(100, Math.max(0, source.quizScore)) : null,
+    quizCompleted: Boolean(source.quizCompleted), project: source.project === "submitted" ? "submitted" : source.project === "started" ? "started" : "not_started",
+    selfAssessmentCompleted: Boolean(source.selfAssessmentCompleted), lessonCompleted: Boolean(source.lessonCompleted),
+    completionPercentage: typeof source.completionPercentage === "number" ? Math.min(100, Math.max(0, source.completionPercentage)) : 0,
+    updatedAt: typeof source.updatedAt === "string" ? source.updatedAt : null,
+  };
+}
+
+function derived(state: LessonProgressState): LessonProgressState {
+  const quizScore = Object.keys(state.quizAnswers).length === programmingLesson.quiz.length
+    ? Math.round((Object.values(state.quizAnswers).filter((answer) => answer.correct).length / programmingLesson.quiz.length) * 100)
+    : state.quizScore;
+  const completed = state.guidedExercise === "completed"
+    && programmingLesson.completion.requiredExerciseIds.every((id) => state.independentExerciseIds.includes(id))
+    && state.quizCompleted && (quizScore ?? 0) >= programmingLesson.completion.minimumQuizScore
+    && state.project === "submitted" && state.selfAssessmentCompleted;
+  const sectionPart = (state.completedSectionIds.length / programmingLesson.sections.length) * 30;
+  const exercisePart = (state.independentExerciseIds.length / programmingLesson.exercises.length) * 25;
+  const percentage = Math.round(Math.min(100, sectionPart + (state.guidedExercise === "completed" ? 10 : 0) + exercisePart + (state.quizCompleted ? 20 : 0) + (state.project === "submitted" ? 10 : 0) + (state.selfAssessmentCompleted ? 5 : 0)));
+  return { ...state, quizScore, lessonCompleted: completed, completionPercentage: completed ? 100 : percentage };
+}
+
+export function applyLessonAction(current: unknown, action: LessonAction, serverTimestamp: string) {
+  const state = normalizeLessonProgress(current);
+  let next: LessonProgressState = { ...state, updatedAt: serverTimestamp };
+  let feedback: { correct?: boolean; explanation?: string } | null = null;
+  switch (action.type) {
+    case "lesson_opened": break;
+    case "lesson_section_viewed": next = { ...next, currentSectionId: action.sectionId, viewedSectionIds: [...new Set([...next.viewedSectionIds, action.sectionId])] }; break;
+    case "lesson_section_completed": next = { ...next, currentSectionId: action.sectionId, viewedSectionIds: [...new Set([...next.viewedSectionIds, action.sectionId])], completedSectionIds: [...new Set([...next.completedSectionIds, action.sectionId])] }; break;
+    case "guided_exercise_started": next = { ...next, guidedExercise: next.guidedExercise === "completed" ? "completed" : "started" }; break;
+    case "guided_exercise_completed": next = { ...next, guidedExercise: "completed" }; break;
+    case "independent_exercise_completed": next = { ...next, independentExerciseIds: [...new Set([...next.independentExerciseIds, action.exerciseId])] }; break;
+    case "quiz_started": next = { ...next, quizStarted: true, quizCompleted: false }; break;
+    case "quiz_answer_submitted": {
+      const question = findQuizQuestion(action.questionId);
+      if (!question) throw new Error("QUESTION_NOT_FOUND");
+      const previous = next.quizAnswers[action.questionId];
+      const answer: LessonAnswerState = { choice: action.choice, correct: action.choice === question.correctChoice, attempts: (previous?.attempts ?? 0) + 1, elapsedSeconds: (previous?.elapsedSeconds ?? 0) + action.elapsedSeconds, concept: question.concept, explanation: question.explanation, reviewSectionId: question.reviewSectionId, answeredAt: serverTimestamp };
+      next = { ...next, quizStarted: true, quizAnswers: { ...next.quizAnswers, [action.questionId]: answer } };
+      feedback = { correct: answer.correct, explanation: question.explanation };
+      break;
+    }
+    case "quiz_completed": next = { ...next, quizCompleted: Object.keys(next.quizAnswers).length === programmingLesson.quiz.length }; break;
+    case "project_started": next = { ...next, project: next.project === "submitted" ? "submitted" : "started" }; break;
+    case "project_submitted": next = { ...next, project: "submitted" }; break;
+    case "self_assessment_completed": next = { ...next, selfAssessmentCompleted: true }; break;
+    case "review_requested": break;
+  }
+  return { state: derived(next), feedback };
+}
+
+export function eveLessonAdvice(stateValue: unknown) {
+  const state = normalizeLessonProgress(stateValue);
+  const incorrect = Object.values(state.quizAnswers).filter((answer) => !answer.correct);
+  if (state.lessonCompleted) return { title: "Lezione completata", message: "Hai soddisfatto tutti i criteri. Eve consiglia un breve ripasso domani prima di passare alla lezione successiva.", sectionIds: [] as string[] };
+  if (state.quizCompleted && (state.quizScore ?? 0) < 70) return { title: "Ripasso mirato", message: `Il quiz è al ${state.quizScore ?? 0}%. Rivedi i concetti sbagliati e riprova: il percorso non è bloccato.`, sectionIds: [...new Set(incorrect.map((answer) => answer.reviewSectionId))] };
+  const nextSection = programmingLesson.sections.find((section) => !state.completedSectionIds.includes(section.id));
+  if (nextSection) return { title: "Prossimo passo", message: `Continua da “${nextSection.title}” e segnala la sezione come compresa quando sapresti rispiegarla.`, sectionIds: [nextSection.id] };
+  if (state.guidedExercise !== "completed") return { title: "Metti in pratica", message: "Completa ora l’esercizio guidato sul distributore di bevande.", sectionIds: ["algorithm", "edge-cases"] };
+  const nextExercise = programmingLesson.exercises.find((exercise) => !state.independentExerciseIds.includes(exercise.id));
+  if (nextExercise) return { title: "Esercizio consigliato", message: `Prosegui con “${nextExercise.title}”.`, sectionIds: [] as string[] };
+  if (!state.quizCompleted) return { title: "Verifica i concetti", message: "Avvia o completa il quiz. Eve userà gli errori per indicarti le sezioni da ripassare.", sectionIds: [] as string[] };
+  if (state.project !== "submitted") return { title: "Consolida con il progetto", message: "Progetta l’assistente per lo studio e consegna tutti e sette gli elaborati richiesti.", sectionIds: ["problem-to-program", "decomposition", "edge-cases"] };
+  return { title: "Ultimo passo", message: "Completa l’autovalutazione: cosa sai spiegare e che cosa vuoi ripassare?", sectionIds: [] as string[] };
+}
+
+export function lessonSubmissionFor(action: LessonAction) {
+  if (!("response" in action)) return null;
+  const activityId = action.type === "guided_exercise_completed" ? programmingLesson.guidedExercise.id
+    : action.type === "independent_exercise_completed" ? action.exerciseId
+    : action.type === "project_submitted" ? programmingLesson.project.id : "self-assessment";
+  const activityType = action.type === "guided_exercise_completed" ? "guided_exercise"
+    : action.type === "independent_exercise_completed" ? "independent_exercise"
+    : action.type === "project_submitted" ? "project" : "self_assessment";
+  return { activityId, activityType, response: action.response };
+}
