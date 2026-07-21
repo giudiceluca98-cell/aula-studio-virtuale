@@ -23,7 +23,7 @@ describe("pacchetto editoriale Programmazione da zero", () => {
     expect(createSubjectRoadmap(query).title).toBe("Programmazione da zero");
   });
 
-  it("pubblica le nove lezioni ufficiali disponibili nel Modulo 0", () => {
+  it("pubblica le lezioni ufficiali disponibili nei Moduli 0 e 1", () => {
     expect(programmingCurriculumOutline).toEqual([
       "Lezione 0.1 · Che cosa significa programmare?",
       "Lezione 0.2 · Che cos’è un computer e come esegue un programma?",
@@ -34,14 +34,18 @@ describe("pacchetto editoriale Programmazione da zero", () => {
       "Lezione 0.7 · Storia essenziale dell’informatica",
       "Lezione 0.8 · Impatto del software",
       "Lezione 0.9 · Laboratorio conclusivo e valutazione completa",
+      "Lezione 1.1 · Che cos’è un ambiente di sviluppo?",
     ]);
-    expect(programmingSubjectPackage.stages).toHaveLength(1);
+    expect(programmingSubjectPackage.stages).toHaveLength(2);
     expect(programmingSubjectPackage.stages[0].id).toBe("programming-module-0");
-    expect(programmingSubjectPackage.stages[0].lessons).toEqual(programmingCurriculumOutline);
-    expect(programmingLesson.modules).toHaveLength(1);
+    expect(programmingSubjectPackage.stages[0].lessons).toEqual(programmingCurriculumOutline.slice(0, 9));
+    expect(programmingSubjectPackage.stages[1].lessons).toEqual(programmingCurriculumOutline.slice(9));
+    expect(programmingLesson.modules).toHaveLength(2);
     expect(programmingLesson.modules[0]).toMatchObject({ id: "programming-module-0", title: "Modulo 0" });
     expect(programmingLesson.modules[0].lessons.map((lesson) => lesson.id)).toEqual(["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9"]);
-    for (const lesson of programmingLesson.modules[0].lessons) {
+    expect(programmingLesson.modules[1]).toMatchObject({ id: "programming-module-1", title: "Modulo 1" });
+    expect(programmingLesson.modules[1].lessons.map((lesson) => lesson.id)).toEqual(["1.1"]);
+    for (const lesson of programmingLesson.modules.flatMap((module) => module.lessons)) {
       const extended = ["0.6", "0.7", "0.8"].includes(lesson.id);
       expect(lesson.sectionIds).toHaveLength(extended ? 13 : 11);
       expect(lesson.exerciseIds).toHaveLength(extended ? 48 : 40);
@@ -51,22 +55,22 @@ describe("pacchetto editoriale Programmazione da zero", () => {
     }
   });
 
-  it("estende i contenuti ufficiali con le lezioni locali 0.3–0.9", () => {
+  it("estende i contenuti ufficiali con le lezioni locali 0.3–1.1", () => {
     expect(programmingLesson.id).toBe("programming-0-1");
     expect(programmingLesson.lessonTitles).toEqual(programmingCurriculumOutline);
-    expect(programmingLesson.objectives).toHaveLength(74);
-    expect(programmingLesson.sections).toHaveLength(105);
-    expect(programmingLesson.glossary).toHaveLength(480);
-    expect(programmingLesson.exercises).toHaveLength(383);
-    expect(programmingLesson.quiz).toHaveLength(288);
-    expect(programmingLesson.project.assessments).toHaveLength(9);
+    expect(programmingLesson.objectives).toHaveLength(82);
+    expect(programmingLesson.sections).toHaveLength(116);
+    expect(programmingLesson.glossary).toHaveLength(530);
+    expect(programmingLesson.exercises).toHaveLength(423);
+    expect(programmingLesson.quiz).toHaveLength(318);
+    expect(programmingLesson.project.assessments).toHaveLength(10);
     expect(programmingLesson.project.guidedProjects.map((project) => project.lessonId)).toEqual(["0.1", "0.2", "0.3"]);
     expect(programmingLesson.project.guidedProjects.every((project) => project.starterCode.includes("print("))).toBe(true);
     expect(programmingLesson.completion.minimumQuizScore).toBe(80);
-    expect(programmingLesson.completion.requiredExerciseIds).toHaveLength(287);
-    expect(new Set(programmingLesson.sections.map((section) => section.id)).size).toBe(105);
-    expect(new Set([programmingLesson.guidedExercise.id, ...programmingLesson.exercises.map((exercise) => exercise.id)]).size).toBe(384);
-    expect(new Set(programmingLesson.quiz.map((question) => question.id)).size).toBe(288);
+    expect(programmingLesson.completion.requiredExerciseIds).toHaveLength(317);
+    expect(new Set(programmingLesson.sections.map((section) => section.id)).size).toBe(116);
+    expect(new Set([programmingLesson.guidedExercise.id, ...programmingLesson.exercises.map((exercise) => exercise.id)]).size).toBe(424);
+    expect(new Set(programmingLesson.quiz.map((question) => question.id)).size).toBe(318);
     expect(programmingLesson.sections[0].blocks.some((block) => block.text === "Che cosa significa programmare?")).toBe(true);
     expect(programmingLesson.sections[11].blocks.some((block) => block.text === "Che cos’è un computer e come esegue un programma?")).toBe(true);
     expect(programmingLesson.sections[22].blocks.some((block) => block.text === "Come il computer rappresenta l’informazione?")).toBe(true);
@@ -76,6 +80,7 @@ describe("pacchetto editoriale Programmazione da zero", () => {
     expect(programmingLesson.sections[68].blocks.some((block) => block.text === "Storia essenziale dell’informatica")).toBe(true);
     expect(programmingLesson.sections[81].blocks.some((block) => block.text === "Impatto del software")).toBe(true);
     expect(programmingLesson.sections[94].blocks.some((block) => block.text === "Laboratorio conclusivo")).toBe(true);
+    expect(programmingLesson.sections[105].blocks.some((block) => block.text === "Che cos’è un ambiente di sviluppo?")).toBe(true);
   });
 
   it("lega gli artefatti alle impronte delle fonti senza richiedere i DOCX locali nel repository", () => {
@@ -93,6 +98,7 @@ describe("pacchetto editoriale Programmazione da zero", () => {
           "0.7": "e66df7f6d2469614a86f66274fe36078dcae5e27dfc24ad690d133c4f94dfaff",
           "0.8": "441b9e1af37992314cd0ded71a8196929786f3741a4bb2d90d371da4a24af017",
           "0.9": "cac28baa626f64d6e79c10b47784704031cec4f4e8d27f26b04f25dd8773bb9b",
+          "1.1": "adf2899abed24ff5b51ae9ec693cd24e73d40c8b0debfa25a60415cda3e8d755",
         }).toMatchObject({ [source.lessonId]: source.sha256 });
       }
       expect(source.metrics.paragraphs).toBeGreaterThan(780);
@@ -107,12 +113,15 @@ describe("pacchetto editoriale Programmazione da zero", () => {
   it("crea un percorso con lezione nativa, checklist e approfondimenti facoltativi", () => {
     const native = { id: "9f219d2a-d532-4af2-bd97-5df8fc863101", title: programmingLesson.title, description: programmingLesson.description, author: null, provider: "Aula Studio Virtuale", source_url: PROGRAMMING_LESSON_SOURCE_URL, material_type: "interactive", language: "it", level: "no_experience" as const, estimated_duration_minutes: 120, price_type: "free" as const, price: null, currency: null, certificate_available: false, prerequisites: [], license_type: null, verification_status: "verified" as const, source_origin: "internal" as const, verified_at: "2026-01-01", last_checked_at: "2026-01-01", viewer_compatibility: "internal" as const, access_requirements: [], topicLinks: [], internal_resource_id: "9f219d2a-d532-4af2-bd97-5df8fc863101", internal_viewer: "lesson" as const };
     const draft = createSubjectRoadmap("programmazione da zero", [native]);
-    expect(draft.modules).toHaveLength(1);
+    expect(draft.modules).toHaveLength(2);
     expect(draft.modules[0].stageId).toBe("programming-module-0");
     expect(draft.modules[0].items[0]).toMatchObject({ itemType: "material", catalogMaterialId: native.id, isRequired: true });
     expect(draft.modules[0].items.filter((item) => item.itemType === "exercise")).toHaveLength(9);
     expect(draft.modules[0].items.some((item) => item.itemType === "project")).toBe(true);
     expect(draft.modules[0].items.filter((item) => item.itemType === "checkpoint")).toHaveLength(9);
+    expect(draft.modules[1].stageId).toBe("programming-module-1");
+    expect(draft.modules[1].items.filter((item) => item.itemType === "exercise")).toHaveLength(1);
+    expect(draft.modules[1].items.filter((item) => item.itemType === "checkpoint")).toHaveLength(1);
   });
 
   it("non completa la lezione con il solo scorrimento o con le sole sezioni", () => {

@@ -29,22 +29,28 @@ export const programmingSubjectPackage: SubjectPackage = {
     no_experience: "programming-module-0", beginner: "programming-module-0", intermediate: "programming-module-0",
     advanced: "programming-module-0", professional: "programming-module-0", university: "programming-module-0",
   },
-  stages: [{
-    id: "programming-module-0",
-    order: 0,
-    title: "Modulo 0",
-    description: programmingLesson.description,
-    prerequisites: ["Capacità di leggere un testo argomentativo", "Curiosità", "Disponibilità a svolgere esempi su carta"],
-    estimatedMinutes: programmingLesson.estimatedMinutes,
-    concepts: programmingLesson.sections.filter((section) => section.chapterNumber > 0).map((section) => section.title),
-    objectives: [...programmingLesson.objectives],
-    lessons: [...programmingLesson.lessonTitles],
-    activities: ["Esercizio guidato", "Esercizi autonomi", "Quiz", "Prova finale di padronanza"],
-    exercises: [programmingLesson.guidedExercise.title, ...programmingLesson.exercises.map((exercise) => exercise.title)],
-    projects: [programmingLesson.project.title],
-    completionCriteria: programmingLesson.project.assessments.flatMap((assessment) => assessment.completionCriteria),
-    googleQueries: queries("programmazione computer esecuzione programmi", "programming computer program execution"),
-  }],
+  stages: programmingLesson.modules.map((module, order) => {
+    const lessonIds = module.lessons.map((lesson) => lesson.id);
+    const sections = programmingLesson.sections.filter((section) => lessonIds.includes(section.lessonId));
+    const exercises = [programmingLesson.guidedExercise, ...programmingLesson.exercises].filter((exercise) => lessonIds.includes(exercise.lessonId));
+    const assessments = programmingLesson.project.assessments.filter((assessment) => lessonIds.includes(assessment.lessonId));
+    return {
+      id: module.id,
+      order,
+      title: module.title,
+      description: module.lessons.flatMap((lesson) => lesson.summary).join(" "),
+      prerequisites: order === 0 ? ["Capacità di leggere un testo argomentativo", "Curiosità", "Disponibilità a svolgere esempi su carta"] : [programmingLesson.modules[order - 1]?.title ?? "Modulo precedente"],
+      estimatedMinutes: module.lessons.length * 90,
+      concepts: sections.filter((section) => section.chapterNumber > 0).map((section) => section.title),
+      objectives: module.lessons.flatMap((lesson) => lesson.objectives),
+      lessons: module.lessons.map((lesson) => `Lezione ${lesson.id} · ${lesson.title}`),
+      activities: ["Esercizio guidato", "Esercizi autonomi", "Quiz", "Prova finale di padronanza"],
+      exercises: exercises.map((exercise) => exercise.title),
+      projects: assessments.map((assessment) => assessment.title),
+      completionCriteria: assessments.flatMap((assessment) => assessment.completionCriteria),
+      googleQueries: queries(order === 0 ? "programmazione computer esecuzione programmi" : "ambiente sviluppo Python", order === 0 ? "programming computer program execution" : "Python development environment"),
+    };
+  }),
   recommendedMaterials: [{
     title: programmingLesson.title,
     provider: "Aula Studio Virtuale",
@@ -53,7 +59,7 @@ export const programmingSubjectPackage: SubjectPackage = {
     language: "it",
     level: "no_experience",
     description: programmingLesson.description,
-    stageIds: ["programming-module-0"],
+    stageIds: programmingLesson.modules.map((module) => module.id),
     verified: true,
   }],
 };

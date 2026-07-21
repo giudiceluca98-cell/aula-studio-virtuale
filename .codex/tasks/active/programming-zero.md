@@ -3,7 +3,7 @@
 Stato: in corso
 Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 1.1 corrente
 Branch: `codex/programming-zero-lesson-1-1`
-Pull request: Draft PR da aprire (base PR #16)
+Pull request: https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/17 (base PR #16)
 Pacchetto: `programming`
 Percorso: `programming-zero`
 
@@ -119,7 +119,7 @@ Contenuti convertiti:
 
 Verifiche: test mirato 21/21, suite completa 138/138, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 
-## Estensione in corso · Lezione 1.1
+## Estensione in revisione · Lezione 1.1
 
 Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_1.1_Ambiente_di_sviluppo.docx`. Il DOCX non verrà caricato nel repository.
 
@@ -128,9 +128,23 @@ File riservati:
 - `src/lib/catalog/subjects/programming-zero-lesson-1-1-official-content.json`
 - `src/lib/catalog/subjects/programming-zero-lesson.ts`
 - `src/lib/programming-lesson-progress.ts`
+- `src/lib/catalog/subjects/programming.ts`
+- `src/lib/catalog/roadmap.ts`
 - `tests/programming-subject.test.ts`
 
-File condivisi prenotati: nessuno. Dipendenza: PR #16; branch e Draft PR impilati sulla lezione 0.9. L'indice editoriale del Modulo 1 è stato letto integralmente e viene usato per validare ordine, titoli e copertura.
+File condivisi prenotati: `src/lib/catalog/roadmap.ts`, necessario per separare realmente Modulo 0 e Modulo 1 nel percorso. Nessuna PR aperta concorrente lo modifica. Dipendenza: PR #16; branch e Draft PR impilati sulla lezione 0.9. L'indice editoriale del Modulo 1 è stato letto integralmente e viene usato per validare ordine, titoli e copertura.
+
+Contenuti convertiti:
+
+- 11 sezioni e 802 blocchi renderizzabili;
+- 10 esercizi guidati e 30 esercizi autonomi;
+- 30 domande di quiz e 50 voci di glossario;
+- laboratorio finale, rubrica e criteri di completamento;
+- impronta SHA-256 `adf2899abed24ff5b51ae9ec693cd24e73d40c8b0debfa25a60415cda3e8d755`, senza includere il DOCX;
+- Modulo 1 separato realmente dal Modulo 0 nel Catalogo e nella roadmap, conservando il materiale nativo e i progressi esistenti;
+- indice editoriale conclusivo del Modulo 1 letto integralmente e usato come controllo, senza caricarlo nel repository.
+
+Verifiche: test mirato 21/21, suite completa 138/138, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 
 ## Estensione in revisione · Lezione 0.9
 
