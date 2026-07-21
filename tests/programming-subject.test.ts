@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
@@ -22,22 +23,46 @@ describe("pacchetto editoriale Programmazione da zero", () => {
     expect(createSubjectRoadmap(query).title).toBe("Programmazione da zero");
   });
 
-  it("dichiara tutti i 27 moduli ma pubblica soltanto il Modulo 0 realmente completo", () => {
-    expect(programmingCurriculumOutline).toHaveLength(27);
+  it("pubblica soltanto le due lezioni ufficiali disponibili nel Modulo 0", () => {
+    expect(programmingCurriculumOutline).toEqual([
+      "Lezione 0.1 · Che cosa significa programmare?",
+      "Lezione 0.2 · Che cos’è un computer e come esegue un programma?",
+    ]);
     expect(programmingSubjectPackage.stages).toHaveLength(1);
     expect(programmingSubjectPackage.stages[0].id).toBe("programming-module-0");
-    expect(programmingSubjectPackage.stages[0].lessons).toEqual(["0.1 · Che cosa significa programmare?"]);
+    expect(programmingSubjectPackage.stages[0].lessons).toEqual(programmingCurriculumOutline);
   });
 
-  it("contiene la Lezione 0.1 completa e deterministica", () => {
+  it("sostituisce i contenuti precedenti con le lezioni ufficiali 0.1 e 0.2", () => {
     expect(programmingLesson.id).toBe("programming-0-1");
-    expect(programmingLesson.estimatedMinutes).toBe(120);
+    expect(programmingLesson.lessonTitles).toEqual(programmingCurriculumOutline);
+    expect(programmingLesson.objectives).toHaveLength(11);
     expect(programmingLesson.sections).toHaveLength(22);
-    expect(programmingLesson.glossary).toHaveLength(17);
-    expect(programmingLesson.exercises).toHaveLength(5);
-    expect(programmingLesson.quiz).toHaveLength(10);
-    expect(programmingLesson.project.deliverables).toHaveLength(7);
+    expect(programmingLesson.glossary).toHaveLength(100);
+    expect(programmingLesson.exercises).toHaveLength(79);
+    expect(programmingLesson.quiz).toHaveLength(60);
+    expect(programmingLesson.project.assessments).toHaveLength(2);
+    expect(programmingLesson.completion.minimumQuizScore).toBe(80);
+    expect(programmingLesson.completion.requiredExerciseIds).toHaveLength(59);
     expect(new Set(programmingLesson.sections.map((section) => section.id)).size).toBe(22);
+    expect(new Set([programmingLesson.guidedExercise.id, ...programmingLesson.exercises.map((exercise) => exercise.id)]).size).toBe(80);
+    expect(new Set(programmingLesson.quiz.map((question) => question.id)).size).toBe(60);
+    expect(programmingLesson.sections[0].blocks.some((block) => block.text === "Che cosa significa programmare?")).toBe(true);
+    expect(programmingLesson.sections[11].blocks.some((block) => block.text === "Che cos’è un computer e come esegue un programma?")).toBe(true);
+  });
+
+  it("lega l’artefatto generato alle impronte dei due documenti Word originali", () => {
+    const sourceDirectory = join(root, "docs/courses/programming-zero/source");
+    for (const source of programmingLesson.sourceDocuments) {
+      const bytes = readFileSync(join(sourceDirectory, source.filename));
+      expect(createHash("sha256").update(bytes).digest("hex")).toBe(source.sha256);
+      expect(source.metrics.paragraphs).toBeGreaterThan(790);
+      expect(source.metrics.tables).toBe(12);
+      const importedBlocks = programmingLesson.sections
+        .filter((section) => section.lessonId === source.lessonId)
+        .reduce((total, section) => total + section.blocks.length, 0);
+      expect(importedBlocks).toBe(source.metrics.paragraphs + source.metrics.tables);
+    }
   });
 
   it("crea un percorso con lezione nativa, checklist e approfondimenti facoltativi", () => {
@@ -46,7 +71,7 @@ describe("pacchetto editoriale Programmazione da zero", () => {
     expect(draft.modules).toHaveLength(1);
     expect(draft.modules[0].stageId).toBe("programming-module-0");
     expect(draft.modules[0].items[0]).toMatchObject({ itemType: "material", catalogMaterialId: native.id, isRequired: true });
-    expect(draft.modules[0].items.filter((item) => item.itemType === "exercise")).toHaveLength(6);
+    expect(draft.modules[0].items.filter((item) => item.itemType === "exercise")).toHaveLength(2);
     expect(draft.modules[0].items.some((item) => item.itemType === "project")).toBe(true);
     expect(draft.modules[0].items.filter((item) => item.itemType === "checkpoint")).toHaveLength(2);
   });
@@ -54,15 +79,31 @@ describe("pacchetto editoriale Programmazione da zero", () => {
   it("non completa la lezione con il solo scorrimento o con le sole sezioni", () => {
     let state = emptyLessonProgress;
     for (const section of programmingLesson.sections) state = applyLessonAction(state, { type: "lesson_section_completed", eventId: crypto.randomUUID(), sectionId: section.id }, new Date().toISOString()).state;
-    expect(state.completedSectionIds).toHaveLength(22);
+    expect(state.completedSectionIds).toHaveLength(programmingLesson.sections.length);
     expect(state.lessonCompleted).toBe(false);
     expect(state.completionPercentage).toBe(30);
   });
 
+  it("completa il percorso soltanto con capitoli, esercizi, quiz e prove finali richiesti dalle fonti", () => {
+    const timestamp = "2026-07-21T10:00:00.000Z";
+    let state = emptyLessonProgress;
+    for (const section of programmingLesson.sections) state = applyLessonAction(state, { type: "lesson_section_completed", eventId: crypto.randomUUID(), sectionId: section.id }, timestamp).state;
+    state = applyLessonAction(state, { type: "guided_exercise_completed", eventId: crypto.randomUUID(), response: "Risposta completa all’esercizio guidato." }, timestamp).state;
+    for (const exerciseId of programmingLesson.completion.requiredExerciseIds) state = applyLessonAction(state, { type: "independent_exercise_completed", eventId: crypto.randomUUID(), exerciseId, response: "Risposta completa all’esercizio richiesto." }, timestamp).state;
+    for (const question of programmingLesson.quiz) state = applyLessonAction(state, { type: "quiz_answer_submitted", eventId: crypto.randomUUID(), questionId: question.id, choice: question.correctChoice, elapsedSeconds: 10 }, timestamp).state;
+    state = applyLessonAction(state, { type: "quiz_completed", eventId: crypto.randomUUID() }, timestamp).state;
+    state = applyLessonAction(state, { type: "project_submitted", eventId: crypto.randomUUID(), response: "Consegna completa delle due prove finali di padronanza." }, timestamp).state;
+    expect(state.quizScore).toBe(100);
+    expect(state.lessonCompleted).toBe(true);
+    expect(state.completionPercentage).toBe(100);
+  });
+
   it("associa errori, tentativi, tempo e ripasso ai concetti del quiz", () => {
-    const result = applyLessonAction(emptyLessonProgress, { type: "quiz_answer_submitted", eventId: crypto.randomUUID(), questionId: "algorithm-program", choice: 1, elapsedSeconds: 18 }, "2026-07-20T10:00:00.000Z");
-    expect(result.state.quizAnswers["algorithm-program"]).toMatchObject({ correct: false, attempts: 1, elapsedSeconds: 18, concept: "algoritmo", reviewSectionId: "algorithm", answeredAt: "2026-07-20T10:00:00.000Z" });
-    expect(result.feedback?.explanation).toContain("algoritmo");
+    const question = programmingLesson.quiz[0];
+    const wrongChoice = question.correctChoice === 0 ? 1 : 0;
+    const result = applyLessonAction(emptyLessonProgress, { type: "quiz_answer_submitted", eventId: crypto.randomUUID(), questionId: question.id, choice: wrongChoice, elapsedSeconds: 18 }, "2026-07-20T10:00:00.000Z");
+    expect(result.state.quizAnswers[question.id]).toMatchObject({ correct: false, attempts: 1, elapsedSeconds: 18, concept: question.concept, reviewSectionId: question.reviewSectionId, answeredAt: "2026-07-20T10:00:00.000Z" });
+    expect(result.feedback?.explanation).toBe(question.explanation);
   });
 
   it("Eve è attiva senza OpenAI e usa solo lo stato didattico consentito", () => {

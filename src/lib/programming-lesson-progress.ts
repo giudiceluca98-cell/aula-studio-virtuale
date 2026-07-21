@@ -90,13 +90,15 @@ function derived(state: LessonProgressState): LessonProgressState {
   const quizScore = Object.keys(state.quizAnswers).length === programmingLesson.quiz.length
     ? Math.round((Object.values(state.quizAnswers).filter((answer) => answer.correct).length / programmingLesson.quiz.length) * 100)
     : state.quizScore;
-  const completed = state.guidedExercise === "completed"
+  const completed = programmingLesson.sections.every((section) => state.completedSectionIds.includes(section.id))
+    && state.guidedExercise === "completed"
     && programmingLesson.completion.requiredExerciseIds.every((id) => state.independentExerciseIds.includes(id))
     && state.quizCompleted && (quizScore ?? 0) >= programmingLesson.completion.minimumQuizScore
-    && state.project === "submitted" && state.selfAssessmentCompleted;
+    && state.project === "submitted";
   const sectionPart = (state.completedSectionIds.length / programmingLesson.sections.length) * 30;
-  const exercisePart = (state.independentExerciseIds.length / programmingLesson.exercises.length) * 25;
-  const percentage = Math.round(Math.min(100, sectionPart + (state.guidedExercise === "completed" ? 10 : 0) + exercisePart + (state.quizCompleted ? 20 : 0) + (state.project === "submitted" ? 10 : 0) + (state.selfAssessmentCompleted ? 5 : 0)));
+  const requiredExercisesDone = programmingLesson.completion.requiredExerciseIds.filter((id) => state.independentExerciseIds.includes(id)).length;
+  const exercisePart = (requiredExercisesDone / programmingLesson.completion.requiredExerciseIds.length) * 30;
+  const percentage = Math.round(Math.min(100, sectionPart + (state.guidedExercise === "completed" ? 5 : 0) + exercisePart + (state.quizCompleted ? 25 : 0) + (state.project === "submitted" ? 10 : 0)));
   return { ...state, quizScore, lessonCompleted: completed, completionPercentage: completed ? 100 : percentage };
 }
 
@@ -134,15 +136,15 @@ export function eveLessonAdvice(stateValue: unknown) {
   const state = normalizeLessonProgress(stateValue);
   const incorrect = Object.values(state.quizAnswers).filter((answer) => !answer.correct);
   if (state.lessonCompleted) return { title: "Lezione completata", message: "Hai soddisfatto tutti i criteri. Eve consiglia un breve ripasso domani prima di passare alla lezione successiva.", sectionIds: [] as string[] };
-  if (state.quizCompleted && (state.quizScore ?? 0) < 70) return { title: "Ripasso mirato", message: `Il quiz è al ${state.quizScore ?? 0}%. Rivedi i concetti sbagliati e riprova: il percorso non è bloccato.`, sectionIds: [...new Set(incorrect.map((answer) => answer.reviewSectionId))] };
+  if (state.quizCompleted && (state.quizScore ?? 0) < programmingLesson.completion.minimumQuizScore) return { title: "Ripasso mirato", message: `Il quiz è al ${state.quizScore ?? 0}%. Rivedi i capitoli associati alle risposte errate e riprova.`, sectionIds: [...new Set(incorrect.map((answer) => answer.reviewSectionId))] };
   const nextSection = programmingLesson.sections.find((section) => !state.completedSectionIds.includes(section.id));
   if (nextSection) return { title: "Prossimo passo", message: `Continua da “${nextSection.title}” e segnala la sezione come compresa quando sapresti rispiegarla.`, sectionIds: [nextSection.id] };
-  if (state.guidedExercise !== "completed") return { title: "Metti in pratica", message: "Completa ora l’esercizio guidato sul distributore di bevande.", sectionIds: ["algorithm", "edge-cases"] };
+  if (state.guidedExercise !== "completed") return { title: "Metti in pratica", message: `Completa l’esercizio guidato del capitolo “${programmingLesson.guidedExercise.title}”.`, sectionIds: ["programming-0-1-chapter-1"] };
   const nextExercise = programmingLesson.exercises.find((exercise) => !state.independentExerciseIds.includes(exercise.id));
   if (nextExercise) return { title: "Esercizio consigliato", message: `Prosegui con “${nextExercise.title}”.`, sectionIds: [] as string[] };
-  if (!state.quizCompleted) return { title: "Verifica i concetti", message: "Avvia o completa il quiz. Eve userà gli errori per indicarti le sezioni da ripassare.", sectionIds: [] as string[] };
-  if (state.project !== "submitted") return { title: "Consolida con il progetto", message: "Progetta l’assistente per lo studio e consegna tutti e sette gli elaborati richiesti.", sectionIds: ["problem-to-program", "decomposition", "edge-cases"] };
-  return { title: "Ultimo passo", message: "Completa l’autovalutazione: cosa sai spiegare e che cosa vuoi ripassare?", sectionIds: [] as string[] };
+  if (!state.quizCompleted) return { title: "Verifica i concetti", message: "Avvia o completa i quiz. Eve userà gli errori per indicarti i capitoli da ripassare.", sectionIds: [] as string[] };
+  if (state.project !== "submitted") return { title: "Prova finale", message: "Completa e consegna le prove finali di padronanza indicate nelle due lezioni.", sectionIds: ["programming-0-1-chapter-10", "programming-0-2-chapter-10"] };
+  return { title: "Controlla i criteri", message: "Rivedi i criteri di completamento delle lezioni 0.1 e 0.2.", sectionIds: ["programming-0-1-chapter-10", "programming-0-2-chapter-10"] };
 }
 
 export function lessonSubmissionFor(action: LessonAction) {
