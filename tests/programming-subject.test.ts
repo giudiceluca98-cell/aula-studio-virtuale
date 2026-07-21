@@ -23,39 +23,46 @@ describe("pacchetto editoriale Programmazione da zero", () => {
     expect(createSubjectRoadmap(query).title).toBe("Programmazione da zero");
   });
 
-  it("pubblica soltanto le due lezioni ufficiali disponibili nel Modulo 0", () => {
+  it("pubblica le tre lezioni ufficiali disponibili nel Modulo 0", () => {
     expect(programmingCurriculumOutline).toEqual([
       "Lezione 0.1 · Che cosa significa programmare?",
       "Lezione 0.2 · Che cos’è un computer e come esegue un programma?",
+      "Lezione 0.3 · Come il computer rappresenta l’informazione?",
     ]);
     expect(programmingSubjectPackage.stages).toHaveLength(1);
     expect(programmingSubjectPackage.stages[0].id).toBe("programming-module-0");
     expect(programmingSubjectPackage.stages[0].lessons).toEqual(programmingCurriculumOutline);
   });
 
-  it("sostituisce i contenuti precedenti con le lezioni ufficiali 0.1 e 0.2", () => {
+  it("estende i contenuti ufficiali con la lezione 0.3", () => {
     expect(programmingLesson.id).toBe("programming-0-1");
     expect(programmingLesson.lessonTitles).toEqual(programmingCurriculumOutline);
-    expect(programmingLesson.objectives).toHaveLength(11);
-    expect(programmingLesson.sections).toHaveLength(22);
-    expect(programmingLesson.glossary).toHaveLength(100);
-    expect(programmingLesson.exercises).toHaveLength(79);
-    expect(programmingLesson.quiz).toHaveLength(60);
-    expect(programmingLesson.project.assessments).toHaveLength(2);
+    expect(programmingLesson.objectives).toHaveLength(18);
+    expect(programmingLesson.sections).toHaveLength(33);
+    expect(programmingLesson.glossary).toHaveLength(150);
+    expect(programmingLesson.exercises).toHaveLength(119);
+    expect(programmingLesson.quiz).toHaveLength(90);
+    expect(programmingLesson.project.assessments).toHaveLength(3);
     expect(programmingLesson.completion.minimumQuizScore).toBe(80);
-    expect(programmingLesson.completion.requiredExerciseIds).toHaveLength(59);
-    expect(new Set(programmingLesson.sections.map((section) => section.id)).size).toBe(22);
-    expect(new Set([programmingLesson.guidedExercise.id, ...programmingLesson.exercises.map((exercise) => exercise.id)]).size).toBe(80);
-    expect(new Set(programmingLesson.quiz.map((question) => question.id)).size).toBe(60);
+    expect(programmingLesson.completion.requiredExerciseIds).toHaveLength(89);
+    expect(new Set(programmingLesson.sections.map((section) => section.id)).size).toBe(33);
+    expect(new Set([programmingLesson.guidedExercise.id, ...programmingLesson.exercises.map((exercise) => exercise.id)]).size).toBe(120);
+    expect(new Set(programmingLesson.quiz.map((question) => question.id)).size).toBe(90);
     expect(programmingLesson.sections[0].blocks.some((block) => block.text === "Che cosa significa programmare?")).toBe(true);
     expect(programmingLesson.sections[11].blocks.some((block) => block.text === "Che cos’è un computer e come esegue un programma?")).toBe(true);
+    expect(programmingLesson.sections[22].blocks.some((block) => block.text === "Come il computer rappresenta l’informazione?")).toBe(true);
   });
 
-  it("lega l’artefatto generato alle impronte dei due documenti Word originali", () => {
+  it("lega gli artefatti alle impronte delle fonti senza richiedere il DOCX 0.3 nel repository", () => {
     const sourceDirectory = join(root, "docs/courses/programming-zero/source");
     for (const source of programmingLesson.sourceDocuments) {
-      const bytes = readFileSync(join(sourceDirectory, source.filename));
-      expect(createHash("sha256").update(bytes).digest("hex")).toBe(source.sha256);
+      if (!("storedInRepository" in source) || source.storedInRepository !== false) {
+        const bytes = readFileSync(join(sourceDirectory, source.filename));
+        expect(createHash("sha256").update(bytes).digest("hex")).toBe(source.sha256);
+      } else {
+        expect(source.lessonId).toBe("0.3");
+        expect(source.sha256).toBe("91a3a14aa8f38b0e6d6b9a9f3d2a2e16aee37f6d8714c18e05304a1ca8164f89");
+      }
       expect(source.metrics.paragraphs).toBeGreaterThan(790);
       expect(source.metrics.tables).toBe(12);
       const importedBlocks = programmingLesson.sections
@@ -92,7 +99,7 @@ describe("pacchetto editoriale Programmazione da zero", () => {
     for (const exerciseId of programmingLesson.completion.requiredExerciseIds) state = applyLessonAction(state, { type: "independent_exercise_completed", eventId: crypto.randomUUID(), exerciseId, response: "Risposta completa all’esercizio richiesto." }, timestamp).state;
     for (const question of programmingLesson.quiz) state = applyLessonAction(state, { type: "quiz_answer_submitted", eventId: crypto.randomUUID(), questionId: question.id, choice: question.correctChoice, elapsedSeconds: 10 }, timestamp).state;
     state = applyLessonAction(state, { type: "quiz_completed", eventId: crypto.randomUUID() }, timestamp).state;
-    state = applyLessonAction(state, { type: "project_submitted", eventId: crypto.randomUUID(), response: "Consegna completa delle due prove finali di padronanza." }, timestamp).state;
+    state = applyLessonAction(state, { type: "project_submitted", eventId: crypto.randomUUID(), response: "Consegna completa delle tre prove finali di padronanza." }, timestamp).state;
     expect(state.quizScore).toBe(100);
     expect(state.lessonCompleted).toBe(true);
     expect(state.completionPercentage).toBe(100);
@@ -134,3 +141,4 @@ describe("pacchetto editoriale Programmazione da zero", () => {
     expect(migration).not.toContain("delete from public.material_reader_progress");
   });
 });
+
