@@ -149,29 +149,25 @@ function programmingZeroRoadmap(
   weeklyHours: number,
 ): LearningPathDraft {
   const nativeLesson = materials.find((material) => material.source_url === PROGRAMMING_LESSON_SOURCE_URL || material.internal_resource_id === "9f219d2a-d532-4af2-bd97-5df8fc863101");
-  const optionalMaterials = materials.filter((material) => material.id !== nativeLesson?.id).slice(0, 4);
   const items: LearningPathDraft["modules"][number]["items"] = [];
   if (nativeLesson) items.push({
-    catalogMaterialId: nativeLesson.id, itemType: "material", title: `Lezione 0.1 · ${programmingLesson.title}`,
+    catalogMaterialId: nativeLesson.id, itemType: "material", title: programmingLesson.title,
     description: programmingLesson.description, isRequired: true, estimatedDurationMinutes: programmingLesson.estimatedMinutes,
   });
   items.push(
-    { catalogMaterialId: null, itemType: "exercise", title: "Esercizio guidato · Distributore di bevande", description: "Completa la progettazione guidata e registra una risposta precisa, inclusi i casi limite.", isRequired: true, estimatedDurationMinutes: 20 },
-    ...programmingLesson.exercises.map((exercise, index) => ({ catalogMaterialId: null, itemType: "exercise" as const, title: `Esercizio ${index + 1} · ${exercise.title}`, description: exercise.prompt, isRequired: true, estimatedDurationMinutes: 15 })),
-    { catalogMaterialId: null, itemType: "checkpoint", title: "Quiz finale · Lezione 0.1", description: "Raggiungi almeno il 70%. Gli errori restano collegati ai concetti da ripassare.", isRequired: true, estimatedDurationMinutes: 15 },
-    { catalogMaterialId: null, itemType: "project", title: `Progetto · ${programmingLesson.project.title}`, description: programmingLesson.project.prompt, isRequired: true, estimatedDurationMinutes: 45 },
-    { catalogMaterialId: null, itemType: "checkpoint", title: "Autovalutazione · Lezione 0.1", description: "Spiega ciò che hai compreso, cosa resta difficile e il prossimo obiettivo.", isRequired: true, estimatedDurationMinutes: 10 },
-    ...optionalMaterials.map((material) => ({ catalogMaterialId: material.id, itemType: "material" as const, title: material.title, description: `Approfondimento facoltativo di ${material.provider}.`, isRequired: false, estimatedDurationMinutes: material.estimated_duration_minutes })),
+    ...programmingLesson.lessonTitles.map((title) => ({ catalogMaterialId: null, itemType: "exercise" as const, title: `${title} · Esercizi`, description: "Esercizio guidato · Esercizi autonomi", isRequired: true, estimatedDurationMinutes: 60 })),
+    ...programmingLesson.lessonTitles.map((title) => ({ catalogMaterialId: null, itemType: "checkpoint" as const, title: `${title} · Quiz`, description: "Tre domande per ciascuno dei dieci capitoli.", isRequired: true, estimatedDurationMinutes: 30 })),
+    { catalogMaterialId: null, itemType: "project", title: programmingLesson.project.title, description: programmingLesson.project.prompt, isRequired: true, estimatedDurationMinutes: 90 },
   );
   return {
     title: "Programmazione da zero", objective: query.trim(), initialLevel, targetLevel, weeklyHours,
-    rationale: "Percorso editoriale nativo e deterministico per principianti assoluti. Il Modulo 0 contiene la Lezione 0.1 completa nell’area di lavoro; i collegamenti esterni sono soltanto approfondimenti facoltativi.",
+    rationale: programmingLesson.description,
     modules: [{
-      stageId: "programming-module-0", title: "Modulo 0 · Introduzione all’informatica e alla programmazione",
-      description: "Comprendi programmi, processi, algoritmi, input/output, stato e tecniche di risoluzione dei problemi prima di scrivere codice.",
-      estimatedDurationMinutes: 210, prerequisites: [],
-      completionCriteria: ["Quiz almeno 70%", "Esercizio guidato e cinque esercizi completati", "Progetto consegnato", "Autovalutazione completata"],
-      items, concepts: ["Programmazione", "Algoritmi", "Input, elaborazione e output", "Stato", "Sintassi e semantica", "Decomposizione", "Casi limite"],
+      stageId: "programming-module-0", title: "Modulo 0",
+      description: programmingLesson.description,
+      estimatedDurationMinutes: programmingLesson.estimatedMinutes, prerequisites: [],
+      completionCriteria: programmingLesson.project.assessments.flatMap((assessment) => assessment.completionCriteria),
+      items, concepts: programmingLesson.sections.filter((section) => section.chapterNumber > 0).map((section) => section.title),
       objectives: [...programmingLesson.objectives], activities: [programmingLesson.guidedExercise.title], exercises: programmingLesson.exercises.map((exercise) => exercise.title), projects: [programmingLesson.project.title],
       googleQueries: { lessons: ["programmazione da zero algoritmi basi"], exercises: ["esercizi algoritmi principianti con soluzioni"], videos: ["introduzione programmazione video principianti"], pdfs: ["introduzione programmazione algoritmi filetype:pdf"] },
     }],

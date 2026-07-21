@@ -6,7 +6,7 @@ Questo file registra incarichi temporanei, proprietà dei file e dipendenze tra 
 
 | Attività | Assegnazione prevista | Branch | Stato | File riservati | File condivisi richiesti | Pull request | Ultimo aggiornamento |
 |---|---|---|---|---|---|---|---|
-| Completamento Programmazione da zero | Altro computer, da prendere in carico | `codex/programming-zero` | Disponibile | Vedere scheda attività | Da dichiarare alla presa in carico | — | 2026-07-21 |
+| Completamento Programmazione da zero | Codex — fonti ufficiali 0.1 e 0.2 | `codex/programming-zero` | In revisione | Vedere scheda attività | `src/lib/catalog/roadmap.ts` | [Draft PR #3](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/3) | 2026-07-21 |
 | Matematica da zero | Qualunque Codex, non ancora assegnato | `codex/mathematics-zero` | Disponibile | Vedere scheda attività | Da dichiarare alla presa in carico | — | 2026-07-21 |
 
 Stati ammessi: `Disponibile`, `In corso`, `In revisione`, `Bloccato`, `Completato`.
