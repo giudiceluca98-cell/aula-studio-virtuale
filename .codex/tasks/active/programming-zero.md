@@ -260,11 +260,15 @@ Contenuti convertiti:
 
 Verifiche: test mirato 21/21, suite completa 151/151, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 
-## Estensione in corso · Lezione 1.5
+## Estensione in revisione · Lezione 1.5
 
 Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_1.5_Editor_e_IDE.docx`. Il DOCX non verrà caricato nel repository.
 
 File riservati: artefatto 1.5, `src/lib/catalog/subjects/programming-zero-lesson.ts`, `src/lib/programming-lesson-progress.ts`, `tests/programming-subject.test.ts`. File condivisi prenotati: nessuno. Dipendenza: PR #32.
+
+Contenuti convertiti: 11 sezioni, 762 blocchi, 40 esercizi, 30 quiz e 50 voci di glossario; laboratorio e criteri finali conservati. SHA-256 `e8efc49c3afeab0c04b6326cc9086c76760e8c0cfe8ff5c7e5a40c2d2bee9377`; nessun DOCX caricato.
+
+Verifiche: test mirato 21/21, suite completa 151/151, typecheck e build superati; lint senza errori e con il solo warning preesistente.
 
 ## Estensione in revisione · Lezione 1.4
 

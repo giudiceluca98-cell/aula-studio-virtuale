@@ -1,0 +1,4551 @@
+{
+  "id": "1.5",
+  "title": "Editor di testo e IDE: configurazione consapevole dell’ambiente",
+  "source": {
+    "filename": "Programmazione_da_Zero_Lezione_1.5_Editor_e_IDE.docx",
+    "sha256": "e8efc49c3afeab0c04b6326cc9086c76760e8c0cfe8ff5c7e5a40c2d2bee9377",
+    "storedInRepository": false,
+    "normalizations": []
+  },
+  "metrics": {
+    "paragraphs": 751,
+    "tables": 11,
+    "textCharacters": 48006
+  },
+  "objectives": [
+    "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+    "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+    "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+    "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+    "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+    "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+    "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+    "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+    "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+    "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile."
+  ],
+  "sections": [
+    {
+      "id": "programming-1-5-introduction",
+      "lessonId": "1.5",
+      "chapterNumber": 0,
+      "title": "Lezione 1.5 · Editor di testo e IDE",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "AULA STUDIO VIRTUALE"
+        },
+        {
+          "type": "paragraph",
+          "text": "Programmazione da Zero"
+        },
+        {
+          "type": "paragraph",
+          "text": "Manuale ufficiale"
+        },
+        {
+          "type": "paragraph",
+          "text": "MODULO 1"
+        },
+        {
+          "type": "paragraph",
+          "text": "Lezione 1.5"
+        },
+        {
+          "type": "paragraph",
+          "text": "Editor di testo e IDE"
+        },
+        {
+          "type": "paragraph",
+          "text": "Configurazione consapevole dell’ambiente"
+        },
+        {
+          "type": "paragraph",
+          "text": "DESTINATARIO  Principiante assoluto. Il volume usa principi indipendenti dal prodotto e richiede sempre prove osservabili."
+        },
+        {
+          "type": "heading",
+          "text": "Come usare questa lezione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Le lezioni precedenti hanno reso espliciti interprete, shell e file system. Ora l’IDE viene studiato come coordinatore di quei componenti, non come sostituto. Ogni capitolo distingue interfaccia, configurazione, processo e artefatto."
+        },
+        {
+          "type": "heading",
+          "text": "Mappa della lezione"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Cap.",
+              "Nucleo"
+            ],
+            [
+              "1",
+              "Scegliere fra editor e IDE"
+            ],
+            [
+              "2",
+              "Installazione, aggiornamenti ed estensioni"
+            ],
+            [
+              "3",
+              "File, cartelle, progetto e area di lavoro"
+            ],
+            [
+              "4",
+              "Testo: codifica, newline, rientri e salvataggio"
+            ],
+            [
+              "5",
+              "Selezionare e verificare l’interprete Python"
+            ],
+            [
+              "6",
+              "Terminale integrato, cartella corrente e configurazioni di esecuzione"
+            ],
+            [
+              "7",
+              "Completamento, language server, linting e formattazione"
+            ],
+            [
+              "8",
+              "Navigazione, ricerca, tastiera e accessibilità"
+            ],
+            [
+              "9",
+              "Privacy, telemetria, sincronizzazione e segreti"
+            ],
+            [
+              "10",
+              "Configurazione riproducibile e diagnosi dell’IDE"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "programming-1-5-chapter-1",
+      "lessonId": "1.5",
+      "chapterNumber": 1,
+      "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "1. Scegliere fra editor e IDE"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un editor modifica testo; un IDE coordina editor, progetto, terminale, analisi ed esecuzione. La scelta dipende da osservabilità, accessibilità, risorse, progetto e capacità di esportare la configurazione, non dal numero di funzioni. La configurazione consapevole parte dall’obiettivo, dichiara l’ambito e conserva una via di ritorno."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un quadro di comando riunisce strumenti senza fonderli: ogni indicatore deve mostrare quale componente controlla. Se un pulsante nasconde origine, destinazione o stato, occorre ricostruirne il meccanismo."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un editor modifica testo; un IDE coordina editor, progetto, terminale, analisi ed esecuzione. La scelta dipende da osservabilità, accessibilità, risorse, progetto e capacità di esportare la configurazione, non dal numero di funzioni. Il valore effettivo nasce dalla precedenza fra impostazioni, dallo stato dell’area di lavoro e dalle estensioni attive. La verifica registra versione dello strumento, radice, file, interprete, cartella, comando, output ed errore."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il metodo comune separa interfaccia, configurazione, servizio di analisi e processo eseguito. Prima si osserva lo stato, poi si cambia una sola variabile, si riavvia il contesto necessario e si ripete la stessa prova. Questa procedura resta valida su Windows, macOS e Linux anche quando menu, scorciatoie e nomi cambiano."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una impostazione di progetto è documentata e condivisibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il comando equivalente conferma ciò che fa il pulsante."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una nuova sessione ripete il risultato con la stessa configurazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Molte funzioni installate non garantiscono comprensione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un messaggio dell’analizzatore non è necessariamente un errore runtime."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una configurazione globale personale non rende il progetto riproducibile."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’IDE è un cruscotto: coordina componenti, ma non diventa motore, strada o carburante. Un buon cruscotto rende osservabile lo stato e consente controllo accessibile."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 1.1 — Catena di configurazione"
+        },
+        {
+          "type": "paragraph",
+          "text": "PROGETTO + CONFIGURAZIONE  vEDITOR / IDE + ESTENSIONI  +--> ANALISI STATICA  +--> TERMINALE E COMANDO  vINTERPRETE -> PROCESSO  vOUTPUT / ERRORI -> VERIFICA"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un editor modifica testo; un IDE coordina editor, progetto, terminale, analisi ed esecuzione. La scelta dipende da osservabilità, accessibilità, risorse, progetto e capacità di esportare la configurazione, non dal numero di funzioni. Le automazioni devono ridurre lavoro ripetitivo senza nascondere identità, percorsi, permessi o trasferimenti di dati. Le impostazioni variabili nel tempo vanno annotate con versione e ambito."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Cambiare più impostazioni insieme."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere avviso statico ed esecuzione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Memorizzare segreti nella configurazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dipendere da valori globali invisibili."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetto remoto o container."
+        },
+        {
+          "type": "paragraph",
+          "text": "Computer gestito."
+        },
+        {
+          "type": "paragraph",
+          "text": "Estensione disabilitata solo nel workspace."
+        },
+        {
+          "type": "paragraph",
+          "text": "Configurazione sincronizzata in conflitto."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale componente produce il comportamento?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Qual è l’ambito del valore effettivo?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale prova smentirebbe l’ipotesi?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Inventaria componenti e ambiti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Crea una modifica reversibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta IDE e terminale esterno."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Costruisci un controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un conflitto di precedenza."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta una checklist accessibile."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Quale scelta rende consapevole Scegliere fra editor e IDE?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. La configurazione verificata"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Il tema più colorato"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Molti plugin"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Un valore nascosto"
+        },
+        {
+          "type": "heading",
+          "text": "2. Un pulsante sostituisce la verifica?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Solo offline"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Solo su Windows"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Sì"
+        },
+        {
+          "type": "heading",
+          "text": "3. Dove vanno i segreti?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. In gestione separata"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Nel nome file"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Nel progetto pubblico"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Nel tema"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione"
+            ],
+            [
+              "Ambito",
+              "Contesto a cui una impostazione si applica."
+            ],
+            [
+              "Precedenza",
+              "Regola che determina il valore effettivo."
+            ],
+            [
+              "Workspace",
+              "Area di lavoro aperta nello strumento."
+            ],
+            [
+              "Estensione",
+              "Componente che amplia l’editor."
+            ],
+            [
+              "Configurazione",
+              "Valori che governano il comportamento."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un editor modifica testo; un IDE coordina editor, progetto, terminale, analisi ed esecuzione. La scelta dipende da osservabilità, accessibilità, risorse, progetto e capacità di esportare la configurazione, non dal numero di funzioni. La padronanza consiste nel produrre evidenze e ricreare il comportamento, non nel ricordare un menu."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il concetto intuitivamente e tecnicamente."
+        },
+        {
+          "type": "paragraph",
+          "text": "So fornire esempio e controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma."
+        },
+        {
+          "type": "paragraph",
+          "text": "So diagnosticare tre casi limite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato esercizi e quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-5-chapter-2",
+      "lessonId": "1.5",
+      "chapterNumber": 2,
+      "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "2. Installazione, aggiornamenti ed estensioni"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Editor, IDE ed estensioni sono software eseguibile. Provenienza, firma, permessi, aggiornamenti e possibilità di rimozione devono essere valutati. Un’estensione amplia l’editor ma può leggere file, avviare processi o comunicare in rete. La configurazione consapevole parte dall’obiettivo, dichiara l’ambito e conserva una via di ritorno."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un quadro di comando riunisce strumenti senza fonderli: ogni indicatore deve mostrare quale componente controlla. Se un pulsante nasconde origine, destinazione o stato, occorre ricostruirne il meccanismo."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Editor, IDE ed estensioni sono software eseguibile. Provenienza, firma, permessi, aggiornamenti e possibilità di rimozione devono essere valutati. Un’estensione amplia l’editor ma può leggere file, avviare processi o comunicare in rete. Il valore effettivo nasce dalla precedenza fra impostazioni, dallo stato dell’area di lavoro e dalle estensioni attive. La verifica registra versione dello strumento, radice, file, interprete, cartella, comando, output ed errore."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il metodo comune separa interfaccia, configurazione, servizio di analisi e processo eseguito. Prima si osserva lo stato, poi si cambia una sola variabile, si riavvia il contesto necessario e si ripete la stessa prova. Questa procedura resta valida su Windows, macOS e Linux anche quando menu, scorciatoie e nomi cambiano."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una impostazione di progetto è documentata e condivisibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il comando equivalente conferma ciò che fa il pulsante."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una nuova sessione ripete il risultato con la stessa configurazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Molte funzioni installate non garantiscono comprensione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un messaggio dell’analizzatore non è necessariamente un errore runtime."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una configurazione globale personale non rende il progetto riproducibile."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’IDE è un cruscotto: coordina componenti, ma non diventa motore, strada o carburante. Un buon cruscotto rende osservabile lo stato e consente controllo accessibile."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 2.1 — Catena di configurazione"
+        },
+        {
+          "type": "paragraph",
+          "text": "PROGETTO + CONFIGURAZIONE  vEDITOR / IDE + ESTENSIONI  +--> ANALISI STATICA  +--> TERMINALE E COMANDO  vINTERPRETE -> PROCESSO  vOUTPUT / ERRORI -> VERIFICA"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Editor, IDE ed estensioni sono software eseguibile. Provenienza, firma, permessi, aggiornamenti e possibilità di rimozione devono essere valutati. Un’estensione amplia l’editor ma può leggere file, avviare processi o comunicare in rete. Le automazioni devono ridurre lavoro ripetitivo senza nascondere identità, percorsi, permessi o trasferimenti di dati. Le impostazioni variabili nel tempo vanno annotate con versione e ambito."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Cambiare più impostazioni insieme."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere avviso statico ed esecuzione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Memorizzare segreti nella configurazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dipendere da valori globali invisibili."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetto remoto o container."
+        },
+        {
+          "type": "paragraph",
+          "text": "Computer gestito."
+        },
+        {
+          "type": "paragraph",
+          "text": "Estensione disabilitata solo nel workspace."
+        },
+        {
+          "type": "paragraph",
+          "text": "Configurazione sincronizzata in conflitto."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale componente produce il comportamento?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Qual è l’ambito del valore effettivo?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale prova smentirebbe l’ipotesi?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Inventaria componenti e ambiti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Crea una modifica reversibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta IDE e terminale esterno."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Costruisci un controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un conflitto di precedenza."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta una checklist accessibile."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Quale scelta rende consapevole Installazione, aggiornamenti ed estensioni?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Molti plugin"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Un valore nascosto"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. La configurazione verificata"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Il tema più colorato"
+        },
+        {
+          "type": "heading",
+          "text": "2. Un pulsante sostituisce la verifica?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Solo offline"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Solo su Windows"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Sì"
+        },
+        {
+          "type": "heading",
+          "text": "3. Dove vanno i segreti?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Nel nome file"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Nel progetto pubblico"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. In gestione separata"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Nel tema"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione"
+            ],
+            [
+              "Ambito",
+              "Contesto a cui una impostazione si applica."
+            ],
+            [
+              "Precedenza",
+              "Regola che determina il valore effettivo."
+            ],
+            [
+              "Workspace",
+              "Area di lavoro aperta nello strumento."
+            ],
+            [
+              "Estensione",
+              "Componente che amplia l’editor."
+            ],
+            [
+              "Configurazione",
+              "Valori che governano il comportamento."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Editor, IDE ed estensioni sono software eseguibile. Provenienza, firma, permessi, aggiornamenti e possibilità di rimozione devono essere valutati. Un’estensione amplia l’editor ma può leggere file, avviare processi o comunicare in rete. La padronanza consiste nel produrre evidenze e ricreare il comportamento, non nel ricordare un menu."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il concetto intuitivamente e tecnicamente."
+        },
+        {
+          "type": "paragraph",
+          "text": "So fornire esempio e controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma."
+        },
+        {
+          "type": "paragraph",
+          "text": "So diagnosticare tre casi limite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato esercizi e quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-5-chapter-3",
+      "lessonId": "1.5",
+      "chapterNumber": 3,
+      "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "3. File, cartelle, progetto e area di lavoro"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Aprire un file non equivale ad aprire il progetto. L’area di lavoro stabilisce radice, file visibili, impostazioni e fiducia. La configurazione effettiva può combinare valori globali, utente, progetto e cartella. La configurazione consapevole parte dall’obiettivo, dichiara l’ambito e conserva una via di ritorno."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un quadro di comando riunisce strumenti senza fonderli: ogni indicatore deve mostrare quale componente controlla. Se un pulsante nasconde origine, destinazione o stato, occorre ricostruirne il meccanismo."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Aprire un file non equivale ad aprire il progetto. L’area di lavoro stabilisce radice, file visibili, impostazioni e fiducia. La configurazione effettiva può combinare valori globali, utente, progetto e cartella. Il valore effettivo nasce dalla precedenza fra impostazioni, dallo stato dell’area di lavoro e dalle estensioni attive. La verifica registra versione dello strumento, radice, file, interprete, cartella, comando, output ed errore."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il metodo comune separa interfaccia, configurazione, servizio di analisi e processo eseguito. Prima si osserva lo stato, poi si cambia una sola variabile, si riavvia il contesto necessario e si ripete la stessa prova. Questa procedura resta valida su Windows, macOS e Linux anche quando menu, scorciatoie e nomi cambiano."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una impostazione di progetto è documentata e condivisibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il comando equivalente conferma ciò che fa il pulsante."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una nuova sessione ripete il risultato con la stessa configurazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Molte funzioni installate non garantiscono comprensione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un messaggio dell’analizzatore non è necessariamente un errore runtime."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una configurazione globale personale non rende il progetto riproducibile."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’IDE è un cruscotto: coordina componenti, ma non diventa motore, strada o carburante. Un buon cruscotto rende osservabile lo stato e consente controllo accessibile."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 3.1 — Catena di configurazione"
+        },
+        {
+          "type": "paragraph",
+          "text": "PROGETTO + CONFIGURAZIONE  vEDITOR / IDE + ESTENSIONI  +--> ANALISI STATICA  +--> TERMINALE E COMANDO  vINTERPRETE -> PROCESSO  vOUTPUT / ERRORI -> VERIFICA"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Aprire un file non equivale ad aprire il progetto. L’area di lavoro stabilisce radice, file visibili, impostazioni e fiducia. La configurazione effettiva può combinare valori globali, utente, progetto e cartella. Le automazioni devono ridurre lavoro ripetitivo senza nascondere identità, percorsi, permessi o trasferimenti di dati. Le impostazioni variabili nel tempo vanno annotate con versione e ambito."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Cambiare più impostazioni insieme."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere avviso statico ed esecuzione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Memorizzare segreti nella configurazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dipendere da valori globali invisibili."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetto remoto o container."
+        },
+        {
+          "type": "paragraph",
+          "text": "Computer gestito."
+        },
+        {
+          "type": "paragraph",
+          "text": "Estensione disabilitata solo nel workspace."
+        },
+        {
+          "type": "paragraph",
+          "text": "Configurazione sincronizzata in conflitto."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale componente produce il comportamento?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Qual è l’ambito del valore effettivo?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale prova smentirebbe l’ipotesi?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Inventaria componenti e ambiti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Crea una modifica reversibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta IDE e terminale esterno."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Costruisci un controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un conflitto di precedenza."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta una checklist accessibile."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Quale scelta rende consapevole File, cartelle, progetto e area di lavoro?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. La configurazione verificata"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Un valore nascosto"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Il tema più colorato"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Molti plugin"
+        },
+        {
+          "type": "heading",
+          "text": "2. Un pulsante sostituisce la verifica?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Sì"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Solo offline"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo su Windows"
+        },
+        {
+          "type": "heading",
+          "text": "3. Dove vanno i segreti?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. In gestione separata"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Nel progetto pubblico"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Nel tema"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Nel nome file"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione"
+            ],
+            [
+              "Ambito",
+              "Contesto a cui una impostazione si applica."
+            ],
+            [
+              "Precedenza",
+              "Regola che determina il valore effettivo."
+            ],
+            [
+              "Workspace",
+              "Area di lavoro aperta nello strumento."
+            ],
+            [
+              "Estensione",
+              "Componente che amplia l’editor."
+            ],
+            [
+              "Configurazione",
+              "Valori che governano il comportamento."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Aprire un file non equivale ad aprire il progetto. L’area di lavoro stabilisce radice, file visibili, impostazioni e fiducia. La configurazione effettiva può combinare valori globali, utente, progetto e cartella. La padronanza consiste nel produrre evidenze e ricreare il comportamento, non nel ricordare un menu."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il concetto intuitivamente e tecnicamente."
+        },
+        {
+          "type": "paragraph",
+          "text": "So fornire esempio e controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma."
+        },
+        {
+          "type": "paragraph",
+          "text": "So diagnosticare tre casi limite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato esercizi e quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-5-chapter-4",
+      "lessonId": "1.5",
+      "chapterNumber": 4,
+      "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "4. Testo: codifica, newline, rientri e salvataggio"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’editor deve preservare byte e convenzioni intenzionali. UTF-8, LF o CRLF, spazi o tab, salvataggio automatico e fine riga finale sono scelte tecniche verificabili, non preferenze puramente estetiche. La configurazione consapevole parte dall’obiettivo, dichiara l’ambito e conserva una via di ritorno."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un quadro di comando riunisce strumenti senza fonderli: ogni indicatore deve mostrare quale componente controlla. Se un pulsante nasconde origine, destinazione o stato, occorre ricostruirne il meccanismo."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’editor deve preservare byte e convenzioni intenzionali. UTF-8, LF o CRLF, spazi o tab, salvataggio automatico e fine riga finale sono scelte tecniche verificabili, non preferenze puramente estetiche. Il valore effettivo nasce dalla precedenza fra impostazioni, dallo stato dell’area di lavoro e dalle estensioni attive. La verifica registra versione dello strumento, radice, file, interprete, cartella, comando, output ed errore."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il metodo comune separa interfaccia, configurazione, servizio di analisi e processo eseguito. Prima si osserva lo stato, poi si cambia una sola variabile, si riavvia il contesto necessario e si ripete la stessa prova. Questa procedura resta valida su Windows, macOS e Linux anche quando menu, scorciatoie e nomi cambiano."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una impostazione di progetto è documentata e condivisibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il comando equivalente conferma ciò che fa il pulsante."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una nuova sessione ripete il risultato con la stessa configurazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Molte funzioni installate non garantiscono comprensione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un messaggio dell’analizzatore non è necessariamente un errore runtime."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una configurazione globale personale non rende il progetto riproducibile."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’IDE è un cruscotto: coordina componenti, ma non diventa motore, strada o carburante. Un buon cruscotto rende osservabile lo stato e consente controllo accessibile."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 4.1 — Catena di configurazione"
+        },
+        {
+          "type": "paragraph",
+          "text": "PROGETTO + CONFIGURAZIONE  vEDITOR / IDE + ESTENSIONI  +--> ANALISI STATICA  +--> TERMINALE E COMANDO  vINTERPRETE -> PROCESSO  vOUTPUT / ERRORI -> VERIFICA"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’editor deve preservare byte e convenzioni intenzionali. UTF-8, LF o CRLF, spazi o tab, salvataggio automatico e fine riga finale sono scelte tecniche verificabili, non preferenze puramente estetiche. Le automazioni devono ridurre lavoro ripetitivo senza nascondere identità, percorsi, permessi o trasferimenti di dati. Le impostazioni variabili nel tempo vanno annotate con versione e ambito."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Cambiare più impostazioni insieme."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere avviso statico ed esecuzione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Memorizzare segreti nella configurazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dipendere da valori globali invisibili."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetto remoto o container."
+        },
+        {
+          "type": "paragraph",
+          "text": "Computer gestito."
+        },
+        {
+          "type": "paragraph",
+          "text": "Estensione disabilitata solo nel workspace."
+        },
+        {
+          "type": "paragraph",
+          "text": "Configurazione sincronizzata in conflitto."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale componente produce il comportamento?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Qual è l’ambito del valore effettivo?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale prova smentirebbe l’ipotesi?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Inventaria componenti e ambiti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Crea una modifica reversibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta IDE e terminale esterno."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Costruisci un controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un conflitto di precedenza."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta una checklist accessibile."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Quale scelta rende consapevole Testo: codifica, newline, rientri e salvataggio?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Un valore nascosto"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Il tema più colorato"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. La configurazione verificata"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Molti plugin"
+        },
+        {
+          "type": "heading",
+          "text": "2. Un pulsante sostituisce la verifica?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Sì"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Solo offline"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo su Windows"
+        },
+        {
+          "type": "heading",
+          "text": "3. Dove vanno i segreti?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Nel tema"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Nel nome file"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. In gestione separata"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Nel progetto pubblico"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione"
+            ],
+            [
+              "Ambito",
+              "Contesto a cui una impostazione si applica."
+            ],
+            [
+              "Precedenza",
+              "Regola che determina il valore effettivo."
+            ],
+            [
+              "Workspace",
+              "Area di lavoro aperta nello strumento."
+            ],
+            [
+              "Estensione",
+              "Componente che amplia l’editor."
+            ],
+            [
+              "Configurazione",
+              "Valori che governano il comportamento."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’editor deve preservare byte e convenzioni intenzionali. UTF-8, LF o CRLF, spazi o tab, salvataggio automatico e fine riga finale sono scelte tecniche verificabili, non preferenze puramente estetiche. La padronanza consiste nel produrre evidenze e ricreare il comportamento, non nel ricordare un menu."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il concetto intuitivamente e tecnicamente."
+        },
+        {
+          "type": "paragraph",
+          "text": "So fornire esempio e controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma."
+        },
+        {
+          "type": "paragraph",
+          "text": "So diagnosticare tre casi limite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato esercizi e quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-5-chapter-5",
+      "lessonId": "1.5",
+      "chapterNumber": 5,
+      "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "5. Selezionare e verificare l’interprete Python"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il pulsante Esegui usa un interprete selezionato. Percorso, versione e ambiente devono coincidere con il terminale del progetto. sys.executable è la prova interna; il nome mostrato nell’interfaccia è soltanto un’indicazione. La configurazione consapevole parte dall’obiettivo, dichiara l’ambito e conserva una via di ritorno."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un quadro di comando riunisce strumenti senza fonderli: ogni indicatore deve mostrare quale componente controlla. Se un pulsante nasconde origine, destinazione o stato, occorre ricostruirne il meccanismo."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il pulsante Esegui usa un interprete selezionato. Percorso, versione e ambiente devono coincidere con il terminale del progetto. sys.executable è la prova interna; il nome mostrato nell’interfaccia è soltanto un’indicazione. Il valore effettivo nasce dalla precedenza fra impostazioni, dallo stato dell’area di lavoro e dalle estensioni attive. La verifica registra versione dello strumento, radice, file, interprete, cartella, comando, output ed errore."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il metodo comune separa interfaccia, configurazione, servizio di analisi e processo eseguito. Prima si osserva lo stato, poi si cambia una sola variabile, si riavvia il contesto necessario e si ripete la stessa prova. Questa procedura resta valida su Windows, macOS e Linux anche quando menu, scorciatoie e nomi cambiano."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una impostazione di progetto è documentata e condivisibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il comando equivalente conferma ciò che fa il pulsante."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una nuova sessione ripete il risultato con la stessa configurazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Molte funzioni installate non garantiscono comprensione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un messaggio dell’analizzatore non è necessariamente un errore runtime."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una configurazione globale personale non rende il progetto riproducibile."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’IDE è un cruscotto: coordina componenti, ma non diventa motore, strada o carburante. Un buon cruscotto rende osservabile lo stato e consente controllo accessibile."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 5.1 — Catena di configurazione"
+        },
+        {
+          "type": "paragraph",
+          "text": "PROGETTO + CONFIGURAZIONE  vEDITOR / IDE + ESTENSIONI  +--> ANALISI STATICA  +--> TERMINALE E COMANDO  vINTERPRETE -> PROCESSO  vOUTPUT / ERRORI -> VERIFICA"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il pulsante Esegui usa un interprete selezionato. Percorso, versione e ambiente devono coincidere con il terminale del progetto. sys.executable è la prova interna; il nome mostrato nell’interfaccia è soltanto un’indicazione. Le automazioni devono ridurre lavoro ripetitivo senza nascondere identità, percorsi, permessi o trasferimenti di dati. Le impostazioni variabili nel tempo vanno annotate con versione e ambito."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Cambiare più impostazioni insieme."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere avviso statico ed esecuzione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Memorizzare segreti nella configurazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dipendere da valori globali invisibili."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetto remoto o container."
+        },
+        {
+          "type": "paragraph",
+          "text": "Computer gestito."
+        },
+        {
+          "type": "paragraph",
+          "text": "Estensione disabilitata solo nel workspace."
+        },
+        {
+          "type": "paragraph",
+          "text": "Configurazione sincronizzata in conflitto."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale componente produce il comportamento?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Qual è l’ambito del valore effettivo?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale prova smentirebbe l’ipotesi?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Inventaria componenti e ambiti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Crea una modifica reversibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta IDE e terminale esterno."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Costruisci un controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un conflitto di precedenza."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta una checklist accessibile."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Quale scelta rende consapevole Selezionare e verificare l’interprete Python?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. La configurazione verificata"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Il tema più colorato"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Molti plugin"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Un valore nascosto"
+        },
+        {
+          "type": "heading",
+          "text": "2. Un pulsante sostituisce la verifica?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Solo offline"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Solo su Windows"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Sì"
+        },
+        {
+          "type": "heading",
+          "text": "3. Dove vanno i segreti?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. In gestione separata"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Nel nome file"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Nel progetto pubblico"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Nel tema"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione"
+            ],
+            [
+              "Ambito",
+              "Contesto a cui una impostazione si applica."
+            ],
+            [
+              "Precedenza",
+              "Regola che determina il valore effettivo."
+            ],
+            [
+              "Workspace",
+              "Area di lavoro aperta nello strumento."
+            ],
+            [
+              "Estensione",
+              "Componente che amplia l’editor."
+            ],
+            [
+              "Configurazione",
+              "Valori che governano il comportamento."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il pulsante Esegui usa un interprete selezionato. Percorso, versione e ambiente devono coincidere con il terminale del progetto. sys.executable è la prova interna; il nome mostrato nell’interfaccia è soltanto un’indicazione. La padronanza consiste nel produrre evidenze e ricreare il comportamento, non nel ricordare un menu."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il concetto intuitivamente e tecnicamente."
+        },
+        {
+          "type": "paragraph",
+          "text": "So fornire esempio e controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma."
+        },
+        {
+          "type": "paragraph",
+          "text": "So diagnosticare tre casi limite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato esercizi e quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-5-chapter-6",
+      "lessonId": "1.5",
+      "chapterNumber": 6,
+      "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "6. Terminale integrato, cartella corrente e configurazioni di esecuzione"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una configurazione di esecuzione combina file, interprete, cartella, argomenti, ambiente e console. Il terminale integrato eredita stato dall’IDE e può differire da una sessione esterna. La configurazione consapevole parte dall’obiettivo, dichiara l’ambito e conserva una via di ritorno."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un quadro di comando riunisce strumenti senza fonderli: ogni indicatore deve mostrare quale componente controlla. Se un pulsante nasconde origine, destinazione o stato, occorre ricostruirne il meccanismo."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una configurazione di esecuzione combina file, interprete, cartella, argomenti, ambiente e console. Il terminale integrato eredita stato dall’IDE e può differire da una sessione esterna. Il valore effettivo nasce dalla precedenza fra impostazioni, dallo stato dell’area di lavoro e dalle estensioni attive. La verifica registra versione dello strumento, radice, file, interprete, cartella, comando, output ed errore."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il metodo comune separa interfaccia, configurazione, servizio di analisi e processo eseguito. Prima si osserva lo stato, poi si cambia una sola variabile, si riavvia il contesto necessario e si ripete la stessa prova. Questa procedura resta valida su Windows, macOS e Linux anche quando menu, scorciatoie e nomi cambiano."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una impostazione di progetto è documentata e condivisibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il comando equivalente conferma ciò che fa il pulsante."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una nuova sessione ripete il risultato con la stessa configurazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Molte funzioni installate non garantiscono comprensione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un messaggio dell’analizzatore non è necessariamente un errore runtime."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una configurazione globale personale non rende il progetto riproducibile."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’IDE è un cruscotto: coordina componenti, ma non diventa motore, strada o carburante. Un buon cruscotto rende osservabile lo stato e consente controllo accessibile."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 6.1 — Catena di configurazione"
+        },
+        {
+          "type": "paragraph",
+          "text": "PROGETTO + CONFIGURAZIONE  vEDITOR / IDE + ESTENSIONI  +--> ANALISI STATICA  +--> TERMINALE E COMANDO  vINTERPRETE -> PROCESSO  vOUTPUT / ERRORI -> VERIFICA"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una configurazione di esecuzione combina file, interprete, cartella, argomenti, ambiente e console. Il terminale integrato eredita stato dall’IDE e può differire da una sessione esterna. Le automazioni devono ridurre lavoro ripetitivo senza nascondere identità, percorsi, permessi o trasferimenti di dati. Le impostazioni variabili nel tempo vanno annotate con versione e ambito."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Cambiare più impostazioni insieme."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere avviso statico ed esecuzione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Memorizzare segreti nella configurazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dipendere da valori globali invisibili."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetto remoto o container."
+        },
+        {
+          "type": "paragraph",
+          "text": "Computer gestito."
+        },
+        {
+          "type": "paragraph",
+          "text": "Estensione disabilitata solo nel workspace."
+        },
+        {
+          "type": "paragraph",
+          "text": "Configurazione sincronizzata in conflitto."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale componente produce il comportamento?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Qual è l’ambito del valore effettivo?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale prova smentirebbe l’ipotesi?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Inventaria componenti e ambiti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Crea una modifica reversibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta IDE e terminale esterno."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Costruisci un controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un conflitto di precedenza."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta una checklist accessibile."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Quale scelta rende consapevole Terminale integrato, cartella corrente e configurazioni di esecuzione?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Molti plugin"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Un valore nascosto"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. La configurazione verificata"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Il tema più colorato"
+        },
+        {
+          "type": "heading",
+          "text": "2. Un pulsante sostituisce la verifica?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Solo offline"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Solo su Windows"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Sì"
+        },
+        {
+          "type": "heading",
+          "text": "3. Dove vanno i segreti?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Nel nome file"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Nel progetto pubblico"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. In gestione separata"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Nel tema"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione"
+            ],
+            [
+              "Ambito",
+              "Contesto a cui una impostazione si applica."
+            ],
+            [
+              "Precedenza",
+              "Regola che determina il valore effettivo."
+            ],
+            [
+              "Workspace",
+              "Area di lavoro aperta nello strumento."
+            ],
+            [
+              "Estensione",
+              "Componente che amplia l’editor."
+            ],
+            [
+              "Configurazione",
+              "Valori che governano il comportamento."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una configurazione di esecuzione combina file, interprete, cartella, argomenti, ambiente e console. Il terminale integrato eredita stato dall’IDE e può differire da una sessione esterna. La padronanza consiste nel produrre evidenze e ricreare il comportamento, non nel ricordare un menu."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il concetto intuitivamente e tecnicamente."
+        },
+        {
+          "type": "paragraph",
+          "text": "So fornire esempio e controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma."
+        },
+        {
+          "type": "paragraph",
+          "text": "So diagnosticare tre casi limite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato esercizi e quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-5-chapter-7",
+      "lessonId": "1.5",
+      "chapterNumber": 7,
+      "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "7. Completamento, language server, linting e formattazione"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Completamento e diagnostica derivano da analisi statica e conoscenza del progetto; non provano il comportamento a runtime. Linter e formatter hanno scopi distinti e devono usare regole dichiarate e riproducibili. La configurazione consapevole parte dall’obiettivo, dichiara l’ambito e conserva una via di ritorno."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un quadro di comando riunisce strumenti senza fonderli: ogni indicatore deve mostrare quale componente controlla. Se un pulsante nasconde origine, destinazione o stato, occorre ricostruirne il meccanismo."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Completamento e diagnostica derivano da analisi statica e conoscenza del progetto; non provano il comportamento a runtime. Linter e formatter hanno scopi distinti e devono usare regole dichiarate e riproducibili. Il valore effettivo nasce dalla precedenza fra impostazioni, dallo stato dell’area di lavoro e dalle estensioni attive. La verifica registra versione dello strumento, radice, file, interprete, cartella, comando, output ed errore."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il metodo comune separa interfaccia, configurazione, servizio di analisi e processo eseguito. Prima si osserva lo stato, poi si cambia una sola variabile, si riavvia il contesto necessario e si ripete la stessa prova. Questa procedura resta valida su Windows, macOS e Linux anche quando menu, scorciatoie e nomi cambiano."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una impostazione di progetto è documentata e condivisibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il comando equivalente conferma ciò che fa il pulsante."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una nuova sessione ripete il risultato con la stessa configurazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Molte funzioni installate non garantiscono comprensione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un messaggio dell’analizzatore non è necessariamente un errore runtime."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una configurazione globale personale non rende il progetto riproducibile."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’IDE è un cruscotto: coordina componenti, ma non diventa motore, strada o carburante. Un buon cruscotto rende osservabile lo stato e consente controllo accessibile."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 7.1 — Catena di configurazione"
+        },
+        {
+          "type": "paragraph",
+          "text": "PROGETTO + CONFIGURAZIONE  vEDITOR / IDE + ESTENSIONI  +--> ANALISI STATICA  +--> TERMINALE E COMANDO  vINTERPRETE -> PROCESSO  vOUTPUT / ERRORI -> VERIFICA"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Completamento e diagnostica derivano da analisi statica e conoscenza del progetto; non provano il comportamento a runtime. Linter e formatter hanno scopi distinti e devono usare regole dichiarate e riproducibili. Le automazioni devono ridurre lavoro ripetitivo senza nascondere identità, percorsi, permessi o trasferimenti di dati. Le impostazioni variabili nel tempo vanno annotate con versione e ambito."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Cambiare più impostazioni insieme."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere avviso statico ed esecuzione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Memorizzare segreti nella configurazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dipendere da valori globali invisibili."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetto remoto o container."
+        },
+        {
+          "type": "paragraph",
+          "text": "Computer gestito."
+        },
+        {
+          "type": "paragraph",
+          "text": "Estensione disabilitata solo nel workspace."
+        },
+        {
+          "type": "paragraph",
+          "text": "Configurazione sincronizzata in conflitto."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale componente produce il comportamento?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Qual è l’ambito del valore effettivo?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale prova smentirebbe l’ipotesi?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Inventaria componenti e ambiti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Crea una modifica reversibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta IDE e terminale esterno."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Costruisci un controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un conflitto di precedenza."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta una checklist accessibile."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Quale scelta rende consapevole Completamento, language server, linting e formattazione?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. La configurazione verificata"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Un valore nascosto"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Il tema più colorato"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Molti plugin"
+        },
+        {
+          "type": "heading",
+          "text": "2. Un pulsante sostituisce la verifica?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Sì"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Solo offline"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo su Windows"
+        },
+        {
+          "type": "heading",
+          "text": "3. Dove vanno i segreti?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. In gestione separata"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Nel progetto pubblico"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Nel tema"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Nel nome file"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione"
+            ],
+            [
+              "Ambito",
+              "Contesto a cui una impostazione si applica."
+            ],
+            [
+              "Precedenza",
+              "Regola che determina il valore effettivo."
+            ],
+            [
+              "Workspace",
+              "Area di lavoro aperta nello strumento."
+            ],
+            [
+              "Estensione",
+              "Componente che amplia l’editor."
+            ],
+            [
+              "Configurazione",
+              "Valori che governano il comportamento."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Completamento e diagnostica derivano da analisi statica e conoscenza del progetto; non provano il comportamento a runtime. Linter e formatter hanno scopi distinti e devono usare regole dichiarate e riproducibili. La padronanza consiste nel produrre evidenze e ricreare il comportamento, non nel ricordare un menu."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il concetto intuitivamente e tecnicamente."
+        },
+        {
+          "type": "paragraph",
+          "text": "So fornire esempio e controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma."
+        },
+        {
+          "type": "paragraph",
+          "text": "So diagnosticare tre casi limite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato esercizi e quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-5-chapter-8",
+      "lessonId": "1.5",
+      "chapterNumber": 8,
+      "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "8. Navigazione, ricerca, tastiera e accessibilità"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un ambiente efficace deve essere utilizzabile con tastiera, zoom, contrasto, lettori di schermo e indicatori non basati solo sul colore. Ricerca, simboli e scorciatoie devono ridurre carico senza nascondere contesto. La configurazione consapevole parte dall’obiettivo, dichiara l’ambito e conserva una via di ritorno."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un quadro di comando riunisce strumenti senza fonderli: ogni indicatore deve mostrare quale componente controlla. Se un pulsante nasconde origine, destinazione o stato, occorre ricostruirne il meccanismo."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un ambiente efficace deve essere utilizzabile con tastiera, zoom, contrasto, lettori di schermo e indicatori non basati solo sul colore. Ricerca, simboli e scorciatoie devono ridurre carico senza nascondere contesto. Il valore effettivo nasce dalla precedenza fra impostazioni, dallo stato dell’area di lavoro e dalle estensioni attive. La verifica registra versione dello strumento, radice, file, interprete, cartella, comando, output ed errore."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il metodo comune separa interfaccia, configurazione, servizio di analisi e processo eseguito. Prima si osserva lo stato, poi si cambia una sola variabile, si riavvia il contesto necessario e si ripete la stessa prova. Questa procedura resta valida su Windows, macOS e Linux anche quando menu, scorciatoie e nomi cambiano."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una impostazione di progetto è documentata e condivisibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il comando equivalente conferma ciò che fa il pulsante."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una nuova sessione ripete il risultato con la stessa configurazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Molte funzioni installate non garantiscono comprensione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un messaggio dell’analizzatore non è necessariamente un errore runtime."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una configurazione globale personale non rende il progetto riproducibile."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’IDE è un cruscotto: coordina componenti, ma non diventa motore, strada o carburante. Un buon cruscotto rende osservabile lo stato e consente controllo accessibile."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 8.1 — Catena di configurazione"
+        },
+        {
+          "type": "paragraph",
+          "text": "PROGETTO + CONFIGURAZIONE  vEDITOR / IDE + ESTENSIONI  +--> ANALISI STATICA  +--> TERMINALE E COMANDO  vINTERPRETE -> PROCESSO  vOUTPUT / ERRORI -> VERIFICA"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un ambiente efficace deve essere utilizzabile con tastiera, zoom, contrasto, lettori di schermo e indicatori non basati solo sul colore. Ricerca, simboli e scorciatoie devono ridurre carico senza nascondere contesto. Le automazioni devono ridurre lavoro ripetitivo senza nascondere identità, percorsi, permessi o trasferimenti di dati. Le impostazioni variabili nel tempo vanno annotate con versione e ambito."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Cambiare più impostazioni insieme."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere avviso statico ed esecuzione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Memorizzare segreti nella configurazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dipendere da valori globali invisibili."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetto remoto o container."
+        },
+        {
+          "type": "paragraph",
+          "text": "Computer gestito."
+        },
+        {
+          "type": "paragraph",
+          "text": "Estensione disabilitata solo nel workspace."
+        },
+        {
+          "type": "paragraph",
+          "text": "Configurazione sincronizzata in conflitto."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale componente produce il comportamento?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Qual è l’ambito del valore effettivo?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale prova smentirebbe l’ipotesi?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Inventaria componenti e ambiti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Crea una modifica reversibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta IDE e terminale esterno."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Costruisci un controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un conflitto di precedenza."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta una checklist accessibile."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Quale scelta rende consapevole Navigazione, ricerca, tastiera e accessibilità?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Un valore nascosto"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Il tema più colorato"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. La configurazione verificata"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Molti plugin"
+        },
+        {
+          "type": "heading",
+          "text": "2. Un pulsante sostituisce la verifica?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Sì"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Solo offline"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo su Windows"
+        },
+        {
+          "type": "heading",
+          "text": "3. Dove vanno i segreti?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Nel tema"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Nel nome file"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. In gestione separata"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Nel progetto pubblico"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione"
+            ],
+            [
+              "Ambito",
+              "Contesto a cui una impostazione si applica."
+            ],
+            [
+              "Precedenza",
+              "Regola che determina il valore effettivo."
+            ],
+            [
+              "Workspace",
+              "Area di lavoro aperta nello strumento."
+            ],
+            [
+              "Estensione",
+              "Componente che amplia l’editor."
+            ],
+            [
+              "Configurazione",
+              "Valori che governano il comportamento."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un ambiente efficace deve essere utilizzabile con tastiera, zoom, contrasto, lettori di schermo e indicatori non basati solo sul colore. Ricerca, simboli e scorciatoie devono ridurre carico senza nascondere contesto. La padronanza consiste nel produrre evidenze e ricreare il comportamento, non nel ricordare un menu."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il concetto intuitivamente e tecnicamente."
+        },
+        {
+          "type": "paragraph",
+          "text": "So fornire esempio e controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma."
+        },
+        {
+          "type": "paragraph",
+          "text": "So diagnosticare tre casi limite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato esercizi e quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-5-chapter-9",
+      "lessonId": "1.5",
+      "chapterNumber": 9,
+      "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "9. Privacy, telemetria, sincronizzazione e segreti"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Telemetria, sincronizzazione delle impostazioni, cronologia, plugin e servizi remoti possono trasferire dati. Segreti e dati personali non appartengono a impostazioni condivise, screenshot o log. La configurazione consapevole parte dall’obiettivo, dichiara l’ambito e conserva una via di ritorno."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un quadro di comando riunisce strumenti senza fonderli: ogni indicatore deve mostrare quale componente controlla. Se un pulsante nasconde origine, destinazione o stato, occorre ricostruirne il meccanismo."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Telemetria, sincronizzazione delle impostazioni, cronologia, plugin e servizi remoti possono trasferire dati. Segreti e dati personali non appartengono a impostazioni condivise, screenshot o log. Il valore effettivo nasce dalla precedenza fra impostazioni, dallo stato dell’area di lavoro e dalle estensioni attive. La verifica registra versione dello strumento, radice, file, interprete, cartella, comando, output ed errore."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il metodo comune separa interfaccia, configurazione, servizio di analisi e processo eseguito. Prima si osserva lo stato, poi si cambia una sola variabile, si riavvia il contesto necessario e si ripete la stessa prova. Questa procedura resta valida su Windows, macOS e Linux anche quando menu, scorciatoie e nomi cambiano."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una impostazione di progetto è documentata e condivisibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il comando equivalente conferma ciò che fa il pulsante."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una nuova sessione ripete il risultato con la stessa configurazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Molte funzioni installate non garantiscono comprensione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un messaggio dell’analizzatore non è necessariamente un errore runtime."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una configurazione globale personale non rende il progetto riproducibile."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’IDE è un cruscotto: coordina componenti, ma non diventa motore, strada o carburante. Un buon cruscotto rende osservabile lo stato e consente controllo accessibile."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 9.1 — Catena di configurazione"
+        },
+        {
+          "type": "paragraph",
+          "text": "PROGETTO + CONFIGURAZIONE  vEDITOR / IDE + ESTENSIONI  +--> ANALISI STATICA  +--> TERMINALE E COMANDO  vINTERPRETE -> PROCESSO  vOUTPUT / ERRORI -> VERIFICA"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Telemetria, sincronizzazione delle impostazioni, cronologia, plugin e servizi remoti possono trasferire dati. Segreti e dati personali non appartengono a impostazioni condivise, screenshot o log. Le automazioni devono ridurre lavoro ripetitivo senza nascondere identità, percorsi, permessi o trasferimenti di dati. Le impostazioni variabili nel tempo vanno annotate con versione e ambito."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Cambiare più impostazioni insieme."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere avviso statico ed esecuzione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Memorizzare segreti nella configurazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dipendere da valori globali invisibili."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetto remoto o container."
+        },
+        {
+          "type": "paragraph",
+          "text": "Computer gestito."
+        },
+        {
+          "type": "paragraph",
+          "text": "Estensione disabilitata solo nel workspace."
+        },
+        {
+          "type": "paragraph",
+          "text": "Configurazione sincronizzata in conflitto."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale componente produce il comportamento?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Qual è l’ambito del valore effettivo?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale prova smentirebbe l’ipotesi?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Inventaria componenti e ambiti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Crea una modifica reversibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta IDE e terminale esterno."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Costruisci un controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un conflitto di precedenza."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta una checklist accessibile."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Quale scelta rende consapevole Privacy, telemetria, sincronizzazione e segreti?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. La configurazione verificata"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Il tema più colorato"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Molti plugin"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Un valore nascosto"
+        },
+        {
+          "type": "heading",
+          "text": "2. Un pulsante sostituisce la verifica?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Solo offline"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Solo su Windows"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Sì"
+        },
+        {
+          "type": "heading",
+          "text": "3. Dove vanno i segreti?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. In gestione separata"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Nel nome file"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Nel progetto pubblico"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Nel tema"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione"
+            ],
+            [
+              "Ambito",
+              "Contesto a cui una impostazione si applica."
+            ],
+            [
+              "Precedenza",
+              "Regola che determina il valore effettivo."
+            ],
+            [
+              "Workspace",
+              "Area di lavoro aperta nello strumento."
+            ],
+            [
+              "Estensione",
+              "Componente che amplia l’editor."
+            ],
+            [
+              "Configurazione",
+              "Valori che governano il comportamento."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Telemetria, sincronizzazione delle impostazioni, cronologia, plugin e servizi remoti possono trasferire dati. Segreti e dati personali non appartengono a impostazioni condivise, screenshot o log. La padronanza consiste nel produrre evidenze e ricreare il comportamento, non nel ricordare un menu."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il concetto intuitivamente e tecnicamente."
+        },
+        {
+          "type": "paragraph",
+          "text": "So fornire esempio e controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma."
+        },
+        {
+          "type": "paragraph",
+          "text": "So diagnosticare tre casi limite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato esercizi e quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-5-chapter-10",
+      "lessonId": "1.5",
+      "chapterNumber": 10,
+      "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "10. Configurazione riproducibile e diagnosi dell’IDE"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "La diagnosi separa editor, estensione, interprete, progetto, terminale e processo. Si registra lo stato, si disabilita o modifica una variabile alla volta e si confronta il comando equivalente fuori dall’IDE. La configurazione consapevole parte dall’obiettivo, dichiara l’ambito e conserva una via di ritorno."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un quadro di comando riunisce strumenti senza fonderli: ogni indicatore deve mostrare quale componente controlla. Se un pulsante nasconde origine, destinazione o stato, occorre ricostruirne il meccanismo."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "La diagnosi separa editor, estensione, interprete, progetto, terminale e processo. Si registra lo stato, si disabilita o modifica una variabile alla volta e si confronta il comando equivalente fuori dall’IDE. Il valore effettivo nasce dalla precedenza fra impostazioni, dallo stato dell’area di lavoro e dalle estensioni attive. La verifica registra versione dello strumento, radice, file, interprete, cartella, comando, output ed errore."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il metodo comune separa interfaccia, configurazione, servizio di analisi e processo eseguito. Prima si osserva lo stato, poi si cambia una sola variabile, si riavvia il contesto necessario e si ripete la stessa prova. Questa procedura resta valida su Windows, macOS e Linux anche quando menu, scorciatoie e nomi cambiano."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una impostazione di progetto è documentata e condivisibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il comando equivalente conferma ciò che fa il pulsante."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una nuova sessione ripete il risultato con la stessa configurazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Molte funzioni installate non garantiscono comprensione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un messaggio dell’analizzatore non è necessariamente un errore runtime."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una configurazione globale personale non rende il progetto riproducibile."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’IDE è un cruscotto: coordina componenti, ma non diventa motore, strada o carburante. Un buon cruscotto rende osservabile lo stato e consente controllo accessibile."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 10.1 — Catena di configurazione"
+        },
+        {
+          "type": "paragraph",
+          "text": "PROGETTO + CONFIGURAZIONE  vEDITOR / IDE + ESTENSIONI  +--> ANALISI STATICA  +--> TERMINALE E COMANDO  vINTERPRETE -> PROCESSO  vOUTPUT / ERRORI -> VERIFICA"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "La diagnosi separa editor, estensione, interprete, progetto, terminale e processo. Si registra lo stato, si disabilita o modifica una variabile alla volta e si confronta il comando equivalente fuori dall’IDE. Le automazioni devono ridurre lavoro ripetitivo senza nascondere identità, percorsi, permessi o trasferimenti di dati. Le impostazioni variabili nel tempo vanno annotate con versione e ambito."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Cambiare più impostazioni insieme."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere avviso statico ed esecuzione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Memorizzare segreti nella configurazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dipendere da valori globali invisibili."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetto remoto o container."
+        },
+        {
+          "type": "paragraph",
+          "text": "Computer gestito."
+        },
+        {
+          "type": "paragraph",
+          "text": "Estensione disabilitata solo nel workspace."
+        },
+        {
+          "type": "paragraph",
+          "text": "Configurazione sincronizzata in conflitto."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale componente produce il comportamento?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Qual è l’ambito del valore effettivo?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale prova smentirebbe l’ipotesi?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Inventaria componenti e ambiti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Crea una modifica reversibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta IDE e terminale esterno."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Costruisci un controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un conflitto di precedenza."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta una checklist accessibile."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Quale scelta rende consapevole Configurazione riproducibile e diagnosi dell’IDE?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Molti plugin"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Un valore nascosto"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. La configurazione verificata"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Il tema più colorato"
+        },
+        {
+          "type": "heading",
+          "text": "2. Un pulsante sostituisce la verifica?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Solo offline"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Solo su Windows"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Sì"
+        },
+        {
+          "type": "heading",
+          "text": "3. Dove vanno i segreti?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Nel nome file"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Nel progetto pubblico"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. In gestione separata"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Nel tema"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione"
+            ],
+            [
+              "Ambito",
+              "Contesto a cui una impostazione si applica."
+            ],
+            [
+              "Precedenza",
+              "Regola che determina il valore effettivo."
+            ],
+            [
+              "Workspace",
+              "Area di lavoro aperta nello strumento."
+            ],
+            [
+              "Estensione",
+              "Componente che amplia l’editor."
+            ],
+            [
+              "Configurazione",
+              "Valori che governano il comportamento."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "La diagnosi separa editor, estensione, interprete, progetto, terminale e processo. Si registra lo stato, si disabilita o modifica una variabile alla volta e si confronta il comando equivalente fuori dall’IDE. La padronanza consiste nel produrre evidenze e ricreare il comportamento, non nel ricordare un menu."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il concetto intuitivamente e tecnicamente."
+        },
+        {
+          "type": "paragraph",
+          "text": "So fornire esempio e controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma."
+        },
+        {
+          "type": "paragraph",
+          "text": "So diagnosticare tre casi limite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato esercizi e quiz."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sintesi integrata della Lezione 1.5"
+        },
+        {
+          "type": "paragraph",
+          "text": "Editor e IDE coordinano testo, progetto, analisi, terminale e interprete. Una configurazione competente è esplicita, accessibile, sicura, limitata nel proprio ambito e verificabile anche fuori dall’interfaccia."
+        },
+        {
+          "type": "heading",
+          "text": "Laboratorio finale: ambiente editoriale verificato"
+        },
+        {
+          "type": "paragraph",
+          "text": "Inventaria editor, estensioni e versioni."
+        },
+        {
+          "type": "paragraph",
+          "text": "Apri la radice corretta."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dichiara codifica e newline."
+        },
+        {
+          "type": "paragraph",
+          "text": "Seleziona e verifica Python."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta terminale interno ed esterno."
+        },
+        {
+          "type": "paragraph",
+          "text": "Configura analisi e formattazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Verifica accessibilità da tastiera."
+        },
+        {
+          "type": "paragraph",
+          "text": "Revisiona privacy e segreti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Esporta impostazioni condivisibili."
+        },
+        {
+          "type": "paragraph",
+          "text": "Diagnostica tre conflitti."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento della lezione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Dieci capitoli completati."
+        },
+        {
+          "type": "paragraph",
+          "text": "Almeno 24/30 nei quiz."
+        },
+        {
+          "type": "paragraph",
+          "text": "Laboratorio documentato e ripetibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Nessun segreto nelle configurazioni."
+        },
+        {
+          "type": "paragraph",
+          "text": "Pronto per la Lezione 1.6."
+        },
+        {
+          "type": "callout",
+          "text": "PASSAGGIO SUCCESSIVO  La Lezione 1.6 introdurrà ambienti virtuali, pacchetti e dipendenze."
+        }
+      ]
+    }
+  ],
+  "chapters": [
+    {
+      "number": 1,
+      "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+      "sectionId": "programming-1-5-chapter-1",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-5-chapter-1-guided",
+          "kind": "guided",
+          "lessonId": "1.5",
+          "chapterNumber": 1,
+          "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Inventaria componenti e ambiti.\nCrea una modifica reversibile.\nConfronta IDE e terminale esterno.",
+          "autoverification": ""
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-5-chapter-1-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 1,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Costruisci un controesempio."
+          },
+          {
+            "id": "programming-1-5-chapter-1-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 1,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Analizza un conflitto di precedenza."
+          },
+          {
+            "id": "programming-1-5-chapter-1-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 1,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Progetta una checklist accessibile."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-5-chapter-1-quiz-1",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Quale scelta rende consapevole Scegliere fra editor e IDE?",
+          "choices": [
+            "A. La configurazione verificata",
+            "B. Il tema più colorato",
+            "C. Molti plugin",
+            "D. Un valore nascosto"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-1"
+        },
+        {
+          "id": "programming-1-5-chapter-1-quiz-2",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Un pulsante sostituisce la verifica?",
+          "choices": [
+            "A. No",
+            "B. Solo offline",
+            "C. Solo su Windows",
+            "D. Sì"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-1"
+        },
+        {
+          "id": "programming-1-5-chapter-1-quiz-3",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Dove vanno i segreti?",
+          "choices": [
+            "A. In gestione separata",
+            "B. Nel nome file",
+            "C. Nel progetto pubblico",
+            "D. Nel tema"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-1"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+      "sectionId": "programming-1-5-chapter-2",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-5-chapter-2-guided",
+          "kind": "guided",
+          "lessonId": "1.5",
+          "chapterNumber": 2,
+          "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Inventaria componenti e ambiti.\nCrea una modifica reversibile.\nConfronta IDE e terminale esterno.",
+          "autoverification": ""
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-5-chapter-2-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 2,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Costruisci un controesempio."
+          },
+          {
+            "id": "programming-1-5-chapter-2-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 2,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Analizza un conflitto di precedenza."
+          },
+          {
+            "id": "programming-1-5-chapter-2-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 2,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Progetta una checklist accessibile."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-5-chapter-2-quiz-1",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Quale scelta rende consapevole Installazione, aggiornamenti ed estensioni?",
+          "choices": [
+            "A. Molti plugin",
+            "B. Un valore nascosto",
+            "C. La configurazione verificata",
+            "D. Il tema più colorato"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-2"
+        },
+        {
+          "id": "programming-1-5-chapter-2-quiz-2",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Un pulsante sostituisce la verifica?",
+          "choices": [
+            "A. Solo offline",
+            "B. Solo su Windows",
+            "C. No",
+            "D. Sì"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-2"
+        },
+        {
+          "id": "programming-1-5-chapter-2-quiz-3",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Dove vanno i segreti?",
+          "choices": [
+            "A. Nel nome file",
+            "B. Nel progetto pubblico",
+            "C. In gestione separata",
+            "D. Nel tema"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-2"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+      "sectionId": "programming-1-5-chapter-3",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-5-chapter-3-guided",
+          "kind": "guided",
+          "lessonId": "1.5",
+          "chapterNumber": 3,
+          "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Inventaria componenti e ambiti.\nCrea una modifica reversibile.\nConfronta IDE e terminale esterno.",
+          "autoverification": ""
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-5-chapter-3-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 3,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Costruisci un controesempio."
+          },
+          {
+            "id": "programming-1-5-chapter-3-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 3,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Analizza un conflitto di precedenza."
+          },
+          {
+            "id": "programming-1-5-chapter-3-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 3,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Progetta una checklist accessibile."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-5-chapter-3-quiz-1",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Quale scelta rende consapevole File, cartelle, progetto e area di lavoro?",
+          "choices": [
+            "A. La configurazione verificata",
+            "B. Un valore nascosto",
+            "C. Il tema più colorato",
+            "D. Molti plugin"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-3"
+        },
+        {
+          "id": "programming-1-5-chapter-3-quiz-2",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Un pulsante sostituisce la verifica?",
+          "choices": [
+            "A. No",
+            "B. Sì",
+            "C. Solo offline",
+            "D. Solo su Windows"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-3"
+        },
+        {
+          "id": "programming-1-5-chapter-3-quiz-3",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Dove vanno i segreti?",
+          "choices": [
+            "A. In gestione separata",
+            "B. Nel progetto pubblico",
+            "C. Nel tema",
+            "D. Nel nome file"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-3"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+      "sectionId": "programming-1-5-chapter-4",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-5-chapter-4-guided",
+          "kind": "guided",
+          "lessonId": "1.5",
+          "chapterNumber": 4,
+          "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Inventaria componenti e ambiti.\nCrea una modifica reversibile.\nConfronta IDE e terminale esterno.",
+          "autoverification": ""
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-5-chapter-4-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 4,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Costruisci un controesempio."
+          },
+          {
+            "id": "programming-1-5-chapter-4-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 4,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Analizza un conflitto di precedenza."
+          },
+          {
+            "id": "programming-1-5-chapter-4-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 4,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Progetta una checklist accessibile."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-5-chapter-4-quiz-1",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Quale scelta rende consapevole Testo: codifica, newline, rientri e salvataggio?",
+          "choices": [
+            "A. Un valore nascosto",
+            "B. Il tema più colorato",
+            "C. La configurazione verificata",
+            "D. Molti plugin"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-4"
+        },
+        {
+          "id": "programming-1-5-chapter-4-quiz-2",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Un pulsante sostituisce la verifica?",
+          "choices": [
+            "A. Sì",
+            "B. Solo offline",
+            "C. No",
+            "D. Solo su Windows"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-4"
+        },
+        {
+          "id": "programming-1-5-chapter-4-quiz-3",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Dove vanno i segreti?",
+          "choices": [
+            "A. Nel tema",
+            "B. Nel nome file",
+            "C. In gestione separata",
+            "D. Nel progetto pubblico"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-4"
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+      "sectionId": "programming-1-5-chapter-5",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-5-chapter-5-guided",
+          "kind": "guided",
+          "lessonId": "1.5",
+          "chapterNumber": 5,
+          "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Inventaria componenti e ambiti.\nCrea una modifica reversibile.\nConfronta IDE e terminale esterno.",
+          "autoverification": ""
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-5-chapter-5-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 5,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Costruisci un controesempio."
+          },
+          {
+            "id": "programming-1-5-chapter-5-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 5,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Analizza un conflitto di precedenza."
+          },
+          {
+            "id": "programming-1-5-chapter-5-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 5,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Progetta una checklist accessibile."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-5-chapter-5-quiz-1",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Quale scelta rende consapevole Selezionare e verificare l’interprete Python?",
+          "choices": [
+            "A. La configurazione verificata",
+            "B. Il tema più colorato",
+            "C. Molti plugin",
+            "D. Un valore nascosto"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-5"
+        },
+        {
+          "id": "programming-1-5-chapter-5-quiz-2",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Un pulsante sostituisce la verifica?",
+          "choices": [
+            "A. No",
+            "B. Solo offline",
+            "C. Solo su Windows",
+            "D. Sì"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-5"
+        },
+        {
+          "id": "programming-1-5-chapter-5-quiz-3",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Dove vanno i segreti?",
+          "choices": [
+            "A. In gestione separata",
+            "B. Nel nome file",
+            "C. Nel progetto pubblico",
+            "D. Nel tema"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-5"
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+      "sectionId": "programming-1-5-chapter-6",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-5-chapter-6-guided",
+          "kind": "guided",
+          "lessonId": "1.5",
+          "chapterNumber": 6,
+          "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Inventaria componenti e ambiti.\nCrea una modifica reversibile.\nConfronta IDE e terminale esterno.",
+          "autoverification": ""
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-5-chapter-6-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 6,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Costruisci un controesempio."
+          },
+          {
+            "id": "programming-1-5-chapter-6-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 6,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Analizza un conflitto di precedenza."
+          },
+          {
+            "id": "programming-1-5-chapter-6-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 6,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Progetta una checklist accessibile."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-5-chapter-6-quiz-1",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Quale scelta rende consapevole Terminale integrato, cartella corrente e configurazioni di esecuzione?",
+          "choices": [
+            "A. Molti plugin",
+            "B. Un valore nascosto",
+            "C. La configurazione verificata",
+            "D. Il tema più colorato"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-6"
+        },
+        {
+          "id": "programming-1-5-chapter-6-quiz-2",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Un pulsante sostituisce la verifica?",
+          "choices": [
+            "A. Solo offline",
+            "B. Solo su Windows",
+            "C. No",
+            "D. Sì"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-6"
+        },
+        {
+          "id": "programming-1-5-chapter-6-quiz-3",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Dove vanno i segreti?",
+          "choices": [
+            "A. Nel nome file",
+            "B. Nel progetto pubblico",
+            "C. In gestione separata",
+            "D. Nel tema"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-6"
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+      "sectionId": "programming-1-5-chapter-7",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-5-chapter-7-guided",
+          "kind": "guided",
+          "lessonId": "1.5",
+          "chapterNumber": 7,
+          "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Inventaria componenti e ambiti.\nCrea una modifica reversibile.\nConfronta IDE e terminale esterno.",
+          "autoverification": ""
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-5-chapter-7-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 7,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Costruisci un controesempio."
+          },
+          {
+            "id": "programming-1-5-chapter-7-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 7,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Analizza un conflitto di precedenza."
+          },
+          {
+            "id": "programming-1-5-chapter-7-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 7,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Progetta una checklist accessibile."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-5-chapter-7-quiz-1",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Quale scelta rende consapevole Completamento, language server, linting e formattazione?",
+          "choices": [
+            "A. La configurazione verificata",
+            "B. Un valore nascosto",
+            "C. Il tema più colorato",
+            "D. Molti plugin"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-7"
+        },
+        {
+          "id": "programming-1-5-chapter-7-quiz-2",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Un pulsante sostituisce la verifica?",
+          "choices": [
+            "A. No",
+            "B. Sì",
+            "C. Solo offline",
+            "D. Solo su Windows"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-7"
+        },
+        {
+          "id": "programming-1-5-chapter-7-quiz-3",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Dove vanno i segreti?",
+          "choices": [
+            "A. In gestione separata",
+            "B. Nel progetto pubblico",
+            "C. Nel tema",
+            "D. Nel nome file"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-7"
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+      "sectionId": "programming-1-5-chapter-8",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-5-chapter-8-guided",
+          "kind": "guided",
+          "lessonId": "1.5",
+          "chapterNumber": 8,
+          "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Inventaria componenti e ambiti.\nCrea una modifica reversibile.\nConfronta IDE e terminale esterno.",
+          "autoverification": ""
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-5-chapter-8-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 8,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Costruisci un controesempio."
+          },
+          {
+            "id": "programming-1-5-chapter-8-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 8,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Analizza un conflitto di precedenza."
+          },
+          {
+            "id": "programming-1-5-chapter-8-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 8,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Progetta una checklist accessibile."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-5-chapter-8-quiz-1",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Quale scelta rende consapevole Navigazione, ricerca, tastiera e accessibilità?",
+          "choices": [
+            "A. Un valore nascosto",
+            "B. Il tema più colorato",
+            "C. La configurazione verificata",
+            "D. Molti plugin"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-8"
+        },
+        {
+          "id": "programming-1-5-chapter-8-quiz-2",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Un pulsante sostituisce la verifica?",
+          "choices": [
+            "A. Sì",
+            "B. Solo offline",
+            "C. No",
+            "D. Solo su Windows"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-8"
+        },
+        {
+          "id": "programming-1-5-chapter-8-quiz-3",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Dove vanno i segreti?",
+          "choices": [
+            "A. Nel tema",
+            "B. Nel nome file",
+            "C. In gestione separata",
+            "D. Nel progetto pubblico"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-8"
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+      "sectionId": "programming-1-5-chapter-9",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-5-chapter-9-guided",
+          "kind": "guided",
+          "lessonId": "1.5",
+          "chapterNumber": 9,
+          "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Inventaria componenti e ambiti.\nCrea una modifica reversibile.\nConfronta IDE e terminale esterno.",
+          "autoverification": ""
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-5-chapter-9-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 9,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Costruisci un controesempio."
+          },
+          {
+            "id": "programming-1-5-chapter-9-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 9,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Analizza un conflitto di precedenza."
+          },
+          {
+            "id": "programming-1-5-chapter-9-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 9,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Progetta una checklist accessibile."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-5-chapter-9-quiz-1",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Quale scelta rende consapevole Privacy, telemetria, sincronizzazione e segreti?",
+          "choices": [
+            "A. La configurazione verificata",
+            "B. Il tema più colorato",
+            "C. Molti plugin",
+            "D. Un valore nascosto"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-9"
+        },
+        {
+          "id": "programming-1-5-chapter-9-quiz-2",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Un pulsante sostituisce la verifica?",
+          "choices": [
+            "A. No",
+            "B. Solo offline",
+            "C. Solo su Windows",
+            "D. Sì"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-9"
+        },
+        {
+          "id": "programming-1-5-chapter-9-quiz-3",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Dove vanno i segreti?",
+          "choices": [
+            "A. In gestione separata",
+            "B. Nel nome file",
+            "C. Nel progetto pubblico",
+            "D. Nel tema"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-9"
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+      "sectionId": "programming-1-5-chapter-10",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-5-chapter-10-guided",
+          "kind": "guided",
+          "lessonId": "1.5",
+          "chapterNumber": 10,
+          "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Inventaria componenti e ambiti.\nCrea una modifica reversibile.\nConfronta IDE e terminale esterno.",
+          "autoverification": ""
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-5-chapter-10-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 10,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Costruisci un controesempio."
+          },
+          {
+            "id": "programming-1-5-chapter-10-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 10,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Analizza un conflitto di precedenza."
+          },
+          {
+            "id": "programming-1-5-chapter-10-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.5",
+            "chapterNumber": 10,
+            "title": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+            "prompt": "Progetta una checklist accessibile."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-5-chapter-10-quiz-1",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Quale scelta rende consapevole Configurazione riproducibile e diagnosi dell’IDE?",
+          "choices": [
+            "A. Molti plugin",
+            "B. Un valore nascosto",
+            "C. La configurazione verificata",
+            "D. Il tema più colorato"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-10"
+        },
+        {
+          "id": "programming-1-5-chapter-10-quiz-2",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Un pulsante sostituisce la verifica?",
+          "choices": [
+            "A. Solo offline",
+            "B. Solo su Windows",
+            "C. No",
+            "D. Sì"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-10"
+        },
+        {
+          "id": "programming-1-5-chapter-10-quiz-3",
+          "concept": "OBIETTIVO  Configurare la funzione in modo esplicito, verificabile, accessibile e riproducibile.",
+          "prompt": "Dove vanno i segreti?",
+          "choices": [
+            "A. Nel nome file",
+            "B. Nel progetto pubblico",
+            "C. In gestione separata",
+            "D. Nel tema"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-5-chapter-10"
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    [
+      "Ambito",
+      "Contesto a cui una impostazione si applica."
+    ],
+    [
+      "Precedenza",
+      "Regola che determina il valore effettivo."
+    ],
+    [
+      "Workspace",
+      "Area di lavoro aperta nello strumento."
+    ],
+    [
+      "Estensione",
+      "Componente che amplia l’editor."
+    ],
+    [
+      "Configurazione",
+      "Valori che governano il comportamento."
+    ],
+    [
+      "Ambito",
+      "Contesto a cui una impostazione si applica."
+    ],
+    [
+      "Precedenza",
+      "Regola che determina il valore effettivo."
+    ],
+    [
+      "Workspace",
+      "Area di lavoro aperta nello strumento."
+    ],
+    [
+      "Estensione",
+      "Componente che amplia l’editor."
+    ],
+    [
+      "Configurazione",
+      "Valori che governano il comportamento."
+    ],
+    [
+      "Ambito",
+      "Contesto a cui una impostazione si applica."
+    ],
+    [
+      "Precedenza",
+      "Regola che determina il valore effettivo."
+    ],
+    [
+      "Workspace",
+      "Area di lavoro aperta nello strumento."
+    ],
+    [
+      "Estensione",
+      "Componente che amplia l’editor."
+    ],
+    [
+      "Configurazione",
+      "Valori che governano il comportamento."
+    ],
+    [
+      "Ambito",
+      "Contesto a cui una impostazione si applica."
+    ],
+    [
+      "Precedenza",
+      "Regola che determina il valore effettivo."
+    ],
+    [
+      "Workspace",
+      "Area di lavoro aperta nello strumento."
+    ],
+    [
+      "Estensione",
+      "Componente che amplia l’editor."
+    ],
+    [
+      "Configurazione",
+      "Valori che governano il comportamento."
+    ],
+    [
+      "Ambito",
+      "Contesto a cui una impostazione si applica."
+    ],
+    [
+      "Precedenza",
+      "Regola che determina il valore effettivo."
+    ],
+    [
+      "Workspace",
+      "Area di lavoro aperta nello strumento."
+    ],
+    [
+      "Estensione",
+      "Componente che amplia l’editor."
+    ],
+    [
+      "Configurazione",
+      "Valori che governano il comportamento."
+    ],
+    [
+      "Ambito",
+      "Contesto a cui una impostazione si applica."
+    ],
+    [
+      "Precedenza",
+      "Regola che determina il valore effettivo."
+    ],
+    [
+      "Workspace",
+      "Area di lavoro aperta nello strumento."
+    ],
+    [
+      "Estensione",
+      "Componente che amplia l’editor."
+    ],
+    [
+      "Configurazione",
+      "Valori che governano il comportamento."
+    ],
+    [
+      "Ambito",
+      "Contesto a cui una impostazione si applica."
+    ],
+    [
+      "Precedenza",
+      "Regola che determina il valore effettivo."
+    ],
+    [
+      "Workspace",
+      "Area di lavoro aperta nello strumento."
+    ],
+    [
+      "Estensione",
+      "Componente che amplia l’editor."
+    ],
+    [
+      "Configurazione",
+      "Valori che governano il comportamento."
+    ],
+    [
+      "Ambito",
+      "Contesto a cui una impostazione si applica."
+    ],
+    [
+      "Precedenza",
+      "Regola che determina il valore effettivo."
+    ],
+    [
+      "Workspace",
+      "Area di lavoro aperta nello strumento."
+    ],
+    [
+      "Estensione",
+      "Componente che amplia l’editor."
+    ],
+    [
+      "Configurazione",
+      "Valori che governano il comportamento."
+    ],
+    [
+      "Ambito",
+      "Contesto a cui una impostazione si applica."
+    ],
+    [
+      "Precedenza",
+      "Regola che determina il valore effettivo."
+    ],
+    [
+      "Workspace",
+      "Area di lavoro aperta nello strumento."
+    ],
+    [
+      "Estensione",
+      "Componente che amplia l’editor."
+    ],
+    [
+      "Configurazione",
+      "Valori che governano il comportamento."
+    ],
+    [
+      "Ambito",
+      "Contesto a cui una impostazione si applica."
+    ],
+    [
+      "Precedenza",
+      "Regola che determina il valore effettivo."
+    ],
+    [
+      "Workspace",
+      "Area di lavoro aperta nello strumento."
+    ],
+    [
+      "Estensione",
+      "Componente che amplia l’editor."
+    ],
+    [
+      "Configurazione",
+      "Valori che governano il comportamento."
+    ]
+  ],
+  "summary": [
+    "Editor e IDE coordinano testo, progetto, analisi, terminale e interprete. Una configurazione competente è esplicita, accessibile, sicura, limitata nel proprio ambito e verificabile anche fuori dall’interfaccia."
+  ],
+  "finalAssessment": {
+    "lessonId": "1.5",
+    "title": "Laboratorio finale: ambiente editoriale verificato",
+    "prompt": "Inventaria editor, estensioni e versioni.",
+    "deliverables": [
+      "Apri la radice corretta.",
+      "Dichiara codifica e newline.",
+      "Seleziona e verifica Python.",
+      "Confronta terminale interno ed esterno.",
+      "Configura analisi e formattazione.",
+      "Verifica accessibilità da tastiera.",
+      "Revisiona privacy e segreti.",
+      "Esporta impostazioni condivisibili.",
+      "Diagnostica tre conflitti."
+    ],
+    "rubric": [],
+    "completionCriteria": [
+      "Dieci capitoli completati.",
+      "Almeno 24/30 nei quiz.",
+      "Laboratorio documentato e ripetibile.",
+      "Nessun segreto nelle configurazioni.",
+      "Pronto per la Lezione 1.6."
+    ]
+  }
+}
