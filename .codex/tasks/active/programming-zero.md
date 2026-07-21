@@ -1,8 +1,8 @@
 # Completamento Programmazione da zero
 
 Stato: in corso
-Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 2.6 corrente
-Branch corrente: `codex/programming-zero-lesson-2-6`
+Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 2.7 corrente
+Branch corrente: `codex/programming-zero-lesson-2-7`
 Ultima integrazione completata: Lezione 0.9 e relativo Python Project, [PR #26](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/26)
 Proposte in integrazione: Lezione 1.1, [PR #17](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/17), e Lezione 1.2, [PR #20](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/20)
 Pacchetto: `programming`
@@ -291,6 +291,14 @@ Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_2.6_Modalita_interattiva
 Contenuti convertiti: 11 sezioni, 914 blocchi, 60 esercizi, 30 quiz e 60 voci di glossario; laboratorio e criteri finali conservati. SHA-256 `b57992d8b2c37e386d3eb43a00ce11e3a31c873d6315ffc54fd9662c2dc14594`.
 
 Verifiche: test 151/151, typecheck e build superati; lint solo warning preesistente. Il timeout del test cumulativo è stato portato a 10 secondi perché l'elaborazione delle 24 lezioni ha superato il limite precedente di 5 secondi.
+
+## Estensione in revisione · Lezione 2.7
+
+Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_2.7_Errori_e_traceback.docx`. Il DOCX non verrà caricato. File riservati: artefatto 2.7, aggregatore, progressi e test. Dipendenza: PR #44.
+
+Contenuti convertiti: 11 sezioni, 914 blocchi, 60 esercizi, 30 quiz e 60 voci di glossario; laboratorio e criteri finali conservati. SHA-256 `e22b440aa98c46696c17ec19f7410c8da43f461b598fcf22d927c372a9c8f3f5`.
+
+Verifiche: test 151/151, typecheck e build superati; lint solo warning preesistente.
 
 ## Estensione in revisione · Lezione 2.4
 
