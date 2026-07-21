@@ -3,7 +3,7 @@
 Stato: in corso
 Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 0.8 corrente
 Branch: `codex/programming-zero-lesson-0-8`
-Pull request: Draft PR da aprire (base PR #13)
+Pull request: https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/15 (base PR #13)
 Pacchetto: `programming`
 Percorso: `programming-zero`
 
@@ -119,7 +119,7 @@ Contenuti convertiti:
 
 Verifiche: test mirato 21/21, suite completa 138/138, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 
-## Estensione in corso · Lezione 0.8
+## Estensione in revisione · Lezione 0.8
 
 Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_0.8_Impatto_del_software.docx`. Il DOCX non verrà caricato nel repository.
 
@@ -131,6 +131,16 @@ File riservati:
 - `tests/programming-subject.test.ts`
 
 File condivisi prenotati: nessuno. Dipendenza: PR #13; branch e Draft PR impilati sulla lezione 0.7.
+
+Contenuti convertiti:
+
+- 13 sezioni e 959 blocchi renderizzabili;
+- 12 esercizi guidati e 36 esercizi autonomi;
+- 36 domande di quiz e 60 voci di glossario;
+- prova finale, rubrica e criteri di completamento;
+- impronta SHA-256 `441b9e1af37992314cd0ded71a8196929786f3741a4bb2d90d371da4a24af017`, senza includere il DOCX.
+
+Verifiche: test mirato 21/21, suite completa 138/138, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 
 ## Estensione in revisione · Lezione 0.7
 
