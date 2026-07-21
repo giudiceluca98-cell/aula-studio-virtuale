@@ -1293,17 +1293,17 @@ export function StudyRoom({ roomId }: { roomId: string }) {
   const connectionState = isDemo ? "connected" : realtime.connectionState;
 
   return (
-    <main className="min-h-screen bg-[#f1f2ed] p-2 sm:p-3 lg:h-screen lg:overflow-hidden">
+    <main data-ui-surface="dark" data-ui-page="room" className="min-h-screen bg-[#f1f2ed] p-2 sm:p-3 lg:h-screen lg:overflow-hidden">
       {toast && <div role="status" className="fixed left-1/2 top-4 z-[70] -translate-x-1/2 rounded-full bg-ink px-4 py-2.5 text-center text-xs font-semibold text-white shadow-soft">{toast}</div>}
 
-      <div id="room-scroll-shell" data-testid="room-scroll-shell" className="mx-auto flex min-h-[calc(100vh-1rem)] max-w-[1800px] flex-col overflow-hidden rounded-[1.6rem] border border-black/[0.07] bg-paper shadow-soft lg:h-[calc(100vh-1.5rem)] lg:min-h-0 lg:overflow-y-auto">
-        <header className="flex min-h-[72px] flex-wrap items-center justify-between gap-3 border-b border-black/[0.06] bg-white/80 px-4 py-3 backdrop-blur-xl sm:px-6">
+      <div id="room-scroll-shell" data-ui-room-shell data-testid="room-scroll-shell" className="mx-auto flex min-h-[calc(100vh-1rem)] max-w-[1800px] flex-col overflow-hidden rounded-[1.6rem] border border-black/[0.07] bg-paper shadow-soft lg:h-[calc(100vh-1.5rem)] lg:min-h-0 lg:overflow-y-auto">
+        <header data-ui-room-header className="flex min-h-[72px] flex-wrap items-center justify-between gap-3 border-b border-black/[0.06] bg-white/80 px-4 py-3 backdrop-blur-xl sm:px-6">
           <div className="flex min-w-0 items-center gap-3">
             <Link href="/dashboard" aria-label="Torna alle stanze" className="grid size-9 shrink-0 place-items-center rounded-xl border border-black/[0.07] bg-white text-black/50 hover:text-ink"><ArrowLeft size={17} /></Link>
-            <div className="min-w-0"><p className="text-[9px] font-bold uppercase tracking-[.18em] text-moss-700">Aula condivisa · {data.room.invite_code}</p><h1 className="truncate text-base font-bold sm:text-lg">{data.room.name}</h1></div>
+            <div className="min-w-0"><p className="text-[9px] font-bold uppercase tracking-[.18em] text-moss-700">Aula condivisa · {data.room.invite_code}</p><h1 data-ui-room-title className="truncate text-base font-bold sm:text-lg">{data.room.name}</h1></div>
           </div>
           <div className="flex items-center gap-2">
-            <div className={clsx("hidden items-center gap-2 rounded-full px-3 py-2 text-[11px] font-bold sm:flex", connectionState === "connected" ? "bg-moss-50 text-moss-700" : "bg-amber-50 text-amber-700")}>
+            <div data-ui-sync-badge className={clsx("hidden items-center gap-2 rounded-full px-3 py-2 text-[11px] font-bold sm:flex", connectionState === "connected" ? "bg-moss-50 text-moss-700" : "bg-amber-50 text-amber-700")}>
               {connectionState === "connected" ? <Wifi size={14} /> : <WifiOff size={14} />}{connectionState === "connected" ? "In sincronia" : connectionState === "offline" ? "Offline · salvo in locale" : "Riconnessione…"}
             </div>
             <Link href={`/catalog?roomId=${roomId}`} aria-label="Apri catalogo" className="button-secondary px-3">
@@ -1333,7 +1333,7 @@ export function StudyRoom({ roomId }: { roomId: string }) {
           </div>
         </header>
 
-        <nav aria-label="Strumenti dell’aula" className="border-b border-black/[0.06] bg-white/90 px-2 py-2 sm:px-4">
+        <nav data-ui-room-nav aria-label="Strumenti dell’aula" className="border-b border-black/[0.06] bg-white/90 px-2 py-2 sm:px-4">
           <div className="flex gap-1.5 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {([
               ["courses", "Corsi", <BookOpen key="courses" size={14} />],
@@ -1396,7 +1396,7 @@ export function StudyRoom({ roomId }: { roomId: string }) {
 
           <section id="room-workspace" aria-label="Area di lavoro" className="min-w-0 space-y-px bg-black/[0.05]">
             <div className={clsx("min-h-full bg-paper p-4 sm:p-6", (activeTool === "progress" || activeTool === "notes") && "hidden")}>
-              <div className="overflow-hidden rounded-[1.5rem] border border-black/[0.06] bg-white shadow-card">
+              <div data-ui-selected-material className="overflow-hidden rounded-[1.5rem] border border-black/[0.06] bg-white shadow-card">
                 <div className="flex items-start justify-between gap-4 border-b border-black/[0.06] p-5 sm:p-6">
                   <div className="min-w-0"><p className="eyebrow">Materiale selezionato</p><h2 className="mt-2 truncate font-[family-name:var(--font-serif)] text-2xl font-medium sm:text-3xl">{selectedMaterial?.title ?? "Scegli un materiale"}</h2><p className="mt-2 text-xs leading-5 text-black/42">{selectedMaterial?.description ?? selectedCourse?.description ?? "Tutto quello che serve per la prossima sessione."}</p></div>
                 </div>

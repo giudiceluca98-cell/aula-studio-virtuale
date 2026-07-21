@@ -96,7 +96,7 @@ export function AuthForm({ mode }: AuthFormProps) {
   }
 
   return (
-    <main className="grid min-h-screen lg:grid-cols-[0.9fr_1.1fr]">
+    <main data-ui-surface="dark" data-ui-page="auth" className="grid min-h-screen lg:grid-cols-[0.9fr_1.1fr]">
       <section className="flex min-h-screen flex-col px-6 py-6 sm:px-10 lg:px-16">
         <Link href="/" className="flex w-fit items-center gap-3 font-bold tracking-tight">
           <span className="grid size-9 place-items-center rounded-xl bg-moss-800 text-white"><BookOpen size={18} /></span>

@@ -6,7 +6,8 @@ Questo file registra incarichi temporanei, proprietà dei file e dipendenze tra 
 
 | Attività | Assegnazione prevista | Branch | Stato | File riservati | File condivisi richiesti | Pull request | Ultimo aggiornamento |
 |---|---|---|---|---|---|---|---|
-| Controlli di lettura e scorrimento dell’aula | Codex | `agent/lesson-reading-controls` | In corso | `programming-lesson-workspace.tsx`, test dedicato | `src/components/room/study-room.tsx` | — | 2026-07-21 |
+| Tema Futuristica Focus e aggiornamenti master | Codex | `agent/futuristic-focus-theme` | In corso | sistema temi, CSS, impostazioni, portale, dashboard e area lezione | `src/components/room/study-room.tsx` | — | 2026-07-22 |
+| Controlli di lettura e scorrimento dell’aula | Codex | `agent/lesson-reading-controls` | In revisione | `programming-lesson-workspace.tsx`, test dedicato | `src/components/room/study-room.tsx` | — | 2026-07-22 |
 | Integrazione Modulo 1 · Lezioni 1.1 e 1.2 | Codex | `agent/integrate-programming-module-1` | In revisione | Artefatti 1.1/1.2, aggregatore, progressi e test | `src/lib/catalog/roadmap.ts` | [PR #29](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/29) | 2026-07-21 |
 | Correzione e coerenza contenuti · Programmazione da zero | Codex | `agent/correct-programming-content` | Completato | Artefatti 0.1–0.9 interessati, aggregatore e test mirati | Nessuno | [PR #28](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/28) | 2026-07-21 |
 | Completamento Programmazione da zero · Lezione 0.3 | Codex — contenuto ufficiale 0.3 convertito in codice | `codex/programming-zero-lesson-0-3` | Completato | Artefatto 0.3, aggregatore, progressi e test | Nessuno | [PR #4](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/4) | 2026-07-21 |

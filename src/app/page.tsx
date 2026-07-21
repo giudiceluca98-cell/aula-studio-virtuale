@@ -18,7 +18,7 @@ const features = [
 
 export default function HomePage() {
   return (
-    <main className="mx-auto min-h-screen max-w-[1480px] overflow-hidden px-5 pb-12 pt-5 sm:px-8 lg:px-12">
+    <main data-ui-surface="dark" data-ui-page="presentation" className="mx-auto min-h-screen max-w-[1480px] overflow-hidden px-5 pb-12 pt-5 sm:px-8 lg:px-12">
       <nav className="flex items-center justify-between rounded-2xl border border-black/[0.05] bg-white/70 px-4 py-3 backdrop-blur-xl sm:px-6">
         <Link href="/" className="flex items-center gap-3 font-bold tracking-tight">
           <span className="grid size-9 place-items-center rounded-xl bg-moss-800 text-white"><BookOpen size={18} /></span>

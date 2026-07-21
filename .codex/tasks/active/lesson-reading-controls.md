@@ -1,6 +1,6 @@
 # Controlli di lettura e scorrimento dell’aula
 
-Stato: in corso
+Stato: in revisione
 Assegnazione: Codex
 Branch: `agent/lesson-reading-controls`
 
