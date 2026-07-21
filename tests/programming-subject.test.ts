@@ -78,9 +78,9 @@ describe("pacchetto editoriale Programmazione da zero", () => {
     expect(draft.modules).toHaveLength(1);
     expect(draft.modules[0].stageId).toBe("programming-module-0");
     expect(draft.modules[0].items[0]).toMatchObject({ itemType: "material", catalogMaterialId: native.id, isRequired: true });
-    expect(draft.modules[0].items.filter((item) => item.itemType === "exercise")).toHaveLength(2);
+    expect(draft.modules[0].items.filter((item) => item.itemType === "exercise")).toHaveLength(3);
     expect(draft.modules[0].items.some((item) => item.itemType === "project")).toBe(true);
-    expect(draft.modules[0].items.filter((item) => item.itemType === "checkpoint")).toHaveLength(2);
+    expect(draft.modules[0].items.filter((item) => item.itemType === "checkpoint")).toHaveLength(3);
   });
 
   it("non completa la lezione con il solo scorrimento o con le sole sezioni", () => {
