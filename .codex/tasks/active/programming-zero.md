@@ -268,9 +268,13 @@ Contenuti convertiti: 11 sezioni, 914 blocchi, 60 esercizi, 30 quiz e 60 voci di
 
 Verifiche: test mirato 21/21, suite completa 151/151, typecheck e build superati; lint senza errori e con il solo warning preesistente.
 
-## Estensione in corso · Lezione 2.3
+## Estensione in revisione · Lezione 2.3
 
 Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_2.3_Sintassi_rientri_righe_vuote_commenti.docx`. Il DOCX non verrà caricato. File riservati: artefatto 2.3, aggregatore, progressi e test. Dipendenza: PR #39.
+
+Contenuti convertiti: 11 sezioni, 914 blocchi, 60 esercizi, 30 quiz e 60 voci di glossario; laboratorio e criteri finali conservati. SHA-256 `d0f99a4174d942baf6404e8c4834006e5d2d5e43989ca36f454cc2ce9d08906e`.
+
+Verifiche: test 151/151, typecheck e build superati; lint solo warning preesistente.
 
 ## Estensione in revisione · Lezione 2.1
 
