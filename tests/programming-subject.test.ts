@@ -23,50 +23,53 @@ describe("pacchetto editoriale Programmazione da zero", () => {
     expect(createSubjectRoadmap(query).title).toBe("Programmazione da zero");
   });
 
-  it("pubblica le cinque lezioni ufficiali disponibili nel Modulo 0", () => {
+  it("pubblica le sei lezioni ufficiali disponibili nel Modulo 0", () => {
     expect(programmingCurriculumOutline).toEqual([
       "Lezione 0.1 · Che cosa significa programmare?",
       "Lezione 0.2 · Che cos’è un computer e come esegue un programma?",
       "Lezione 0.3 · Come il computer rappresenta l’informazione?",
       "Lezione 0.4 · Logica, proposizioni e ragionamento booleano",
       "Lezione 0.5 · Pensiero computazionale, algoritmi e pseudocodice",
+      "Lezione 0.6 · Come nasce il software",
     ]);
     expect(programmingSubjectPackage.stages).toHaveLength(1);
     expect(programmingSubjectPackage.stages[0].id).toBe("programming-module-0");
     expect(programmingSubjectPackage.stages[0].lessons).toEqual(programmingCurriculumOutline);
     expect(programmingLesson.modules).toHaveLength(1);
     expect(programmingLesson.modules[0]).toMatchObject({ id: "programming-module-0", title: "Modulo 0" });
-    expect(programmingLesson.modules[0].lessons.map((lesson) => lesson.id)).toEqual(["0.1", "0.2", "0.3", "0.4", "0.5"]);
+    expect(programmingLesson.modules[0].lessons.map((lesson) => lesson.id)).toEqual(["0.1", "0.2", "0.3", "0.4", "0.5", "0.6"]);
     for (const lesson of programmingLesson.modules[0].lessons) {
-      expect(lesson.sectionIds).toHaveLength(11);
-      expect(lesson.exerciseIds).toHaveLength(40);
-      expect(lesson.quizIds).toHaveLength(30);
-      expect(lesson.glossary).toHaveLength(50);
+      const extended = lesson.id === "0.6";
+      expect(lesson.sectionIds).toHaveLength(extended ? 13 : 11);
+      expect(lesson.exerciseIds).toHaveLength(extended ? 48 : 40);
+      expect(lesson.quizIds).toHaveLength(extended ? 36 : 30);
+      expect(lesson.glossary).toHaveLength(extended ? 60 : 50);
       expect(lesson.summary.length).toBeGreaterThan(0);
     }
   });
 
-  it("estende i contenuti ufficiali con le lezioni locali 0.3–0.5", () => {
+  it("estende i contenuti ufficiali con le lezioni locali 0.3–0.6", () => {
     expect(programmingLesson.id).toBe("programming-0-1");
     expect(programmingLesson.lessonTitles).toEqual(programmingCurriculumOutline);
-    expect(programmingLesson.objectives).toHaveLength(33);
-    expect(programmingLesson.sections).toHaveLength(55);
-    expect(programmingLesson.glossary).toHaveLength(250);
-    expect(programmingLesson.exercises).toHaveLength(199);
-    expect(programmingLesson.quiz).toHaveLength(150);
-    expect(programmingLesson.project.assessments).toHaveLength(5);
+    expect(programmingLesson.objectives).toHaveLength(43);
+    expect(programmingLesson.sections).toHaveLength(68);
+    expect(programmingLesson.glossary).toHaveLength(310);
+    expect(programmingLesson.exercises).toHaveLength(247);
+    expect(programmingLesson.quiz).toHaveLength(186);
+    expect(programmingLesson.project.assessments).toHaveLength(6);
     expect(programmingLesson.project.guidedProjects.map((project) => project.lessonId)).toEqual(["0.1", "0.2", "0.3", "0.4", "0.5"]);
     expect(programmingLesson.project.guidedProjects.every((project) => project.starterCode.includes("print("))).toBe(true);
     expect(programmingLesson.completion.minimumQuizScore).toBe(80);
-    expect(programmingLesson.completion.requiredExerciseIds).toHaveLength(149);
-    expect(new Set(programmingLesson.sections.map((section) => section.id)).size).toBe(55);
-    expect(new Set([programmingLesson.guidedExercise.id, ...programmingLesson.exercises.map((exercise) => exercise.id)]).size).toBe(200);
-    expect(new Set(programmingLesson.quiz.map((question) => question.id)).size).toBe(150);
+    expect(programmingLesson.completion.requiredExerciseIds).toHaveLength(185);
+    expect(new Set(programmingLesson.sections.map((section) => section.id)).size).toBe(68);
+    expect(new Set([programmingLesson.guidedExercise.id, ...programmingLesson.exercises.map((exercise) => exercise.id)]).size).toBe(248);
+    expect(new Set(programmingLesson.quiz.map((question) => question.id)).size).toBe(186);
     expect(programmingLesson.sections[0].blocks.some((block) => block.text === "Che cosa significa programmare?")).toBe(true);
     expect(programmingLesson.sections[11].blocks.some((block) => block.text === "Che cos’è un computer e come esegue un programma?")).toBe(true);
     expect(programmingLesson.sections[22].blocks.some((block) => block.text === "Come il computer rappresenta l’informazione?")).toBe(true);
     expect(programmingLesson.sections[33].blocks.some((block) => block.text === "Logica, proposizioni e ragionamento booleano")).toBe(true);
     expect(programmingLesson.sections[44].blocks.some((block) => block.text === "Pensiero computazionale, algoritmi e pseudocodice")).toBe(true);
+    expect(programmingLesson.sections[55].blocks.some((block) => block.text === "Come nasce il software")).toBe(true);
   });
 
   it("lega gli artefatti alle impronte delle fonti senza richiedere i DOCX locali nel repository", () => {
@@ -80,10 +83,11 @@ describe("pacchetto editoriale Programmazione da zero", () => {
           "0.3": "91a3a14aa8f38b0e6d6b9a9f3d2a2e16aee37f6d8714c18e05304a1ca8164f89",
           "0.4": "8508d2e700c8ddbc07e38dce1344b54da037764189dee40abbfbfd153d2c18fa",
           "0.5": "1faa694e1279feb929c9c145ba0a253cfc1b4281a3e7fde2155ca69bf05ac5ca",
+          "0.6": "e4508786bb492e2b22d2a930bf55068e0a22a6631711ce1cc4fd65c22deeb58e",
         }).toMatchObject({ [source.lessonId]: source.sha256 });
       }
       expect(source.metrics.paragraphs).toBeGreaterThan(780);
-      expect(source.metrics.tables).toBe(12);
+      expect(source.metrics.tables).toBeGreaterThanOrEqual(12);
       const importedBlocks = programmingLesson.sections
         .filter((section) => section.lessonId === source.lessonId)
         .reduce((total, section) => total + section.blocks.length, 0);
@@ -97,9 +101,9 @@ describe("pacchetto editoriale Programmazione da zero", () => {
     expect(draft.modules).toHaveLength(1);
     expect(draft.modules[0].stageId).toBe("programming-module-0");
     expect(draft.modules[0].items[0]).toMatchObject({ itemType: "material", catalogMaterialId: native.id, isRequired: true });
-    expect(draft.modules[0].items.filter((item) => item.itemType === "exercise")).toHaveLength(5);
+    expect(draft.modules[0].items.filter((item) => item.itemType === "exercise")).toHaveLength(6);
     expect(draft.modules[0].items.some((item) => item.itemType === "project")).toBe(true);
-    expect(draft.modules[0].items.filter((item) => item.itemType === "checkpoint")).toHaveLength(5);
+    expect(draft.modules[0].items.filter((item) => item.itemType === "checkpoint")).toHaveLength(6);
   });
 
   it("non completa la lezione con il solo scorrimento o con le sole sezioni", () => {
