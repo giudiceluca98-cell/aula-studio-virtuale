@@ -236,7 +236,7 @@ Contenuti convertiti:
 
 Verifiche dichiarate dalla proposta originale: test mirato 21/21, suite completa 138/138, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`. L'integrazione su `main` e i nuovi Python Project vengono verificati nuovamente nella PR #14.
 
-## Estensione in corso · Lezione 1.3
+## Estensione in revisione · Lezione 1.3
 
 Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_1.3_Terminale_e_shell.docx`. Il DOCX non verrà caricato nel repository.
 
@@ -248,4 +248,15 @@ File riservati:
 - `tests/programming-subject.test.ts`
 
 File condivisi prenotati: nessuno. Base: `main`, che include già le lezioni 1.1 e 1.2 tramite PR #29. L'indice editoriale del Modulo 1 viene usato come controllo di ordine, titolo e copertura.
+
+Contenuti convertiti:
+
+- 11 sezioni e 804 blocchi renderizzabili;
+- 10 esercizi guidati e 30 esercizi autonomi;
+- 30 domande di quiz e 50 voci di glossario;
+- laboratorio finale, rubrica e criteri di completamento;
+- impronta SHA-256 `5dc43d5e590fcfa64f8dd169ef28b59f2399e495e0b58c689b59ed7a0f376b1a`, senza includere il DOCX;
+- indice editoriale del Modulo 1 usato come controllo, senza caricarlo nel repository.
+
+Verifiche: test mirato 21/21, suite completa 151/151, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 

@@ -36,6 +36,7 @@ describe("pacchetto editoriale Programmazione da zero", () => {
       "Lezione 0.9 · Laboratorio conclusivo e valutazione completa",
       "Lezione 1.1 · Che cos’è un ambiente di sviluppo?",
       "Lezione 1.2 · Installare Python",
+      "Lezione 1.3 · Terminale e shell",
     ]);
     expect(programmingSubjectPackage.stages).toHaveLength(2);
     expect(programmingSubjectPackage.stages[0].id).toBe("programming-module-0");
@@ -53,33 +54,33 @@ describe("pacchetto editoriale Programmazione da zero", () => {
       expect(lesson.summary.length).toBeGreaterThan(0);
     }
     expect(programmingLesson.modules[1]).toMatchObject({ id: "programming-module-1", title: "Modulo 1" });
-    expect(programmingLesson.modules[1].lessons.map((lesson) => lesson.id)).toEqual(["1.1", "1.2"]);
+    expect(programmingLesson.modules[1].lessons.map((lesson) => lesson.id)).toEqual(["1.1", "1.2", "1.3"]);
     for (const lesson of programmingLesson.modules[1].lessons) {
       expect(lesson.sectionIds).toHaveLength(11);
       expect(lesson.exerciseIds).toHaveLength(40);
       expect(lesson.quizIds).toHaveLength(30);
       expect(lesson.glossary).toHaveLength(50);
-      expect(lesson.objectives).toHaveLength(8);
+      expect(lesson.objectives).toHaveLength(lesson.id === "1.3" ? 10 : 8);
     }
   });
 
-  it("estende i contenuti ufficiali fino alla lezione 1.2", () => {
+  it("estende i contenuti ufficiali fino alla lezione 1.3", () => {
     expect(programmingLesson.id).toBe("programming-0-1");
     expect(programmingLesson.lessonTitles).toEqual(programmingCurriculumOutline);
-    expect(programmingLesson.objectives).toHaveLength(90);
-    expect(programmingLesson.sections).toHaveLength(127);
-    expect(programmingLesson.glossary).toHaveLength(580);
-    expect(programmingLesson.exercises).toHaveLength(463);
-    expect(programmingLesson.quiz).toHaveLength(348);
-    expect(programmingLesson.project.assessments).toHaveLength(11);
+    expect(programmingLesson.objectives).toHaveLength(100);
+    expect(programmingLesson.sections).toHaveLength(138);
+    expect(programmingLesson.glossary).toHaveLength(630);
+    expect(programmingLesson.exercises).toHaveLength(503);
+    expect(programmingLesson.quiz).toHaveLength(378);
+    expect(programmingLesson.project.assessments).toHaveLength(12);
     expect(programmingLesson.project.guidedProjects.map((project) => project.lessonId)).toEqual(["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.1", "1.2"]);
     expect(programmingLesson.project.guidedProjects.every((project) => project.starterCode.includes("print("))).toBe(true);
     expect(programmingLesson.project.guidedProjects.filter((project) => project.lessonId.startsWith("1.")).every((project) => !project.starterCode.includes("import "))).toBe(true);
     expect(programmingLesson.completion.minimumQuizScore).toBe(80);
-    expect(programmingLesson.completion.requiredExerciseIds).toHaveLength(347);
-    expect(new Set(programmingLesson.sections.map((section) => section.id)).size).toBe(127);
-    expect(new Set([programmingLesson.guidedExercise.id, ...programmingLesson.exercises.map((exercise) => exercise.id)]).size).toBe(464);
-    expect(new Set(programmingLesson.quiz.map((question) => question.id)).size).toBe(348);
+    expect(programmingLesson.completion.requiredExerciseIds).toHaveLength(377);
+    expect(new Set(programmingLesson.sections.map((section) => section.id)).size).toBe(138);
+    expect(new Set([programmingLesson.guidedExercise.id, ...programmingLesson.exercises.map((exercise) => exercise.id)]).size).toBe(504);
+    expect(new Set(programmingLesson.quiz.map((question) => question.id)).size).toBe(378);
     expect(programmingLesson.sections[0].blocks.some((block) => block.text === "Che cosa significa programmare?")).toBe(true);
     expect(programmingLesson.sections[11].blocks.some((block) => block.text === "Che cos’è un computer e come esegue un programma?")).toBe(true);
     expect(programmingLesson.sections[22].blocks.some((block) => block.text === "Come il computer rappresenta l’informazione?")).toBe(true);
@@ -91,6 +92,7 @@ describe("pacchetto editoriale Programmazione da zero", () => {
     expect(programmingLesson.sections[94].blocks.some((block) => block.text === "Laboratorio conclusivo")).toBe(true);
     expect(programmingLesson.sections[105].blocks.some((block) => block.text === "Che cos’è un ambiente di sviluppo?")).toBe(true);
     expect(programmingLesson.sections[116].blocks.some((block) => block.text === "Installare Python")).toBe(true);
+    expect(programmingLesson.sections[127].blocks.some((block) => block.text === "Terminale e shell")).toBe(true);
   });
 
   it("lega gli artefatti alle impronte delle fonti senza richiedere i DOCX locali nel repository", () => {
@@ -110,6 +112,7 @@ describe("pacchetto editoriale Programmazione da zero", () => {
           "0.9": "cac28baa626f64d6e79c10b47784704031cec4f4e8d27f26b04f25dd8773bb9b",
           "1.1": "adf2899abed24ff5b51ae9ec693cd24e73d40c8b0debfa25a60415cda3e8d755",
           "1.2": "3cc6e6166ef7e3ead6e11dd70a23aca68dc7bf4773bbf928eff4260cfdef952a",
+          "1.3": "5dc43d5e590fcfa64f8dd169ef28b59f2399e495e0b58c689b59ed7a0f376b1a",
         }).toMatchObject({ [source.lessonId]: source.sha256 });
       }
       expect(source.metrics.paragraphs).toBeGreaterThan(780);
@@ -131,8 +134,8 @@ describe("pacchetto editoriale Programmazione da zero", () => {
     expect(draft.modules[0].items.some((item) => item.itemType === "project")).toBe(true);
     expect(draft.modules[0].items.filter((item) => item.itemType === "checkpoint")).toHaveLength(9);
     expect(draft.modules[1].stageId).toBe("programming-module-1");
-    expect(draft.modules[1].items.filter((item) => item.itemType === "exercise")).toHaveLength(2);
-    expect(draft.modules[1].items.filter((item) => item.itemType === "checkpoint")).toHaveLength(2);
+    expect(draft.modules[1].items.filter((item) => item.itemType === "exercise")).toHaveLength(3);
+    expect(draft.modules[1].items.filter((item) => item.itemType === "checkpoint")).toHaveLength(3);
     expect(draft.modules[1].items.filter((item) => item.itemType === "project")).toHaveLength(2);
   });
 

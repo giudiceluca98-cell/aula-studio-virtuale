@@ -1,0 +1,4808 @@
+{
+  "id": "1.3",
+  "title": "Terminale e shell",
+  "source": {
+    "filename": "Programmazione_da_Zero_Lezione_1.3_Terminale_e_shell.docx",
+    "sha256": "5dc43d5e590fcfa64f8dd169ef28b59f2399e495e0b58c689b59ed7a0f376b1a",
+    "storedInRepository": false,
+    "normalizations": []
+  },
+  "metrics": {
+    "paragraphs": 792,
+    "tables": 12,
+    "textCharacters": 54845
+  },
+  "objectives": [
+    "Distinguere terminale, console, shell e prompt.",
+    "Analizzare comando, opzioni e argomenti.",
+    "Gestire cartella corrente e percorsi.",
+    "Comprendere quoting, escaping e rischi di injection.",
+    "Operare sui file con controlli preventivi.",
+    "Distinguere stdin, stdout, stderr e codice di uscita.",
+    "Comprendere processi e interruzione.",
+    "Gestire ambiente e PATH.",
+    "Tradurre intenti fra shell.",
+    "Produrre trascrizioni diagnostiche sicure."
+  ],
+  "sections": [
+    {
+      "id": "programming-1-3-introduction",
+      "lessonId": "1.3",
+      "chapterNumber": 0,
+      "title": "Lezione 1.3 · Terminale e shell",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "AULA STUDIO VIRTUALE"
+        },
+        {
+          "type": "paragraph",
+          "text": "Programmazione da Zero"
+        },
+        {
+          "type": "paragraph",
+          "text": "Manuale ufficiale"
+        },
+        {
+          "type": "paragraph",
+          "text": "MODULO 1"
+        },
+        {
+          "type": "paragraph",
+          "text": "Lezione 1.3"
+        },
+        {
+          "type": "paragraph",
+          "text": "Terminale e shell"
+        },
+        {
+          "type": "paragraph",
+          "text": "Comandi fondamentali e modello di esecuzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "DESTINATARIO  Lettore principiante. Gli esempi distinguono PowerShell, cmd.exe e shell Unix e privilegiano operazioni osservabili e non distruttive."
+        },
+        {
+          "type": "paragraph",
+          "text": "Edizione editoriale · 2026"
+        },
+        {
+          "type": "heading",
+          "text": "Come usare questa lezione"
+        },
+        {
+          "type": "paragraph",
+          "text": "La Lezione 1.2 ha installato e identificato l’interprete. Ora il terminale diventa uno strumento controllabile: ogni riga viene analizzata come trasformazione da testo a comando, argomenti, processo, flussi e stato. Non si richiede di memorizzare ogni sintassi, ma di sapere quale shell è attiva e come consultare il suo aiuto."
+        },
+        {
+          "type": "paragraph",
+          "text": "CONVENZIONE EDITORIALE  Nei diagrammi $ e > possono rappresentare prompt esemplificativi: non vanno copiati. Ogni procedura reale deve essere etichettata con la shell a cui appartiene."
+        },
+        {
+          "type": "heading",
+          "text": "Risultati di apprendimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Distinguere terminale, console, shell e prompt."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizzare comando, opzioni e argomenti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Gestire cartella corrente e percorsi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Comprendere quoting, escaping e rischi di injection."
+        },
+        {
+          "type": "paragraph",
+          "text": "Operare sui file con controlli preventivi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Distinguere stdin, stdout, stderr e codice di uscita."
+        },
+        {
+          "type": "paragraph",
+          "text": "Comprendere processi e interruzione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Gestire ambiente e PATH."
+        },
+        {
+          "type": "paragraph",
+          "text": "Tradurre intenti fra shell."
+        },
+        {
+          "type": "paragraph",
+          "text": "Produrre trascrizioni diagnostiche sicure."
+        },
+        {
+          "type": "heading",
+          "text": "Mappa della lezione"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Cap.",
+              "Nucleo concettuale"
+            ],
+            [
+              "1",
+              "Terminale, console, shell e prompt: quattro concetti distinti"
+            ],
+            [
+              "2",
+              "Anatomia di un comando: nome, opzioni, argomenti e sintassi"
+            ],
+            [
+              "3",
+              "Stato della sessione: cartella corrente, home e navigazione"
+            ],
+            [
+              "4",
+              "Percorsi, spazi, quoting ed escaping"
+            ],
+            [
+              "5",
+              "Osservare e modificare il file system con prudenza"
+            ],
+            [
+              "6",
+              "Input, output, errore, redirezione e pipeline"
+            ],
+            [
+              "7",
+              "Processi, primo piano, interruzione e codice di uscita"
+            ],
+            [
+              "8",
+              "Variabili d’ambiente, PATH e scoperta dei comandi"
+            ],
+            [
+              "9",
+              "PowerShell, cmd.exe e shell Unix: portabilità consapevole"
+            ],
+            [
+              "10",
+              "Metodo operativo: trascrizione, diagnosi e laboratorio sicuro"
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Prerequisiti e materiali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Prerequisiti: Lezioni 1.1 e 1.2. Crea una cartella di laboratorio contenente esclusivamente file sacrificabili. Non eseguire comandi ricorsivi o distruttivi su cartelle personali, di sistema o di progetto reale."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-3-chapter-1",
+      "lessonId": "1.3",
+      "chapterNumber": 1,
+      "title": "1. Terminale, console, shell e prompt: quattro concetti distinti",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.3 · CAPITOLO 1 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "1. Terminale, console, shell e prompt: quattro concetti distinti"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Usare il modello della shell per prevedere parsing, stato, processi e risultati senza dipendere da una singola interfaccia."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il terminale è l’interfaccia testuale attraverso cui una persona invia caratteri e riceve testo. La shell è il programma che interpreta i comandi. Console indica storicamente un dispositivo o una sessione di controllo e oggi viene usato con significati diversi. Il prompt è il segnale che la shell è pronta: non è normalmente parte del comando da digitare."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "In uno sportello, il vetro e il microfono sono il mezzo di comunicazione, l’operatore interpreta la richiesta e il display indica che è il tuo turno. Terminale, shell e prompt svolgono ruoli analoghi. Confonderli rende difficile spiegare dove nasce un errore."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un emulatore di terminale gestisce finestra, input, output e convenzioni di controllo. Al suo interno può essere avviata PowerShell, cmd.exe, bash, zsh o un’altra shell. La shell mantiene stato, analizza la riga, applica espansioni e avvia processi. Un terminale integrato in un IDE resta un terminale: la shell selezionata può differire da quella esterna. Il prompt può mostrare utente, macchina e cartella, ma è configurabile e non costituisce una prova completa dello stato."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Windows Terminal ospita una sessione PowerShell."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il terminale dell’IDE usa una shell diversa dal profilo predefinito del sistema."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una guida separa chiaramente prompt, comando digitato e output."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Cambiare il tema del terminale non cambia la sintassi della shell."
+        },
+        {
+          "type": "paragraph",
+          "text": "Copiare anche il simbolo > o $ dal prompt può alterare il comando."
+        },
+        {
+          "type": "paragraph",
+          "text": "Chiudere la finestra non dimostra che ogni processo figlio sia terminato."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il terminale è il telefono, la shell è l’interlocutore e il prompt è il suo ‘pronto’. Il limite dell’analogia è che una shell applica grammatica formale e conserva stato operativo."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 1.1 — Modello operativo della shell"
+        },
+        {
+          "type": "paragraph",
+          "text": "PERSONA  v inputTERMINALE / CONSOLE  v rigaSHELL + STATO + GRAMMATICA  v comando e argomentiSISTEMA OPERATIVO -> PROCESSO  v output / erroreTERMINALE -> PERSONA"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "La parola console può indicare il pannello degli strumenti per sviluppatori di un browser, la finestra di un programma o una console di sistema; il contesto deve essere esplicito. La capacità fondamentale non è riconoscere l’aspetto della finestra, ma identificare la shell attiva e il computer su cui agisce, soprattutto nelle sessioni remote."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Usare terminale e shell come sinonimi assoluti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Digitare il prompt mostrato negli esempi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Deducere la shell dal solo aspetto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dimenticare che una sessione può essere remota."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Terminale nel browser collegato a un container."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sessione senza interfaccia grafica."
+        },
+        {
+          "type": "paragraph",
+          "text": "Shell incorporata in un’applicazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Processo che sopravvive alla finestra."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Prima di modificare dati: identifica shell e computer, verifica la cartella, risolvi il bersaglio, elenca gli oggetti e usa un laboratorio sacrificabile."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale componente interpreta la riga?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Dove viene eseguito il comando?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale informazione del prompt è solo decorativa?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Etichetta una trascrizione con prompt, comando e output."
+        },
+        {
+          "type": "paragraph",
+          "text": "Disegna terminale e shell come processi distinti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta sessione locale, remota e integrata."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve separare testo digitato, elaborazione della shell, processo avviato, flussi, codice di uscita e stato modificato."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Spiega i quattro termini con un controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un prompt personalizzato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta una legenda per le guide del corso."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Chi interpreta normalmente il comando?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. La shell"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Il monitor"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Il file"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Il mouse"
+        },
+        {
+          "type": "heading",
+          "text": "2. Il prompt va sempre digitato?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Solo su Linux"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Solo in PowerShell"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Sì"
+        },
+        {
+          "type": "heading",
+          "text": "3. Un terminale integrato può usare quale shell?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Una shell configurata"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Sempre la stessa esterna"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Nessuna"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo cmd"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Terminale",
+              "Interfaccia testuale per input e output."
+            ],
+            [
+              "Shell",
+              "Programma che interpreta comandi e gestisce una sessione."
+            ],
+            [
+              "Console",
+              "Interfaccia o sessione di controllo, termine dipendente dal contesto."
+            ],
+            [
+              "Prompt",
+              "Segnale che la shell è pronta."
+            ],
+            [
+              "Sessione",
+              "Contesto operativo con stato e processi."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un emulatore di terminale gestisce finestra, input, output e convenzioni di controllo. Al suo interno può essere avviata PowerShell, cmd.exe, bash, zsh o un’altra shell. La shell mantiene stato, analizza la riga, applica espansioni e avvia processi. Un terminale integrato in un IDE resta un terminale: la shell selezionata può differire da quella esterna. Il prompt può mostrare utente, macchina e cartella, ma è configurabile e non costituisce una prova completa dello stato. La competenza consiste nel prevedere l’effetto, osservare il livello corretto e produrre una trascrizione ripetibile."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre un esempio e un controesempio motivati."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e individuare lo stato della sessione."
+        },
+        {
+          "type": "paragraph",
+          "text": "So adattare la procedura alla shell dichiarata e gestire tre casi limite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-3-chapter-2",
+      "lessonId": "1.3",
+      "chapterNumber": 2,
+      "title": "2. Anatomia di un comando: nome, opzioni, argomenti e sintassi",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.3 · CAPITOLO 2 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "2. Anatomia di un comando: nome, opzioni, argomenti e sintassi"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Usare il modello della shell per prevedere parsing, stato, processi e risultati senza dipendere da una singola interfaccia."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una riga di comando non è una frase libera. La shell la divide secondo regole precise e il programma riceve una sequenza di argomenti. Spazi, virgolette e caratteri speciali possono cambiare il numero e il contenuto degli elementi ricevuti."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un modulo separa nome dell’operazione, scelte e dati. Se i confini dei campi vengono spostati, il destinatario riceve informazioni diverse. Le virgolette possono indicare che più parole appartengono allo stesso campo."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il primo token identifica spesso un comando, alias, funzione o eseguibile. Gli elementi successivi diventano argomenti dopo l’elaborazione della shell. Un’opzione è un argomento interpretato dal programma come modifica del comportamento; la sua forma non è universale. --help, /? e Get-Help appartengono a convenzioni diverse. La shell interpreta prima caratteri speciali, poi avvia il comando; il programma non vede necessariamente la riga originale."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "python --version contiene comando e opzione."
+        },
+        {
+          "type": "paragraph",
+          "text": "python script.py dati.csv passa due argomenti dopo il comando."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un percorso con spazi racchiuso correttamente viene passato come un solo argomento."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ogni parola separata da spazio non è sempre un argomento: quoting ed espansione intervengono."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un’opzione valida per un comando non è valida per tutti."
+        },
+        {
+          "type": "paragraph",
+          "text": "L’ordine degli argomenti può essere significativo."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "La busta contiene destinatario e documenti ordinati; la shell prepara la busta, il programma legge ciò che riceve. Una trasformazione durante la preparazione cambia il contenuto consegnato."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 2.1 — Modello operativo della shell"
+        },
+        {
+          "type": "paragraph",
+          "text": "RIGA SCRITTA  v parsing shellTOKEN / ESPANSIONI / QUOTING  vCOMANDO RISOLTO  +-- argomento 1  +-- argomento 2  +-- opzione, se il programma la riconosce  vPROCESSO RICEVE UNA SEQUENZA"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "La documentazione deve specificare la shell perché le regole di parsing cambiano. In PowerShell i comandi nativi e i cmdlet possono ricevere oggetti e stringhe con comportamenti differenti; nelle shell Unix l’espansione avviene secondo regole proprie; cmd.exe ha un’altra grammatica. Il modello comune è la trasformazione da testo digitato a processo e argomenti."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Memorizzare opzioni senza leggere l’aiuto del comando."
+        },
+        {
+          "type": "paragraph",
+          "text": "Omettere virgolette nei percorsi con spazi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Supporre sintassi identica fra shell."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere ordine degli argomenti e ordine delle opzioni."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Argomento vuoto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Argomento che inizia con trattino."
+        },
+        {
+          "type": "paragraph",
+          "text": "Nome contenente caratteri speciali."
+        },
+        {
+          "type": "paragraph",
+          "text": "Comando che legge oggetti invece di testo."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Prima di modificare dati: identifica shell e computer, verifica la cartella, risolvi il bersaglio, elenca gli oggetti e usa un laboratorio sacrificabile."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quali caratteri interpreta la shell?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quanti argomenti riceve il processo?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale fonte descrive le opzioni del comando?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Scomponi cinque righe in comando e argomenti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Correggi un percorso con spazi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Costruisci un controesempio con argomento vuoto."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve separare testo digitato, elaborazione della shell, processo avviato, flussi, codice di uscita e stato modificato."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta --help, /? e Get-Help."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un’opzione dopo --."
+        },
+        {
+          "type": "paragraph",
+          "text": "Disegna parsing e avvio come fasi separate."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Chi interpreta per primo i caratteri speciali?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Il file system"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Il monitor"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. La shell"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Il programma finale"
+        },
+        {
+          "type": "heading",
+          "text": "2. Un’opzione è?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Sempre universale"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Un processo separato"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Un argomento interpretato dal comando"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Sempre una cartella"
+        },
+        {
+          "type": "heading",
+          "text": "3. Le virgolette possono?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Creare una shell"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Cambiare CPU"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Raggruppare testo in un argomento"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Installare Python"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Token",
+              "Unità riconosciuta durante l’analisi della riga."
+            ],
+            [
+              "Argomento",
+              "Valore passato a un comando."
+            ],
+            [
+              "Opzione",
+              "Argomento che modifica il comportamento secondo la sintassi del programma."
+            ],
+            [
+              "Parsing",
+              "Analisi della struttura di un testo."
+            ],
+            [
+              "Espansione",
+              "Sostituzione eseguita dalla shell prima dell’avvio."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il primo token identifica spesso un comando, alias, funzione o eseguibile. Gli elementi successivi diventano argomenti dopo l’elaborazione della shell. Un’opzione è un argomento interpretato dal programma come modifica del comportamento; la sua forma non è universale. --help, /? e Get-Help appartengono a convenzioni diverse. La shell interpreta prima caratteri speciali, poi avvia il comando; il programma non vede necessariamente la riga originale. La competenza consiste nel prevedere l’effetto, osservare il livello corretto e produrre una trascrizione ripetibile."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre un esempio e un controesempio motivati."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e individuare lo stato della sessione."
+        },
+        {
+          "type": "paragraph",
+          "text": "So adattare la procedura alla shell dichiarata e gestire tre casi limite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-3-chapter-3",
+      "lessonId": "1.3",
+      "chapterNumber": 3,
+      "title": "3. Stato della sessione: cartella corrente, home e navigazione",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.3 · CAPITOLO 3 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "3. Stato della sessione: cartella corrente, home e navigazione"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Usare il modello della shell per prevedere parsing, stato, processi e risultati senza dipendere da una singola interfaccia."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "La shell conserva una cartella corrente. Molti percorsi relativi e comandi operano rispetto a questa base, perciò due sessioni con la stessa riga possono produrre risultati diversi. La home dell’utente è una posizione convenzionale, non necessariamente la cartella del progetto."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Dire ‘entra nella stanza accanto’ ha significato soltanto conoscendo la stanza di partenza. Un percorso relativo usa la stessa logica. Sapere dove ci si trova precede qualsiasi operazione sui file."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ogni processo possiede una cartella di lavoro ereditata dal processo genitore, salvo modifica. PowerShell usa Get-Location e Set-Location; cmd.exe usa cd o chdir; molte shell Unix usano pwd e cd. I nomi e alcuni comportamenti differiscono, ma i concetti sono comuni. . rappresenta la cartella corrente e .. il genitore in molte sintassi. La radice e la home non coincidono."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il terminale integrato parte dalla radice del progetto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un nuovo terminale esterno parte dalla home."
+        },
+        {
+          "type": "paragraph",
+          "text": "Lo stesso percorso relativo trova file diversi dalle due basi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il prompt abbreviato non prova il percorso completo."
+        },
+        {
+          "type": "paragraph",
+          "text": "cd senza argomento non ha comportamento identico in ogni shell."
+        },
+        {
+          "type": "paragraph",
+          "text": "La home non è la radice del file system."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "La cartella corrente è il punto ‘tu sei qui’ su una mappa. Il percorso relativo descrive movimenti; quello assoluto indica la destinazione dalla radice."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 3.1 — Modello operativo della shell"
+        },
+        {
+          "type": "paragraph",
+          "text": "PROCESSO SHELL  +-- home utente  +-- cartella corrente: progetto/src  v comando con ../dataRISOLUZIONE: progetto/src + ../data  vDESTINAZIONE: progetto/data"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Cambiare cartella modifica lo stato della shell, non sposta i file. Un comando eseguito in una sottoshell può cambiare la propria cartella senza modificare quella della shell genitore. Le guide riproducibili dichiarano sempre la base iniziale e includono una prova visibile della posizione."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Eseguire senza controllare la cartella."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere navigazione e spostamento dei file."
+        },
+        {
+          "type": "paragraph",
+          "text": "Supporre che IDE e terminale esterno partano uguali."
+        },
+        {
+          "type": "paragraph",
+          "text": "Usare una home personale come radice del progetto."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Cartella rimossa mentre è corrente."
+        },
+        {
+          "type": "paragraph",
+          "text": "Percorso di rete non disponibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sottoshell con stato separato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Unità diverse in Windows."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Prima di modificare dati: identifica shell e computer, verifica la cartella, risolvi il bersaglio, elenca gli oggetti e usa un laboratorio sacrificabile."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale processo possiede la cartella corrente?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Da quale base viene risolto il percorso?"
+        },
+        {
+          "type": "paragraph",
+          "text": "La modifica sopravvive a una nuova sessione?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Disegna un albero e risolvi dieci navigazioni."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta due sessioni con basi diverse."
+        },
+        {
+          "type": "paragraph",
+          "text": "Scrivi una procedura che parte sempre dalla radice del progetto."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve separare testo digitato, elaborazione della shell, processo avviato, flussi, codice di uscita e stato modificato."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza . e ..."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta home e radice."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta una prova per la cartella dell’IDE."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Che cosa possiede una cartella di lavoro?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Un processo"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Il monitor"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Solo il disco"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo Python"
+        },
+        {
+          "type": "heading",
+          "text": "2. La home coincide sempre con la radice?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Sì"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Solo Windows"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo Linux"
+        },
+        {
+          "type": "heading",
+          "text": "3. Cambiare cartella sposta i file?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Sì"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Solo con cd"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo in IDE"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Cartella corrente",
+              "Base operativa di un processo."
+            ],
+            [
+              "Home",
+              "Cartella convenzionale dell’utente."
+            ],
+            [
+              "Radice",
+              "Punto iniziale della gerarchia di un file system o unità."
+            ],
+            [
+              "Navigazione",
+              "Cambio della cartella corrente."
+            ],
+            [
+              "Sottoshell",
+              "Shell figlia con stato separato."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ogni processo possiede una cartella di lavoro ereditata dal processo genitore, salvo modifica. PowerShell usa Get-Location e Set-Location; cmd.exe usa cd o chdir; molte shell Unix usano pwd e cd. I nomi e alcuni comportamenti differiscono, ma i concetti sono comuni. . rappresenta la cartella corrente e .. il genitore in molte sintassi. La radice e la home non coincidono. La competenza consiste nel prevedere l’effetto, osservare il livello corretto e produrre una trascrizione ripetibile."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre un esempio e un controesempio motivati."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e individuare lo stato della sessione."
+        },
+        {
+          "type": "paragraph",
+          "text": "So adattare la procedura alla shell dichiarata e gestire tre casi limite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-3-chapter-4",
+      "lessonId": "1.3",
+      "chapterNumber": 4,
+      "title": "4. Percorsi, spazi, quoting ed escaping",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.3 · CAPITOLO 4 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "4. Percorsi, spazi, quoting ed escaping"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Usare il modello della shell per prevedere parsing, stato, processi e risultati senza dipendere da una singola interfaccia."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "I percorsi sono dati passati ai comandi, ma possono contenere spazi o caratteri che la shell considera speciali. Quoting ed escaping controllano l’interpretazione. Le regole differiscono abbastanza da rendere pericoloso copiare una sintassi fra PowerShell, cmd.exe e shell Unix senza adattamento."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Le virgolette sono una confezione che dice ‘tratta questi caratteri come un’unità’. L’escape è un’etichetta che ordina di considerare letterale un carattere normalmente speciale. Confezioni diverse seguono regole diverse."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "In molte shell, virgolette singole e doppie non sono equivalenti: possono consentire o impedire espansioni. PowerShell usa regole proprie e un carattere di escape diverso da molte shell Unix; cmd.exe tratta virgolette e metacaratteri secondo la propria grammatica. Il separatore di percorso varia, anche se molte API accettano più forme. Per istruzioni portabili si forniscono rami espliciti e si evita di costruire comandi concatenando input non fidato."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un percorso con spazi viene racchiuso secondo la shell attiva."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una variabile dentro virgolette può essere espansa in una sintassi e restare letterale in un’altra."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un percorso viene passato come argomento, non incorporato in una stringa di comando generata."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Aggiungere virgolette casuali può creare caratteri letterali inattesi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il backslash non è un escape universale in ogni contesto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una riga sicura con dati fissi può diventare pericolosa con input esterno."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Punteggiatura e citazione distinguono le parole dell’autore dalle parole riportate. Nel comando, quoting separa struttura e dati, ma la grammatica dipende dalla shell."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 4.1 — Modello operativo della shell"
+        },
+        {
+          "type": "paragraph",
+          "text": "TESTO + CARATTERI SPECIALI  v regole shellQUOTING -> raggruppamentoESCAPING -> carattere letteraleESPANSIONE -> sostituzione  vARGOMENTI FINALI  vPROCESSO"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il modo più sicuro per passare argomenti da un programma a un altro è usare API che accettano una lista, senza costruire una singola riga interpretata da una shell. Questa nozione prepara ai moduli Python futuri. Nel lavoro manuale, si verifica il risultato con un comando innocuo prima di usare operazioni che modificano dati."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Copiare quoting Unix in PowerShell senza verifica."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere separatore di percorso ed escape."
+        },
+        {
+          "type": "paragraph",
+          "text": "Incorporare input non fidato in un comando."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dimenticare che virgolette singole e doppie possono espandere diversamente."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Percorso che termina con separatore."
+        },
+        {
+          "type": "paragraph",
+          "text": "Nome contenente virgolette."
+        },
+        {
+          "type": "paragraph",
+          "text": "Stringa vuota."
+        },
+        {
+          "type": "paragraph",
+          "text": "Caratteri Unicode nel percorso."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Prima di modificare dati: identifica shell e computer, verifica la cartella, risolvi il bersaglio, elenca gli oggetti e usa un laboratorio sacrificabile."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale shell applica la regola?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il carattere deve essere strutturale o letterale?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quali espansioni avvengono prima dell’avvio?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Correggi quattro percorsi con spazi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta virgolette singole e doppie in casi simulati."
+        },
+        {
+          "type": "paragraph",
+          "text": "Trasforma una concatenazione insicura in argomenti separati."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve separare testo digitato, elaborazione della shell, processo avviato, flussi, codice di uscita e stato modificato."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Crea una tabella di metacaratteri per due shell."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza input ostile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta test con nomi Unicode."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Quoting ed escaping sono universali?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Solo in Python"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Sì"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo nei file"
+        },
+        {
+          "type": "heading",
+          "text": "2. Che cosa fa il quoting?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Spegne il computer"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Installa la shell"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Controlla raggruppamento e interpretazione"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Cambia CPU"
+        },
+        {
+          "type": "heading",
+          "text": "3. Come evitare una stringa di comando insicura in un’API?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Nascondere l’output"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Usare admin"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Passare argomenti separati"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Aggiungere spazi"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Quoting",
+              "Regole che raggruppano e controllano l’interpretazione del testo."
+            ],
+            [
+              "Escaping",
+              "Marcatura di un carattere perché venga trattato letteralmente."
+            ],
+            [
+              "Metacarattere",
+              "Carattere con significato speciale per la shell."
+            ],
+            [
+              "Letterale",
+              "Dato interpretato come se stesso."
+            ],
+            [
+              "Command injection",
+              "Esecuzione indesiderata causata da input interpretato come comando."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "In molte shell, virgolette singole e doppie non sono equivalenti: possono consentire o impedire espansioni. PowerShell usa regole proprie e un carattere di escape diverso da molte shell Unix; cmd.exe tratta virgolette e metacaratteri secondo la propria grammatica. Il separatore di percorso varia, anche se molte API accettano più forme. Per istruzioni portabili si forniscono rami espliciti e si evita di costruire comandi concatenando input non fidato. La competenza consiste nel prevedere l’effetto, osservare il livello corretto e produrre una trascrizione ripetibile."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre un esempio e un controesempio motivati."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e individuare lo stato della sessione."
+        },
+        {
+          "type": "paragraph",
+          "text": "So adattare la procedura alla shell dichiarata e gestire tre casi limite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-3-chapter-5",
+      "lessonId": "1.3",
+      "chapterNumber": 5,
+      "title": "5. Osservare e modificare il file system con prudenza",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.3 · CAPITOLO 5 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "5. Osservare e modificare il file system con prudenza"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Usare il modello della shell per prevedere parsing, stato, processi e risultati senza dipendere da una singola interfaccia."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "La shell permette di elencare, creare, copiare, spostare e rimuovere file. Le operazioni di osservazione sono il primo passo; quelle modificative richiedono destinazioni esplicite e verifica. Un comando breve può agire su molti oggetti, quindi l’automazione amplifica sia precisione sia errore."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Prima di spostare scatole in un magazzino si leggono etichette e si controllano origine e destinazione. Rimuovere senza inventario equivale a svuotare uno scaffale al buio."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "PowerShell tratta spesso file e cartelle come oggetti tramite cmdlet quali Get-ChildItem, Copy-Item e Move-Item. cmd.exe usa comandi storici come dir, copy e move. Shell Unix impiegano comunemente ls, cp e mv. Le opzioni ricorsive, i caratteri jolly e la sovrascrittura non sono uniformi. Prima di una modifica materiale si risolve il percorso assoluto, si elenca l’insieme bersaglio, si preferisce una copia o un’area di prova e si controlla l’esito."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Si elenca una cartella prima di copiarla."
+        },
+        {
+          "type": "paragraph",
+          "text": "Si prova una procedura su file temporanei non importanti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Si usa un nome di destinazione esplicito e si verifica l’oggetto creato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un jolly non verificato può includere più file del previsto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Spostare fra volumi può comportarsi come copia più rimozione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Rimuovere ricorsivamente dalla cartella sbagliata può essere irreversibile."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un braccio robotico esegue con forza e velocità ma non comprende l’intenzione. La shell esegue il bersaglio descritto, non quello immaginato."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 5.1 — Modello operativo della shell"
+        },
+        {
+          "type": "paragraph",
+          "text": "INTENZIONE  vRISOLVI PERCORSO ASSOLUTO  vELENCA BERSAGLI  vPROVA SU DATI SACRIFICABILI  vESEGUI UNA MODIFICA  vVERIFICA ORIGINE + DESTINAZIONE + RECUPERO"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Cancellazione, Cestino e rimozione permanente non coincidono. Il comportamento dipende dallo strumento e dal file system; non si presume recuperabilità. Le guide didattiche usano cartelle di laboratorio dedicate e non propongono comandi ricorsivi su percorsi ampi. Le operazioni complete saranno approfondite nella Lezione 1.4."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Usare ricorsione senza elenco preventivo."
+        },
+        {
+          "type": "paragraph",
+          "text": "Operare dalla cartella sbagliata."
+        },
+        {
+          "type": "paragraph",
+          "text": "Supporre che la sovrascrittura chieda sempre conferma."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mescolare shell diverse in una stessa procedura."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "File aperto da un altro processo."
+        },
+        {
+          "type": "paragraph",
+          "text": "Destinazione su altro volume."
+        },
+        {
+          "type": "paragraph",
+          "text": "Permessi insufficienti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Collegamento simbolico nel sottoalbero."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Prima di modificare dati: identifica shell e computer, verifica la cartella, risolvi il bersaglio, elenca gli oggetti e usa un laboratorio sacrificabile."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Qual è l’insieme esatto dei bersagli?"
+        },
+        {
+          "type": "paragraph",
+          "text": "La modifica è recuperabile?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Che cosa accade attraversando collegamenti o volumi?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta un laboratorio con file sacrificabili."
+        },
+        {
+          "type": "paragraph",
+          "text": "Scrivi una checklist prima di copia, spostamento e rimozione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un jolly che include un file inatteso."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve separare testo digitato, elaborazione della shell, processo avviato, flussi, codice di uscita e stato modificato."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta copia e spostamento fra volumi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta una prova di sovrascrittura."
+        },
+        {
+          "type": "paragraph",
+          "text": "Spiega perché i percorsi ampi sono pericolosi."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Prima di modificare molti file bisogna?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Elencare i bersagli"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Nascondere il percorso"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Usare admin"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Cambiare IDE"
+        },
+        {
+          "type": "heading",
+          "text": "2. Un jolly indica sempre un solo file?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Solo Windows"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Solo Linux"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Sì"
+        },
+        {
+          "type": "heading",
+          "text": "3. La rimozione è sempre recuperabile?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Solo offline"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Sì"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo con Python"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Jolly",
+              "Pattern che può corrispondere a più nomi."
+            ],
+            [
+              "Ricorsione",
+              "Applicazione attraverso una gerarchia di sottocartelle."
+            ],
+            [
+              "Sovrascrittura",
+              "Sostituzione di un oggetto esistente."
+            ],
+            [
+              "Collegamento simbolico",
+              "Riferimento a un altro percorso."
+            ],
+            [
+              "Bersaglio",
+              "Oggetto su cui un comando deve agire."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "PowerShell tratta spesso file e cartelle come oggetti tramite cmdlet quali Get-ChildItem, Copy-Item e Move-Item. cmd.exe usa comandi storici come dir, copy e move. Shell Unix impiegano comunemente ls, cp e mv. Le opzioni ricorsive, i caratteri jolly e la sovrascrittura non sono uniformi. Prima di una modifica materiale si risolve il percorso assoluto, si elenca l’insieme bersaglio, si preferisce una copia o un’area di prova e si controlla l’esito. La competenza consiste nel prevedere l’effetto, osservare il livello corretto e produrre una trascrizione ripetibile."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre un esempio e un controesempio motivati."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e individuare lo stato della sessione."
+        },
+        {
+          "type": "paragraph",
+          "text": "So adattare la procedura alla shell dichiarata e gestire tre casi limite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-3-chapter-6",
+      "lessonId": "1.3",
+      "chapterNumber": 6,
+      "title": "6. Input, output, errore, redirezione e pipeline",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.3 · CAPITOLO 6 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "6. Input, output, errore, redirezione e pipeline"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Usare il modello della shell per prevedere parsing, stato, processi e risultati senza dipendere da una singola interfaccia."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un processo può ricevere input e produrre output normale ed errore. Questi flussi sono separati perché automazioni e persone possano trattarli diversamente. Redirezione e pipeline collegano flussi, ma sintassi e tipo dei dati cambiano fra shell."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un ufficio ha posta in entrata, risultati ufficiali e registro degli incidenti. Mescolarli rende difficile capire che cosa sia un risultato e che cosa segnali un problema."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "I flussi standard sono stdin, stdout e stderr. Una redirezione associa un flusso a un file o altra destinazione. Una pipeline collega l’uscita di un comando all’ingresso del successivo. Nelle shell Unix la pipeline trasporta tipicamente byte o testo; PowerShell può trasportare oggetti fra cmdlet, convertendo quando interagisce con programmi nativi. I simboli di redirezione non vanno copiati fra shell senza controllarne semantica e sovrascrittura."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’output viene salvato mentre gli errori restano visibili."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una pipeline filtra un elenco senza creare file intermedi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un comando produce nessun stdout ma un codice di uscita significativo."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Redirigere l’output non elimina necessariamente stderr."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una pipeline PowerShell non è sempre una pipeline di stringhe."
+        },
+        {
+          "type": "paragraph",
+          "text": "Appendere e sovrascrivere un file sono operazioni diverse."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Tubi separati trasportano materiali diversi; collegarli richiede compatibilità. Una pipeline conserva il flusso, non garantisce che il destinatario comprenda il formato."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 6.1 — Modello operativo della shell"
+        },
+        {
+          "type": "paragraph",
+          "text": "stdin ---> PROCESSO             +---> stdout ---> terminale / file / pipeline             +---> stderr ---> terminale / file separato             +---> codice uscita ---> shellPIPELINE: processo A -> trasformazione -> processo B"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il codice di uscita non è un flusso testuale: è uno stato numerico osservato dalla shell. Un processo può scrivere errori e terminare con zero oppure non scrivere nulla e fallire; il contratto del comando decide. Le automazioni robuste considerano contenuto, canale e codice di uscita."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere stdout e successo."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sovrascrivere un file durante una redirezione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Assumere che la pipeline trasporti lo stesso tipo in ogni shell."
+        },
+        {
+          "type": "paragraph",
+          "text": "Nascondere stderr durante la diagnosi."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Output binario."
+        },
+        {
+          "type": "paragraph",
+          "text": "Processo interattivo in pipeline."
+        },
+        {
+          "type": "paragraph",
+          "text": "Pipeline interrotta a metà."
+        },
+        {
+          "type": "paragraph",
+          "text": "Encoding diverso fra programmi."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Prima di modificare dati: identifica shell e computer, verifica la cartella, risolvi il bersaglio, elenca gli oggetti e usa un laboratorio sacrificabile."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale canale trasporta il messaggio?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il destinatario accetta quel formato?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Che cosa comunica il codice di uscita?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Disegna tre flussi e il codice di uscita."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta una redirezione che preservi gli errori."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta pipeline testuale e a oggetti."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve separare testo digitato, elaborazione della shell, processo avviato, flussi, codice di uscita e stato modificato."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un processo silenzioso che fallisce."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta un log separato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Spiega append e sovrascrittura."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Quale flusso contiene l’errore standard?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. stdout"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. codice"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. stderr"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. stdin"
+        },
+        {
+          "type": "heading",
+          "text": "2. PowerShell può trasportare in pipeline?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Solo file"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Nessun dato"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Oggetti fra cmdlet"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo pixel"
+        },
+        {
+          "type": "heading",
+          "text": "3. Il codice di uscita è?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Un alias"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Sempre testo"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Uno stato numerico separato"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Una cartella"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "stdin",
+              "Flusso di ingresso standard."
+            ],
+            [
+              "stdout",
+              "Flusso di uscita standard."
+            ],
+            [
+              "stderr",
+              "Flusso di errore standard."
+            ],
+            [
+              "Redirezione",
+              "Associazione di un flusso a una destinazione."
+            ],
+            [
+              "Pipeline",
+              "Collegamento dell’uscita di un comando all’ingresso di un altro."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "I flussi standard sono stdin, stdout e stderr. Una redirezione associa un flusso a un file o altra destinazione. Una pipeline collega l’uscita di un comando all’ingresso del successivo. Nelle shell Unix la pipeline trasporta tipicamente byte o testo; PowerShell può trasportare oggetti fra cmdlet, convertendo quando interagisce con programmi nativi. I simboli di redirezione non vanno copiati fra shell senza controllarne semantica e sovrascrittura. La competenza consiste nel prevedere l’effetto, osservare il livello corretto e produrre una trascrizione ripetibile."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre un esempio e un controesempio motivati."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e individuare lo stato della sessione."
+        },
+        {
+          "type": "paragraph",
+          "text": "So adattare la procedura alla shell dichiarata e gestire tre casi limite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-3-chapter-7",
+      "lessonId": "1.3",
+      "chapterNumber": 7,
+      "title": "7. Processi, primo piano, interruzione e codice di uscita",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.3 · CAPITOLO 7 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "7. Processi, primo piano, interruzione e codice di uscita"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Usare il modello della shell per prevedere parsing, stato, processi e risultati senza dipendere da una singola interfaccia."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "La shell avvia processi e normalmente attende quelli in primo piano. Alcuni comandi restano attivi, richiedono input o producono output nel tempo. Interrompere una richiesta non equivale sempre a terminare immediatamente ogni processo figlio."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Consegnare un incarico e aspettare è lavoro in primo piano; delegarlo e continuare è lavoro in background. Richiamare l’incarico invia una richiesta, ma il destinatario potrebbe dover chiudere attività in corso."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il sistema operativo identifica processi e ne gestisce risorse. La shell può avviare un processo in primo piano o secondo meccanismi di job/background specifici. Una combinazione come Ctrl+C invia normalmente una richiesta di interruzione al processo in primo piano, ma il comportamento dipende dal programma e dalla piattaforma. Al termine, il processo fornisce un codice di uscita. PowerShell espone stati e variabili proprie; shell Unix usano convenzioni differenti; cmd.exe ha errorlevel."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un server di prova resta attivo finché viene interrotto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un comando termina con codice non zero pur avendo stampato informazioni utili."
+        },
+        {
+          "type": "paragraph",
+          "text": "La shell torna al prompt quando il processo in primo piano termina."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Premere Ctrl+C non è una cancellazione universale di tutti i discendenti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Chiudere il terminale può lasciare processi gestiti altrove."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il prompt che ritorna non prova che l’operazione abbia avuto successo."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il prompt è come una postazione che torna disponibile dopo un incarico. La disponibilità segnala fine dell’attesa, non qualità del risultato."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 7.1 — Modello operativo della shell"
+        },
+        {
+          "type": "paragraph",
+          "text": "SHELL  v avviaPROCESSO IN PRIMO PIANO  +--> input/output  +--> figli  +<-- richiesta interruzione  v terminaCODICE USCITA -> SHELL -> NUOVO PROMPT"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Terminazione normale, interruzione e arresto forzato hanno conseguenze diverse sui file e sulle risorse. Prima di forzare si osservano messaggi e si concede al programma la possibilità di chiudere. Nei processi che scrivono dati, un arresto improvviso può lasciare stato parziale."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Interpretare ritorno del prompt come successo."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forzare l’arresto senza attendere."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ignorare processi figli."
+        },
+        {
+          "type": "paragraph",
+          "text": "Usare sintassi di job di un’altra shell."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Processo che ignora l’interruzione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Processo remoto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Scrittura parziale."
+        },
+        {
+          "type": "paragraph",
+          "text": "Processo senza terminale associato."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Prima di modificare dati: identifica shell e computer, verifica la cartella, risolvi il bersaglio, elenca gli oggetti e usa un laboratorio sacrificabile."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Chi possiede il processo?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale richiesta è stata inviata?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale stato può restare incompleto?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Disegna shell, processo e figli."
+        },
+        {
+          "type": "paragraph",
+          "text": "Classifica tre modalità di terminazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta una verifica dopo interruzione."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve separare testo digitato, elaborazione della shell, processo avviato, flussi, codice di uscita e stato modificato."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un server locale."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta prompt e codice di uscita."
+        },
+        {
+          "type": "paragraph",
+          "text": "Crea una procedura prudente di arresto."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Ctrl+C garantisce sempre l’arresto di tutto?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Solo Windows"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Sì"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo Python"
+        },
+        {
+          "type": "heading",
+          "text": "2. Che cosa torna alla shell al termine?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Un codice di uscita"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Una CPU"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Un monitor"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Un editor"
+        },
+        {
+          "type": "heading",
+          "text": "3. Il ritorno del prompt prova successo?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Sì"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Solo in bash"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo in PowerShell"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Processo",
+              "Istanza in esecuzione di un programma."
+            ],
+            [
+              "Primo piano",
+              "Modalità in cui la shell attende il processo interattivo."
+            ],
+            [
+              "Background",
+              "Esecuzione che consente alla shell di proseguire."
+            ],
+            [
+              "Interruzione",
+              "Richiesta al processo di fermare l’attività."
+            ],
+            [
+              "Terminazione forzata",
+              "Arresto imposto senza normale chiusura."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il sistema operativo identifica processi e ne gestisce risorse. La shell può avviare un processo in primo piano o secondo meccanismi di job/background specifici. Una combinazione come Ctrl+C invia normalmente una richiesta di interruzione al processo in primo piano, ma il comportamento dipende dal programma e dalla piattaforma. Al termine, il processo fornisce un codice di uscita. PowerShell espone stati e variabili proprie; shell Unix usano convenzioni differenti; cmd.exe ha errorlevel. La competenza consiste nel prevedere l’effetto, osservare il livello corretto e produrre una trascrizione ripetibile."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre un esempio e un controesempio motivati."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e individuare lo stato della sessione."
+        },
+        {
+          "type": "paragraph",
+          "text": "So adattare la procedura alla shell dichiarata e gestire tre casi limite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-3-chapter-8",
+      "lessonId": "1.3",
+      "chapterNumber": 8,
+      "title": "8. Variabili d’ambiente, PATH e scoperta dei comandi",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.3 · CAPITOLO 8 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "8. Variabili d’ambiente, PATH e scoperta dei comandi"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Usare il modello della shell per prevedere parsing, stato, processi e risultati senza dipendere da una singola interfaccia."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Le variabili d’ambiente sono valori associati al processo e trasmessi ai figli. PATH guida la ricerca degli eseguibili, ma alias, funzioni e launcher possono avere precedenza. Cambiare una variabile in una sessione non modifica necessariamente il sistema o le altre finestre."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ogni processo riceve una busta con informazioni di contesto. Il figlio riceve una copia iniziale; se cambia la propria busta, quella del genitore non viene riscritta."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’ambiente è una mappa nome-valore. La sintassi per leggere o impostare valori varia: PowerShell usa il provider Env:, cmd.exe usa espansioni percentuali e set, shell Unix usano convenzioni come $NAME ed export. PATH è una variabile strutturata e ordinata. Get-Command, where.exe, command -v e type appartengono a strumenti diversi. sys.executable conferma l’interprete Python effettivamente avviato."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una variabile impostata in una shell è ereditata dal processo Python figlio."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un nuovo terminale non vede una modifica solo locale alla vecchia sessione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Due voci PATH contengono comandi omonimi e vince la precedenza."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "PATH non è il percorso corrente."
+        },
+        {
+          "type": "paragraph",
+          "text": "Impostare una variabile nel figlio non riscrive il genitore."
+        },
+        {
+          "type": "paragraph",
+          "text": "Stampare segreti in una trascrizione può esporli."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "La busta di istruzioni viene fotocopiata per ogni figlio. Le copie possono divergere, ma non viaggiano automaticamente all’indietro."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 8.1 — Modello operativo della shell"
+        },
+        {
+          "type": "paragraph",
+          "text": "PROCESSO GENITORE: ambiente A  v crea figlio e copiaPROCESSO FIGLIO: ambiente A'  +-- legge PATH  +-- modifica variabile locale  v crea nipoteNIPOTE eredita A'GENITORE resta A"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Le variabili persistenti vengono gestite da profili o impostazioni del sistema, con ambiti utente e macchina. Prima di modificare PATH si conserva il valore, si aggiunge la posizione minima e si apre una nuova sessione. I segreti non vanno inseriti in esempi, cronologia o screenshot."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere ambiente di processo e impostazione persistente."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cancellare PATH mentre lo si modifica."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mostrare token nel terminale."
+        },
+        {
+          "type": "paragraph",
+          "text": "Usare la sintassi di espansione sbagliata."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Nome variabile con differenze di maiuscole."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ambiente filtrato da un IDE."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sessione remota."
+        },
+        {
+          "type": "paragraph",
+          "text": "PATH molto lungo con duplicati."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Prima di modificare dati: identifica shell e computer, verifica la cartella, risolvi il bersaglio, elenca gli oggetti e usa un laboratorio sacrificabile."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale processo possiede il valore?"
+        },
+        {
+          "type": "paragraph",
+          "text": "La modifica è locale o persistente?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il valore contiene informazioni sensibili?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Disegna ereditarietà genitore-figlio."
+        },
+        {
+          "type": "paragraph",
+          "text": "Simula due PATH con precedenze diverse."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta una modifica reversibile."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve separare testo digitato, elaborazione della shell, processo avviato, flussi, codice di uscita e stato modificato."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta sintassi di tre shell."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un segreto nella cronologia."
+        },
+        {
+          "type": "paragraph",
+          "text": "Distingui PATH e cartella corrente."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Una variabile del figlio modifica automaticamente il genitore?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Solo Python"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Sì"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo Linux"
+        },
+        {
+          "type": "heading",
+          "text": "2. PATH è?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. La cartella corrente"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Una password"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Un elenco ordinato di ricerca"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Un IDE"
+        },
+        {
+          "type": "heading",
+          "text": "3. Che cosa conferma Python avviato?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Il tema"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. La home"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. sys.executable"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Il prompt"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Ambiente di processo",
+              "Mappa di variabili posseduta da un processo."
+            ],
+            [
+              "Ereditarietà",
+              "Copia iniziale dell’ambiente dal genitore al figlio."
+            ],
+            [
+              "PATH",
+              "Sequenza di posizioni per la ricerca dei comandi."
+            ],
+            [
+              "Persistenza",
+              "Sopravvivenza della configurazione a nuove sessioni."
+            ],
+            [
+              "Cronologia",
+              "Registro dei comandi digitati."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’ambiente è una mappa nome-valore. La sintassi per leggere o impostare valori varia: PowerShell usa il provider Env:, cmd.exe usa espansioni percentuali e set, shell Unix usano convenzioni come $NAME ed export. PATH è una variabile strutturata e ordinata. Get-Command, where.exe, command -v e type appartengono a strumenti diversi. sys.executable conferma l’interprete Python effettivamente avviato. La competenza consiste nel prevedere l’effetto, osservare il livello corretto e produrre una trascrizione ripetibile."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre un esempio e un controesempio motivati."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e individuare lo stato della sessione."
+        },
+        {
+          "type": "paragraph",
+          "text": "So adattare la procedura alla shell dichiarata e gestire tre casi limite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-3-chapter-9",
+      "lessonId": "1.3",
+      "chapterNumber": 9,
+      "title": "9. PowerShell, cmd.exe e shell Unix: portabilità consapevole",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.3 · CAPITOLO 9 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "9. PowerShell, cmd.exe e shell Unix: portabilità consapevole"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Usare il modello della shell per prevedere parsing, stato, processi e risultati senza dipendere da una singola interfaccia."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Le shell condividono obiettivi ma non una grammatica universale. PowerShell è orientata agli oggetti e ai cmdlet; cmd.exe conserva convenzioni storiche Windows; bash, zsh e altre shell Unix condividono molte idee ma differiscono in dettagli. Una guida seria dichiara la shell e offre rami equivalenti."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Tre lingue possono esprimere la stessa richiesta con parole e ordine diversi. Tradurre parola per parola produce frasi scorrette; bisogna preservare il significato dell’azione."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "I cmdlet PowerShell seguono spesso la forma Verbo-Sostantivo e restituiscono oggetti. I programmi nativi continuano a ricevere argomenti di processo. cmd.exe usa comandi e variabili con regole proprie. Le shell Unix trattano comunemente flussi testuali e offrono espansioni, glob e pipeline secondo standard e convenzioni. Anche fra bash e zsh uno script non è automaticamente portabile. La portabilità si costruisce definendo l’intento e traducendo per shell."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "‘Mostra cartella corrente’ viene espresso con Get-Location o pwd secondo la shell."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un elenco PowerShell può essere filtrato per proprietà senza analizzare testo."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una guida etichetta ogni blocco con il nome della shell."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un alias PowerShell simile a un comando Unix non garantisce opzioni identiche."
+        },
+        {
+          "type": "paragraph",
+          "text": "Uno script bash non diventa PowerShell cambiando estensione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il fatto che un comando funzioni sul proprio computer non prova portabilità."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Tradurre un contratto richiede equivalenza giuridica, non sostituzione meccanica di parole. Tradurre comandi richiede equivalenza di effetto e rischi."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 9.1 — Modello operativo della shell"
+        },
+        {
+          "type": "paragraph",
+          "text": "INTENTO: elencare una cartella  +--> PowerShell: cmdlet + oggetti  +--> cmd.exe: comando storico + testo  +--> shell Unix: comando + flusso testuale  vCONFRONTA BERSAGLI, ERRORI, USCITA E SICUREZZA"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Le guide multipiattaforma devono distinguere sistema operativo e shell: PowerShell esiste anche fuori da Windows e bash può essere disponibile su Windows in ambienti specifici. La verifica chiede sempre ‘quale shell?’ e ‘quale computer?’. Non si invoca un’altra shell soltanto per copiare una riga se aumenta complessità e dipendenze."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere sistema operativo e shell."
+        },
+        {
+          "type": "paragraph",
+          "text": "Affidarsi ad alias di compatibilità."
+        },
+        {
+          "type": "paragraph",
+          "text": "Tradurre sintassi senza confrontare effetti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mescolare righe di shell diverse nello stesso blocco."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "PowerShell su Linux."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bash in ambiente Windows isolato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Shell minimale senza alcune estensioni."
+        },
+        {
+          "type": "paragraph",
+          "text": "Comando nativo chiamato da PowerShell."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Prima di modificare dati: identifica shell e computer, verifica la cartella, risolvi il bersaglio, elenca gli oggetti e usa un laboratorio sacrificabile."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Qual è l’intento indipendente dalla sintassi?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale tipo attraversa la pipeline?"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’alias conserva davvero le opzioni?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Traduci tre intenti in tre shell."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta output, errori e codice di uscita."
+        },
+        {
+          "type": "paragraph",
+          "text": "Scrivi una guida con blocchi chiaramente etichettati."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve separare testo digitato, elaborazione della shell, processo avviato, flussi, codice di uscita e stato modificato."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un alias ingannevole."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta oggetti e testo."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta criteri di portabilità."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Sistema operativo e shell coincidono?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Sì"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Solo Linux"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo Windows"
+        },
+        {
+          "type": "heading",
+          "text": "2. PowerShell può passare fra cmdlet?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Oggetti"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Niente"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Solo CPU"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo immagini"
+        },
+        {
+          "type": "heading",
+          "text": "3. Come si traduce un comando?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Preservando intento ed effetti"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Usando admin"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Parola per parola"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Cambiando estensione"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Cmdlet",
+              "Comando PowerShell con convenzione e output a oggetti."
+            ],
+            [
+              "Programma nativo",
+              "Eseguibile esterno alla shell."
+            ],
+            [
+              "Shell Unix",
+              "Famiglia di shell ispirate alle convenzioni Unix."
+            ],
+            [
+              "Portabilità",
+              "Capacità di conservare comportamento fra contesti."
+            ],
+            [
+              "Alias",
+              "Nome alternativo associato a un comando."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "I cmdlet PowerShell seguono spesso la forma Verbo-Sostantivo e restituiscono oggetti. I programmi nativi continuano a ricevere argomenti di processo. cmd.exe usa comandi e variabili con regole proprie. Le shell Unix trattano comunemente flussi testuali e offrono espansioni, glob e pipeline secondo standard e convenzioni. Anche fra bash e zsh uno script non è automaticamente portabile. La portabilità si costruisce definendo l’intento e traducendo per shell. La competenza consiste nel prevedere l’effetto, osservare il livello corretto e produrre una trascrizione ripetibile."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre un esempio e un controesempio motivati."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e individuare lo stato della sessione."
+        },
+        {
+          "type": "paragraph",
+          "text": "So adattare la procedura alla shell dichiarata e gestire tre casi limite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-3-chapter-10",
+      "lessonId": "1.3",
+      "chapterNumber": 10,
+      "title": "10. Metodo operativo: trascrizione, diagnosi e laboratorio sicuro",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.3 · CAPITOLO 10 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "10. Metodo operativo: trascrizione, diagnosi e laboratorio sicuro"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Usare il modello della shell per prevedere parsing, stato, processi e risultati senza dipendere da una singola interfaccia."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "La padronanza del terminale consiste nel rendere ogni azione spiegabile e ripetibile. Una trascrizione utile registra shell, cartella, comando, output, errore e codice di uscita senza includere segreti. La diagnosi modifica una sola variabile alla volta."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un quaderno di laboratorio annota condizioni, intervento e osservazione. Senza questi dati, un risultato non può essere ripetuto né corretto con metodo."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una sessione controllata parte da inventario e cartella di laboratorio. Ogni prova ha un’attesa, un comando non distruttivo e un criterio. Si distingue testo digitato da output; si annotano shell e sistema; si oscurano dati sensibili; si conserva lo stato iniziale. I sintomi vengono classificati: parsing, risoluzione del comando, percorso, permesso, processo, flusso o logica del programma."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "La trascrizione indica ‘PowerShell’ e non solo ‘Windows’."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un errore di percorso viene riprodotto in una cartella sacrificabile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dopo una modifica si ripete la stessa prova e una prova di regressione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Uno screenshot senza testo copiabile è difficile da cercare e può esporre dati."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una lista di comandi senza output non dimostra l’esito."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cambiare shell e percorso insieme rende ambigua la correzione."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il referto diagnostico collega sintomo, esame e risultato. Elencare farmaci senza diagnosi non costituisce cura; elencare comandi senza ipotesi non costituisce troubleshooting."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 10.1 — Modello operativo della shell"
+        },
+        {
+          "type": "paragraph",
+          "text": "INVENTARIO + CARTELLA LAB  vATTESA  vCOMANDO ETICHETTATO PER SHELL  vOUTPUT + STDERR + USCITA  vCLASSIFICA LIVELLO  vUNA MODIFICA -> RIPETI -> REGRESSIONE  vCONCLUSIONE E REGISTRO"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "La sicurezza didattica richiede dati sacrificabili, percorsi espliciti e nessun comando ricorsivo su directory ampie. Le trascrizioni vengono revisionate prima della condivisione per rimuovere nomi utente, token e percorsi sensibili. Un problema non riproducibile viene descritto con frequenza e condizioni, non liquidato come casuale."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Omettere shell e cartella."
+        },
+        {
+          "type": "paragraph",
+          "text": "Condividere segreti nella cronologia."
+        },
+        {
+          "type": "paragraph",
+          "text": "Usare file reali negli esercizi distruttivi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Saltare la prova di regressione."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Errore intermittente."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sessione remota che cade."
+        },
+        {
+          "type": "paragraph",
+          "text": "Output troppo grande."
+        },
+        {
+          "type": "paragraph",
+          "text": "Comando localizzato in una lingua diversa."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Prima di modificare dati: identifica shell e computer, verifica la cartella, risolvi il bersaglio, elenca gli oggetti e usa un laboratorio sacrificabile."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale livello spiega il sintomo?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale dato della trascrizione è sensibile?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale prova smentirebbe l’ipotesi?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Crea una trascrizione completa di un caso simulato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Classifica sei errori per livello."
+        },
+        {
+          "type": "paragraph",
+          "text": "Revisiona il registro per privacy e riproducibilità."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve separare testo digitato, elaborazione della shell, processo avviato, flussi, codice di uscita e stato modificato."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta un laboratorio sicuro."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un errore intermittente."
+        },
+        {
+          "type": "paragraph",
+          "text": "Crea una rubrica per valutare trascrizioni."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Che cosa deve indicare una trascrizione?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Solo il prompt"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Una password"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Shell, cartella, comando ed esito"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo uno screenshot"
+        },
+        {
+          "type": "heading",
+          "text": "2. Quante variabili si cambiano per prova?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Nessuna sempre"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Dipende dal colore"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Una, quando possibile"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Tutte"
+        },
+        {
+          "type": "heading",
+          "text": "3. Dove svolgere prove modificative?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Nella home intera"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Nella radice del disco"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. In una cartella di laboratorio"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Su file importanti"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Trascrizione",
+              "Registro testuale di una sessione."
+            ],
+            [
+              "Troubleshooting",
+              "Diagnosi sistematica di un problema."
+            ],
+            [
+              "Prova di regressione",
+              "Controllo che una correzione non rompa altro."
+            ],
+            [
+              "Dato sacrificabile",
+              "Dato creato per prove e sostituibile senza danno."
+            ],
+            [
+              "Sanitizzazione",
+              "Rimozione di informazioni sensibili da un registro."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una sessione controllata parte da inventario e cartella di laboratorio. Ogni prova ha un’attesa, un comando non distruttivo e un criterio. Si distingue testo digitato da output; si annotano shell e sistema; si oscurano dati sensibili; si conserva lo stato iniziale. I sintomi vengono classificati: parsing, risoluzione del comando, percorso, permesso, processo, flusso o logica del programma. La competenza consiste nel prevedere l’effetto, osservare il livello corretto e produrre una trascrizione ripetibile."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre un esempio e un controesempio motivati."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e individuare lo stato della sessione."
+        },
+        {
+          "type": "paragraph",
+          "text": "So adattare la procedura alla shell dichiarata e gestire tre casi limite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sintesi integrata della Lezione 1.3"
+        },
+        {
+          "type": "paragraph",
+          "text": "La shell mantiene stato, trasforma una riga in comando e argomenti, avvia processi e collega flussi. Cartella corrente, quoting, PATH e variabili spiegano perché la stessa apparenza può produrre risultati diversi. PowerShell, cmd.exe e shell Unix condividono il modello ma non la grammatica. Il metodo sicuro rende espliciti contesto, bersagli, attesa, output, errore e codice di uscita."
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura S.1 — Modello completo di una sessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "PERSONA -> TERMINALE -> SHELL                         +-- stato: cartella + ambiente                         +-- parsing: quoting + espansione                         +-- risoluzione: alias + PATH                         vPROCESSO: stdin -> lavoro -> stdout/stderr + uscita                         vTRASCRIZIONE -> VERIFICA -> NUOVA AZIONE"
+        },
+        {
+          "type": "heading",
+          "text": "Laboratorio finale: sessione multipiattaforma documentata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Produci un dossier di 1.800–2.400 parole senza usare dati importanti. Esegui o simula ogni azione in PowerShell e in una shell Unix; aggiungi cmd.exe dove disponibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Identifica sistema, terminale, shell e cartella."
+        },
+        {
+          "type": "paragraph",
+          "text": "Scomponi dieci comandi in token e argomenti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Risolvi percorsi assoluti e relativi con spazi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta quoting in due shell."
+        },
+        {
+          "type": "paragraph",
+          "text": "Esegui osservazione, copia e spostamento solo nel laboratorio."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dimostra stdout, stderr e codice di uscita."
+        },
+        {
+          "type": "paragraph",
+          "text": "Documenta un processo in primo piano e una interruzione controllata."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mostra ambiente, PATH e comando risolto senza esporre segreti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Traduci cinque intenti fra shell."
+        },
+        {
+          "type": "paragraph",
+          "text": "Diagnostica tre errori modificando una variabile per volta."
+        },
+        {
+          "type": "heading",
+          "text": "Rubrica di valutazione"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Dimensione",
+              "Essenziale",
+              "Solida",
+              "Piena padronanza"
+            ],
+            [
+              "Modello",
+              "Termini riconosciuti",
+              "Shell e processo distinti",
+              "Stato, parsing, flussi e uscita collegati"
+            ],
+            [
+              "Sintassi",
+              "Comandi eseguiti",
+              "Argomenti e quoting",
+              "Differenze fra shell motivate"
+            ],
+            [
+              "File system",
+              "Percorsi usati",
+              "Bersagli verificati",
+              "Jolly, collegamenti e recupero analizzati"
+            ],
+            [
+              "Processi",
+              "Avvio osservato",
+              "Interruzione e uscita",
+              "Figli e stato parziale considerati"
+            ],
+            [
+              "Portabilità",
+              "Due shell citate",
+              "Intenti tradotti",
+              "Effetti e tipi confrontati"
+            ],
+            [
+              "Metodo",
+              "Output registrato",
+              "Attesa e diagnosi",
+              "Trascrizione sanitizzata e regressione"
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento della lezione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Tutti i dieci capitoli sono stati letti e annotati."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sono stati completati gli esercizi guidati e almeno venti autonomi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il punteggio dei quiz è almeno 24/30 con correzione motivata."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il laboratorio raggiunge almeno il livello Solida in ogni dimensione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il lettore sa identificare shell, cartella e comando risolto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il lettore sa spiegare flussi, processo e codice di uscita."
+        },
+        {
+          "type": "paragraph",
+          "text": "La cartella di laboratorio è separata dai dati reali."
+        },
+        {
+          "type": "callout",
+          "text": "PASSAGGIO SUCCESSIVO  La Lezione 1.4 approfondirà file system, cartelle, percorsi, estensioni, collegamenti e permessi."
+        }
+      ]
+    }
+  ],
+  "chapters": [
+    {
+      "number": 1,
+      "title": "1. Terminale, console, shell e prompt: quattro concetti distinti",
+      "sectionId": "programming-1-3-chapter-1",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-3-chapter-1-guided",
+          "kind": "guided",
+          "lessonId": "1.3",
+          "chapterNumber": 1,
+          "title": "1. Terminale, console, shell e prompt: quattro concetti distinti",
+          "prompt": "Etichetta una trascrizione con prompt, comando e output.\nDisegna terminale e shell come processi distinti.\nConfronta sessione locale, remota e integrata.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve separare testo digitato, elaborazione della shell, processo avviato, flussi, codice di uscita e stato modificato."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-3-chapter-1-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 1,
+            "title": "1. Terminale, console, shell e prompt: quattro concetti distinti",
+            "prompt": "Spiega i quattro termini con un controesempio."
+          },
+          {
+            "id": "programming-1-3-chapter-1-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 1,
+            "title": "1. Terminale, console, shell e prompt: quattro concetti distinti",
+            "prompt": "Analizza un prompt personalizzato."
+          },
+          {
+            "id": "programming-1-3-chapter-1-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 1,
+            "title": "1. Terminale, console, shell e prompt: quattro concetti distinti",
+            "prompt": "Progetta una legenda per le guide del corso."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-3-chapter-1-quiz-1",
+          "concept": "1. Terminale, console, shell e prompt: quattro concetti distinti",
+          "prompt": "Chi interpreta normalmente il comando?",
+          "choices": [
+            "A. La shell",
+            "B. Il monitor",
+            "C. Il file",
+            "D. Il mouse"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-1"
+        },
+        {
+          "id": "programming-1-3-chapter-1-quiz-2",
+          "concept": "1. Terminale, console, shell e prompt: quattro concetti distinti",
+          "prompt": "Il prompt va sempre digitato?",
+          "choices": [
+            "A. No",
+            "B. Solo su Linux",
+            "C. Solo in PowerShell",
+            "D. Sì"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-1"
+        },
+        {
+          "id": "programming-1-3-chapter-1-quiz-3",
+          "concept": "1. Terminale, console, shell e prompt: quattro concetti distinti",
+          "prompt": "Un terminale integrato può usare quale shell?",
+          "choices": [
+            "A. Una shell configurata",
+            "B. Sempre la stessa esterna",
+            "C. Nessuna",
+            "D. Solo cmd"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-1"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "2. Anatomia di un comando: nome, opzioni, argomenti e sintassi",
+      "sectionId": "programming-1-3-chapter-2",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-3-chapter-2-guided",
+          "kind": "guided",
+          "lessonId": "1.3",
+          "chapterNumber": 2,
+          "title": "2. Anatomia di un comando: nome, opzioni, argomenti e sintassi",
+          "prompt": "Scomponi cinque righe in comando e argomenti.\nCorreggi un percorso con spazi.\nCostruisci un controesempio con argomento vuoto.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve separare testo digitato, elaborazione della shell, processo avviato, flussi, codice di uscita e stato modificato."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-3-chapter-2-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 2,
+            "title": "2. Anatomia di un comando: nome, opzioni, argomenti e sintassi",
+            "prompt": "Confronta --help, /? e Get-Help."
+          },
+          {
+            "id": "programming-1-3-chapter-2-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 2,
+            "title": "2. Anatomia di un comando: nome, opzioni, argomenti e sintassi",
+            "prompt": "Analizza un’opzione dopo --."
+          },
+          {
+            "id": "programming-1-3-chapter-2-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 2,
+            "title": "2. Anatomia di un comando: nome, opzioni, argomenti e sintassi",
+            "prompt": "Disegna parsing e avvio come fasi separate."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-3-chapter-2-quiz-1",
+          "concept": "2. Anatomia di un comando: nome, opzioni, argomenti e sintassi",
+          "prompt": "Chi interpreta per primo i caratteri speciali?",
+          "choices": [
+            "A. Il file system",
+            "B. Il monitor",
+            "C. La shell",
+            "D. Il programma finale"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-2"
+        },
+        {
+          "id": "programming-1-3-chapter-2-quiz-2",
+          "concept": "2. Anatomia di un comando: nome, opzioni, argomenti e sintassi",
+          "prompt": "Un’opzione è?",
+          "choices": [
+            "A. Sempre universale",
+            "B. Un processo separato",
+            "C. Un argomento interpretato dal comando",
+            "D. Sempre una cartella"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-2"
+        },
+        {
+          "id": "programming-1-3-chapter-2-quiz-3",
+          "concept": "2. Anatomia di un comando: nome, opzioni, argomenti e sintassi",
+          "prompt": "Le virgolette possono?",
+          "choices": [
+            "A. Creare una shell",
+            "B. Cambiare CPU",
+            "C. Raggruppare testo in un argomento",
+            "D. Installare Python"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-2"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "title": "3. Stato della sessione: cartella corrente, home e navigazione",
+      "sectionId": "programming-1-3-chapter-3",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-3-chapter-3-guided",
+          "kind": "guided",
+          "lessonId": "1.3",
+          "chapterNumber": 3,
+          "title": "3. Stato della sessione: cartella corrente, home e navigazione",
+          "prompt": "Disegna un albero e risolvi dieci navigazioni.\nConfronta due sessioni con basi diverse.\nScrivi una procedura che parte sempre dalla radice del progetto.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve separare testo digitato, elaborazione della shell, processo avviato, flussi, codice di uscita e stato modificato."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-3-chapter-3-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 3,
+            "title": "3. Stato della sessione: cartella corrente, home e navigazione",
+            "prompt": "Analizza . e ..."
+          },
+          {
+            "id": "programming-1-3-chapter-3-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 3,
+            "title": "3. Stato della sessione: cartella corrente, home e navigazione",
+            "prompt": "Confronta home e radice."
+          },
+          {
+            "id": "programming-1-3-chapter-3-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 3,
+            "title": "3. Stato della sessione: cartella corrente, home e navigazione",
+            "prompt": "Progetta una prova per la cartella dell’IDE."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-3-chapter-3-quiz-1",
+          "concept": "3. Stato della sessione: cartella corrente, home e navigazione",
+          "prompt": "Che cosa possiede una cartella di lavoro?",
+          "choices": [
+            "A. Un processo",
+            "B. Il monitor",
+            "C. Solo il disco",
+            "D. Solo Python"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-3"
+        },
+        {
+          "id": "programming-1-3-chapter-3-quiz-2",
+          "concept": "3. Stato della sessione: cartella corrente, home e navigazione",
+          "prompt": "La home coincide sempre con la radice?",
+          "choices": [
+            "A. No",
+            "B. Sì",
+            "C. Solo Windows",
+            "D. Solo Linux"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-3"
+        },
+        {
+          "id": "programming-1-3-chapter-3-quiz-3",
+          "concept": "3. Stato della sessione: cartella corrente, home e navigazione",
+          "prompt": "Cambiare cartella sposta i file?",
+          "choices": [
+            "A. No",
+            "B. Sì",
+            "C. Solo con cd",
+            "D. Solo in IDE"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-3"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "title": "4. Percorsi, spazi, quoting ed escaping",
+      "sectionId": "programming-1-3-chapter-4",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-3-chapter-4-guided",
+          "kind": "guided",
+          "lessonId": "1.3",
+          "chapterNumber": 4,
+          "title": "4. Percorsi, spazi, quoting ed escaping",
+          "prompt": "Correggi quattro percorsi con spazi.\nConfronta virgolette singole e doppie in casi simulati.\nTrasforma una concatenazione insicura in argomenti separati.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve separare testo digitato, elaborazione della shell, processo avviato, flussi, codice di uscita e stato modificato."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-3-chapter-4-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 4,
+            "title": "4. Percorsi, spazi, quoting ed escaping",
+            "prompt": "Crea una tabella di metacaratteri per due shell."
+          },
+          {
+            "id": "programming-1-3-chapter-4-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 4,
+            "title": "4. Percorsi, spazi, quoting ed escaping",
+            "prompt": "Analizza input ostile."
+          },
+          {
+            "id": "programming-1-3-chapter-4-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 4,
+            "title": "4. Percorsi, spazi, quoting ed escaping",
+            "prompt": "Progetta test con nomi Unicode."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-3-chapter-4-quiz-1",
+          "concept": "4. Percorsi, spazi, quoting ed escaping",
+          "prompt": "Quoting ed escaping sono universali?",
+          "choices": [
+            "A. Solo in Python",
+            "B. Sì",
+            "C. No",
+            "D. Solo nei file"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-4"
+        },
+        {
+          "id": "programming-1-3-chapter-4-quiz-2",
+          "concept": "4. Percorsi, spazi, quoting ed escaping",
+          "prompt": "Che cosa fa il quoting?",
+          "choices": [
+            "A. Spegne il computer",
+            "B. Installa la shell",
+            "C. Controlla raggruppamento e interpretazione",
+            "D. Cambia CPU"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-4"
+        },
+        {
+          "id": "programming-1-3-chapter-4-quiz-3",
+          "concept": "4. Percorsi, spazi, quoting ed escaping",
+          "prompt": "Come evitare una stringa di comando insicura in un’API?",
+          "choices": [
+            "A. Nascondere l’output",
+            "B. Usare admin",
+            "C. Passare argomenti separati",
+            "D. Aggiungere spazi"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-4"
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "title": "5. Osservare e modificare il file system con prudenza",
+      "sectionId": "programming-1-3-chapter-5",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-3-chapter-5-guided",
+          "kind": "guided",
+          "lessonId": "1.3",
+          "chapterNumber": 5,
+          "title": "5. Osservare e modificare il file system con prudenza",
+          "prompt": "Progetta un laboratorio con file sacrificabili.\nScrivi una checklist prima di copia, spostamento e rimozione.\nAnalizza un jolly che include un file inatteso.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve separare testo digitato, elaborazione della shell, processo avviato, flussi, codice di uscita e stato modificato."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-3-chapter-5-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 5,
+            "title": "5. Osservare e modificare il file system con prudenza",
+            "prompt": "Confronta copia e spostamento fra volumi."
+          },
+          {
+            "id": "programming-1-3-chapter-5-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 5,
+            "title": "5. Osservare e modificare il file system con prudenza",
+            "prompt": "Progetta una prova di sovrascrittura."
+          },
+          {
+            "id": "programming-1-3-chapter-5-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 5,
+            "title": "5. Osservare e modificare il file system con prudenza",
+            "prompt": "Spiega perché i percorsi ampi sono pericolosi."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-3-chapter-5-quiz-1",
+          "concept": "5. Osservare e modificare il file system con prudenza",
+          "prompt": "Prima di modificare molti file bisogna?",
+          "choices": [
+            "A. Elencare i bersagli",
+            "B. Nascondere il percorso",
+            "C. Usare admin",
+            "D. Cambiare IDE"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-5"
+        },
+        {
+          "id": "programming-1-3-chapter-5-quiz-2",
+          "concept": "5. Osservare e modificare il file system con prudenza",
+          "prompt": "Un jolly indica sempre un solo file?",
+          "choices": [
+            "A. No",
+            "B. Solo Windows",
+            "C. Solo Linux",
+            "D. Sì"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-5"
+        },
+        {
+          "id": "programming-1-3-chapter-5-quiz-3",
+          "concept": "5. Osservare e modificare il file system con prudenza",
+          "prompt": "La rimozione è sempre recuperabile?",
+          "choices": [
+            "A. No",
+            "B. Solo offline",
+            "C. Sì",
+            "D. Solo con Python"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-5"
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "title": "6. Input, output, errore, redirezione e pipeline",
+      "sectionId": "programming-1-3-chapter-6",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-3-chapter-6-guided",
+          "kind": "guided",
+          "lessonId": "1.3",
+          "chapterNumber": 6,
+          "title": "6. Input, output, errore, redirezione e pipeline",
+          "prompt": "Disegna tre flussi e il codice di uscita.\nProgetta una redirezione che preservi gli errori.\nConfronta pipeline testuale e a oggetti.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve separare testo digitato, elaborazione della shell, processo avviato, flussi, codice di uscita e stato modificato."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-3-chapter-6-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 6,
+            "title": "6. Input, output, errore, redirezione e pipeline",
+            "prompt": "Analizza un processo silenzioso che fallisce."
+          },
+          {
+            "id": "programming-1-3-chapter-6-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 6,
+            "title": "6. Input, output, errore, redirezione e pipeline",
+            "prompt": "Progetta un log separato."
+          },
+          {
+            "id": "programming-1-3-chapter-6-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 6,
+            "title": "6. Input, output, errore, redirezione e pipeline",
+            "prompt": "Spiega append e sovrascrittura."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-3-chapter-6-quiz-1",
+          "concept": "6. Input, output, errore, redirezione e pipeline",
+          "prompt": "Quale flusso contiene l’errore standard?",
+          "choices": [
+            "A. stdout",
+            "B. codice",
+            "C. stderr",
+            "D. stdin"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-6"
+        },
+        {
+          "id": "programming-1-3-chapter-6-quiz-2",
+          "concept": "6. Input, output, errore, redirezione e pipeline",
+          "prompt": "PowerShell può trasportare in pipeline?",
+          "choices": [
+            "A. Solo file",
+            "B. Nessun dato",
+            "C. Oggetti fra cmdlet",
+            "D. Solo pixel"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-6"
+        },
+        {
+          "id": "programming-1-3-chapter-6-quiz-3",
+          "concept": "6. Input, output, errore, redirezione e pipeline",
+          "prompt": "Il codice di uscita è?",
+          "choices": [
+            "A. Un alias",
+            "B. Sempre testo",
+            "C. Uno stato numerico separato",
+            "D. Una cartella"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-6"
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "title": "7. Processi, primo piano, interruzione e codice di uscita",
+      "sectionId": "programming-1-3-chapter-7",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-3-chapter-7-guided",
+          "kind": "guided",
+          "lessonId": "1.3",
+          "chapterNumber": 7,
+          "title": "7. Processi, primo piano, interruzione e codice di uscita",
+          "prompt": "Disegna shell, processo e figli.\nClassifica tre modalità di terminazione.\nProgetta una verifica dopo interruzione.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve separare testo digitato, elaborazione della shell, processo avviato, flussi, codice di uscita e stato modificato."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-3-chapter-7-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 7,
+            "title": "7. Processi, primo piano, interruzione e codice di uscita",
+            "prompt": "Analizza un server locale."
+          },
+          {
+            "id": "programming-1-3-chapter-7-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 7,
+            "title": "7. Processi, primo piano, interruzione e codice di uscita",
+            "prompt": "Confronta prompt e codice di uscita."
+          },
+          {
+            "id": "programming-1-3-chapter-7-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 7,
+            "title": "7. Processi, primo piano, interruzione e codice di uscita",
+            "prompt": "Crea una procedura prudente di arresto."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-3-chapter-7-quiz-1",
+          "concept": "7. Processi, primo piano, interruzione e codice di uscita",
+          "prompt": "Ctrl+C garantisce sempre l’arresto di tutto?",
+          "choices": [
+            "A. No",
+            "B. Solo Windows",
+            "C. Sì",
+            "D. Solo Python"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-7"
+        },
+        {
+          "id": "programming-1-3-chapter-7-quiz-2",
+          "concept": "7. Processi, primo piano, interruzione e codice di uscita",
+          "prompt": "Che cosa torna alla shell al termine?",
+          "choices": [
+            "A. Un codice di uscita",
+            "B. Una CPU",
+            "C. Un monitor",
+            "D. Un editor"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-7"
+        },
+        {
+          "id": "programming-1-3-chapter-7-quiz-3",
+          "concept": "7. Processi, primo piano, interruzione e codice di uscita",
+          "prompt": "Il ritorno del prompt prova successo?",
+          "choices": [
+            "A. No",
+            "B. Sì",
+            "C. Solo in bash",
+            "D. Solo in PowerShell"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-7"
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "title": "8. Variabili d’ambiente, PATH e scoperta dei comandi",
+      "sectionId": "programming-1-3-chapter-8",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-3-chapter-8-guided",
+          "kind": "guided",
+          "lessonId": "1.3",
+          "chapterNumber": 8,
+          "title": "8. Variabili d’ambiente, PATH e scoperta dei comandi",
+          "prompt": "Disegna ereditarietà genitore-figlio.\nSimula due PATH con precedenze diverse.\nProgetta una modifica reversibile.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve separare testo digitato, elaborazione della shell, processo avviato, flussi, codice di uscita e stato modificato."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-3-chapter-8-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 8,
+            "title": "8. Variabili d’ambiente, PATH e scoperta dei comandi",
+            "prompt": "Confronta sintassi di tre shell."
+          },
+          {
+            "id": "programming-1-3-chapter-8-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 8,
+            "title": "8. Variabili d’ambiente, PATH e scoperta dei comandi",
+            "prompt": "Analizza un segreto nella cronologia."
+          },
+          {
+            "id": "programming-1-3-chapter-8-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 8,
+            "title": "8. Variabili d’ambiente, PATH e scoperta dei comandi",
+            "prompt": "Distingui PATH e cartella corrente."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-3-chapter-8-quiz-1",
+          "concept": "8. Variabili d’ambiente, PATH e scoperta dei comandi",
+          "prompt": "Una variabile del figlio modifica automaticamente il genitore?",
+          "choices": [
+            "A. Solo Python",
+            "B. Sì",
+            "C. No",
+            "D. Solo Linux"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-8"
+        },
+        {
+          "id": "programming-1-3-chapter-8-quiz-2",
+          "concept": "8. Variabili d’ambiente, PATH e scoperta dei comandi",
+          "prompt": "PATH è?",
+          "choices": [
+            "A. La cartella corrente",
+            "B. Una password",
+            "C. Un elenco ordinato di ricerca",
+            "D. Un IDE"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-8"
+        },
+        {
+          "id": "programming-1-3-chapter-8-quiz-3",
+          "concept": "8. Variabili d’ambiente, PATH e scoperta dei comandi",
+          "prompt": "Che cosa conferma Python avviato?",
+          "choices": [
+            "A. Il tema",
+            "B. La home",
+            "C. sys.executable",
+            "D. Il prompt"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-8"
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "title": "9. PowerShell, cmd.exe e shell Unix: portabilità consapevole",
+      "sectionId": "programming-1-3-chapter-9",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-3-chapter-9-guided",
+          "kind": "guided",
+          "lessonId": "1.3",
+          "chapterNumber": 9,
+          "title": "9. PowerShell, cmd.exe e shell Unix: portabilità consapevole",
+          "prompt": "Traduci tre intenti in tre shell.\nConfronta output, errori e codice di uscita.\nScrivi una guida con blocchi chiaramente etichettati.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve separare testo digitato, elaborazione della shell, processo avviato, flussi, codice di uscita e stato modificato."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-3-chapter-9-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 9,
+            "title": "9. PowerShell, cmd.exe e shell Unix: portabilità consapevole",
+            "prompt": "Analizza un alias ingannevole."
+          },
+          {
+            "id": "programming-1-3-chapter-9-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 9,
+            "title": "9. PowerShell, cmd.exe e shell Unix: portabilità consapevole",
+            "prompt": "Confronta oggetti e testo."
+          },
+          {
+            "id": "programming-1-3-chapter-9-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 9,
+            "title": "9. PowerShell, cmd.exe e shell Unix: portabilità consapevole",
+            "prompt": "Progetta criteri di portabilità."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-3-chapter-9-quiz-1",
+          "concept": "9. PowerShell, cmd.exe e shell Unix: portabilità consapevole",
+          "prompt": "Sistema operativo e shell coincidono?",
+          "choices": [
+            "A. No",
+            "B. Sì",
+            "C. Solo Linux",
+            "D. Solo Windows"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-9"
+        },
+        {
+          "id": "programming-1-3-chapter-9-quiz-2",
+          "concept": "9. PowerShell, cmd.exe e shell Unix: portabilità consapevole",
+          "prompt": "PowerShell può passare fra cmdlet?",
+          "choices": [
+            "A. Oggetti",
+            "B. Niente",
+            "C. Solo CPU",
+            "D. Solo immagini"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-9"
+        },
+        {
+          "id": "programming-1-3-chapter-9-quiz-3",
+          "concept": "9. PowerShell, cmd.exe e shell Unix: portabilità consapevole",
+          "prompt": "Come si traduce un comando?",
+          "choices": [
+            "A. Preservando intento ed effetti",
+            "B. Usando admin",
+            "C. Parola per parola",
+            "D. Cambiando estensione"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-9"
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "title": "10. Metodo operativo: trascrizione, diagnosi e laboratorio sicuro",
+      "sectionId": "programming-1-3-chapter-10",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-3-chapter-10-guided",
+          "kind": "guided",
+          "lessonId": "1.3",
+          "chapterNumber": 10,
+          "title": "10. Metodo operativo: trascrizione, diagnosi e laboratorio sicuro",
+          "prompt": "Crea una trascrizione completa di un caso simulato.\nClassifica sei errori per livello.\nRevisiona il registro per privacy e riproducibilità.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve separare testo digitato, elaborazione della shell, processo avviato, flussi, codice di uscita e stato modificato."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-3-chapter-10-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 10,
+            "title": "10. Metodo operativo: trascrizione, diagnosi e laboratorio sicuro",
+            "prompt": "Progetta un laboratorio sicuro."
+          },
+          {
+            "id": "programming-1-3-chapter-10-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 10,
+            "title": "10. Metodo operativo: trascrizione, diagnosi e laboratorio sicuro",
+            "prompt": "Analizza un errore intermittente."
+          },
+          {
+            "id": "programming-1-3-chapter-10-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.3",
+            "chapterNumber": 10,
+            "title": "10. Metodo operativo: trascrizione, diagnosi e laboratorio sicuro",
+            "prompt": "Crea una rubrica per valutare trascrizioni."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-3-chapter-10-quiz-1",
+          "concept": "10. Metodo operativo: trascrizione, diagnosi e laboratorio sicuro",
+          "prompt": "Che cosa deve indicare una trascrizione?",
+          "choices": [
+            "A. Solo il prompt",
+            "B. Una password",
+            "C. Shell, cartella, comando ed esito",
+            "D. Solo uno screenshot"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-10"
+        },
+        {
+          "id": "programming-1-3-chapter-10-quiz-2",
+          "concept": "10. Metodo operativo: trascrizione, diagnosi e laboratorio sicuro",
+          "prompt": "Quante variabili si cambiano per prova?",
+          "choices": [
+            "A. Nessuna sempre",
+            "B. Dipende dal colore",
+            "C. Una, quando possibile",
+            "D. Tutte"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-10"
+        },
+        {
+          "id": "programming-1-3-chapter-10-quiz-3",
+          "concept": "10. Metodo operativo: trascrizione, diagnosi e laboratorio sicuro",
+          "prompt": "Dove svolgere prove modificative?",
+          "choices": [
+            "A. Nella home intera",
+            "B. Nella radice del disco",
+            "C. In una cartella di laboratorio",
+            "D. Su file importanti"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-3-chapter-10"
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    [
+      "Terminale",
+      "Interfaccia testuale per input e output."
+    ],
+    [
+      "Shell",
+      "Programma che interpreta comandi e gestisce una sessione."
+    ],
+    [
+      "Console",
+      "Interfaccia o sessione di controllo, termine dipendente dal contesto."
+    ],
+    [
+      "Prompt",
+      "Segnale che la shell è pronta."
+    ],
+    [
+      "Sessione",
+      "Contesto operativo con stato e processi."
+    ],
+    [
+      "Token",
+      "Unità riconosciuta durante l’analisi della riga."
+    ],
+    [
+      "Argomento",
+      "Valore passato a un comando."
+    ],
+    [
+      "Opzione",
+      "Argomento che modifica il comportamento secondo la sintassi del programma."
+    ],
+    [
+      "Parsing",
+      "Analisi della struttura di un testo."
+    ],
+    [
+      "Espansione",
+      "Sostituzione eseguita dalla shell prima dell’avvio."
+    ],
+    [
+      "Cartella corrente",
+      "Base operativa di un processo."
+    ],
+    [
+      "Home",
+      "Cartella convenzionale dell’utente."
+    ],
+    [
+      "Radice",
+      "Punto iniziale della gerarchia di un file system o unità."
+    ],
+    [
+      "Navigazione",
+      "Cambio della cartella corrente."
+    ],
+    [
+      "Sottoshell",
+      "Shell figlia con stato separato."
+    ],
+    [
+      "Quoting",
+      "Regole che raggruppano e controllano l’interpretazione del testo."
+    ],
+    [
+      "Escaping",
+      "Marcatura di un carattere perché venga trattato letteralmente."
+    ],
+    [
+      "Metacarattere",
+      "Carattere con significato speciale per la shell."
+    ],
+    [
+      "Letterale",
+      "Dato interpretato come se stesso."
+    ],
+    [
+      "Command injection",
+      "Esecuzione indesiderata causata da input interpretato come comando."
+    ],
+    [
+      "Jolly",
+      "Pattern che può corrispondere a più nomi."
+    ],
+    [
+      "Ricorsione",
+      "Applicazione attraverso una gerarchia di sottocartelle."
+    ],
+    [
+      "Sovrascrittura",
+      "Sostituzione di un oggetto esistente."
+    ],
+    [
+      "Collegamento simbolico",
+      "Riferimento a un altro percorso."
+    ],
+    [
+      "Bersaglio",
+      "Oggetto su cui un comando deve agire."
+    ],
+    [
+      "stdin",
+      "Flusso di ingresso standard."
+    ],
+    [
+      "stdout",
+      "Flusso di uscita standard."
+    ],
+    [
+      "stderr",
+      "Flusso di errore standard."
+    ],
+    [
+      "Redirezione",
+      "Associazione di un flusso a una destinazione."
+    ],
+    [
+      "Pipeline",
+      "Collegamento dell’uscita di un comando all’ingresso di un altro."
+    ],
+    [
+      "Processo",
+      "Istanza in esecuzione di un programma."
+    ],
+    [
+      "Primo piano",
+      "Modalità in cui la shell attende il processo interattivo."
+    ],
+    [
+      "Background",
+      "Esecuzione che consente alla shell di proseguire."
+    ],
+    [
+      "Interruzione",
+      "Richiesta al processo di fermare l’attività."
+    ],
+    [
+      "Terminazione forzata",
+      "Arresto imposto senza normale chiusura."
+    ],
+    [
+      "Ambiente di processo",
+      "Mappa di variabili posseduta da un processo."
+    ],
+    [
+      "Ereditarietà",
+      "Copia iniziale dell’ambiente dal genitore al figlio."
+    ],
+    [
+      "PATH",
+      "Sequenza di posizioni per la ricerca dei comandi."
+    ],
+    [
+      "Persistenza",
+      "Sopravvivenza della configurazione a nuove sessioni."
+    ],
+    [
+      "Cronologia",
+      "Registro dei comandi digitati."
+    ],
+    [
+      "Cmdlet",
+      "Comando PowerShell con convenzione e output a oggetti."
+    ],
+    [
+      "Programma nativo",
+      "Eseguibile esterno alla shell."
+    ],
+    [
+      "Shell Unix",
+      "Famiglia di shell ispirate alle convenzioni Unix."
+    ],
+    [
+      "Portabilità",
+      "Capacità di conservare comportamento fra contesti."
+    ],
+    [
+      "Alias",
+      "Nome alternativo associato a un comando."
+    ],
+    [
+      "Trascrizione",
+      "Registro testuale di una sessione."
+    ],
+    [
+      "Troubleshooting",
+      "Diagnosi sistematica di un problema."
+    ],
+    [
+      "Prova di regressione",
+      "Controllo che una correzione non rompa altro."
+    ],
+    [
+      "Dato sacrificabile",
+      "Dato creato per prove e sostituibile senza danno."
+    ],
+    [
+      "Sanitizzazione",
+      "Rimozione di informazioni sensibili da un registro."
+    ]
+  ],
+  "summary": [
+    "La shell mantiene stato, trasforma una riga in comando e argomenti, avvia processi e collega flussi. Cartella corrente, quoting, PATH e variabili spiegano perché la stessa apparenza può produrre risultati diversi. PowerShell, cmd.exe e shell Unix condividono il modello ma non la grammatica. Il metodo sicuro rende espliciti contesto, bersagli, attesa, output, errore e codice di uscita."
+  ],
+  "finalAssessment": {
+    "lessonId": "1.3",
+    "title": "Laboratorio finale: sessione multipiattaforma documentata",
+    "prompt": "Produci un dossier di 1.800–2.400 parole senza usare dati importanti. Esegui o simula ogni azione in PowerShell e in una shell Unix; aggiungi cmd.exe dove disponibile.",
+    "deliverables": [
+      "Identifica sistema, terminale, shell e cartella.",
+      "Scomponi dieci comandi in token e argomenti.",
+      "Risolvi percorsi assoluti e relativi con spazi.",
+      "Confronta quoting in due shell.",
+      "Esegui osservazione, copia e spostamento solo nel laboratorio.",
+      "Dimostra stdout, stderr e codice di uscita.",
+      "Documenta un processo in primo piano e una interruzione controllata.",
+      "Mostra ambiente, PATH e comando risolto senza esporre segreti.",
+      "Traduci cinque intenti fra shell.",
+      "Diagnostica tre errori modificando una variabile per volta."
+    ],
+    "rubric": [
+      [
+        "Dimensione",
+        "Essenziale",
+        "Solida",
+        "Piena padronanza"
+      ],
+      [
+        "Modello",
+        "Termini riconosciuti",
+        "Shell e processo distinti",
+        "Stato, parsing, flussi e uscita collegati"
+      ],
+      [
+        "Sintassi",
+        "Comandi eseguiti",
+        "Argomenti e quoting",
+        "Differenze fra shell motivate"
+      ],
+      [
+        "File system",
+        "Percorsi usati",
+        "Bersagli verificati",
+        "Jolly, collegamenti e recupero analizzati"
+      ],
+      [
+        "Processi",
+        "Avvio osservato",
+        "Interruzione e uscita",
+        "Figli e stato parziale considerati"
+      ],
+      [
+        "Portabilità",
+        "Due shell citate",
+        "Intenti tradotti",
+        "Effetti e tipi confrontati"
+      ],
+      [
+        "Metodo",
+        "Output registrato",
+        "Attesa e diagnosi",
+        "Trascrizione sanitizzata e regressione"
+      ]
+    ],
+    "completionCriteria": [
+      "Tutti i dieci capitoli sono stati letti e annotati.",
+      "Sono stati completati gli esercizi guidati e almeno venti autonomi.",
+      "Il punteggio dei quiz è almeno 24/30 con correzione motivata.",
+      "Il laboratorio raggiunge almeno il livello Solida in ogni dimensione.",
+      "Il lettore sa identificare shell, cartella e comando risolto.",
+      "Il lettore sa spiegare flussi, processo e codice di uscita.",
+      "La cartella di laboratorio è separata dai dati reali."
+    ]
+  }
+}
