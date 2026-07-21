@@ -1,0 +1,4856 @@
+{
+  "id": "1.4",
+  "title": "File system, cartelle e percorsi",
+  "source": {
+    "filename": "Programmazione_da_Zero_Lezione_1.4_File_system_e_percorsi.docx",
+    "sha256": "58e92a5aeaea1f6b1622aa2432fa359ac64c61e957dbbcf25b5685fdc405e5f0",
+    "storedInRepository": false,
+    "normalizations": []
+  },
+  "metrics": {
+    "paragraphs": 804,
+    "tables": 12,
+    "textCharacters": 55653
+  },
+  "objectives": [
+    "Comprendere oggetti e gerarchie.",
+    "Risolvere percorsi assoluti e relativi.",
+    "Distinguere nome, estensione, formato e visibilità.",
+    "Operare in sicurezza.",
+    "Riconoscere collegamenti, montaggi e sync.",
+    "Diagnosticare permessi.",
+    "Progettare nomi portabili.",
+    "Gestire codifica e newline.",
+    "Separare categorie del progetto.",
+    "Diagnosticare per livelli."
+  ],
+  "sections": [
+    {
+      "id": "programming-1-4-introduction",
+      "lessonId": "1.4",
+      "chapterNumber": 0,
+      "title": "Lezione 1.4 · File system, cartelle e percorsi",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "AULA STUDIO VIRTUALE"
+        },
+        {
+          "type": "paragraph",
+          "text": "Programmazione da Zero"
+        },
+        {
+          "type": "paragraph",
+          "text": "Manuale ufficiale"
+        },
+        {
+          "type": "paragraph",
+          "text": "MODULO 1"
+        },
+        {
+          "type": "paragraph",
+          "text": "Lezione 1.4"
+        },
+        {
+          "type": "paragraph",
+          "text": "File system, cartelle e percorsi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Estensioni, collegamenti, permessi e portabilità"
+        },
+        {
+          "type": "paragraph",
+          "text": "DESTINATARIO  Lettore principiante. Tutte le operazioni modificative sono progettate per cartelle di laboratorio e dati sacrificabili."
+        },
+        {
+          "type": "paragraph",
+          "text": "Edizione editoriale · 2026"
+        },
+        {
+          "type": "heading",
+          "text": "Come usare questa lezione"
+        },
+        {
+          "type": "paragraph",
+          "text": "La Lezione 1.3 ha introdotto shell e percorsi. Questa lezione approfondisce ciò che il percorso identifica e le regole che determinano visibilità, accesso, portabilità e sicurezza. I comandi specifici restano secondari rispetto al modello comune."
+        },
+        {
+          "type": "paragraph",
+          "text": "Studia ogni operazione in due tempi. Nel primo ricostruisci l’effetto senza modificare nulla: individua radice, base, oggetto, collegamenti, identità e regole di accesso. Nel secondo lavora esclusivamente nella cartella di laboratorio, registra lo stato iniziale, esegue una sola modifica e verifica sia l’origine sia la destinazione. Se l’effetto non può essere descritto con precisione, l’operazione non è ancora pronta. Questo criterio evita che la velocità della shell sostituisca il ragionamento e prepara a organizzare progetti riproducibili nelle lezioni successive."
+        },
+        {
+          "type": "paragraph",
+          "text": "LABORATORIO PROTETTO  Crea una nuova cartella destinata unicamente agli esercizi. Non usare radici, home, cartelle sincronizzate importanti o dati personali."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ogni risultato deve essere motivato, controllato, ripetibile e verificabile da un’altra persona."
+        },
+        {
+          "type": "heading",
+          "text": "Risultati di apprendimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Comprendere oggetti e gerarchie."
+        },
+        {
+          "type": "paragraph",
+          "text": "Risolvere percorsi assoluti e relativi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Distinguere nome, estensione, formato e visibilità."
+        },
+        {
+          "type": "paragraph",
+          "text": "Operare in sicurezza."
+        },
+        {
+          "type": "paragraph",
+          "text": "Riconoscere collegamenti, montaggi e sync."
+        },
+        {
+          "type": "paragraph",
+          "text": "Diagnosticare permessi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progettare nomi portabili."
+        },
+        {
+          "type": "paragraph",
+          "text": "Gestire codifica e newline."
+        },
+        {
+          "type": "paragraph",
+          "text": "Separare categorie del progetto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Diagnosticare per livelli."
+        },
+        {
+          "type": "heading",
+          "text": "Mappa della lezione"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Cap.",
+              "Nucleo concettuale"
+            ],
+            [
+              "1",
+              "Il file system come modello di oggetti e gerarchie"
+            ],
+            [
+              "2",
+              "Percorsi assoluti, relativi, radici e normalizzazione"
+            ],
+            [
+              "3",
+              "Nomi, estensioni, formati e file nascosti"
+            ],
+            [
+              "4",
+              "Creare, copiare, spostare, rinominare e rimuovere"
+            ],
+            [
+              "5",
+              "Collegamenti, scorciatoie, montaggi e sincronizzazione"
+            ],
+            [
+              "6",
+              "Permessi, proprietà e minimo privilegio"
+            ],
+            [
+              "7",
+              "Maiuscole, caratteri Unicode, limiti e portabilità dei nomi"
+            ],
+            [
+              "8",
+              "Testo, codifica, newline e integrità dei file"
+            ],
+            [
+              "9",
+              "Cartelle di progetto, temporanei, cache, backup e dati sensibili"
+            ],
+            [
+              "10",
+              "Diagnosi per livelli e laboratorio conclusivo"
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Prerequisiti e materiali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Prerequisiti: Lezioni 1.1–1.3. Servono terminale, editor e una cartella di laboratorio vuota. Gli esempi devono essere adattati alla shell dichiarata."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-4-chapter-1",
+      "lessonId": "1.4",
+      "chapterNumber": 1,
+      "title": "1. Il file system come modello di oggetti e gerarchie",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.4 · CAPITOLO 1 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "1. Il file system come modello di oggetti e gerarchie"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Identificare oggetti, percorsi e regole del file system e operare con confini, permessi e prove esplicite."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il file system organizza dati persistenti in oggetti identificabili. File e cartelle non sono soltanto icone: possiedono nomi, percorsi, contenuti, metadati e regole di accesso. Comprendere questa struttura permette di distinguere un errore del programma da un oggetto mancante, spostato o non accessibile."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una biblioteca separa contenuto del libro, scheda catalografica e posizione sullo scaffale. Un file ha contenuto, metadati e collocazione. Spostarlo cambia la posizione ma non necessariamente i dati; rinominarlo cambia l’identificatore visibile ma non il contenuto."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il sistema operativo espone file system tramite una gerarchia. Una directory contiene associazioni fra nomi e oggetti. Un file regolare contiene una sequenza di byte; altri tipi possono rappresentare dispositivi, collegamenti o endpoint. Metadati come dimensione, date e autorizzazioni descrivono l’oggetto senza coincidere con il contenuto. Interfacce grafiche e shell mostrano viste diverse dello stesso modello."
+        },
+        {
+          "type": "paragraph",
+          "text": "Per applicare questo modello occorre separare cinque domande: quale oggetto è coinvolto, con quale percorso viene raggiunto, quale identità esegue l’operazione, quale stato persistente può cambiare e quale evidenza conferma l’esito. La sequenza impedisce di correggere il livello sbagliato. Prima si osservano tipo, percorso risolto e metadati; poi si valutano permessi, collegamenti e confini; infine si interpreta il contenuto. Ogni modifica deve dichiarare origine, destinazione, comportamento in caso di conflitto e strategia di recupero. Questo metodo resta valido su Windows, macOS e Linux anche quando comandi, separatori, ACL e interfacce sono differenti."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Due file omonimi in cartelle diverse sono oggetti distinti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una cartella può esistere ma risultare vuota per filtri dell’interfaccia."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un programma apre un file attraverso un percorso, non attraverso l’icona."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’estensione non trasforma il contenuto."
+        },
+        {
+          "type": "paragraph",
+          "text": "La dimensione zero non significa che l’oggetto non esista."
+        },
+        {
+          "type": "paragraph",
+          "text": "La data mostrata non è una prova univoca dell’identità."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il catalogo della biblioteca collega nome e posizione a un oggetto; il libro resta distinto dalla scheda. Il limite è che un oggetto digitale può avere più collegamenti e viste."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 1.1 — Modello del file system"
+        },
+        {
+          "type": "paragraph",
+          "text": "FILE SYSTEM  +-- gerarchia di directory  +-- nomi -> oggetti  +-- file -> byte  +-- metadati -> dimensione, tempi, permessi  +-- collegamenti -> altre vie  vAPPLICAZIONE APRE UN PERCORSO"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "La persistenza non equivale a permanenza assoluta: guasti, sincronizzazione e cancellazioni possono modificare i dati. Un inventario serio registra percorso risolto, tipo, dimensione e, quando necessario, impronta crittografica. La Lezione 0.3 ha mostrato che il significato dipende dalla codifica; il file system conserva byte, non comprende automaticamente il formato."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere file e collegamento."
+        },
+        {
+          "type": "paragraph",
+          "text": "Usare solo l’icona come prova."
+        },
+        {
+          "type": "paragraph",
+          "text": "Scambiare metadati e contenuto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Pensare che una cartella contenga fisicamente i dati come una scatola."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "File sparse o speciali."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cartella virtuale dell’interfaccia."
+        },
+        {
+          "type": "paragraph",
+          "text": "Oggetto remoto montato localmente."
+        },
+        {
+          "type": "paragraph",
+          "text": "Metadati aggiornati con ritardo."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Risolvi il percorso assoluto, elenca i bersagli, verifica identità e permessi, usa dati sacrificabili e conserva una via di recupero."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale oggetto viene identificato?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quali proprietà sono contenuto e quali metadati?"
+        },
+        {
+          "type": "paragraph",
+          "text": "La vista applica filtri?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Disegna una gerarchia con file omonimi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Classifica contenuto, nome, percorso e metadati."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta un inventario verificabile."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve distinguere nome, oggetto, percorso, collegamento, permesso, contenuto e formato."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta icona e oggetto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un file vuoto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Spiega la persistenza con un controesempio."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Che cosa contiene un file regolare?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Una sequenza di byte"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Solo testo"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Un’icona"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Un percorso"
+        },
+        {
+          "type": "heading",
+          "text": "2. Nome e contenuto coincidono?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Solo Windows"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Solo Python"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Sì"
+        },
+        {
+          "type": "heading",
+          "text": "3. La cartella è principalmente?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Un’associazione gerarchica di nomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Una CPU"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Un formato audio"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Un processo"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "File system",
+              "Meccanismo che organizza oggetti persistenti."
+            ],
+            [
+              "File",
+              "Oggetto che conserva una sequenza di dati."
+            ],
+            [
+              "Directory",
+              "Oggetto che associa nomi ad altri oggetti."
+            ],
+            [
+              "Metadato",
+              "Informazione descrittiva distinta dal contenuto."
+            ],
+            [
+              "Persistenza",
+              "Conservazione oltre la vita del processo."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il sistema operativo espone file system tramite una gerarchia. Una directory contiene associazioni fra nomi e oggetti. Un file regolare contiene una sequenza di byte; altri tipi possono rappresentare dispositivi, collegamenti o endpoint. Metadati come dimensione, date e autorizzazioni descrivono l’oggetto senza coincidere con il contenuto. Interfacce grafiche e shell mostrano viste diverse dello stesso modello. La padronanza richiede una prova osservabile e una correzione minima, non un tentativo casuale."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre esempio e controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e distinguere oggetto, percorso e contenuto."
+        },
+        {
+          "type": "paragraph",
+          "text": "So gestire tre casi limite con una procedura sicura."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato esercizi e almeno due risposte corrette su tre."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-4-chapter-2",
+      "lessonId": "1.4",
+      "chapterNumber": 2,
+      "title": "2. Percorsi assoluti, relativi, radici e normalizzazione",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.4 · CAPITOLO 2 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "2. Percorsi assoluti, relativi, radici e normalizzazione"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Identificare oggetti, percorsi e regole del file system e operare con confini, permessi e prove esplicite."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un percorso descrive una via verso un oggetto. Un percorso assoluto parte da una radice o da una convenzione completa; uno relativo richiede una base. La stessa stringa relativa può quindi indicare oggetti diversi in sessioni differenti."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un indirizzo completo individua una destinazione indipendentemente dal punto di partenza; ‘due porte a destra’ dipende da dove ti trovi. I percorsi funzionano allo stesso modo."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Windows usa unità, percorsi UNC e convenzioni con backslash; macOS e Linux usano una gerarchia radicata in /. I segmenti . e .. indicano comunemente corrente e genitore. Normalizzare significa risolvere elementi ridondanti secondo regole, ma non sempre attraversare collegamenti. Percorso lessicale, percorso assoluto e percorso canonico non sono sinonimi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Per applicare questo modello occorre separare cinque domande: quale oggetto è coinvolto, con quale percorso viene raggiunto, quale identità esegue l’operazione, quale stato persistente può cambiare e quale evidenza conferma l’esito. La sequenza impedisce di correggere il livello sbagliato. Prima si osservano tipo, percorso risolto e metadati; poi si valutano permessi, collegamenti e confini; infine si interpreta il contenuto. Ogni modifica deve dichiarare origine, destinazione, comportamento in caso di conflitto e strategia di recupero. Questo metodo resta valido su Windows, macOS e Linux anche quando comandi, separatori, ACL e interfacce sono differenti."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "../data viene risolto dalla cartella corrente."
+        },
+        {
+          "type": "paragraph",
+          "text": "C:\\progetti e /home/utente/progetti esprimono radici diverse."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un percorso UNC identifica una risorsa di rete Windows."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Rimuovere .. testualmente senza considerare la base può essere errato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un percorso assoluto non garantisce che l’oggetto esista."
+        },
+        {
+          "type": "paragraph",
+          "text": "Due stringhe diverse possono condurre allo stesso oggetto."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una mappa stradale distingue itinerario scritto e luogo reale. Collegamenti e montaggi creano più itinerari verso la stessa destinazione."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 2.1 — Modello del file system"
+        },
+        {
+          "type": "paragraph",
+          "text": "BASE + PERCORSO RELATIVO  v risoluzionePERCORSO ASSOLUTO  v eventuali collegamentiOGGETTO EFFETTIVOradice Windows: unità/UNCradice Unix: /"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "La canonicalizzazione può avere implicazioni di sicurezza: controllare una stringa prima di risolvere collegamenti può consentire di uscire da una cartella prevista. Le applicazioni devono usare API di percorso e confini verificati. Per il principiante, la regola è dichiarare la base, evitare concatenazioni manuali e verificare il percorso risolto."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere assoluto ed esistente."
+        },
+        {
+          "type": "paragraph",
+          "text": "Concatenare separatori a mano."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ignorare unità o condivisioni."
+        },
+        {
+          "type": "paragraph",
+          "text": "Trattare normalizzazione e canonicalizzazione come equivalenti."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Radici diverse in Windows."
+        },
+        {
+          "type": "paragraph",
+          "text": "Percorso di rete offline."
+        },
+        {
+          "type": "paragraph",
+          "text": "Collegamento che esce dal progetto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cartella corrente rimossa."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Risolvi il percorso assoluto, elenca i bersagli, verifica identità e permessi, usa dati sacrificabili e conserva una via di recupero."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Qual è la base?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale radice viene usata?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il percorso attraversa collegamenti?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Risolvi dieci percorsi su un albero."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta forme Windows e Unix."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un percorso che tenta di uscire dal confine."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve distinguere nome, oggetto, percorso, collegamento, permesso, contenuto e formato."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Spiega UNC."
+        },
+        {
+          "type": "paragraph",
+          "text": "Costruisci due stringhe per lo stesso oggetto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta una funzione concettuale di verifica del confine."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Un percorso relativo dipende da?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. La tastiera"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. La rete sempre"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Una base"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Il monitor"
+        },
+        {
+          "type": "heading",
+          "text": "2. Assoluto significa esistente?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Solo Linux"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Solo locale"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Sì"
+        },
+        {
+          "type": "heading",
+          "text": "3. Che cosa può creare più vie?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Il prompt"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Il colore"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Collegamenti e montaggi"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. La RAM"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Percorso assoluto",
+              "Percorso espresso da una radice completa."
+            ],
+            [
+              "Percorso relativo",
+              "Percorso risolto rispetto a una base."
+            ],
+            [
+              "UNC",
+              "Convenzione Windows per risorse di rete."
+            ],
+            [
+              "Normalizzazione",
+              "Riduzione lessicale di segmenti e separatori."
+            ],
+            [
+              "Canonicalizzazione",
+              "Risoluzione verso una rappresentazione effettiva secondo regole."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Windows usa unità, percorsi UNC e convenzioni con backslash; macOS e Linux usano una gerarchia radicata in /. I segmenti . e .. indicano comunemente corrente e genitore. Normalizzare significa risolvere elementi ridondanti secondo regole, ma non sempre attraversare collegamenti. Percorso lessicale, percorso assoluto e percorso canonico non sono sinonimi. La padronanza richiede una prova osservabile e una correzione minima, non un tentativo casuale."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre esempio e controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e distinguere oggetto, percorso e contenuto."
+        },
+        {
+          "type": "paragraph",
+          "text": "So gestire tre casi limite con una procedura sicura."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato esercizi e almeno due risposte corrette su tre."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-4-chapter-3",
+      "lessonId": "1.4",
+      "chapterNumber": 3,
+      "title": "3. Nomi, estensioni, formati e file nascosti",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.4 · CAPITOLO 3 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "3. Nomi, estensioni, formati e file nascosti"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Identificare oggetti, percorsi e regole del file system e operare con confini, permessi e prove esplicite."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il nome di un file è una convenzione del file system; l’estensione è una parte del nome usata da persone e applicazioni per suggerire il formato. Il contenuto rimane la fonte tecnica: rinominare foto.jpg in foto.txt non converte i byte."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Cambiare l’etichetta su una bottiglia non cambia il liquido. L’estensione aiuta a scegliere lo strumento, ma non garantisce la natura del contenuto."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Windows può nascondere estensioni note; macOS usa attributi e convenzioni; Unix considera spesso nascosti i nomi che iniziano con punto. MIME type, firma iniziale e analisi del contenuto offrono indizi diversi. I nomi validi e riservati variano: caratteri ammessi, lunghezza, separatori e nomi speciali non sono portabili automaticamente."
+        },
+        {
+          "type": "paragraph",
+          "text": "Per applicare questo modello occorre separare cinque domande: quale oggetto è coinvolto, con quale percorso viene raggiunto, quale identità esegue l’operazione, quale stato persistente può cambiare e quale evidenza conferma l’esito. La sequenza impedisce di correggere il livello sbagliato. Prima si osservano tipo, percorso risolto e metadati; poi si valutano permessi, collegamenti e confini; infine si interpreta il contenuto. Ogni modifica deve dichiarare origine, destinazione, comportamento in caso di conflitto e strategia di recupero. Questo metodo resta valido su Windows, macOS e Linux anche quando comandi, separatori, ACL e interfacce sono differenti."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "programma.py.txt appare come programma.py se l’interfaccia nasconde l’ultima estensione."
+        },
+        {
+          "type": "paragraph",
+          "text": ".env è nascosto per convenzione in molte viste Unix ma può contenere dati sensibili."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un editor identifica il formato dal contenuto anche con estensione insolita."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Rinominare non converte."
+        },
+        {
+          "type": "paragraph",
+          "text": "Nascosto non significa cifrato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Estensione corretta non garantisce file sicuro o valido."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’etichetta di un archivio orienta la ricerca ma può essere errata o ingannevole. Serve controllare anche il contenuto e la provenienza."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 3.1 — Modello del file system"
+        },
+        {
+          "type": "paragraph",
+          "text": "NOME COMPLETO  +-- parte principale  +-- estensione convenzionale  +-- attributi / convenzioni di visibilità  vAPPLICAZIONE INFERISCE FORMATO  vCONTENUTO CONFERMA O SMENTISCE"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "I file di configurazione nascosti sono comunque file normali e possono essere condivisi accidentalmente. L’uso di doppie estensioni è comune negli inganni. Per sviluppare, si mostrano le estensioni, si conserva la codifica prevista e si evita di basare la sicurezza sul nome."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Nascondere estensioni durante la diagnosi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere nascosto e protetto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Usare nomi riservati."
+        },
+        {
+          "type": "paragraph",
+          "text": "Accettare il formato solo dall’estensione."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "File senza estensione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Nome con più punti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Nome Unicode equivalente visivamente."
+        },
+        {
+          "type": "paragraph",
+          "text": "Maiuscole trattate diversamente."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Risolvi il percorso assoluto, elenca i bersagli, verifica identità e permessi, usa dati sacrificabili e conserva una via di recupero."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Qual è il nome completo?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Chi ha determinato il formato?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il file è nascosto, protetto o entrambi?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Classifica dieci nomi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza una doppia estensione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta file nascosti fra piattaforme."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve distinguere nome, oggetto, percorso, collegamento, permesso, contenuto e formato."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta una regola di naming portabile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Spiega MIME e firma del file."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un nome Unicode ambiguo."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Rinominare cambia il formato?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Solo immagini"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Sempre"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo testo"
+        },
+        {
+          "type": "heading",
+          "text": "2. Nascosto significa cifrato?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Sì"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Solo macOS"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo .env"
+        },
+        {
+          "type": "heading",
+          "text": "3. Che cosa mostrare in sviluppo?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Le estensioni complete"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Solo icone"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Solo date"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Niente"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Estensione",
+              "Parte convenzionale del nome che suggerisce un formato."
+            ],
+            [
+              "Formato",
+              "Regole con cui i byte rappresentano dati."
+            ],
+            [
+              "File nascosto",
+              "File omesso da alcune viste per attributo o convenzione."
+            ],
+            [
+              "MIME type",
+              "Etichetta standardizzata del tipo di contenuto."
+            ],
+            [
+              "Nome riservato",
+              "Nome vietato o speciale in un sistema."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Windows può nascondere estensioni note; macOS usa attributi e convenzioni; Unix considera spesso nascosti i nomi che iniziano con punto. MIME type, firma iniziale e analisi del contenuto offrono indizi diversi. I nomi validi e riservati variano: caratteri ammessi, lunghezza, separatori e nomi speciali non sono portabili automaticamente. La padronanza richiede una prova osservabile e una correzione minima, non un tentativo casuale."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre esempio e controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e distinguere oggetto, percorso e contenuto."
+        },
+        {
+          "type": "paragraph",
+          "text": "So gestire tre casi limite con una procedura sicura."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato esercizi e almeno due risposte corrette su tre."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-4-chapter-4",
+      "lessonId": "1.4",
+      "chapterNumber": 4,
+      "title": "4. Creare, copiare, spostare, rinominare e rimuovere",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.4 · CAPITOLO 4 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "4. Creare, copiare, spostare, rinominare e rimuovere"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Identificare oggetti, percorsi e regole del file system e operare con confini, permessi e prove esplicite."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Le operazioni sul file system cambiano stato persistente. Creazione, copia, spostamento e rimozione hanno precondizioni e fallimenti diversi. La prudenza consiste nel risolvere origine e destinazione, verificare l’insieme dei bersagli e usare dati sacrificabili."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un trasloco distingue duplicare, trasferire ed eliminare. Se origine e destinazione non sono etichettate, una singola azione può sovrascrivere ciò che si voleva conservare."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Copia crea un nuovo oggetto con contenuto derivato; spostamento cambia collocazione o, fra file system, può richiedere copia e rimozione. Rinomina è spesso uno spostamento nella stessa directory. Rimozione può aggirare il Cestino secondo lo strumento. Atomicità, sovrascrittura, conflitti, metadati conservati e collegamenti dipendono da sistema e comando."
+        },
+        {
+          "type": "paragraph",
+          "text": "Per applicare questo modello occorre separare cinque domande: quale oggetto è coinvolto, con quale percorso viene raggiunto, quale identità esegue l’operazione, quale stato persistente può cambiare e quale evidenza conferma l’esito. La sequenza impedisce di correggere il livello sbagliato. Prima si osservano tipo, percorso risolto e metadati; poi si valutano permessi, collegamenti e confini; infine si interpreta il contenuto. Ogni modifica deve dichiarare origine, destinazione, comportamento in caso di conflitto e strategia di recupero. Questo metodo resta valido su Windows, macOS e Linux anche quando comandi, separatori, ACL e interfacce sono differenti."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Si elenca il bersaglio prima di una copia ricorsiva."
+        },
+        {
+          "type": "paragraph",
+          "text": "Si prova su una cartella temporanea dedicata."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dopo lo spostamento si verifica sia origine sia destinazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Spostare fra volumi non è sempre una semplice modifica del nome."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il comando può sovrascrivere senza la conferma immaginata."
+        },
+        {
+          "type": "paragraph",
+          "text": "La rimozione da shell non è necessariamente recuperabile dal Cestino."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un braccio industriale esegue coordinate con precisione ma non comprende l’intenzione. Le coordinate devono essere verificate prima di attivarlo."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 4.1 — Modello del file system"
+        },
+        {
+          "type": "paragraph",
+          "text": "RISOLVI ORIGINE + DESTINAZIONE  vELENCA BERSAGLI  vVERIFICA SPAZIO + CONFLITTI + RECUPERO  vUNA OPERAZIONE  vCONTROLLA ESITO E INTEGRITÀ"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Le operazioni ricorsive e i jolly amplificano il raggio. Non si eseguono su radici, home o cartelle reali durante l’apprendimento. Un backup è utile solo se separato e verificato. Per file importanti si preferiscono copie, confronti e operazioni reversibili prima della rimozione."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Usare jolly non verificati."
+        },
+        {
+          "type": "paragraph",
+          "text": "Invertire origine e destinazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Supporre recuperabilità."
+        },
+        {
+          "type": "paragraph",
+          "text": "Eseguire con privilegi elevati per aggirare un errore."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "File aperto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Volume pieno durante uno spostamento."
+        },
+        {
+          "type": "paragraph",
+          "text": "Interruzione a metà copia."
+        },
+        {
+          "type": "paragraph",
+          "text": "Destinazione già esistente."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Risolvi il percorso assoluto, elenca i bersagli, verifica identità e permessi, usa dati sacrificabili e conserva una via di recupero."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quali oggetti saranno toccati?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Che cosa è atomico?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Come si torna allo stato iniziale?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta un laboratorio sacrificabile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Scrivi controlli pre e post operazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza uno spostamento interrotto."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve distinguere nome, oggetto, percorso, collegamento, permesso, contenuto e formato."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta rinomina e spostamento."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta una copia verificata."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza una sovrascrittura."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Prima di una ricorsione bisogna?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Cambiare shell"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Nascondere i file"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Elencare i bersagli"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Usare admin"
+        },
+        {
+          "type": "heading",
+          "text": "2. La rimozione da shell va sempre nel Cestino?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Sì"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Solo Python"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo offline"
+        },
+        {
+          "type": "heading",
+          "text": "3. Spostare fra volumi può implicare?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Nessun I/O"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Cifratura"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Copia e rimozione"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo rinomina"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Copia",
+              "Creazione di un nuovo oggetto con dati derivati."
+            ],
+            [
+              "Spostamento",
+              "Cambio di collocazione logica o trasferimento."
+            ],
+            [
+              "Rimozione",
+              "Eliminazione del riferimento o dell’oggetto secondo il sistema."
+            ],
+            [
+              "Atomicità",
+              "Operazione osservabile come intera o non avvenuta."
+            ],
+            [
+              "Jolly",
+              "Pattern che può selezionare più nomi."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Copia crea un nuovo oggetto con contenuto derivato; spostamento cambia collocazione o, fra file system, può richiedere copia e rimozione. Rinomina è spesso uno spostamento nella stessa directory. Rimozione può aggirare il Cestino secondo lo strumento. Atomicità, sovrascrittura, conflitti, metadati conservati e collegamenti dipendono da sistema e comando. La padronanza richiede una prova osservabile e una correzione minima, non un tentativo casuale."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre esempio e controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e distinguere oggetto, percorso e contenuto."
+        },
+        {
+          "type": "paragraph",
+          "text": "So gestire tre casi limite con una procedura sicura."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato esercizi e almeno due risposte corrette su tre."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-4-chapter-5",
+      "lessonId": "1.4",
+      "chapterNumber": 5,
+      "title": "5. Collegamenti, scorciatoie, montaggi e sincronizzazione",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.4 · CAPITOLO 5 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "5. Collegamenti, scorciatoie, montaggi e sincronizzazione"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Identificare oggetti, percorsi e regole del file system e operare con confini, permessi e prove esplicite."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Non ogni percorso conduce direttamente ai byte locali. Collegamenti simbolici, hard link, scorciatoie, punti di montaggio e cartelle sincronizzate creano livelli di indirezione. L’interfaccia può farli apparire simili a file o cartelle normali."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un cartello stradale, una seconda porta dello stesso edificio e una copia spedita altrove sembrano ‘accessi’, ma hanno proprietà diverse. Eliminare il cartello non demolisce l’edificio; rimuovere l’ultima porta logica può invece rendere l’oggetto irraggiungibile."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un symlink contiene un riferimento a un percorso; un hard link è un altro nome per lo stesso oggetto supportato dal file system; una scorciatoia è spesso un file interpretato dall’interfaccia. Un mount inserisce un altro file system nella gerarchia. La sincronizzazione replica e riconcilia cambiamenti, non equivale automaticamente a backup versionato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Per applicare questo modello occorre separare cinque domande: quale oggetto è coinvolto, con quale percorso viene raggiunto, quale identità esegue l’operazione, quale stato persistente può cambiare e quale evidenza conferma l’esito. La sequenza impedisce di correggere il livello sbagliato. Prima si osservano tipo, percorso risolto e metadati; poi si valutano permessi, collegamenti e confini; infine si interpreta il contenuto. Ogni modifica deve dichiarare origine, destinazione, comportamento in caso di conflitto e strategia di recupero. Questo metodo resta valido su Windows, macOS e Linux anche quando comandi, separatori, ACL e interfacce sono differenti."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un symlink diventa interrotto se la destinazione viene rimossa."
+        },
+        {
+          "type": "paragraph",
+          "text": "Due hard link mostrano lo stesso contenuto perché nominano lo stesso oggetto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una cartella cloud può mostrare file non ancora disponibili localmente."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Eliminare una scorciatoia non elimina normalmente la destinazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sincronizzare una cancellazione può propagarla."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il percorso visibile non prova che i dati siano sul disco locale."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una rete di ingressi distingue segnali, porte e repliche. La destinazione effettiva va risolta prima di operazioni ricorsive."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 5.1 — Modello del file system"
+        },
+        {
+          "type": "paragraph",
+          "text": "PERCORSO  +--> file diretto  +--> symlink -> altro percorso  +--> hard link -> stesso oggetto  +--> mount -> altro file system  +--> sync -> replica locale/remota  vRISOLVI TIPO E DESTINAZIONE"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Attraversare collegamenti durante una copia o rimozione dipende dallo strumento. Le procedure sicure dichiarano se seguono l’indirezione. La sincronizzazione può introdurre conflitti e stati ‘solo online’. Un backup deve offrire recupero indipendente, non soltanto propagazione bidirezionale."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere collegamento e copia."
+        },
+        {
+          "type": "paragraph",
+          "text": "Trattare sync come backup."
+        },
+        {
+          "type": "paragraph",
+          "text": "Seguire symlink senza limite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ignorare lo stato solo online."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ciclo di symlink."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mount scollegato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Conflitto di sincronizzazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ultimo hard link rimosso."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Risolvi il percorso assoluto, elenca i bersagli, verifica identità e permessi, usa dati sacrificabili e conserva una via di recupero."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il percorso è diretto o indiretto?"
+        },
+        {
+          "type": "paragraph",
+          "text": "La cancellazione si propaga?"
+        },
+        {
+          "type": "paragraph",
+          "text": "I byte sono disponibili offline?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Disegna quattro tipi di indirezione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza una cancellazione sincronizzata."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta un backup indipendente."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve distinguere nome, oggetto, percorso, collegamento, permesso, contenuto e formato."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta symlink e hard link."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un ciclo."
+        },
+        {
+          "type": "paragraph",
+          "text": "Spiega mount a un principiante."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Un symlink contiene?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Un riferimento a un percorso"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Sempre una copia"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Una password"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Un processo"
+        },
+        {
+          "type": "heading",
+          "text": "2. Sincronizzazione equivale sempre a backup?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Solo cloud"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Solo locale"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Sì"
+        },
+        {
+          "type": "heading",
+          "text": "3. Un mount fa cosa?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Inserisce un file system nella gerarchia"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Nasconde la CPU"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Cambia estensione"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Crea Python"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Symlink",
+              "Collegamento che riferisce un percorso."
+            ],
+            [
+              "Hard link",
+              "Nome aggiuntivo dello stesso oggetto supportato."
+            ],
+            [
+              "Scorciatoia",
+              "File o oggetto interpretato come collegamento dall’interfaccia."
+            ],
+            [
+              "Mount",
+              "Inserimento di un file system in una gerarchia."
+            ],
+            [
+              "Sincronizzazione",
+              "Riconciliazione di cambiamenti fra repliche."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un symlink contiene un riferimento a un percorso; un hard link è un altro nome per lo stesso oggetto supportato dal file system; una scorciatoia è spesso un file interpretato dall’interfaccia. Un mount inserisce un altro file system nella gerarchia. La sincronizzazione replica e riconcilia cambiamenti, non equivale automaticamente a backup versionato. La padronanza richiede una prova osservabile e una correzione minima, non un tentativo casuale."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre esempio e controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e distinguere oggetto, percorso e contenuto."
+        },
+        {
+          "type": "paragraph",
+          "text": "So gestire tre casi limite con una procedura sicura."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato esercizi e almeno due risposte corrette su tre."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-4-chapter-6",
+      "lessonId": "1.4",
+      "chapterNumber": 6,
+      "title": "6. Permessi, proprietà e minimo privilegio",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.4 · CAPITOLO 6 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "6. Permessi, proprietà e minimo privilegio"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Identificare oggetti, percorsi e regole del file system e operare con confini, permessi e prove esplicite."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un file può esistere ed essere trovato ma restare non leggibile, non scrivibile o non eseguibile. I permessi proteggono oggetti secondo identità e politiche. L’errore di accesso non si corregge automaticamente eseguendo tutto come amministratore."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una chiave può aprire una stanza senza autorizzare a modificarne il contenuto. Identità, diritto e operazione sono elementi distinti."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "I sistemi Unix descrivono tradizionalmente proprietario, gruppo e altri con bit di lettura, scrittura ed esecuzione, oltre ad ACL e regole aggiuntive. Windows usa ACL con utenti, gruppi, ereditarietà e diritti dettagliati. Il permesso di esecuzione su una directory Unix riguarda l’attraversamento; quello su un file riguarda l’avvio diretto. Il processo opera con un’identità e un insieme di privilegi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Per applicare questo modello occorre separare cinque domande: quale oggetto è coinvolto, con quale percorso viene raggiunto, quale identità esegue l’operazione, quale stato persistente può cambiare e quale evidenza conferma l’esito. La sequenza impedisce di correggere il livello sbagliato. Prima si osservano tipo, percorso risolto e metadati; poi si valutano permessi, collegamenti e confini; infine si interpreta il contenuto. Ogni modifica deve dichiarare origine, destinazione, comportamento in caso di conflitto e strategia di recupero. Questo metodo resta valido su Windows, macOS e Linux anche quando comandi, separatori, ACL e interfacce sono differenti."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un file è leggibile ma la directory genitore non attraversabile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un progetto eredità permessi dalla cartella padre."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un processo crea file con proprietà diverse secondo account e impostazioni."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "‘Accesso negato’ non prova che il file manchi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Amministratore non è la soluzione didattica predefinita."
+        },
+        {
+          "type": "paragraph",
+          "text": "Leggere una cartella e attraversarla non sono sempre lo stesso diritto."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un edificio combina badge, ruolo e porte. Dare una chiave universale risolve il passaggio ma distrugge il controllo."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 6.1 — Modello del file system"
+        },
+        {
+          "type": "paragraph",
+          "text": "PROCESSO + IDENTITÀ  vACL / PROPRIETARIO / GRUPPO / EREDITARIETÀ  vOPERAZIONE: leggere | scrivere | attraversare | eseguire  vCONSENTI O NEGA  vLOG E DIAGNOSI"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il minimo privilegio assegna soltanto i diritti necessari. Cambiare proprietà o ACL senza comprenderne l’ereditarietà può esporre o bloccare interi alberi. Una diagnosi sicura identifica account, oggetto, operazione e regola applicata, quindi modifica il punto minimo autorizzato."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Usare elevazione per ogni problema."
+        },
+        {
+          "type": "paragraph",
+          "text": "Aprire permessi a tutti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere esecuzione e lettura."
+        },
+        {
+          "type": "paragraph",
+          "text": "Modificare ricorsivamente ACL su cartelle ampie."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "File creato da altro account."
+        },
+        {
+          "type": "paragraph",
+          "text": "ACL che nega nonostante un consenso."
+        },
+        {
+          "type": "paragraph",
+          "text": "Volume con semantica diversa."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cartella condivisa."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Risolvi il percorso assoluto, elenca i bersagli, verifica identità e permessi, usa dati sacrificabili e conserva una via di recupero."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale identità usa il processo?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale operazione è negata?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale regola viene ereditata?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza tre casi di accesso negato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Disegna identità-regola-operazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Proponi la correzione minima."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve distinguere nome, oggetto, percorso, collegamento, permesso, contenuto e formato."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta bit Unix e ACL Windows."
+        },
+        {
+          "type": "paragraph",
+          "text": "Spiega attraversamento."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un albero condiviso."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Il minimo privilegio concede?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Niente"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Solo i diritti necessari"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Sempre admin"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Tutto"
+        },
+        {
+          "type": "heading",
+          "text": "2. Accesso negato significa file assente?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Solo rete"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Sì"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo Windows"
+        },
+        {
+          "type": "heading",
+          "text": "3. Che cosa va identificato per primo?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. La CPU soltanto"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Identità, oggetto e operazione"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Il colore"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. La versione IDE"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Permesso",
+              "Regola che autorizza un’operazione."
+            ],
+            [
+              "Proprietario",
+              "Identità associata all’oggetto."
+            ],
+            [
+              "ACL",
+              "Elenco di regole di controllo accessi."
+            ],
+            [
+              "Ereditarietà",
+              "Propagazione di regole dalla gerarchia."
+            ],
+            [
+              "Minimo privilegio",
+              "Concessione dei soli diritti necessari."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "I sistemi Unix descrivono tradizionalmente proprietario, gruppo e altri con bit di lettura, scrittura ed esecuzione, oltre ad ACL e regole aggiuntive. Windows usa ACL con utenti, gruppi, ereditarietà e diritti dettagliati. Il permesso di esecuzione su una directory Unix riguarda l’attraversamento; quello su un file riguarda l’avvio diretto. Il processo opera con un’identità e un insieme di privilegi. La padronanza richiede una prova osservabile e una correzione minima, non un tentativo casuale."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre esempio e controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e distinguere oggetto, percorso e contenuto."
+        },
+        {
+          "type": "paragraph",
+          "text": "So gestire tre casi limite con una procedura sicura."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato esercizi e almeno due risposte corrette su tre."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-4-chapter-7",
+      "lessonId": "1.4",
+      "chapterNumber": 7,
+      "title": "7. Maiuscole, caratteri Unicode, limiti e portabilità dei nomi",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.4 · CAPITOLO 7 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "7. Maiuscole, caratteri Unicode, limiti e portabilità dei nomi"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Identificare oggetti, percorsi e regole del file system e operare con confini, permessi e prove esplicite."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un nome valido su una piattaforma può essere ambiguo o vietato su un’altra. Sensibilità alle maiuscole, normalizzazione Unicode, caratteri riservati, lunghezza e spazi finali influenzano la portabilità dei progetti."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Due cartellini possono sembrare uguali all’occhio ma essere composti da caratteri diversi; oppure sembrare diversi e venire considerati uguali dal catalogo. Il confronto dipende dalle regole del sistema."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Alcuni file system distinguono maiuscole e minuscole, altri le preservano ma confrontano senza distinzione, altri sono configurabili. Unicode consente rappresentazioni diverse dello stesso testo percepito. Windows riserva caratteri e nomi storici; Unix vieta principalmente slash e byte nullo a livello di nome, ma applicazioni impongono altri limiti. I percorsi hanno limiti dipendenti da API e configurazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Per applicare questo modello occorre separare cinque domande: quale oggetto è coinvolto, con quale percorso viene raggiunto, quale identità esegue l’operazione, quale stato persistente può cambiare e quale evidenza conferma l’esito. La sequenza impedisce di correggere il livello sbagliato. Prima si osservano tipo, percorso risolto e metadati; poi si valutano permessi, collegamenti e confini; infine si interpreta il contenuto. Ogni modifica deve dichiarare origine, destinazione, comportamento in caso di conflitto e strategia di recupero. Questo metodo resta valido su Windows, macOS e Linux anche quando comandi, separatori, ACL e interfacce sono differenti."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "main.py e Main.py possono coesistere su un sistema e collidere su un altro."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un nome accentato può avere sequenze Unicode differenti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un nome valido su Linux può non essere creabile su Windows."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "‘Visivamente uguale’ non implica sequenza uguale."
+        },
+        {
+          "type": "paragraph",
+          "text": "Minuscolizzare tutto non risolve ogni collisione Unicode."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il limite di lunghezza non è un unico numero universale."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un archivio internazionale deve definire regole condivise di catalogazione. Senza convenzione, il trasferimento crea collisioni."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 7.1 — Modello del file system"
+        },
+        {
+          "type": "paragraph",
+          "text": "NOME DESIDERATO  +--> caratteri consentiti  +--> confronto maiuscole  +--> normalizzazione Unicode  +--> lunghezza / nomi riservati  vVALIDO E UNIVOCO SU TUTTE LE PIATTAFORME?"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una convenzione portabile usa nomi brevi, descrittivi, coerenti e privi di caratteri problematici, senza sacrificare chiarezza. I test devono includere il file system più restrittivo previsto. Git, affrontato nel Modulo 19, può evidenziare casi di sola variazione di maiuscole."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Creare file distinti solo per maiuscole."
+        },
+        {
+          "type": "paragraph",
+          "text": "Usare caratteri riservati."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere visualizzazione e codifica."
+        },
+        {
+          "type": "paragraph",
+          "text": "Superare limiti con gerarchie eccessive."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Trasferimento fra file system."
+        },
+        {
+          "type": "paragraph",
+          "text": "Archivio ZIP estratto altrove."
+        },
+        {
+          "type": "paragraph",
+          "text": "Nome normalizzato dal sistema."
+        },
+        {
+          "type": "paragraph",
+          "text": "Collisione durante sincronizzazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Risolvi il percorso assoluto, elenca i bersagli, verifica identità e permessi, usa dati sacrificabili e conserva una via di recupero."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il confronto è sensibile?"
+        },
+        {
+          "type": "paragraph",
+          "text": "La sequenza Unicode è normalizzata?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il nome è portabile nel perimetro?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta una convenzione di naming."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza cinque collisioni."
+        },
+        {
+          "type": "paragraph",
+          "text": "Testa concettualmente un archivio multipiattaforma."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve distinguere nome, oggetto, percorso, collegamento, permesso, contenuto e formato."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Spiega case-preserving."
+        },
+        {
+          "type": "paragraph",
+          "text": "Crea un caso Unicode."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un nome riservato."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. La sensibilità alle maiuscole è universale?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Solo Python"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Solo rete"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Sì"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. No"
+        },
+        {
+          "type": "heading",
+          "text": "2. Unicode può rappresentare testo simile con?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Solo ASCII"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Una sola sequenza"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Nessun byte"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Sequenze differenti"
+        },
+        {
+          "type": "heading",
+          "text": "3. Come favorire portabilità?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Usare nomi coerenti e testare le piattaforme"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Usare ogni carattere"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Ignorare Windows"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Usare nomi lunghissimi"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Case-sensitive",
+              "Sistema che distingue maiuscole e minuscole."
+            ],
+            [
+              "Case-preserving",
+              "Sistema che conserva la forma digitata."
+            ],
+            [
+              "Normalizzazione Unicode",
+              "Conversione a una forma Unicode convenzionale."
+            ],
+            [
+              "Collisione",
+              "Due nomi trattati come lo stesso identificatore."
+            ],
+            [
+              "Portabilità",
+              "Capacità di mantenere significato fra sistemi."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Alcuni file system distinguono maiuscole e minuscole, altri le preservano ma confrontano senza distinzione, altri sono configurabili. Unicode consente rappresentazioni diverse dello stesso testo percepito. Windows riserva caratteri e nomi storici; Unix vieta principalmente slash e byte nullo a livello di nome, ma applicazioni impongono altri limiti. I percorsi hanno limiti dipendenti da API e configurazione. La padronanza richiede una prova osservabile e una correzione minima, non un tentativo casuale."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre esempio e controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e distinguere oggetto, percorso e contenuto."
+        },
+        {
+          "type": "paragraph",
+          "text": "So gestire tre casi limite con una procedura sicura."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato esercizi e almeno due risposte corrette su tre."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-4-chapter-8",
+      "lessonId": "1.4",
+      "chapterNumber": 8,
+      "title": "8. Testo, codifica, newline e integrità dei file",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.4 · CAPITOLO 8 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "8. Testo, codifica, newline e integrità dei file"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Identificare oggetti, percorsi e regole del file system e operare con confini, permessi e prove esplicite."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il file system conserva byte; editor e programmi li interpretano. Codifica dei caratteri e terminatori di riga possono cambiare la lettura senza cambiare il percorso. Un file che ‘esiste’ può quindi apparire corrotto o diverso per un problema di interpretazione."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una partitura scritta con un alfabeto convenzionale richiede la chiave corretta. Usare la chiave sbagliata produce simboli privi di senso pur leggendo lo stesso foglio."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "UTF-8 è una codifica diffusa, ma esistono altre codifiche. I newline sono convenzionalmente LF o CRLF secondo piattaforme e strumenti, con possibili conversioni. BOM, modalità testo/binaria e normalizzazione influenzano l’interpretazione. Dimensione e hash aiutano a verificare identità dei byte; non dimostrano da soli il significato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Per applicare questo modello occorre separare cinque domande: quale oggetto è coinvolto, con quale percorso viene raggiunto, quale identità esegue l’operazione, quale stato persistente può cambiare e quale evidenza conferma l’esito. La sequenza impedisce di correggere il livello sbagliato. Prima si osservano tipo, percorso risolto e metadati; poi si valutano permessi, collegamenti e confini; infine si interpreta il contenuto. Ogni modifica deve dichiarare origine, destinazione, comportamento in caso di conflitto e strategia di recupero. Questo metodo resta valido su Windows, macOS e Linux anche quando comandi, separatori, ACL e interfacce sono differenti."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Lo stesso testo usa byte diversi in codifiche diverse."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un editor converte newline al salvataggio."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un hash diverso rivela che almeno un byte è cambiato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Cambiare estensione non corregge la codifica."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un hash uguale non certifica la provenienza."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un file leggibile in un editor non è necessariamente portabile."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "La stessa sequenza musicale può essere annotata con sistemi diversi; occorre conoscere la notazione. L’hash è un’impronta del foglio, non una spiegazione della musica."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 8.1 — Modello del file system"
+        },
+        {
+          "type": "paragraph",
+          "text": "BYTE NEL FILE  v codificaCARATTERI  v convenzione newlineRIGHE  v parser/formatoSIGNIFICATOhash controlla byte, non semantica"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "La Lezione 0.3 ha introdotto Unicode e rappresentazione; qui il concetto diventa operativo. Il progetto dovrebbe dichiarare codifica e newline, usare editor coerenti e non mescolare file binari con procedure testuali. Una conversione conserva informazione soltanto se tutti i caratteri sono rappresentabili."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere byte e caratteri."
+        },
+        {
+          "type": "paragraph",
+          "text": "Salvare con codifica locale non dichiarata."
+        },
+        {
+          "type": "paragraph",
+          "text": "Convertire file binari come testo."
+        },
+        {
+          "type": "paragraph",
+          "text": "Usare hash come prova assoluta di autenticità."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "BOM inatteso."
+        },
+        {
+          "type": "paragraph",
+          "text": "Carattere non rappresentabile."
+        },
+        {
+          "type": "paragraph",
+          "text": "File misto LF/CRLF."
+        },
+        {
+          "type": "paragraph",
+          "text": "Conversione automatica durante trasferimento."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Risolvi il percorso assoluto, elenca i bersagli, verifica identità e permessi, usa dati sacrificabili e conserva una via di recupero."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale codifica viene usata?"
+        },
+        {
+          "type": "paragraph",
+          "text": "I newline vengono convertiti?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Serve integrità o autenticità?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Disegna byte-caratteri-significato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza una conversione fallita."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta una verifica con dimensione e hash."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve distinguere nome, oggetto, percorso, collegamento, permesso, contenuto e formato."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta LF e CRLF."
+        },
+        {
+          "type": "paragraph",
+          "text": "Spiega BOM."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un file binario aperto come testo."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Il file system conserva principalmente?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Byte"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Caratteri astratti"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Significato"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Icone"
+        },
+        {
+          "type": "heading",
+          "text": "2. Un hash verifica direttamente?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. I byte osservati"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. La bontà del testo"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. La licenza"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Il proprietario"
+        },
+        {
+          "type": "heading",
+          "text": "3. UTF-8 è?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Una codifica di caratteri"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Un permesso"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Un link"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Un editor"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Codifica",
+              "Regola che associa caratteri e byte."
+            ],
+            [
+              "Newline",
+              "Convenzione che delimita righe."
+            ],
+            [
+              "BOM",
+              "Sequenza iniziale con significato di codifica in alcuni formati."
+            ],
+            [
+              "Hash",
+              "Impronta calcolata dai byte."
+            ],
+            [
+              "Integrità",
+              "Proprietà che i dati non siano cambiati in modo inatteso."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "UTF-8 è una codifica diffusa, ma esistono altre codifiche. I newline sono convenzionalmente LF o CRLF secondo piattaforme e strumenti, con possibili conversioni. BOM, modalità testo/binaria e normalizzazione influenzano l’interpretazione. Dimensione e hash aiutano a verificare identità dei byte; non dimostrano da soli il significato. La padronanza richiede una prova osservabile e una correzione minima, non un tentativo casuale."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre esempio e controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e distinguere oggetto, percorso e contenuto."
+        },
+        {
+          "type": "paragraph",
+          "text": "So gestire tre casi limite con una procedura sicura."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato esercizi e almeno due risposte corrette su tre."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-4-chapter-9",
+      "lessonId": "1.4",
+      "chapterNumber": 9,
+      "title": "9. Cartelle di progetto, temporanei, cache, backup e dati sensibili",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.4 · CAPITOLO 9 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "9. Cartelle di progetto, temporanei, cache, backup e dati sensibili"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Identificare oggetti, percorsi e regole del file system e operare con confini, permessi e prove esplicite."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un ambiente ordinato separa sorgenti, dati, configurazioni, artefatti generati, cache, temporanei e segreti. La separazione rende chiaro che cosa modificare, ricreare, condividere, proteggere o eliminare."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una cucina separa ingredienti, utensili, scarti e prodotti finiti. Mescolarli aumenta contaminazione e rende impossibile capire che cosa possa essere buttato o riutilizzato."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "La radice del progetto definisce un confine logico. I sorgenti sono autorevoli; build e cache sono ricreabili; i temporanei hanno ciclo breve; backup e archivi sono copie indipendenti; segreti e dati personali richiedono controlli. Cartelle di sincronizzazione possono propagare modifiche. Percorsi assoluti personali riducono riproducibilità."
+        },
+        {
+          "type": "paragraph",
+          "text": "Per applicare questo modello occorre separare cinque domande: quale oggetto è coinvolto, con quale percorso viene raggiunto, quale identità esegue l’operazione, quale stato persistente può cambiare e quale evidenza conferma l’esito. La sequenza impedisce di correggere il livello sbagliato. Prima si osservano tipo, percorso risolto e metadati; poi si valutano permessi, collegamenti e confini; infine si interpreta il contenuto. Ogni modifica deve dichiarare origine, destinazione, comportamento in caso di conflitto e strategia di recupero. Questo metodo resta valido su Windows, macOS e Linux anche quando comandi, separatori, ACL e interfacce sono differenti."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una cartella output può essere rigenerata."
+        },
+        {
+          "type": "paragraph",
+          "text": "I dati di esempio sono sintetici e separati dai dati reali."
+        },
+        {
+          "type": "paragraph",
+          "text": "La configurazione condivisa non contiene token."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una copia nella stessa cartella sincronizzata non è un backup indipendente."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cache e sorgente non sono equivalenti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Nascondere un file segreto non lo protegge."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un laboratorio etichetta materiali originali, derivati e rifiuti. Ogni categoria ha conservazione e responsabilità proprie."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 9.1 — Modello del file system"
+        },
+        {
+          "type": "paragraph",
+          "text": "RADICE PROGETTO  +-- src / autorevole  +-- tests / verifiche  +-- data-sample / sintetici  +-- output / generati  +-- cache,temp / eliminabili con criterio  +-- segreti / gestione separata  +-- backup / indipendente e verificato"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "La pulizia automatica deve agire solo su categorie esplicitamente ricreabili. Un backup richiede prova di ripristino. I dati sensibili non si copiano nei laboratori e le trascrizioni vengono sanitizzate. La Lezione 1.7 approfondirà struttura e riproducibilità."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Usare Download come progetto permanente."
+        },
+        {
+          "type": "paragraph",
+          "text": "Condividere segreti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Eliminare cache senza sapere se contiene dati unici."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere sync e backup."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "File temporaneo ancora aperto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Backup cifrato senza chiave recuperabile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dati personali nei log."
+        },
+        {
+          "type": "paragraph",
+          "text": "Output costoso da rigenerare."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Risolvi il percorso assoluto, elenca i bersagli, verifica identità e permessi, usa dati sacrificabili e conserva una via di recupero."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Qual è la fonte autorevole?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Che cosa è ricreabile?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Dove sono segreti e dati personali?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Classifica venti artefatti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta albero e politica di conservazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Definisci una prova di ripristino."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve distinguere nome, oggetto, percorso, collegamento, permesso, contenuto e formato."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza una cache unica."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta dati sintetici."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta backup e sync."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Nascosto significa protetto?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Sì"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Solo .env"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo cloud"
+        },
+        {
+          "type": "heading",
+          "text": "2. Un backup va?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Verificato con ripristino"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Tenuto nella cache"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Messo nel sorgente"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo creato"
+        },
+        {
+          "type": "heading",
+          "text": "3. I segreti vanno?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Gestiti separatamente"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Nel quiz"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Nel README"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Nel nome file"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Sorgente autorevole",
+              "Artefatto che costituisce la fonte intenzionale."
+            ],
+            [
+              "Cache",
+              "Dato derivato conservato per accelerare operazioni."
+            ],
+            [
+              "Temporaneo",
+              "Artefatto a vita breve."
+            ],
+            [
+              "Backup",
+              "Copia indipendente destinata al recupero."
+            ],
+            [
+              "Dato sintetico",
+              "Dato artificiale creato per prova senza esporre persone."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "La radice del progetto definisce un confine logico. I sorgenti sono autorevoli; build e cache sono ricreabili; i temporanei hanno ciclo breve; backup e archivi sono copie indipendenti; segreti e dati personali richiedono controlli. Cartelle di sincronizzazione possono propagare modifiche. Percorsi assoluti personali riducono riproducibilità. La padronanza richiede una prova osservabile e una correzione minima, non un tentativo casuale."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre esempio e controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e distinguere oggetto, percorso e contenuto."
+        },
+        {
+          "type": "paragraph",
+          "text": "So gestire tre casi limite con una procedura sicura."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato esercizi e almeno due risposte corrette su tre."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-4-chapter-10",
+      "lessonId": "1.4",
+      "chapterNumber": 10,
+      "title": "10. Diagnosi per livelli e laboratorio conclusivo",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.4 · CAPITOLO 10 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "10. Diagnosi per livelli e laboratorio conclusivo"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Identificare oggetti, percorsi e regole del file system e operare con confini, permessi e prove esplicite."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un problema di file system viene diagnosticato separando nome, percorso, esistenza, tipo, collegamento, disponibilità, permesso, contenuto e formato. Cambiare tutto insieme trasforma un errore locale in un ambiente imprevedibile."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un medico distingue indirizzo del paziente, identità, accesso alla stanza e stato clinico. Trovare la porta non prova che sia aperta; aprirla non descrive il contenuto."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "La diagnosi parte dalla shell e dalla cartella corrente, risolve il percorso, osserva il tipo senza modificare, controlla collegamenti e montaggi, verifica permessi con l’identità del processo, quindi legge metadati e contenuto. Soltanto dopo interviene. Ogni prova ha attesa, osservazione e conclusione; la correzione minima viene seguita da regressione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Per applicare questo modello occorre separare cinque domande: quale oggetto è coinvolto, con quale percorso viene raggiunto, quale identità esegue l’operazione, quale stato persistente può cambiare e quale evidenza conferma l’esito. La sequenza impedisce di correggere il livello sbagliato. Prima si osservano tipo, percorso risolto e metadati; poi si valutano permessi, collegamenti e confini; infine si interpreta il contenuto. Ogni modifica deve dichiarare origine, destinazione, comportamento in caso di conflitto e strategia di recupero. Questo metodo resta valido su Windows, macOS e Linux anche quando comandi, separatori, ACL e interfacce sono differenti."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "File not found viene distinto da access denied."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un symlink interrotto spiega un percorso visibile ma non apribile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un file esiste e si legge, ma il parser rifiuta il formato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Reinstallare Python non corregge un percorso errato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Usare admin può nascondere il difetto di permesso."
+        },
+        {
+          "type": "paragraph",
+          "text": "Rinominare non corregge contenuto non valido."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "La catena diagnostica è una scala: si prova ogni gradino prima di salire. Saltare direttamente al contenuto ignora livelli esterni."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 10.1 — Modello del file system"
+        },
+        {
+          "type": "paragraph",
+          "text": "SINTOMO  vSHELL + CARTELLA  vPERCORSO + ESISTENZA + TIPO  vLINK / MOUNT / SYNC  vIDENTITÀ + PERMESSI  vBYTE + CODIFICA + FORMATO  vCORREZIONE MINIMA + REGRESSIONE"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Le prove si svolgono su una cartella dedicata e non modificano dati reali. Una trascrizione registra sistema, shell, percorso assoluto, comando, output ed errore, ma rimuove nomi personali e segreti. Se un problema è intermittente, si registrano frequenza e condizioni."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Saltare l’osservazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cambiare permessi ricorsivamente."
+        },
+        {
+          "type": "paragraph",
+          "text": "Usare dati reali."
+        },
+        {
+          "type": "paragraph",
+          "text": "Omettere la prova di regressione."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Errore intermittente."
+        },
+        {
+          "type": "paragraph",
+          "text": "Volume remoto instabile."
+        },
+        {
+          "type": "paragraph",
+          "text": "File bloccato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Stato modificato dalla sincronizzazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Risolvi il percorso assoluto, elenca i bersagli, verifica identità e permessi, usa dati sacrificabili e conserva una via di recupero."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "A quale livello nasce il sintomo?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale prova lo distingue?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale correzione minima è reversibile?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Diagnostica sei casi simulati."
+        },
+        {
+          "type": "paragraph",
+          "text": "Produci trascrizioni sanitizzate."
+        },
+        {
+          "type": "paragraph",
+          "text": "Esegui regressione su casi vicini."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve distinguere nome, oggetto, percorso, collegamento, permesso, contenuto e formato."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta un albero decisionale."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un symlink interrotto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Valuta un problema di encoding."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Una diagnosi efficace cambia?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Niente"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Una variabile per volta"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Solo il nome"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Tutto"
+        },
+        {
+          "type": "heading",
+          "text": "2. Admin è la prima soluzione?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Solo rete"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Sì"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo Windows"
+        },
+        {
+          "type": "heading",
+          "text": "3. Prima del contenuto si verifica?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Il quiz"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Percorso, tipo e accesso"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Il colore"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. La RAM soltanto"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "File not found",
+              "Errore di risoluzione o assenza del percorso."
+            ],
+            [
+              "Access denied",
+              "Operazione rifiutata dalle regole di accesso."
+            ],
+            [
+              "Formato non valido",
+              "Byte disponibili ma non conformi alle regole attese."
+            ],
+            [
+              "Correzione minima",
+              "Intervento più piccolo che risolve la causa."
+            ],
+            [
+              "Regressione",
+              "Controllo che la correzione non danneggi altri casi."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "La diagnosi parte dalla shell e dalla cartella corrente, risolve il percorso, osserva il tipo senza modificare, controlla collegamenti e montaggi, verifica permessi con l’identità del processo, quindi legge metadati e contenuto. Soltanto dopo interviene. Ogni prova ha attesa, osservazione e conclusione; la correzione minima viene seguita da regressione. La padronanza richiede una prova osservabile e una correzione minima, non un tentativo casuale."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre esempio e controesempio."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e distinguere oggetto, percorso e contenuto."
+        },
+        {
+          "type": "paragraph",
+          "text": "So gestire tre casi limite con una procedura sicura."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato esercizi e almeno due risposte corrette su tre."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sintesi integrata della Lezione 1.4"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il file system collega nomi, percorsi, oggetti, metadati e regole di accesso. Estensione e visibilità non determinano contenuto o sicurezza. Collegamenti, montaggi e sincronizzazione introducono indirezione. Le operazioni sicure dichiarano confini, verificano bersagli e permessi e preservano recupero. Portabilità richiede convenzioni su nomi, codifica e struttura."
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura S.1 — Catena completa del file system"
+        },
+        {
+          "type": "paragraph",
+          "text": "SHELL + CARTELLA  vPERCORSO -> OGGETTO / LINK / MOUNT  vIDENTITÀ + PERMESSI  vBYTE -> CODIFICA -> FORMATO  vOPERAZIONE CONTROLLATA  vVERIFICA + BACKUP + REGRESSIONE"
+        },
+        {
+          "type": "heading",
+          "text": "Laboratorio finale: progetto portabile e diagnosi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Produci un dossier di 1.800–2.400 parole e una cartella sacrificabile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Disegna gerarchia e categorie."
+        },
+        {
+          "type": "paragraph",
+          "text": "Risolvi percorsi su Windows e Unix."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza nomi, estensioni e file nascosti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Documenta copia, spostamento e rimozione controllata."
+        },
+        {
+          "type": "paragraph",
+          "text": "Crea casi concettuali di link, mount e sync."
+        },
+        {
+          "type": "paragraph",
+          "text": "Diagnostica permessi senza elevazione indiscriminata."
+        },
+        {
+          "type": "paragraph",
+          "text": "Verifica naming multipiattaforma."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta UTF-8, LF e CRLF."
+        },
+        {
+          "type": "paragraph",
+          "text": "Definisci backup e prova di ripristino."
+        },
+        {
+          "type": "paragraph",
+          "text": "Risolvi cinque errori per livelli."
+        },
+        {
+          "type": "heading",
+          "text": "Rubrica di valutazione"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Dimensione",
+              "Essenziale",
+              "Solida",
+              "Piena padronanza"
+            ],
+            [
+              "Modello",
+              "File e cartelle",
+              "Oggetti e metadati",
+              "Link, mount e viste distinti"
+            ],
+            [
+              "Percorsi",
+              "Relativi riconosciuti",
+              "Basi e radici",
+              "Canonicalizzazione e confini"
+            ],
+            [
+              "Operazioni",
+              "Azioni elencate",
+              "Bersagli verificati",
+              "Atomicità e recupero analizzati"
+            ],
+            [
+              "Permessi",
+              "Errore riconosciuto",
+              "Identità e regola",
+              "Minimo privilegio e ereditarietà"
+            ],
+            [
+              "Portabilità",
+              "Differenze citate",
+              "Naming e codifica",
+              "Collisioni e conversioni testate"
+            ],
+            [
+              "Diagnosi",
+              "Sintomo descritto",
+              "Livello isolato",
+              "Correzione minima e regressione"
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento della lezione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Tutti i dieci capitoli sono stati letti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sono stati completati gli esercizi guidati e almeno venti autonomi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il punteggio dei quiz è almeno 24/30."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il laboratorio raggiunge almeno Solida in ogni dimensione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il lettore sa distinguere percorso, oggetto, contenuto e formato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il lettore non usa dati reali negli esercizi modificativi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il dossier prepara alla Lezione 1.5."
+        },
+        {
+          "type": "callout",
+          "text": "PASSAGGIO SUCCESSIVO  La Lezione 1.5 configurerà editor e IDE in modo consapevole, collegandoli a interprete, progetto e strumenti."
+        }
+      ]
+    }
+  ],
+  "chapters": [
+    {
+      "number": 1,
+      "title": "1. Il file system come modello di oggetti e gerarchie",
+      "sectionId": "programming-1-4-chapter-1",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-4-chapter-1-guided",
+          "kind": "guided",
+          "lessonId": "1.4",
+          "chapterNumber": 1,
+          "title": "1. Il file system come modello di oggetti e gerarchie",
+          "prompt": "Disegna una gerarchia con file omonimi.\nClassifica contenuto, nome, percorso e metadati.\nProgetta un inventario verificabile.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve distinguere nome, oggetto, percorso, collegamento, permesso, contenuto e formato."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-4-chapter-1-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 1,
+            "title": "1. Il file system come modello di oggetti e gerarchie",
+            "prompt": "Confronta icona e oggetto."
+          },
+          {
+            "id": "programming-1-4-chapter-1-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 1,
+            "title": "1. Il file system come modello di oggetti e gerarchie",
+            "prompt": "Analizza un file vuoto."
+          },
+          {
+            "id": "programming-1-4-chapter-1-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 1,
+            "title": "1. Il file system come modello di oggetti e gerarchie",
+            "prompt": "Spiega la persistenza con un controesempio."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-4-chapter-1-quiz-1",
+          "concept": "1. Il file system come modello di oggetti e gerarchie",
+          "prompt": "Che cosa contiene un file regolare?",
+          "choices": [
+            "A. Una sequenza di byte",
+            "B. Solo testo",
+            "C. Un’icona",
+            "D. Un percorso"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-1"
+        },
+        {
+          "id": "programming-1-4-chapter-1-quiz-2",
+          "concept": "1. Il file system come modello di oggetti e gerarchie",
+          "prompt": "Nome e contenuto coincidono?",
+          "choices": [
+            "A. No",
+            "B. Solo Windows",
+            "C. Solo Python",
+            "D. Sì"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-1"
+        },
+        {
+          "id": "programming-1-4-chapter-1-quiz-3",
+          "concept": "1. Il file system come modello di oggetti e gerarchie",
+          "prompt": "La cartella è principalmente?",
+          "choices": [
+            "A. Un’associazione gerarchica di nomi",
+            "B. Una CPU",
+            "C. Un formato audio",
+            "D. Un processo"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-1"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "2. Percorsi assoluti, relativi, radici e normalizzazione",
+      "sectionId": "programming-1-4-chapter-2",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-4-chapter-2-guided",
+          "kind": "guided",
+          "lessonId": "1.4",
+          "chapterNumber": 2,
+          "title": "2. Percorsi assoluti, relativi, radici e normalizzazione",
+          "prompt": "Risolvi dieci percorsi su un albero.\nConfronta forme Windows e Unix.\nAnalizza un percorso che tenta di uscire dal confine.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve distinguere nome, oggetto, percorso, collegamento, permesso, contenuto e formato."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-4-chapter-2-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 2,
+            "title": "2. Percorsi assoluti, relativi, radici e normalizzazione",
+            "prompt": "Spiega UNC."
+          },
+          {
+            "id": "programming-1-4-chapter-2-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 2,
+            "title": "2. Percorsi assoluti, relativi, radici e normalizzazione",
+            "prompt": "Costruisci due stringhe per lo stesso oggetto."
+          },
+          {
+            "id": "programming-1-4-chapter-2-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 2,
+            "title": "2. Percorsi assoluti, relativi, radici e normalizzazione",
+            "prompt": "Progetta una funzione concettuale di verifica del confine."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-4-chapter-2-quiz-1",
+          "concept": "2. Percorsi assoluti, relativi, radici e normalizzazione",
+          "prompt": "Un percorso relativo dipende da?",
+          "choices": [
+            "A. La tastiera",
+            "B. La rete sempre",
+            "C. Una base",
+            "D. Il monitor"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-2"
+        },
+        {
+          "id": "programming-1-4-chapter-2-quiz-2",
+          "concept": "2. Percorsi assoluti, relativi, radici e normalizzazione",
+          "prompt": "Assoluto significa esistente?",
+          "choices": [
+            "A. Solo Linux",
+            "B. Solo locale",
+            "C. No",
+            "D. Sì"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-2"
+        },
+        {
+          "id": "programming-1-4-chapter-2-quiz-3",
+          "concept": "2. Percorsi assoluti, relativi, radici e normalizzazione",
+          "prompt": "Che cosa può creare più vie?",
+          "choices": [
+            "A. Il prompt",
+            "B. Il colore",
+            "C. Collegamenti e montaggi",
+            "D. La RAM"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-2"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "title": "3. Nomi, estensioni, formati e file nascosti",
+      "sectionId": "programming-1-4-chapter-3",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-4-chapter-3-guided",
+          "kind": "guided",
+          "lessonId": "1.4",
+          "chapterNumber": 3,
+          "title": "3. Nomi, estensioni, formati e file nascosti",
+          "prompt": "Classifica dieci nomi.\nAnalizza una doppia estensione.\nConfronta file nascosti fra piattaforme.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve distinguere nome, oggetto, percorso, collegamento, permesso, contenuto e formato."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-4-chapter-3-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 3,
+            "title": "3. Nomi, estensioni, formati e file nascosti",
+            "prompt": "Progetta una regola di naming portabile."
+          },
+          {
+            "id": "programming-1-4-chapter-3-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 3,
+            "title": "3. Nomi, estensioni, formati e file nascosti",
+            "prompt": "Spiega MIME e firma del file."
+          },
+          {
+            "id": "programming-1-4-chapter-3-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 3,
+            "title": "3. Nomi, estensioni, formati e file nascosti",
+            "prompt": "Analizza un nome Unicode ambiguo."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-4-chapter-3-quiz-1",
+          "concept": "3. Nomi, estensioni, formati e file nascosti",
+          "prompt": "Rinominare cambia il formato?",
+          "choices": [
+            "A. No",
+            "B. Solo immagini",
+            "C. Sempre",
+            "D. Solo testo"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-3"
+        },
+        {
+          "id": "programming-1-4-chapter-3-quiz-2",
+          "concept": "3. Nomi, estensioni, formati e file nascosti",
+          "prompt": "Nascosto significa cifrato?",
+          "choices": [
+            "A. No",
+            "B. Sì",
+            "C. Solo macOS",
+            "D. Solo .env"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-3"
+        },
+        {
+          "id": "programming-1-4-chapter-3-quiz-3",
+          "concept": "3. Nomi, estensioni, formati e file nascosti",
+          "prompt": "Che cosa mostrare in sviluppo?",
+          "choices": [
+            "A. Le estensioni complete",
+            "B. Solo icone",
+            "C. Solo date",
+            "D. Niente"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-3"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "title": "4. Creare, copiare, spostare, rinominare e rimuovere",
+      "sectionId": "programming-1-4-chapter-4",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-4-chapter-4-guided",
+          "kind": "guided",
+          "lessonId": "1.4",
+          "chapterNumber": 4,
+          "title": "4. Creare, copiare, spostare, rinominare e rimuovere",
+          "prompt": "Progetta un laboratorio sacrificabile.\nScrivi controlli pre e post operazione.\nAnalizza uno spostamento interrotto.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve distinguere nome, oggetto, percorso, collegamento, permesso, contenuto e formato."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-4-chapter-4-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 4,
+            "title": "4. Creare, copiare, spostare, rinominare e rimuovere",
+            "prompt": "Confronta rinomina e spostamento."
+          },
+          {
+            "id": "programming-1-4-chapter-4-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 4,
+            "title": "4. Creare, copiare, spostare, rinominare e rimuovere",
+            "prompt": "Progetta una copia verificata."
+          },
+          {
+            "id": "programming-1-4-chapter-4-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 4,
+            "title": "4. Creare, copiare, spostare, rinominare e rimuovere",
+            "prompt": "Analizza una sovrascrittura."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-4-chapter-4-quiz-1",
+          "concept": "4. Creare, copiare, spostare, rinominare e rimuovere",
+          "prompt": "Prima di una ricorsione bisogna?",
+          "choices": [
+            "A. Cambiare shell",
+            "B. Nascondere i file",
+            "C. Elencare i bersagli",
+            "D. Usare admin"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-4"
+        },
+        {
+          "id": "programming-1-4-chapter-4-quiz-2",
+          "concept": "4. Creare, copiare, spostare, rinominare e rimuovere",
+          "prompt": "La rimozione da shell va sempre nel Cestino?",
+          "choices": [
+            "A. Sì",
+            "B. Solo Python",
+            "C. No",
+            "D. Solo offline"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-4"
+        },
+        {
+          "id": "programming-1-4-chapter-4-quiz-3",
+          "concept": "4. Creare, copiare, spostare, rinominare e rimuovere",
+          "prompt": "Spostare fra volumi può implicare?",
+          "choices": [
+            "A. Nessun I/O",
+            "B. Cifratura",
+            "C. Copia e rimozione",
+            "D. Solo rinomina"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-4"
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "title": "5. Collegamenti, scorciatoie, montaggi e sincronizzazione",
+      "sectionId": "programming-1-4-chapter-5",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-4-chapter-5-guided",
+          "kind": "guided",
+          "lessonId": "1.4",
+          "chapterNumber": 5,
+          "title": "5. Collegamenti, scorciatoie, montaggi e sincronizzazione",
+          "prompt": "Disegna quattro tipi di indirezione.\nAnalizza una cancellazione sincronizzata.\nProgetta un backup indipendente.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve distinguere nome, oggetto, percorso, collegamento, permesso, contenuto e formato."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-4-chapter-5-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 5,
+            "title": "5. Collegamenti, scorciatoie, montaggi e sincronizzazione",
+            "prompt": "Confronta symlink e hard link."
+          },
+          {
+            "id": "programming-1-4-chapter-5-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 5,
+            "title": "5. Collegamenti, scorciatoie, montaggi e sincronizzazione",
+            "prompt": "Analizza un ciclo."
+          },
+          {
+            "id": "programming-1-4-chapter-5-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 5,
+            "title": "5. Collegamenti, scorciatoie, montaggi e sincronizzazione",
+            "prompt": "Spiega mount a un principiante."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-4-chapter-5-quiz-1",
+          "concept": "5. Collegamenti, scorciatoie, montaggi e sincronizzazione",
+          "prompt": "Un symlink contiene?",
+          "choices": [
+            "A. Un riferimento a un percorso",
+            "B. Sempre una copia",
+            "C. Una password",
+            "D. Un processo"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-5"
+        },
+        {
+          "id": "programming-1-4-chapter-5-quiz-2",
+          "concept": "5. Collegamenti, scorciatoie, montaggi e sincronizzazione",
+          "prompt": "Sincronizzazione equivale sempre a backup?",
+          "choices": [
+            "A. No",
+            "B. Solo cloud",
+            "C. Solo locale",
+            "D. Sì"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-5"
+        },
+        {
+          "id": "programming-1-4-chapter-5-quiz-3",
+          "concept": "5. Collegamenti, scorciatoie, montaggi e sincronizzazione",
+          "prompt": "Un mount fa cosa?",
+          "choices": [
+            "A. Inserisce un file system nella gerarchia",
+            "B. Nasconde la CPU",
+            "C. Cambia estensione",
+            "D. Crea Python"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-5"
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "title": "6. Permessi, proprietà e minimo privilegio",
+      "sectionId": "programming-1-4-chapter-6",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-4-chapter-6-guided",
+          "kind": "guided",
+          "lessonId": "1.4",
+          "chapterNumber": 6,
+          "title": "6. Permessi, proprietà e minimo privilegio",
+          "prompt": "Analizza tre casi di accesso negato.\nDisegna identità-regola-operazione.\nProponi la correzione minima.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve distinguere nome, oggetto, percorso, collegamento, permesso, contenuto e formato."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-4-chapter-6-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 6,
+            "title": "6. Permessi, proprietà e minimo privilegio",
+            "prompt": "Confronta bit Unix e ACL Windows."
+          },
+          {
+            "id": "programming-1-4-chapter-6-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 6,
+            "title": "6. Permessi, proprietà e minimo privilegio",
+            "prompt": "Spiega attraversamento."
+          },
+          {
+            "id": "programming-1-4-chapter-6-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 6,
+            "title": "6. Permessi, proprietà e minimo privilegio",
+            "prompt": "Analizza un albero condiviso."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-4-chapter-6-quiz-1",
+          "concept": "6. Permessi, proprietà e minimo privilegio",
+          "prompt": "Il minimo privilegio concede?",
+          "choices": [
+            "A. Niente",
+            "B. Solo i diritti necessari",
+            "C. Sempre admin",
+            "D. Tutto"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-6"
+        },
+        {
+          "id": "programming-1-4-chapter-6-quiz-2",
+          "concept": "6. Permessi, proprietà e minimo privilegio",
+          "prompt": "Accesso negato significa file assente?",
+          "choices": [
+            "A. Solo rete",
+            "B. No",
+            "C. Sì",
+            "D. Solo Windows"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-6"
+        },
+        {
+          "id": "programming-1-4-chapter-6-quiz-3",
+          "concept": "6. Permessi, proprietà e minimo privilegio",
+          "prompt": "Che cosa va identificato per primo?",
+          "choices": [
+            "A. La CPU soltanto",
+            "B. Identità, oggetto e operazione",
+            "C. Il colore",
+            "D. La versione IDE"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-6"
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "title": "7. Maiuscole, caratteri Unicode, limiti e portabilità dei nomi",
+      "sectionId": "programming-1-4-chapter-7",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-4-chapter-7-guided",
+          "kind": "guided",
+          "lessonId": "1.4",
+          "chapterNumber": 7,
+          "title": "7. Maiuscole, caratteri Unicode, limiti e portabilità dei nomi",
+          "prompt": "Progetta una convenzione di naming.\nAnalizza cinque collisioni.\nTesta concettualmente un archivio multipiattaforma.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve distinguere nome, oggetto, percorso, collegamento, permesso, contenuto e formato."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-4-chapter-7-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 7,
+            "title": "7. Maiuscole, caratteri Unicode, limiti e portabilità dei nomi",
+            "prompt": "Spiega case-preserving."
+          },
+          {
+            "id": "programming-1-4-chapter-7-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 7,
+            "title": "7. Maiuscole, caratteri Unicode, limiti e portabilità dei nomi",
+            "prompt": "Crea un caso Unicode."
+          },
+          {
+            "id": "programming-1-4-chapter-7-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 7,
+            "title": "7. Maiuscole, caratteri Unicode, limiti e portabilità dei nomi",
+            "prompt": "Analizza un nome riservato."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-4-chapter-7-quiz-1",
+          "concept": "7. Maiuscole, caratteri Unicode, limiti e portabilità dei nomi",
+          "prompt": "La sensibilità alle maiuscole è universale?",
+          "choices": [
+            "A. Solo Python",
+            "B. Solo rete",
+            "C. Sì",
+            "D. No"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-7"
+        },
+        {
+          "id": "programming-1-4-chapter-7-quiz-2",
+          "concept": "7. Maiuscole, caratteri Unicode, limiti e portabilità dei nomi",
+          "prompt": "Unicode può rappresentare testo simile con?",
+          "choices": [
+            "A. Solo ASCII",
+            "B. Una sola sequenza",
+            "C. Nessun byte",
+            "D. Sequenze differenti"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-7"
+        },
+        {
+          "id": "programming-1-4-chapter-7-quiz-3",
+          "concept": "7. Maiuscole, caratteri Unicode, limiti e portabilità dei nomi",
+          "prompt": "Come favorire portabilità?",
+          "choices": [
+            "A. Usare nomi coerenti e testare le piattaforme",
+            "B. Usare ogni carattere",
+            "C. Ignorare Windows",
+            "D. Usare nomi lunghissimi"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-7"
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "title": "8. Testo, codifica, newline e integrità dei file",
+      "sectionId": "programming-1-4-chapter-8",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-4-chapter-8-guided",
+          "kind": "guided",
+          "lessonId": "1.4",
+          "chapterNumber": 8,
+          "title": "8. Testo, codifica, newline e integrità dei file",
+          "prompt": "Disegna byte-caratteri-significato.\nAnalizza una conversione fallita.\nProgetta una verifica con dimensione e hash.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve distinguere nome, oggetto, percorso, collegamento, permesso, contenuto e formato."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-4-chapter-8-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 8,
+            "title": "8. Testo, codifica, newline e integrità dei file",
+            "prompt": "Confronta LF e CRLF."
+          },
+          {
+            "id": "programming-1-4-chapter-8-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 8,
+            "title": "8. Testo, codifica, newline e integrità dei file",
+            "prompt": "Spiega BOM."
+          },
+          {
+            "id": "programming-1-4-chapter-8-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 8,
+            "title": "8. Testo, codifica, newline e integrità dei file",
+            "prompt": "Analizza un file binario aperto come testo."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-4-chapter-8-quiz-1",
+          "concept": "8. Testo, codifica, newline e integrità dei file",
+          "prompt": "Il file system conserva principalmente?",
+          "choices": [
+            "A. Byte",
+            "B. Caratteri astratti",
+            "C. Significato",
+            "D. Icone"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-8"
+        },
+        {
+          "id": "programming-1-4-chapter-8-quiz-2",
+          "concept": "8. Testo, codifica, newline e integrità dei file",
+          "prompt": "Un hash verifica direttamente?",
+          "choices": [
+            "A. I byte osservati",
+            "B. La bontà del testo",
+            "C. La licenza",
+            "D. Il proprietario"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-8"
+        },
+        {
+          "id": "programming-1-4-chapter-8-quiz-3",
+          "concept": "8. Testo, codifica, newline e integrità dei file",
+          "prompt": "UTF-8 è?",
+          "choices": [
+            "A. Una codifica di caratteri",
+            "B. Un permesso",
+            "C. Un link",
+            "D. Un editor"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-8"
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "title": "9. Cartelle di progetto, temporanei, cache, backup e dati sensibili",
+      "sectionId": "programming-1-4-chapter-9",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-4-chapter-9-guided",
+          "kind": "guided",
+          "lessonId": "1.4",
+          "chapterNumber": 9,
+          "title": "9. Cartelle di progetto, temporanei, cache, backup e dati sensibili",
+          "prompt": "Classifica venti artefatti.\nProgetta albero e politica di conservazione.\nDefinisci una prova di ripristino.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve distinguere nome, oggetto, percorso, collegamento, permesso, contenuto e formato."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-4-chapter-9-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 9,
+            "title": "9. Cartelle di progetto, temporanei, cache, backup e dati sensibili",
+            "prompt": "Analizza una cache unica."
+          },
+          {
+            "id": "programming-1-4-chapter-9-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 9,
+            "title": "9. Cartelle di progetto, temporanei, cache, backup e dati sensibili",
+            "prompt": "Progetta dati sintetici."
+          },
+          {
+            "id": "programming-1-4-chapter-9-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 9,
+            "title": "9. Cartelle di progetto, temporanei, cache, backup e dati sensibili",
+            "prompt": "Confronta backup e sync."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-4-chapter-9-quiz-1",
+          "concept": "9. Cartelle di progetto, temporanei, cache, backup e dati sensibili",
+          "prompt": "Nascosto significa protetto?",
+          "choices": [
+            "A. No",
+            "B. Sì",
+            "C. Solo .env",
+            "D. Solo cloud"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-9"
+        },
+        {
+          "id": "programming-1-4-chapter-9-quiz-2",
+          "concept": "9. Cartelle di progetto, temporanei, cache, backup e dati sensibili",
+          "prompt": "Un backup va?",
+          "choices": [
+            "A. Verificato con ripristino",
+            "B. Tenuto nella cache",
+            "C. Messo nel sorgente",
+            "D. Solo creato"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-9"
+        },
+        {
+          "id": "programming-1-4-chapter-9-quiz-3",
+          "concept": "9. Cartelle di progetto, temporanei, cache, backup e dati sensibili",
+          "prompt": "I segreti vanno?",
+          "choices": [
+            "A. Gestiti separatamente",
+            "B. Nel quiz",
+            "C. Nel README",
+            "D. Nel nome file"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-9"
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "title": "10. Diagnosi per livelli e laboratorio conclusivo",
+      "sectionId": "programming-1-4-chapter-10",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-4-chapter-10-guided",
+          "kind": "guided",
+          "lessonId": "1.4",
+          "chapterNumber": 10,
+          "title": "10. Diagnosi per livelli e laboratorio conclusivo",
+          "prompt": "Diagnostica sei casi simulati.\nProduci trascrizioni sanitizzate.\nEsegui regressione su casi vicini.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve distinguere nome, oggetto, percorso, collegamento, permesso, contenuto e formato."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-4-chapter-10-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 10,
+            "title": "10. Diagnosi per livelli e laboratorio conclusivo",
+            "prompt": "Progetta un albero decisionale."
+          },
+          {
+            "id": "programming-1-4-chapter-10-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 10,
+            "title": "10. Diagnosi per livelli e laboratorio conclusivo",
+            "prompt": "Analizza un symlink interrotto."
+          },
+          {
+            "id": "programming-1-4-chapter-10-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.4",
+            "chapterNumber": 10,
+            "title": "10. Diagnosi per livelli e laboratorio conclusivo",
+            "prompt": "Valuta un problema di encoding."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-4-chapter-10-quiz-1",
+          "concept": "10. Diagnosi per livelli e laboratorio conclusivo",
+          "prompt": "Una diagnosi efficace cambia?",
+          "choices": [
+            "A. Niente",
+            "B. Una variabile per volta",
+            "C. Solo il nome",
+            "D. Tutto"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-10"
+        },
+        {
+          "id": "programming-1-4-chapter-10-quiz-2",
+          "concept": "10. Diagnosi per livelli e laboratorio conclusivo",
+          "prompt": "Admin è la prima soluzione?",
+          "choices": [
+            "A. Solo rete",
+            "B. No",
+            "C. Sì",
+            "D. Solo Windows"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-10"
+        },
+        {
+          "id": "programming-1-4-chapter-10-quiz-3",
+          "concept": "10. Diagnosi per livelli e laboratorio conclusivo",
+          "prompt": "Prima del contenuto si verifica?",
+          "choices": [
+            "A. Il quiz",
+            "B. Percorso, tipo e accesso",
+            "C. Il colore",
+            "D. La RAM soltanto"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-4-chapter-10"
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    [
+      "File system",
+      "Meccanismo che organizza oggetti persistenti."
+    ],
+    [
+      "File",
+      "Oggetto che conserva una sequenza di dati."
+    ],
+    [
+      "Directory",
+      "Oggetto che associa nomi ad altri oggetti."
+    ],
+    [
+      "Metadato",
+      "Informazione descrittiva distinta dal contenuto."
+    ],
+    [
+      "Persistenza",
+      "Conservazione oltre la vita del processo."
+    ],
+    [
+      "Percorso assoluto",
+      "Percorso espresso da una radice completa."
+    ],
+    [
+      "Percorso relativo",
+      "Percorso risolto rispetto a una base."
+    ],
+    [
+      "UNC",
+      "Convenzione Windows per risorse di rete."
+    ],
+    [
+      "Normalizzazione",
+      "Riduzione lessicale di segmenti e separatori."
+    ],
+    [
+      "Canonicalizzazione",
+      "Risoluzione verso una rappresentazione effettiva secondo regole."
+    ],
+    [
+      "Estensione",
+      "Parte convenzionale del nome che suggerisce un formato."
+    ],
+    [
+      "Formato",
+      "Regole con cui i byte rappresentano dati."
+    ],
+    [
+      "File nascosto",
+      "File omesso da alcune viste per attributo o convenzione."
+    ],
+    [
+      "MIME type",
+      "Etichetta standardizzata del tipo di contenuto."
+    ],
+    [
+      "Nome riservato",
+      "Nome vietato o speciale in un sistema."
+    ],
+    [
+      "Copia",
+      "Creazione di un nuovo oggetto con dati derivati."
+    ],
+    [
+      "Spostamento",
+      "Cambio di collocazione logica o trasferimento."
+    ],
+    [
+      "Rimozione",
+      "Eliminazione del riferimento o dell’oggetto secondo il sistema."
+    ],
+    [
+      "Atomicità",
+      "Operazione osservabile come intera o non avvenuta."
+    ],
+    [
+      "Jolly",
+      "Pattern che può selezionare più nomi."
+    ],
+    [
+      "Symlink",
+      "Collegamento che riferisce un percorso."
+    ],
+    [
+      "Hard link",
+      "Nome aggiuntivo dello stesso oggetto supportato."
+    ],
+    [
+      "Scorciatoia",
+      "File o oggetto interpretato come collegamento dall’interfaccia."
+    ],
+    [
+      "Mount",
+      "Inserimento di un file system in una gerarchia."
+    ],
+    [
+      "Sincronizzazione",
+      "Riconciliazione di cambiamenti fra repliche."
+    ],
+    [
+      "Permesso",
+      "Regola che autorizza un’operazione."
+    ],
+    [
+      "Proprietario",
+      "Identità associata all’oggetto."
+    ],
+    [
+      "ACL",
+      "Elenco di regole di controllo accessi."
+    ],
+    [
+      "Ereditarietà",
+      "Propagazione di regole dalla gerarchia."
+    ],
+    [
+      "Minimo privilegio",
+      "Concessione dei soli diritti necessari."
+    ],
+    [
+      "Case-sensitive",
+      "Sistema che distingue maiuscole e minuscole."
+    ],
+    [
+      "Case-preserving",
+      "Sistema che conserva la forma digitata."
+    ],
+    [
+      "Normalizzazione Unicode",
+      "Conversione a una forma Unicode convenzionale."
+    ],
+    [
+      "Collisione",
+      "Due nomi trattati come lo stesso identificatore."
+    ],
+    [
+      "Portabilità",
+      "Capacità di mantenere significato fra sistemi."
+    ],
+    [
+      "Codifica",
+      "Regola che associa caratteri e byte."
+    ],
+    [
+      "Newline",
+      "Convenzione che delimita righe."
+    ],
+    [
+      "BOM",
+      "Sequenza iniziale con significato di codifica in alcuni formati."
+    ],
+    [
+      "Hash",
+      "Impronta calcolata dai byte."
+    ],
+    [
+      "Integrità",
+      "Proprietà che i dati non siano cambiati in modo inatteso."
+    ],
+    [
+      "Sorgente autorevole",
+      "Artefatto che costituisce la fonte intenzionale."
+    ],
+    [
+      "Cache",
+      "Dato derivato conservato per accelerare operazioni."
+    ],
+    [
+      "Temporaneo",
+      "Artefatto a vita breve."
+    ],
+    [
+      "Backup",
+      "Copia indipendente destinata al recupero."
+    ],
+    [
+      "Dato sintetico",
+      "Dato artificiale creato per prova senza esporre persone."
+    ],
+    [
+      "File not found",
+      "Errore di risoluzione o assenza del percorso."
+    ],
+    [
+      "Access denied",
+      "Operazione rifiutata dalle regole di accesso."
+    ],
+    [
+      "Formato non valido",
+      "Byte disponibili ma non conformi alle regole attese."
+    ],
+    [
+      "Correzione minima",
+      "Intervento più piccolo che risolve la causa."
+    ],
+    [
+      "Regressione",
+      "Controllo che la correzione non danneggi altri casi."
+    ]
+  ],
+  "summary": [
+    "Il file system collega nomi, percorsi, oggetti, metadati e regole di accesso. Estensione e visibilità non determinano contenuto o sicurezza. Collegamenti, montaggi e sincronizzazione introducono indirezione. Le operazioni sicure dichiarano confini, verificano bersagli e permessi e preservano recupero. Portabilità richiede convenzioni su nomi, codifica e struttura."
+  ],
+  "finalAssessment": {
+    "lessonId": "1.4",
+    "title": "Laboratorio finale: progetto portabile e diagnosi",
+    "prompt": "Produci un dossier di 1.800–2.400 parole e una cartella sacrificabile.",
+    "deliverables": [
+      "Disegna gerarchia e categorie.",
+      "Risolvi percorsi su Windows e Unix.",
+      "Analizza nomi, estensioni e file nascosti.",
+      "Documenta copia, spostamento e rimozione controllata.",
+      "Crea casi concettuali di link, mount e sync.",
+      "Diagnostica permessi senza elevazione indiscriminata.",
+      "Verifica naming multipiattaforma.",
+      "Confronta UTF-8, LF e CRLF.",
+      "Definisci backup e prova di ripristino.",
+      "Risolvi cinque errori per livelli."
+    ],
+    "rubric": [
+      [
+        "Dimensione",
+        "Essenziale",
+        "Solida",
+        "Piena padronanza"
+      ],
+      [
+        "Modello",
+        "File e cartelle",
+        "Oggetti e metadati",
+        "Link, mount e viste distinti"
+      ],
+      [
+        "Percorsi",
+        "Relativi riconosciuti",
+        "Basi e radici",
+        "Canonicalizzazione e confini"
+      ],
+      [
+        "Operazioni",
+        "Azioni elencate",
+        "Bersagli verificati",
+        "Atomicità e recupero analizzati"
+      ],
+      [
+        "Permessi",
+        "Errore riconosciuto",
+        "Identità e regola",
+        "Minimo privilegio e ereditarietà"
+      ],
+      [
+        "Portabilità",
+        "Differenze citate",
+        "Naming e codifica",
+        "Collisioni e conversioni testate"
+      ],
+      [
+        "Diagnosi",
+        "Sintomo descritto",
+        "Livello isolato",
+        "Correzione minima e regressione"
+      ]
+    ],
+    "completionCriteria": [
+      "Tutti i dieci capitoli sono stati letti.",
+      "Sono stati completati gli esercizi guidati e almeno venti autonomi.",
+      "Il punteggio dei quiz è almeno 24/30.",
+      "Il laboratorio raggiunge almeno Solida in ogni dimensione.",
+      "Il lettore sa distinguere percorso, oggetto, contenuto e formato.",
+      "Il lettore non usa dati reali negli esercizi modificativi.",
+      "Il dossier prepara alla Lezione 1.5."
+    ]
+  }
+}

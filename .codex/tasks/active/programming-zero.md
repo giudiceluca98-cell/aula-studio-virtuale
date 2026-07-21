@@ -260,7 +260,7 @@ Contenuti convertiti:
 
 Verifiche: test mirato 21/21, suite completa 151/151, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 
-## Estensione in corso · Lezione 1.4
+## Estensione in revisione · Lezione 1.4
 
 Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_1.4_File_system_e_percorsi.docx`. Il DOCX non verrà caricato nel repository.
 
@@ -272,4 +272,8 @@ File riservati:
 - `tests/programming-subject.test.ts`
 
 File condivisi prenotati: nessuno. Dipendenza: PR #31; branch e Draft PR impilati sulla lezione 1.3.
+
+Contenuti convertiti: 11 sezioni, 816 blocchi, 10 esercizi guidati, 30 autonomi, 30 quiz e 50 voci di glossario; laboratorio finale, rubrica e criteri conservati. Impronta SHA-256 `58e92a5aeaea1f6b1622aa2432fa359ac64c61e957dbbcf25b5685fdc405e5f0`; nessun DOCX caricato.
+
+Verifiche: test mirato 21/21, suite completa 151/151, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 
