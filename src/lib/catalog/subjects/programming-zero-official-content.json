@@ -803,7 +803,7 @@
                   "Descrizione verificabile del comportamento richiesto."
                 ],
                 [
-                  "Dominio",
+                  "Dominio degli input",
                   "Insieme degli ingressi ammessi."
                 ],
                 [
@@ -2155,7 +2155,7 @@
                   "Conservazione durevole dello stato."
                 ],
                 [
-                  "Validazione",
+                  "Validazione dell’input",
                   "Controllo di formato, dominio e vincoli."
                 ],
                 [
@@ -2821,7 +2821,7 @@
                   "Controllo di conformità alla specifica."
                 ],
                 [
-                  "Validazione",
+                  "Validazione del sistema",
                   "Controllo di adeguatezza al bisogno reale."
                 ],
                 [
@@ -4576,7 +4576,7 @@
           "Descrizione verificabile del comportamento richiesto."
         ],
         [
-          "Dominio",
+          "Dominio degli input",
           "Insieme degli ingressi ammessi."
         ],
         [
@@ -4660,7 +4660,7 @@
           "Conservazione durevole dello stato."
         ],
         [
-          "Validazione",
+          "Validazione dell’input",
           "Controllo di formato, dominio e vincoli."
         ],
         [
@@ -4692,7 +4692,7 @@
           "Controllo di conformità alla specifica."
         ],
         [
-          "Validazione",
+          "Validazione del sistema",
           "Controllo di adeguatezza al bisogno reale."
         ],
         [
@@ -7628,7 +7628,7 @@
                   "Flusso di esecuzione all’interno di un processo."
                 ],
                 [
-                  "Ciclo di vita",
+                  "Ciclo di vita del processo",
                   "Fasi di creazione, attività, sospensione e terminazione."
                 ]
               ]
@@ -9499,7 +9499,7 @@
           "Flusso di esecuzione all’interno di un processo."
         ],
         [
-          "Ciclo di vita",
+          "Ciclo di vita del processo",
           "Fasi di creazione, attività, sospensione e terminazione."
         ],
         [

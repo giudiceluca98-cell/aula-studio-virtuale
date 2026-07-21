@@ -382,7 +382,7 @@
         },
         {
           "type": "list-item",
-          "text": "A. ‘Il saldo è maggiore di zero’"
+          "text": "A. ‘5 è maggiore di zero’"
         },
         {
           "type": "list-item",
@@ -801,11 +801,11 @@
               "Espressione booleana usata per scegliere un comportamento."
             ],
             [
-              "Dominio",
+              "Dominio dei valori",
               "Insieme dei valori ammessi."
             ],
             [
-              "Confine",
+              "Valore di confine",
               "Valore limite in cui può cambiare il risultato."
             ]
           ]
@@ -3730,7 +3730,7 @@
           "concept": "1. Proposizioni e valori di verità",
           "prompt": "Quale frase è una proposizione?",
           "choices": [
-            "A. ‘Il saldo è maggiore di zero’",
+            "A. ‘5 è maggiore di zero’",
             "B. ‘Inserisci il saldo’",
             "C. ‘Qual è il saldo?’",
             "D. ‘Che bel saldo!’"
@@ -4578,11 +4578,11 @@
       "Espressione booleana usata per scegliere un comportamento."
     ],
     [
-      "Dominio",
+      "Dominio dei valori",
       "Insieme dei valori ammessi."
     ],
     [
-      "Confine",
+      "Valore di confine",
       "Valore limite in cui può cambiare il risultato."
     ],
     [
