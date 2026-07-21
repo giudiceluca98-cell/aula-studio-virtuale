@@ -265,7 +265,7 @@ export function CatalogExplorer({ preferredRoomId }: { preferredRoomId?: string 
   if (loading) return <main className="grid min-h-screen place-items-center"><Loader2 className="animate-spin text-moss-700" /></main>;
 
   return (
-    <main className="min-h-screen px-4 py-5 sm:px-7 lg:px-10">
+    <main data-ui-surface="dark" data-ui-page="catalog" className="min-h-screen px-4 py-5 sm:px-7 lg:px-10">
       <nav className="mx-auto flex max-w-7xl items-center justify-between">
         <Link href={preferredRoomId ? `/room/${preferredRoomId}` : "/dashboard"} className="button-secondary px-3 py-2"><ArrowLeft size={16} /> {preferredRoomId ? "Torna all’aula" : "Scrivania"}</Link>
         <div className="flex items-center gap-2 text-sm font-bold"><span className="grid size-9 place-items-center rounded-xl bg-moss-800 text-white"><BookOpen size={18} /></span>Catalogo</div>

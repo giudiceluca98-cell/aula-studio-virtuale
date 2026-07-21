@@ -13,6 +13,7 @@ import {
   Languages,
   Loader2,
   LogOut,
+  Palette,
   RefreshCw,
   ShieldCheck,
   Trash2,
@@ -20,6 +21,7 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/config";
+import { ThemeSelector } from "@/components/theme/theme-selector";
 
 export function RoomSettings({ roomId }: { roomId: string }) {
   const router = useRouter();
@@ -171,7 +173,7 @@ export function RoomSettings({ roomId }: { roomId: string }) {
   if (loading) return <main className="grid min-h-screen place-items-center"><Loader2 className="animate-spin text-moss-700" /></main>;
 
   return (
-    <main className="min-h-screen px-5 py-5 sm:px-8 lg:px-12">
+    <main data-ui-surface="dark" data-ui-page="settings" className="min-h-screen px-5 py-5 sm:px-8 lg:px-12">
       {notice && <div className="fixed left-1/2 top-4 z-50 -translate-x-1/2 rounded-full bg-ink px-4 py-2.5 text-xs font-semibold text-white shadow-soft">{notice}</div>}
       <div className="mx-auto max-w-3xl">
         <Link href={`/room/${roomId}`} className="inline-flex items-center gap-2 text-xs font-bold text-black/45 hover:text-moss-700"><ArrowLeft size={14} /> Torna alla stanza</Link>
@@ -184,6 +186,11 @@ export function RoomSettings({ roomId }: { roomId: string }) {
             <PreferenceRow icon={RefreshCw} title="Condividi l'attivita recente" description="Mostra progressi, esercizi, materiali aperti nell'aula e inizio/fine sessione." checked={shareActivity} onChange={(value) => { setShareActivity(value); void savePreference("share_activity", value); }} />
             <PreferenceRow icon={UserRound} title="Note private per impostazione predefinita" description="Le nuove note saranno visibili solo a te, finche non scegli di condividerle." checked={defaultPrivateNotes} onChange={(value) => { setDefaultPrivateNotes(value); void savePreference("default_private_notes", value); }} />
           </div>
+        </section>
+
+        <section className="panel mt-5 p-5 sm:p-6">
+          <div className="flex items-center gap-3"><span className="grid size-10 place-items-center rounded-xl bg-moss-100 text-moss-700"><Palette size={18} /></span><div><h2 className="text-sm font-bold">Temi</h2><p className="mt-0.5 text-xs text-black/40">Scegli l’aspetto dell’app. La preferenza è personale e si applica subito.</p></div></div>
+          <div className="mt-5"><ThemeSelector /></div>
         </section>
 
         <form onSubmit={saveLanguagePreferences} className="panel mt-5 p-5 sm:p-6">

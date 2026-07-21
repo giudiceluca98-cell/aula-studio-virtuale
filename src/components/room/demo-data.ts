@@ -15,7 +15,10 @@ export interface UiCourse { id: string; room_id: string; title: string; descript
 export interface UiMaterial { id: string; room_id: string; course_id: string | null; type: "link" | "pdf" | "file" | "course"; title: string; url: string | null; storage_path: string | null; description?: string | null; metadata?: Record<string, unknown>; access_mode?: "internal" | "embedded" | "import-required" | "external-unmonitored" | "unsupported"; monitoring_level?: "full" | "partial" | "opened-only" | "none"; internal_viewer?: "pdf" | "text" | "document" | "presentation" | "video" | "web-article" | "exercise" | null; import_status?: "ready" | "pending" | "failed" | "not-required"; internal_resource_id?: string | null; created_by: string; created_at: string }
 export interface UiProgress { id: string; room_id: string; user_id: string; course_id: string; chapter: string | null; lesson: string | null; progress_percentage: number; exercises_completed: number; score: number | null; study_minutes: number; notes: string | null; next_goal: string | null; updated_at: string }
 export interface UiTask { id: string; room_id: string; assigned_to: string | null; assignment_mode?: "everyone" | "single" | "selected"; title: string; description?: string | null; completed: boolean; completed_by?: string | null; completed_at?: string | null; priority: "low" | "medium" | "high"; due_at: string | null; created_at: string; stage_id?: string | null; task_type?: "lesson" | "exercise" | "project" | "assessment" | null; order_index?: number | null; completion_criteria?: string[]; estimated_minutes?: number | null; learning_path_id?: string | null }
-export interface UiMessage { id: string; room_id: string; sender_id: string; content: string; created_at: string }
+export interface UiMessageAttachment { name: string; path: string; mime: string; size: number }
+export interface UiMessage { id: string; room_id: string; sender_id: string; content: string; created_at: string; conversation_id?: string | null; message_type?: "text" | "system"; attachments?: UiMessageAttachment[] }
+export interface UiMessageConversation { id: string; room_id: string; kind: "lobby" | "private" | "group"; title: string | null; created_by: string | null; created_at: string; updated_at: string; archived_at: string | null }
+export interface UiMessageConversationMember { conversation_id: string; room_id: string; user_id: string; joined_at: string; last_read_at: string | null; left_at: string | null }
 export interface UiNote { id: string; room_id: string; user_id: string; content: string; is_private: boolean; created_at: string; updated_at: string }
 export interface UiActivity { id: string; room_id: string; user_id: string; event_type: string; data: Record<string, unknown>; created_at: string }
 export interface UiSession { id: string; room_id: string; user_id: string; mode?: "free" | "pomodoro_focus" | "pomodoro_break"; started_at: string; paused_at: string | null; resumed_at?: string | null; ended_at: string | null; total_seconds: number; status: "running" | "paused" | "completed" }
@@ -31,6 +34,8 @@ export interface RoomViewData {
   progress: UiProgress[];
   tasks: UiTask[];
   messages: UiMessage[];
+  messageConversations: UiMessageConversation[];
+  messageConversationMembers: UiMessageConversationMember[];
   notes: UiNote[];
   activities: UiActivity[];
   sessions: UiSession[];
@@ -72,6 +77,10 @@ export function makeDemoData(): RoomViewData {
       { id: "msg-2", room_id: "demo", sender_id: "demo-marco", content: "Perfetto, io finisco la lezione sulle funzioni.", created_at: minutesAgo(31) },
       { id: "msg-3", room_id: "demo", sender_id: "demo-tatiana", content: "Quando vuoi confrontiamo l'esercizio 4.", created_at: minutesAgo(4) },
     ],
+    messageConversations: [
+      { id: "demo-lobby", room_id: "demo", kind: "lobby", title: "Lobby generale", created_by: "demo-marco", created_at: minutesAgo(5000), updated_at: minutesAgo(4), archived_at: null },
+    ],
+    messageConversationMembers: [],
     notes: [
       { id: "note-1", room_id: "demo", user_id: "demo-tatiana", content: "Una funzione evita di ripetere lo stesso blocco di istruzioni.", is_private: false, created_at: minutesAgo(210), updated_at: minutesAgo(210) },
       { id: "note-2", room_id: "demo", user_id: "demo-marco", content: "Ricordarsi: input() restituisce sempre una stringa.", is_private: false, created_at: minutesAgo(90), updated_at: minutesAgo(90) },

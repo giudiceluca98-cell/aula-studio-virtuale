@@ -28,7 +28,6 @@ import {
   Play,
   Plus,
   MessageCircle,
-  Send,
   Settings,
   Sparkles,
   Square,
@@ -66,6 +65,7 @@ import {
 } from "./demo-data";
 import { RoomContentRemovalDialog } from "./room-content-removal-dialog";
 import { MaterialWorkspaceViewer } from "./material-workspace-viewer";
+import { MessageCenter } from "./message-center";
 
 const statusLabels: Record<UiStatus, string> = {
   online: "Online ora",
@@ -106,6 +106,7 @@ const activityLabels: Record<string, string> = {
 };
 
 const NO_TIMER_SESSION_ID = "11111111-1111-4111-8111-111111111111";
+const MESSAGE_ATTACHMENT_TYPES = new Set(["application/pdf", "text/plain", "text/markdown", "image/png", "image/jpeg", "image/webp", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]);
 
 type RoomTool = "courses" | "materials" | "checklist" | "progress" | "notes" | "participants" | "activity" | "timer" | "chat";
 type RemovalTarget =
@@ -146,17 +147,6 @@ function isTaskTrackedForUser(task: RoomViewData["tasks"][number], userId: strin
 function isTaskCompletedByUser(task: RoomViewData["tasks"][number], userId: string) {
   if (!task.completed) return false;
   return task.assigned_to === userId || task.completed_by === userId;
-}
-
-function MessageContent({ content }: { content: string }) {
-  const parts = content.split(/(https?:\/\/[^\s]+)/gi);
-  return <>{parts.map((part, index) => {
-    if (!/^https?:\/\//i.test(part)) return <span key={index}>{part}</span>;
-    try {
-      const url = new URL(part);
-      return <a key={index} href={url.toString()} target="_blank" rel="noopener noreferrer" className="font-semibold underline decoration-current/30 underline-offset-2">{url.hostname}</a>;
-    } catch { return <span key={index}>{part}</span>; }
-  })}</>;
 }
 
 function panelTitle(title: string, action?: React.ReactNode) {
@@ -204,6 +194,9 @@ export function StudyRoom({ roomId }: { roomId: string }) {
   const [callInvitees, setCallInvitees] = useState<string[]>([]);
   const [speakerBlocked, setSpeakerBlocked] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [conversationUnread, setConversationUnread] = useState<Record<string, number>>({});
+  const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
+  const [messageCenterSchemaAvailable, setMessageCenterSchemaAvailable] = useState(isDemo);
   const [activeTool, setActiveTool] = useState<RoomTool | null>(null);
   const [courseMenuId, setCourseMenuId] = useState<string | null>(null);
   const [materialMenuId, setMaterialMenuId] = useState<string | null>(null);
@@ -228,7 +221,7 @@ export function StudyRoom({ roomId }: { roomId: string }) {
       const { data: auth, error: authError } = await liveClient.auth.getUser();
       if (authError || !auth.user) { router.replace("/login"); return; }
 
-      const [roomResult, memberResult, presenceResult, courseResult, materialResult, progressResult, sessionResult, taskResult, messageResult, noteResult, activityResult, preferenceResult, callResult, callParticipantResult] = await Promise.all([
+      const [roomResult, memberResult, presenceResult, courseResult, materialResult, progressResult, sessionResult, taskResult, messageResult, noteResult, activityResult, preferenceResult, callResult, callParticipantResult, conversationResult, conversationMemberResult] = await Promise.all([
         liveClient.from("study_rooms").select("id,name,invite_code").eq("id", roomId).single(),
         liveClient.from("room_members").select("room_id,user_id,role,joined_at").eq("room_id", roomId).is("left_at", null),
         liveClient.from("presence").select("room_id,user_id,status,current_activity,last_seen_at,device_label").eq("room_id", roomId),
@@ -243,6 +236,8 @@ export function StudyRoom({ roomId }: { roomId: string }) {
         liveClient.from("user_room_preferences").select("share_presence,default_private_notes").eq("room_id", roomId).eq("user_id", auth.user.id).maybeSingle(),
         liveClient.from("call_sessions").select("id,room_id,started_by,call_kind,status,created_at,started_at,ended_at").eq("room_id", roomId).in("status", ["waiting", "active"]).order("created_at", { ascending: false }).limit(5),
         liveClient.from("call_participants").select("call_id,room_id,user_id,state,invited_by,invited_at,joined_at,left_at").eq("room_id", roomId),
+        liveClient.from("message_conversations").select("id,room_id,kind,title,created_by,created_at,updated_at,archived_at").eq("room_id", roomId).is("archived_at", null).order("updated_at", { ascending: false }),
+        liveClient.from("message_conversation_members").select("conversation_id,room_id,user_id,joined_at,last_read_at,left_at").eq("room_id", roomId).is("left_at", null),
       ]);
 
       if (roomResult.error || !roomResult.data) {
@@ -272,6 +267,13 @@ export function StudyRoom({ roomId }: { roomId: string }) {
         };
       });
 
+      const messageSchemaReady = !conversationResult.error && !conversationMemberResult.error;
+      const conversations = messageSchemaReady
+        ? (conversationResult.data ?? []) as RoomViewData["messageConversations"]
+        : [{ id: `legacy-lobby-${roomId}`, room_id: roomId, kind: "lobby" as const, title: "Lobby generale", created_by: null, created_at: new Date(0).toISOString(), updated_at: new Date().toISOString(), archived_at: null }];
+      setMessageCenterSchemaAvailable(messageSchemaReady);
+      setActiveConversationId((current) => current && conversations.some((item) => item.id === current) ? current : conversations.find((item) => item.kind === "lobby")?.id ?? conversations[0]?.id ?? null);
+
       setData({
         room: roomResult.data,
         currentUserId: auth.user.id,
@@ -293,6 +295,8 @@ export function StudyRoom({ roomId }: { roomId: string }) {
         })),
         tasks: (taskResult.data ?? []) as RoomViewData["tasks"],
         messages: (messageResult.data ?? []) as RoomViewData["messages"],
+        messageConversations: conversations,
+        messageConversationMembers: messageSchemaReady ? (conversationMemberResult.data ?? []) as RoomViewData["messageConversationMembers"] : [],
         notes: ((noteResult.data ?? []) as Array<Record<string, unknown>>).map((note) => ({
           id: String(note.id),
           room_id: String(note.room_id),
@@ -351,7 +355,9 @@ export function StudyRoom({ roomId }: { roomId: string }) {
 
   useEffect(() => {
     if (isDemo) {
-      setData(makeDemoData());
+      const demoData = makeDemoData();
+      setData(demoData);
+      setActiveConversationId(demoData.messageConversations.find((conversation) => conversation.kind === "lobby")?.id ?? null);
       setLoading(false);
       return;
     }
@@ -401,25 +407,39 @@ export function StudyRoom({ roomId }: { roomId: string }) {
   const roomMessages = data?.messages;
   const roomCurrentUserId = data?.currentUserId;
   useEffect(() => {
-    if (!roomMessages || !roomCurrentUserId) return;
-    const storageKey = `aula:last-read:${roomId}:${roomCurrentUserId}`;
-    const lastRead = Number(window.localStorage.getItem(storageKey) ?? 0);
-    const unread = roomMessages.filter((message) => message.sender_id !== roomCurrentUserId && Date.parse(message.created_at) > lastRead);
-    setUnreadCount(unread.length);
-    if (!unread.length || document.visibilityState !== "visible" || activeTool !== "chat") return;
+    if (!roomMessages || !roomCurrentUserId || !data) return;
+    const lobbyId = data.messageConversations.find((conversation) => conversation.kind === "lobby")?.id;
+    const counts = Object.fromEntries(data.messageConversations.map((conversation) => {
+      const localRead = Number(window.localStorage.getItem(`aula:last-read:${roomId}:${roomCurrentUserId}:${conversation.id}`) ?? (conversation.kind === "lobby" ? window.localStorage.getItem(`aula:last-read:${roomId}:${roomCurrentUserId}`) ?? 0 : 0));
+      const serverRead = Date.parse(data.messageConversationMembers.find((member) => member.conversation_id === conversation.id && member.user_id === roomCurrentUserId)?.last_read_at ?? "") || 0;
+      const lastRead = Math.max(localRead, serverRead);
+      const count = roomMessages.filter((message) => (message.conversation_id ?? lobbyId) === conversation.id && message.sender_id !== roomCurrentUserId && Date.parse(message.created_at) > lastRead).length;
+      return [conversation.id, count];
+    }));
+    setConversationUnread(counts);
+    setUnreadCount(Object.values(counts).reduce((sum, count) => sum + count, 0));
+    const activeId = activeConversationId ?? lobbyId;
+    const activeConversation = data.messageConversations.find((conversation) => conversation.id === activeId);
+    const activeLocalRead = Number(window.localStorage.getItem(`aula:last-read:${roomId}:${roomCurrentUserId}:${activeId}`) ?? (activeConversation?.kind === "lobby" ? window.localStorage.getItem(`aula:last-read:${roomId}:${roomCurrentUserId}`) ?? 0 : 0));
+    const activeServerRead = Date.parse(data.messageConversationMembers.find((member) => member.conversation_id === activeId && member.user_id === roomCurrentUserId)?.last_read_at ?? "") || 0;
+    const activeLastRead = Math.max(activeLocalRead, activeServerRead);
+    const unread = roomMessages.filter((message) => (message.conversation_id ?? lobbyId) === activeId && message.sender_id !== roomCurrentUserId && Date.parse(message.created_at) > activeLastRead);
+    if (!activeId || !unread.length || document.visibilityState !== "visible" || activeTool !== "chat") return;
     const timer = window.setTimeout(() => {
       const newest = Math.max(...unread.map((message) => Date.parse(message.created_at)));
-      window.localStorage.setItem(storageKey, String(newest));
-      setUnreadCount(0);
+      window.localStorage.setItem(`aula:last-read:${roomId}:${roomCurrentUserId}:${activeId}`, String(newest));
+      setConversationUnread((current) => ({ ...current, [activeId]: 0 }));
+      setUnreadCount((current) => Math.max(0, current - unread.length));
       if (liveClient) {
         void liveClient.from("message_reads").upsert(
           unread.map((message) => ({ message_id: message.id, room_id: roomId, user_id: roomCurrentUserId })),
           { onConflict: "message_id,user_id" },
         );
+        if (messageCenterSchemaAvailable && activeId !== lobbyId) void liveClient.rpc("mark_message_conversation_read", { p_conversation_id: activeId });
       }
     }, 1800);
     return () => window.clearTimeout(timer);
-  }, [activeTool, liveClient, roomCurrentUserId, roomId, roomMessages]);
+  }, [activeConversationId, activeTool, data, liveClient, messageCenterSchemaAvailable, roomCurrentUserId, roomId, roomMessages]);
 
   useEffect(() => {
     if (!data?.currentUserId || uiPreferencesApplied.current) return;
@@ -704,30 +724,79 @@ export function StudyRoom({ roomId }: { roomId: string }) {
     } finally { setActionPending(null); }
   }
 
-  async function sendMessage(event: React.FormEvent) {
+  async function sendMessage(event: React.FormEvent, conversationId = activeConversationId ?? "", files: File[] = []): Promise<boolean> {
     event.preventDefault();
-    if (!data || !chatDraft.trim() || actionPending) return;
-    if (chatDraft.length > 1000) { showToast("Il messaggio supera 1.000 caratteri."); return; }
-    if (Date.now() - lastMessageAt.current < 1200) { showToast("Aspetta un istante prima di inviare di nuovo."); return; }
+    if (!data || !chatDraft.trim() || actionPending) return false;
+    if (chatDraft.length > 1000) { showToast("Il messaggio supera 1.000 caratteri."); return false; }
+    if (files.length > 5 || files.some((file) => file.size > 10 * 1024 * 1024 || !MESSAGE_ATTACHMENT_TYPES.has(file.type))) { showToast("Usa al massimo 5 file consentiti, ciascuno entro 10 MB."); return false; }
+    if (Date.now() - lastMessageAt.current < 1200) { showToast("Aspetta un istante prima di inviare di nuovo."); return false; }
     const content = chatDraft.trim();
     setActionPending("chat");
+    const uploadedPaths: string[] = [];
     try {
       if (isDemo) {
-        const message: UiMessage = { id: crypto.randomUUID(), room_id: roomId, sender_id: data.currentUserId, content, created_at: new Date().toISOString() };
-        mutateDemo((current) => ({ ...current, messages: [...current.messages, message] }));
+        const createdAt = new Date().toISOString();
+        const message: UiMessage = { id: crypto.randomUUID(), room_id: roomId, conversation_id: conversationId, sender_id: data.currentUserId, content, created_at: createdAt, attachments: files.map((file) => ({ name: file.name, path: `demo/${crypto.randomUUID()}`, mime: file.type, size: file.size })) };
+        mutateDemo((current) => ({ ...current, messages: [...current.messages, message], messageConversations: current.messageConversations.map((conversation) => conversation.id === conversationId ? { ...conversation, updated_at: createdAt } : conversation) }));
       } else if (liveClient) {
-        const { error } = await liveClient.from("messages").insert({ room_id: roomId, sender_id: data.currentUserId, content });
+        const attachments = [] as Array<{ name: string; path: string; mime: string; size: number }>;
+        for (const file of files) {
+          const safeName = file.name.normalize("NFKD").replace(/[^a-zA-Z0-9._-]+/g, "-").replace(/^-+|-+$/g, "").slice(-120) || "allegato";
+          const path = `${conversationId}/${data.currentUserId}/${crypto.randomUUID()}-${safeName}`;
+          const { error: uploadError } = await liveClient.storage.from("message-attachments").upload(path, file, { contentType: file.type, upsert: false });
+          if (uploadError) throw uploadError;
+          uploadedPaths.push(path);
+          attachments.push({ name: file.name.slice(0, 180), path, mime: file.type, size: file.size });
+        }
+        const payload: Record<string, unknown> = { room_id: roomId, sender_id: data.currentUserId, content, attachments };
+        if (messageCenterSchemaAvailable && conversationId) payload.conversation_id = conversationId;
+        const { error } = await liveClient.from("messages").insert(payload);
         if (error) throw error;
       } else {
         throw new Error("Chat non disponibile.");
       }
       lastMessageAt.current = Date.now();
       setChatDraft((current) => current.trim() === content ? "" : current);
+      return true;
     } catch (error) {
+      if (liveClient && uploadedPaths.length) await liveClient.storage.from("message-attachments").remove(uploadedPaths);
       showToast(error instanceof Error ? error.message : "Messaggio non inviato: la bozza e rimasta al suo posto.");
+      return false;
     } finally {
       setActionPending(null);
     }
+  }
+
+  async function openMessageAttachment(path: string) {
+    if (isDemo) { showToast("Allegato dimostrativo: in una stanza reale viene aperto con un link temporaneo protetto."); return; }
+    if (!liveClient) return;
+    const { data: signed, error } = await liveClient.storage.from("message-attachments").createSignedUrl(path, 60);
+    if (error || !signed?.signedUrl) { showToast("Non riesco ad aprire questo allegato."); return; }
+    window.open(signed.signedUrl, "_blank", "noopener,noreferrer");
+  }
+
+  async function createMessageConversation(kind: "private" | "group", title: string, participantIds: string[]) {
+    if (!data || actionPending) return;
+    setActionPending("conversation");
+    try {
+      if (isDemo) {
+        const id = crypto.randomUUID();
+        const now = new Date().toISOString();
+        mutateDemo((current) => ({
+          ...current,
+          messageConversations: [...current.messageConversations, { id, room_id: roomId, kind, title: kind === "group" ? title : null, created_by: current.currentUserId, created_at: now, updated_at: now, archived_at: null }],
+          messageConversationMembers: [...current.messageConversationMembers, ...[current.currentUserId, ...participantIds].map((userId) => ({ conversation_id: id, room_id: roomId, user_id: userId, joined_at: now, last_read_at: null, left_at: null }))],
+        }));
+        setActiveConversationId(id);
+      } else if (liveClient && messageCenterSchemaAvailable) {
+        const { data: conversationId, error } = await liveClient.rpc("create_message_conversation", { p_room_id: roomId, p_kind: kind, p_title: title || null, p_participant_ids: participantIds });
+        if (error || typeof conversationId !== "string") throw error ?? new Error("Conversazione non creata.");
+        setActiveConversationId(conversationId);
+        await refreshRoom();
+      } else throw new Error("Applica la migrazione 0017 per attivare chat private e gruppi.");
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : "Conversazione non creata.");
+    } finally { setActionPending(null); }
   }
 
   async function addTask(event: React.FormEvent) {
@@ -1293,17 +1362,17 @@ export function StudyRoom({ roomId }: { roomId: string }) {
   const connectionState = isDemo ? "connected" : realtime.connectionState;
 
   return (
-    <main className="min-h-screen bg-[#f1f2ed] p-2 sm:p-3 lg:h-screen lg:overflow-hidden">
+    <main data-ui-surface="dark" data-ui-page="room" className="min-h-screen bg-[#f1f2ed] p-2 sm:p-3 lg:h-screen lg:overflow-hidden">
       {toast && <div role="status" className="fixed left-1/2 top-4 z-[70] -translate-x-1/2 rounded-full bg-ink px-4 py-2.5 text-center text-xs font-semibold text-white shadow-soft">{toast}</div>}
 
-      <div className="mx-auto flex min-h-[calc(100vh-1rem)] max-w-[1800px] flex-col overflow-hidden rounded-[1.6rem] border border-black/[0.07] bg-paper shadow-soft lg:h-[calc(100vh-1.5rem)] lg:min-h-0">
-        <header className="flex min-h-[72px] flex-wrap items-center justify-between gap-3 border-b border-black/[0.06] bg-white/80 px-4 py-3 backdrop-blur-xl sm:px-6">
+      <div id="room-scroll-shell" data-ui-room-shell data-testid="room-scroll-shell" className="mx-auto flex min-h-[calc(100vh-1rem)] max-w-[1800px] flex-col overflow-hidden rounded-[1.6rem] border border-black/[0.07] bg-paper shadow-soft lg:h-[calc(100vh-1.5rem)] lg:min-h-0 lg:overflow-y-auto">
+        <header data-ui-room-header className="flex min-h-[72px] flex-wrap items-center justify-between gap-3 border-b border-black/[0.06] bg-white/80 px-4 py-3 backdrop-blur-xl sm:px-6">
           <div className="flex min-w-0 items-center gap-3">
             <Link href="/dashboard" aria-label="Torna alle stanze" className="grid size-9 shrink-0 place-items-center rounded-xl border border-black/[0.07] bg-white text-black/50 hover:text-ink"><ArrowLeft size={17} /></Link>
-            <div className="min-w-0"><p className="text-[9px] font-bold uppercase tracking-[.18em] text-moss-700">Aula condivisa · {data.room.invite_code}</p><h1 className="truncate text-base font-bold sm:text-lg">{data.room.name}</h1></div>
+            <div className="min-w-0"><p className="text-[9px] font-bold uppercase tracking-[.18em] text-moss-700">Aula condivisa · {data.room.invite_code}</p><h1 data-ui-room-title className="truncate text-base font-bold sm:text-lg">{data.room.name}</h1></div>
           </div>
           <div className="flex items-center gap-2">
-            <div className={clsx("hidden items-center gap-2 rounded-full px-3 py-2 text-[11px] font-bold sm:flex", connectionState === "connected" ? "bg-moss-50 text-moss-700" : "bg-amber-50 text-amber-700")}>
+            <div data-ui-sync-badge className={clsx("hidden items-center gap-2 rounded-full px-3 py-2 text-[11px] font-bold sm:flex", connectionState === "connected" ? "bg-moss-50 text-moss-700" : "bg-amber-50 text-amber-700")}>
               {connectionState === "connected" ? <Wifi size={14} /> : <WifiOff size={14} />}{connectionState === "connected" ? "In sincronia" : connectionState === "offline" ? "Offline · salvo in locale" : "Riconnessione…"}
             </div>
             <Link href={`/catalog?roomId=${roomId}`} aria-label="Apri catalogo" className="button-secondary px-3">
@@ -1333,7 +1402,7 @@ export function StudyRoom({ roomId }: { roomId: string }) {
           </div>
         </header>
 
-        <nav aria-label="Strumenti dell’aula" className="border-b border-black/[0.06] bg-white/90 px-2 py-2 sm:px-4">
+        <nav data-ui-room-nav aria-label="Strumenti dell’aula" className="border-b border-black/[0.06] bg-white/90 px-2 py-2 sm:px-4">
           <div className="flex gap-1.5 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {([
               ["courses", "Corsi", <BookOpen key="courses" size={14} />],
@@ -1351,7 +1420,7 @@ export function StudyRoom({ roomId }: { roomId: string }) {
           </div>
         </nav>
 
-        <div className={clsx("relative grid flex-1 bg-black/[0.04] lg:min-h-0", ["courses", "materials", "checklist"].includes(activeTool ?? "") && "lg:grid-cols-[340px_minmax(0,1fr)]", ["participants", "activity", "timer", "chat"].includes(activeTool ?? "") && "lg:grid-cols-[minmax(0,1fr)_340px]")}> 
+        <div className={clsx("relative grid flex-1 bg-black/[0.04]", ["courses", "materials", "checklist"].includes(activeTool ?? "") && "lg:grid-cols-[340px_minmax(0,1fr)]", ["participants", "activity", "timer", "chat"].includes(activeTool ?? "") && "lg:grid-cols-[minmax(0,1fr)_340px]")}>
           <aside id="room-tool-left" aria-label="Pannello strumenti" className={clsx("fixed inset-x-2 bottom-2 top-[9.5rem] z-50 space-y-px overflow-y-auto rounded-2xl border border-black/[0.08] bg-white shadow-2xl lg:static lg:z-auto lg:rounded-none lg:border-0 lg:shadow-none", !["courses", "materials", "checklist"].includes(activeTool ?? "") && "hidden")}>
             <section id="room-tool-courses" className={clsx("bg-white/95 p-5", activeTool !== "courses" && "hidden")}>
               {panelTitle("Corsi", <div className="flex gap-1"><button onClick={addCourse} aria-label="Aggiungi corso" className="grid size-8 place-items-center rounded-lg bg-moss-50 text-moss-700 hover:bg-moss-100"><Plus size={14} /></button><button onClick={() => setActiveTool(null)} aria-label="Chiudi corsi" className="grid size-8 place-items-center rounded-lg bg-black/[0.035] text-black/45"><X size={14} /></button></div>)}
@@ -1394,9 +1463,9 @@ export function StudyRoom({ roomId }: { roomId: string }) {
             </section>
           </aside>
 
-          <section id="room-workspace" aria-label="Area di lavoro" className="min-w-0 space-y-px bg-black/[0.05] lg:overflow-y-auto">
+          <section id="room-workspace" aria-label="Area di lavoro" className="min-w-0 space-y-px bg-black/[0.05]">
             <div className={clsx("min-h-full bg-paper p-4 sm:p-6", (activeTool === "progress" || activeTool === "notes") && "hidden")}>
-              <div className="overflow-hidden rounded-[1.5rem] border border-black/[0.06] bg-white shadow-card">
+              <div data-ui-selected-material className="overflow-hidden rounded-[1.5rem] border border-black/[0.06] bg-white shadow-card">
                 <div className="flex items-start justify-between gap-4 border-b border-black/[0.06] p-5 sm:p-6">
                   <div className="min-w-0"><p className="eyebrow">Materiale selezionato</p><h2 className="mt-2 truncate font-[family-name:var(--font-serif)] text-2xl font-medium sm:text-3xl">{selectedMaterial?.title ?? "Scegli un materiale"}</h2><p className="mt-2 text-xs leading-5 text-black/42">{selectedMaterial?.description ?? selectedCourse?.description ?? "Tutto quello che serve per la prossima sessione."}</p></div>
                 </div>
@@ -1469,11 +1538,7 @@ export function StudyRoom({ roomId }: { roomId: string }) {
               {data.members.some((member) => member.user_id !== data.currentUserId && member.status === "studying") && <p className="mt-4 flex items-center justify-center gap-1.5 text-[9px] font-semibold text-moss-200"><Users size={11} /> Qualcuno sta studiando con te</p>}
             </section>
 
-            <section id="room-tool-chat" className={clsx("min-h-[330px] flex-col bg-white/90 p-5", activeTool === "chat" ? "flex" : "hidden")}>
-              {panelTitle("Chat", <div className="flex items-center gap-2"><span className={clsx("rounded-full px-2 py-0.5 text-[9px] font-bold", unreadCount ? "bg-apricot text-ink" : "bg-moss-100 text-moss-700")}>{unreadCount ? `${unreadCount} non lett${unreadCount === 1 ? "o" : "i"}` : "Live"}</span><button onClick={() => setActiveTool(null)} aria-label="Chiudi chat" className="grid size-8 place-items-center rounded-lg bg-black/[0.035] text-black/45"><X size={14} /></button></div>)}
-              <div className="mt-4 flex-1 space-y-3 overflow-y-auto pr-1">{data.messages.slice(-30).map((message) => { const mine = message.sender_id === data.currentUserId; const author = data.members.find((member) => member.user_id === message.sender_id); return <div key={message.id} className={clsx("flex", mine ? "justify-end" : "justify-start")}><div className={clsx("max-w-[86%] rounded-2xl px-3 py-2.5 text-[11px] leading-4", mine ? "rounded-br-md bg-moss-700 text-white" : "rounded-bl-md bg-black/[0.045] text-black/70")}><p className={clsx("mb-1 text-[8px] font-bold", mine ? "text-white/55" : "text-moss-700")}>{mine ? "Tu" : author?.display_name ?? "Partecipante"} · {new Intl.DateTimeFormat("it-IT", { hour: "2-digit", minute: "2-digit" }).format(new Date(message.created_at))}</p><p><MessageContent content={message.content} /></p></div></div>; })}</div>
-              <form onSubmit={sendMessage} className="mt-4 flex items-end gap-2 rounded-2xl border border-black/[0.07] bg-white p-1.5"><textarea aria-label="Messaggio" rows={1} maxLength={1000} value={chatDraft} onChange={(event) => setChatDraft(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); event.currentTarget.form?.requestSubmit(); } }} placeholder="Scrivi un messaggio…" className="max-h-24 flex-1 resize-none border-0 bg-transparent px-2 py-2 text-[11px] placeholder:text-black/30 focus:ring-0" /><button aria-label="Invia" className="grid size-8 shrink-0 place-items-center rounded-xl bg-moss-700 text-white"><Send size={13} /></button></form>
-            </section>
+            {activeTool === "chat" && <section id="room-tool-chat"><MessageCenter data={data} activeConversationId={activeConversationId} onActiveConversation={setActiveConversationId} draft={chatDraft} onDraft={setChatDraft} unreadTotal={unreadCount} unreadByConversation={conversationUnread} pending={actionPending === "chat" || actionPending === "conversation"} schemaAvailable={messageCenterSchemaAvailable} onSend={sendMessage} onOpenAttachment={openMessageAttachment} onCreate={createMessageConversation} onClose={() => setActiveTool(null)} /></section>}
 
             <section id="room-tool-activity" className={clsx("bg-white/95 p-5", activeTool !== "activity" && "hidden")}>
               {panelTitle("Attività recente", <button onClick={() => setActiveTool(null)} aria-label="Chiudi attività recente" className="grid size-8 place-items-center rounded-lg bg-black/[0.035] text-black/45"><X size={14} /></button>)}

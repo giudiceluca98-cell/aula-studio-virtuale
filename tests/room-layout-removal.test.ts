@@ -24,6 +24,12 @@ describe("layout modulare dell'aula", () => {
     expect(room).not.toContain("xl:grid-cols-[280px_minmax(440px,1fr)_340px]");
   });
 
+  it("fa scorrere via testata e strumenti insieme al contenuto dell’aula", () => {
+    expect(room).toMatch(/id="room-scroll-shell"[^>]+lg:overflow-y-auto/);
+    expect(room).toContain('aria-label="Area di lavoro" className="min-w-0 space-y-px bg-black/[0.05]"');
+    expect(room).not.toContain('aria-label="Area di lavoro" className="min-w-0 space-y-px bg-black/[0.05] lg:overflow-y-auto"');
+  });
+
   it("mantiene una sola sessione timer e integra timer e chat nella barra", () => {
     expect(room.match(/useAutosaveSession\(/g)).toHaveLength(1);
     expect(room).toContain('id="room-tool-timer"');
@@ -31,7 +37,8 @@ describe("layout modulare dell'aula", () => {
     expect(room).not.toContain('id="study-timer-widget"');
     expect(room).not.toContain('id="room-chat-widget"');
     expect(room).toContain('activeTool !== "chat"');
-    expect(room).toContain("setUnreadCount(unread.length)");
+    expect(room).toContain("setUnreadCount(Object.values(counts)");
+    expect(room).toContain("conversationUnread");
     expect(room).toContain("aula:room-ui:");
   });
 

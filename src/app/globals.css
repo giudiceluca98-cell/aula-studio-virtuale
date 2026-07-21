@@ -10,6 +10,24 @@
   --font-serif: Iowan Old Style, Baskerville, "Times New Roman", serif;
 }
 
+:root[data-ui-theme="futuristic-focus"] {
+  color-scheme: dark;
+  --background: #050b12;
+  --foreground: #e8fbff;
+  --future-page: #050b12;
+  --future-page-deep: #02060b;
+  --future-surface: rgba(9, 20, 29, 0.9);
+  --future-surface-strong: rgba(12, 29, 41, 0.96);
+  --future-line: rgba(132, 232, 245, 0.13);
+  --future-ink: #e8fbff;
+  --future-muted: #91a7b3;
+  --future-cyan: #00dff2;
+  --future-cyan-soft: #8df7ff;
+  --future-violet: #7a7cff;
+  --future-reading: #f8faf9;
+  --future-reading-ink: #17201b;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -29,6 +47,29 @@ body {
     var(--background);
   font-family: var(--font-sans);
   text-rendering: optimizeLegibility;
+}
+
+:root[data-ui-theme="futuristic-focus"] body {
+  color: var(--future-ink);
+  background:
+    radial-gradient(circle at 8% 0%, rgba(0, 223, 242, 0.14), transparent 34rem),
+    radial-gradient(circle at 90% 10%, rgba(122, 124, 255, 0.13), transparent 30rem),
+    radial-gradient(circle at 50% 100%, rgba(255, 138, 61, 0.06), transparent 28rem),
+    linear-gradient(180deg, var(--future-page), var(--future-page-deep));
+}
+
+:root[data-ui-theme="futuristic-focus"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.32;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.014) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.014) 1px, transparent 1px);
+  background-size: 46px 46px;
+  mask-image: radial-gradient(circle at 50% 18%, black, transparent 76%);
 }
 
 ::selection {
@@ -73,6 +114,299 @@ select:focus-visible {
   .eyebrow {
     @apply text-[0.68rem] font-bold uppercase tracking-[0.18em] text-moss-700;
   }
+}
+
+/* Futuristica Focus è interamente opt-in: il tema Classico conserva le regole originali. */
+:root[data-ui-theme="futuristic-focus"] .panel,
+:root[data-ui-theme="futuristic-focus"] [data-ui-future-panel] {
+  border-color: var(--future-line);
+  color: var(--future-ink);
+  background:
+    linear-gradient(155deg, rgba(14, 34, 47, 0.94), rgba(6, 18, 27, 0.94));
+  box-shadow: 0 22px 62px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+:root[data-ui-theme="futuristic-focus"] .field {
+  border-color: var(--future-line);
+  color: var(--future-ink);
+  background: rgba(3, 13, 21, 0.82);
+}
+
+:root[data-ui-theme="futuristic-focus"] .field::placeholder {
+  color: rgba(207, 239, 244, 0.34);
+}
+
+:root[data-ui-theme="futuristic-focus"] .button-primary {
+  border: 1px solid rgba(125, 235, 255, 0.27);
+  color: #efffff;
+  background: linear-gradient(135deg, rgba(9, 126, 145, 0.95), rgba(80, 79, 190, 0.92));
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25), 0 0 24px rgba(0, 223, 242, 0.1);
+}
+
+:root[data-ui-theme="futuristic-focus"] .button-primary:hover {
+  background: linear-gradient(135deg, rgba(12, 151, 171, 0.98), rgba(94, 91, 213, 0.96));
+}
+
+:root[data-ui-theme="futuristic-focus"] .button-secondary {
+  border-color: var(--future-line);
+  color: var(--future-ink);
+  background: linear-gradient(180deg, rgba(15, 35, 48, 0.94), rgba(7, 20, 29, 0.94));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+:root[data-ui-theme="futuristic-focus"] .button-secondary:hover {
+  border-color: rgba(125, 235, 255, 0.3);
+  background: rgba(0, 223, 242, 0.08);
+}
+
+:root[data-ui-theme="futuristic-focus"] .eyebrow {
+  color: var(--future-cyan-soft);
+  text-shadow: 0 0 14px rgba(0, 223, 242, 0.2);
+}
+
+:root[data-ui-theme="futuristic-focus"] [data-ui-surface="dark"] {
+  color: var(--future-ink);
+}
+
+:root[data-ui-theme="futuristic-focus"] [data-ui-surface="dark"] [class*="text-black/"],
+:root[data-ui-theme="futuristic-focus"] [data-ui-surface="dark"] [class*="text-black\\/"] {
+  color: var(--future-muted) !important;
+}
+
+:root[data-ui-theme="futuristic-focus"] [data-ui-surface="dark"] [class*="border-black/"],
+:root[data-ui-theme="futuristic-focus"] [data-ui-surface="dark"] [class*="border-black\\/"] {
+  border-color: var(--future-line) !important;
+}
+
+:root[data-ui-theme="futuristic-focus"] [data-ui-surface="dark"] [class*="bg-black/"],
+:root[data-ui-theme="futuristic-focus"] [data-ui-surface="dark"] [class*="bg-black\\/"] {
+  background-color: rgba(125, 235, 255, 0.045) !important;
+}
+
+:root[data-ui-theme="futuristic-focus"] [data-ui-surface="dark"] [class*="bg-white"],
+:root[data-ui-theme="futuristic-focus"] [data-ui-surface="dark"] .bg-paper {
+  background-color: rgba(8, 23, 33, 0.9) !important;
+}
+
+:root[data-ui-theme="futuristic-focus"] [data-ui-surface="dark"] .text-ink {
+  color: var(--future-ink) !important;
+}
+
+:root[data-ui-theme="futuristic-focus"] [data-ui-room-shell] {
+  border-color: rgba(125, 235, 255, 0.18) !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(0, 223, 242, 0.08), transparent 28rem),
+    linear-gradient(160deg, rgba(7, 20, 29, 0.98), rgba(3, 11, 18, 0.99)) !important;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.42), 0 0 42px rgba(0, 223, 242, 0.06) !important;
+}
+
+:root[data-ui-theme="futuristic-focus"] [data-ui-room-header] {
+  border-color: var(--future-line) !important;
+  background:
+    linear-gradient(110deg, rgba(14, 34, 48, 0.97), rgba(5, 18, 28, 0.98) 62%, rgba(27, 27, 62, 0.93)) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045), 0 14px 34px rgba(0, 0, 0, 0.22);
+}
+
+:root[data-ui-theme="futuristic-focus"] [data-ui-room-title] {
+  color: transparent;
+  background: linear-gradient(180deg, #f4feff 5%, #9fc2cb 48%, #f4feff 82%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  text-shadow: 0 0 20px rgba(0, 223, 242, 0.12);
+}
+
+:root[data-ui-theme="futuristic-focus"] [data-ui-sync-badge] {
+  border: 1px solid rgba(90, 244, 205, 0.17);
+  color: #8df7d1 !important;
+  background: rgba(34, 164, 137, 0.09) !important;
+}
+
+:root[data-ui-theme="futuristic-focus"] [data-ui-room-nav] {
+  border-color: var(--future-line) !important;
+  background: rgba(5, 17, 26, 0.93) !important;
+  backdrop-filter: blur(18px) saturate(140%);
+}
+
+:root[data-ui-theme="futuristic-focus"] [data-ui-room-nav] button {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border-color: transparent !important;
+  color: var(--future-muted) !important;
+  background: rgba(255, 255, 255, 0.025) !important;
+}
+
+:root[data-ui-theme="futuristic-focus"] [data-ui-room-nav] button[aria-expanded="true"] {
+  color: #edffff !important;
+  background: linear-gradient(135deg, rgba(0, 223, 242, 0.2), rgba(122, 124, 255, 0.18)) !important;
+  box-shadow: inset 0 0 0 1px rgba(125, 235, 255, 0.22), 0 0 18px rgba(0, 223, 242, 0.08);
+}
+
+:root[data-ui-theme="futuristic-focus"] [data-ui-room-nav] button[aria-expanded="true"]::before {
+  content: "";
+  position: absolute;
+  inset: -90%;
+  z-index: -1;
+  opacity: 0.7;
+  background:
+    radial-gradient(circle at 35% 36%, rgba(255, 255, 255, 0.22) 0 2px, transparent 3px),
+    radial-gradient(circle at 62% 58%, rgba(141, 247, 255, 0.35) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 50% 50%, rgba(0, 223, 242, 0.2), transparent 35%);
+  animation: future-liquid 8s linear infinite;
+}
+
+:root[data-ui-theme="futuristic-focus"] [data-ui-selected-material] {
+  position: relative;
+  isolation: isolate;
+  color: var(--future-ink);
+  background: linear-gradient(160deg, rgba(8, 24, 35, 0.98), rgba(3, 13, 21, 0.98)) !important;
+}
+
+:root[data-ui-theme="futuristic-focus"] [data-ui-selected-material]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.72;
+  background:
+    radial-gradient(circle at 16% 20%, rgba(0, 223, 242, 0.13), transparent 28%),
+    radial-gradient(circle at 84% 70%, rgba(122, 124, 255, 0.12), transparent 26%);
+  animation: future-material-pulse 9s ease-in-out infinite alternate;
+}
+
+:root[data-ui-theme="futuristic-focus"] [data-ui-lesson-workspace] {
+  color: var(--future-ink);
+  background: rgba(4, 14, 22, 0.76) !important;
+}
+
+:root[data-ui-theme="futuristic-focus"] [data-ui-reading-surface] {
+  color-scheme: light;
+  color: var(--future-reading-ink) !important;
+  border: 1px solid rgba(152, 187, 181, 0.24);
+  background: var(--future-reading) !important;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.24) !important;
+}
+
+:root[data-ui-theme="futuristic-focus"] [data-ui-reading-surface] .text-ink,
+:root[data-ui-theme="futuristic-focus"] [data-ui-reading-surface] [class*="text-black/"],
+:root[data-ui-theme="futuristic-focus"] [data-ui-reading-surface] [class*="text-black\\/"] {
+  color: var(--future-reading-ink) !important;
+}
+
+:root[data-ui-theme="futuristic-focus"] [data-ui-reading-surface] [class*="bg-white"] {
+  background-color: #fff !important;
+}
+
+:root[data-ui-theme="futuristic-focus"] [data-ui-theme-card][aria-pressed="true"] {
+  border-color: rgba(125, 235, 255, 0.46) !important;
+  box-shadow: 0 0 0 2px rgba(0, 223, 242, 0.12), 0 18px 42px rgba(0, 0, 0, 0.22);
+}
+
+.theme-cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 99999;
+  width: 22px;
+  height: 22px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms ease;
+  will-change: transform, opacity;
+}
+
+.theme-cursor.is-visible { opacity: 1; }
+.theme-cursor-ring,
+.theme-cursor-core,
+.theme-cursor-burst { position: absolute; border-radius: 50%; transform-origin: 50% 50%; }
+.theme-cursor-ring { inset: -1px; border: 1px solid rgba(111, 243, 255, 0.74); background: radial-gradient(circle, rgba(111, 243, 255, 0.2), transparent 72%); box-shadow: 0 0 13px rgba(111, 243, 255, 0.34), inset 0 0 9px rgba(111, 243, 255, 0.1); transition: transform 140ms ease; }
+.theme-cursor-core { inset: 4px; background: radial-gradient(circle at 31% 27%, rgba(255, 255, 255, 0.34), transparent 27%), radial-gradient(circle, #252525, #000); box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.16), 0 0 10px rgba(0, 0, 0, 0.35); transition: transform 120ms ease; }
+.theme-cursor-burst { inset: -3px; opacity: 0; border: 1px solid rgba(111, 243, 255, 0.68); }
+.theme-cursor.is-pressed .theme-cursor-ring { transform: scale(0.74); }
+.theme-cursor.is-pressed .theme-cursor-core { transform: scale(0.38); }
+.theme-cursor.is-burst .theme-cursor-ring { animation: future-cursor-flash 340ms ease; }
+.theme-cursor.is-burst .theme-cursor-core { animation: future-cursor-core 340ms ease; }
+.theme-cursor.is-burst .theme-cursor-burst { animation: future-cursor-burst 360ms ease; }
+
+@media (hover: hover) and (pointer: fine) {
+  :root[data-ui-theme="futuristic-focus"],
+  :root[data-ui-theme="futuristic-focus"] a,
+  :root[data-ui-theme="futuristic-focus"] button,
+  :root[data-ui-theme="futuristic-focus"] input,
+  :root[data-ui-theme="futuristic-focus"] textarea,
+  :root[data-ui-theme="futuristic-focus"] select,
+  :root[data-ui-theme="futuristic-focus"] label { cursor: none !important; }
+}
+
+@keyframes future-liquid { to { transform: rotate(360deg); } }
+@keyframes future-material-pulse { from { transform: scale(1); opacity: 0.56; } to { transform: scale(1.06); opacity: 0.88; } }
+@keyframes future-cursor-flash { 45% { transform: scale(1.18); } }
+@keyframes future-cursor-core { 0% { transform: scale(0.38); } 45% { transform: scale(1.18); } }
+@keyframes future-cursor-burst { from { opacity: 0.72; transform: scale(0.84); } to { opacity: 0; transform: scale(1.95); } }
+
+.eve-audio-panel {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.eve-audio-panel.is-detached {
+  position: fixed;
+  z-index: 60;
+  top: 5.5rem;
+  right: 1rem;
+  width: min(19rem, calc(100vw - 2rem));
+  max-height: calc(100vh - 7rem);
+  margin: 0;
+  overflow-y: auto;
+  padding: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(18px);
+}
+
+.eve-audio-panel.is-detached.is-collapsed { width: 12rem; }
+
+:root[data-ui-theme="futuristic-focus"] .eve-audio-panel { border-color: var(--future-line); }
+:root[data-ui-theme="futuristic-focus"] .eve-audio-panel.is-detached { color: var(--future-ink); border-color: rgba(125, 235, 255, 0.2); background: rgba(7, 21, 31, 0.97); box-shadow: 0 24px 70px rgba(0, 0, 0, 0.42), 0 0 24px rgba(0, 223, 242, 0.08); }
+:root[data-ui-theme="futuristic-focus"] .eve-audio-panel.is-detached [class*="text-black/"] { color: var(--future-muted) !important; }
+:root[data-ui-theme="futuristic-focus"] .eve-audio-panel.is-detached select { color: var(--future-ink); border-color: var(--future-line); background: #07151f; }
+
+.eve-frequency {
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  overflow: hidden;
+  border-radius: 9px;
+  background: rgba(0, 0, 0, 0.035);
+}
+
+.eve-frequency span {
+  width: 2px;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #00dff2, #7a7cff);
+  opacity: 0.45;
+}
+
+.eve-frequency.is-speaking span {
+  opacity: 0.92;
+  animation: eve-frequency-bar 720ms ease-in-out infinite alternate;
+}
+
+.eve-frequency.is-speaking span:nth-child(3n) { animation-duration: 520ms; }
+.eve-frequency.is-speaking span:nth-child(4n) { animation-duration: 880ms; }
+.eve-frequency.is-speaking span:nth-child(5n) { animation-duration: 640ms; }
+
+@keyframes eve-frequency-bar { from { height: 4px; } to { height: 23px; } }
+
+@media (max-width: 720px) {
+  .eve-audio-panel.is-detached { top: auto; right: 0.75rem; bottom: 4.75rem; width: calc(100vw - 1.5rem); max-height: 62vh; }
 }
 
 @keyframes breathe {
