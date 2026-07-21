@@ -3,6 +3,7 @@ import lesson03Content from "./programming-zero-lesson-0-3-official-content.json
 import lesson04Content from "./programming-zero-lesson-0-4-official-content.json";
 import lesson05Content from "./programming-zero-lesson-0-5-official-content.json";
 import lesson06Content from "./programming-zero-lesson-0-6-official-content.json";
+import lesson07Content from "./programming-zero-lesson-0-7-official-content.json";
 
 export const PROGRAMMING_ZERO_PATH_ID = "programming-zero";
 // The existing native material keeps its identifier so rooms and saved progress remain connected.
@@ -44,7 +45,7 @@ interface OfficialExercise {
   autoverification?: string;
 }
 
-const officialLessons = [...officialContent.lessons, lesson03Content, lesson04Content, lesson05Content, lesson06Content];
+const officialLessons = [...officialContent.lessons, lesson03Content, lesson04Content, lesson05Content, lesson06Content, lesson07Content];
 const chapters = officialLessons.flatMap((lesson) => lesson.chapters);
 const allExercises = chapters.flatMap((chapter) => [chapter.exercises.guided, ...chapter.exercises.autonomous]);
 const [firstGuidedExercise, ...remainingExercises] = allExercises;
@@ -148,10 +149,10 @@ export const programmingLesson = {
   id: PROGRAMMING_LESSON_ID,
   pathId: PROGRAMMING_ZERO_PATH_ID,
   moduleId: "programming-module-0",
-  title: "Programmazione da Zero · Lezioni 0.1–0.6",
+  title: "Programmazione da Zero · Lezioni 0.1–0.7",
   lessonTitles: officialLessons.map((lesson) => `Lezione ${lesson.id} · ${lesson.title}`),
   level: "Lettore senza conoscenze pregresse",
-  estimatedMinutes: 540,
+  estimatedMinutes: 630,
   description: officialLessons.map((lesson) => lesson.summary[0]).join(" "),
   objectives: officialLessons.flatMap((lesson) => lesson.objectives),
   modules: programmingModules,
