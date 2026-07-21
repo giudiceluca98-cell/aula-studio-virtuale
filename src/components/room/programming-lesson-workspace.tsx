@@ -20,8 +20,20 @@ interface PublicLesson {
 type EveAdvice = { title: string; message: string; sectionIds: string[] };
 type Tab = "lesson" | "practice" | "quiz" | "project" | "glossary";
 type LessonNavigationItem = PublicLesson["modules"][number]["lessons"][number];
+type QuizQuestion = PublicLesson["quiz"][number];
+type LessonSection = PublicLesson["sections"][number];
 
 function eventId() { return crypto.randomUUID(); }
+
+function splitSectionBlocksAroundQuiz(section: LessonSection) {
+  const quizStart = section.blocks.findIndex((block) => block.type === "heading" && block.text?.trim().toLocaleLowerCase("it") === "quiz");
+  if (quizStart < 0) return { beforeQuiz: section.blocks, afterQuiz: [] as LessonSection["blocks"][number][] };
+  const nextContent = section.blocks.findIndex((block, index) => index > quizStart && block.type === "heading" && ["glossario del capitolo", "riepilogo", "criteri di completamento"].includes(block.text?.trim().toLocaleLowerCase("it") ?? ""));
+  return {
+    beforeQuiz: section.blocks.slice(0, quizStart),
+    afterQuiz: nextContent >= 0 ? section.blocks.slice(nextContent) : [],
+  };
+}
 
 export function ProgrammingLessonWorkspace({ roomId, materialId, lesson, initialState, initialEve }: {
   roomId: string; materialId: string; lesson: PublicLesson; initialState: LessonProgressState; initialEve: EveAdvice;
@@ -40,6 +52,8 @@ export function ProgrammingLessonWorkspace({ roomId, materialId, lesson, initial
   const lessonSections = selectedLesson ? selectedLesson.sectionIds.map((id) => lesson.sections.find((item) => item.id === id)).filter((item): item is PublicLesson["sections"][number] => Boolean(item)) : [];
   const section = lesson.sections[sectionIndex] ?? lessonSections[0] ?? lesson.sections[0];
   const sectionPosition = Math.max(0, lessonSections.findIndex((item) => item.id === section.id));
+  const sectionBlocks = splitSectionBlocksAroundQuiz(section);
+  const chapterQuestions = lesson.quiz.filter((question) => question.reviewSectionId === section.id);
   const endpoint = `/api/rooms/${roomId}/materials/${materialId}/lesson`;
 
   async function act(payload: Record<string, unknown>) {
@@ -100,7 +114,9 @@ export function ProgrammingLessonWorkspace({ roomId, materialId, lesson, initial
         {error && <div role="alert" className="mb-4 rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-800">{error}</div>}
         {tab === "lesson" && <section aria-labelledby={`section-${section.id}`} className="mx-auto max-w-3xl rounded-2xl bg-white p-5 shadow-sm sm:p-8">
           <p className="eyebrow">Lezione {selectedLesson?.id} · Sezione {sectionPosition + 1} di {lessonSections.length}</p><h3 id={`section-${section.id}`} className="mt-2 font-[family-name:var(--font-serif)] text-2xl font-bold text-ink">{section.title}</h3>
-          <div className="mt-5 space-y-4 font-[family-name:var(--font-serif)] text-[1.02rem] leading-8 text-black/72">{section.blocks.map((block, index) => <LessonBlock key={index} block={block} />)}</div>
+          <div className="mt-5 space-y-4 font-[family-name:var(--font-serif)] text-[1.02rem] leading-8 text-black/72">{sectionBlocks.beforeQuiz.map((block, index) => <LessonBlock key={index} block={block} />)}</div>
+          {chapterQuestions.length > 0 && <InlineChapterQuiz questions={chapterQuestions} progress={progress} saving={saving} act={act} />}
+          {sectionBlocks.afterQuiz.length > 0 && <div className="mt-6 space-y-4 font-[family-name:var(--font-serif)] text-[1.02rem] leading-8 text-black/72">{sectionBlocks.afterQuiz.map((block, index) => <LessonBlock key={index} block={block} />)}</div>}
           <div className="mt-7 flex flex-wrap items-center justify-between gap-2 border-t border-black/[0.06] pt-4"><button disabled={sectionPosition === 0} onClick={() => moveInsideLesson(-1)} className="button-secondary disabled:opacity-30"><ChevronLeft size={13} /> Indietro</button><button disabled={saving || progress.completedSectionIds.includes(section.id)} onClick={() => void act({ type: "lesson_section_completed", eventId: eventId(), sectionId: section.id })} className="button-secondary disabled:opacity-55"><Check size={13} />{progress.completedSectionIds.includes(section.id) ? "Segnata come compresa" : "Ho compreso questa sezione"}</button><button disabled={sectionPosition === lessonSections.length - 1} onClick={() => moveInsideLesson(1)} className="button-primary disabled:opacity-30">Avanti <ChevronRight size={13} /></button></div>
           <p className="mt-3 text-center text-[9px] text-black/35">Scorrere non completa la lezione: contano comprensione, esercizi, quiz, progetto e autovalutazione.</p>
         </section>}
@@ -190,16 +206,48 @@ function PracticePanel({ lesson, selectedLesson, progress, saving, act }: { less
   </section>;
 }
 
-function QuizPanel({ lesson, selectedLesson, progress, saving, act }: { lesson: PublicLesson; selectedLesson: LessonNavigationItem; progress: LessonProgressState; saving: boolean; act: (payload: Record<string, unknown>) => Promise<unknown> }) {
+function QuizQuestionList({ questions, progress, saving, act, revealExplanation }: {
+  questions: readonly QuizQuestion[];
+  progress: LessonProgressState;
+  saving: boolean;
+  act: (payload: Record<string, unknown>) => Promise<unknown>;
+  revealExplanation: boolean;
+}) {
   const [startedAt, setStartedAt] = useState(() => Date.now());
-  useEffect(() => { if (!progress.quizStarted) void act({ type: "quiz_started", eventId: eventId() }); setStartedAt(Date.now()); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  return <div className="space-y-6">{questions.map((question, index) => {
+    const answer = progress.quizAnswers[question.id];
+    return <fieldset key={question.id} data-question-id={question.id} className="border-t border-black/[0.06] pt-5">
+      <legend className="text-sm font-bold"><span className="mr-2 text-moss-700">{index + 1}.</span>{question.prompt}</legend>
+      <div className="mt-3 grid gap-2">{question.choices.map((choice, choiceIndex) => <button key={choice} type="button" disabled={saving} aria-pressed={answer?.choice === choiceIndex} onClick={() => void act({ type: "quiz_answer_submitted", eventId: eventId(), questionId: question.id, choice: choiceIndex, elapsedSeconds: Math.round((Date.now() - startedAt) / 1000) }).then(() => setStartedAt(Date.now()))} className={`rounded-xl border p-3 text-left text-xs leading-5 ${answer?.choice === choiceIndex ? answer.correct ? "border-moss-400 bg-moss-50" : "border-red-300 bg-red-50" : "border-black/[0.08] hover:bg-black/[0.02]"}`}>{choice}</button>)}</div>
+      {answer && <div role="status" className={`mt-3 rounded-lg p-3 text-[10px] leading-5 ${answer.correct ? "bg-moss-50 text-moss-900" : "bg-amber-50 text-amber-950"}`}><strong>{answer.correct ? "Corretto." : "Da ripassare."}</strong>{revealExplanation ? <> {answer.explanation}</> : <> La risposta è stata salvata; puoi riprovare senza vedere in anticipo la soluzione.</>}<span className="ml-2 opacity-60">Tentativi: {answer.attempts} · tempo: {answer.elapsedSeconds}s</span></div>}
+    </fieldset>;
+  })}</div>;
+}
+
+function InlineChapterQuiz({ questions, progress, saving, act }: {
+  questions: readonly QuizQuestion[];
+  progress: LessonProgressState;
+  saving: boolean;
+  act: (payload: Record<string, unknown>) => Promise<unknown>;
+}) {
+  const answered = questions.filter((question) => progress.quizAnswers[question.id]);
+  const correct = answered.filter((question) => progress.quizAnswers[question.id]?.correct).length;
+  return <section data-testid="inline-chapter-quiz" className="mt-8 rounded-2xl border border-moss-200 bg-[#f5f8f2] p-4 sm:p-6">
+    <div className="flex flex-wrap items-end justify-between gap-3"><div><p className="eyebrow">Mini-verifica del capitolo</p><h4 className="mt-1 text-lg font-bold text-ink">Controlla ciò che hai appena imparato</h4><p className="mt-1 text-xs leading-5 text-black/50">Scegli una risposta: la soluzione non viene mostrata prima del tentativo.</p></div><p className="text-xs font-bold text-moss-800">{answered.length}/{questions.length} risposte · {correct} corrette</p></div>
+    <div className="mt-5"><QuizQuestionList questions={questions} progress={progress} saving={saving} act={act} revealExplanation={false} /></div>
+    {answered.length === questions.length && <p className="mt-5 rounded-xl bg-white p-3 text-xs font-bold text-moss-900">Mini-verifica completata. Potrai ripetere queste domande insieme a tutte le altre nella scheda “Quiz”.</p>}
+  </section>;
+}
+
+function QuizPanel({ lesson, selectedLesson, progress, saving, act }: { lesson: PublicLesson; selectedLesson: LessonNavigationItem; progress: LessonProgressState; saving: boolean; act: (payload: Record<string, unknown>) => Promise<unknown> }) {
+  useEffect(() => { if (!progress.quizStarted) void act({ type: "quiz_started", eventId: eventId() }); }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const questions = lesson.quiz.filter((question) => selectedLesson.quizIds.includes(question.id));
   const answered = questions.filter((question) => progress.quizAnswers[question.id]);
   const correct = answered.filter((question) => progress.quizAnswers[question.id]?.correct).length;
   const localScore = answered.length ? Math.round((correct / answered.length) * 100) : null;
   const allAnswered = questions.every((question) => progress.quizAnswers[question.id]);
   const allCourseAnswered = lesson.quiz.every((question) => progress.quizAnswers[question.id]);
-  return <section className="mx-auto max-w-3xl rounded-2xl bg-white p-5 shadow-sm sm:p-8"><div className="flex items-end justify-between gap-3"><div><p className="eyebrow">Lezione {selectedLesson.id} · Verifica concettuale</p><h3 className="mt-2 text-xl font-bold">Quiz della lezione</h3><p className="mt-1 text-xs text-black/45">{questions.length} domande collegate esclusivamente a questa lezione.</p></div><div className="text-right"><p className="text-2xl font-bold text-moss-800">{localScore ?? "—"}%</p><p className="text-[9px] text-black/35">{answered.length}/{questions.length} risposte</p></div></div><div className="mt-6 space-y-6">{questions.map((question, index) => { const answer = progress.quizAnswers[question.id]; return <fieldset key={question.id} data-question-id={question.id} className="border-t border-black/[0.06] pt-5"><legend className="text-sm font-bold"><span className="mr-2 text-moss-700">{index + 1}.</span>{question.prompt}</legend><div className="mt-3 grid gap-2">{question.choices.map((choice, choiceIndex) => <button key={choice} disabled={saving} onClick={() => void act({ type: "quiz_answer_submitted", eventId: eventId(), questionId: question.id, choice: choiceIndex, elapsedSeconds: Math.round((Date.now() - startedAt) / 1000) }).then(() => setStartedAt(Date.now()))} className={`rounded-xl border p-3 text-left text-xs leading-5 ${answer?.choice === choiceIndex ? answer.correct ? "border-moss-400 bg-moss-50" : "border-red-300 bg-red-50" : "border-black/[0.08] hover:bg-black/[0.02]"}`}>{choice}</button>)}</div>{answer && <div className={`mt-3 rounded-lg p-3 text-[10px] leading-5 ${answer.correct ? "bg-moss-50 text-moss-900" : "bg-amber-50 text-amber-950"}`}><strong>{answer.correct ? "Corretto." : "Da ripassare."}</strong> {answer.explanation}<span className="ml-2 opacity-60">Tentativi: {answer.attempts} · tempo: {answer.elapsedSeconds}s</span></div>}</fieldset>; })}</div>{allAnswered && !allCourseAnswered && <div className="mt-6 rounded-xl bg-moss-50 p-4 text-xs font-bold text-moss-900">Risposte della lezione {selectedLesson.id} salvate. Scegli la lezione successiva dall’indice per continuare il quiz del modulo.</div>}{allCourseAnswered && <button disabled={saving} onClick={() => void act({ type: "quiz_completed", eventId: eventId() })} className="button-primary mt-6 w-full justify-center disabled:opacity-40">Concludi il quiz del modulo e calcola il risultato</button>}{progress.quizCompleted && (progress.quizScore ?? 0) < lesson.completion.minimumQuizScore && <p className="mt-3 rounded-lg bg-amber-50 p-3 text-xs leading-5 text-amber-950">Eve indica i capitoli associati alle risposte da ripassare; puoi cambiare le risposte e concludere nuovamente i quiz.</p>}</section>;
+  return <section className="mx-auto max-w-3xl rounded-2xl bg-white p-5 shadow-sm sm:p-8"><div className="flex items-end justify-between gap-3"><div><p className="eyebrow">Lezione {selectedLesson.id} · Verifica finale</p><h3 className="mt-2 text-xl font-bold">Quiz completo della lezione</h3><p className="mt-1 text-xs text-black/45">Tutte le {questions.length} domande dei capitoli sono riunite qui. Puoi ripetere anche quelle già affrontate durante la lettura.</p></div><div className="text-right"><p className="text-2xl font-bold text-moss-800">{localScore ?? "—"}%</p><p className="text-[9px] text-black/35">{answered.length}/{questions.length} risposte</p></div></div><div className="mt-6"><QuizQuestionList questions={questions} progress={progress} saving={saving} act={act} revealExplanation /></div>{allAnswered && !allCourseAnswered && <div className="mt-6 rounded-xl bg-moss-50 p-4 text-xs font-bold text-moss-900">Verifica finale della lezione {selectedLesson.id} completata e salvata. Puoi modificare le risposte oppure scegliere la lezione successiva.</div>}{allCourseAnswered && <button disabled={saving} onClick={() => void act({ type: "quiz_completed", eventId: eventId() })} className="button-primary mt-6 w-full justify-center disabled:opacity-40">Concludi il quiz del modulo e calcola il risultato</button>}{progress.quizCompleted && (progress.quizScore ?? 0) < lesson.completion.minimumQuizScore && <p className="mt-3 rounded-lg bg-amber-50 p-3 text-xs leading-5 text-amber-950">Eve indica i capitoli associati alle risposte da ripassare; puoi cambiare le risposte e concludere nuovamente i quiz.</p>}</section>;
 }
 
 function ProjectPanel({ lesson, progress, saving, act }: { lesson: PublicLesson; progress: LessonProgressState; saving: boolean; act: (payload: Record<string, unknown>) => Promise<unknown> }) {
