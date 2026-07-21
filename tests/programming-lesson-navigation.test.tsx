@@ -79,4 +79,27 @@ describe("navigazione separata di moduli e lezioni", () => {
     await clickAndSettle(screen.getByRole("button", { name: "Glossario" }));
     expect(screen.getByText("Lezione 0.3 · 2 voci")).toBeInTheDocument();
   });
+
+  it("ridimensiona soltanto il testo e torna rapidamente all’inizio dell’aula", async () => {
+    const shell = document.createElement("div");
+    shell.id = "room-scroll-shell";
+    const scrollTo = vi.fn();
+    const scrollIntoView = vi.fn();
+    Object.defineProperty(shell, "scrollTo", { value: scrollTo });
+    Object.defineProperty(shell, "scrollIntoView", { value: scrollIntoView });
+    document.body.appendChild(shell);
+
+    render(<ProgrammingLessonWorkspace roomId="room-test" materialId="material-test" lesson={lightweightLessonFixture()} initialState={{ ...emptyLessonProgress }} initialEve={initialEve} />, { container: shell });
+    await waitFor(() => expect(fetch).toHaveBeenCalled());
+
+    const content = screen.getByTestId("lesson-reading-content");
+    expect(content).toHaveAttribute("data-reading-zoom", "100");
+    fireEvent.click(screen.getByRole("button", { name: "Aumenta dimensione testo" }));
+    expect(content).toHaveAttribute("data-reading-zoom", "110");
+    expect(screen.getByLabelText("Dimensione testo")).toHaveTextContent("110%");
+
+    fireEvent.click(screen.getByRole("button", { name: "Torna all’inizio dell’aula" }));
+    expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: "smooth" });
+    expect(scrollIntoView).toHaveBeenCalledWith({ behavior: "smooth", block: "start" });
+  });
 });

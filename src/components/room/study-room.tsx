@@ -1296,7 +1296,7 @@ export function StudyRoom({ roomId }: { roomId: string }) {
     <main className="min-h-screen bg-[#f1f2ed] p-2 sm:p-3 lg:h-screen lg:overflow-hidden">
       {toast && <div role="status" className="fixed left-1/2 top-4 z-[70] -translate-x-1/2 rounded-full bg-ink px-4 py-2.5 text-center text-xs font-semibold text-white shadow-soft">{toast}</div>}
 
-      <div className="mx-auto flex min-h-[calc(100vh-1rem)] max-w-[1800px] flex-col overflow-hidden rounded-[1.6rem] border border-black/[0.07] bg-paper shadow-soft lg:h-[calc(100vh-1.5rem)] lg:min-h-0">
+      <div id="room-scroll-shell" data-testid="room-scroll-shell" className="mx-auto flex min-h-[calc(100vh-1rem)] max-w-[1800px] flex-col overflow-hidden rounded-[1.6rem] border border-black/[0.07] bg-paper shadow-soft lg:h-[calc(100vh-1.5rem)] lg:min-h-0 lg:overflow-y-auto">
         <header className="flex min-h-[72px] flex-wrap items-center justify-between gap-3 border-b border-black/[0.06] bg-white/80 px-4 py-3 backdrop-blur-xl sm:px-6">
           <div className="flex min-w-0 items-center gap-3">
             <Link href="/dashboard" aria-label="Torna alle stanze" className="grid size-9 shrink-0 place-items-center rounded-xl border border-black/[0.07] bg-white text-black/50 hover:text-ink"><ArrowLeft size={17} /></Link>
@@ -1351,7 +1351,7 @@ export function StudyRoom({ roomId }: { roomId: string }) {
           </div>
         </nav>
 
-        <div className={clsx("relative grid flex-1 bg-black/[0.04] lg:min-h-0", ["courses", "materials", "checklist"].includes(activeTool ?? "") && "lg:grid-cols-[340px_minmax(0,1fr)]", ["participants", "activity", "timer", "chat"].includes(activeTool ?? "") && "lg:grid-cols-[minmax(0,1fr)_340px]")}> 
+        <div className={clsx("relative grid flex-1 bg-black/[0.04]", ["courses", "materials", "checklist"].includes(activeTool ?? "") && "lg:grid-cols-[340px_minmax(0,1fr)]", ["participants", "activity", "timer", "chat"].includes(activeTool ?? "") && "lg:grid-cols-[minmax(0,1fr)_340px]")}>
           <aside id="room-tool-left" aria-label="Pannello strumenti" className={clsx("fixed inset-x-2 bottom-2 top-[9.5rem] z-50 space-y-px overflow-y-auto rounded-2xl border border-black/[0.08] bg-white shadow-2xl lg:static lg:z-auto lg:rounded-none lg:border-0 lg:shadow-none", !["courses", "materials", "checklist"].includes(activeTool ?? "") && "hidden")}>
             <section id="room-tool-courses" className={clsx("bg-white/95 p-5", activeTool !== "courses" && "hidden")}>
               {panelTitle("Corsi", <div className="flex gap-1"><button onClick={addCourse} aria-label="Aggiungi corso" className="grid size-8 place-items-center rounded-lg bg-moss-50 text-moss-700 hover:bg-moss-100"><Plus size={14} /></button><button onClick={() => setActiveTool(null)} aria-label="Chiudi corsi" className="grid size-8 place-items-center rounded-lg bg-black/[0.035] text-black/45"><X size={14} /></button></div>)}
@@ -1394,7 +1394,7 @@ export function StudyRoom({ roomId }: { roomId: string }) {
             </section>
           </aside>
 
-          <section id="room-workspace" aria-label="Area di lavoro" className="min-w-0 space-y-px bg-black/[0.05] lg:overflow-y-auto">
+          <section id="room-workspace" aria-label="Area di lavoro" className="min-w-0 space-y-px bg-black/[0.05]">
             <div className={clsx("min-h-full bg-paper p-4 sm:p-6", (activeTool === "progress" || activeTool === "notes") && "hidden")}>
               <div className="overflow-hidden rounded-[1.5rem] border border-black/[0.06] bg-white shadow-card">
                 <div className="flex items-start justify-between gap-4 border-b border-black/[0.06] p-5 sm:p-6">

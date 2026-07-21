@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { BookOpen, Check, ChevronLeft, ChevronRight, CircleHelp, ClipboardCheck, Lightbulb, Loader2, Play, RotateCcw, Send, Sparkles, Terminal } from "lucide-react";
+import { ArrowUp, BookOpen, Check, ChevronLeft, ChevronRight, CircleHelp, ClipboardCheck, Lightbulb, Loader2, Minus, Play, Plus, RotateCcw, Send, Sparkles, Terminal } from "lucide-react";
 import type { LessonProgressState } from "@/lib/programming-lesson-progress";
 import { usePythonRunner } from "@/hooks/use-python-runner";
 
@@ -46,6 +46,7 @@ export function ProgrammingLessonWorkspace({ roomId, materialId, lesson, initial
   const initialSectionIndex = Math.max(0, lesson.sections.findIndex((section) => section.id === initialState.currentSectionId));
   const [sectionIndex, setSectionIndex] = useState(initialSectionIndex);
   const [selectedLessonId, setSelectedLessonId] = useState(() => lesson.sections[initialSectionIndex]?.lessonId ?? lesson.modules[0]?.lessons[0]?.id ?? "");
+  const [readingZoom, setReadingZoom] = useState(100);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const openedId = useRef(eventId());
@@ -93,6 +94,16 @@ export function ProgrammingLessonWorkspace({ roomId, materialId, lesson, initial
     openSection(lesson.sections.findIndex((item) => item.id === target.id));
   }
 
+  function scrollRoomToTop() {
+    const shell = document.getElementById("room-scroll-shell");
+    if (shell) {
+      shell.scrollTo({ top: 0, behavior: "smooth" });
+      shell.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
   const tabs: Array<{ id: Tab; label: string; icon: typeof BookOpen }> = [
     { id: "lesson", label: "Lezione", icon: BookOpen }, { id: "practice", label: "Esercizi", icon: ClipboardCheck },
     { id: "quiz", label: "Quiz", icon: CircleHelp }, { id: "project", label: "Python Project", icon: Terminal },
@@ -115,10 +126,10 @@ export function ProgrammingLessonWorkspace({ roomId, materialId, lesson, initial
       <main className="min-w-0 p-4 sm:p-6">
         {error && <div role="alert" className="mb-4 rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-800">{error}</div>}
         {tab === "lesson" && <section aria-labelledby={`section-${section.id}`} className="mx-auto max-w-3xl rounded-2xl bg-white p-5 shadow-sm sm:p-8">
-          <p className="eyebrow">Lezione {selectedLesson?.id} · Sezione {sectionPosition + 1} di {lessonSections.length}</p><h3 id={`section-${section.id}`} className="mt-2 font-[family-name:var(--font-serif)] text-2xl font-bold text-ink">{section.title}</h3>
-          <div className="mt-5 space-y-4 font-[family-name:var(--font-serif)] text-[1.02rem] leading-8 text-black/72">{sectionBlocks.beforeQuiz.map((block, index) => <LessonBlock key={index} block={block} />)}</div>
+          <p className="eyebrow">Lezione {selectedLesson?.id} · Sezione {sectionPosition + 1} di {lessonSections.length}</p><h3 id={`section-${section.id}`} className="mt-2 font-[family-name:var(--font-serif)] font-bold text-ink" style={{ fontSize: `${1.5 * readingZoom / 100}rem`, lineHeight: 1.3 }}>{section.title}</h3>
+          <div data-testid="lesson-reading-content" data-reading-zoom={readingZoom} className="mt-5 space-y-4 font-[family-name:var(--font-serif)] text-black/72">{sectionBlocks.beforeQuiz.map((block, index) => <LessonBlock key={index} block={block} fontScale={readingZoom / 100} />)}</div>
           {chapterQuestions.length > 0 && <InlineChapterQuiz questions={chapterQuestions} progress={progress} saving={saving} act={act} />}
-          {sectionBlocks.afterQuiz.length > 0 && <div className="mt-6 space-y-4 font-[family-name:var(--font-serif)] text-[1.02rem] leading-8 text-black/72">{sectionBlocks.afterQuiz.map((block, index) => <LessonBlock key={index} block={block} />)}</div>}
+          {sectionBlocks.afterQuiz.length > 0 && <div className="mt-6 space-y-4 font-[family-name:var(--font-serif)] text-black/72">{sectionBlocks.afterQuiz.map((block, index) => <LessonBlock key={index} block={block} fontScale={readingZoom / 100} />)}</div>}
           <div className="mt-7 flex flex-wrap items-center justify-between gap-2 border-t border-black/[0.06] pt-4"><button disabled={sectionPosition === 0} onClick={() => moveInsideLesson(-1)} className="button-secondary disabled:opacity-30"><ChevronLeft size={13} /> Indietro</button><button disabled={saving || progress.completedSectionIds.includes(section.id)} onClick={() => void act({ type: "lesson_section_completed", eventId: eventId(), sectionId: section.id })} className="button-secondary disabled:opacity-55"><Check size={13} />{progress.completedSectionIds.includes(section.id) ? "Segnata come compresa" : "Ho compreso questa sezione"}</button><button disabled={sectionPosition === lessonSections.length - 1} onClick={() => moveInsideLesson(1)} className="button-primary disabled:opacity-30">Avanti <ChevronRight size={13} /></button></div>
           <p className="mt-3 text-center text-[9px] text-black/35">Scorrere non completa la lezione: contano comprensione, esercizi, quiz, progetto e autovalutazione.</p>
         </section>}
@@ -130,6 +141,13 @@ export function ProgrammingLessonWorkspace({ roomId, materialId, lesson, initial
 
       <aside className="border-t border-black/[0.06] bg-[#e9efe8] p-4 lg:border-l lg:border-t-0"><div className="sticky top-4 rounded-2xl bg-white p-4 shadow-sm"><span className="grid size-9 place-items-center rounded-xl bg-moss-100 text-moss-800"><Sparkles size={17} /></span><p className="mt-3 text-[9px] font-black uppercase tracking-[0.16em] text-moss-700">Eve · tutor attivo</p><h3 className="mt-1 text-sm font-bold">{eve.title}</h3><p className="mt-2 text-xs leading-5 text-black/58">{eve.message}</p>{eve.sectionIds.length > 0 && <div className="mt-3 flex flex-wrap gap-1">{eve.sectionIds.map((id) => { const index = lesson.sections.findIndex((item) => item.id === id); return index >= 0 ? <button key={id} onClick={() => openSection(index)} className="rounded-md bg-moss-50 px-2 py-1 text-[9px] font-bold text-moss-800">Ripassa {lesson.sections[index].title}</button> : null; })}</div>}<button onClick={() => void act({ type: "review_requested", eventId: eventId() })} className="mt-4 inline-flex items-center gap-1 text-[10px] font-bold text-moss-800"><RotateCcw size={11} /> Aggiorna consiglio</button><div className="mt-4 border-t border-black/[0.06] pt-3 text-[9px] leading-4 text-black/38">Eve usa solo progressi, esercizi, quiz e progetto di questa lezione. Non legge chat, chiamate, note private o dati degli altri partecipanti.</div></div></aside>
     </div>
+    {tab === "lesson" && <div data-testid="lesson-reading-controls" className="fixed bottom-3 right-3 z-40 flex items-center gap-1 rounded-2xl border border-black/10 bg-white/95 p-1.5 shadow-xl backdrop-blur sm:bottom-5 sm:right-5">
+      <button type="button" aria-label="Riduci dimensione testo" disabled={readingZoom <= 80} onClick={() => setReadingZoom((value) => Math.max(80, value - 10))} className="grid size-9 place-items-center rounded-xl text-black/55 hover:bg-black/[0.05] disabled:opacity-25"><Minus size={15} /></button>
+      <output aria-live="polite" aria-label="Dimensione testo" className="min-w-10 text-center text-[10px] font-bold text-moss-800">{readingZoom}%</output>
+      <button type="button" aria-label="Aumenta dimensione testo" disabled={readingZoom >= 130} onClick={() => setReadingZoom((value) => Math.min(130, value + 10))} className="grid size-9 place-items-center rounded-xl text-black/55 hover:bg-black/[0.05] disabled:opacity-25"><Plus size={15} /></button>
+      <span aria-hidden="true" className="mx-0.5 h-6 w-px bg-black/10" />
+      <button type="button" aria-label="Torna all’inizio dell’aula" onClick={scrollRoomToTop} className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-moss-700 px-3 text-[10px] font-bold text-white hover:bg-moss-800"><ArrowUp size={14} /><span className="hidden sm:inline">Torna su</span></button>
+    </div>}
   </div>;
 }
 
@@ -173,13 +191,13 @@ function CourseLessonIndex({ lesson, selectedLessonId, sectionIndex, tab, progre
   </nav>;
 }
 
-function LessonBlock({ block }: { block: PublicLesson["sections"][number]["blocks"][number] }) {
-  if (block.type === "heading") return <h4 className="pt-3 text-lg font-bold text-ink">{block.text}</h4>;
-  if (block.type === "list-item") return <div className="flex gap-3 rounded-lg bg-[#f7f5ee] px-4 py-2 text-sm leading-6"><span className="text-moss-600">•</span><span>{block.text}</span></div>;
-  if (block.type === "callout") return <div className="flex gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-950"><Lightbulb className="mt-1 shrink-0" size={15} /><p>{block.text}</p></div>;
-  if (block.type === "diagram") return <pre className="overflow-x-auto whitespace-pre rounded-xl bg-[#17211d] p-4 font-mono text-xs leading-6 text-[#e6f0e6]">{block.text}</pre>;
-  if (block.type === "table" && block.rows?.length) return <div className="overflow-x-auto rounded-xl border border-black/[0.08]"><table className="min-w-full border-collapse text-left text-xs"><tbody>{block.rows.map((row, rowIndex) => <tr key={rowIndex} className={rowIndex === 0 ? "bg-moss-50 font-bold text-moss-900" : "border-t border-black/[0.06]"}>{row.map((cell, cellIndex) => <td key={cellIndex} className="min-w-32 whitespace-pre-line px-3 py-2 align-top leading-5">{cell}</td>)}</tr>)}</tbody></table></div>;
-  return <p className="whitespace-pre-line">{block.text}</p>;
+function LessonBlock({ block, fontScale }: { block: PublicLesson["sections"][number]["blocks"][number]; fontScale: number }) {
+  if (block.type === "heading") return <h4 className="pt-3 font-bold text-ink" style={{ fontSize: `${1.125 * fontScale}rem`, lineHeight: 1.55 }}>{block.text}</h4>;
+  if (block.type === "list-item") return <div className="flex gap-3 rounded-lg bg-[#f7f5ee] px-4 py-2" style={{ fontSize: `${0.875 * fontScale}rem`, lineHeight: 1.7 }}><span className="text-moss-600">•</span><span>{block.text}</span></div>;
+  if (block.type === "callout") return <div className="flex gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 text-amber-950" style={{ fontSize: `${0.875 * fontScale}rem`, lineHeight: 1.7 }}><Lightbulb className="mt-1 shrink-0" size={15} /><p>{block.text}</p></div>;
+  if (block.type === "diagram") return <pre className="overflow-x-auto whitespace-pre rounded-xl bg-[#17211d] p-4 font-mono text-[#e6f0e6]" style={{ fontSize: `${0.75 * fontScale}rem`, lineHeight: 2 }}>{block.text}</pre>;
+  if (block.type === "table" && block.rows?.length) return <div className="overflow-x-auto rounded-xl border border-black/[0.08]"><table className="min-w-full border-collapse text-left" style={{ fontSize: `${0.75 * fontScale}rem` }}><tbody>{block.rows.map((row, rowIndex) => <tr key={rowIndex} className={rowIndex === 0 ? "bg-moss-50 font-bold text-moss-900" : "border-t border-black/[0.06]"}>{row.map((cell, cellIndex) => <td key={cellIndex} className="min-w-32 whitespace-pre-line px-3 py-2 align-top leading-5">{cell}</td>)}</tr>)}</tbody></table></div>;
+  return <p className="whitespace-pre-line" style={{ fontSize: `${1.02 * fontScale}rem`, lineHeight: 1.95 }}>{block.text}</p>;
 }
 
 function ResponseBox({ label, button, done, saving, onSubmit }: { label: string; button: string; done: boolean; saving: boolean; onSubmit: (response: string) => Promise<unknown> }) {
