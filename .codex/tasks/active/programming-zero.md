@@ -1,8 +1,8 @@
 # Completamento Programmazione da zero
 
 Stato: in corso
-Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 1.8 corrente
-Branch corrente: `codex/programming-zero-lesson-1-8`
+Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 1.9 corrente
+Branch corrente: `codex/programming-zero-lesson-1-9`
 Ultima integrazione completata: Lezione 0.9 e relativo Python Project, [PR #26](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/26)
 Proposte in integrazione: Lezione 1.1, [PR #17](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/17), e Lezione 1.2, [PR #20](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/20)
 Pacchetto: `programming`
@@ -259,6 +259,12 @@ Contenuti convertiti:
 - indice editoriale del Modulo 1 usato come controllo, senza caricarlo nel repository.
 
 Verifiche: test mirato 21/21, suite completa 151/151, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
+
+## Estensione in corso · Lezione 1.9
+
+Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_1.9_Laboratorio_e_valutazione_finale.docx`. Il DOCX non verrà caricato nel repository; l'indice editoriale del Modulo 1 viene usato soltanto per validare ordine, titolo e copertura.
+
+File riservati: artefatto 1.9, `src/lib/catalog/subjects/programming-zero-lesson.ts`, `src/lib/programming-lesson-progress.ts`, `tests/programming-subject.test.ts`. File condivisi prenotati: nessuno. Dipendenza: PR #36; branch e Draft PR impilati sulla lezione 1.8.
 
 ## Estensione in revisione · Lezione 1.8
 
