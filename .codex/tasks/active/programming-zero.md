@@ -1,8 +1,8 @@
 # Completamento Programmazione da zero
 
 Stato: in corso
-Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 2.7 corrente
-Branch corrente: `codex/programming-zero-lesson-2-7`
+Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 2.8 corrente
+Branch corrente: `codex/programming-zero-lesson-2-8`
 Ultima integrazione completata: Lezione 0.9 e relativo Python Project, [PR #26](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/26)
 Proposte in integrazione: Lezione 1.1, [PR #17](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/17), e Lezione 1.2, [PR #20](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/20)
 Pacchetto: `programming`
@@ -273,6 +273,14 @@ Verifiche: test mirato 21/21, suite completa 151/151, typecheck e build superati
 Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_2.3_Sintassi_rientri_righe_vuote_commenti.docx`. Il DOCX non verrà caricato. File riservati: artefatto 2.3, aggregatore, progressi e test. Dipendenza: PR #39.
 
 Contenuti convertiti: 11 sezioni, 914 blocchi, 60 esercizi, 30 quiz e 60 voci di glossario; laboratorio e criteri finali conservati. SHA-256 `d0f99a4174d942baf6404e8c4834006e5d2d5e43989ca36f454cc2ce9d08906e`.
+
+Verifiche: test 151/151, typecheck e build superati; lint solo warning preesistente.
+
+## Estensione in revisione · Lezione 2.8
+
+Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_2.8_Progettare_eseguire_revisionare_programmi_sequenziali.docx`. Il DOCX non verrà caricato. File riservati: artefatto 2.8, aggregatore, progressi e test. Dipendenza: PR #45. Indice e registro conclusivi del Modulo 2 sono stati letti integralmente come controllo editoriale e non vengono caricati.
+
+Contenuti convertiti: 11 sezioni, 914 blocchi, 60 esercizi, 30 quiz e 60 voci di glossario; laboratorio e criteri finali conservati. SHA-256 `726d7940392fb03e4e6061edc2031ac660de82d52b190b3a5325e2affecec0e2`.
 
 Verifiche: test 151/151, typecheck e build superati; lint solo warning preesistente.
 
