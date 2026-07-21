@@ -141,7 +141,7 @@ Contenuti convertiti:
 - impronta SHA-256 `cac28baa626f64d6e79c10b47784704031cec4f4e8d27f26b04f25dd8773bb9b`, senza includere il DOCX;
 - indice editoriale conclusivo letto integralmente e usato per validare ordine, copertura e titolo da Catalogo; indice non caricato nel repository.
 
-Verifiche dichiarate dall'autore: test mirato 21/21, suite completa 138/138, typecheck e build superati; nuova verifica completa prevista nella PR #26 dopo l'integrazione del Python Project.
+Verifiche della PR #26: test mirati 29/29, suite completa 144/144, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 
 ## Estensione in revisione · Lezione 0.8
 

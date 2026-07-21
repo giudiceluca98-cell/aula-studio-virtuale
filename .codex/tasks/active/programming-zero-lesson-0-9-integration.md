@@ -1,6 +1,6 @@
 # Integrazione Programmazione da zero · Lezione 0.9
 
-Stato: in corso
+Stato: in revisione
 Assegnazione: Codex
 Branch: `agent/integrate-programming-lesson-0-9`
 Proposta sorgente: [PR #16](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/16)
@@ -41,3 +41,12 @@ Nessuno. Non è prevista alcuna modifica ai file condivisi o all’area di lavor
 - lint;
 - build;
 - verifica online della lezione e del Python Project.
+
+## Risultati prima del merge
+
+- test mirati: 29/29 superati;
+- suite completa: 144/144 superati;
+- typecheck: superato;
+- lint: nessun errore, solo il warning preesistente in `src/lib/vocabulary/mastery.ts`;
+- build di produzione: superata;
+- Draft PR di integrazione: [#26](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/26).

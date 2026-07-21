@@ -339,6 +339,47 @@ else:
     print("Attenzione: il gruppo B presenta il tasso di errore maggiore")`,
     expectedResult: "Il programma deve mostrare il tasso globale, i due tipi di errore per ciascun gruppo e segnalare quale gruppo presenta il tasso complessivo maggiore.",
   },
+  {
+    id: "programming-zero-python-project-0-9",
+    lessonId: "0.9",
+    title: "Profilo di padronanza, non solo media",
+    difficulty: "Verifica finale guidata",
+    goal: "Calcolare il risultato complessivo e il profilo per dimensione, individuando le lacune che richiedono recupero anche quando la soglia totale è superata.",
+    concepts: ["soglie", "profilo per dimensione", "logica booleana", "recupero mirato", "evidenze"],
+    instructions: [
+      "Leggi i quattro punteggi e verifica prima a mano il totale su 64.",
+      "Esegui il programma: il totale supera 45, ma due dimensioni restano sotto la soglia di 8.",
+      "Modifica i punteggi per ottenere prima un profilo completamente superato e poi un profilo con una sola lacuna.",
+      "Scegli le due dimensioni più deboli e aggiungi due righe stampate con un'attività di recupero e la prova equivalente che useresti per verificarla.",
+    ],
+    starterCode: `problema_e_dati = 16
+logica_e_algoritmo = 16
+sistema_e_ciclo_di_vita = 7
+impatto_e_responsabilita = 7
+
+totale = problema_e_dati + logica_e_algoritmo + sistema_e_ciclo_di_vita + impatto_e_responsabilita
+soglia_totale = 45
+soglia_dimensione = 8
+
+totale_superato = totale >= soglia_totale
+problema_superato = problema_e_dati >= soglia_dimensione
+logica_superata = logica_e_algoritmo >= soglia_dimensione
+sistema_superato = sistema_e_ciclo_di_vita >= soglia_dimensione
+impatto_superato = impatto_e_responsabilita >= soglia_dimensione
+
+print("Punteggio totale:", totale, "/ 64")
+print("Soglia totale superata:", totale_superato)
+print("Problema e dati:", problema_e_dati, "- soglia superata:", problema_superato)
+print("Logica e algoritmo:", logica_e_algoritmo, "- soglia superata:", logica_superata)
+print("Sistema e ciclo di vita:", sistema_e_ciclo_di_vita, "- soglia superata:", sistema_superato)
+print("Impatto e responsabilità:", impatto_e_responsabilita, "- soglia superata:", impatto_superato)
+
+if totale_superato and problema_superato and logica_superata and sistema_superato and impatto_superato:
+    print("Esito: profilo completo, pronto per il Modulo 1")
+else:
+    print("Esito: serve recupero mirato per le dimensioni sotto soglia")`,
+    expectedResult: "Il programma deve mostrare il totale, l'esito di ogni dimensione e richiedere recupero quando almeno una soglia specifica non è raggiunta.",
+  },
 ] as const;
 
 if (!firstGuidedExercise) throw new Error("Le fonti ufficiali non contengono esercizi guidati");
