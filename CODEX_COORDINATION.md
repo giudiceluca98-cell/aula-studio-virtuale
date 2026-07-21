@@ -12,6 +12,7 @@ Questo file registra incarichi temporanei, proprietà dei file e dipendenze tra 
 | Navigazione moduli e lezioni separate | Codex | `codex/lesson-module-navigation` | Completato | aggregatore, area di lavoro e test dedicati | `src/components/room/programming-lesson-workspace.tsx` (area protetta) | [PR #6](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/6) | 2026-07-21 |
 | Quiz interattivi dentro i capitoli | Codex | `codex/inline-chapter-quiz` | Completato | area di lavoro e test dedicati | `src/components/room/programming-lesson-workspace.tsx` (area protetta) | [PR #7](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/7) | 2026-07-21 |
 | Python Project guidati | Codex | `codex/guided-python-projects` | Completato | runner, aggregatore, progressi, area di lavoro, API e test | `src/components/room/programming-lesson-workspace.tsx` (area protetta) | [PR #8](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/8) | 2026-07-21 |
+| Python Project Lezioni 0.4 e 0.5 | Codex | `agent/python-project-lesson-0-4` | In corso | aggregatore, progressi e test Python Project | `src/components/room/programming-lesson-workspace.tsx` (modifica minima al solo Python Project) | Da aprire | 2026-07-21 |
 | Matematica da zero | Qualunque Codex, non ancora assegnato | `codex/mathematics-zero` | Disponibile | Vedere scheda attività | Da dichiarare alla presa in carico | — | 2026-07-21 |
 
 Stati ammessi: `Disponibile`, `In corso`, `In revisione`, `Bloccato`, `Completato`.
