@@ -15,7 +15,7 @@ export function ThemeSelector() {
   return <div className="grid gap-3 sm:grid-cols-2" role="radiogroup" aria-label="Tema dell’interfaccia">
     {options.map((option) => {
       const selected = theme === option.id;
-      return <button key={option.id} type="button" role="radio" aria-checked={selected} aria-pressed={selected} data-ui-theme-card onClick={() => setTheme(option.id)} className="group overflow-hidden rounded-2xl border border-black/[0.08] bg-white p-3 text-left transition hover:-translate-y-0.5 hover:border-moss-300">
+      return <button key={option.id} type="button" role="radio" aria-checked={selected} data-ui-theme-card onClick={() => setTheme(option.id)} className="group overflow-hidden rounded-2xl border border-black/[0.08] bg-white p-3 text-left transition hover:-translate-y-0.5 hover:border-moss-300">
         <span className={`relative block h-24 overflow-hidden rounded-xl border ${option.preview === "future" ? "border-cyan-200/20 bg-[#050b12]" : "border-black/[0.06] bg-[#f7f6f1]"}`}>
           <span className={`absolute inset-x-2 top-2 flex h-5 items-center gap-1.5 rounded-md px-2 ${option.preview === "future" ? "bg-[#102532]" : "bg-white"}`}><span className={`size-2 rounded-full ${option.preview === "future" ? "bg-cyan-300" : "bg-moss-600"}`} /><span className={`h-1.5 w-12 rounded-full ${option.preview === "future" ? "bg-cyan-100/45" : "bg-black/15"}`} /></span>
           <span className={`absolute bottom-2 left-2 top-9 w-10 rounded-md ${option.preview === "future" ? "bg-[#0b1c28]" : "bg-white"}`} />

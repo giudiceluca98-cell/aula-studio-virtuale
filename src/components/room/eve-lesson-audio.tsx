@@ -17,6 +17,14 @@ function sectionText(section: AudioSection) {
   return [section.title, ...section.blocks.flatMap((block) => block.rows?.flat().filter(Boolean) ?? (block.text ? [block.text] : []))].join(". ");
 }
 
+function SpeechTranscript({ text, charIndex }: { text: string; charIndex: number }) {
+  if (!text) return null;
+  const start = Math.max(0, charIndex - 100);
+  const excerpt = text.slice(start, Math.min(text.length, charIndex + 260));
+  const parts = excerpt.split(/(\s+)/);
+  return <p aria-live="off" className="mt-3 max-h-24 overflow-y-auto rounded-xl bg-black/[0.035] p-3 text-[9px] leading-5 text-black/48">{start > 0 && "…"}{parts.map((part, index) => { const from = start + parts.slice(0, index).reduce((length, previous) => length + previous.length, 0); const active = Boolean(part.trim()) && charIndex >= from && charIndex < from + part.length; return <span key={`${from}-${index}`} className={active ? "rounded bg-cyan-200 px-0.5 font-bold text-cyan-950" : ""}>{part}</span>; })}{start + excerpt.length < text.length && "…"}</p>;
+}
+
 export function EveLessonAudio({ sections, currentIndex, onNavigate }: { sections: readonly AudioSection[]; currentIndex: number; onNavigate: (index: number) => void }) {
   const [supported, setSupported] = useState(true);
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
@@ -28,6 +36,8 @@ export function EveLessonAudio({ sections, currentIndex, onNavigate }: { section
   const [paused, setPaused] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [detached, setDetached] = useState(false);
+  const [spokenText, setSpokenText] = useState("");
+  const [spokenCharIndex, setSpokenCharIndex] = useState(0);
   const queueRef = useRef<number[]>([]);
   const queuePositionRef = useRef(0);
   const cancelledRef = useRef(false);
@@ -60,7 +70,7 @@ export function EveLessonAudio({ sections, currentIndex, onNavigate }: { section
 
   const selectedLabel = useMemo(() => selected.length ? `${selected.length} pagine selezionate` : "Nessuna pagina selezionata", [selected.length]);
 
-  const speakQueueIndex = useCallback((position: number) => {
+  function speakQueueIndex(position: number) {
     if (!("speechSynthesis" in window)) return;
     const index = queueRef.current[position];
     const section = sections[index];
@@ -68,10 +78,14 @@ export function EveLessonAudio({ sections, currentIndex, onNavigate }: { section
     queuePositionRef.current = position;
     cancelledRef.current = false;
     onNavigate(index);
-    const utterance = new SpeechSynthesisUtterance(sectionText(section));
+    const text = sectionText(section);
+    setSpokenText(text);
+    setSpokenCharIndex(0);
+    const utterance = new SpeechSynthesisUtterance(text);
     utterance.rate = rate;
     utterance.lang = "it-IT";
     utterance.voice = voices.find((voice) => voice.voiceURI === voiceUri) ?? null;
+    utterance.onboundary = (event) => { if (event.name === "word" || !event.name) setSpokenCharIndex(event.charIndex); };
     utterance.onend = () => {
       if (cancelledRef.current) return;
       const next = position + 1;
@@ -82,7 +96,7 @@ export function EveLessonAudio({ sections, currentIndex, onNavigate }: { section
     window.speechSynthesis.speak(utterance);
     setPlaying(true);
     setPaused(false);
-  }, [onNavigate, rate, sections, voiceUri, voices]);
+  }
 
   function start() {
     if (!supported) return;
@@ -132,6 +146,7 @@ export function EveLessonAudio({ sections, currentIndex, onNavigate }: { section
       <label className="mt-3 block text-[8px] font-bold text-black/45">Contenuto da leggere<select aria-label="Contenuto Audio-lezione" value={scope} onChange={(event) => setScope(event.target.value as AudioScope)} className="mt-1 w-full rounded-lg border-black/10 bg-white py-1.5 pl-2 pr-6 text-[9px]"><option value="current">Pagina corrente</option><option value="selected">Pagine scelte</option><option value="lesson">Lezione completa</option></select></label>
       {scope === "selected" && <div className="mt-2 rounded-xl border border-black/[0.06] p-2"><div className="flex items-center justify-between gap-2"><span className="truncate text-[8px] text-black/40">{selectedLabel}</span><span className="flex gap-1"><button type="button" onClick={() => setSelected(sections.map((_, index) => index).filter((index) => index >= currentIndex))} className="rounded-md bg-black/[0.04] px-1.5 py-1 text-[7px] font-bold">Da qui</button><button type="button" onClick={() => setSelected(sections.map((_, index) => index))} className="rounded-md bg-black/[0.04] px-1.5 py-1 text-[7px] font-bold">Tutte</button><button type="button" onClick={() => setSelected([])} className="rounded-md bg-black/[0.04] px-1.5 py-1 text-[7px] font-bold">Azzera</button></span></div><div className="mt-2 grid grid-cols-6 gap-1">{sections.map((section, index) => <button type="button" key={section.id} aria-label={`Pagina ${index + 1}: ${section.title}`} aria-pressed={selected.includes(index)} onClick={() => toggleSelected(index)} className={`grid h-7 place-items-center rounded-md text-[8px] font-black ${selected.includes(index) ? "bg-moss-700 text-white" : "bg-black/[0.04] text-black/45"}`}>{index + 1}</button>)}</div></div>}
       <div className={`eve-frequency mt-3${playing && !paused ? " is-speaking" : ""}`} aria-hidden="true">{Array.from({ length: 25 }, (_, index) => <span key={index} style={{ animationDelay: `${index * -37}ms` }} />)}</div>
+      <SpeechTranscript text={spokenText} charIndex={spokenCharIndex} />
       <div className="mt-3 grid grid-cols-5 gap-1"><button type="button" aria-label="Pagina precedente" onClick={() => move(-1)} disabled={currentIndex === 0} className="grid h-8 place-items-center rounded-lg bg-black/[0.04] disabled:opacity-25"><ChevronLeft size={13} /></button><button type="button" aria-label={paused || !playing ? "Avvia lettura" : "Pausa lettura"} onClick={playing && !paused ? pause : start} disabled={!supported} className="grid h-8 place-items-center rounded-lg bg-moss-700 text-white disabled:opacity-35">{playing && !paused ? <Pause size={13} /> : <Play size={13} />}</button><button type="button" aria-label="Ferma lettura" onClick={stop} disabled={!playing} className="grid h-8 place-items-center rounded-lg bg-black/[0.04] disabled:opacity-25"><Square size={12} /></button><button type="button" aria-label="Pagina successiva" onClick={() => move(1)} disabled={currentIndex >= sections.length - 1} className="grid h-8 place-items-center rounded-lg bg-black/[0.04] disabled:opacity-25"><ChevronRight size={13} /></button><output aria-live="polite" className="grid h-8 place-items-center rounded-lg bg-black/[0.04] text-[8px] font-bold">{currentIndex + 1}/{sections.length}</output></div>
     </>}
   </section>;

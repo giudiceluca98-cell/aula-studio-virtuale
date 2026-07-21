@@ -5,6 +5,7 @@ import { ArrowUp, BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight, Chevr
 import type { LessonProgressState } from "@/lib/programming-lesson-progress";
 import { usePythonRunner } from "@/hooks/use-python-runner";
 import { EveLessonAudio } from "@/components/room/eve-lesson-audio";
+import { ExerciseVoiceAssistant } from "@/components/room/exercise-voice-assistant";
 
 interface PublicLesson {
   id: string; title: string; level: string; estimatedMinutes: number; description: string; objectives: readonly string[]; lessonTitles: readonly string[];
@@ -251,13 +252,15 @@ function PracticePanel({ lesson, selectedLesson, progress, saving, act }: { less
       const primaryGuided = exercise.id === lesson.guidedExercise.id;
       const done = primaryGuided ? progress.guidedExercise === "completed" : progress.independentExerciseIds.includes(exercise.id);
       const verification = "autoverification" in exercise ? exercise.autoverification : lesson.guidedExercise.requiredCases.join(" ");
+      const hints = "hints" in exercise ? exercise.hints : [];
       return <article key={exercise.id} data-exercise-id={exercise.id} className="rounded-2xl bg-white p-5 shadow-sm sm:p-7">
         <p className="eyebrow">{exercise.kind === "guided" ? "Esercizio guidato" : "Esercizio autonomo"} {index + 1}</p>
         <h3 className="mt-2 text-base font-bold">{exercise.title}</h3>
         <p className="mt-2 whitespace-pre-line text-xs leading-6 text-black/60">{exercise.prompt}</p>
-        {verification && <p className="mt-3 text-[10px] font-bold leading-5 text-black/55">{verification}</p>}
+        {done && verification && <div className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 p-3"><p className="text-[9px] font-black uppercase tracking-wide text-emerald-800">Criteri ufficiali di confronto</p><p className="mt-1 text-[10px] font-bold leading-5 text-emerald-950/70">{verification}</p></div>}
         {primaryGuided && progress.guidedExercise === "not_started" && <button onClick={() => void act({ type: "guided_exercise_started", eventId: eventId() })} className="button-secondary mt-4">Inizia esercizio</button>}
         <ResponseBox label={primaryGuided ? "La tua procedura" : "La tua risposta"} button={primaryGuided ? "Registra risposta" : "Completa esercizio"} done={done} saving={saving} onSubmit={(response) => primaryGuided ? act({ type: "guided_exercise_completed", eventId: eventId(), response }) : act({ type: "independent_exercise_completed", eventId: eventId(), exerciseId: exercise.id, response })} />
+        <ExerciseVoiceAssistant title={exercise.title} prompt={exercise.prompt} hints={hints} completed={done} comparison={verification ?? ""} />
       </article>;
     })}
   </section>;

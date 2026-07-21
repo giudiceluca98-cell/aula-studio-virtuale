@@ -32,8 +32,15 @@ Integrare in modo incrementale il documento master del 22 luglio 2026 senza sost
 ## File condivisi prenotati
 
 - `src/components/room/study-room.tsx`
+- `src/components/room/message-center.tsx`
+- `src/components/room/exercise-voice-assistant.tsx`
+- `src/components/room/demo-data.ts`
+- `src/hooks/use-room-realtime.ts`
+- `src/lib/types.ts`
+- `supabase/migrations/0017_message_center.sql`
+- test dedicati al centro messaggi e all’assistente esercizi
 
-La prenotazione prosegue quella già attiva sul ramo dipendente dei controlli di lettura. Il tema non modifica API, schema Supabase, autorizzazioni, routing o dati condivisi.
+La prenotazione prosegue quella già attiva sul ramo dipendente dei controlli di lettura. Per la fase Centro messaggi è prenotata anche la nuova migrazione incrementale `0017_message_center.sql`; non vengono riscritte migrazioni già applicate.
 
 ## Fasi
 
@@ -68,8 +75,24 @@ La prenotazione prosegue quella già attiva sul ramo dipendente dei controlli di
 - lint: superato senza errori;
 - build di produzione: superata.
 
-## Fasi ancora separate
+## Seconda fase completata
 
-- centro messaggi con conversazioni private/gruppi e allegati realtime: richiede modello dati e policy RLS incrementali;
-- assistente vocale dentro ogni esercizio, suggerimenti progressivi e soluzione bloccata: richiede dati editoriali di soluzione senza inventare contenuti;
-- classificazione ed evidenziazione parola-per-parola durante la sintesi vocale.
+- sostituita la chat laterale con un centro messaggi responsive e minimizzabile;
+- aggiunte Lobby permanente, chat private e gruppi con ricerca, filtri, ordinamento, separatori giornalieri, non letti per conversazione, emoji e pannello partecipanti;
+- aggiunta la migrazione incrementale `0017_message_center.sql` con RLS, RPC sicure, Realtime, backfill dei messaggi storici e contenitore privato per gli allegati;
+- aggiunti allegati fino a 5 file da 10 MB, validazione MIME, percorsi sicuri e apertura tramite URL firmati temporanei;
+- mantenuta una modalità compatibile: prima dell’applicazione della migrazione la Lobby continua a funzionare, mentre private, gruppi e allegati restano disabilitati;
+- aggiunto Eve negli esercizi con lettura consegna/selezione, voci e velocità condivise, pausa/stop, suggerimenti editoriali progressivi e confronto sbloccato solo dopo una risposta valida;
+- aggiunta l’evidenziazione progressiva del parlato sia nelle lezioni sia negli esercizi, con fallback nei browser privi dell’evento vocale parola-per-parola.
+
+## Limite editoriale esplicito
+
+- I modelli di soluzione completi non vengono inventati: finché una lezione non contiene una soluzione editoriale ufficiale, Eve mostra e legge dopo il completamento soltanto i criteri di verifica già presenti.
+
+## Verifiche della seconda fase
+
+- suite completa: 29 file, 165/165 test superati;
+- test finali mirati voce/tema: 6/6 superati;
+- typecheck: superato;
+- lint: superato senza errori (resta un warning preesistente e non correlato in `src/lib/vocabulary/mastery.ts`);
+- build di produzione finale: superata.

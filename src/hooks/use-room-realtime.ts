@@ -22,6 +22,8 @@ export const DEFAULT_ROOM_REALTIME_TABLES: readonly RealtimeTable[] = [
   "task_assignees",
   "messages",
   "message_reads",
+  "message_conversations",
+  "message_conversation_members",
   "shared_notes",
   "activity_events",
   "material_reader_progress",
@@ -55,6 +57,13 @@ function rowIdentity(row: Record<string, unknown> | undefined): string {
     (typeof row.user_id === "string" || typeof row.user_id === "number")
   ) {
     return `message:${String(messageId)}:${String(row.user_id)}`;
+  }
+  const conversationId = row.conversation_id;
+  if (
+    (typeof conversationId === "string" || typeof conversationId === "number") &&
+    (typeof row.user_id === "string" || typeof row.user_id === "number")
+  ) {
+    return `conversation:${String(conversationId)}:${String(row.user_id)}`;
   }
   const callId = row.call_id;
   if (

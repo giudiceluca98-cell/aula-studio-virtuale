@@ -194,6 +194,8 @@ export type RealtimeTable =
   | "task_assignees"
   | "messages"
   | "message_reads"
+  | "message_conversations"
+  | "message_conversation_members"
   | "shared_notes"
   | "activity_events"
   | "material_reader_progress"

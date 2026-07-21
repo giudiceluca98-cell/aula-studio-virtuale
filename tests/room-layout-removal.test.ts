@@ -37,7 +37,8 @@ describe("layout modulare dell'aula", () => {
     expect(room).not.toContain('id="study-timer-widget"');
     expect(room).not.toContain('id="room-chat-widget"');
     expect(room).toContain('activeTool !== "chat"');
-    expect(room).toContain("setUnreadCount(unread.length)");
+    expect(room).toContain("setUnreadCount(Object.values(counts)");
+    expect(room).toContain("conversationUnread");
     expect(room).toContain("aula:room-ui:");
   });
 
