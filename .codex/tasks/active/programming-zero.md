@@ -1,8 +1,8 @@
 # Completamento Programmazione da zero
 
 Stato: in corso
-Assegnazione: Codex
-Branch corrente: `agent/integrate-programming-module-1`
+Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 1.3 corrente
+Branch corrente: `codex/programming-zero-lesson-1-3`
 Ultima integrazione completata: Lezione 0.9 e relativo Python Project, [PR #26](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/26)
 Proposte in integrazione: Lezione 1.1, [PR #17](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/17), e Lezione 1.2, [PR #20](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/20)
 Pacchetto: `programming`
@@ -235,4 +235,17 @@ Contenuti convertiti:
 - impronta SHA-256 `1faa694e1279feb929c9c145ba0a253cfc1b4281a3e7fde2155ca69bf05ac5ca`, senza includere il DOCX.
 
 Verifiche dichiarate dalla proposta originale: test mirato 21/21, suite completa 138/138, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`. L'integrazione su `main` e i nuovi Python Project vengono verificati nuovamente nella PR #14.
+
+## Estensione in corso · Lezione 1.3
+
+Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_1.3_Terminale_e_shell.docx`. Il DOCX non verrà caricato nel repository.
+
+File riservati:
+
+- `src/lib/catalog/subjects/programming-zero-lesson-1-3-official-content.json`
+- `src/lib/catalog/subjects/programming-zero-lesson.ts`
+- `src/lib/programming-lesson-progress.ts`
+- `tests/programming-subject.test.ts`
+
+File condivisi prenotati: nessuno. Base: `main`, che include già le lezioni 1.1 e 1.2 tramite PR #29. L'indice editoriale del Modulo 1 viene usato come controllo di ordine, titolo e copertura.
 
