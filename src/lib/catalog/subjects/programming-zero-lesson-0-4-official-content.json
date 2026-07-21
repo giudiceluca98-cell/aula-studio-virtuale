@@ -1,0 +1,4814 @@
+{
+  "id": "0.4",
+  "title": "Logica, proposizioni e ragionamento booleano",
+  "source": {
+    "filename": "Programmazione_da_Zero_Lezione_0.4_Logica_e_ragionamento_booleano.docx",
+    "sha256": "8508d2e700c8ddbc07e38dce1344b54da037764189dee40abbfbfd153d2c18fa",
+    "storedInRepository": false,
+    "normalizations": [
+      {
+        "from": "LEZIONE 0.2",
+        "to": "LEZIONE 0.4",
+        "occurrences": 10,
+        "reason": "Refuso confermato dal confronto con il contenuto distinto della Lezione 0.2"
+      }
+    ]
+  },
+  "metrics": {
+    "paragraphs": 796,
+    "tables": 12,
+    "textCharacters": 54760
+  },
+  "objectives": [
+    "Riconoscere proposizioni, predicati e condizioni.",
+    "Costruire e negare confronti con confini corretti.",
+    "Usare concettualmente NOT, AND, OR e XOR.",
+    "Costruire tavole di verità e verificare equivalenze.",
+    "Distinguere implicazione, causalità, necessità e sufficienza.",
+    "Applicare leggi di De Morgan e semplificazioni controllate.",
+    "Spiegare corto circuito, guardie e limiti del modello booleano."
+  ],
+  "sections": [
+    {
+      "id": "programming-0-4-introduction",
+      "lessonId": "0.4",
+      "chapterNumber": 0,
+      "title": "Lezione 0.4 · Logica, proposizioni e ragionamento booleano",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "AULA STUDIO VIRTUALE"
+        },
+        {
+          "type": "paragraph",
+          "text": "Programmazione da Zero"
+        },
+        {
+          "type": "paragraph",
+          "text": "Manuale ufficiale"
+        },
+        {
+          "type": "paragraph",
+          "text": "MODULO 0"
+        },
+        {
+          "type": "paragraph",
+          "text": "Lezione 0.4"
+        },
+        {
+          "type": "paragraph",
+          "text": "Logica, proposizioni e ragionamento booleano"
+        },
+        {
+          "type": "paragraph",
+          "text": "DESTINATARIO  Lettore senza conoscenze pregresse. La lezione costruisce il ragionamento logico necessario per comprendere condizioni, cicli e validazione nei moduli successivi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Edizione editoriale · 2026"
+        },
+        {
+          "type": "heading",
+          "text": "Come usare questa lezione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Questa lezione introduce la logica prima della sintassi di un linguaggio. I simboli sono strumenti per rendere preciso il ragionamento, non formule da memorizzare isolate. Ogni regola deve essere provata su esempi, controesempi, confini e combinazioni complete."
+        },
+        {
+          "type": "paragraph",
+          "text": "PRINCIPIO GUIDA  Prima di combinare condizioni, definisci il significato di ciascuna proposizione e la fonte del suo valore. Una formula precisa applicata a dati ambigui resta una decisione ambigua."
+        },
+        {
+          "type": "heading",
+          "text": "Risultati di apprendimento"
+        },
+        {
+          "type": "list-item",
+          "text": "Riconoscere proposizioni, predicati e condizioni."
+        },
+        {
+          "type": "list-item",
+          "text": "Costruire e negare confronti con confini corretti."
+        },
+        {
+          "type": "list-item",
+          "text": "Usare concettualmente NOT, AND, OR e XOR."
+        },
+        {
+          "type": "list-item",
+          "text": "Costruire tavole di verità e verificare equivalenze."
+        },
+        {
+          "type": "list-item",
+          "text": "Distinguere implicazione, causalità, necessità e sufficienza."
+        },
+        {
+          "type": "list-item",
+          "text": "Applicare leggi di De Morgan e semplificazioni controllate."
+        },
+        {
+          "type": "list-item",
+          "text": "Spiegare corto circuito, guardie e limiti del modello booleano."
+        },
+        {
+          "type": "heading",
+          "text": "Mappa della lezione"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Cap.",
+              "Nucleo concettuale"
+            ],
+            [
+              "1",
+              "Proposizioni e valori di verità"
+            ],
+            [
+              "2",
+              "Predicati, confronti e condizioni"
+            ],
+            [
+              "3",
+              "Negazione: l’operatore NOT"
+            ],
+            [
+              "4",
+              "Congiunzione: l’operatore AND"
+            ],
+            [
+              "5",
+              "Disgiunzione: OR inclusivo e XOR esclusivo"
+            ],
+            [
+              "6",
+              "Tavole di verità e precedenza degli operatori"
+            ],
+            [
+              "7",
+              "Implicazione, condizioni necessarie e sufficienti"
+            ],
+            [
+              "8",
+              "Equivalenze, leggi di De Morgan e semplificazione"
+            ],
+            [
+              "9",
+              "Valutazione a corto circuito e ordine delle condizioni"
+            ],
+            [
+              "10",
+              "Oltre Vero e Falso: incertezza, stati e responsabilità"
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Prerequisiti e materiali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Prerequisiti consigliati: Lezioni 0.1–0.3. Servono soltanto carta, matita e disponibilità a compilare tavole. È importante non saltare le righe considerate ‘ovvie’: spesso il difetto si trova proprio nella combinazione dimenticata."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-4-chapter-1",
+      "lessonId": "0.4",
+      "chapterNumber": 1,
+      "title": "1. Proposizioni e valori di verità",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.4 · CAPITOLO 1 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "1. Proposizioni e valori di verità"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto centrale, collegarlo agli altri strati del sistema, riconoscere errori di interpretazione e applicarlo a un dispositivo reale."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "La programmazione richiede decisioni: consentire o rifiutare un accesso, ripetere un’azione, segnalare un errore. Alla base di queste decisioni vi sono espressioni che, in condizioni definite, possono essere considerate vere oppure false. La logica proposizionale offre un modello rigoroso per studiarle."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "La frase ‘la porta è chiusa’ può essere controllata osservando una porta precisa in un momento preciso. Se le condizioni sono chiare, possiamo assegnarle un valore di verità. La domanda ‘chiudi la porta!’ è invece un comando: può essere eseguito o ignorato, ma non è vera o falsa nello stesso senso."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una proposizione è un enunciato dichiarativo al quale, nel modello adottato, è assegnabile un valore di verità. Nella logica booleana classica i valori sono Vero e Falso. Le lettere p, q e r rappresentano proposizioni senza specificarne il contenuto. Il valore dipende dall’interpretazione e, per enunciati sul mondo, dallo stato osservato."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "‘7 è maggiore di 3’ è vera."
+        },
+        {
+          "type": "list-item",
+          "text": "‘Il file esiste’ è una proposizione se file, percorso e momento sono definiti."
+        },
+        {
+          "type": "list-item",
+          "text": "‘L’utente ha accettato le condizioni’ può essere vera o falsa secondo un dato registrato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "‘Inserisci la password’ è un comando, non una proposizione."
+        },
+        {
+          "type": "list-item",
+          "text": "‘Che ore sono?’ è una domanda."
+        },
+        {
+          "type": "list-item",
+          "text": "‘Questo programma è bello’ non è valutabile senza un criterio condiviso di bellezza."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una proposizione è simile a una casella di controllo che può risultare selezionata o non selezionata. L’analogia è utile, ma nel software la casella può non essere ancora nota, essere incoerente con altre fonti o cambiare mentre viene letta."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 1.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "ENUNCIATO   | è dichiarativo e valutabile nel modello?   +-- no --> comando, domanda o frase vaga   |   +-- sì --> PROPOSIZIONE                 |                 +--> VERO                 +--> FALSO"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "La verità logica va distinta dalla possibilità di conoscere il valore. ‘Domani pioverà qui alle 15’ può avere un valore nel mondo futuro, ma oggi non possiamo verificarlo con certezza. Nei programmi occorre separare falso, sconosciuto, non ancora misurato ed errore: ridurre ogni assenza a falso può cambiare il significato."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Confondere un comando con una proposizione."
+        },
+        {
+          "type": "list-item",
+          "text": "Omettere luogo, tempo o oggetto di riferimento."
+        },
+        {
+          "type": "list-item",
+          "text": "Trattare un’opinione vaga come fatto booleano."
+        },
+        {
+          "type": "list-item",
+          "text": "Confondere falso con valore mancante."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Dato non ancora disponibile."
+        },
+        {
+          "type": "list-item",
+          "text": "Due sensori che forniscono valori discordanti."
+        },
+        {
+          "type": "list-item",
+          "text": "Proposizione che cambia durante l’elaborazione."
+        },
+        {
+          "type": "list-item",
+          "text": "Paradossi autoriferiti, non adatti al semplice modello booleano."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso chiedi quale strato è coinvolto, quale contratto è stato violato, quale segnale è osservabile e quali prove distinguono le cause alternative."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Quali dettagli rendono verificabile ‘il negozio è aperto’?"
+        },
+        {
+          "type": "list-item",
+          "text": "Una previsione è una proposizione? Quando possiamo valutarla?"
+        },
+        {
+          "type": "list-item",
+          "text": "Perché sconosciuto non coincide con falso?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Classifica dieci frasi come proposizione, comando, domanda o frase vaga."
+        },
+        {
+          "type": "list-item",
+          "text": "Per ogni proposizione aggiungi contesto sufficiente."
+        },
+        {
+          "type": "list-item",
+          "text": "Indica la fonte dei dati necessaria per valutarla."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Scrivi cinque proposizioni relative a una biblioteca."
+        },
+        {
+          "type": "list-item",
+          "text": "Trasforma tre requisiti vaghi in proposizioni verificabili."
+        },
+        {
+          "type": "list-item",
+          "text": "Descrivi un caso in cui il valore cambia nel tempo."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Quale frase è una proposizione?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. ‘Il saldo è maggiore di zero’"
+        },
+        {
+          "type": "list-item",
+          "text": "B. ‘Inserisci il saldo’"
+        },
+        {
+          "type": "list-item",
+          "text": "C. ‘Qual è il saldo?’"
+        },
+        {
+          "type": "list-item",
+          "text": "D. ‘Che bel saldo!’"
+        },
+        {
+          "type": "heading",
+          "text": "2. Nella logica booleana classica i valori sono?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Alto e basso soltanto"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Uno e dieci"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Testo e numero"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Vero e Falso"
+        },
+        {
+          "type": "heading",
+          "text": "3. Valore sconosciuto equivale sempre a falso?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Solo nei file"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo nei quiz"
+        },
+        {
+          "type": "list-item",
+          "text": "C. No"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Sì"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Proposizione",
+              "Enunciato dichiarativo valutabile come vero o falso nel modello."
+            ],
+            [
+              "Valore di verità",
+              "Risultato logico assegnato a una proposizione."
+            ],
+            [
+              "Booleano",
+              "Dominio classico formato da Vero e Falso."
+            ],
+            [
+              "Interpretazione",
+              "Assegnazione di significato e valori ai simboli."
+            ],
+            [
+              "Contesto",
+              "Informazioni che rendono l’enunciato determinato."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una proposizione è un enunciato dichiarativo al quale, nel modello adottato, è assegnabile un valore di verità. Nella logica booleana classica i valori sono Vero e Falso. Le lettere p, q e r rappresentano proposizioni senza specificarne il contenuto. Il valore dipende dall’interpretazione e, per enunciati sul mondo, dallo stato osservato. La competenza richiesta non consiste nel ricordare un elenco di componenti, ma nel saper seguire il flusso di dati e responsabilità attraverso i diversi livelli."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So classificare almeno tre casi limite e proporre un controllo."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        },
+        {
+          "type": "list-item",
+          "text": "So collegare il capitolo al percorso completo sorgente–processo–hardware–effetto."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-4-chapter-2",
+      "lessonId": "0.4",
+      "chapterNumber": 2,
+      "title": "2. Predicati, confronti e condizioni",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.4 · CAPITOLO 2 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "2. Predicati, confronti e condizioni"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto centrale, collegarlo agli altri strati del sistema, riconoscere errori di interpretazione e applicarlo a un dispositivo reale."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Molte frasi diventano proposizioni soltanto dopo aver assegnato valori a elementi variabili. ‘x è maggiore di 18’ non è ancora vera o falsa finché non sappiamo che cosa rappresenta x. Questa struttura è un predicato e permette di formulare regole generali."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un modulo può contenere la regola ‘età almeno 18’. La regola è come uno stampo: applicata a 21 produce vero, applicata a 16 produce falso. Non dobbiamo riscrivere una frase diversa per ogni persona; cambiamo il dato e conserviamo il criterio."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un predicato è un’espressione con variabili che diventa proposizione quando le variabili ricevono valori nel dominio previsto. I confronti di uguaglianza, disuguaglianza e ordinamento producono risultati booleani. Una condizione è un’espressione valutata per scegliere un comportamento. Dominio, unità e politica per valori mancanti fanno parte della definizione."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "prezzo > 0 applicato a 12,50 produce vero."
+        },
+        {
+          "type": "list-item",
+          "text": "tentativi <= 3 include esattamente il valore 3."
+        },
+        {
+          "type": "list-item",
+          "text": "ruolo = ‘amministratore’ confronta un valore con una categoria definita."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "Confrontare 10 metri con 10 secondi non ha significato utile."
+        },
+        {
+          "type": "list-item",
+          "text": "Usare > quando il requisito dice ‘almeno’ esclude il confine."
+        },
+        {
+          "type": "list-item",
+          "text": "Confrontare testo numerico ‘10’ e numero 10 senza conversione dichiarata confonde rappresentazioni."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un predicato è simile a un setaccio che lascia passare gli oggetti con una certa proprietà. Ma un setaccio fisico agisce su forma e dimensione; un predicato software dipende da dati, codifiche e regole che possono essere errati."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 2.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "PREDICATO P(x): x >= 18       | assegna x = 21       vPROPOSIZIONE: 21 >= 18       vVEROassegna x = 16 -> FALSO"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’uguaglianza dipende dal tipo di oggetto. Per interi è semplice; per valori floating point calcolati può servire una tolleranza; per testo possono contare maiuscole, normalizzazione e lingua; per oggetti complessi occorre decidere quali proprietà partecipano. Scrivere ‘uguale’ senza definizione può nascondere scelte importanti."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Sbagliare l’inclusione del limite."
+        },
+        {
+          "type": "list-item",
+          "text": "Confrontare unità diverse."
+        },
+        {
+          "type": "list-item",
+          "text": "Trattare testo e numero come equivalenti impliciti."
+        },
+        {
+          "type": "list-item",
+          "text": "Usare uguaglianza esatta con misure approssimate."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Valore esattamente sul confine."
+        },
+        {
+          "type": "list-item",
+          "text": "Valore mancante o non valido."
+        },
+        {
+          "type": "list-item",
+          "text": "NaN nei confronti numerici."
+        },
+        {
+          "type": "list-item",
+          "text": "Testi visivamente uguali ma codificati diversamente."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso chiedi quale strato è coinvolto, quale contratto è stato violato, quale segnale è osservabile e quali prove distinguono le cause alternative."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale differenza c’è fra > e >= nel requisito?"
+        },
+        {
+          "type": "list-item",
+          "text": "Che cosa significa uguaglianza per una persona registrata?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quando una conversione automatica può essere pericolosa?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Definisci il predicato per una temperatura accettabile fra 18 e 26 gradi inclusi."
+        },
+        {
+          "type": "list-item",
+          "text": "Provalo su 17,9; 18; 22; 26; 26,1."
+        },
+        {
+          "type": "list-item",
+          "text": "Aggiungi la gestione del sensore non disponibile."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Progetta condizioni per una password di lunghezza minima."
+        },
+        {
+          "type": "list-item",
+          "text": "Definisci uguaglianza tra indirizzi ignorando spazi irrilevanti."
+        },
+        {
+          "type": "list-item",
+          "text": "Crea test di confine per uno sconto riservato a età minore di 12."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Quando un predicato diventa proposizione?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Quando è lungo"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Quando viene stampato"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Quando usa soltanto numeri"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Quando le variabili ricevono valori nel dominio"
+        },
+        {
+          "type": "heading",
+          "text": "2. ‘Almeno 18’ si traduce concettualmente con?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. = 18 soltanto"
+        },
+        {
+          "type": "list-item",
+          "text": "B. < 18"
+        },
+        {
+          "type": "list-item",
+          "text": "C. >= 18"
+        },
+        {
+          "type": "list-item",
+          "text": "D. > 18"
+        },
+        {
+          "type": "heading",
+          "text": "3. Uguaglianza floating point è sempre semplice?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Solo online"
+        },
+        {
+          "type": "list-item",
+          "text": "B. No"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Solo per zero"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Predicato",
+              "Espressione con variabili che produce una proposizione dopo l’assegnazione."
+            ],
+            [
+              "Confronto",
+              "Operazione che mette in relazione valori."
+            ],
+            [
+              "Condizione",
+              "Espressione booleana usata per scegliere un comportamento."
+            ],
+            [
+              "Dominio",
+              "Insieme dei valori ammessi."
+            ],
+            [
+              "Confine",
+              "Valore limite in cui può cambiare il risultato."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un predicato è un’espressione con variabili che diventa proposizione quando le variabili ricevono valori nel dominio previsto. I confronti di uguaglianza, disuguaglianza e ordinamento producono risultati booleani. Una condizione è un’espressione valutata per scegliere un comportamento. Dominio, unità e politica per valori mancanti fanno parte della definizione. La competenza richiesta non consiste nel ricordare un elenco di componenti, ma nel saper seguire il flusso di dati e responsabilità attraverso i diversi livelli."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So classificare almeno tre casi limite e proporre un controllo."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        },
+        {
+          "type": "list-item",
+          "text": "So collegare il capitolo al percorso completo sorgente–processo–hardware–effetto."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-4-chapter-3",
+      "lessonId": "0.4",
+      "chapterNumber": 3,
+      "title": "3. Negazione: l’operatore NOT",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.4 · CAPITOLO 3 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "3. Negazione: l’operatore NOT"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto centrale, collegarlo agli altri strati del sistema, riconoscere errori di interpretazione e applicarlo a un dispositivo reale."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "La negazione inverte il valore di una proposizione: se p è vera, NOT p è falsa; se p è falsa, NOT p è vera. L’operazione è semplice, ma tradurre correttamente una frase negativa richiede attenzione a quantificatori, ambiguità e formulazioni doppie."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Se una lampada logica indica ‘porta aperta’, la negazione indica ‘non porta aperta’. Quando il sensore è affidabile e gli stati possibili sono soltanto aperta o chiusa, possiamo interpretarla come ‘porta chiusa’. Se esiste uno stato intermedio o ignoto, le due frasi non coincidono necessariamente."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "NOT è un operatore unario: riceve un valore booleano e restituisce il suo complemento. La tavola è: NOT Vero = Falso; NOT Falso = Vero. La doppia negazione soddisfa NOT(NOT p) = p. Negare una relazione richiede usare il complemento logico: la negazione di x > 5 è x <= 5, se x appartiene a un dominio ordinato e valido."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "NOT autenticato rappresenta un utente non autenticato."
+        },
+        {
+          "type": "list-item",
+          "text": "NOT (età >= 18) equivale a età < 18 per un’età numerica valida."
+        },
+        {
+          "type": "list-item",
+          "text": "NOT file_esiste può attivare la gestione di un file mancante."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "‘Non approvato’ non significa sempre ‘rifiutato’: può significare in attesa."
+        },
+        {
+          "type": "list-item",
+          "text": "La negazione di ‘tutti hanno consegnato’ non è ‘nessuno ha consegnato’, ma ‘almeno uno non ha consegnato’."
+        },
+        {
+          "type": "list-item",
+          "text": "Una doppia negazione linguistica può risultare ambigua anche se quella logica è precisa."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "NOT assomiglia a un interruttore che scambia due stati. L’analogia fallisce quando il dominio possiede più di due stati, per esempio approvato, rifiutato e in revisione."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 3.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "p        | NOT p---------+------VERO     | FALSOFALSO    | VERONOT (NOT p) = p"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Formulare condizioni positive riduce spesso gli errori. ‘Se non è vero che l’utente non è inattivo’ è logicamente gestibile, ma difficile da leggere. La chiarezza conta perché la logica del programma sarà modificata e verificata da persone, non soltanto eseguita dalla macchina."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Negare soltanto una parola invece dell’intera proposizione."
+        },
+        {
+          "type": "list-item",
+          "text": "Confondere non approvato con rifiutato."
+        },
+        {
+          "type": "list-item",
+          "text": "Dimenticare di trasformare > in <= e non soltanto in <."
+        },
+        {
+          "type": "list-item",
+          "text": "Usare troppe negazioni annidate."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Stato sconosciuto in una logica a tre valori."
+        },
+        {
+          "type": "list-item",
+          "text": "Valore non valido che rende il confronto non applicabile."
+        },
+        {
+          "type": "list-item",
+          "text": "Sensore con stato intermedio."
+        },
+        {
+          "type": "list-item",
+          "text": "Negazione di enunciati con ‘tutti’ o ‘esiste’."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso chiedi quale strato è coinvolto, quale contratto è stato violato, quale segnale è osservabile e quali prove distinguono le cause alternative."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Qual è la negazione di ‘almeno uno ha accesso’?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quando ‘non aperto’ non equivale a ‘chiuso’?"
+        },
+        {
+          "type": "list-item",
+          "text": "Perché una condizione positiva è spesso più manutenibile?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Scrivi la negazione di x < 10."
+        },
+        {
+          "type": "list-item",
+          "text": "Verifica su 9, 10 e 11."
+        },
+        {
+          "type": "list-item",
+          "text": "Spiega perché x >= 10 include correttamente il confine."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Nega cinque condizioni di confronto."
+        },
+        {
+          "type": "list-item",
+          "text": "Trasforma una doppia negazione in frase positiva."
+        },
+        {
+          "type": "list-item",
+          "text": "Distingui non completato, fallito e in corso in un modello a stati."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. NOT Vero vale?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Sconosciuto sempre"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Zero soltanto"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Falso"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Vero"
+        },
+        {
+          "type": "heading",
+          "text": "2. Negazione di x > 5?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. x >= 5"
+        },
+        {
+          "type": "list-item",
+          "text": "B. x <= 5"
+        },
+        {
+          "type": "list-item",
+          "text": "C. x < 5"
+        },
+        {
+          "type": "list-item",
+          "text": "D. x = 5"
+        },
+        {
+          "type": "heading",
+          "text": "3. Non approvato significa sempre rifiutato?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. No"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo nei database"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Solo nei quiz"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Negazione",
+              "Operazione che inverte un valore booleano."
+            ],
+            [
+              "Operatore unario",
+              "Operatore applicato a un solo operando."
+            ],
+            [
+              "Complemento logico",
+              "Insieme dei casi non coperti dalla condizione."
+            ],
+            [
+              "Doppia negazione",
+              "Applicazione di NOT due volte, equivalente all’originale."
+            ],
+            [
+              "Stato intermedio",
+              "Valore distinto dai due estremi previsti da un modello binario."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "NOT è un operatore unario: riceve un valore booleano e restituisce il suo complemento. La tavola è: NOT Vero = Falso; NOT Falso = Vero. La doppia negazione soddisfa NOT(NOT p) = p. Negare una relazione richiede usare il complemento logico: la negazione di x > 5 è x <= 5, se x appartiene a un dominio ordinato e valido. La competenza richiesta non consiste nel ricordare un elenco di componenti, ma nel saper seguire il flusso di dati e responsabilità attraverso i diversi livelli."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So classificare almeno tre casi limite e proporre un controllo."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        },
+        {
+          "type": "list-item",
+          "text": "So collegare il capitolo al percorso completo sorgente–processo–hardware–effetto."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-4-chapter-4",
+      "lessonId": "0.4",
+      "chapterNumber": 4,
+      "title": "4. Congiunzione: l’operatore AND",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.4 · CAPITOLO 4 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "4. Congiunzione: l’operatore AND"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto centrale, collegarlo agli altri strati del sistema, riconoscere errori di interpretazione e applicarlo a un dispositivo reale."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "AND combina requisiti che devono essere tutti soddisfatti. È centrale nelle autorizzazioni, nella validazione e nei filtri. Una congiunzione è vera soltanto quando ogni operando è vero; un singolo requisito falso rende falsa l’intera espressione."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Per entrare in una sala possono servire biglietto valido e documento. Possedere soltanto uno dei due non basta. AND descrive questa necessità congiunta. Se aggiungiamo un requisito, l’insieme dei casi accettati può soltanto restringersi o restare uguale."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "La congiunzione p AND q vale Vero esclusivamente per p=Vero e q=Vero. È commutativa, associativa e idempotente: p AND q = q AND p; (p AND q) AND r = p AND (q AND r); p AND p = p. Vero è elemento neutro e Falso è assorbente."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "utente_attivo AND password_corretta."
+        },
+        {
+          "type": "list-item",
+          "text": "temperatura >= 18 AND temperatura <= 26."
+        },
+        {
+          "type": "list-item",
+          "text": "file_esiste AND permesso_lettura."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "‘Documento oppure biglietto’ non è una congiunzione."
+        },
+        {
+          "type": "list-item",
+          "text": "Aggiungere condizioni non rende più permissiva una regola AND."
+        },
+        {
+          "type": "list-item",
+          "text": "Verificare due condizioni in momenti diversi può essere insufficiente se lo stato cambia fra i controlli."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "AND è come una catena di serrature: tutte devono aprirsi. Tuttavia nei sistemi reali alcuni requisiti possono dipendere l’uno dall’altro e la loro valutazione può avere costi o effetti collaterali."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 4.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "p       q       | p AND q----------------+--------FALSO   FALSO   | FALSOFALSO   VERO    | FALSOVERO    FALSO   | FALSOVERO    VERO    | VERO"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Nella progettazione di accessi, AND esprime spesso difesa in profondità: identità valida, ruolo sufficiente, risorsa disponibile e contesto consentito. Ma accumulare controlli senza spiegazione può rendere la regola difficile da verificare. È utile nominare sotto-condizioni significative."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Usare AND quando basta una delle alternative."
+        },
+        {
+          "type": "list-item",
+          "text": "Dimenticare uno dei due limiti di un intervallo."
+        },
+        {
+          "type": "list-item",
+          "text": "Scrivere una lunga catena senza nomi intermedi."
+        },
+        {
+          "type": "list-item",
+          "text": "Supporre che l’ordine non conti quando le condizioni hanno effetti."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Zero condizioni: in alcune formulazioni la congiunzione vuota vale Vero."
+        },
+        {
+          "type": "list-item",
+          "text": "Condizione costosa dopo una condizione già falsa."
+        },
+        {
+          "type": "list-item",
+          "text": "Dato che cambia fra due verifiche."
+        },
+        {
+          "type": "list-item",
+          "text": "Valore sconosciuto in una logica non binaria."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso chiedi quale strato è coinvolto, quale contratto è stato violato, quale segnale è osservabile e quali prove distinguono le cause alternative."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Perché aggiungere un requisito restringe l’accettazione?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quando l’ordine di valutazione può diventare osservabile?"
+        },
+        {
+          "type": "list-item",
+          "text": "Che cosa dovrebbe accadere se un requisito non è verificabile?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Costruisci la regola per un numero fra 10 e 20 inclusi."
+        },
+        {
+          "type": "list-item",
+          "text": "Compila i risultati per 9, 10, 15, 20 e 21."
+        },
+        {
+          "type": "list-item",
+          "text": "Nega l’intera regola e controlla i confini."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Progetta una regola AND per un prestito bibliotecario."
+        },
+        {
+          "type": "list-item",
+          "text": "Semplifica p AND Vero e p AND Falso."
+        },
+        {
+          "type": "list-item",
+          "text": "Trova un errore causato da un requisito mancante."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Quando p AND q è vero?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Quando p è falso"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Quando entrambi sono veri"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Quando almeno uno è vero"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Quando entrambi sono falsi"
+        },
+        {
+          "type": "heading",
+          "text": "2. p AND Falso vale?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Falso"
+        },
+        {
+          "type": "list-item",
+          "text": "B. p"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Vero"
+        },
+        {
+          "type": "list-item",
+          "text": "D. NOT p"
+        },
+        {
+          "type": "heading",
+          "text": "3. Aggiungere un requisito AND può ampliare i casi accettati?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Sempre"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo con numeri"
+        },
+        {
+          "type": "list-item",
+          "text": "D. No"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Congiunzione",
+              "Combinazione vera soltanto se tutti gli operandi sono veri."
+            ],
+            [
+              "Commutativa",
+              "Proprietà per cui scambiare gli operandi non cambia il valore."
+            ],
+            [
+              "Associativa",
+              "Proprietà che consente di cambiare il raggruppamento."
+            ],
+            [
+              "Elemento neutro",
+              "Valore che non modifica l’altro operando."
+            ],
+            [
+              "Assorbente",
+              "Valore che determina da solo il risultato dell’operazione."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "La congiunzione p AND q vale Vero esclusivamente per p=Vero e q=Vero. È commutativa, associativa e idempotente: p AND q = q AND p; (p AND q) AND r = p AND (q AND r); p AND p = p. Vero è elemento neutro e Falso è assorbente. La competenza richiesta non consiste nel ricordare un elenco di componenti, ma nel saper seguire il flusso di dati e responsabilità attraverso i diversi livelli."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So classificare almeno tre casi limite e proporre un controllo."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        },
+        {
+          "type": "list-item",
+          "text": "So collegare il capitolo al percorso completo sorgente–processo–hardware–effetto."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-4-chapter-5",
+      "lessonId": "0.4",
+      "chapterNumber": 5,
+      "title": "5. Disgiunzione: OR inclusivo e XOR esclusivo",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.4 · CAPITOLO 5 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "5. Disgiunzione: OR inclusivo e XOR esclusivo"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto centrale, collegarlo agli altri strati del sistema, riconoscere errori di interpretazione e applicarlo a un dispositivo reale."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "OR esprime alternative. Nella logica booleana standard è inclusivo: è vero se almeno un operando è vero, compreso il caso in cui lo siano entrambi. Nel linguaggio quotidiano ‘o’ può invece essere esclusivo; per evitare errori occorre dichiarare la politica."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "‘Puoi pagare con carta o contanti’ spesso permette entrambe le modalità in momenti diversi e non considera sbagliato possederle entrambe: è OR inclusivo. ‘Scegli un solo premio: libro o biglietto’ richiede esattamente un’alternativa: è XOR."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "p OR q è falsa soltanto quando entrambi sono falsi. XOR è vera quando gli operandi hanno valori diversi. OR è commutativa, associativa e idempotente; Falso è neutro e Vero è assorbente. XOR può essere espresso come (p OR q) AND NOT(p AND q)."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Accesso con password valida OR codice di recupero valido."
+        },
+        {
+          "type": "list-item",
+          "text": "Spedizione gratuita se abbonato OR ordine sopra soglia."
+        },
+        {
+          "type": "list-item",
+          "text": "Selezione esattamente di una modalità tramite XOR."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "Interpretare ogni ‘o’ italiana come XOR."
+        },
+        {
+          "type": "list-item",
+          "text": "Usare OR fra controlli di sicurezza quando erano entrambi obbligatori."
+        },
+        {
+          "type": "list-item",
+          "text": "Credere che OR smetta di essere vero se entrambe le condizioni sono vere."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "OR inclusivo è come una stanza con due ingressi: basta che almeno uno sia aperto e possono esserlo entrambi. XOR è come un deviatore che richiede configurazioni differenti; l’analogia non sostituisce la tavola di verità."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 5.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "p       q       | OR      XOR----------------+--------------FALSO   FALSO   | FALSO   FALSOFALSO   VERO    | VERO    VEROVERO    FALSO   | VERO    VEROVERO    VERO    | VERO    FALSO"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Le alternative di autenticazione mostrano un rischio: OR rende la regola forte quanto il percorso più debole. Se una password robusta è affiancata a domande di recupero facili, un attaccante sceglierà la seconda via. La correttezza logica non garantisce una politica sicura."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Non specificare OR inclusivo o esclusivo."
+        },
+        {
+          "type": "list-item",
+          "text": "Confondere almeno uno con esattamente uno."
+        },
+        {
+          "type": "list-item",
+          "text": "Aggiungere un’alternativa insicura a una politica di accesso."
+        },
+        {
+          "type": "list-item",
+          "text": "Dimenticare il caso in cui entrambe sono vere."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Nessuna alternativa disponibile."
+        },
+        {
+          "type": "list-item",
+          "text": "Entrambe le alternative selezionate quando ne è ammessa una."
+        },
+        {
+          "type": "list-item",
+          "text": "Alternativa che diventa indisponibile durante il processo."
+        },
+        {
+          "type": "list-item",
+          "text": "Più di due opzioni con requisito ‘esattamente una’."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso chiedi quale strato è coinvolto, quale contratto è stato violato, quale segnale è osservabile e quali prove distinguono le cause alternative."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale ‘o’ usa la frase ‘almeno uno’?"
+        },
+        {
+          "type": "list-item",
+          "text": "Perché un percorso OR debole compromette una protezione?"
+        },
+        {
+          "type": "list-item",
+          "text": "Come esprimeresti esattamente una fra tre opzioni?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Costruisci la tavola di p OR q."
+        },
+        {
+          "type": "list-item",
+          "text": "Aggiungi una colonna p AND q."
+        },
+        {
+          "type": "list-item",
+          "text": "Deriva XOR con OR, AND e NOT e verifica tutte le righe."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Trova tre esempi di OR inclusivo e tre di XOR."
+        },
+        {
+          "type": "list-item",
+          "text": "Analizza una politica di recupero account."
+        },
+        {
+          "type": "list-item",
+          "text": "Progetta una regola per almeno una di tre autorizzazioni."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. OR inclusivo è vero quando entrambi sono veri?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "B. No"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo per numeri"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Solo se p è falso"
+        },
+        {
+          "type": "heading",
+          "text": "2. XOR è vero quando?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Entrambi sono veri"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Entrambi sono falsi"
+        },
+        {
+          "type": "list-item",
+          "text": "C. p è sempre vero"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Gli operandi sono diversi"
+        },
+        {
+          "type": "heading",
+          "text": "3. Un’alternativa debole in una regola OR può ridurre la sicurezza?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Mai"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo offline"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "D. No"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Disgiunzione",
+              "Combinazione di alternative logiche."
+            ],
+            [
+              "OR inclusivo",
+              "Vero se almeno un operando è vero."
+            ],
+            [
+              "XOR",
+              "Vero se gli operandi hanno valori differenti."
+            ],
+            [
+              "Alternativa",
+              "Percorso sufficiente per soddisfare una regola OR."
+            ],
+            [
+              "Politica",
+              "Insieme esplicito di regole applicate dal sistema."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "p OR q è falsa soltanto quando entrambi sono falsi. XOR è vera quando gli operandi hanno valori diversi. OR è commutativa, associativa e idempotente; Falso è neutro e Vero è assorbente. XOR può essere espresso come (p OR q) AND NOT(p AND q). La competenza richiesta non consiste nel ricordare un elenco di componenti, ma nel saper seguire il flusso di dati e responsabilità attraverso i diversi livelli."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So classificare almeno tre casi limite e proporre un controllo."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        },
+        {
+          "type": "list-item",
+          "text": "So collegare il capitolo al percorso completo sorgente–processo–hardware–effetto."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-4-chapter-6",
+      "lessonId": "0.4",
+      "chapterNumber": 6,
+      "title": "6. Tavole di verità e precedenza degli operatori",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.4 · CAPITOLO 6 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "6. Tavole di verità e precedenza degli operatori"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto centrale, collegarlo agli altri strati del sistema, riconoscere errori di interpretazione e applicarlo a un dispositivo reale."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quando un’espressione combina più operatori, l’intuizione può fallire. La tavola di verità enumera tutte le assegnazioni possibili e calcola il risultato passo per passo. Le parentesi rendono esplicito il raggruppamento e proteggono da interpretazioni errate."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una tavola di verità è un collaudo esaustivo per espressioni con poche variabili: prova tutte le configurazioni possibili, come verificare ogni combinazione di interruttori. Con n variabili booleane esistono 2^n righe."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Per costruire la tavola si elencano le combinazioni, poi si aggiunge una colonna per ogni sottoespressione. NOT ha normalmente precedenza maggiore di AND, che precede OR, ma le regole dipendono dalla notazione o dal linguaggio. Le parentesi prevalgono e sono preferibili quando chiariscono l’intento."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Con due variabili ci sono quattro righe; con tre, otto."
+        },
+        {
+          "type": "list-item",
+          "text": "NOT p AND q si interpreta normalmente come (NOT p) AND q."
+        },
+        {
+          "type": "list-item",
+          "text": "p AND (q OR r) richiede prima la disgiunzione tra q e r."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "Calcolare soltanto i casi che confermano l’ipotesi non dimostra equivalenza."
+        },
+        {
+          "type": "list-item",
+          "text": "Omettere una combinazione può nascondere l’unica riga differente."
+        },
+        {
+          "type": "list-item",
+          "text": "Affidarsi alla precedenza ricordata invece di usare parentesi riduce leggibilità."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "La tavola è simile a una matrice di collaudo, ma cresce esponenzialmente: con molte variabili non è pratica. In sistemi grandi servono decomposizione, ragionamento simbolico e test mirati."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 6.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "n variabili -> 2^n combinazionip q r | q OR r | p AND (q OR r)------+--------+---------------...   |   ...  |      ...una colonna per ogni passo"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Due espressioni sono logicamente equivalenti se hanno lo stesso valore in ogni assegnazione. Una tautologia è sempre vera; una contraddizione sempre falsa; una contingenza varia. Queste categorie aiutano a rilevare condizioni inutili o impossibili."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Dimenticare righe."
+        },
+        {
+          "type": "list-item",
+          "text": "Saltare colonne intermedie."
+        },
+        {
+          "type": "list-item",
+          "text": "Confondere equivalenza con risultati uguali in un solo caso."
+        },
+        {
+          "type": "list-item",
+          "text": "Scrivere condizioni senza parentesi chiare."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Espressione con zero variabili."
+        },
+        {
+          "type": "list-item",
+          "text": "Molte variabili e crescita esponenziale."
+        },
+        {
+          "type": "list-item",
+          "text": "Operatore non classico o valore sconosciuto."
+        },
+        {
+          "type": "list-item",
+          "text": "Sottoespressione con errore o effetto collaterale."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso chiedi quale strato è coinvolto, quale contratto è stato violato, quale segnale è osservabile e quali prove distinguono le cause alternative."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Perché servono 2^n righe?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quando due espressioni sono equivalenti?"
+        },
+        {
+          "type": "list-item",
+          "text": "Che cosa rivela una contraddizione in una condizione?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Costruisci la tavola di NOT(p AND q)."
+        },
+        {
+          "type": "list-item",
+          "text": "Costruisci NOT p OR NOT q."
+        },
+        {
+          "type": "list-item",
+          "text": "Confronta le colonne finali e formula l’equivalenza."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Classifica p OR NOT p."
+        },
+        {
+          "type": "list-item",
+          "text": "Classifica p AND NOT p."
+        },
+        {
+          "type": "list-item",
+          "text": "Confronta p AND(q OR r) con (p AND q) OR(p AND r)."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Righe per tre variabili booleane?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. 3"
+        },
+        {
+          "type": "list-item",
+          "text": "B. 6"
+        },
+        {
+          "type": "list-item",
+          "text": "C. 9"
+        },
+        {
+          "type": "list-item",
+          "text": "D. 8"
+        },
+        {
+          "type": "heading",
+          "text": "2. Due espressioni equivalenti coincidono in?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Solo quando vere"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo quando false"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Tutte le assegnazioni"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Una riga"
+        },
+        {
+          "type": "heading",
+          "text": "3. Una tautologia è?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Non valutabile per definizione"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Sempre vera"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Sempre falsa"
+        },
+        {
+          "type": "list-item",
+          "text": "D. A volte vera"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Tavola di verità",
+              "Tabella dei risultati per tutte le assegnazioni."
+            ],
+            [
+              "Precedenza",
+              "Regola sull’ordine di applicazione degli operatori."
+            ],
+            [
+              "Equivalenza logica",
+              "Uguaglianza dei valori per tutte le assegnazioni."
+            ],
+            [
+              "Tautologia",
+              "Espressione sempre vera."
+            ],
+            [
+              "Contraddizione",
+              "Espressione sempre falsa."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Per costruire la tavola si elencano le combinazioni, poi si aggiunge una colonna per ogni sottoespressione. NOT ha normalmente precedenza maggiore di AND, che precede OR, ma le regole dipendono dalla notazione o dal linguaggio. Le parentesi prevalgono e sono preferibili quando chiariscono l’intento. La competenza richiesta non consiste nel ricordare un elenco di componenti, ma nel saper seguire il flusso di dati e responsabilità attraverso i diversi livelli."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So classificare almeno tre casi limite e proporre un controllo."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        },
+        {
+          "type": "list-item",
+          "text": "So collegare il capitolo al percorso completo sorgente–processo–hardware–effetto."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-4-chapter-7",
+      "lessonId": "0.4",
+      "chapterNumber": 7,
+      "title": "7. Implicazione, condizioni necessarie e sufficienti",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.4 · CAPITOLO 7 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "7. Implicazione, condizioni necessarie e sufficienti"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto centrale, collegarlo agli altri strati del sistema, riconoscere errori di interpretazione e applicarlo a un dispositivo reale."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’implicazione ‘se p, allora q’ è spesso fraintesa. In logica classica è falsa soltanto quando p è vera e q è falsa. Non afferma che p causi q, né che q implichi p. Serve a formulare garanzie e vincoli."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "‘Se un numero è multiplo di 4, allora è pari’. Ogni multiplo di 4 deve appartenere ai pari. Un numero pari come 6 non deve essere multiplo di 4: il conseguente può essere vero per altre ragioni."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "p → q equivale a NOT p OR q. p è condizione sufficiente per q; q è necessaria per p. La contrapposta NOT q → NOT p è equivalente. L’inversa q → p e la contraria NOT p → NOT q non sono in generale equivalenti all’implicazione originale."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Se il pagamento è confermato, allora esiste una registrazione verificabile."
+        },
+        {
+          "type": "list-item",
+          "text": "Se un utente è amministratore, allora è autenticato."
+        },
+        {
+          "type": "list-item",
+          "text": "Se un file è cifrato correttamente, non segue che sia autentico."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "Dalla strada bagnata non segue necessariamente che abbia piovuto."
+        },
+        {
+          "type": "list-item",
+          "text": "Se il test passa, non segue che il programma sia privo di ogni difetto."
+        },
+        {
+          "type": "list-item",
+          "text": "Confondere necessario con sufficiente produce regole troppo larghe o troppo strette."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un biglietto valido può essere necessario per entrare ma non sufficiente se serve anche un documento. Le condizioni sono come requisiti di una porta; causa ed effetto nel mondo richiedono ulteriori evidenze."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 7.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "p -> qp sufficiente per qq necessaria per pequivalente: NOT p OR qcontrapposta: NOT q -> NOT pnon equivalente in generale: q -> p"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Nei contratti software, una postcondizione assume spesso la forma: se le precondizioni sono rispettate e l’operazione termina normalmente, allora una proprietà deve valere. Rendere espliciti antecedente e conseguente evita garanzie assolute non giustificate."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Invertire l’implicazione."
+        },
+        {
+          "type": "list-item",
+          "text": "Interpretarla automaticamente come causalità."
+        },
+        {
+          "type": "list-item",
+          "text": "Confondere necessario e sufficiente."
+        },
+        {
+          "type": "list-item",
+          "text": "Ignorare le precondizioni della garanzia."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Antecedente falso, per cui l’implicazione classica risulta vera."
+        },
+        {
+          "type": "list-item",
+          "text": "Conseguente vero per causa diversa."
+        },
+        {
+          "type": "list-item",
+          "text": "Regola basata su dati incompleti."
+        },
+        {
+          "type": "list-item",
+          "text": "Enunciati temporali in cui ordine e causalità richiedono modelli ulteriori."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso chiedi quale strato è coinvolto, quale contratto è stato violato, quale segnale è osservabile e quali prove distinguono le cause alternative."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Perché q vera non prova p?"
+        },
+        {
+          "type": "list-item",
+          "text": "Che differenza c’è fra causa e implicazione?"
+        },
+        {
+          "type": "list-item",
+          "text": "Qual è la contrapposta di ‘se è quadrato allora è rettangolo’?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Scrivi la tavola di p → q tramite NOT p OR q."
+        },
+        {
+          "type": "list-item",
+          "text": "Costruisci la contrapposta."
+        },
+        {
+          "type": "list-item",
+          "text": "Verifica che le colonne coincidano."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Trova tre errori di inversione in frasi quotidiane."
+        },
+        {
+          "type": "list-item",
+          "text": "Distingui condizioni necessarie e sufficienti per un accesso."
+        },
+        {
+          "type": "list-item",
+          "text": "Formula un contratto con precondizione e postcondizione."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Quando p → q è falsa?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. entrambe false"
+        },
+        {
+          "type": "list-item",
+          "text": "B. entrambe vere"
+        },
+        {
+          "type": "list-item",
+          "text": "C. p vera e q falsa"
+        },
+        {
+          "type": "list-item",
+          "text": "D. p falsa e q vera"
+        },
+        {
+          "type": "heading",
+          "text": "2. La contrapposta equivalente è?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. p AND q"
+        },
+        {
+          "type": "list-item",
+          "text": "B. NOT q → NOT p"
+        },
+        {
+          "type": "list-item",
+          "text": "C. q → p"
+        },
+        {
+          "type": "list-item",
+          "text": "D. NOT p → NOT q"
+        },
+        {
+          "type": "heading",
+          "text": "3. Implicazione significa sempre causalità?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. No"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo nei programmi"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Solo per numeri"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Implicazione",
+              "Connettivo falso solo con antecedente vero e conseguente falso."
+            ],
+            [
+              "Antecedente",
+              "Parte p di p → q."
+            ],
+            [
+              "Conseguente",
+              "Parte q di p → q."
+            ],
+            [
+              "Condizione necessaria",
+              "Proprietà richiesta perché un’altra possa valere."
+            ],
+            [
+              "Condizione sufficiente",
+              "Proprietà che garantisce un’altra nel modello."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "p → q equivale a NOT p OR q. p è condizione sufficiente per q; q è necessaria per p. La contrapposta NOT q → NOT p è equivalente. L’inversa q → p e la contraria NOT p → NOT q non sono in generale equivalenti all’implicazione originale. La competenza richiesta non consiste nel ricordare un elenco di componenti, ma nel saper seguire il flusso di dati e responsabilità attraverso i diversi livelli."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So classificare almeno tre casi limite e proporre un controllo."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        },
+        {
+          "type": "list-item",
+          "text": "So collegare il capitolo al percorso completo sorgente–processo–hardware–effetto."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-4-chapter-8",
+      "lessonId": "0.4",
+      "chapterNumber": 8,
+      "title": "8. Equivalenze, leggi di De Morgan e semplificazione",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.4 · CAPITOLO 8 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "8. Equivalenze, leggi di De Morgan e semplificazione"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto centrale, collegarlo agli altri strati del sistema, riconoscere errori di interpretazione e applicarlo a un dispositivo reale."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Espressioni diverse possono descrivere la stessa regola. Le equivalenze consentono di trasformare condizioni senza cambiarne il significato. Sono utili per chiarire, verificare e talvolta rendere più efficiente il codice, ma ogni trasformazione va controllata."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Dire ‘non è vero che entrambi hanno pagato’ equivale a ‘almeno uno dei due non ha pagato’. La forma cambia, l’insieme dei casi descritti resta uguale. Le leggi di De Morgan formalizzano questo passaggio."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "NOT(p AND q) equivale a NOT p OR NOT q; NOT(p OR q) equivale a NOT p AND NOT q. Altre leggi includono identità, dominazione, idempotenza, doppia negazione, commutatività, associatività, distributività e assorbimento. L’equivalenza può essere dimostrata con tavole di verità o trasformazioni note."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "NOT(x >= 10 AND x <= 20) equivale a x < 10 OR x > 20."
+        },
+        {
+          "type": "list-item",
+          "text": "p OR (p AND q) equivale a p per assorbimento."
+        },
+        {
+          "type": "list-item",
+          "text": "p AND Vero equivale a p."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "NOT(p AND q) non equivale a NOT p AND NOT q."
+        },
+        {
+          "type": "list-item",
+          "text": "Una forma più corta non è sempre più chiara."
+        },
+        {
+          "type": "list-item",
+          "text": "Le equivalenze sui soli valori non preservano necessariamente effetti collaterali o errori di valutazione."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Semplificare è come ridurre una frazione mantenendo lo stesso valore. Ma nelle condizioni software l’ordine di calcolo può essere osservabile, quindi l’equivalenza logica non garantisce sempre equivalenza operativa."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 8.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "NOT (p AND q)  =  (NOT p) OR (NOT q)NOT (p OR q)   =  (NOT p) AND (NOT q)la negazione entra:AND cambia in OROR cambia in ANDogni operando viene negato"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "La normalizzazione porta espressioni in forme sistematiche, utili in circuiti, database e risolutori. Per principianti l’obiettivo non è memorizzare tutte le forme, ma imparare a controllare le trasformazioni su tutte le combinazioni e privilegiare nomi e parentesi leggibili."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Distribuire NOT senza cambiare l’operatore."
+        },
+        {
+          "type": "list-item",
+          "text": "Semplificare soltanto per intuizione."
+        },
+        {
+          "type": "list-item",
+          "text": "Eliminare parentesi necessarie."
+        },
+        {
+          "type": "list-item",
+          "text": "Ignorare la differenza fra equivalenza logica e operativa."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Condizioni che possono generare errore."
+        },
+        {
+          "type": "list-item",
+          "text": "Valori sconosciuti con regole a tre valori."
+        },
+        {
+          "type": "list-item",
+          "text": "Funzioni chiamate durante la valutazione."
+        },
+        {
+          "type": "list-item",
+          "text": "Espressioni già semplici ma rese meno leggibili dalla trasformazione."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso chiedi quale strato è coinvolto, quale contratto è stato violato, quale segnale è osservabile e quali prove distinguono le cause alternative."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Come verifichi una trasformazione?"
+        },
+        {
+          "type": "list-item",
+          "text": "Perché De Morgan cambia AND in OR?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quando una forma più lunga è preferibile?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Nega ‘età >= 18 AND consenso = vero’."
+        },
+        {
+          "type": "list-item",
+          "text": "Applica De Morgan."
+        },
+        {
+          "type": "list-item",
+          "text": "Verifica quattro combinazioni concettuali."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Semplifica p AND(p OR q)."
+        },
+        {
+          "type": "list-item",
+          "text": "Trasforma la negazione di tre condizioni AND."
+        },
+        {
+          "type": "list-item",
+          "text": "Trova due espressioni logicamente equivalenti ma operativamente rischiose."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. NOT(p AND q) equivale a?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. p AND q"
+        },
+        {
+          "type": "list-item",
+          "text": "B. NOT p OR NOT q"
+        },
+        {
+          "type": "list-item",
+          "text": "C. NOT p AND NOT q"
+        },
+        {
+          "type": "list-item",
+          "text": "D. p OR q"
+        },
+        {
+          "type": "heading",
+          "text": "2. p OR(p AND q) equivale a?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. p"
+        },
+        {
+          "type": "list-item",
+          "text": "B. q"
+        },
+        {
+          "type": "list-item",
+          "text": "C. p AND q"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Vero"
+        },
+        {
+          "type": "heading",
+          "text": "3. Equivalenza logica garantisce sempre identici effetti operativi?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo con OR"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo con NOT"
+        },
+        {
+          "type": "list-item",
+          "text": "D. No"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Legge di De Morgan",
+              "Regola per negare congiunzioni e disgiunzioni."
+            ],
+            [
+              "Assorbimento",
+              "Legge che elimina una sottoespressione ridondante."
+            ],
+            [
+              "Distributività",
+              "Regola di trasformazione fra combinazioni AND e OR."
+            ],
+            [
+              "Normalizzazione",
+              "Conversione in una forma logica sistematica."
+            ],
+            [
+              "Equivalenza operativa",
+              "Uguaglianza che considera anche ordine, errori ed effetti."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "NOT(p AND q) equivale a NOT p OR NOT q; NOT(p OR q) equivale a NOT p AND NOT q. Altre leggi includono identità, dominazione, idempotenza, doppia negazione, commutatività, associatività, distributività e assorbimento. L’equivalenza può essere dimostrata con tavole di verità o trasformazioni note. La competenza richiesta non consiste nel ricordare un elenco di componenti, ma nel saper seguire il flusso di dati e responsabilità attraverso i diversi livelli."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So classificare almeno tre casi limite e proporre un controllo."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        },
+        {
+          "type": "list-item",
+          "text": "So collegare il capitolo al percorso completo sorgente–processo–hardware–effetto."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-4-chapter-9",
+      "lessonId": "0.4",
+      "chapterNumber": 9,
+      "title": "9. Valutazione a corto circuito e ordine delle condizioni",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.4 · CAPITOLO 9 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "9. Valutazione a corto circuito e ordine delle condizioni"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto centrale, collegarlo agli altri strati del sistema, riconoscere errori di interpretazione e applicarlo a un dispositivo reale."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Molti linguaggi non valutano sempre tutti gli operandi. Con AND, se il primo è falso, il risultato è già determinato; con OR, se il primo è vero, vale lo stesso. Questa valutazione a corto circuito migliora efficienza e consente controlli di sicurezza, ma rende l’ordine osservabile."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Prima di leggere una pagina di un libro, controlli che il libro esista. Se non esiste, non tenti la lettura. La condizione ‘libro esiste AND pagina valida’ evita un’operazione impossibile se viene valutata nell’ordine corretto."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Nel corto circuito, p AND q non valuta q quando p è falso; p OR q non valuta q quando p è vero. Il valore logico coincide con la tavola classica se gli operandi sono puri, ma errori, costi ed effetti possono differire. Una condizione guardia protegge l’operazione successiva verificandone prima i prerequisiti."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "file_esiste AND contenuto_valido evita la lettura se il file manca."
+        },
+        {
+          "type": "list-item",
+          "text": "utente è None OR utente_inattivo evita l’accesso a proprietà inesistenti."
+        },
+        {
+          "type": "list-item",
+          "text": "cache_disponibile OR recupera_dalla_rete può evitare una richiesta costosa."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "Affidare un effetto essenziale al secondo operando di OR può impedirne l’esecuzione."
+        },
+        {
+          "type": "list-item",
+          "text": "Invertire guardia e operazione può causare errore prima del controllo."
+        },
+        {
+          "type": "list-item",
+          "text": "Credere che commutatività logica autorizzi sempre a scambiare operandi nel programma."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Le guardie sono come controlli all’ingresso di una macchina: verificano condizioni prima di avviarla. Ma un controllo può a sua volta fallire o modificare lo stato, quindi è preferibile mantenerlo semplice e privo di effetti."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 9.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "p AND q:valuta p  | falso -> risultato FALSO; q saltata  | vero  -> valuta qp OR q:  | vero  -> risultato VERO; q saltata  | falso -> valuta q"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’ordine dovrebbe seguire validità, costo e probabilità senza sacrificare chiarezza: prima controlli che rendono sicura la valutazione, poi quelli economici e selettivi, infine operazioni costose. Ottimizzare alla cieca può nascondere requisiti o introdurre dipendenze fragili."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Mettere l’operazione rischiosa prima della guardia."
+        },
+        {
+          "type": "list-item",
+          "text": "Usare effetti collaterali dentro condizioni."
+        },
+        {
+          "type": "list-item",
+          "text": "Scambiare operandi perché AND e OR sono commutativi in logica pura."
+        },
+        {
+          "type": "list-item",
+          "text": "Supporre corto circuito in una notazione che non lo garantisce."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Primo operando che genera errore."
+        },
+        {
+          "type": "list-item",
+          "text": "Condizione che modifica lo stato."
+        },
+        {
+          "type": "list-item",
+          "text": "Valutazioni concorrenti con dati che cambiano."
+        },
+        {
+          "type": "list-item",
+          "text": "Sistema dichiarativo che valuta in ordine non specificato."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso chiedi quale strato è coinvolto, quale contratto è stato violato, quale segnale è osservabile e quali prove distinguono le cause alternative."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale condizione deve venire prima per evitare un errore?"
+        },
+        {
+          "type": "list-item",
+          "text": "Perché lo scambio può cambiare effetti pur conservando il valore?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quando un recupero di rete dovrebbe essere evitato?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Analizza denominatore != 0 AND numeratore/denominatore > 2."
+        },
+        {
+          "type": "list-item",
+          "text": "Spiega perché l’ordine protegge dalla divisione per zero."
+        },
+        {
+          "type": "list-item",
+          "text": "Inverti gli operandi e descrivi il rischio."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Progetta una guardia per accedere a un elemento di lista."
+        },
+        {
+          "type": "list-item",
+          "text": "Ordina tre controlli per sicurezza e costo."
+        },
+        {
+          "type": "list-item",
+          "text": "Trova un caso in cui il secondo operando non viene eseguito."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Con AND, quando il secondo operando è saltato?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Quando il primo è falso"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Quando il primo è vero"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Sempre"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Mai"
+        },
+        {
+          "type": "heading",
+          "text": "2. Una guardia serve a?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Cambiare ogni dato"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Eliminare i test"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Sostituire il sistema operativo"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Verificare prerequisiti prima di un’operazione"
+        },
+        {
+          "type": "heading",
+          "text": "3. Si possono sempre scambiare operandi con effetti?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Solo in OR"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo online"
+        },
+        {
+          "type": "list-item",
+          "text": "C. No"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Sì"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Corto circuito",
+              "Valutazione che omette operandi non necessari al risultato."
+            ],
+            [
+              "Guardia",
+              "Condizione che protegge un’operazione successiva."
+            ],
+            [
+              "Operando puro",
+              "Espressione senza effetti osservabili oltre al valore."
+            ],
+            [
+              "Effetto collaterale",
+              "Modifica osservabile prodotta durante la valutazione."
+            ],
+            [
+              "Ordine di valutazione",
+              "Sequenza con cui vengono calcolate le parti."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Nel corto circuito, p AND q non valuta q quando p è falso; p OR q non valuta q quando p è vero. Il valore logico coincide con la tavola classica se gli operandi sono puri, ma errori, costi ed effetti possono differire. Una condizione guardia protegge l’operazione successiva verificandone prima i prerequisiti. La competenza richiesta non consiste nel ricordare un elenco di componenti, ma nel saper seguire il flusso di dati e responsabilità attraverso i diversi livelli."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So classificare almeno tre casi limite e proporre un controllo."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        },
+        {
+          "type": "list-item",
+          "text": "So collegare il capitolo al percorso completo sorgente–processo–hardware–effetto."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-4-chapter-10",
+      "lessonId": "0.4",
+      "chapterNumber": 10,
+      "title": "10. Oltre Vero e Falso: incertezza, stati e responsabilità",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.4 · CAPITOLO 10 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "10. Oltre Vero e Falso: incertezza, stati e responsabilità"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto centrale, collegarlo agli altri strati del sistema, riconoscere errori di interpretazione e applicarlo a un dispositivo reale."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "La logica booleana è potente, ma non ogni problema reale è naturalmente binario. Informazioni mancanti, stati in corso, conflitti e probabilità richiedono modelli più ricchi. Forzare tutto in Vero/Falso può produrre decisioni ingiuste o tecnicamente errate."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una richiesta di prestito può essere approvata, rifiutata o ancora in valutazione. Registrare ‘non approvata’ come falsa non distingue rifiuto e attesa. Il problema non si risolve con una formula più complessa: serve un dominio con stati espliciti."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una logica a tre valori può includere Sconosciuto oltre a Vero e Falso, con tavole specifiche. Un modello a stati rappresenta fasi come ricevuta, verificata, approvata, respinta. La probabilità misura incertezza e non coincide con verità parziale. La scelta del modello determina quali domande sono esprimibili e quali errori sono distinguibili."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Risultato di laboratorio non ancora disponibile."
+        },
+        {
+          "type": "list-item",
+          "text": "Consenso non registrato distinto da consenso negato."
+        },
+        {
+          "type": "list-item",
+          "text": "Sensore guasto distinto da temperatura sotto soglia."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "Sconosciuto non significa cinquanta per cento di probabilità."
+        },
+        {
+          "type": "list-item",
+          "text": "‘Non vero’ non equivale sempre a falso in una logica a più valori."
+        },
+        {
+          "type": "list-item",
+          "text": "Aggiungere una categoria ‘altro’ senza processo di gestione può solo nascondere casi."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un semaforo ha più di due segnali e ogni colore ordina un comportamento diverso. Tuttavia uno stato di sistema non è soltanto colore: deve definire transizioni valide, eventi e responsabilità."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 10.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "RICHIESTA   vRICEVUTA -> IN VERIFICA -> APPROVATA                    |                    +----------> RESPINTA                    |                    +----------> SOSPESAnon ridurre tutti gli stati a sì/no"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Le decisioni ad alto impatto richiedono trasparenza e possibilità di revisione. Una condizione booleana può implementare una soglia, ma la soglia deriva da scelte umane, dati e obiettivi. Correttezza logica non prova equità, legalità o adeguatezza della politica."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Usare falso per dato mancante."
+        },
+        {
+          "type": "list-item",
+          "text": "Confondere probabilità e valore di verità."
+        },
+        {
+          "type": "list-item",
+          "text": "Creare stati senza transizioni definite."
+        },
+        {
+          "type": "list-item",
+          "text": "Trattare una decisione automatica come neutrale."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Fonti discordanti."
+        },
+        {
+          "type": "list-item",
+          "text": "Stato che resta indefinitamente in attesa."
+        },
+        {
+          "type": "list-item",
+          "text": "Decisione revocata dopo nuove informazioni."
+        },
+        {
+          "type": "list-item",
+          "text": "Modello accurato in media ma peggiore per un gruppo."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso chiedi quale strato è coinvolto, quale contratto è stato violato, quale segnale è osservabile e quali prove distinguono le cause alternative."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Quando serve un modello a stati invece di un booleano?"
+        },
+        {
+          "type": "list-item",
+          "text": "Chi subisce il costo di un falso positivo?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale canale permette di correggere una decisione?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Modella una consegna con ordinata, preparata, spedita, consegnata e annullata."
+        },
+        {
+          "type": "list-item",
+          "text": "Definisci transizioni ammesse."
+        },
+        {
+          "type": "list-item",
+          "text": "Individua stati che non possono essere rappresentati con un solo booleano consegnata."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Progetta stati per una richiesta di assistenza."
+        },
+        {
+          "type": "list-item",
+          "text": "Distingui sconosciuto, non applicabile e falso."
+        },
+        {
+          "type": "list-item",
+          "text": "Analizza una soglia automatica e proponi revisione umana."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Sconosciuto equivale a falso?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Sempre"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo nei modelli a stati"
+        },
+        {
+          "type": "list-item",
+          "text": "D. No"
+        },
+        {
+          "type": "heading",
+          "text": "2. La probabilità è un valore di verità parziale?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. È soltanto falso"
+        },
+        {
+          "type": "list-item",
+          "text": "B. È soltanto vero"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Non necessariamente: è un modello diverso"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Sì sempre"
+        },
+        {
+          "type": "heading",
+          "text": "3. Correttezza logica garantisce equità?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Solo con dati numerici"
+        },
+        {
+          "type": "list-item",
+          "text": "B. No"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Solo con AND"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Logica a tre valori",
+              "Sistema con un terzo valore oltre a vero e falso."
+            ],
+            [
+              "Sconosciuto",
+              "Valore non determinato con le informazioni disponibili."
+            ],
+            [
+              "Modello a stati",
+              "Rappresentazione di fasi e transizioni."
+            ],
+            [
+              "Falso positivo",
+              "Caso classificato positivamente quando non dovrebbe esserlo."
+            ],
+            [
+              "Revisione umana",
+              "Controllo da parte di una persona su una decisione automatizzata."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una logica a tre valori può includere Sconosciuto oltre a Vero e Falso, con tavole specifiche. Un modello a stati rappresenta fasi come ricevuta, verificata, approvata, respinta. La probabilità misura incertezza e non coincide con verità parziale. La scelta del modello determina quali domande sono esprimibili e quali errori sono distinguibili. La competenza richiesta non consiste nel ricordare un elenco di componenti, ma nel saper seguire il flusso di dati e responsabilità attraverso i diversi livelli."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So classificare almeno tre casi limite e proporre un controllo."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        },
+        {
+          "type": "list-item",
+          "text": "So collegare il capitolo al percorso completo sorgente–processo–hardware–effetto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sintesi integrata della Lezione 0.4"
+        },
+        {
+          "type": "paragraph",
+          "text": "La logica booleana trasforma condizioni in oggetti verificabili. Proposizioni e predicati producono valori; NOT, AND, OR e XOR li combinano; tavole di verità dimostrano equivalenze; implicazione e De Morgan consentono ragionamenti sistematici. Nell’esecuzione reale contano anche ordine, errori, effetti e valori sconosciuti. La qualità della decisione dipende infine dal modello e dalla politica, non soltanto dalla formula."
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura S.1 — Dati, logica e decisione"
+        },
+        {
+          "type": "paragraph",
+          "text": "DATI + CONTESTO      vPREDICATI -> PROPOSIZIONI      vNOT / AND / OR / XOR / IMPLICAZIONE      vCONDIZIONE COMPLESSIVA      vDECISIONE DEL PROGRAMMA      |      +--> verifica casi, confini, sconosciuti ed effetti"
+        },
+        {
+          "type": "heading",
+          "text": "Prova finale di padronanza"
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta la logica di accesso a una risorsa digitale e produci un’analisi di 900–1.300 parole che includa:"
+        },
+        {
+          "type": "list-item",
+          "text": "proposizioni atomiche con fonte dei dati;"
+        },
+        {
+          "type": "list-item",
+          "text": "predicati e confronti con confini;"
+        },
+        {
+          "type": "list-item",
+          "text": "regola composta con parentesi esplicite;"
+        },
+        {
+          "type": "list-item",
+          "text": "tavola di verità per almeno tre variabili;"
+        },
+        {
+          "type": "list-item",
+          "text": "negazione completa tramite De Morgan;"
+        },
+        {
+          "type": "list-item",
+          "text": "condizioni necessarie e sufficienti;"
+        },
+        {
+          "type": "list-item",
+          "text": "ordine di valutazione e guardie;"
+        },
+        {
+          "type": "list-item",
+          "text": "trattamento di sconosciuto, errore e revisione umana."
+        },
+        {
+          "type": "heading",
+          "text": "Rubrica di valutazione"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Dimensione",
+              "Essenziale",
+              "Solida",
+              "Piena padronanza"
+            ],
+            [
+              "Definizioni",
+              "Proposizioni riconoscibili",
+              "Contesto e dominio dichiarati",
+              "Ambiguità e stati mancanti trattati"
+            ],
+            [
+              "Operatori",
+              "Operatori principali corretti",
+              "Parentesi e tavole coerenti",
+              "Equivalenze dimostrate"
+            ],
+            [
+              "Confini",
+              "Alcuni casi limite",
+              "Limiti inclusivi/esclusivi verificati",
+              "Errori e sconosciuti distinti"
+            ],
+            [
+              "Esecuzione",
+              "Ordine citato",
+              "Guardie e corto circuito corretti",
+              "Effetti e concorrenza considerati"
+            ],
+            [
+              "Responsabilità",
+              "Decisione descritta",
+              "Conseguenze e revisione indicate",
+              "Politica e formula valutate separatamente"
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento della lezione"
+        },
+        {
+          "type": "list-item",
+          "text": "Tutti i dieci capitoli sono stati letti e annotati."
+        },
+        {
+          "type": "list-item",
+          "text": "Sono state compilate almeno sei tavole di verità complete."
+        },
+        {
+          "type": "list-item",
+          "text": "Per ogni operatore è stato creato un esempio e un controesempio personale."
+        },
+        {
+          "type": "list-item",
+          "text": "Sono stati completati tutti gli esercizi guidati e almeno venti autonomi."
+        },
+        {
+          "type": "list-item",
+          "text": "Il punteggio dei quiz è almeno 24/30, con correzione motivata."
+        },
+        {
+          "type": "list-item",
+          "text": "La prova finale raggiunge almeno il livello Solida in ogni dimensione."
+        },
+        {
+          "type": "list-item",
+          "text": "Il lettore sa distinguere correttezza della formula e adeguatezza della decisione."
+        },
+        {
+          "type": "callout",
+          "text": "PASSAGGIO SUCCESSIVO  La Lezione 0.5 userà questa base per progettare algoritmi, pseudocodice e diagrammi di flusso, collegando condizioni, sequenze e ripetizioni."
+        }
+      ]
+    }
+  ],
+  "chapters": [
+    {
+      "number": 1,
+      "title": "1. Proposizioni e valori di verità",
+      "sectionId": "programming-0-4-chapter-1",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-4-chapter-1-guided",
+          "kind": "guided",
+          "lessonId": "0.4",
+          "chapterNumber": 1,
+          "title": "1. Proposizioni e valori di verità",
+          "prompt": "Classifica dieci frasi come proposizione, comando, domanda o frase vaga.\nPer ogni proposizione aggiungi contesto sufficiente.\nIndica la fonte dei dati necessaria per valutarla.",
+          "autoverification": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-4-chapter-1-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 1,
+            "title": "1. Proposizioni e valori di verità",
+            "prompt": "Scrivi cinque proposizioni relative a una biblioteca."
+          },
+          {
+            "id": "programming-0-4-chapter-1-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 1,
+            "title": "1. Proposizioni e valori di verità",
+            "prompt": "Trasforma tre requisiti vaghi in proposizioni verificabili."
+          },
+          {
+            "id": "programming-0-4-chapter-1-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 1,
+            "title": "1. Proposizioni e valori di verità",
+            "prompt": "Descrivi un caso in cui il valore cambia nel tempo."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-4-chapter-1-quiz-1",
+          "concept": "1. Proposizioni e valori di verità",
+          "prompt": "Quale frase è una proposizione?",
+          "choices": [
+            "A. ‘Il saldo è maggiore di zero’",
+            "B. ‘Inserisci il saldo’",
+            "C. ‘Qual è il saldo?’",
+            "D. ‘Che bel saldo!’"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-1"
+        },
+        {
+          "id": "programming-0-4-chapter-1-quiz-2",
+          "concept": "1. Proposizioni e valori di verità",
+          "prompt": "Nella logica booleana classica i valori sono?",
+          "choices": [
+            "A. Alto e basso soltanto",
+            "B. Uno e dieci",
+            "C. Testo e numero",
+            "D. Vero e Falso"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-1"
+        },
+        {
+          "id": "programming-0-4-chapter-1-quiz-3",
+          "concept": "1. Proposizioni e valori di verità",
+          "prompt": "Valore sconosciuto equivale sempre a falso?",
+          "choices": [
+            "A. Solo nei file",
+            "B. Solo nei quiz",
+            "C. No",
+            "D. Sì"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-1"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "2. Predicati, confronti e condizioni",
+      "sectionId": "programming-0-4-chapter-2",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-4-chapter-2-guided",
+          "kind": "guided",
+          "lessonId": "0.4",
+          "chapterNumber": 2,
+          "title": "2. Predicati, confronti e condizioni",
+          "prompt": "Definisci il predicato per una temperatura accettabile fra 18 e 26 gradi inclusi.\nProvalo su 17,9; 18; 22; 26; 26,1.\nAggiungi la gestione del sensore non disponibile.",
+          "autoverification": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-4-chapter-2-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 2,
+            "title": "2. Predicati, confronti e condizioni",
+            "prompt": "Progetta condizioni per una password di lunghezza minima."
+          },
+          {
+            "id": "programming-0-4-chapter-2-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 2,
+            "title": "2. Predicati, confronti e condizioni",
+            "prompt": "Definisci uguaglianza tra indirizzi ignorando spazi irrilevanti."
+          },
+          {
+            "id": "programming-0-4-chapter-2-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 2,
+            "title": "2. Predicati, confronti e condizioni",
+            "prompt": "Crea test di confine per uno sconto riservato a età minore di 12."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-4-chapter-2-quiz-1",
+          "concept": "2. Predicati, confronti e condizioni",
+          "prompt": "Quando un predicato diventa proposizione?",
+          "choices": [
+            "A. Quando è lungo",
+            "B. Quando viene stampato",
+            "C. Quando usa soltanto numeri",
+            "D. Quando le variabili ricevono valori nel dominio"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-2"
+        },
+        {
+          "id": "programming-0-4-chapter-2-quiz-2",
+          "concept": "2. Predicati, confronti e condizioni",
+          "prompt": "‘Almeno 18’ si traduce concettualmente con?",
+          "choices": [
+            "A. = 18 soltanto",
+            "B. < 18",
+            "C. >= 18",
+            "D. > 18"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-2"
+        },
+        {
+          "id": "programming-0-4-chapter-2-quiz-3",
+          "concept": "2. Predicati, confronti e condizioni",
+          "prompt": "Uguaglianza floating point è sempre semplice?",
+          "choices": [
+            "A. Solo online",
+            "B. No",
+            "C. Sì",
+            "D. Solo per zero"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-2"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "title": "3. Negazione: l’operatore NOT",
+      "sectionId": "programming-0-4-chapter-3",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-4-chapter-3-guided",
+          "kind": "guided",
+          "lessonId": "0.4",
+          "chapterNumber": 3,
+          "title": "3. Negazione: l’operatore NOT",
+          "prompt": "Scrivi la negazione di x < 10.\nVerifica su 9, 10 e 11.\nSpiega perché x >= 10 include correttamente il confine.",
+          "autoverification": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-4-chapter-3-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 3,
+            "title": "3. Negazione: l’operatore NOT",
+            "prompt": "Nega cinque condizioni di confronto."
+          },
+          {
+            "id": "programming-0-4-chapter-3-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 3,
+            "title": "3. Negazione: l’operatore NOT",
+            "prompt": "Trasforma una doppia negazione in frase positiva."
+          },
+          {
+            "id": "programming-0-4-chapter-3-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 3,
+            "title": "3. Negazione: l’operatore NOT",
+            "prompt": "Distingui non completato, fallito e in corso in un modello a stati."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-4-chapter-3-quiz-1",
+          "concept": "3. Negazione: l’operatore NOT",
+          "prompt": "NOT Vero vale?",
+          "choices": [
+            "A. Sconosciuto sempre",
+            "B. Zero soltanto",
+            "C. Falso",
+            "D. Vero"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-3"
+        },
+        {
+          "id": "programming-0-4-chapter-3-quiz-2",
+          "concept": "3. Negazione: l’operatore NOT",
+          "prompt": "Negazione di x > 5?",
+          "choices": [
+            "A. x >= 5",
+            "B. x <= 5",
+            "C. x < 5",
+            "D. x = 5"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-3"
+        },
+        {
+          "id": "programming-0-4-chapter-3-quiz-3",
+          "concept": "3. Negazione: l’operatore NOT",
+          "prompt": "Non approvato significa sempre rifiutato?",
+          "choices": [
+            "A. No",
+            "B. Sì",
+            "C. Solo nei database",
+            "D. Solo nei quiz"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-3"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "title": "4. Congiunzione: l’operatore AND",
+      "sectionId": "programming-0-4-chapter-4",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-4-chapter-4-guided",
+          "kind": "guided",
+          "lessonId": "0.4",
+          "chapterNumber": 4,
+          "title": "4. Congiunzione: l’operatore AND",
+          "prompt": "Costruisci la regola per un numero fra 10 e 20 inclusi.\nCompila i risultati per 9, 10, 15, 20 e 21.\nNega l’intera regola e controlla i confini.",
+          "autoverification": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-4-chapter-4-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 4,
+            "title": "4. Congiunzione: l’operatore AND",
+            "prompt": "Progetta una regola AND per un prestito bibliotecario."
+          },
+          {
+            "id": "programming-0-4-chapter-4-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 4,
+            "title": "4. Congiunzione: l’operatore AND",
+            "prompt": "Semplifica p AND Vero e p AND Falso."
+          },
+          {
+            "id": "programming-0-4-chapter-4-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 4,
+            "title": "4. Congiunzione: l’operatore AND",
+            "prompt": "Trova un errore causato da un requisito mancante."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-4-chapter-4-quiz-1",
+          "concept": "4. Congiunzione: l’operatore AND",
+          "prompt": "Quando p AND q è vero?",
+          "choices": [
+            "A. Quando p è falso",
+            "B. Quando entrambi sono veri",
+            "C. Quando almeno uno è vero",
+            "D. Quando entrambi sono falsi"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-4"
+        },
+        {
+          "id": "programming-0-4-chapter-4-quiz-2",
+          "concept": "4. Congiunzione: l’operatore AND",
+          "prompt": "p AND Falso vale?",
+          "choices": [
+            "A. Falso",
+            "B. p",
+            "C. Vero",
+            "D. NOT p"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-4"
+        },
+        {
+          "id": "programming-0-4-chapter-4-quiz-3",
+          "concept": "4. Congiunzione: l’operatore AND",
+          "prompt": "Aggiungere un requisito AND può ampliare i casi accettati?",
+          "choices": [
+            "A. Sì",
+            "B. Sempre",
+            "C. Solo con numeri",
+            "D. No"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-4"
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "title": "5. Disgiunzione: OR inclusivo e XOR esclusivo",
+      "sectionId": "programming-0-4-chapter-5",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-4-chapter-5-guided",
+          "kind": "guided",
+          "lessonId": "0.4",
+          "chapterNumber": 5,
+          "title": "5. Disgiunzione: OR inclusivo e XOR esclusivo",
+          "prompt": "Costruisci la tavola di p OR q.\nAggiungi una colonna p AND q.\nDeriva XOR con OR, AND e NOT e verifica tutte le righe.",
+          "autoverification": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-4-chapter-5-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 5,
+            "title": "5. Disgiunzione: OR inclusivo e XOR esclusivo",
+            "prompt": "Trova tre esempi di OR inclusivo e tre di XOR."
+          },
+          {
+            "id": "programming-0-4-chapter-5-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 5,
+            "title": "5. Disgiunzione: OR inclusivo e XOR esclusivo",
+            "prompt": "Analizza una politica di recupero account."
+          },
+          {
+            "id": "programming-0-4-chapter-5-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 5,
+            "title": "5. Disgiunzione: OR inclusivo e XOR esclusivo",
+            "prompt": "Progetta una regola per almeno una di tre autorizzazioni."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-4-chapter-5-quiz-1",
+          "concept": "5. Disgiunzione: OR inclusivo e XOR esclusivo",
+          "prompt": "OR inclusivo è vero quando entrambi sono veri?",
+          "choices": [
+            "A. Sì",
+            "B. No",
+            "C. Solo per numeri",
+            "D. Solo se p è falso"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-5"
+        },
+        {
+          "id": "programming-0-4-chapter-5-quiz-2",
+          "concept": "5. Disgiunzione: OR inclusivo e XOR esclusivo",
+          "prompt": "XOR è vero quando?",
+          "choices": [
+            "A. Entrambi sono veri",
+            "B. Entrambi sono falsi",
+            "C. p è sempre vero",
+            "D. Gli operandi sono diversi"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-5"
+        },
+        {
+          "id": "programming-0-4-chapter-5-quiz-3",
+          "concept": "5. Disgiunzione: OR inclusivo e XOR esclusivo",
+          "prompt": "Un’alternativa debole in una regola OR può ridurre la sicurezza?",
+          "choices": [
+            "A. Mai",
+            "B. Solo offline",
+            "C. Sì",
+            "D. No"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-5"
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "title": "6. Tavole di verità e precedenza degli operatori",
+      "sectionId": "programming-0-4-chapter-6",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-4-chapter-6-guided",
+          "kind": "guided",
+          "lessonId": "0.4",
+          "chapterNumber": 6,
+          "title": "6. Tavole di verità e precedenza degli operatori",
+          "prompt": "Costruisci la tavola di NOT(p AND q).\nCostruisci NOT p OR NOT q.\nConfronta le colonne finali e formula l’equivalenza.",
+          "autoverification": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-4-chapter-6-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 6,
+            "title": "6. Tavole di verità e precedenza degli operatori",
+            "prompt": "Classifica p OR NOT p."
+          },
+          {
+            "id": "programming-0-4-chapter-6-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 6,
+            "title": "6. Tavole di verità e precedenza degli operatori",
+            "prompt": "Classifica p AND NOT p."
+          },
+          {
+            "id": "programming-0-4-chapter-6-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 6,
+            "title": "6. Tavole di verità e precedenza degli operatori",
+            "prompt": "Confronta p AND(q OR r) con (p AND q) OR(p AND r)."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-4-chapter-6-quiz-1",
+          "concept": "6. Tavole di verità e precedenza degli operatori",
+          "prompt": "Righe per tre variabili booleane?",
+          "choices": [
+            "A. 3",
+            "B. 6",
+            "C. 9",
+            "D. 8"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-6"
+        },
+        {
+          "id": "programming-0-4-chapter-6-quiz-2",
+          "concept": "6. Tavole di verità e precedenza degli operatori",
+          "prompt": "Due espressioni equivalenti coincidono in?",
+          "choices": [
+            "A. Solo quando vere",
+            "B. Solo quando false",
+            "C. Tutte le assegnazioni",
+            "D. Una riga"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-6"
+        },
+        {
+          "id": "programming-0-4-chapter-6-quiz-3",
+          "concept": "6. Tavole di verità e precedenza degli operatori",
+          "prompt": "Una tautologia è?",
+          "choices": [
+            "A. Non valutabile per definizione",
+            "B. Sempre vera",
+            "C. Sempre falsa",
+            "D. A volte vera"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-6"
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "title": "7. Implicazione, condizioni necessarie e sufficienti",
+      "sectionId": "programming-0-4-chapter-7",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-4-chapter-7-guided",
+          "kind": "guided",
+          "lessonId": "0.4",
+          "chapterNumber": 7,
+          "title": "7. Implicazione, condizioni necessarie e sufficienti",
+          "prompt": "Scrivi la tavola di p → q tramite NOT p OR q.\nCostruisci la contrapposta.\nVerifica che le colonne coincidano.",
+          "autoverification": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-4-chapter-7-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 7,
+            "title": "7. Implicazione, condizioni necessarie e sufficienti",
+            "prompt": "Trova tre errori di inversione in frasi quotidiane."
+          },
+          {
+            "id": "programming-0-4-chapter-7-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 7,
+            "title": "7. Implicazione, condizioni necessarie e sufficienti",
+            "prompt": "Distingui condizioni necessarie e sufficienti per un accesso."
+          },
+          {
+            "id": "programming-0-4-chapter-7-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 7,
+            "title": "7. Implicazione, condizioni necessarie e sufficienti",
+            "prompt": "Formula un contratto con precondizione e postcondizione."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-4-chapter-7-quiz-1",
+          "concept": "7. Implicazione, condizioni necessarie e sufficienti",
+          "prompt": "Quando p → q è falsa?",
+          "choices": [
+            "A. entrambe false",
+            "B. entrambe vere",
+            "C. p vera e q falsa",
+            "D. p falsa e q vera"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-7"
+        },
+        {
+          "id": "programming-0-4-chapter-7-quiz-2",
+          "concept": "7. Implicazione, condizioni necessarie e sufficienti",
+          "prompt": "La contrapposta equivalente è?",
+          "choices": [
+            "A. p AND q",
+            "B. NOT q → NOT p",
+            "C. q → p",
+            "D. NOT p → NOT q"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-7"
+        },
+        {
+          "id": "programming-0-4-chapter-7-quiz-3",
+          "concept": "7. Implicazione, condizioni necessarie e sufficienti",
+          "prompt": "Implicazione significa sempre causalità?",
+          "choices": [
+            "A. No",
+            "B. Sì",
+            "C. Solo nei programmi",
+            "D. Solo per numeri"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-7"
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "title": "8. Equivalenze, leggi di De Morgan e semplificazione",
+      "sectionId": "programming-0-4-chapter-8",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-4-chapter-8-guided",
+          "kind": "guided",
+          "lessonId": "0.4",
+          "chapterNumber": 8,
+          "title": "8. Equivalenze, leggi di De Morgan e semplificazione",
+          "prompt": "Nega ‘età >= 18 AND consenso = vero’.\nApplica De Morgan.\nVerifica quattro combinazioni concettuali.",
+          "autoverification": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-4-chapter-8-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 8,
+            "title": "8. Equivalenze, leggi di De Morgan e semplificazione",
+            "prompt": "Semplifica p AND(p OR q)."
+          },
+          {
+            "id": "programming-0-4-chapter-8-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 8,
+            "title": "8. Equivalenze, leggi di De Morgan e semplificazione",
+            "prompt": "Trasforma la negazione di tre condizioni AND."
+          },
+          {
+            "id": "programming-0-4-chapter-8-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 8,
+            "title": "8. Equivalenze, leggi di De Morgan e semplificazione",
+            "prompt": "Trova due espressioni logicamente equivalenti ma operativamente rischiose."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-4-chapter-8-quiz-1",
+          "concept": "8. Equivalenze, leggi di De Morgan e semplificazione",
+          "prompt": "NOT(p AND q) equivale a?",
+          "choices": [
+            "A. p AND q",
+            "B. NOT p OR NOT q",
+            "C. NOT p AND NOT q",
+            "D. p OR q"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-8"
+        },
+        {
+          "id": "programming-0-4-chapter-8-quiz-2",
+          "concept": "8. Equivalenze, leggi di De Morgan e semplificazione",
+          "prompt": "p OR(p AND q) equivale a?",
+          "choices": [
+            "A. p",
+            "B. q",
+            "C. p AND q",
+            "D. Vero"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-8"
+        },
+        {
+          "id": "programming-0-4-chapter-8-quiz-3",
+          "concept": "8. Equivalenze, leggi di De Morgan e semplificazione",
+          "prompt": "Equivalenza logica garantisce sempre identici effetti operativi?",
+          "choices": [
+            "A. Sì",
+            "B. Solo con OR",
+            "C. Solo con NOT",
+            "D. No"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-8"
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "title": "9. Valutazione a corto circuito e ordine delle condizioni",
+      "sectionId": "programming-0-4-chapter-9",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-4-chapter-9-guided",
+          "kind": "guided",
+          "lessonId": "0.4",
+          "chapterNumber": 9,
+          "title": "9. Valutazione a corto circuito e ordine delle condizioni",
+          "prompt": "Analizza denominatore != 0 AND numeratore/denominatore > 2.\nSpiega perché l’ordine protegge dalla divisione per zero.\nInverti gli operandi e descrivi il rischio.",
+          "autoverification": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-4-chapter-9-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 9,
+            "title": "9. Valutazione a corto circuito e ordine delle condizioni",
+            "prompt": "Progetta una guardia per accedere a un elemento di lista."
+          },
+          {
+            "id": "programming-0-4-chapter-9-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 9,
+            "title": "9. Valutazione a corto circuito e ordine delle condizioni",
+            "prompt": "Ordina tre controlli per sicurezza e costo."
+          },
+          {
+            "id": "programming-0-4-chapter-9-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 9,
+            "title": "9. Valutazione a corto circuito e ordine delle condizioni",
+            "prompt": "Trova un caso in cui il secondo operando non viene eseguito."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-4-chapter-9-quiz-1",
+          "concept": "9. Valutazione a corto circuito e ordine delle condizioni",
+          "prompt": "Con AND, quando il secondo operando è saltato?",
+          "choices": [
+            "A. Quando il primo è falso",
+            "B. Quando il primo è vero",
+            "C. Sempre",
+            "D. Mai"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-9"
+        },
+        {
+          "id": "programming-0-4-chapter-9-quiz-2",
+          "concept": "9. Valutazione a corto circuito e ordine delle condizioni",
+          "prompt": "Una guardia serve a?",
+          "choices": [
+            "A. Cambiare ogni dato",
+            "B. Eliminare i test",
+            "C. Sostituire il sistema operativo",
+            "D. Verificare prerequisiti prima di un’operazione"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-9"
+        },
+        {
+          "id": "programming-0-4-chapter-9-quiz-3",
+          "concept": "9. Valutazione a corto circuito e ordine delle condizioni",
+          "prompt": "Si possono sempre scambiare operandi con effetti?",
+          "choices": [
+            "A. Solo in OR",
+            "B. Solo online",
+            "C. No",
+            "D. Sì"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-9"
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "title": "10. Oltre Vero e Falso: incertezza, stati e responsabilità",
+      "sectionId": "programming-0-4-chapter-10",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-4-chapter-10-guided",
+          "kind": "guided",
+          "lessonId": "0.4",
+          "chapterNumber": 10,
+          "title": "10. Oltre Vero e Falso: incertezza, stati e responsabilità",
+          "prompt": "Modella una consegna con ordinata, preparata, spedita, consegnata e annullata.\nDefinisci transizioni ammesse.\nIndividua stati che non possono essere rappresentati con un solo booleano consegnata.",
+          "autoverification": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-4-chapter-10-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 10,
+            "title": "10. Oltre Vero e Falso: incertezza, stati e responsabilità",
+            "prompt": "Progetta stati per una richiesta di assistenza."
+          },
+          {
+            "id": "programming-0-4-chapter-10-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 10,
+            "title": "10. Oltre Vero e Falso: incertezza, stati e responsabilità",
+            "prompt": "Distingui sconosciuto, non applicabile e falso."
+          },
+          {
+            "id": "programming-0-4-chapter-10-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.4",
+            "chapterNumber": 10,
+            "title": "10. Oltre Vero e Falso: incertezza, stati e responsabilità",
+            "prompt": "Analizza una soglia automatica e proponi revisione umana."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-4-chapter-10-quiz-1",
+          "concept": "10. Oltre Vero e Falso: incertezza, stati e responsabilità",
+          "prompt": "Sconosciuto equivale a falso?",
+          "choices": [
+            "A. Sì",
+            "B. Sempre",
+            "C. Solo nei modelli a stati",
+            "D. No"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-10"
+        },
+        {
+          "id": "programming-0-4-chapter-10-quiz-2",
+          "concept": "10. Oltre Vero e Falso: incertezza, stati e responsabilità",
+          "prompt": "La probabilità è un valore di verità parziale?",
+          "choices": [
+            "A. È soltanto falso",
+            "B. È soltanto vero",
+            "C. Non necessariamente: è un modello diverso",
+            "D. Sì sempre"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-10"
+        },
+        {
+          "id": "programming-0-4-chapter-10-quiz-3",
+          "concept": "10. Oltre Vero e Falso: incertezza, stati e responsabilità",
+          "prompt": "Correttezza logica garantisce equità?",
+          "choices": [
+            "A. Solo con dati numerici",
+            "B. No",
+            "C. Sì",
+            "D. Solo con AND"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-4-chapter-10"
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    [
+      "Proposizione",
+      "Enunciato dichiarativo valutabile come vero o falso nel modello."
+    ],
+    [
+      "Valore di verità",
+      "Risultato logico assegnato a una proposizione."
+    ],
+    [
+      "Booleano",
+      "Dominio classico formato da Vero e Falso."
+    ],
+    [
+      "Interpretazione",
+      "Assegnazione di significato e valori ai simboli."
+    ],
+    [
+      "Contesto",
+      "Informazioni che rendono l’enunciato determinato."
+    ],
+    [
+      "Predicato",
+      "Espressione con variabili che produce una proposizione dopo l’assegnazione."
+    ],
+    [
+      "Confronto",
+      "Operazione che mette in relazione valori."
+    ],
+    [
+      "Condizione",
+      "Espressione booleana usata per scegliere un comportamento."
+    ],
+    [
+      "Dominio",
+      "Insieme dei valori ammessi."
+    ],
+    [
+      "Confine",
+      "Valore limite in cui può cambiare il risultato."
+    ],
+    [
+      "Negazione",
+      "Operazione che inverte un valore booleano."
+    ],
+    [
+      "Operatore unario",
+      "Operatore applicato a un solo operando."
+    ],
+    [
+      "Complemento logico",
+      "Insieme dei casi non coperti dalla condizione."
+    ],
+    [
+      "Doppia negazione",
+      "Applicazione di NOT due volte, equivalente all’originale."
+    ],
+    [
+      "Stato intermedio",
+      "Valore distinto dai due estremi previsti da un modello binario."
+    ],
+    [
+      "Congiunzione",
+      "Combinazione vera soltanto se tutti gli operandi sono veri."
+    ],
+    [
+      "Commutativa",
+      "Proprietà per cui scambiare gli operandi non cambia il valore."
+    ],
+    [
+      "Associativa",
+      "Proprietà che consente di cambiare il raggruppamento."
+    ],
+    [
+      "Elemento neutro",
+      "Valore che non modifica l’altro operando."
+    ],
+    [
+      "Assorbente",
+      "Valore che determina da solo il risultato dell’operazione."
+    ],
+    [
+      "Disgiunzione",
+      "Combinazione di alternative logiche."
+    ],
+    [
+      "OR inclusivo",
+      "Vero se almeno un operando è vero."
+    ],
+    [
+      "XOR",
+      "Vero se gli operandi hanno valori differenti."
+    ],
+    [
+      "Alternativa",
+      "Percorso sufficiente per soddisfare una regola OR."
+    ],
+    [
+      "Politica",
+      "Insieme esplicito di regole applicate dal sistema."
+    ],
+    [
+      "Tavola di verità",
+      "Tabella dei risultati per tutte le assegnazioni."
+    ],
+    [
+      "Precedenza",
+      "Regola sull’ordine di applicazione degli operatori."
+    ],
+    [
+      "Equivalenza logica",
+      "Uguaglianza dei valori per tutte le assegnazioni."
+    ],
+    [
+      "Tautologia",
+      "Espressione sempre vera."
+    ],
+    [
+      "Contraddizione",
+      "Espressione sempre falsa."
+    ],
+    [
+      "Implicazione",
+      "Connettivo falso solo con antecedente vero e conseguente falso."
+    ],
+    [
+      "Antecedente",
+      "Parte p di p → q."
+    ],
+    [
+      "Conseguente",
+      "Parte q di p → q."
+    ],
+    [
+      "Condizione necessaria",
+      "Proprietà richiesta perché un’altra possa valere."
+    ],
+    [
+      "Condizione sufficiente",
+      "Proprietà che garantisce un’altra nel modello."
+    ],
+    [
+      "Legge di De Morgan",
+      "Regola per negare congiunzioni e disgiunzioni."
+    ],
+    [
+      "Assorbimento",
+      "Legge che elimina una sottoespressione ridondante."
+    ],
+    [
+      "Distributività",
+      "Regola di trasformazione fra combinazioni AND e OR."
+    ],
+    [
+      "Normalizzazione",
+      "Conversione in una forma logica sistematica."
+    ],
+    [
+      "Equivalenza operativa",
+      "Uguaglianza che considera anche ordine, errori ed effetti."
+    ],
+    [
+      "Corto circuito",
+      "Valutazione che omette operandi non necessari al risultato."
+    ],
+    [
+      "Guardia",
+      "Condizione che protegge un’operazione successiva."
+    ],
+    [
+      "Operando puro",
+      "Espressione senza effetti osservabili oltre al valore."
+    ],
+    [
+      "Effetto collaterale",
+      "Modifica osservabile prodotta durante la valutazione."
+    ],
+    [
+      "Ordine di valutazione",
+      "Sequenza con cui vengono calcolate le parti."
+    ],
+    [
+      "Logica a tre valori",
+      "Sistema con un terzo valore oltre a vero e falso."
+    ],
+    [
+      "Sconosciuto",
+      "Valore non determinato con le informazioni disponibili."
+    ],
+    [
+      "Modello a stati",
+      "Rappresentazione di fasi e transizioni."
+    ],
+    [
+      "Falso positivo",
+      "Caso classificato positivamente quando non dovrebbe esserlo."
+    ],
+    [
+      "Revisione umana",
+      "Controllo da parte di una persona su una decisione automatizzata."
+    ]
+  ],
+  "summary": [
+    "La logica booleana trasforma condizioni in oggetti verificabili. Proposizioni e predicati producono valori; NOT, AND, OR e XOR li combinano; tavole di verità dimostrano equivalenze; implicazione e De Morgan consentono ragionamenti sistematici. Nell’esecuzione reale contano anche ordine, errori, effetti e valori sconosciuti. La qualità della decisione dipende infine dal modello e dalla politica, non soltanto dalla formula."
+  ],
+  "finalAssessment": {
+    "lessonId": "0.4",
+    "title": "Prova finale di padronanza",
+    "prompt": "Progetta la logica di accesso a una risorsa digitale e produci un’analisi di 900–1.300 parole che includa:",
+    "deliverables": [
+      "proposizioni atomiche con fonte dei dati;",
+      "predicati e confronti con confini;",
+      "regola composta con parentesi esplicite;",
+      "tavola di verità per almeno tre variabili;",
+      "negazione completa tramite De Morgan;",
+      "condizioni necessarie e sufficienti;",
+      "ordine di valutazione e guardie;",
+      "trattamento di sconosciuto, errore e revisione umana."
+    ],
+    "rubric": [
+      [
+        "Dimensione",
+        "Essenziale",
+        "Solida",
+        "Piena padronanza"
+      ],
+      [
+        "Definizioni",
+        "Proposizioni riconoscibili",
+        "Contesto e dominio dichiarati",
+        "Ambiguità e stati mancanti trattati"
+      ],
+      [
+        "Operatori",
+        "Operatori principali corretti",
+        "Parentesi e tavole coerenti",
+        "Equivalenze dimostrate"
+      ],
+      [
+        "Confini",
+        "Alcuni casi limite",
+        "Limiti inclusivi/esclusivi verificati",
+        "Errori e sconosciuti distinti"
+      ],
+      [
+        "Esecuzione",
+        "Ordine citato",
+        "Guardie e corto circuito corretti",
+        "Effetti e concorrenza considerati"
+      ],
+      [
+        "Responsabilità",
+        "Decisione descritta",
+        "Conseguenze e revisione indicate",
+        "Politica e formula valutate separatamente"
+      ]
+    ],
+    "completionCriteria": [
+      "Tutti i dieci capitoli sono stati letti e annotati.",
+      "Sono state compilate almeno sei tavole di verità complete.",
+      "Per ogni operatore è stato creato un esempio e un controesempio personale.",
+      "Sono stati completati tutti gli esercizi guidati e almeno venti autonomi.",
+      "Il punteggio dei quiz è almeno 24/30, con correzione motivata.",
+      "La prova finale raggiunge almeno il livello Solida in ogni dimensione.",
+      "Il lettore sa distinguere correttezza della formula e adeguatezza della decisione."
+    ]
+  }
+}

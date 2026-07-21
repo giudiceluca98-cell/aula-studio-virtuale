@@ -1,9 +1,9 @@
 # Completamento Programmazione da zero
 
-Stato: in revisione
-Assegnazione: Codex — integrazione del contenuto ufficiale della Lezione 0.3
-Branch: `codex/programming-zero-lesson-0-3`
-Pull request: https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/4
+Stato: in corso
+Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 0.4 corrente
+Branch: `codex/programming-zero-lesson-0-4`
+Pull request: https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/9
 Pacchetto: `programming`
 Percorso: `programming-zero`
 
@@ -92,4 +92,30 @@ Contenuti convertiti:
 - 50 voci di glossario;
 - prova finale, rubrica e criteri di completamento;
 - impronta SHA-256 della fonte locale, senza includere il DOCX.
+
+## Estensione in revisione · Lezione 0.4
+
+Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_0.4_Logica_e_ragionamento_booleano.docx`. Il DOCX non verrà caricato nel repository.
+
+File riservati:
+
+- `src/lib/catalog/subjects/programming-zero-lesson-0-4-official-content.json`
+- `src/lib/catalog/subjects/programming-zero-lesson.ts`
+- `src/lib/programming-lesson-progress.ts`
+- `tests/programming-subject.test.ts`
+
+File condivisi prenotati: nessuno. L'integrazione usa il modello dinamico della Lezione 0.3 e non modifica l'area di lavoro protetta.
+
+Dipendenza: PR #4 già unita; branch basato su `main` aggiornato.
+
+Contenuti convertiti:
+
+- 11 sezioni e 808 blocchi renderizzabili;
+- 10 esercizi guidati e 30 esercizi autonomi;
+- 30 domande di quiz e 50 voci di glossario;
+- prova finale, rubrica e criteri di completamento;
+- impronta SHA-256 `8508d2e700c8ddbc07e38dce1344b54da037764189dee40abbfbfd153d2c18fa`, senza includere il DOCX;
+- normalizzato il solo refuso `LEZIONE 0.2` → `LEZIONE 0.4` nelle dieci intestazioni di capitolo, dopo confronto con il contenuto distinto della fonte 0.2.
+
+Verifiche: test mirato 21/21, suite completa 138/138, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 

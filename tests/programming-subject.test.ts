@@ -23,18 +23,19 @@ describe("pacchetto editoriale Programmazione da zero", () => {
     expect(createSubjectRoadmap(query).title).toBe("Programmazione da zero");
   });
 
-  it("pubblica le tre lezioni ufficiali disponibili nel Modulo 0", () => {
+  it("pubblica le quattro lezioni ufficiali disponibili nel Modulo 0", () => {
     expect(programmingCurriculumOutline).toEqual([
       "Lezione 0.1 · Che cosa significa programmare?",
       "Lezione 0.2 · Che cos’è un computer e come esegue un programma?",
       "Lezione 0.3 · Come il computer rappresenta l’informazione?",
+      "Lezione 0.4 · Logica, proposizioni e ragionamento booleano",
     ]);
     expect(programmingSubjectPackage.stages).toHaveLength(1);
     expect(programmingSubjectPackage.stages[0].id).toBe("programming-module-0");
     expect(programmingSubjectPackage.stages[0].lessons).toEqual(programmingCurriculumOutline);
     expect(programmingLesson.modules).toHaveLength(1);
     expect(programmingLesson.modules[0]).toMatchObject({ id: "programming-module-0", title: "Modulo 0" });
-    expect(programmingLesson.modules[0].lessons.map((lesson) => lesson.id)).toEqual(["0.1", "0.2", "0.3"]);
+    expect(programmingLesson.modules[0].lessons.map((lesson) => lesson.id)).toEqual(["0.1", "0.2", "0.3", "0.4"]);
     for (const lesson of programmingLesson.modules[0].lessons) {
       expect(lesson.sectionIds).toHaveLength(11);
       expect(lesson.exerciseIds).toHaveLength(40);
@@ -44,36 +45,39 @@ describe("pacchetto editoriale Programmazione da zero", () => {
     }
   });
 
-  it("estende i contenuti ufficiali con la lezione 0.3", () => {
+  it("estende i contenuti ufficiali con le lezioni locali 0.3 e 0.4", () => {
     expect(programmingLesson.id).toBe("programming-0-1");
     expect(programmingLesson.lessonTitles).toEqual(programmingCurriculumOutline);
-    expect(programmingLesson.objectives).toHaveLength(18);
-    expect(programmingLesson.sections).toHaveLength(33);
-    expect(programmingLesson.glossary).toHaveLength(150);
-    expect(programmingLesson.exercises).toHaveLength(119);
-    expect(programmingLesson.quiz).toHaveLength(90);
-    expect(programmingLesson.project.assessments).toHaveLength(3);
+    expect(programmingLesson.objectives).toHaveLength(25);
+    expect(programmingLesson.sections).toHaveLength(44);
+    expect(programmingLesson.glossary).toHaveLength(200);
+    expect(programmingLesson.exercises).toHaveLength(159);
+    expect(programmingLesson.quiz).toHaveLength(120);
+    expect(programmingLesson.project.assessments).toHaveLength(4);
     expect(programmingLesson.project.guidedProjects.map((project) => project.lessonId)).toEqual(["0.1", "0.2", "0.3"]);
     expect(programmingLesson.project.guidedProjects.every((project) => project.starterCode.includes("print("))).toBe(true);
     expect(programmingLesson.completion.minimumQuizScore).toBe(80);
-    expect(programmingLesson.completion.requiredExerciseIds).toHaveLength(89);
-    expect(new Set(programmingLesson.sections.map((section) => section.id)).size).toBe(33);
-    expect(new Set([programmingLesson.guidedExercise.id, ...programmingLesson.exercises.map((exercise) => exercise.id)]).size).toBe(120);
-    expect(new Set(programmingLesson.quiz.map((question) => question.id)).size).toBe(90);
+    expect(programmingLesson.completion.requiredExerciseIds).toHaveLength(119);
+    expect(new Set(programmingLesson.sections.map((section) => section.id)).size).toBe(44);
+    expect(new Set([programmingLesson.guidedExercise.id, ...programmingLesson.exercises.map((exercise) => exercise.id)]).size).toBe(160);
+    expect(new Set(programmingLesson.quiz.map((question) => question.id)).size).toBe(120);
     expect(programmingLesson.sections[0].blocks.some((block) => block.text === "Che cosa significa programmare?")).toBe(true);
     expect(programmingLesson.sections[11].blocks.some((block) => block.text === "Che cos’è un computer e come esegue un programma?")).toBe(true);
     expect(programmingLesson.sections[22].blocks.some((block) => block.text === "Come il computer rappresenta l’informazione?")).toBe(true);
+    expect(programmingLesson.sections[33].blocks.some((block) => block.text === "Logica, proposizioni e ragionamento booleano")).toBe(true);
   });
 
-  it("lega gli artefatti alle impronte delle fonti senza richiedere il DOCX 0.3 nel repository", () => {
+  it("lega gli artefatti alle impronte delle fonti senza richiedere i DOCX locali nel repository", () => {
     const sourceDirectory = join(root, "docs/courses/programming-zero/source");
     for (const source of programmingLesson.sourceDocuments) {
       if (!("storedInRepository" in source) || source.storedInRepository !== false) {
         const bytes = readFileSync(join(sourceDirectory, source.filename));
         expect(createHash("sha256").update(bytes).digest("hex")).toBe(source.sha256);
       } else {
-        expect(source.lessonId).toBe("0.3");
-        expect(source.sha256).toBe("91a3a14aa8f38b0e6d6b9a9f3d2a2e16aee37f6d8714c18e05304a1ca8164f89");
+        expect({
+          "0.3": "91a3a14aa8f38b0e6d6b9a9f3d2a2e16aee37f6d8714c18e05304a1ca8164f89",
+          "0.4": "8508d2e700c8ddbc07e38dce1344b54da037764189dee40abbfbfd153d2c18fa",
+        }).toMatchObject({ [source.lessonId]: source.sha256 });
       }
       expect(source.metrics.paragraphs).toBeGreaterThan(790);
       expect(source.metrics.tables).toBe(12);
@@ -90,9 +94,9 @@ describe("pacchetto editoriale Programmazione da zero", () => {
     expect(draft.modules).toHaveLength(1);
     expect(draft.modules[0].stageId).toBe("programming-module-0");
     expect(draft.modules[0].items[0]).toMatchObject({ itemType: "material", catalogMaterialId: native.id, isRequired: true });
-    expect(draft.modules[0].items.filter((item) => item.itemType === "exercise")).toHaveLength(3);
+    expect(draft.modules[0].items.filter((item) => item.itemType === "exercise")).toHaveLength(4);
     expect(draft.modules[0].items.some((item) => item.itemType === "project")).toBe(true);
-    expect(draft.modules[0].items.filter((item) => item.itemType === "checkpoint")).toHaveLength(3);
+    expect(draft.modules[0].items.filter((item) => item.itemType === "checkpoint")).toHaveLength(4);
   });
 
   it("non completa la lezione con il solo scorrimento o con le sole sezioni", () => {
