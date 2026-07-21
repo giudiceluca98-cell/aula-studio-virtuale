@@ -200,6 +200,42 @@ else:
     print("Errore: il numero di lezioni deve essere maggiore di zero")`,
     expectedResult: "Il programma deve rendere visibili input, calcolo, output e decisione finale dell'algoritmo.",
   },
+  {
+    id: "programming-zero-python-project-0-6",
+    lessonId: "0.6",
+    title: "Dal requisito al comportamento verificabile",
+    difficulty: "Base con requisiti e test",
+    goal: "Tradurre un requisito di annullamento in precondizioni, cambiamento di stato, risultato osservabile e casi di test.",
+    concepts: ["requisiti", "precondizioni", "stati", "decisione", "casi di test", "tracciabilità"],
+    instructions: [
+      "Individua nel codice gli input, le precondizioni e il cambiamento di stato prima di eseguirlo.",
+      "Verifica il caso normale con prenotazione confermata, 30 ore disponibili e utente autorizzato.",
+      "Prova il valore di confine con 24 ore e poi con 23 ore: osserva quale requisito cambia il risultato.",
+      "Prova una prenotazione già annullata oppure un utente non autorizzato e aggiungi una riga che spieghi quale precondizione non è soddisfatta.",
+    ],
+    starterCode: `stato_prenotazione = "confermata"
+ore_alla_partenza = 30
+utente_autorizzato = True
+
+stato_valido = stato_prenotazione == "confermata"
+entro_limite = ore_alla_partenza >= 24
+puo_annullare = utente_autorizzato and stato_valido and entro_limite
+
+print("Stato iniziale:", stato_prenotazione)
+print("Ore alla partenza:", ore_alla_partenza)
+print("Utente autorizzato:", utente_autorizzato)
+print("Requisito soddisfatto:", puo_annullare)
+
+if puo_annullare:
+    stato_finale = "annullata"
+    print("Esito: prenotazione annullata")
+else:
+    stato_finale = stato_prenotazione
+    print("Esito: annullamento rifiutato")
+
+print("Stato finale:", stato_finale)`,
+    expectedResult: "Il programma deve mostrare dati iniziali, valutazione del requisito, esito e stato finale, distinguendo il caso valido, il confine e i casi rifiutati.",
+  },
 ] as const;
 
 if (!firstGuidedExercise) throw new Error("Le fonti ufficiali non contengono esercizi guidati");

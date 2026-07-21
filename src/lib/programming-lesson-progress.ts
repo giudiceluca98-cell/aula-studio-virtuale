@@ -2,7 +2,7 @@ import { z } from "zod";
 import { findQuizQuestion, programmingLesson } from "@/lib/catalog/subjects/programming-zero-lesson";
 
 const responseSchema = z.string().trim().min(20).max(8000);
-const projectLessonIdSchema = z.enum(["0.1", "0.2", "0.3", "0.4", "0.5"]);
+const projectLessonIdSchema = z.enum(["0.1", "0.2", "0.3", "0.4", "0.5", "0.6"]);
 const projectCodeSchema = z.string().trim().min(20).max(2800);
 const projectOutputSchema = z.string().max(1000);
 

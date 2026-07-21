@@ -1,6 +1,6 @@
 # Integrazione Programmazione da zero · Lezione 0.6
 
-Stato: in corso
+Stato: in revisione
 Assegnazione: Codex
 Branch: `agent/integrate-programming-lesson-0-6`
 Proposta sorgente: [PR #12](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/12)
@@ -26,14 +26,18 @@ La PR #12 è impilata sul branch 0.5 precedente alla PR #14. Il branch dell'altr
 - `src/lib/catalog/subjects/programming-zero-lesson-0-6-official-content.json`
 - `src/lib/catalog/subjects/programming-zero-lesson.ts`
 - `src/lib/programming-lesson-progress.ts`
-- `src/components/room/programming-lesson-workspace.tsx` (nessuna modifica prevista)
+- `src/components/room/programming-lesson-workspace.tsx` (sola griglia dei Python Project)
 - `tests/programming-subject.test.ts`
 - `tests/programming-python-project.test.tsx`
 
-## Verifiche previste
+## Integrazione completata
 
-- test mirati e suite completa;
-- typecheck;
-- lint;
-- build;
-- verifica della lezione e del Python Project in produzione.
+- lezione 0.6 collegata a catalogo, aula, indice, esercizi, quiz, glossario, progressi ed Eve;
+- Python Project 0.6 “Dal requisito al comportamento verificabile” collegato a esecuzione, bozza, consegna e avanzamento;
+- test mirati: 26 superati;
+- suite completa: 141 test superati;
+- typecheck: superato;
+- lint: superato con un avviso preesistente in `src/lib/vocabulary/mastery.ts`;
+- build di produzione: superata.
+
+Restano il merge, la pubblicazione e la verifica online.
