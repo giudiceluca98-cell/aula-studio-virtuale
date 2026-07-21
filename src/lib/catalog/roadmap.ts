@@ -149,28 +149,44 @@ function programmingZeroRoadmap(
   weeklyHours: number,
 ): LearningPathDraft {
   const nativeLesson = materials.find((material) => material.source_url === PROGRAMMING_LESSON_SOURCE_URL || material.internal_resource_id === "9f219d2a-d532-4af2-bd97-5df8fc863101");
-  const items: LearningPathDraft["modules"][number]["items"] = [];
-  if (nativeLesson) items.push({
-    catalogMaterialId: nativeLesson.id, itemType: "material", title: programmingLesson.title,
-    description: programmingLesson.description, isRequired: true, estimatedDurationMinutes: programmingLesson.estimatedMinutes,
+  const modules = programmingLesson.modules.map((module, moduleIndex) => {
+    const lessonIds = module.lessons.map((lesson) => lesson.id);
+    const lessonTitles = module.lessons.map((lesson) => `Lezione ${lesson.id} · ${lesson.title}`);
+    const assessments = programmingLesson.project.assessments.filter((assessment) => lessonIds.includes(assessment.lessonId));
+    const projects = programmingLesson.project.guidedProjects.filter((project) => lessonIds.includes(project.lessonId));
+    const items: LearningPathDraft["modules"][number]["items"] = [];
+    if (nativeLesson && moduleIndex === 0) items.push({
+      catalogMaterialId: nativeLesson.id, itemType: "material", title: programmingLesson.title,
+      description: programmingLesson.description, isRequired: true, estimatedDurationMinutes: programmingLesson.estimatedMinutes,
+    });
+    items.push(
+      ...lessonTitles.map((title) => ({ catalogMaterialId: null, itemType: "exercise" as const, title: `${title} · Esercizi`, description: "Esercizio guidato · Esercizi autonomi", isRequired: true, estimatedDurationMinutes: 60 })),
+      ...lessonTitles.map((title) => ({ catalogMaterialId: null, itemType: "checkpoint" as const, title: `${title} · Quiz`, description: "Tre domande per ciascuno dei capitoli.", isRequired: true, estimatedDurationMinutes: 30 })),
+      { catalogMaterialId: null, itemType: "project" as const, title: `Python Project · ${module.title}`, description: projects.map((project) => project.title).join(" · "), isRequired: true, estimatedDurationMinutes: Math.max(90, projects.length * 45) },
+      { catalogMaterialId: null, itemType: "project" as const, title: assessments.at(-1)?.title ?? programmingLesson.project.title, description: assessments.map((assessment) => assessment.prompt).join("\n\n"), isRequired: true, estimatedDurationMinutes: 90 },
+    );
+    return {
+      stageId: module.id,
+      title: module.title,
+      description: module.lessons.flatMap((lesson) => lesson.summary).join(" "),
+      estimatedDurationMinutes: module.lessons.length * 90,
+      prerequisites: moduleIndex === 0 ? [] : [programmingLesson.modules[moduleIndex - 1]?.title ?? "Modulo precedente"],
+      completionCriteria: assessments.flatMap((assessment) => assessment.completionCriteria),
+      items,
+      concepts: programmingLesson.sections.filter((section) => lessonIds.includes(section.lessonId) && section.chapterNumber > 0).map((section) => section.title),
+      objectives: module.lessons.flatMap((lesson) => lesson.objectives),
+      activities: ["Esercizio guidato", "Esercizi autonomi", "Quiz", "Python Project"],
+      exercises: programmingLesson.exercises.filter((exercise) => lessonIds.includes(exercise.lessonId)).map((exercise) => exercise.title),
+      projects: [...projects.map((project) => project.title), ...assessments.map((assessment) => assessment.title)],
+      googleQueries: moduleIndex === 0
+        ? { lessons: ["programmazione da zero algoritmi basi"], exercises: ["esercizi algoritmi principianti con soluzioni"], videos: ["introduzione programmazione video principianti"], pdfs: ["introduzione programmazione algoritmi filetype:pdf"] }
+        : { lessons: ["ambiente sviluppo installare Python principianti"], exercises: ["esercizi ambiente sviluppo Python principianti"], videos: ["installare Python ambiente sviluppo video"], pdfs: ["ambiente sviluppo Python installazione filetype:pdf"] },
+    };
   });
-  items.push(
-    ...programmingLesson.lessonTitles.map((title) => ({ catalogMaterialId: null, itemType: "exercise" as const, title: `${title} · Esercizi`, description: "Esercizio guidato · Esercizi autonomi", isRequired: true, estimatedDurationMinutes: 60 })),
-    ...programmingLesson.lessonTitles.map((title) => ({ catalogMaterialId: null, itemType: "checkpoint" as const, title: `${title} · Quiz`, description: "Tre domande per ciascuno dei dieci capitoli.", isRequired: true, estimatedDurationMinutes: 30 })),
-    { catalogMaterialId: null, itemType: "project", title: programmingLesson.project.title, description: programmingLesson.project.prompt, isRequired: true, estimatedDurationMinutes: 90 },
-  );
   return {
     title: "Programmazione da zero", objective: query.trim(), initialLevel, targetLevel, weeklyHours,
     rationale: programmingLesson.description,
-    modules: [{
-      stageId: "programming-module-0", title: "Modulo 0",
-      description: programmingLesson.description,
-      estimatedDurationMinutes: programmingLesson.estimatedMinutes, prerequisites: [],
-      completionCriteria: programmingLesson.project.assessments.flatMap((assessment) => assessment.completionCriteria),
-      items, concepts: programmingLesson.sections.filter((section) => section.chapterNumber > 0).map((section) => section.title),
-      objectives: [...programmingLesson.objectives], activities: [programmingLesson.guidedExercise.title], exercises: programmingLesson.exercises.map((exercise) => exercise.title), projects: [programmingLesson.project.title],
-      googleQueries: { lessons: ["programmazione da zero algoritmi basi"], exercises: ["esercizi algoritmi principianti con soluzioni"], videos: ["introduzione programmazione video principianti"], pdfs: ["introduzione programmazione algoritmi filetype:pdf"] },
-    }],
+    modules,
   };
 }
 

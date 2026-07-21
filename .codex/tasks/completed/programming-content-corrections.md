@@ -1,6 +1,6 @@
 # Correzione e coerenza dei contenuti · Programmazione da zero
 
-Stato: in revisione
+Stato: completato
 Assegnazione: Codex
 Branch: `agent/correct-programming-content`
 Pull request: [PR #28](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/28)
