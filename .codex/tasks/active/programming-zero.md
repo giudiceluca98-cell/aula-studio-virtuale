@@ -1,9 +1,9 @@
 # Completamento Programmazione da zero
 
 Stato: in corso
-Assegnazione: disponibile per la prossima lezione sequenziale
-Ultima integrazione completata: Lezione 0.8 e relativo Python Project, [PR #24](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/24)
-Prossima proposta disponibile: Lezione 0.9, [PR #16](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/16)
+Assegnazione: Codex — integrazione verificata della Lezione 0.9 e relativo Python Project
+Branch: `agent/integrate-programming-lesson-0-9`
+Pull request: https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/26
 Pacchetto: `programming`
 Percorso: `programming-zero`
 
@@ -118,6 +118,30 @@ Contenuti convertiti:
 - normalizzato il solo refuso `LEZIONE 0.2` → `LEZIONE 0.4` nelle dieci intestazioni di capitolo, dopo confronto con il contenuto distinto della fonte 0.2.
 
 Verifiche: test mirato 21/21, suite completa 138/138, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
+
+## Estensione in revisione · Lezione 0.9
+
+Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_0.9_Laboratorio_e_valutazione_finale.docx`. Il DOCX non verrà caricato nel repository.
+
+File riservati:
+
+- `src/lib/catalog/subjects/programming-zero-lesson-0-9-official-content.json`
+- `src/lib/catalog/subjects/programming-zero-lesson.ts`
+- `src/lib/programming-lesson-progress.ts`
+- `tests/programming-subject.test.ts`
+
+File condivisi prenotati: nessuno. Dipendenza: PR #15; branch e Draft PR impilati sulla lezione 0.8.
+
+Contenuti convertiti:
+
+- 11 sezioni e 859 blocchi renderizzabili;
+- 10 esercizi guidati e 30 esercizi autonomi;
+- 30 domande di quiz e 50 voci di glossario;
+- prova scritta integrata, rubrica del progetto, portfolio, recupero e criteri finali del Modulo 0;
+- impronta SHA-256 `cac28baa626f64d6e79c10b47784704031cec4f4e8d27f26b04f25dd8773bb9b`, senza includere il DOCX;
+- indice editoriale conclusivo letto integralmente e usato per validare ordine, copertura e titolo da Catalogo; indice non caricato nel repository.
+
+Verifiche della PR #26: test mirati 29/29, suite completa 144/144, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 
 ## Estensione in revisione · Lezione 0.8
 
