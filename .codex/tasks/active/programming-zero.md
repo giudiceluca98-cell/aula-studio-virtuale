@@ -1,8 +1,8 @@
 # Completamento Programmazione da zero
 
 Stato: in corso
-Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 2.2 corrente
-Branch corrente: `codex/programming-zero-lesson-2-2`
+Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 2.3 corrente
+Branch corrente: `codex/programming-zero-lesson-2-3`
 Ultima integrazione completata: Lezione 0.9 e relativo Python Project, [PR #26](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/26)
 Proposte in integrazione: Lezione 1.1, [PR #17](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/17), e Lezione 1.2, [PR #20](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/20)
 Pacchetto: `programming`
@@ -267,6 +267,10 @@ Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_2.2_Come_Python_esegue_u
 Contenuti convertiti: 11 sezioni, 914 blocchi, 60 esercizi, 30 quiz e 60 voci di glossario; laboratorio, rubrica e criteri finali conservati. SHA-256 `00657c9f2fa9147c42c5585ac2c0ba0d66fdf6376e1efe8eb3a237b2d37c0e9f`; nessun DOCX caricato.
 
 Verifiche: test mirato 21/21, suite completa 151/151, typecheck e build superati; lint senza errori e con il solo warning preesistente.
+
+## Estensione in corso · Lezione 2.3
+
+Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_2.3_Sintassi_rientri_righe_vuote_commenti.docx`. Il DOCX non verrà caricato. File riservati: artefatto 2.3, aggregatore, progressi e test. Dipendenza: PR #39.
 
 ## Estensione in revisione · Lezione 2.1
 
