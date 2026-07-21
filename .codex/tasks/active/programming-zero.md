@@ -260,11 +260,15 @@ Contenuti convertiti:
 
 Verifiche: test mirato 21/21, suite completa 151/151, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 
-## Estensione in corso · Lezione 1.7
+## Estensione in revisione · Lezione 1.7
 
 Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_1.7_Struttura_progetto_e_riproducibilita.docx`. Il DOCX non verrà caricato nel repository; l'indice editoriale del Modulo 1 viene usato soltanto per validare ordine, titolo e copertura.
 
 File riservati: artefatto 1.7, `src/lib/catalog/subjects/programming-zero-lesson.ts`, `src/lib/programming-lesson-progress.ts`, `tests/programming-subject.test.ts`. File condivisi prenotati: nessuno. Dipendenza: PR #34; branch e Draft PR impilati sulla lezione 1.6.
+
+Contenuti convertiti: 11 sezioni, 914 blocchi, 60 esercizi, 30 quiz e 60 voci di glossario; prova finale, rubrica e criteri conservati. SHA-256 `c887c4eba65d169db7547489344150a8043f2dfc641dc4c2a6acc522f9bd7ab7`; nessun DOCX caricato.
+
+Verifiche: test mirato 21/21, suite completa 151/151, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 
 ## Estensione in revisione · Lezione 1.5
 
