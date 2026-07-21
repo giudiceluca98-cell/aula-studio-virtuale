@@ -1,8 +1,8 @@
 # Completamento Programmazione da zero
 
 Stato: in corso
-Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 1.5 corrente
-Branch corrente: `codex/programming-zero-lesson-1-5`
+Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 1.6 corrente
+Branch corrente: `codex/programming-zero-lesson-1-6`
 Ultima integrazione completata: Lezione 0.9 e relativo Python Project, [PR #26](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/26)
 Proposte in integrazione: Lezione 1.1, [PR #17](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/17), e Lezione 1.2, [PR #20](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/20)
 Pacchetto: `programming`
@@ -269,6 +269,12 @@ File riservati: artefatto 1.5, `src/lib/catalog/subjects/programming-zero-lesson
 Contenuti convertiti: 11 sezioni, 762 blocchi, 40 esercizi, 30 quiz e 50 voci di glossario; laboratorio e criteri finali conservati. SHA-256 `e8efc49c3afeab0c04b6326cc9086c76760e8c0cfe8ff5c7e5a40c2d2bee9377`; nessun DOCX caricato.
 
 Verifiche: test mirato 21/21, suite completa 151/151, typecheck e build superati; lint senza errori e con il solo warning preesistente.
+
+## Estensione in corso · Lezione 1.6
+
+Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_1.6_Ambienti_virtuali_e_dipendenze.docx`. Il DOCX non verrà caricato nel repository; l'indice editoriale del Modulo 1 viene usato soltanto per validare ordine, titolo e copertura.
+
+File riservati: artefatto 1.6, `src/lib/catalog/subjects/programming-zero-lesson.ts`, `src/lib/programming-lesson-progress.ts`, `tests/programming-subject.test.ts`. File condivisi prenotati: nessuno. Dipendenza: PR #33; branch e Draft PR impilati sulla lezione 1.5.
 
 ## Estensione in revisione · Lezione 1.4
 
