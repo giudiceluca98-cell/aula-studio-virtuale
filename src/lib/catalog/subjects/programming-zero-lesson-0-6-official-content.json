@@ -476,7 +476,7 @@
               "Insieme di componenti tecnici e organizzativi che realizza un servizio."
             ],
             [
-              "Ciclo di vita",
+              "Ciclo di vita del software",
               "Attività dalla concezione al ritiro del software."
             ],
             [
@@ -1804,7 +1804,7 @@
               "Definizione operativa"
             ],
             [
-              "Dominio",
+              "Dominio applicativo",
               "Ambito reale di concetti e regole affrontato dal sistema."
             ],
             [
@@ -3564,7 +3564,7 @@
         },
         {
           "type": "paragraph",
-          "text": "Una release è un insieme identificato di modifiche autorizzate. Il deployment installa o attiva l’artefatto in un ambiente. Strategie progressive — pilota, canary, blue-green, feature flag — limitano l’esposizione e permettono valutazione. Migrazioni di dati e interfacce richiedono compatibilità e ordine. Un rollback ripristina una versione precedente quando è sicuro; talvolta serve roll-forward perché i dati non possono tornare indietro. L’esercizio usa monitoraggio, allarmi, runbook, gestione incidenti e obiettivi di servizio."
+          "text": "Una release è una versione identificata e approvata di uno o più artefatti e configurazioni, resa disponibile per l’uso. Il deployment installa o attiva l’artefatto in un ambiente. Strategie progressive — pilota, canary, blue-green, feature flag — limitano l’esposizione e permettono valutazione. Migrazioni di dati e interfacce richiedono compatibilità e ordine. Un rollback ripristina una versione precedente quando è sicuro; talvolta serve roll-forward perché i dati non possono tornare indietro. L’esercizio usa monitoraggio, allarmi, runbook, gestione incidenti e obiettivi di servizio."
         },
         {
           "type": "heading",
@@ -3740,7 +3740,7 @@
         },
         {
           "type": "list-item",
-          "text": "C. Un insieme identificato e autorizzato di modifiche"
+          "text": "C. Una versione identificata e approvata di artefatti e configurazioni resa disponibile per l’uso"
         },
         {
           "type": "list-item",
@@ -3803,7 +3803,7 @@
             ],
             [
               "Release",
-              "Insieme identificato di modifiche approvate."
+              "Versione identificata e approvata di artefatti e configurazioni resa disponibile per l’uso."
             ],
             [
               "Deployment",
@@ -3829,7 +3829,7 @@
         },
         {
           "type": "paragraph",
-          "text": "Una release è un insieme identificato di modifiche autorizzate. Il deployment installa o attiva l’artefatto in un ambiente. Strategie progressive — pilota, canary, blue-green, feature flag — limitano l’esposizione e permettono valutazione. Migrazioni di dati e interfacce richiedono compatibilità e ordine. Un rollback ripristina una versione precedente quando è sicuro; talvolta serve roll-forward perché i dati non possono tornare indietro. L’esercizio usa monitoraggio, allarmi, runbook, gestione incidenti e obiettivi di servizio. La padronanza consiste nel motivare i collegamenti fra attività e nel produrre evidenze verificabili, non nel recitare un elenco di fasi."
+          "text": "Una release è una versione identificata e approvata di uno o più artefatti e configurazioni, resa disponibile per l’uso. Il deployment installa o attiva l’artefatto in un ambiente. Strategie progressive — pilota, canary, blue-green, feature flag — limitano l’esposizione e permettono valutazione. Migrazioni di dati e interfacce richiedono compatibilità e ordine. Un rollback ripristina una versione precedente quando è sicuro; talvolta serve roll-forward perché i dati non possono tornare indietro. L’esercizio usa monitoraggio, allarmi, runbook, gestione incidenti e obiettivi di servizio. La padronanza consiste nel motivare i collegamenti fra attività e nel produrre evidenze verificabili, non nel recitare un elenco di fasi."
         },
         {
           "type": "heading",
@@ -5260,7 +5260,7 @@
           "choices": [
             "A. Solo una schermata",
             "B. Un requisito non approvato",
-            "C. Un insieme identificato e autorizzato di modifiche",
+            "C. Una versione identificata e approvata di artefatti e configurazioni resa disponibile per l’uso",
             "D. Qualunque file locale"
           ],
           "correctChoice": 2,
@@ -5390,7 +5390,7 @@
       "Insieme di componenti tecnici e organizzativi che realizza un servizio."
     ],
     [
-      "Ciclo di vita",
+      "Ciclo di vita del software",
       "Attività dalla concezione al ritiro del software."
     ],
     [
@@ -5466,7 +5466,7 @@
       "Valutazione delle conseguenze di una modifica proposta."
     ],
     [
-      "Dominio",
+      "Dominio applicativo",
       "Ambito reale di concetti e regole affrontato dal sistema."
     ],
     [
@@ -5587,7 +5587,7 @@
     ],
     [
       "Release",
-      "Insieme identificato di modifiche approvate."
+      "Versione identificata e approvata di artefatti e configurazioni resa disponibile per l’uso."
     ],
     [
       "Deployment",

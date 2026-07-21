@@ -448,7 +448,7 @@
               "Associazione controllata fra fenomeni o concetti e simboli."
             ],
             [
-              "Dominio",
+              "Dominio dei valori",
               "Insieme dei valori o casi considerati."
             ],
             [
@@ -1471,7 +1471,7 @@
               "Valore speciale che indica un risultato numerico non definito."
             ],
             [
-              "Tolleranza",
+              "Tolleranza numerica",
               "Scarto accettato in un confronto approssimato."
             ]
           ]
@@ -1554,7 +1554,7 @@
         },
         {
           "type": "paragraph",
-          "text": "Unicode definisce un repertorio e punti di codice. UTF-8 codifica ciascun punto di codice in una sequenza variabile da uno a quattro byte. Un grafema percepito può essere formato da più punti di codice, come lettera e accento combinante o una sequenza emoji. Normalizzazione e confronto devono considerare che testi visivamente equivalenti possono avere sequenze diverse."
+          "text": "Unicode definisce un repertorio e punti di codice. UTF-8 codifica ciascun valore scalare Unicode in una sequenza variabile da uno a quattro byte. Un grafema percepito può essere formato da più punti di codice, come lettera e accento combinante o una sequenza emoji. Normalizzazione e confronto devono considerare che testi visivamente equivalenti possono avere sequenze diverse."
         },
         {
           "type": "heading",
@@ -1722,7 +1722,7 @@
         },
         {
           "type": "list-item",
-          "text": "A. Punti di codice Unicode in byte"
+          "text": "A. Valori scalari Unicode in byte"
         },
         {
           "type": "list-item",
@@ -1801,7 +1801,7 @@
             ],
             [
               "UTF-8",
-              "Codifica variabile dei punti di codice in byte."
+              "Codifica variabile dei valori scalari Unicode in byte."
             ],
             [
               "Grafema",
@@ -1819,7 +1819,7 @@
         },
         {
           "type": "paragraph",
-          "text": "Unicode definisce un repertorio e punti di codice. UTF-8 codifica ciascun punto di codice in una sequenza variabile da uno a quattro byte. Un grafema percepito può essere formato da più punti di codice, come lettera e accento combinante o una sequenza emoji. Normalizzazione e confronto devono considerare che testi visivamente equivalenti possono avere sequenze diverse. La competenza richiesta non consiste nel ricordare un elenco di componenti, ma nel saper seguire il flusso di dati e responsabilità attraverso i diversi livelli."
+          "text": "Unicode definisce un repertorio e punti di codice. UTF-8 codifica ciascun valore scalare Unicode in una sequenza variabile da uno a quattro byte. Un grafema percepito può essere formato da più punti di codice, come lettera e accento combinante o una sequenza emoji. Normalizzazione e confronto devono considerare che testi visivamente equivalenti possono avere sequenze diverse. La competenza richiesta non consiste nel ricordare un elenco di componenti, ma nel saper seguire il flusso di dati e responsabilità attraverso i diversi livelli."
         },
         {
           "type": "heading",
@@ -2819,7 +2819,7 @@
               "Informazione ripetuta o prevedibile sfruttabile."
             ],
             [
-              "Artefatto",
+              "Artefatto di rappresentazione",
               "Distorsione introdotta dalla rappresentazione o compressione."
             ]
           ]
@@ -4066,7 +4066,7 @@
           "concept": "5. Testo digitale: caratteri, codifiche e Unicode",
           "prompt": "UTF-8 codifica che cosa?",
           "choices": [
-            "A. Punti di codice Unicode in byte",
+            "A. Valori scalari Unicode in byte",
             "B. Soltanto immagini",
             "C. Font in pixel",
             "D. Solo lettere inglesi"
@@ -4542,7 +4542,7 @@
       "Associazione controllata fra fenomeni o concetti e simboli."
     ],
     [
-      "Dominio",
+      "Dominio dei valori",
       "Insieme dei valori o casi considerati."
     ],
     [
@@ -4614,7 +4614,7 @@
       "Valore speciale che indica un risultato numerico non definito."
     ],
     [
-      "Tolleranza",
+      "Tolleranza numerica",
       "Scarto accettato in un confronto approssimato."
     ],
     [
@@ -4627,7 +4627,7 @@
     ],
     [
       "UTF-8",
-      "Codifica variabile dei punti di codice in byte."
+      "Codifica variabile dei valori scalari Unicode in byte."
     ],
     [
       "Grafema",
@@ -4694,7 +4694,7 @@
       "Informazione ripetuta o prevedibile sfruttabile."
     ],
     [
-      "Artefatto",
+      "Artefatto di rappresentazione",
       "Distorsione introdotta dalla rappresentazione o compressione."
     ],
     [

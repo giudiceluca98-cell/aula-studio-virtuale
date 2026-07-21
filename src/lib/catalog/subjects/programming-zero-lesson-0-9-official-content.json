@@ -60,7 +60,7 @@
         },
         {
           "type": "paragraph",
-          "text": "DESTINATARIO  Lettore che ha completato le Lezioni 0.1–0.8. Non è richiesta programmazione Python: si valutano fondamenti, ragionamento, progettazione e responsabilità."
+          "text": "DESTINATARIO  Lettore che ha completato le Lezioni 0.1–0.8. La verifica teorica non richiede di scrivere codice Python: valuta fondamenti, ragionamento, progettazione e responsabilità. Nell’app, i Python Project guidati restano attività pratiche separate e proporzionate agli argomenti delle lezioni."
         },
         {
           "type": "paragraph",
@@ -2869,7 +2869,7 @@
         },
         {
           "type": "paragraph",
-          "text": "Il progetto finale unisce tutti i risultati del Modulo 0 senza richiedere ancora codice Python. Il lettore deve progettare un sistema per prenotare sessioni di studio virtuali, mostrando problema, dati, logica, algoritmo, architettura, ciclo di vita, storia tecnica e impatto responsabile."
+          "text": "Il dossier finale unisce tutti i risultati teorici del Modulo 0 senza richiedere codice Python. Il lettore deve progettare un sistema per prenotare sessioni di studio virtuali, mostrando problema, dati, logica, algoritmo, architettura, ciclo di vita, storia tecnica e impatto responsabile. I Python Project dell’app sono esercitazioni pratiche guidate distinte dal dossier."
         },
         {
           "type": "heading",
@@ -3127,11 +3127,11 @@
               "Insieme coerente di artefatti e motivazioni."
             ],
             [
-              "Confine",
+              "Confine del sistema",
               "Separazione fra sistema e ambiente."
             ],
             [
-              "Artefatto",
+              "Artefatto di lavoro",
               "Prodotto verificabile del lavoro."
             ],
             [
@@ -3919,7 +3919,7 @@
         },
         {
           "type": "paragraph",
-          "text": "CONCLUSIONE  Il Modulo 0 è completato quando le evidenze mostrano comprensione trasferibile. Il passo successivo è il Modulo 1 – Ambiente di sviluppo, dove questi modelli guideranno installazione, terminale, editor e interprete Python."
+          "text": "CONCLUSIONE  Il Modulo 0 è completato quando le evidenze mostrano comprensione trasferibile. Il passo successivo è il Modulo 1 – Ambiente di sviluppo, dove questi modelli guideranno l’approfondimento di installazione, terminale, editor e interprete Python dopo le esercitazioni guidate svolte nell’app."
         }
       ]
     }
@@ -4952,11 +4952,11 @@
       "Insieme coerente di artefatti e motivazioni."
     ],
     [
-      "Confine",
+      "Confine del sistema",
       "Separazione fra sistema e ambiente."
     ],
     [
-      "Artefatto",
+      "Artefatto di lavoro",
       "Prodotto verificabile del lavoro."
     ],
     [

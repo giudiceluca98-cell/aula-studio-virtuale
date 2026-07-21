@@ -124,22 +124,22 @@ else:
     title: "Quanto spazio occupano i miei dati?",
     difficulty: "Base con calcolo",
     goal: "Usare numeri e operazioni per stimare la dimensione di un insieme di contenuti digitali.",
-    concepts: ["dati digitali", "moltiplicazione", "divisione", "round"],
+    concepts: ["dati digitali", "unità decimali MB/GB", "moltiplicazione", "divisione", "round"],
     instructions: [
       "Scegli un numero realistico di fotografie e la dimensione media di ciascuna.",
-      "Esegui il calcolo in megabyte e gigabyte.",
+      "Esegui il calcolo usando unità decimali: 1 GB corrisponde a 1000 MB.",
       "Aggiungi una stampa che spieghi con parole tue che cosa rappresenta il risultato.",
     ],
     starterCode: `numero_foto = 120
 dimensione_foto_mb = 4
 
 totale_mb = numero_foto * dimensione_foto_mb
-totale_gb = totale_mb / 1024
+totale_gb = totale_mb / 1000
 
 print("Numero di fotografie:", numero_foto)
 print("Spazio totale in MB:", totale_mb)
 print("Spazio totale in GB:", round(totale_gb, 2))`,
-    expectedResult: "Il programma deve mostrare quantità, megabyte totali e gigabyte arrotondati.",
+    expectedResult: "Il programma deve mostrare quantità, megabyte totali e gigabyte decimali arrotondati.",
   },
   {
     id: "programming-zero-python-project-0-4",
@@ -250,6 +250,7 @@ print("Stato finale:", stato_finale)`,
       "Leggi i quattro criteri: idea, prototipo, uso e diffusione. Un numero più piccolo indica una precedenza per quel solo criterio.",
       "Esegui il programma e osserva perché i due candidati possono risultare primi secondo criteri differenti.",
       "Cambia un valore di ordine e verifica quale affermazione di primato viene modificata, senza alterare gli altri criteri.",
+      "Imposta due ordini uguali e verifica che il programma segnali una parità invece di attribuire il primato a uno dei candidati.",
       "Sostituisci i nomi generici e gli ordini con due casi studiati nella lezione, usando soltanto fatti documentati e mantenendo separati idea, prototipo, uso e diffusione.",
     ],
     starterCode: `candidato_a = "Tecnologia A"
@@ -268,26 +269,34 @@ print("Confronto tra", candidato_a, "e", candidato_b)
 
 if ordine_idea_a < ordine_idea_b:
     print("Primato secondo l'idea:", candidato_a)
-else:
+elif ordine_idea_b < ordine_idea_a:
     print("Primato secondo l'idea:", candidato_b)
+else:
+    print("Parità secondo l'idea")
 
 if ordine_prototipo_a < ordine_prototipo_b:
     print("Primato secondo il prototipo:", candidato_a)
-else:
+elif ordine_prototipo_b < ordine_prototipo_a:
     print("Primato secondo il prototipo:", candidato_b)
+else:
+    print("Parità secondo il prototipo")
 
 if ordine_uso_a < ordine_uso_b:
     print("Primato secondo l'uso:", candidato_a)
-else:
+elif ordine_uso_b < ordine_uso_a:
     print("Primato secondo l'uso:", candidato_b)
+else:
+    print("Parità secondo l'uso")
 
 if ordine_diffusione_a < ordine_diffusione_b:
     print("Primato secondo la diffusione:", candidato_a)
-else:
+elif ordine_diffusione_b < ordine_diffusione_a:
     print("Primato secondo la diffusione:", candidato_b)
+else:
+    print("Parità secondo la diffusione")
 
 print("Conclusione: il primato dipende dal criterio dichiarato")`,
-    expectedResult: "Il programma deve produrre quattro attribuzioni qualificate e mostrare che idea, prototipo, uso e diffusione possono indicare candidati diversi.",
+    expectedResult: "Il programma deve produrre quattro confronti qualificati, gestire anche le parità e mostrare che idea, prototipo, uso e diffusione possono indicare candidati diversi.",
   },
   {
     id: "programming-zero-python-project-0-8",
@@ -300,6 +309,7 @@ print("Conclusione: il primato dipende dal criterio dichiarato")`,
       "Individua per ciascun gruppo il numero di casi, i falsi positivi e i falsi negativi prima di eseguire il programma.",
       "Confronta il tasso globale con i tassi separati dei due gruppi e descrivi quale informazione andrebbe persa mostrando soltanto la media.",
       "Modifica uno dei due tipi di errore del gruppo B e verifica quali percentuali cambiano e quali restano invariate.",
+      "Imposta dati che producano lo stesso tasso complessivo nei due gruppi e verifica che il programma segnali la parità.",
       "Aggiungi una riga stampata che proponga una verifica o una correzione su dati, obiettivo, processo oppure ricorso, come richiesto dall’esercizio ufficiale.",
     ],
     starterCode: `casi_gruppo_a = 100
@@ -335,9 +345,11 @@ print("Gruppo B - errori totali:", round(tasso_errori_b, 1), "%")
 
 if tasso_errori_a > tasso_errori_b:
     print("Attenzione: il gruppo A presenta il tasso di errore maggiore")
+elif tasso_errori_b > tasso_errori_a:
+    print("Attenzione: il gruppo B presenta il tasso di errore maggiore")
 else:
-    print("Attenzione: il gruppo B presenta il tasso di errore maggiore")`,
-    expectedResult: "Il programma deve mostrare il tasso globale, i due tipi di errore per ciascun gruppo e segnalare quale gruppo presenta il tasso complessivo maggiore.",
+    print("I due gruppi presentano lo stesso tasso complessivo di errore")`,
+    expectedResult: "Il programma deve mostrare il tasso globale, i due tipi di errore per ciascun gruppo e segnalare quale gruppo presenta il tasso complessivo maggiore oppure se i tassi sono uguali.",
   },
   {
     id: "programming-zero-python-project-0-9",

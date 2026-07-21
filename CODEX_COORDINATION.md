@@ -6,6 +6,7 @@ Questo file registra incarichi temporanei, proprietà dei file e dipendenze tra 
 
 | Attività | Assegnazione prevista | Branch | Stato | File riservati | File condivisi richiesti | Pull request | Ultimo aggiornamento |
 |---|---|---|---|---|---|---|---|
+| Correzione e coerenza contenuti · Programmazione da zero | Codex | `agent/correct-programming-content` | In revisione | Artefatti 0.1–0.9 interessati, aggregatore e test mirati | Nessuno | [PR #28](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/28) | 2026-07-21 |
 | Completamento Programmazione da zero · Lezione 0.3 | Codex — contenuto ufficiale 0.3 convertito in codice | `codex/programming-zero-lesson-0-3` | Completato | Artefatto 0.3, aggregatore, progressi e test | Nessuno | [PR #4](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/4) | 2026-07-21 |
 | Completamento Programmazione da zero · Lezione 0.4 | Codex — contenuto ufficiale 0.4 convertito in codice | `codex/programming-zero-lesson-0-4` | Completato | Artefatto 0.4, aggregatore, progressi e test | Nessuno | [PR #9](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/9) | 2026-07-21 |
 | Completamento Programmazione da zero · Lezione 0.5 | Codex — artefatto ufficiale 0.5 da PR #11, integrazione sicura su `main` | `agent/python-project-lesson-0-4` | Completato | Artefatto 0.5, aggregatore, progressi e test | Nessuno | [PR #14](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/14) | 2026-07-21 |

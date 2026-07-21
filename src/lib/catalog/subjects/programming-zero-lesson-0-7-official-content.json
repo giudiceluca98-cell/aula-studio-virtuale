@@ -1154,7 +1154,7 @@
               "Meccanismo che esegue una sequenza secondo una configurazione."
             ],
             [
-              "Tolleranza",
+              "Tolleranza meccanica",
               "Scostamento ammesso nelle dimensioni di una parte."
             ]
           ]
@@ -5508,7 +5508,7 @@
       "Meccanismo che esegue una sequenza secondo una configurazione."
     ],
     [
-      "Tolleranza",
+      "Tolleranza meccanica",
       "Scostamento ammesso nelle dimensioni di una parte."
     ],
     [
