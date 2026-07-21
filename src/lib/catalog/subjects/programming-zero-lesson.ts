@@ -3,6 +3,7 @@ import lesson03Content from "./programming-zero-lesson-0-3-official-content.json
 import lesson04Content from "./programming-zero-lesson-0-4-official-content.json";
 import lesson05Content from "./programming-zero-lesson-0-5-official-content.json";
 import lesson06Content from "./programming-zero-lesson-0-6-official-content.json";
+import lesson07Content from "./programming-zero-lesson-0-7-official-content.json";
 
 export const PROGRAMMING_ZERO_PATH_ID = "programming-zero";
 // The existing native material keeps its identifier so rooms and saved progress remain connected.
@@ -44,7 +45,7 @@ interface OfficialExercise {
   autoverification?: string;
 }
 
-const officialLessons = [...officialContent.lessons, lesson03Content, lesson04Content, lesson05Content, lesson06Content];
+const officialLessons = [...officialContent.lessons, lesson03Content, lesson04Content, lesson05Content, lesson06Content, lesson07Content];
 const chapters = officialLessons.flatMap((lesson) => lesson.chapters);
 const allExercises = chapters.flatMap((chapter) => [chapter.exercises.guided, ...chapter.exercises.autonomous]);
 const [firstGuidedExercise, ...remainingExercises] = allExercises;
@@ -236,6 +237,56 @@ else:
 print("Stato finale:", stato_finale)`,
     expectedResult: "Il programma deve mostrare dati iniziali, valutazione del requisito, esito e stato finale, distinguendo il caso valido, il confine e i casi rifiutati.",
   },
+  {
+    id: "programming-zero-python-project-0-7",
+    lessonId: "0.7",
+    title: "Un primato con criteri espliciti",
+    difficulty: "Base con confronto storico",
+    goal: "Trasformare il confronto fra due attribuzioni di primato in criteri separati, evitando di scegliere un vincitore assoluto.",
+    concepts: ["criteri", "confronti", "ordine", "primato qualificato", "fatti e interpretazioni"],
+    instructions: [
+      "Leggi i quattro criteri: idea, prototipo, uso e diffusione. Un numero più piccolo indica una precedenza per quel solo criterio.",
+      "Esegui il programma e osserva perché i due candidati possono risultare primi secondo criteri differenti.",
+      "Cambia un valore di ordine e verifica quale affermazione di primato viene modificata, senza alterare gli altri criteri.",
+      "Sostituisci i nomi generici e gli ordini con due casi studiati nella lezione, usando soltanto fatti documentati e mantenendo separati idea, prototipo, uso e diffusione.",
+    ],
+    starterCode: `candidato_a = "Tecnologia A"
+candidato_b = "Tecnologia B"
+
+ordine_idea_a = 1
+ordine_idea_b = 2
+ordine_prototipo_a = 1
+ordine_prototipo_b = 2
+ordine_uso_a = 2
+ordine_uso_b = 1
+ordine_diffusione_a = 2
+ordine_diffusione_b = 1
+
+print("Confronto tra", candidato_a, "e", candidato_b)
+
+if ordine_idea_a < ordine_idea_b:
+    print("Primato secondo l'idea:", candidato_a)
+else:
+    print("Primato secondo l'idea:", candidato_b)
+
+if ordine_prototipo_a < ordine_prototipo_b:
+    print("Primato secondo il prototipo:", candidato_a)
+else:
+    print("Primato secondo il prototipo:", candidato_b)
+
+if ordine_uso_a < ordine_uso_b:
+    print("Primato secondo l'uso:", candidato_a)
+else:
+    print("Primato secondo l'uso:", candidato_b)
+
+if ordine_diffusione_a < ordine_diffusione_b:
+    print("Primato secondo la diffusione:", candidato_a)
+else:
+    print("Primato secondo la diffusione:", candidato_b)
+
+print("Conclusione: il primato dipende dal criterio dichiarato")`,
+    expectedResult: "Il programma deve produrre quattro attribuzioni qualificate e mostrare che idea, prototipo, uso e diffusione possono indicare candidati diversi.",
+  },
 ] as const;
 
 if (!firstGuidedExercise) throw new Error("Le fonti ufficiali non contengono esercizi guidati");
@@ -246,10 +297,10 @@ export const programmingLesson = {
   id: PROGRAMMING_LESSON_ID,
   pathId: PROGRAMMING_ZERO_PATH_ID,
   moduleId: "programming-module-0",
-  title: "Programmazione da Zero · Lezioni 0.1–0.6",
+  title: "Programmazione da Zero · Lezioni 0.1–0.7",
   lessonTitles: officialLessons.map((lesson) => `Lezione ${lesson.id} · ${lesson.title}`),
   level: "Lettore senza conoscenze pregresse",
-  estimatedMinutes: 540,
+  estimatedMinutes: 630,
   description: officialLessons.map((lesson) => lesson.summary[0]).join(" "),
   objectives: officialLessons.flatMap((lesson) => lesson.objectives),
   modules: programmingModules,
