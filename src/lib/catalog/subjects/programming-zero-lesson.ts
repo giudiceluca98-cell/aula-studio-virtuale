@@ -20,6 +20,7 @@ import lesson22Content from "./programming-zero-lesson-2-2-official-content.json
 import lesson23Content from "./programming-zero-lesson-2-3-official-content.json";
 import lesson24Content from "./programming-zero-lesson-2-4-official-content.json";
 import lesson25Content from "./programming-zero-lesson-2-5-official-content.json";
+import lesson26Content from "./programming-zero-lesson-2-6-official-content.json";
 
 export const PROGRAMMING_ZERO_PATH_ID = "programming-zero";
 // The existing native material keeps its identifier so rooms and saved progress remain connected.
@@ -61,7 +62,7 @@ interface OfficialExercise {
   autoverification?: string;
 }
 
-const officialLessons = [...officialContent.lessons, lesson03Content, lesson04Content, lesson05Content, lesson06Content, lesson07Content, lesson08Content, lesson09Content, lesson11Content, lesson12Content, lesson13Content, lesson14Content, lesson15Content, lesson16Content, lesson17Content, lesson18Content, lesson19Content, lesson21Content, lesson22Content, lesson23Content, lesson24Content, lesson25Content];
+const officialLessons = [...officialContent.lessons, lesson03Content, lesson04Content, lesson05Content, lesson06Content, lesson07Content, lesson08Content, lesson09Content, lesson11Content, lesson12Content, lesson13Content, lesson14Content, lesson15Content, lesson16Content, lesson17Content, lesson18Content, lesson19Content, lesson21Content, lesson22Content, lesson23Content, lesson24Content, lesson25Content, lesson26Content];
 const chapters = officialLessons.flatMap((lesson) => lesson.chapters);
 const allExercises = chapters.flatMap((chapter) => [chapter.exercises.guided, ...chapter.exercises.autonomous]);
 const [firstGuidedExercise, ...remainingExercises] = allExercises;
@@ -475,10 +476,10 @@ export const programmingLesson = {
   id: PROGRAMMING_LESSON_ID,
   pathId: PROGRAMMING_ZERO_PATH_ID,
   moduleId: "programming-module-0",
-  title: "Programmazione da Zero · Lezioni 0.1–2.5",
+  title: "Programmazione da Zero · Lezioni 0.1–2.6",
   lessonTitles: officialLessons.map((lesson) => `Lezione ${lesson.id} · ${lesson.title}`),
   level: "Lettore senza conoscenze pregresse",
-  estimatedMinutes: 2070,
+  estimatedMinutes: 2160,
   description: officialLessons.map((lesson) => lesson.summary[0]).join(" "),
   objectives: officialLessons.flatMap((lesson) => lesson.objectives),
   modules: programmingModules,
