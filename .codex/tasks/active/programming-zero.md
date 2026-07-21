@@ -1,9 +1,9 @@
 # Completamento Programmazione da zero
 
 Stato: in corso
-Assegnazione: Codex — integrazione verificata della Lezione 0.9 e relativo Python Project
-Branch: `agent/integrate-programming-lesson-0-9`
-Pull request: https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/26
+Assegnazione: disponibile per la prossima lezione sequenziale
+Ultima integrazione completata: Lezione 0.9 e relativo Python Project, [PR #26](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/26)
+Prossima proposta disponibile: Lezione 1.1, [PR #17](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/17)
 Pacchetto: `programming`
 Percorso: `programming-zero`
 
@@ -119,7 +119,7 @@ Contenuti convertiti:
 
 Verifiche: test mirato 21/21, suite completa 138/138, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 
-## Estensione in revisione · Lezione 0.9
+## Estensione completata · Lezione 0.9
 
 Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_0.9_Laboratorio_e_valutazione_finale.docx`. Il DOCX non verrà caricato nel repository.
 
