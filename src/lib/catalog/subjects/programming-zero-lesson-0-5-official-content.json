@@ -1,0 +1,4777 @@
+{
+  "id": "0.5",
+  "title": "Pensiero computazionale, algoritmi e pseudocodice",
+  "source": {
+    "filename": "Programmazione_da_Zero_Lezione_0.5_Pensiero_computazionale_e_pseudocodice.docx",
+    "sha256": "1faa694e1279feb929c9c145ba0a253cfc1b4281a3e7fde2155ca69bf05ac5ca",
+    "storedInRepository": false,
+    "normalizations": []
+  },
+  "metrics": {
+    "paragraphs": 788,
+    "tables": 12,
+    "textCharacters": 52488
+  },
+  "objectives": [
+    "Formulare problemi con input, output e criteri di successo.",
+    "Scrivere precondizioni, postcondizioni e politiche d’errore.",
+    "Decomporre problemi e riconoscere schemi riutilizzabili.",
+    "Distinguere astrazione utile e perdita di informazione dannosa.",
+    "Descrivere algoritmi, terminazione e determinismo.",
+    "Scrivere pseudocodice coerente.",
+    "Rappresentare sequenza, selezione e ripetizione con diagrammi.",
+    "Tracciare algoritmi e confrontare strategie per risorse e rischi."
+  ],
+  "sections": [
+    {
+      "id": "programming-0-5-introduction",
+      "lessonId": "0.5",
+      "chapterNumber": 0,
+      "title": "Lezione 0.5 · Pensiero computazionale, algoritmi e pseudocodice",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "AULA STUDIO VIRTUALE"
+        },
+        {
+          "type": "paragraph",
+          "text": "Programmazione da Zero"
+        },
+        {
+          "type": "paragraph",
+          "text": "Manuale ufficiale"
+        },
+        {
+          "type": "paragraph",
+          "text": "MODULO 0"
+        },
+        {
+          "type": "paragraph",
+          "text": "Lezione 0.5"
+        },
+        {
+          "type": "paragraph",
+          "text": "Pensiero computazionale, algoritmi e pseudocodice"
+        },
+        {
+          "type": "paragraph",
+          "text": "DESTINATARIO  Lettore senza conoscenze pregresse. La lezione trasforma problemi in procedure verificabili prima dell’implementazione in Python."
+        },
+        {
+          "type": "paragraph",
+          "text": "Edizione editoriale · 2026"
+        },
+        {
+          "type": "heading",
+          "text": "Come usare questa lezione"
+        },
+        {
+          "type": "paragraph",
+          "text": "La logica della Lezione 0.4 fornisce condizioni e combinazioni. Qui tali elementi vengono organizzati in procedure: si definisce il problema, lo si scompone, si riconoscono schemi, si scrive pseudocodice e si verifica il comportamento mediante diagrammi e tracce."
+        },
+        {
+          "type": "paragraph",
+          "text": "PRINCIPIO GUIDA  Non giudicare un algoritmo dalla plausibilità della descrizione. Eseguilo a mano su casi normali, confini e controesempi; poi collega ogni passo alla specifica."
+        },
+        {
+          "type": "heading",
+          "text": "Risultati di apprendimento"
+        },
+        {
+          "type": "list-item",
+          "text": "Formulare problemi con input, output e criteri di successo."
+        },
+        {
+          "type": "list-item",
+          "text": "Scrivere precondizioni, postcondizioni e politiche d’errore."
+        },
+        {
+          "type": "list-item",
+          "text": "Decomporre problemi e riconoscere schemi riutilizzabili."
+        },
+        {
+          "type": "list-item",
+          "text": "Distinguere astrazione utile e perdita di informazione dannosa."
+        },
+        {
+          "type": "list-item",
+          "text": "Descrivere algoritmi, terminazione e determinismo."
+        },
+        {
+          "type": "list-item",
+          "text": "Scrivere pseudocodice coerente."
+        },
+        {
+          "type": "list-item",
+          "text": "Rappresentare sequenza, selezione e ripetizione con diagrammi."
+        },
+        {
+          "type": "list-item",
+          "text": "Tracciare algoritmi e confrontare strategie per risorse e rischi."
+        },
+        {
+          "type": "heading",
+          "text": "Mappa della lezione"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Cap.",
+              "Nucleo concettuale"
+            ],
+            [
+              "1",
+              "Pensiero computazionale: formulare problemi trattabili"
+            ],
+            [
+              "2",
+              "Specificare input, output, precondizioni e postcondizioni"
+            ],
+            [
+              "3",
+              "Decomposizione: dividere senza perdere il problema"
+            ],
+            [
+              "4",
+              "Schemi, generalizzazione e astrazione"
+            ],
+            [
+              "5",
+              "Algoritmi: proprietà, terminazione e determinismo"
+            ],
+            [
+              "6",
+              "Pseudocodice: scrivere algoritmi senza dipendere da un linguaggio"
+            ],
+            [
+              "7",
+              "Sequenza, selezione e ripetizione"
+            ],
+            [
+              "8",
+              "Diagrammi di flusso: simboli, percorsi e limiti"
+            ],
+            [
+              "9",
+              "Tracciamento manuale, invarianti e dimostrazione della correttezza"
+            ],
+            [
+              "10",
+              "Confrontare algoritmi: risorse, compromessi e scelta responsabile"
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Prerequisiti e materiali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Prerequisiti consigliati: Lezioni 0.1–0.4. Servono carta, matita e tempo per simulare gli algoritmi. Non è richiesto un interprete Python: l’obiettivo è imparare a progettare prima di codificare."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-5-chapter-1",
+      "lessonId": "0.5",
+      "chapterNumber": 1,
+      "title": "1. Pensiero computazionale: formulare problemi trattabili",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.5 · CAPITOLO 1 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "1. Pensiero computazionale: formulare problemi trattabili"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto, formalizzarlo, verificarlo con casi e controesempi e applicarlo alla progettazione di una procedura."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il pensiero computazionale è un modo disciplinato di affrontare problemi affinché una soluzione possa essere descritta, verificata ed eventualmente eseguita da una macchina. Non significa pensare come un computer né trasformare ogni attività in codice: significa rendere espliciti dati, regole, limiti e criteri di successo."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Organizzare una biblioteca richiede decidere che cosa identificare, come ordinare, come cercare e come trattare libri mancanti. Prima di costruire un programma, dobbiamo trasformare l’obiettivo generico ‘gestire i libri’ in domande più precise e operazioni osservabili."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un problema computazionale definisce una famiglia di istanze, un dominio degli input e una relazione che stabilisce quali output sono corretti. La soluzione deve essere esprimibile mediante passi effettivi. Il pensiero computazionale usa decomposizione, riconoscimento di schemi, astrazione, rappresentazione dei dati, progettazione algoritmica e valutazione."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Trovare il prezzo minimo fra offerte valide."
+        },
+        {
+          "type": "list-item",
+          "text": "Stabilire se una parola compare in un testo secondo regole su maiuscole e accenti."
+        },
+        {
+          "type": "list-item",
+          "text": "Assegnare turni rispettando disponibilità e vincoli dichiarati."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "‘Rendi tutti felici’ non è ancora un problema verificabile."
+        },
+        {
+          "type": "list-item",
+          "text": "‘Usa l’intelligenza artificiale’ indica uno strumento possibile, non il problema."
+        },
+        {
+          "type": "list-item",
+          "text": "Automatizzare un processo incomprensibile può rendere più veloci anche i suoi errori."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Formulare un problema è come preparare una domanda scientifica: si delimita ciò che si osserva e si stabilisce come riconoscere una risposta. L’analogia ha un limite: i problemi umani possono includere valori e conflitti non riducibili a una sola misura."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 1.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "BISOGNO REALE     v delimitazionePROBLEMA COMPUTAZIONALE     | input, output, vincoli, criteri     vMODELLO E ALGORITMO     v verifica e validazioneRISULTATO + EFFETTI NEL MONDO"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "La computabilità non equivale all’opportunità. Un problema può essere formalizzabile ma non etico da automatizzare, oppure richiedere dati che non è lecito o prudente raccogliere. La prima domanda non è sempre ‘come lo automatizzo?’, ma anche ‘quale parte deve restare sotto giudizio umano?’."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Saltare direttamente alla soluzione."
+        },
+        {
+          "type": "list-item",
+          "text": "Confondere requisito e tecnica."
+        },
+        {
+          "type": "list-item",
+          "text": "Non definire che cosa conta come successo."
+        },
+        {
+          "type": "list-item",
+          "text": "Ignorare persone ed effetti fuori dal confine tecnico."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Obiettivi in conflitto."
+        },
+        {
+          "type": "list-item",
+          "text": "Input non osservabili o costosi da ottenere."
+        },
+        {
+          "type": "list-item",
+          "text": "Risultati corretti formalmente ma dannosi nel contesto."
+        },
+        {
+          "type": "list-item",
+          "text": "Problema che cambia mentre viene analizzato."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso identifica input, stato, regola applicata, output atteso e proprietà da preservare; cerca poi un caso capace di smentire l’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale parte del problema è davvero computazionale?"
+        },
+        {
+          "type": "list-item",
+          "text": "Come misuri il successo senza impoverire lo scopo?"
+        },
+        {
+          "type": "list-item",
+          "text": "Chi viene escluso dal confine scelto?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Trasforma ‘organizza le prenotazioni’ in input, output e vincoli."
+        },
+        {
+          "type": "list-item",
+          "text": "Definisci tre istanze concrete."
+        },
+        {
+          "type": "list-item",
+          "text": "Indica una decisione che richiede revisione umana."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve dichiarare le assunzioni, permettere una simulazione passo per passo e collegare il risultato ai criteri della specifica."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Formula il problema di cercare un libro."
+        },
+        {
+          "type": "list-item",
+          "text": "Analizza un obiettivo non misurabile e rendilo verificabile."
+        },
+        {
+          "type": "list-item",
+          "text": "Trova un caso in cui non automatizzare è la scelta migliore."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Un problema computazionale definisce?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Input ammessi e output corretti"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Soltanto un linguaggio"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Il colore dell’interfaccia"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Una singola risposta"
+        },
+        {
+          "type": "heading",
+          "text": "2. Scegliere una tecnologia equivale a definire il problema?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo con Python"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo con database"
+        },
+        {
+          "type": "list-item",
+          "text": "D. No"
+        },
+        {
+          "type": "heading",
+          "text": "3. Tutto ciò che è formalizzabile va automatizzato?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Sempre"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo gratuitamente"
+        },
+        {
+          "type": "list-item",
+          "text": "C. No"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Sì"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Pensiero computazionale",
+              "Metodo per formulare e risolvere problemi in modo eseguibile e verificabile."
+            ],
+            [
+              "Istanza",
+              "Caso concreto di un problema generale."
+            ],
+            [
+              "Criterio di successo",
+              "Condizione osservabile che definisce un esito accettabile."
+            ],
+            [
+              "Vincolo",
+              "Regola che limita input o soluzioni."
+            ],
+            [
+              "Computazionale",
+              "Trattabile mediante rappresentazioni e procedure effettive."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un problema computazionale definisce una famiglia di istanze, un dominio degli input e una relazione che stabilisce quali output sono corretti. La soluzione deve essere esprimibile mediante passi effettivi. Il pensiero computazionale usa decomposizione, riconoscimento di schemi, astrazione, rappresentazione dei dati, progettazione algoritmica e valutazione. La competenza richiesta consiste nel trasformare l’idea in una rappresentazione precisa, tracciabile e criticabile, non nel memorizzare formule isolate."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So analizzare almeno tre casi limite e indicare come verificarli."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-5-chapter-2",
+      "lessonId": "0.5",
+      "chapterNumber": 2,
+      "title": "2. Specificare input, output, precondizioni e postcondizioni",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.5 · CAPITOLO 2 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "2. Specificare input, output, precondizioni e postcondizioni"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto, formalizzarlo, verificarlo con casi e controesempi e applicarlo alla progettazione di una procedura."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una soluzione non può essere valutata senza una specifica. Gli esempi aiutano, ma non sostituiscono una regola generale. La specifica separa ciò che il sistema deve garantire dal modo in cui verrà implementato."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Dire ‘calcola la media’ sembra sufficiente finché la raccolta è vuota, contiene valori mancanti o richiede pesi diversi. Una specifica risponde prima che il programma debba indovinare."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "La precondizione descrive ciò che deve valere prima dell’operazione; la postcondizione ciò che deve valere dopo una conclusione corretta. Il dominio delimita gli input; il codominio descrive la forma degli output. Le invarianti esprimono proprietà che devono restare vere durante determinate fasi. Una politica degli errori definisce cosa accade fuori dominio."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Input: lista non vuota di numeri; output: valore compreso fra minimo e massimo."
+        },
+        {
+          "type": "list-item",
+          "text": "Precondizione: denominatore diverso da zero; postcondizione: quoziente×denominatore+resto=dividendo."
+        },
+        {
+          "type": "list-item",
+          "text": "Ricerca: output posizione valida oppure indicazione esplicita di assenza."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "Tre esempi riusciti non definiscono tutti i casi."
+        },
+        {
+          "type": "list-item",
+          "text": "‘Funziona bene’ non è una postcondizione verificabile."
+        },
+        {
+          "type": "list-item",
+          "text": "Restituire zero quando il dato manca confonde assenza e valore valido."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "La specifica è simile a un contratto di consegna: stabilisce prodotto e criteri di accettazione, senza imporre ogni attrezzo usato. Come ogni contratto, deve chiarire eccezioni e responsabilità."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 2.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "INPUT  | soddisfa precondizioni?  +-- no --> errore/politica dichiarata  |  +-- sì --> ALGORITMO                 |                 v              OUTPUT                 | verifica postcondizioni"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una precondizione troppo forte può rendere la soluzione apparentemente facile trasferendo il lavoro al chiamante. Una postcondizione troppo debole non protegge l’utente. Il confine ragionevole dipende dal contesto e deve essere documentato."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Nascondere ipotesi."
+        },
+        {
+          "type": "list-item",
+          "text": "Non specificare unità e formato."
+        },
+        {
+          "type": "list-item",
+          "text": "Usare un valore valido come segnale di errore."
+        },
+        {
+          "type": "list-item",
+          "text": "Cambiare la specifica per adattarla a un risultato sbagliato."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Collezione vuota."
+        },
+        {
+          "type": "list-item",
+          "text": "Duplicati."
+        },
+        {
+          "type": "list-item",
+          "text": "Valori estremi."
+        },
+        {
+          "type": "list-item",
+          "text": "Input valido singolarmente ma incoerente con altri input."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso identifica input, stato, regola applicata, output atteso e proprietà da preservare; cerca poi un caso capace di smentire l’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Chi deve verificare la precondizione?"
+        },
+        {
+          "type": "list-item",
+          "text": "Come distingui assenza ed errore?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale proprietà dell’output deve essere sempre vera?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Specifica la ricerca del massimo in una lista."
+        },
+        {
+          "type": "list-item",
+          "text": "Decidi la politica per lista vuota."
+        },
+        {
+          "type": "list-item",
+          "text": "Scrivi una postcondizione controllabile."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve dichiarare le assunzioni, permettere una simulazione passo per passo e collegare il risultato ai criteri della specifica."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Specifica un convertitore di temperatura."
+        },
+        {
+          "type": "list-item",
+          "text": "Definisci un ordinamento con duplicati."
+        },
+        {
+          "type": "list-item",
+          "text": "Critica una precondizione irrealisticamente forte."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Che cosa descrive una postcondizione?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Il colore del codice"
+        },
+        {
+          "type": "list-item",
+          "text": "B. L’hardware"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Il nome del file"
+        },
+        {
+          "type": "list-item",
+          "text": "D. La garanzia dopo l’operazione"
+        },
+        {
+          "type": "heading",
+          "text": "2. Gli esempi sostituiscono una specifica generale?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Sempre"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo se numerici"
+        },
+        {
+          "type": "list-item",
+          "text": "C. No"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Sì"
+        },
+        {
+          "type": "heading",
+          "text": "3. Una precondizione può essere troppo forte?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Solo nei quiz"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "C. No"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Mai"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Specifica",
+              "Descrizione verificabile del comportamento richiesto."
+            ],
+            [
+              "Precondizione",
+              "Proprietà richiesta prima dell’operazione."
+            ],
+            [
+              "Postcondizione",
+              "Proprietà garantita dopo l’operazione valida."
+            ],
+            [
+              "Invariante",
+              "Proprietà che resta vera in una fase definita."
+            ],
+            [
+              "Politica degli errori",
+              "Regole per condizioni non valide o anomale."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "La precondizione descrive ciò che deve valere prima dell’operazione; la postcondizione ciò che deve valere dopo una conclusione corretta. Il dominio delimita gli input; il codominio descrive la forma degli output. Le invarianti esprimono proprietà che devono restare vere durante determinate fasi. Una politica degli errori definisce cosa accade fuori dominio. La competenza richiesta consiste nel trasformare l’idea in una rappresentazione precisa, tracciabile e criticabile, non nel memorizzare formule isolate."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So analizzare almeno tre casi limite e indicare come verificarli."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-5-chapter-3",
+      "lessonId": "0.5",
+      "chapterNumber": 3,
+      "title": "3. Decomposizione: dividere senza perdere il problema",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.5 · CAPITOLO 3 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "3. Decomposizione: dividere senza perdere il problema"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto, formalizzarlo, verificarlo con casi e controesempi e applicarlo alla progettazione di una procedura."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Problemi complessi diventano gestibili quando vengono scomposti in responsabilità più piccole. La decomposizione non consiste nel tagliare arbitrariamente: deve creare parti comprensibili, verificabili e collegate da interfacce chiare."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Preparare un evento può essere separato in luogo, partecipanti, programma e budget. Ogni parte ha domande proprie, ma tutte devono convergere sullo stesso evento. Una divisione che ignora le dipendenze crea sorprese tardive."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "La decomposizione individua sottoproblemi con input, output e contratti. Una struttura gerarchica procede dal sistema ai componenti e alle operazioni elementari. Alta coesione significa che le attività di una parte appartengono allo stesso scopo; basso accoppiamento riduce la dipendenza da dettagli altrui."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Un negozio divide catalogo, carrello, pagamento e spedizione."
+        },
+        {
+          "type": "list-item",
+          "text": "Un’analisi dati separa acquisizione, validazione, trasformazione e rapporto."
+        },
+        {
+          "type": "list-item",
+          "text": "Un gioco distingue regole, stato, input e visualizzazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "Un componente per ogni singola riga frammenta senza chiarire."
+        },
+        {
+          "type": "list-item",
+          "text": "Un blocco ‘varie utilità’ raccoglie responsabilità non correlate."
+        },
+        {
+          "type": "list-item",
+          "text": "Scomporre seguendo l’ordine in cui si è pensato al problema non garantisce buoni confini."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "I reparti di un’organizzazione spiegano responsabilità, ma nel software i confini sono contratti formali e possono essere eseguiti automaticamente. Una cattiva interfaccia propaga errori con grande velocità."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 3.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "PROBLEMA PRINCIPALE  +--> acquisire dati  +--> validare dati  +--> elaborare  +--> presentare risultato          |          +--> ogni parte: input, output, errori"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un buon sottoproblema può essere compreso e testato in isolamento, ma non deve nascondere informazioni essenziali. Decomposizione e integrazione sono complementari: dopo aver studiato le parti, occorre verificare il comportamento dell’insieme."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Confondere file con responsabilità."
+        },
+        {
+          "type": "list-item",
+          "text": "Creare dipendenze circolari."
+        },
+        {
+          "type": "list-item",
+          "text": "Dimenticare gli errori fra componenti."
+        },
+        {
+          "type": "list-item",
+          "text": "Ottimizzare una parte sacrificando l’obiettivo complessivo."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Responsabilità che appartiene a più parti."
+        },
+        {
+          "type": "list-item",
+          "text": "Sottoproblema piccolo ma condiviso da molti componenti."
+        },
+        {
+          "type": "list-item",
+          "text": "Errore locale con conseguenza globale."
+        },
+        {
+          "type": "list-item",
+          "text": "Requisito nuovo che attraversa tutti i confini."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso identifica input, stato, regola applicata, output atteso e proprietà da preservare; cerca poi un caso capace di smentire l’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Qual è la ragione di cambiamento di questa parte?"
+        },
+        {
+          "type": "list-item",
+          "text": "Il sottoproblema è verificabile da solo?"
+        },
+        {
+          "type": "list-item",
+          "text": "Che cosa deve conoscere delle altre parti?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Scomponi un distributore automatico."
+        },
+        {
+          "type": "list-item",
+          "text": "Definisci contratti per credito, selezione e consegna."
+        },
+        {
+          "type": "list-item",
+          "text": "Simula prodotto esaurito dopo il pagamento."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve dichiarare le assunzioni, permettere una simulazione passo per passo e collegare il risultato ai criteri della specifica."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Scomponi una biblioteca digitale."
+        },
+        {
+          "type": "list-item",
+          "text": "Trova un esempio di alto accoppiamento."
+        },
+        {
+          "type": "list-item",
+          "text": "Disegna l’integrazione fra tre sottoproblemi."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Una buona decomposizione crea?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Soltanto molti file"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Nessun collegamento"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Responsabilità e contratti chiari"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Parti casuali"
+        },
+        {
+          "type": "heading",
+          "text": "2. Alta coesione indica?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Un solo computer"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Responsabilità interne correlate"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Molte dipendenze"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Molti colori"
+        },
+        {
+          "type": "heading",
+          "text": "3. Testare le parti basta sempre?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. No, serve anche integrazione"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo online"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Solo con due parti"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Decomposizione",
+              "Divisione strutturata in sottoproblemi."
+            ],
+            [
+              "Sottoproblema",
+              "Parte delimitata del problema generale."
+            ],
+            [
+              "Coesione",
+              "Relazione interna fra responsabilità dello stesso componente."
+            ],
+            [
+              "Accoppiamento",
+              "Grado di dipendenza fra componenti."
+            ],
+            [
+              "Integrazione",
+              "Verifica e composizione delle parti nel sistema completo."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "La decomposizione individua sottoproblemi con input, output e contratti. Una struttura gerarchica procede dal sistema ai componenti e alle operazioni elementari. Alta coesione significa che le attività di una parte appartengono allo stesso scopo; basso accoppiamento riduce la dipendenza da dettagli altrui. La competenza richiesta consiste nel trasformare l’idea in una rappresentazione precisa, tracciabile e criticabile, non nel memorizzare formule isolate."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So analizzare almeno tre casi limite e indicare come verificarli."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-5-chapter-4",
+      "lessonId": "0.5",
+      "chapterNumber": 4,
+      "title": "4. Schemi, generalizzazione e astrazione",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.5 · CAPITOLO 4 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "4. Schemi, generalizzazione e astrazione"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto, formalizzarlo, verificarlo con casi e controesempi e applicarlo alla progettazione di una procedura."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Riconoscere somiglianze fra problemi consente di riusare idee. L’astrazione conserva le proprietà rilevanti e nasconde dettagli scelti; la generalizzazione estende una soluzione da casi particolari a una famiglia. Entrambe richiedono giudizio: astrarre troppo presto può creare un modello sbagliato."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Cercare un nome in un elenco, un libro in uno scaffale o un codice in un archivio condividono lo schema ‘trovare un elemento che soddisfa un criterio’. I dettagli cambiano, ma la struttura di ricerca può essere studiata separatamente."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un pattern è una struttura ricorrente. Generalizzare significa parametrizzare ciò che varia e conservare ciò che è comune. Un’astrazione espone un’interfaccia e omette dettagli non rilevanti allo scopo. La validità dell’astrazione dipende dalle operazioni richieste e dalle proprietà che devono essere preservate."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Ricerca lineare applicata a numeri, nomi o oggetti con predicato."
+        },
+        {
+          "type": "list-item",
+          "text": "Conteggio di eventi che soddisfano una condizione."
+        },
+        {
+          "type": "list-item",
+          "text": "Accumulazione di somma, prodotto o risultato combinato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "Due problemi con parole simili possono richiedere proprietà diverse."
+        },
+        {
+          "type": "list-item",
+          "text": "Generalizzare un solo caso può produrre parametri inutili."
+        },
+        {
+          "type": "list-item",
+          "text": "Nascondere errori importanti non è buona astrazione."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una mappa stradale astrae edifici per mostrare percorsi. Una mappa geologica omette altri dettagli e ne conserva di diversi. Non esiste la mappa più astratta universalmente migliore."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 4.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "CASO A ----+CASO B ----+--> proprietà comuni --> SCHEMACASO C ----+                         |                                      v                         parametri + astrazione                                      v                           soluzione riutilizzabile"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’astrazione perde intenzionalmente informazione. Per questo occorre chiedere quali domande non potranno più essere risposte. Rimuovere l’ordine da una collezione facilita alcuni ragionamenti ma impedisce di ricostruire la sequenza originale."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Astrarre prima di comprendere i casi."
+        },
+        {
+          "type": "list-item",
+          "text": "Confondere somiglianza superficiale e struttura comune."
+        },
+        {
+          "type": "list-item",
+          "text": "Creare un modello più complesso dei problemi concreti."
+        },
+        {
+          "type": "list-item",
+          "text": "Omettere una proprietà necessaria."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Un solo caso disponibile."
+        },
+        {
+          "type": "list-item",
+          "text": "Eccezione che rompe lo schema."
+        },
+        {
+          "type": "list-item",
+          "text": "Proprietà rilevante soltanto in futuro."
+        },
+        {
+          "type": "list-item",
+          "text": "Astrazione valida per lettura ma non per modifica."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso identifica input, stato, regola applicata, output atteso e proprietà da preservare; cerca poi un caso capace di smentire l’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Che cosa varia e che cosa resta invariato?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale informazione viene persa?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quanti casi servono prima di generalizzare?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Confronta cercare un numero e cercare un nome."
+        },
+        {
+          "type": "list-item",
+          "text": "Isola lo schema comune."
+        },
+        {
+          "type": "list-item",
+          "text": "Parametrizza il criterio di uguaglianza."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve dichiarare le assunzioni, permettere una simulazione passo per passo e collegare il risultato ai criteri della specifica."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Trova tre problemi di conteggio."
+        },
+        {
+          "type": "list-item",
+          "text": "Critica un’astrazione troppo generica."
+        },
+        {
+          "type": "list-item",
+          "text": "Crea due mappe concettuali dello stesso sistema per scopi diversi."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Che cosa fa un’astrazione?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Scrive codice automaticamente"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Conserva aspetti rilevanti e omette dettagli scelti"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Conserva sempre tutto"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Elimina ogni errore"
+        },
+        {
+          "type": "heading",
+          "text": "2. Generalizzare significa?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Estendere una struttura a una famiglia di casi"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Copiare un esempio"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Ridurre sempre la lunghezza"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Usare un computer più grande"
+        },
+        {
+          "type": "heading",
+          "text": "3. Ogni perdita d’informazione è sbagliata?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo nei numeri"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo nei file"
+        },
+        {
+          "type": "list-item",
+          "text": "D. No, può essere intenzionale e adeguata allo scopo"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Schema",
+              "Struttura ricorrente fra problemi."
+            ],
+            [
+              "Astrazione",
+              "Modello che seleziona proprietà rilevanti."
+            ],
+            [
+              "Generalizzazione",
+              "Estensione da casi particolari a una famiglia."
+            ],
+            [
+              "Parametro",
+              "Elemento variabile di una soluzione generale."
+            ],
+            [
+              "Interfaccia",
+              "Aspetti esposti per usare un’astrazione."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un pattern è una struttura ricorrente. Generalizzare significa parametrizzare ciò che varia e conservare ciò che è comune. Un’astrazione espone un’interfaccia e omette dettagli non rilevanti allo scopo. La validità dell’astrazione dipende dalle operazioni richieste e dalle proprietà che devono essere preservate. La competenza richiesta consiste nel trasformare l’idea in una rappresentazione precisa, tracciabile e criticabile, non nel memorizzare formule isolate."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So analizzare almeno tre casi limite e indicare come verificarli."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-5-chapter-5",
+      "lessonId": "0.5",
+      "chapterNumber": 5,
+      "title": "5. Algoritmi: proprietà, terminazione e determinismo",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.5 · CAPITOLO 5 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "5. Algoritmi: proprietà, terminazione e determinismo"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto, formalizzarlo, verificarlo con casi e controesempi e applicarlo alla progettazione di una procedura."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un algoritmo descrive una procedura generale per risolvere una classe di problemi. Deve essere abbastanza preciso da poter essere eseguito e analizzato. Non ogni algoritmo deve terminare, ma quando il problema richiede una risposta finita, la terminazione fa parte della correttezza."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una ricetta indica passi e decisioni, ma frasi come ‘cuoci quanto basta’ richiedono esperienza. Per una macchina occorre trasformare il criterio in una misura o un test osservabile."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un algoritmo possiede input, output, passi effettivi e controllo del flusso. Deterministico significa che lo stesso stato e gli stessi input producono lo stesso passo successivo; algoritmi randomizzati usano scelte casuali controllate. Correttezza parziale significa che, se termina, l’output è corretto; correttezza totale include terminazione."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Ricerca lineare termina dopo aver esaminato al massimo tutti gli elementi."
+        },
+        {
+          "type": "list-item",
+          "text": "Un server ha un ciclo intenzionalmente persistente, non un algoritmo di risposta che deve terminare."
+        },
+        {
+          "type": "list-item",
+          "text": "Un algoritmo randomizzato può usare un seme per rendere ripetibile una prova."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "‘Prova finché funziona’ non garantisce progresso."
+        },
+        {
+          "type": "list-item",
+          "text": "Funzionare su un esempio non dimostra generalità."
+        },
+        {
+          "type": "list-item",
+          "text": "Un processo infinito non è automaticamente un errore se il requisito è restare in ascolto."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un percorso con cartelli rappresenta decisioni e avanzamento. Per dimostrare la fine serve mostrare che ogni passo avvicina alla destinazione o riduce una quantità finita."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 5.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "INPUT  vPASSI + STATO  | ogni passo è effettivo  | esiste progresso?  vTERMINAZIONE richiesta  vOUTPUT conforme alla specifica"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una variante di ciclo è una quantità che diminuisce secondo un ordine ben fondato e non può diminuire indefinitamente. Un’invariante descrive ciò che resta vero. Insieme aiutano a ragionare su correttezza e terminazione prima del codice."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Confondere algoritmo e singola esecuzione."
+        },
+        {
+          "type": "list-item",
+          "text": "Non definire progresso."
+        },
+        {
+          "type": "list-item",
+          "text": "Nascondere un sottoproblema altrettanto difficile in un passo."
+        },
+        {
+          "type": "list-item",
+          "text": "Chiamare deterministico ciò che legge ambiente variabile."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Input vuoto."
+        },
+        {
+          "type": "list-item",
+          "text": "Algoritmo reattivo intenzionalmente continuo."
+        },
+        {
+          "type": "list-item",
+          "text": "Scelta casuale senza limite di tentativi."
+        },
+        {
+          "type": "list-item",
+          "text": "Risorsa esterna che non risponde."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso identifica input, stato, regola applicata, output atteso e proprietà da preservare; cerca poi un caso capace di smentire l’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Come dimostri che ogni passo avanza?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quando la non terminazione è requisito?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale parte dell’ambiente rompe il determinismo?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Analizza un conto alla rovescia da n."
+        },
+        {
+          "type": "list-item",
+          "text": "Definisci variante n."
+        },
+        {
+          "type": "list-item",
+          "text": "Dimostra che con n intero non negativo termina."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve dichiarare le assunzioni, permettere una simulazione passo per passo e collegare il risultato ai criteri della specifica."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Trova una variante per ricerca lineare."
+        },
+        {
+          "type": "list-item",
+          "text": "Distingui correttezza parziale e totale."
+        },
+        {
+          "type": "list-item",
+          "text": "Descrivi un algoritmo randomizzato con limite."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Correttezza totale include?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Correttezza del risultato e terminazione"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo sintassi"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo velocità"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Solo memoria"
+        },
+        {
+          "type": "heading",
+          "text": "2. Deterministico significa?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Sempre veloce"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Sempre breve"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Senza dati"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Stesso stato e input determinano il passo successivo"
+        },
+        {
+          "type": "heading",
+          "text": "3. Un server continuo è sempre errato?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Solo offline"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo senza rete"
+        },
+        {
+          "type": "list-item",
+          "text": "C. No"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Sì"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Algoritmo",
+              "Procedura generale ed effettiva per una classe di problemi."
+            ],
+            [
+              "Determinismo",
+              "Univocità dell’evoluzione dato stato e input."
+            ],
+            [
+              "Terminazione",
+              "Conclusione dopo un numero finito di passi."
+            ],
+            [
+              "Variante",
+              "Quantità che dimostra il progresso verso la fine."
+            ],
+            [
+              "Correttezza totale",
+              "Correttezza dell’output più terminazione."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un algoritmo possiede input, output, passi effettivi e controllo del flusso. Deterministico significa che lo stesso stato e gli stessi input producono lo stesso passo successivo; algoritmi randomizzati usano scelte casuali controllate. Correttezza parziale significa che, se termina, l’output è corretto; correttezza totale include terminazione. La competenza richiesta consiste nel trasformare l’idea in una rappresentazione precisa, tracciabile e criticabile, non nel memorizzare formule isolate."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So analizzare almeno tre casi limite e indicare come verificarli."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-5-chapter-6",
+      "lessonId": "0.5",
+      "chapterNumber": 6,
+      "title": "6. Pseudocodice: scrivere algoritmi senza dipendere da un linguaggio",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.5 · CAPITOLO 6 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "6. Pseudocodice: scrivere algoritmi senza dipendere da un linguaggio"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto, formalizzarlo, verificarlo con casi e controesempi e applicarlo alla progettazione di una procedura."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Lo pseudocodice esprime un algoritmo con convenzioni leggibili senza adottare tutta la sintassi di un linguaggio. Serve per ragionare, comunicare e revisionare la soluzione. Non è un linguaggio universale: ogni documento deve dichiarare le proprie convenzioni."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "È simile a una pianta preliminare: abbastanza precisa per discutere stanze e collegamenti, ma non ancora il progetto esecutivo con ogni materiale. Una pianta vaga non aiuta; una copia completa del progetto perde il vantaggio dell’astrazione."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un buon pseudocodice usa assegnazione, lettura, scrittura, condizioni, ripetizioni e chiamate con indentazione coerente. Le variabili rappresentano stato; ← può distinguere assegnazione da uguaglianza. Precondizioni e postcondizioni accompagnano la procedura. Ogni istruzione deve essere traducibile senza inventare regole nuove."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "massimo ← primo elemento."
+        },
+        {
+          "type": "list-item",
+          "text": "PER OGNI elemento: SE elemento > massimo ALLORA massimo ← elemento."
+        },
+        {
+          "type": "list-item",
+          "text": "RESTITUISCI massimo."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "‘Sistema la lista’ è troppo vago."
+        },
+        {
+          "type": "list-item",
+          "text": "Mescolare Python, italiano e simboli senza regola confonde."
+        },
+        {
+          "type": "list-item",
+          "text": "Omettere il caso vuoto lascia la procedura incompleta."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "La pianta preliminare chiarisce il livello di dettaglio, ma lo pseudocodice descrive comportamento dinamico e deve rendere espliciti stato e flusso."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 6.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "PROCEDURA massimo(lista)  PRE: lista non vuota  massimo ← lista[0]  PER OGNI elemento restante    SE elemento > massimo      massimo ← elemento  RESTITUISCI massimo"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Lo pseudocodice è utile se resta stabile nel progetto. Termini come ‘PER OGNI’, ‘FINCHÉ’ e ‘RESTITUISCI’ devono avere significato coerente. Commenti spiegano il perché, non sostituiscono passi mancanti."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Scrivere codice mascherato da pseudocodice."
+        },
+        {
+          "type": "list-item",
+          "text": "Non distinguere assegnazione e confronto."
+        },
+        {
+          "type": "list-item",
+          "text": "Usare variabili mai inizializzate."
+        },
+        {
+          "type": "list-item",
+          "text": "Ignorare precondizioni ed errori."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Collezione vuota."
+        },
+        {
+          "type": "list-item",
+          "text": "Valori duplicati."
+        },
+        {
+          "type": "list-item",
+          "text": "Operazione che può fallire."
+        },
+        {
+          "type": "list-item",
+          "text": "Effetti esterni e input che arrivano nel tempo."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso identifica input, stato, regola applicata, output atteso e proprietà da preservare; cerca poi un caso capace di smentire l’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale dettaglio appartiene allo pseudocodice?"
+        },
+        {
+          "type": "list-item",
+          "text": "Come distingui uguaglianza e assegnazione?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quando un passo è ancora troppo astratto?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Scrivi pseudocodice per contare valori positivi."
+        },
+        {
+          "type": "list-item",
+          "text": "Traccialo su [2,-1,0,4]."
+        },
+        {
+          "type": "list-item",
+          "text": "Aggiungi la politica per input non numerico."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve dichiarare le assunzioni, permettere una simulazione passo per passo e collegare il risultato ai criteri della specifica."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Scrivi il minimo di una lista."
+        },
+        {
+          "type": "list-item",
+          "text": "Progetta validazione di un PIN."
+        },
+        {
+          "type": "list-item",
+          "text": "Traduci una ricetta vaga in pseudocodice verificabile."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Lo pseudocodice è eseguibile universalmente?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo in Python"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo su carta"
+        },
+        {
+          "type": "list-item",
+          "text": "D. No"
+        },
+        {
+          "type": "heading",
+          "text": "2. A che cosa serve ←?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. A cancellare dati"
+        },
+        {
+          "type": "list-item",
+          "text": "B. A terminare il programma"
+        },
+        {
+          "type": "list-item",
+          "text": "C. A indicare assegnazione"
+        },
+        {
+          "type": "list-item",
+          "text": "D. A indicare sempre confronto"
+        },
+        {
+          "type": "heading",
+          "text": "3. Un passo può richiedere regole non dichiarate?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Solo nei commenti"
+        },
+        {
+          "type": "list-item",
+          "text": "B. No, deve essere traducibile senza inventarle"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Sì sempre"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Solo se breve"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Pseudocodice",
+              "Notazione informale ma precisa per descrivere algoritmi."
+            ],
+            [
+              "Assegnazione",
+              "Aggiornamento del valore associato a una variabile."
+            ],
+            [
+              "Indentazione",
+              "Rientro che mostra struttura e annidamento."
+            ],
+            [
+              "Procedura",
+              "Unità nominata di passi con contratto."
+            ],
+            [
+              "Restituzione",
+              "Produzione dell’output della procedura."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un buon pseudocodice usa assegnazione, lettura, scrittura, condizioni, ripetizioni e chiamate con indentazione coerente. Le variabili rappresentano stato; ← può distinguere assegnazione da uguaglianza. Precondizioni e postcondizioni accompagnano la procedura. Ogni istruzione deve essere traducibile senza inventare regole nuove. La competenza richiesta consiste nel trasformare l’idea in una rappresentazione precisa, tracciabile e criticabile, non nel memorizzare formule isolate."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So analizzare almeno tre casi limite e indicare come verificarli."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-5-chapter-7",
+      "lessonId": "0.5",
+      "chapterNumber": 7,
+      "title": "7. Sequenza, selezione e ripetizione",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.5 · CAPITOLO 7 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "7. Sequenza, selezione e ripetizione"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto, formalizzarlo, verificarlo con casi e controesempi e applicarlo alla progettazione di una procedura."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "La maggior parte degli algoritmi strutturati combina tre forme: sequenza, selezione e ripetizione. Questi costrutti descrivono l’ordine, le alternative e il lavoro iterato. Comprenderli concettualmente prepara condizioni e cicli senza anticipare la sintassi Python."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Preparare una bevanda segue passi in ordine; scegliere zucchero o no è una selezione; mescolare finché lo zucchero è sciolto è una ripetizione. La difficoltà è dichiarare condizioni e progresso."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "La sequenza esegue passi nell’ordine. La selezione sceglie un ramo secondo una condizione. La ripetizione esegue un corpo per elementi, per un numero di volte o finché vale una condizione. Ingressi, stato e uscita del costrutto devono essere definiti. L’annidamento compone strutture mantenendo un solo ingresso e un’uscita comprensibile."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Leggi prezzo, calcola imposta, mostra totale: sequenza."
+        },
+        {
+          "type": "list-item",
+          "text": "Se età >=18 scegli tariffa adulto, altrimenti minore: selezione."
+        },
+        {
+          "type": "list-item",
+          "text": "Per ogni voto aggiorna somma: ripetizione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "Una condizione senza ramo per il caso falso può lasciare stato incompleto."
+        },
+        {
+          "type": "list-item",
+          "text": "Un ciclo senza aggiornamento può non terminare."
+        },
+        {
+          "type": "list-item",
+          "text": "Ripetere un’intera procedura quando basta una parte spreca lavoro."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Sono mattoni di costruzione del flusso. Come i mattoni, non garantiscono da soli una casa corretta: servono progetto, misure e verifiche."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 7.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "SEQUENZA: A -> B -> CSELEZIONE: condizione --vero--> A                       --falso-> BRIPETIZIONE: condizione -> corpo -> aggiornamento                    ^_________________________|"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "La ripetizione controllata da elemento evita spesso errori di indice; quella controllata da condizione è necessaria quando il numero di passi non è noto. La scelta dipende dalla conoscenza disponibile, non dalla preferenza stilistica."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Dimenticare il ramo alternativo necessario."
+        },
+        {
+          "type": "list-item",
+          "text": "Confondere condizione di continuazione e di arresto."
+        },
+        {
+          "type": "list-item",
+          "text": "Aggiornare la variabile sbagliata."
+        },
+        {
+          "type": "list-item",
+          "text": "Creare annidamenti difficili da tracciare."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Zero iterazioni."
+        },
+        {
+          "type": "list-item",
+          "text": "Una sola iterazione."
+        },
+        {
+          "type": "list-item",
+          "text": "Condizione vera per sempre."
+        },
+        {
+          "type": "list-item",
+          "text": "Stato modificato dentro rami diversi."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso identifica input, stato, regola applicata, output atteso e proprietà da preservare; cerca poi un caso capace di smentire l’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale stato cambia a ogni iterazione?"
+        },
+        {
+          "type": "list-item",
+          "text": "Il ramo falso deve fare qualcosa?"
+        },
+        {
+          "type": "list-item",
+          "text": "Come riconosci una ripetizione per elementi?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Progetta la somma di una lista."
+        },
+        {
+          "type": "list-item",
+          "text": "Definisci inizializzazione, corpo e risultato."
+        },
+        {
+          "type": "list-item",
+          "text": "Traccia lista vuota e lista con un elemento."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve dichiarare le assunzioni, permettere una simulazione passo per passo e collegare il risultato ai criteri della specifica."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Conta elementi pari."
+        },
+        {
+          "type": "list-item",
+          "text": "Progetta una selezione a tre casi."
+        },
+        {
+          "type": "list-item",
+          "text": "Trasforma una ripetizione senza progresso in una terminante."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Quali sono le tre strutture base?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Testo, audio, video"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Input, mouse, schermo"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Sequenza, selezione, ripetizione"
+        },
+        {
+          "type": "list-item",
+          "text": "D. File, rete, CPU"
+        },
+        {
+          "type": "heading",
+          "text": "2. Un ciclo termina se?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Ha sempre due rami"
+        },
+        {
+          "type": "list-item",
+          "text": "B. La condizione e lo stato garantiscono progresso verso l’uscita"
+        },
+        {
+          "type": "list-item",
+          "text": "C. È lungo"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Usa colori"
+        },
+        {
+          "type": "heading",
+          "text": "3. Zero iterazioni è possibile?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "B. No"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo con numeri"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Solo online"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Sequenza",
+              "Esecuzione ordinata di passi."
+            ],
+            [
+              "Selezione",
+              "Scelta fra rami tramite condizione."
+            ],
+            [
+              "Ripetizione",
+              "Esecuzione reiterata di un corpo."
+            ],
+            [
+              "Corpo",
+              "Passi eseguiti in un ramo o ciclo."
+            ],
+            [
+              "Annidamento",
+              "Inserimento di una struttura dentro un’altra."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "La sequenza esegue passi nell’ordine. La selezione sceglie un ramo secondo una condizione. La ripetizione esegue un corpo per elementi, per un numero di volte o finché vale una condizione. Ingressi, stato e uscita del costrutto devono essere definiti. L’annidamento compone strutture mantenendo un solo ingresso e un’uscita comprensibile. La competenza richiesta consiste nel trasformare l’idea in una rappresentazione precisa, tracciabile e criticabile, non nel memorizzare formule isolate."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So analizzare almeno tre casi limite e indicare come verificarli."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-5-chapter-8",
+      "lessonId": "0.5",
+      "chapterNumber": 8,
+      "title": "8. Diagrammi di flusso: simboli, percorsi e limiti",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.5 · CAPITOLO 8 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "8. Diagrammi di flusso: simboli, percorsi e limiti"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto, formalizzarlo, verificarlo con casi e controesempi e applicarlo alla progettazione di una procedura."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "I diagrammi di flusso rappresentano graficamente il controllo. Sono utili per procedure piccole e per comunicare percorsi, ma diventano rapidamente complessi. Devono chiarire l’algoritmo, non decorarlo."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una mappa mostra incroci e direzioni. Il diagramma mostra passi e decisioni con frecce. Seguire un percorso con un input specifico equivale a simulare un’esecuzione."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Convenzioni comuni: ovale per inizio/fine, rettangolo per elaborazione, parallelogramma per input/output, rombo per decisione, frecce per flusso. Ogni uscita di decisione deve essere etichettata. Connettori e sottoprocessi riducono incroci, ma la notazione deve essere dichiarata."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Controllo maggiorenne con un rombo e due output."
+        },
+        {
+          "type": "list-item",
+          "text": "Ciclo con freccia di ritorno dopo aggiornamento."
+        },
+        {
+          "type": "list-item",
+          "text": "Validazione input prima dell’elaborazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "Un rettangolo contenente ‘risolvi tutto’ non aggiunge precisione."
+        },
+        {
+          "type": "list-item",
+          "text": "Frecce incrociate senza etichette rendono ambiguo il flusso."
+        },
+        {
+          "type": "list-item",
+          "text": "Usare forme diverse senza significato coerente ostacola la lettura."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "La mappa aiuta a seguire percorsi, ma un algoritmo contiene anche dati e invarianti che un diagramma può mostrare male. Pseudocodice e diagramma sono complementari."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 8.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "(INIZIO)       |  / leggi x /       |   < x >= 0 ?>    sì/     \\no     v       v[mostra x] [errore]      \\     /       (FINE)"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un diagramma dovrebbe stare a un livello coerente. Mescolare ‘leggi file’ con dettagli di singoli byte nello stesso disegno rende le forme incomparabili. Per sistemi grandi convengono più diagrammi collegati, ognuno con scopo dichiarato."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Decisioni senza etichette."
+        },
+        {
+          "type": "list-item",
+          "text": "Percorsi che non raggiungono fine o ciclo dichiarato."
+        },
+        {
+          "type": "list-item",
+          "text": "Livelli di dettaglio incoerenti."
+        },
+        {
+          "type": "list-item",
+          "text": "Diagramma non aggiornato rispetto allo pseudocodice."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Più punti di uscita."
+        },
+        {
+          "type": "list-item",
+          "text": "Errore durante input/output."
+        },
+        {
+          "type": "list-item",
+          "text": "Ciclo intenzionalmente infinito."
+        },
+        {
+          "type": "list-item",
+          "text": "Processi concorrenti difficili da rappresentare con flusso semplice."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso identifica input, stato, regola applicata, output atteso e proprietà da preservare; cerca poi un caso capace di smentire l’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale informazione mostra meglio il diagramma?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quando dividerlo in sottoprocessi?"
+        },
+        {
+          "type": "list-item",
+          "text": "Come rilevi un percorso morto?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Disegna il massimo fra due numeri."
+        },
+        {
+          "type": "list-item",
+          "text": "Etichetta vero e falso."
+        },
+        {
+          "type": "list-item",
+          "text": "Simula valori uguali."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve dichiarare le assunzioni, permettere una simulazione passo per passo e collegare il risultato ai criteri della specifica."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Disegna una validazione con tre tentativi."
+        },
+        {
+          "type": "list-item",
+          "text": "Converti pseudocodice di somma in diagramma."
+        },
+        {
+          "type": "list-item",
+          "text": "Critica un diagramma troppo dettagliato."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Quale forma indica normalmente una decisione?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Parallelogramma"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Rombo"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Rettangolo"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Ovale"
+        },
+        {
+          "type": "heading",
+          "text": "2. Le uscite di una decisione devono essere?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Etichettate"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Nascoste"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Sempre tre"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Senza frecce"
+        },
+        {
+          "type": "heading",
+          "text": "3. Un diagramma grande è sempre migliore?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo a colori"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo se stampato"
+        },
+        {
+          "type": "list-item",
+          "text": "D. No"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Diagramma di flusso",
+              "Rappresentazione grafica del controllo."
+            ],
+            [
+              "Nodo decisione",
+              "Punto che seleziona un percorso."
+            ],
+            [
+              "Connettore",
+              "Simbolo che collega parti del diagramma."
+            ],
+            [
+              "Sottoprocesso",
+              "Procedura richiamata come unità."
+            ],
+            [
+              "Percorso morto",
+              "Ramo che non può essere raggiunto."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Convenzioni comuni: ovale per inizio/fine, rettangolo per elaborazione, parallelogramma per input/output, rombo per decisione, frecce per flusso. Ogni uscita di decisione deve essere etichettata. Connettori e sottoprocessi riducono incroci, ma la notazione deve essere dichiarata. La competenza richiesta consiste nel trasformare l’idea in una rappresentazione precisa, tracciabile e criticabile, non nel memorizzare formule isolate."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So analizzare almeno tre casi limite e indicare come verificarli."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-5-chapter-9",
+      "lessonId": "0.5",
+      "chapterNumber": 9,
+      "title": "9. Tracciamento manuale, invarianti e dimostrazione della correttezza",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.5 · CAPITOLO 9 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "9. Tracciamento manuale, invarianti e dimostrazione della correttezza"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto, formalizzarlo, verificarlo con casi e controesempi e applicarlo alla progettazione di una procedura."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Leggere un algoritmo non basta per sapere che cosa fa. Il tracciamento manuale registra lo stato dopo ogni passo per un input concreto. Invarianti e ragionamento sui casi estendono l’analisi oltre gli esempi."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Seguire una partita annotando ogni mossa permette di ricostruire la posizione. Una tabella di traccia fa lo stesso con variabili e condizioni. L’invariante è una regola che resta valida dopo ogni mossa consentita."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una traccia contiene passo, valori delle variabili, condizione e output. Per un ciclo, un’invariante deve valere prima, essere preservata dal corpo e contribuire alla postcondizione quando il ciclo termina. Casi normali, confini e input anomali rivelano difetti diversi."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Nel massimo, dopo k elementi la variabile massimo è il massimo dei primi k."
+        },
+        {
+          "type": "list-item",
+          "text": "Nella somma, dopo k elementi accumulatore è la somma dei primi k."
+        },
+        {
+          "type": "list-item",
+          "text": "In ricerca, gli elementi già esaminati non soddisfano il criterio se non è stato trovato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "Una traccia riuscita non dimostra tutti gli input."
+        },
+        {
+          "type": "list-item",
+          "text": "Un invariante vero all’inizio ma non preservato è inutile."
+        },
+        {
+          "type": "list-item",
+          "text": "Controllare soltanto l’output finale nasconde stati impossibili."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il registro di bordo mostra l’evoluzione; l’invariante è una norma che deve restare rispettata. Tuttavia la dimostrazione richiede argomentare tutti i passi, non soltanto osservare registri."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 9.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "INIZIALIZZAZIONE -> invariante vero       |       vCORPO DEL CICLO -> preserva invariante       |                ^       +-- continua ----+       | termina       vINVARIANTE + condizione finale -> postcondizione"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il test cerca difetti su casi scelti; la dimostrazione ragiona su tutti i casi coperti dalle ipotesi. Nella pratica si combinano: specifiche, revisioni, invarianti, test e monitoraggio. Nessun singolo metodo elimina ogni rischio."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Saltare aggiornamenti nella traccia."
+        },
+        {
+          "type": "list-item",
+          "text": "Cambiare più variabili senza annotarle."
+        },
+        {
+          "type": "list-item",
+          "text": "Proporre un invariante uguale alla postcondizione ma falso durante il ciclo."
+        },
+        {
+          "type": "list-item",
+          "text": "Confondere prova empirica e dimostrazione."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Zero iterazioni."
+        },
+        {
+          "type": "list-item",
+          "text": "Prima iterazione."
+        },
+        {
+          "type": "list-item",
+          "text": "Ultima iterazione."
+        },
+        {
+          "type": "list-item",
+          "text": "Interruzione anticipata del ciclo."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso identifica input, stato, regola applicata, output atteso e proprietà da preservare; cerca poi un caso capace di smentire l’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Che cosa deve valere dopo k passi?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale caso verifica l’inizializzazione?"
+        },
+        {
+          "type": "list-item",
+          "text": "Come contribuisce la condizione finale?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Traccia il massimo su [3,1,5,2]."
+        },
+        {
+          "type": "list-item",
+          "text": "Annota indice e massimo."
+        },
+        {
+          "type": "list-item",
+          "text": "Formula e verifica l’invariante."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve dichiarare le assunzioni, permettere una simulazione passo per passo e collegare il risultato ai criteri della specifica."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Traccia una ricerca fallita."
+        },
+        {
+          "type": "list-item",
+          "text": "Trova un invariante per conteggio."
+        },
+        {
+          "type": "list-item",
+          "text": "Crea un controesempio a un algoritmo errato."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Una traccia manuale analizza?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Una specifica esecuzione"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Tutti gli input automaticamente"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo la sintassi"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Soltanto la memoria"
+        },
+        {
+          "type": "heading",
+          "text": "2. Un invariante deve essere?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Vero solo alla fine"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Sempre uguale all’input"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Segreto"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Vero inizialmente e preservato"
+        },
+        {
+          "type": "heading",
+          "text": "3. Test e dimostrazione sono identici?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Solo per cicli"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo con numeri"
+        },
+        {
+          "type": "list-item",
+          "text": "C. No"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Sì"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Traccia",
+              "Registrazione passo per passo dello stato."
+            ],
+            [
+              "Invariante di ciclo",
+              "Proprietà vera prima e dopo ogni iterazione."
+            ],
+            [
+              "Preservazione",
+              "Mantenimento di una proprietà dopo un passo."
+            ],
+            [
+              "Controesempio",
+              "Caso che smentisce un’affermazione generale."
+            ],
+            [
+              "Dimostrazione",
+              "Argomento valido per tutti i casi coperti dalle ipotesi."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una traccia contiene passo, valori delle variabili, condizione e output. Per un ciclo, un’invariante deve valere prima, essere preservata dal corpo e contribuire alla postcondizione quando il ciclo termina. Casi normali, confini e input anomali rivelano difetti diversi. La competenza richiesta consiste nel trasformare l’idea in una rappresentazione precisa, tracciabile e criticabile, non nel memorizzare formule isolate."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So analizzare almeno tre casi limite e indicare come verificarli."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-5-chapter-10",
+      "lessonId": "0.5",
+      "chapterNumber": 10,
+      "title": "10. Confrontare algoritmi: risorse, compromessi e scelta responsabile",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.5 · CAPITOLO 10 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "10. Confrontare algoritmi: risorse, compromessi e scelta responsabile"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto, formalizzarlo, verificarlo con casi e controesempi e applicarlo alla progettazione di una procedura."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Più algoritmi possono essere corretti e produrre lo stesso risultato, ma differire per tempo, memoria, semplicità, affidabilità e impatto. La scelta non consiste nel trovare sempre il più veloce: deve rispondere a dimensione degli input, frequenza d’uso e costi reali."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Per trovare un nome in dieci fogli, scorrerli uno a uno è ragionevole. Per milioni di registrazioni, costruire un indice può ripagare il costo iniziale. La strategia migliore dipende dal contesto."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "La complessità descrive la crescita delle risorse rispetto alla dimensione n. L’analisi asintotica ignora costanti per confrontare la crescita, ma le costanti contano nei dati reali. Tempo e spazio possono essere scambiati; preelaborazione e indici accelerano richieste pagando memoria e aggiornamenti."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Ricerca lineare cresce proporzionalmente agli elementi nel caso peggiore."
+        },
+        {
+          "type": "list-item",
+          "text": "Un indice ordinato può rendere la ricerca più rapida ma deve essere mantenuto."
+        },
+        {
+          "type": "list-item",
+          "text": "Memorizzare risultati evita ricalcoli usando spazio."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "L’algoritmo asintoticamente migliore non è sempre più veloce su input piccoli."
+        },
+        {
+          "type": "list-item",
+          "text": "Ottimizzare codice raramente eseguito può peggiorare leggibilità senza beneficio."
+        },
+        {
+          "type": "list-item",
+          "text": "Una soluzione veloce ma sbagliata non è preferibile."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Scegliere un mezzo di trasporto dipende da distanza, costo, carico e infrastruttura. Non esiste il mezzo universalmente migliore; esiste quello adeguato ai vincoli."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 10.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "ALGORITMI CORRETTI  | confronta  +--> tempo  +--> memoria  +--> semplicità e manutenzione  +--> affidabilità e sicurezza  +--> energia e scala  vSCELTA MOTIVATA DAL CONTESTO"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Misurare richiede input rappresentativi e ambiente controllato. L’analisi teorica anticipa la crescita; il benchmark osserva un’implementazione concreta. Le due prospettive si completano. La sostenibilità considera energia, hardware e durata oltre alla latenza."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Ottimizzare prima di misurare."
+        },
+        {
+          "type": "list-item",
+          "text": "Usare un solo input favorevole."
+        },
+        {
+          "type": "list-item",
+          "text": "Ignorare costo di costruzione e aggiornamento dell’indice."
+        },
+        {
+          "type": "list-item",
+          "text": "Sacrificare chiarezza senza requisito."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Input piccolissimi."
+        },
+        {
+          "type": "list-item",
+          "text": "Caso peggiore raro ma catastrofico."
+        },
+        {
+          "type": "list-item",
+          "text": "Memoria insufficiente."
+        },
+        {
+          "type": "list-item",
+          "text": "Dati che cambiano continuamente."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso identifica input, stato, regola applicata, output atteso e proprietà da preservare; cerca poi un caso capace di smentire l’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Qual è la dimensione n del problema?"
+        },
+        {
+          "type": "list-item",
+          "text": "Che cosa costa la preelaborazione?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale rischio pesa più della velocità?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Confronta ricerca lineare e indice per dieci e un milione di elementi."
+        },
+        {
+          "type": "list-item",
+          "text": "Aggiungi il costo di aggiornamento."
+        },
+        {
+          "type": "list-item",
+          "text": "Scegli per elenco statico e dinamico."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La soluzione deve dichiarare le assunzioni, permettere una simulazione passo per passo e collegare il risultato ai criteri della specifica."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Trova un compromesso tempo-spazio."
+        },
+        {
+          "type": "list-item",
+          "text": "Progetta un benchmark equo."
+        },
+        {
+          "type": "list-item",
+          "text": "Valuta energia e manutenzione in una scelta."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Più algoritmi possono essere corretti?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. No"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo due"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo in Python"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Sì"
+        },
+        {
+          "type": "heading",
+          "text": "2. L’analisi asintotica sostituisce ogni misura?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Sempre"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo nei database"
+        },
+        {
+          "type": "list-item",
+          "text": "C. No"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Sì"
+        },
+        {
+          "type": "heading",
+          "text": "3. La soluzione più veloce è sempre migliore?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Solo online"
+        },
+        {
+          "type": "list-item",
+          "text": "B. No"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Solo se breve"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Complessità",
+              "Crescita delle risorse rispetto alla dimensione dell’input."
+            ],
+            [
+              "Caso peggiore",
+              "Input che richiede il massimo costo considerato."
+            ],
+            [
+              "Preelaborazione",
+              "Lavoro iniziale per facilitare operazioni future."
+            ],
+            [
+              "Indice",
+              "Struttura ausiliaria per recuperare dati più rapidamente."
+            ],
+            [
+              "Benchmark",
+              "Misurazione controllata di un’implementazione."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "La complessità descrive la crescita delle risorse rispetto alla dimensione n. L’analisi asintotica ignora costanti per confrontare la crescita, ma le costanti contano nei dati reali. Tempo e spazio possono essere scambiati; preelaborazione e indici accelerano richieste pagando memoria e aggiornamenti. La competenza richiesta consiste nel trasformare l’idea in una rappresentazione precisa, tracciabile e criticabile, non nel memorizzare formule isolate."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So analizzare almeno tre casi limite e indicare come verificarli."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sintesi integrata della Lezione 0.5"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il pensiero computazionale parte dalla formulazione del problema, non dal codice. Specifiche, decomposizione, schemi e astrazioni conducono a un algoritmo; pseudocodice e diagrammi ne rendono visibile il controllo; tracce, invarianti e controesempi ne verificano il comportamento; analisi e misure permettono di scegliere fra soluzioni corrette. Ogni passaggio conserva un legame con il bisogno reale e con gli effetti della decisione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura S.1 — Dal bisogno all’algoritmo verificato"
+        },
+        {
+          "type": "paragraph",
+          "text": "BISOGNO  vPROBLEMA + SPECIFICA  vDECOMPOSIZIONE + ASTRAZIONE  vALGORITMO  +--> PSEUDOCODICE  +--> DIAGRAMMA  +--> TRACCIA / INVARIANTI  vSCELTA, IMPLEMENTAZIONE E VALIDAZIONE"
+        },
+        {
+          "type": "heading",
+          "text": "Prova finale di padronanza"
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta un sistema di gestione di una coda di richieste e produci un elaborato di 1.000–1.400 parole che includa:"
+        },
+        {
+          "type": "list-item",
+          "text": "dominio, input, output e vincoli;"
+        },
+        {
+          "type": "list-item",
+          "text": "precondizioni, postcondizioni e errori;"
+        },
+        {
+          "type": "list-item",
+          "text": "decomposizione in sottoproblemi;"
+        },
+        {
+          "type": "list-item",
+          "text": "schema riutilizzabile e astrazione scelta;"
+        },
+        {
+          "type": "list-item",
+          "text": "pseudocodice completo;"
+        },
+        {
+          "type": "list-item",
+          "text": "diagramma di flusso;"
+        },
+        {
+          "type": "list-item",
+          "text": "traccia su caso normale, vuoto e anomalo;"
+        },
+        {
+          "type": "list-item",
+          "text": "invariante e argomento di terminazione;"
+        },
+        {
+          "type": "list-item",
+          "text": "confronto con una strategia alternativa."
+        },
+        {
+          "type": "heading",
+          "text": "Rubrica di valutazione"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Dimensione",
+              "Essenziale",
+              "Solida",
+              "Piena padronanza"
+            ],
+            [
+              "Specifica",
+              "Input e output presenti",
+              "Vincoli ed errori espliciti",
+              "Postcondizioni verificabili e complete"
+            ],
+            [
+              "Progettazione",
+              "Passi principali",
+              "Decomposizione coerente",
+              "Astrazioni motivate e integrabili"
+            ],
+            [
+              "Algoritmo",
+              "Procedura plausibile",
+              "Pseudocodice tracciabile",
+              "Terminazione e invariante argomentati"
+            ],
+            [
+              "Verifica",
+              "Un esempio",
+              "Casi normali e confini",
+              "Controesempi e proprietà generali"
+            ],
+            [
+              "Scelta",
+              "Una soluzione",
+              "Compromessi riconosciuti",
+              "Risorse, rischi e contesto confrontati"
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento della lezione"
+        },
+        {
+          "type": "list-item",
+          "text": "Tutti i dieci capitoli sono stati letti e annotati."
+        },
+        {
+          "type": "list-item",
+          "text": "Sono stati completati tutti gli esercizi guidati e almeno venti autonomi."
+        },
+        {
+          "type": "list-item",
+          "text": "Sono stati scritti almeno cinque algoritmi in pseudocodice."
+        },
+        {
+          "type": "list-item",
+          "text": "Sono stati disegnati almeno tre diagrammi di flusso e cinque tracce."
+        },
+        {
+          "type": "list-item",
+          "text": "Il punteggio dei quiz è almeno 24/30, con correzione motivata."
+        },
+        {
+          "type": "list-item",
+          "text": "La prova finale raggiunge almeno il livello Solida in ogni dimensione."
+        },
+        {
+          "type": "list-item",
+          "text": "Il lettore sa passare da un bisogno a una specifica e a un algoritmo verificabile senza ricorrere alla sintassi Python."
+        },
+        {
+          "type": "callout",
+          "text": "PASSAGGIO SUCCESSIVO  La Lezione 0.6 studierà il ciclo di vita del software: requisiti, progettazione, implementazione, test, distribuzione e manutenzione."
+        }
+      ]
+    }
+  ],
+  "chapters": [
+    {
+      "number": 1,
+      "title": "1. Pensiero computazionale: formulare problemi trattabili",
+      "sectionId": "programming-0-5-chapter-1",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-5-chapter-1-guided",
+          "kind": "guided",
+          "lessonId": "0.5",
+          "chapterNumber": 1,
+          "title": "1. Pensiero computazionale: formulare problemi trattabili",
+          "prompt": "Trasforma ‘organizza le prenotazioni’ in input, output e vincoli.\nDefinisci tre istanze concrete.\nIndica una decisione che richiede revisione umana.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve dichiarare le assunzioni, permettere una simulazione passo per passo e collegare il risultato ai criteri della specifica."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-5-chapter-1-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 1,
+            "title": "1. Pensiero computazionale: formulare problemi trattabili",
+            "prompt": "Formula il problema di cercare un libro."
+          },
+          {
+            "id": "programming-0-5-chapter-1-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 1,
+            "title": "1. Pensiero computazionale: formulare problemi trattabili",
+            "prompt": "Analizza un obiettivo non misurabile e rendilo verificabile."
+          },
+          {
+            "id": "programming-0-5-chapter-1-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 1,
+            "title": "1. Pensiero computazionale: formulare problemi trattabili",
+            "prompt": "Trova un caso in cui non automatizzare è la scelta migliore."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-5-chapter-1-quiz-1",
+          "concept": "1. Pensiero computazionale: formulare problemi trattabili",
+          "prompt": "Un problema computazionale definisce?",
+          "choices": [
+            "A. Input ammessi e output corretti",
+            "B. Soltanto un linguaggio",
+            "C. Il colore dell’interfaccia",
+            "D. Una singola risposta"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-1"
+        },
+        {
+          "id": "programming-0-5-chapter-1-quiz-2",
+          "concept": "1. Pensiero computazionale: formulare problemi trattabili",
+          "prompt": "Scegliere una tecnologia equivale a definire il problema?",
+          "choices": [
+            "A. Sì",
+            "B. Solo con Python",
+            "C. Solo con database",
+            "D. No"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-1"
+        },
+        {
+          "id": "programming-0-5-chapter-1-quiz-3",
+          "concept": "1. Pensiero computazionale: formulare problemi trattabili",
+          "prompt": "Tutto ciò che è formalizzabile va automatizzato?",
+          "choices": [
+            "A. Sempre",
+            "B. Solo gratuitamente",
+            "C. No",
+            "D. Sì"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-1"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "2. Specificare input, output, precondizioni e postcondizioni",
+      "sectionId": "programming-0-5-chapter-2",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-5-chapter-2-guided",
+          "kind": "guided",
+          "lessonId": "0.5",
+          "chapterNumber": 2,
+          "title": "2. Specificare input, output, precondizioni e postcondizioni",
+          "prompt": "Specifica la ricerca del massimo in una lista.\nDecidi la politica per lista vuota.\nScrivi una postcondizione controllabile.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve dichiarare le assunzioni, permettere una simulazione passo per passo e collegare il risultato ai criteri della specifica."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-5-chapter-2-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 2,
+            "title": "2. Specificare input, output, precondizioni e postcondizioni",
+            "prompt": "Specifica un convertitore di temperatura."
+          },
+          {
+            "id": "programming-0-5-chapter-2-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 2,
+            "title": "2. Specificare input, output, precondizioni e postcondizioni",
+            "prompt": "Definisci un ordinamento con duplicati."
+          },
+          {
+            "id": "programming-0-5-chapter-2-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 2,
+            "title": "2. Specificare input, output, precondizioni e postcondizioni",
+            "prompt": "Critica una precondizione irrealisticamente forte."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-5-chapter-2-quiz-1",
+          "concept": "2. Specificare input, output, precondizioni e postcondizioni",
+          "prompt": "Che cosa descrive una postcondizione?",
+          "choices": [
+            "A. Il colore del codice",
+            "B. L’hardware",
+            "C. Il nome del file",
+            "D. La garanzia dopo l’operazione"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-2"
+        },
+        {
+          "id": "programming-0-5-chapter-2-quiz-2",
+          "concept": "2. Specificare input, output, precondizioni e postcondizioni",
+          "prompt": "Gli esempi sostituiscono una specifica generale?",
+          "choices": [
+            "A. Sempre",
+            "B. Solo se numerici",
+            "C. No",
+            "D. Sì"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-2"
+        },
+        {
+          "id": "programming-0-5-chapter-2-quiz-3",
+          "concept": "2. Specificare input, output, precondizioni e postcondizioni",
+          "prompt": "Una precondizione può essere troppo forte?",
+          "choices": [
+            "A. Solo nei quiz",
+            "B. Sì",
+            "C. No",
+            "D. Mai"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-2"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "title": "3. Decomposizione: dividere senza perdere il problema",
+      "sectionId": "programming-0-5-chapter-3",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-5-chapter-3-guided",
+          "kind": "guided",
+          "lessonId": "0.5",
+          "chapterNumber": 3,
+          "title": "3. Decomposizione: dividere senza perdere il problema",
+          "prompt": "Scomponi un distributore automatico.\nDefinisci contratti per credito, selezione e consegna.\nSimula prodotto esaurito dopo il pagamento.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve dichiarare le assunzioni, permettere una simulazione passo per passo e collegare il risultato ai criteri della specifica."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-5-chapter-3-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 3,
+            "title": "3. Decomposizione: dividere senza perdere il problema",
+            "prompt": "Scomponi una biblioteca digitale."
+          },
+          {
+            "id": "programming-0-5-chapter-3-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 3,
+            "title": "3. Decomposizione: dividere senza perdere il problema",
+            "prompt": "Trova un esempio di alto accoppiamento."
+          },
+          {
+            "id": "programming-0-5-chapter-3-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 3,
+            "title": "3. Decomposizione: dividere senza perdere il problema",
+            "prompt": "Disegna l’integrazione fra tre sottoproblemi."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-5-chapter-3-quiz-1",
+          "concept": "3. Decomposizione: dividere senza perdere il problema",
+          "prompt": "Una buona decomposizione crea?",
+          "choices": [
+            "A. Soltanto molti file",
+            "B. Nessun collegamento",
+            "C. Responsabilità e contratti chiari",
+            "D. Parti casuali"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-3"
+        },
+        {
+          "id": "programming-0-5-chapter-3-quiz-2",
+          "concept": "3. Decomposizione: dividere senza perdere il problema",
+          "prompt": "Alta coesione indica?",
+          "choices": [
+            "A. Un solo computer",
+            "B. Responsabilità interne correlate",
+            "C. Molte dipendenze",
+            "D. Molti colori"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-3"
+        },
+        {
+          "id": "programming-0-5-chapter-3-quiz-3",
+          "concept": "3. Decomposizione: dividere senza perdere il problema",
+          "prompt": "Testare le parti basta sempre?",
+          "choices": [
+            "A. No, serve anche integrazione",
+            "B. Sì",
+            "C. Solo online",
+            "D. Solo con due parti"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-3"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "title": "4. Schemi, generalizzazione e astrazione",
+      "sectionId": "programming-0-5-chapter-4",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-5-chapter-4-guided",
+          "kind": "guided",
+          "lessonId": "0.5",
+          "chapterNumber": 4,
+          "title": "4. Schemi, generalizzazione e astrazione",
+          "prompt": "Confronta cercare un numero e cercare un nome.\nIsola lo schema comune.\nParametrizza il criterio di uguaglianza.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve dichiarare le assunzioni, permettere una simulazione passo per passo e collegare il risultato ai criteri della specifica."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-5-chapter-4-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 4,
+            "title": "4. Schemi, generalizzazione e astrazione",
+            "prompt": "Trova tre problemi di conteggio."
+          },
+          {
+            "id": "programming-0-5-chapter-4-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 4,
+            "title": "4. Schemi, generalizzazione e astrazione",
+            "prompt": "Critica un’astrazione troppo generica."
+          },
+          {
+            "id": "programming-0-5-chapter-4-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 4,
+            "title": "4. Schemi, generalizzazione e astrazione",
+            "prompt": "Crea due mappe concettuali dello stesso sistema per scopi diversi."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-5-chapter-4-quiz-1",
+          "concept": "4. Schemi, generalizzazione e astrazione",
+          "prompt": "Che cosa fa un’astrazione?",
+          "choices": [
+            "A. Scrive codice automaticamente",
+            "B. Conserva aspetti rilevanti e omette dettagli scelti",
+            "C. Conserva sempre tutto",
+            "D. Elimina ogni errore"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-4"
+        },
+        {
+          "id": "programming-0-5-chapter-4-quiz-2",
+          "concept": "4. Schemi, generalizzazione e astrazione",
+          "prompt": "Generalizzare significa?",
+          "choices": [
+            "A. Estendere una struttura a una famiglia di casi",
+            "B. Copiare un esempio",
+            "C. Ridurre sempre la lunghezza",
+            "D. Usare un computer più grande"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-4"
+        },
+        {
+          "id": "programming-0-5-chapter-4-quiz-3",
+          "concept": "4. Schemi, generalizzazione e astrazione",
+          "prompt": "Ogni perdita d’informazione è sbagliata?",
+          "choices": [
+            "A. Sì",
+            "B. Solo nei numeri",
+            "C. Solo nei file",
+            "D. No, può essere intenzionale e adeguata allo scopo"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-4"
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "title": "5. Algoritmi: proprietà, terminazione e determinismo",
+      "sectionId": "programming-0-5-chapter-5",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-5-chapter-5-guided",
+          "kind": "guided",
+          "lessonId": "0.5",
+          "chapterNumber": 5,
+          "title": "5. Algoritmi: proprietà, terminazione e determinismo",
+          "prompt": "Analizza un conto alla rovescia da n.\nDefinisci variante n.\nDimostra che con n intero non negativo termina.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve dichiarare le assunzioni, permettere una simulazione passo per passo e collegare il risultato ai criteri della specifica."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-5-chapter-5-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 5,
+            "title": "5. Algoritmi: proprietà, terminazione e determinismo",
+            "prompt": "Trova una variante per ricerca lineare."
+          },
+          {
+            "id": "programming-0-5-chapter-5-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 5,
+            "title": "5. Algoritmi: proprietà, terminazione e determinismo",
+            "prompt": "Distingui correttezza parziale e totale."
+          },
+          {
+            "id": "programming-0-5-chapter-5-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 5,
+            "title": "5. Algoritmi: proprietà, terminazione e determinismo",
+            "prompt": "Descrivi un algoritmo randomizzato con limite."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-5-chapter-5-quiz-1",
+          "concept": "5. Algoritmi: proprietà, terminazione e determinismo",
+          "prompt": "Correttezza totale include?",
+          "choices": [
+            "A. Correttezza del risultato e terminazione",
+            "B. Solo sintassi",
+            "C. Solo velocità",
+            "D. Solo memoria"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-5"
+        },
+        {
+          "id": "programming-0-5-chapter-5-quiz-2",
+          "concept": "5. Algoritmi: proprietà, terminazione e determinismo",
+          "prompt": "Deterministico significa?",
+          "choices": [
+            "A. Sempre veloce",
+            "B. Sempre breve",
+            "C. Senza dati",
+            "D. Stesso stato e input determinano il passo successivo"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-5"
+        },
+        {
+          "id": "programming-0-5-chapter-5-quiz-3",
+          "concept": "5. Algoritmi: proprietà, terminazione e determinismo",
+          "prompt": "Un server continuo è sempre errato?",
+          "choices": [
+            "A. Solo offline",
+            "B. Solo senza rete",
+            "C. No",
+            "D. Sì"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-5"
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "title": "6. Pseudocodice: scrivere algoritmi senza dipendere da un linguaggio",
+      "sectionId": "programming-0-5-chapter-6",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-5-chapter-6-guided",
+          "kind": "guided",
+          "lessonId": "0.5",
+          "chapterNumber": 6,
+          "title": "6. Pseudocodice: scrivere algoritmi senza dipendere da un linguaggio",
+          "prompt": "Scrivi pseudocodice per contare valori positivi.\nTraccialo su [2,-1,0,4].\nAggiungi la politica per input non numerico.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve dichiarare le assunzioni, permettere una simulazione passo per passo e collegare il risultato ai criteri della specifica."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-5-chapter-6-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 6,
+            "title": "6. Pseudocodice: scrivere algoritmi senza dipendere da un linguaggio",
+            "prompt": "Scrivi il minimo di una lista."
+          },
+          {
+            "id": "programming-0-5-chapter-6-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 6,
+            "title": "6. Pseudocodice: scrivere algoritmi senza dipendere da un linguaggio",
+            "prompt": "Progetta validazione di un PIN."
+          },
+          {
+            "id": "programming-0-5-chapter-6-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 6,
+            "title": "6. Pseudocodice: scrivere algoritmi senza dipendere da un linguaggio",
+            "prompt": "Traduci una ricetta vaga in pseudocodice verificabile."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-5-chapter-6-quiz-1",
+          "concept": "6. Pseudocodice: scrivere algoritmi senza dipendere da un linguaggio",
+          "prompt": "Lo pseudocodice è eseguibile universalmente?",
+          "choices": [
+            "A. Sì",
+            "B. Solo in Python",
+            "C. Solo su carta",
+            "D. No"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-6"
+        },
+        {
+          "id": "programming-0-5-chapter-6-quiz-2",
+          "concept": "6. Pseudocodice: scrivere algoritmi senza dipendere da un linguaggio",
+          "prompt": "A che cosa serve ←?",
+          "choices": [
+            "A. A cancellare dati",
+            "B. A terminare il programma",
+            "C. A indicare assegnazione",
+            "D. A indicare sempre confronto"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-6"
+        },
+        {
+          "id": "programming-0-5-chapter-6-quiz-3",
+          "concept": "6. Pseudocodice: scrivere algoritmi senza dipendere da un linguaggio",
+          "prompt": "Un passo può richiedere regole non dichiarate?",
+          "choices": [
+            "A. Solo nei commenti",
+            "B. No, deve essere traducibile senza inventarle",
+            "C. Sì sempre",
+            "D. Solo se breve"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-6"
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "title": "7. Sequenza, selezione e ripetizione",
+      "sectionId": "programming-0-5-chapter-7",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-5-chapter-7-guided",
+          "kind": "guided",
+          "lessonId": "0.5",
+          "chapterNumber": 7,
+          "title": "7. Sequenza, selezione e ripetizione",
+          "prompt": "Progetta la somma di una lista.\nDefinisci inizializzazione, corpo e risultato.\nTraccia lista vuota e lista con un elemento.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve dichiarare le assunzioni, permettere una simulazione passo per passo e collegare il risultato ai criteri della specifica."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-5-chapter-7-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 7,
+            "title": "7. Sequenza, selezione e ripetizione",
+            "prompt": "Conta elementi pari."
+          },
+          {
+            "id": "programming-0-5-chapter-7-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 7,
+            "title": "7. Sequenza, selezione e ripetizione",
+            "prompt": "Progetta una selezione a tre casi."
+          },
+          {
+            "id": "programming-0-5-chapter-7-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 7,
+            "title": "7. Sequenza, selezione e ripetizione",
+            "prompt": "Trasforma una ripetizione senza progresso in una terminante."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-5-chapter-7-quiz-1",
+          "concept": "7. Sequenza, selezione e ripetizione",
+          "prompt": "Quali sono le tre strutture base?",
+          "choices": [
+            "A. Testo, audio, video",
+            "B. Input, mouse, schermo",
+            "C. Sequenza, selezione, ripetizione",
+            "D. File, rete, CPU"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-7"
+        },
+        {
+          "id": "programming-0-5-chapter-7-quiz-2",
+          "concept": "7. Sequenza, selezione e ripetizione",
+          "prompt": "Un ciclo termina se?",
+          "choices": [
+            "A. Ha sempre due rami",
+            "B. La condizione e lo stato garantiscono progresso verso l’uscita",
+            "C. È lungo",
+            "D. Usa colori"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-7"
+        },
+        {
+          "id": "programming-0-5-chapter-7-quiz-3",
+          "concept": "7. Sequenza, selezione e ripetizione",
+          "prompt": "Zero iterazioni è possibile?",
+          "choices": [
+            "A. Sì",
+            "B. No",
+            "C. Solo con numeri",
+            "D. Solo online"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-7"
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "title": "8. Diagrammi di flusso: simboli, percorsi e limiti",
+      "sectionId": "programming-0-5-chapter-8",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-5-chapter-8-guided",
+          "kind": "guided",
+          "lessonId": "0.5",
+          "chapterNumber": 8,
+          "title": "8. Diagrammi di flusso: simboli, percorsi e limiti",
+          "prompt": "Disegna il massimo fra due numeri.\nEtichetta vero e falso.\nSimula valori uguali.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve dichiarare le assunzioni, permettere una simulazione passo per passo e collegare il risultato ai criteri della specifica."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-5-chapter-8-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 8,
+            "title": "8. Diagrammi di flusso: simboli, percorsi e limiti",
+            "prompt": "Disegna una validazione con tre tentativi."
+          },
+          {
+            "id": "programming-0-5-chapter-8-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 8,
+            "title": "8. Diagrammi di flusso: simboli, percorsi e limiti",
+            "prompt": "Converti pseudocodice di somma in diagramma."
+          },
+          {
+            "id": "programming-0-5-chapter-8-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 8,
+            "title": "8. Diagrammi di flusso: simboli, percorsi e limiti",
+            "prompt": "Critica un diagramma troppo dettagliato."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-5-chapter-8-quiz-1",
+          "concept": "8. Diagrammi di flusso: simboli, percorsi e limiti",
+          "prompt": "Quale forma indica normalmente una decisione?",
+          "choices": [
+            "A. Parallelogramma",
+            "B. Rombo",
+            "C. Rettangolo",
+            "D. Ovale"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-8"
+        },
+        {
+          "id": "programming-0-5-chapter-8-quiz-2",
+          "concept": "8. Diagrammi di flusso: simboli, percorsi e limiti",
+          "prompt": "Le uscite di una decisione devono essere?",
+          "choices": [
+            "A. Etichettate",
+            "B. Nascoste",
+            "C. Sempre tre",
+            "D. Senza frecce"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-8"
+        },
+        {
+          "id": "programming-0-5-chapter-8-quiz-3",
+          "concept": "8. Diagrammi di flusso: simboli, percorsi e limiti",
+          "prompt": "Un diagramma grande è sempre migliore?",
+          "choices": [
+            "A. Sì",
+            "B. Solo a colori",
+            "C. Solo se stampato",
+            "D. No"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-8"
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "title": "9. Tracciamento manuale, invarianti e dimostrazione della correttezza",
+      "sectionId": "programming-0-5-chapter-9",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-5-chapter-9-guided",
+          "kind": "guided",
+          "lessonId": "0.5",
+          "chapterNumber": 9,
+          "title": "9. Tracciamento manuale, invarianti e dimostrazione della correttezza",
+          "prompt": "Traccia il massimo su [3,1,5,2].\nAnnota indice e massimo.\nFormula e verifica l’invariante.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve dichiarare le assunzioni, permettere una simulazione passo per passo e collegare il risultato ai criteri della specifica."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-5-chapter-9-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 9,
+            "title": "9. Tracciamento manuale, invarianti e dimostrazione della correttezza",
+            "prompt": "Traccia una ricerca fallita."
+          },
+          {
+            "id": "programming-0-5-chapter-9-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 9,
+            "title": "9. Tracciamento manuale, invarianti e dimostrazione della correttezza",
+            "prompt": "Trova un invariante per conteggio."
+          },
+          {
+            "id": "programming-0-5-chapter-9-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 9,
+            "title": "9. Tracciamento manuale, invarianti e dimostrazione della correttezza",
+            "prompt": "Crea un controesempio a un algoritmo errato."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-5-chapter-9-quiz-1",
+          "concept": "9. Tracciamento manuale, invarianti e dimostrazione della correttezza",
+          "prompt": "Una traccia manuale analizza?",
+          "choices": [
+            "A. Una specifica esecuzione",
+            "B. Tutti gli input automaticamente",
+            "C. Solo la sintassi",
+            "D. Soltanto la memoria"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-9"
+        },
+        {
+          "id": "programming-0-5-chapter-9-quiz-2",
+          "concept": "9. Tracciamento manuale, invarianti e dimostrazione della correttezza",
+          "prompt": "Un invariante deve essere?",
+          "choices": [
+            "A. Vero solo alla fine",
+            "B. Sempre uguale all’input",
+            "C. Segreto",
+            "D. Vero inizialmente e preservato"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-9"
+        },
+        {
+          "id": "programming-0-5-chapter-9-quiz-3",
+          "concept": "9. Tracciamento manuale, invarianti e dimostrazione della correttezza",
+          "prompt": "Test e dimostrazione sono identici?",
+          "choices": [
+            "A. Solo per cicli",
+            "B. Solo con numeri",
+            "C. No",
+            "D. Sì"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-9"
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "title": "10. Confrontare algoritmi: risorse, compromessi e scelta responsabile",
+      "sectionId": "programming-0-5-chapter-10",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-5-chapter-10-guided",
+          "kind": "guided",
+          "lessonId": "0.5",
+          "chapterNumber": 10,
+          "title": "10. Confrontare algoritmi: risorse, compromessi e scelta responsabile",
+          "prompt": "Confronta ricerca lineare e indice per dieci e un milione di elementi.\nAggiungi il costo di aggiornamento.\nScegli per elenco statico e dinamico.",
+          "autoverification": "AUTOVERIFICA  La soluzione deve dichiarare le assunzioni, permettere una simulazione passo per passo e collegare il risultato ai criteri della specifica."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-5-chapter-10-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 10,
+            "title": "10. Confrontare algoritmi: risorse, compromessi e scelta responsabile",
+            "prompt": "Trova un compromesso tempo-spazio."
+          },
+          {
+            "id": "programming-0-5-chapter-10-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 10,
+            "title": "10. Confrontare algoritmi: risorse, compromessi e scelta responsabile",
+            "prompt": "Progetta un benchmark equo."
+          },
+          {
+            "id": "programming-0-5-chapter-10-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.5",
+            "chapterNumber": 10,
+            "title": "10. Confrontare algoritmi: risorse, compromessi e scelta responsabile",
+            "prompt": "Valuta energia e manutenzione in una scelta."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-5-chapter-10-quiz-1",
+          "concept": "10. Confrontare algoritmi: risorse, compromessi e scelta responsabile",
+          "prompt": "Più algoritmi possono essere corretti?",
+          "choices": [
+            "A. No",
+            "B. Solo due",
+            "C. Solo in Python",
+            "D. Sì"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-10"
+        },
+        {
+          "id": "programming-0-5-chapter-10-quiz-2",
+          "concept": "10. Confrontare algoritmi: risorse, compromessi e scelta responsabile",
+          "prompt": "L’analisi asintotica sostituisce ogni misura?",
+          "choices": [
+            "A. Sempre",
+            "B. Solo nei database",
+            "C. No",
+            "D. Sì"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-10"
+        },
+        {
+          "id": "programming-0-5-chapter-10-quiz-3",
+          "concept": "10. Confrontare algoritmi: risorse, compromessi e scelta responsabile",
+          "prompt": "La soluzione più veloce è sempre migliore?",
+          "choices": [
+            "A. Solo online",
+            "B. No",
+            "C. Sì",
+            "D. Solo se breve"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-5-chapter-10"
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    [
+      "Pensiero computazionale",
+      "Metodo per formulare e risolvere problemi in modo eseguibile e verificabile."
+    ],
+    [
+      "Istanza",
+      "Caso concreto di un problema generale."
+    ],
+    [
+      "Criterio di successo",
+      "Condizione osservabile che definisce un esito accettabile."
+    ],
+    [
+      "Vincolo",
+      "Regola che limita input o soluzioni."
+    ],
+    [
+      "Computazionale",
+      "Trattabile mediante rappresentazioni e procedure effettive."
+    ],
+    [
+      "Specifica",
+      "Descrizione verificabile del comportamento richiesto."
+    ],
+    [
+      "Precondizione",
+      "Proprietà richiesta prima dell’operazione."
+    ],
+    [
+      "Postcondizione",
+      "Proprietà garantita dopo l’operazione valida."
+    ],
+    [
+      "Invariante",
+      "Proprietà che resta vera in una fase definita."
+    ],
+    [
+      "Politica degli errori",
+      "Regole per condizioni non valide o anomale."
+    ],
+    [
+      "Decomposizione",
+      "Divisione strutturata in sottoproblemi."
+    ],
+    [
+      "Sottoproblema",
+      "Parte delimitata del problema generale."
+    ],
+    [
+      "Coesione",
+      "Relazione interna fra responsabilità dello stesso componente."
+    ],
+    [
+      "Accoppiamento",
+      "Grado di dipendenza fra componenti."
+    ],
+    [
+      "Integrazione",
+      "Verifica e composizione delle parti nel sistema completo."
+    ],
+    [
+      "Schema",
+      "Struttura ricorrente fra problemi."
+    ],
+    [
+      "Astrazione",
+      "Modello che seleziona proprietà rilevanti."
+    ],
+    [
+      "Generalizzazione",
+      "Estensione da casi particolari a una famiglia."
+    ],
+    [
+      "Parametro",
+      "Elemento variabile di una soluzione generale."
+    ],
+    [
+      "Interfaccia",
+      "Aspetti esposti per usare un’astrazione."
+    ],
+    [
+      "Algoritmo",
+      "Procedura generale ed effettiva per una classe di problemi."
+    ],
+    [
+      "Determinismo",
+      "Univocità dell’evoluzione dato stato e input."
+    ],
+    [
+      "Terminazione",
+      "Conclusione dopo un numero finito di passi."
+    ],
+    [
+      "Variante",
+      "Quantità che dimostra il progresso verso la fine."
+    ],
+    [
+      "Correttezza totale",
+      "Correttezza dell’output più terminazione."
+    ],
+    [
+      "Pseudocodice",
+      "Notazione informale ma precisa per descrivere algoritmi."
+    ],
+    [
+      "Assegnazione",
+      "Aggiornamento del valore associato a una variabile."
+    ],
+    [
+      "Indentazione",
+      "Rientro che mostra struttura e annidamento."
+    ],
+    [
+      "Procedura",
+      "Unità nominata di passi con contratto."
+    ],
+    [
+      "Restituzione",
+      "Produzione dell’output della procedura."
+    ],
+    [
+      "Sequenza",
+      "Esecuzione ordinata di passi."
+    ],
+    [
+      "Selezione",
+      "Scelta fra rami tramite condizione."
+    ],
+    [
+      "Ripetizione",
+      "Esecuzione reiterata di un corpo."
+    ],
+    [
+      "Corpo",
+      "Passi eseguiti in un ramo o ciclo."
+    ],
+    [
+      "Annidamento",
+      "Inserimento di una struttura dentro un’altra."
+    ],
+    [
+      "Diagramma di flusso",
+      "Rappresentazione grafica del controllo."
+    ],
+    [
+      "Nodo decisione",
+      "Punto che seleziona un percorso."
+    ],
+    [
+      "Connettore",
+      "Simbolo che collega parti del diagramma."
+    ],
+    [
+      "Sottoprocesso",
+      "Procedura richiamata come unità."
+    ],
+    [
+      "Percorso morto",
+      "Ramo che non può essere raggiunto."
+    ],
+    [
+      "Traccia",
+      "Registrazione passo per passo dello stato."
+    ],
+    [
+      "Invariante di ciclo",
+      "Proprietà vera prima e dopo ogni iterazione."
+    ],
+    [
+      "Preservazione",
+      "Mantenimento di una proprietà dopo un passo."
+    ],
+    [
+      "Controesempio",
+      "Caso che smentisce un’affermazione generale."
+    ],
+    [
+      "Dimostrazione",
+      "Argomento valido per tutti i casi coperti dalle ipotesi."
+    ],
+    [
+      "Complessità",
+      "Crescita delle risorse rispetto alla dimensione dell’input."
+    ],
+    [
+      "Caso peggiore",
+      "Input che richiede il massimo costo considerato."
+    ],
+    [
+      "Preelaborazione",
+      "Lavoro iniziale per facilitare operazioni future."
+    ],
+    [
+      "Indice",
+      "Struttura ausiliaria per recuperare dati più rapidamente."
+    ],
+    [
+      "Benchmark",
+      "Misurazione controllata di un’implementazione."
+    ]
+  ],
+  "summary": [
+    "Il pensiero computazionale parte dalla formulazione del problema, non dal codice. Specifiche, decomposizione, schemi e astrazioni conducono a un algoritmo; pseudocodice e diagrammi ne rendono visibile il controllo; tracce, invarianti e controesempi ne verificano il comportamento; analisi e misure permettono di scegliere fra soluzioni corrette. Ogni passaggio conserva un legame con il bisogno reale e con gli effetti della decisione."
+  ],
+  "finalAssessment": {
+    "lessonId": "0.5",
+    "title": "Prova finale di padronanza",
+    "prompt": "Progetta un sistema di gestione di una coda di richieste e produci un elaborato di 1.000–1.400 parole che includa:",
+    "deliverables": [
+      "dominio, input, output e vincoli;",
+      "precondizioni, postcondizioni e errori;",
+      "decomposizione in sottoproblemi;",
+      "schema riutilizzabile e astrazione scelta;",
+      "pseudocodice completo;",
+      "diagramma di flusso;",
+      "traccia su caso normale, vuoto e anomalo;",
+      "invariante e argomento di terminazione;",
+      "confronto con una strategia alternativa."
+    ],
+    "rubric": [
+      [
+        "Dimensione",
+        "Essenziale",
+        "Solida",
+        "Piena padronanza"
+      ],
+      [
+        "Specifica",
+        "Input e output presenti",
+        "Vincoli ed errori espliciti",
+        "Postcondizioni verificabili e complete"
+      ],
+      [
+        "Progettazione",
+        "Passi principali",
+        "Decomposizione coerente",
+        "Astrazioni motivate e integrabili"
+      ],
+      [
+        "Algoritmo",
+        "Procedura plausibile",
+        "Pseudocodice tracciabile",
+        "Terminazione e invariante argomentati"
+      ],
+      [
+        "Verifica",
+        "Un esempio",
+        "Casi normali e confini",
+        "Controesempi e proprietà generali"
+      ],
+      [
+        "Scelta",
+        "Una soluzione",
+        "Compromessi riconosciuti",
+        "Risorse, rischi e contesto confrontati"
+      ]
+    ],
+    "completionCriteria": [
+      "Tutti i dieci capitoli sono stati letti e annotati.",
+      "Sono stati completati tutti gli esercizi guidati e almeno venti autonomi.",
+      "Sono stati scritti almeno cinque algoritmi in pseudocodice.",
+      "Sono stati disegnati almeno tre diagrammi di flusso e cinque tracce.",
+      "Il punteggio dei quiz è almeno 24/30, con correzione motivata.",
+      "La prova finale raggiunge almeno il livello Solida in ogni dimensione.",
+      "Il lettore sa passare da un bisogno a una specifica e a un algoritmo verificabile senza ricorrere alla sintassi Python."
+    ]
+  }
+}

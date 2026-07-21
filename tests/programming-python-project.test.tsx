@@ -69,7 +69,39 @@ describe("Python Project guidati", () => {
     await waitFor(() => expect(actions).toContain("project_submitted"));
     expect(progress.completedProjectLessonIds).toEqual(["0.1"]);
     expect(progress.project).toBe("started");
-    expect(screen.getByText("1/3")).toBeInTheDocument();
+    expect(screen.getByText("1/5")).toBeInTheDocument();
+  });
+
+  it("collega ed esegue il Python Project della lezione 0.4", async () => {
+    let progress: LessonProgressState = { ...emptyLessonProgress, project: "started", completedProjectLessonIds: ["0.1", "0.2", "0.3"] };
+    vi.stubGlobal("fetch", vi.fn(async (_input: RequestInfo | URL, init?: RequestInit) => {
+      const action = lessonActionSchema.parse(JSON.parse(String(init?.body)));
+      progress = applyLessonAction(progress, action, "2026-07-21T12:00:00.000Z").state;
+      return { ok: true, json: async () => ({ state: progress, eve: initialEve }) };
+    }));
+
+    render(<ProgrammingLessonWorkspace roomId="room-test" materialId="material-test" lesson={publicProgrammingLesson()} initialState={progress} initialEve={initialEve} />);
+    await waitFor(() => expect(fetch).toHaveBeenCalled());
+    await act(async () => { fireEvent.click(screen.getByRole("button", { name: "Python Project" })); });
+
+    expect(screen.getByRole("heading", { name: "Una regola di accesso verificabile" })).toBeInTheDocument();
+    expect((screen.getByTestId("python-code-editor") as HTMLTextAreaElement).value).toContain("account_attivo and autorizzato");
+    await waitFor(() => expect(screen.getByRole("button", { name: "Esegui codice" })).toBeEnabled());
+    await act(async () => { fireEvent.click(screen.getByRole("button", { name: "Esegui codice" })); });
+    await waitFor(() => expect(screen.getByRole("button", { name: "Consegna progetto" })).toBeEnabled());
+    await act(async () => { fireEvent.click(screen.getByRole("button", { name: "Consegna progetto" })); });
+
+    await waitFor(() => expect(progress.completedProjectLessonIds).toContain("0.4"));
+    expect(screen.getByText("4/5")).toBeInTheDocument();
+  });
+
+  it("espone il Python Project della lezione 0.5 con input, algoritmo e output", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => ({ ok: true, json: async () => ({ state: emptyLessonProgress, eve: initialEve }) })));
+    render(<ProgrammingLessonWorkspace roomId="room-test" materialId="material-test" lesson={publicProgrammingLesson()} initialState={emptyLessonProgress} initialEve={initialEve} />);
+    await act(async () => { fireEvent.click(screen.getByRole("button", { name: "Python Project" })); });
+    await act(async () => { fireEvent.click(document.querySelector<HTMLButtonElement>('[data-project-lesson-id="0.5"]')!); });
+    expect(screen.getByRole("heading", { name: "Dall’algoritmo al primo programma" })).toBeInTheDocument();
+    expect((screen.getByTestId("python-code-editor") as HTMLTextAreaElement).value).toContain("minuti_per_lezione");
   });
 
   it("ripristina codice e risultato di una consegna già salvata", async () => {

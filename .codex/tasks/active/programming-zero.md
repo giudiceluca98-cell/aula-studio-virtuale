@@ -1,9 +1,9 @@
 # Completamento Programmazione da zero
 
 Stato: in corso
-Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 0.4 corrente
-Branch: `codex/programming-zero-lesson-0-4`
-Pull request: https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/9
+Assegnazione: Codex — integrazione verificata della Lezione 0.5 e Python Project delle Lezioni 0.4–0.5
+Branch: `agent/python-project-lesson-0-4`
+Pull request: https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/14
 Pacchetto: `programming`
 Percorso: `programming-zero`
 
@@ -118,4 +118,27 @@ Contenuti convertiti:
 - normalizzato il solo refuso `LEZIONE 0.2` → `LEZIONE 0.4` nelle dieci intestazioni di capitolo, dopo confronto con il contenuto distinto della fonte 0.2.
 
 Verifiche: test mirato 21/21, suite completa 138/138, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
+
+## Estensione in revisione · Lezione 0.5
+
+Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_0.5_Pensiero_computazionale_e_pseudocodice.docx`. Il DOCX non verrà caricato nel repository.
+
+File riservati:
+
+- `src/lib/catalog/subjects/programming-zero-lesson-0-5-official-content.json`
+- `src/lib/catalog/subjects/programming-zero-lesson.ts`
+- `src/lib/programming-lesson-progress.ts`
+- `tests/programming-subject.test.ts`
+
+File condivisi prenotati: nessuno. Dipendenza: PR #9; il branch e la Draft PR 0.5 sono impilati sulla lezione 0.4.
+
+Contenuti convertiti:
+
+- 11 sezioni e 800 blocchi renderizzabili;
+- 10 esercizi guidati e 30 esercizi autonomi;
+- 30 domande di quiz e 50 voci di glossario;
+- prova finale, rubrica e criteri di completamento;
+- impronta SHA-256 `1faa694e1279feb929c9c145ba0a253cfc1b4281a3e7fde2155ca69bf05ac5ca`, senza includere il DOCX.
+
+Verifiche dichiarate dalla proposta originale: test mirato 21/21, suite completa 138/138, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`. L'integrazione su `main` e i nuovi Python Project vengono verificati nuovamente nella PR #14.
 

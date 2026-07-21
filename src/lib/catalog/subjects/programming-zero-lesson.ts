@@ -1,6 +1,7 @@
 import officialContent from "./programming-zero-official-content.json";
 import lesson03Content from "./programming-zero-lesson-0-3-official-content.json";
 import lesson04Content from "./programming-zero-lesson-0-4-official-content.json";
+import lesson05Content from "./programming-zero-lesson-0-5-official-content.json";
 
 export const PROGRAMMING_ZERO_PATH_ID = "programming-zero";
 // The existing native material keeps its identifier so rooms and saved progress remain connected.
@@ -42,7 +43,7 @@ interface OfficialExercise {
   autoverification?: string;
 }
 
-const officialLessons = [...officialContent.lessons, lesson03Content, lesson04Content];
+const officialLessons = [...officialContent.lessons, lesson03Content, lesson04Content, lesson05Content];
 const chapters = officialLessons.flatMap((lesson) => lesson.chapters);
 const allExercises = chapters.flatMap((chapter) => [chapter.exercises.guided, ...chapter.exercises.autonomous]);
 const [firstGuidedExercise, ...remainingExercises] = allExercises;
@@ -136,6 +137,68 @@ print("Spazio totale in MB:", totale_mb)
 print("Spazio totale in GB:", round(totale_gb, 2))`,
     expectedResult: "Il programma deve mostrare quantità, megabyte totali e gigabyte arrotondati.",
   },
+  {
+    id: "programming-zero-python-project-0-4",
+    lessonId: "0.4",
+    title: "Una regola di accesso verificabile",
+    difficulty: "Base con logica booleana",
+    goal: "Tradurre una regola in condizioni verificabili e controllarne i confini con AND, OR e NOT.",
+    concepts: ["booleani", "confronti", "AND", "OR", "NOT", "if/else"],
+    instructions: [
+      "Esegui il codice e osserva i valori delle singole condizioni e la decisione finale.",
+      "Prova prima età 17 e poi età 18 per verificare il confine della maggiore età.",
+      "Imposta account_attivo su False e controlla che NOT segnali il blocco e che l'accesso venga negato.",
+      "Modifica consenso_tutore e spiega, con una nuova riga stampata, perché il risultato cambia oppure resta invariato.",
+    ],
+    starterCode: `eta = 17
+consenso_tutore = True
+account_attivo = True
+
+maggiorenne = eta >= 18
+autorizzato = maggiorenne or consenso_tutore
+account_bloccato = not account_attivo
+accesso_consentito = account_attivo and autorizzato
+
+print("Maggiorenne:", maggiorenne)
+print("Autorizzato:", autorizzato)
+print("Account bloccato:", account_bloccato)
+
+if accesso_consentito:
+    print("Risultato: accesso consentito")
+else:
+    print("Risultato: accesso negato")`,
+    expectedResult: "Il programma deve mostrare le condizioni booleane e concedere o negare l'accesso in modo coerente con i valori scelti.",
+  },
+  {
+    id: "programming-zero-python-project-0-5",
+    lessonId: "0.5",
+    title: "Dall’algoritmo al primo programma",
+    difficulty: "Base con progettazione",
+    goal: "Partire da input, risultato atteso e passaggi ordinati per tradurre un piccolo algoritmo in Python.",
+    concepts: ["input e output", "sequenza", "selezione", "traccia", "criterio di successo"],
+    instructions: [
+      "Individua nel codice gli input, i passaggi di calcolo e gli output prima di eseguirlo.",
+      "Prevedi su carta il risultato con 180 minuti e 3 lezioni, quindi verifica la previsione eseguendo il programma.",
+      "Prova 90 minuti e 4 lezioni e controlla quale ramo della selezione viene eseguito.",
+      "Prova 0 lezioni e verifica che la precondizione impedisca la divisione; poi aggiungi una riga che dichiari il criterio di successo: almeno 45 minuti per lezione.",
+    ],
+    starterCode: `minuti_disponibili = 180
+lezioni_da_studiare = 3
+
+print("Input - minuti disponibili:", minuti_disponibili)
+print("Input - lezioni da studiare:", lezioni_da_studiare)
+
+if lezioni_da_studiare > 0:
+    minuti_per_lezione = minuti_disponibili / lezioni_da_studiare
+    print("Output - minuti per lezione:", round(minuti_per_lezione, 1))
+    if minuti_per_lezione >= 45:
+        print("Piano sostenibile")
+    else:
+        print("Riduci le lezioni o aumenta il tempo")
+else:
+    print("Errore: il numero di lezioni deve essere maggiore di zero")`,
+    expectedResult: "Il programma deve rendere visibili input, calcolo, output e decisione finale dell'algoritmo.",
+  },
 ] as const;
 
 if (!firstGuidedExercise) throw new Error("Le fonti ufficiali non contengono esercizi guidati");
@@ -146,10 +209,10 @@ export const programmingLesson = {
   id: PROGRAMMING_LESSON_ID,
   pathId: PROGRAMMING_ZERO_PATH_ID,
   moduleId: "programming-module-0",
-  title: "Programmazione da Zero · Lezioni 0.1–0.4",
+  title: "Programmazione da Zero · Lezioni 0.1–0.5",
   lessonTitles: officialLessons.map((lesson) => `Lezione ${lesson.id} · ${lesson.title}`),
   level: "Lettore senza conoscenze pregresse",
-  estimatedMinutes: 360,
+  estimatedMinutes: 450,
   description: officialLessons.map((lesson) => lesson.summary[0]).join(" "),
   objectives: officialLessons.flatMap((lesson) => lesson.objectives),
   modules: programmingModules,
