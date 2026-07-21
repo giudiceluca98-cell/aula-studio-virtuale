@@ -1,9 +1,9 @@
 # Completamento Programmazione da zero
 
 Stato: in corso
-Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 0.6 corrente
-Branch: `codex/programming-zero-lesson-0-6`
-Pull request: https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/12 (base PR #11)
+Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 0.7 corrente
+Branch: `codex/programming-zero-lesson-0-7`
+Pull request: Draft PR da aprire (base PR #12)
 Pacchetto: `programming`
 Percorso: `programming-zero`
 
@@ -118,6 +118,19 @@ Contenuti convertiti:
 - normalizzato il solo refuso `LEZIONE 0.2` → `LEZIONE 0.4` nelle dieci intestazioni di capitolo, dopo confronto con il contenuto distinto della fonte 0.2.
 
 Verifiche: test mirato 21/21, suite completa 138/138, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
+
+## Estensione in corso · Lezione 0.7
+
+Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_0.7_Storia_e_aree_dell_informatica.docx`. Il DOCX non verrà caricato nel repository.
+
+File riservati:
+
+- `src/lib/catalog/subjects/programming-zero-lesson-0-7-official-content.json`
+- `src/lib/catalog/subjects/programming-zero-lesson.ts`
+- `src/lib/programming-lesson-progress.ts`
+- `tests/programming-subject.test.ts`
+
+File condivisi prenotati: nessuno. Dipendenza: PR #12; branch e Draft PR impilati sulla lezione 0.6.
 
 ## Estensione in revisione · Lezione 0.6
 
