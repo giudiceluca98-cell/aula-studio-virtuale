@@ -3,7 +3,7 @@
 Stato: in revisione
 Assegnazione: Codex
 Branch: `agent/correct-programming-content`
-Pull request: da aprire
+Pull request: [PR #28](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/28)
 
 ## Obiettivo
 
