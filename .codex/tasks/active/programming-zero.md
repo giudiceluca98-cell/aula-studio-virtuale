@@ -1,9 +1,9 @@
 # Completamento Programmazione da zero
 
 Stato: in corso
-Assegnazione: Codex — integrazione verificata della Lezione 0.6 e relativo Python Project
-Branch: `agent/integrate-programming-lesson-0-6`
-Pull request: https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/19
+Assegnazione: disponibile per la prossima lezione sequenziale
+Ultima integrazione completata: Lezione 0.6 e relativo Python Project, [PR #19](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/19)
+Prossima proposta disponibile: Lezione 0.7, [PR #13](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/13)
 Pacchetto: `programming`
 Percorso: `programming-zero`
 
