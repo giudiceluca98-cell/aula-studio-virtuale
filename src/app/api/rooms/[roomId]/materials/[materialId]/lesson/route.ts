@@ -46,12 +46,12 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     const { error } = await supabase.from("native_lesson_submissions").upsert({
       user_id: user.id, room_id: values.roomId, material_id: values.materialId,
       lesson_id: PROGRAMMING_LESSON_ID, activity_id: submission.activityId,
-      activity_type: submission.activityType, response: submission.response, status: "submitted",
+      activity_type: submission.activityType, response: submission.response, status: submission.status,
     }, { onConflict: "user_id,material_id,activity_id" });
     if (error) return json({ error: "submission_save_failed" }, 409);
   }
 
-  const actionEvent = parsed.data.type === "self_assessment_completed" ? null : parsed.data.type;
+  const actionEvent = parsed.data.type === "self_assessment_completed" || parsed.data.type === "project_draft_saved" ? null : parsed.data.type;
   const eventType = !before.lessonCompleted && applied.state.lessonCompleted ? "lesson_completed" : actionEvent;
   const { data, error } = await supabase.rpc("record_native_lesson_progress", {
     p_room_id: values.roomId,
@@ -66,7 +66,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     },
     p_event_type: eventType,
     p_client_event_id: parsed.data.eventId,
-    p_event_payload: { lessonId: PROGRAMMING_LESSON_ID, itemId: "sectionId" in parsed.data ? parsed.data.sectionId : "exerciseId" in parsed.data ? parsed.data.exerciseId : "questionId" in parsed.data ? parsed.data.questionId : null, quizScore: applied.state.quizScore },
+    p_event_payload: { lessonId: PROGRAMMING_LESSON_ID, itemId: "sectionId" in parsed.data ? parsed.data.sectionId : "exerciseId" in parsed.data ? parsed.data.exerciseId : "questionId" in parsed.data ? parsed.data.questionId : "projectLessonId" in parsed.data ? parsed.data.projectLessonId : null, quizScore: applied.state.quizScore },
   });
   if (error) {
     const status = error.code === "42501" ? 403 : error.code === "P0002" ? 404 : 409;

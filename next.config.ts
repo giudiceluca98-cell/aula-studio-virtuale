@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ["127.0.0.1", "localhost"],
   async headers() {
     const isDev = process.env.NODE_ENV !== "production";
-    const connectSrc = ["'self'", "https://*.supabase.co", "wss://*.supabase.co"];
+    const connectSrc = ["'self'", "https://*.supabase.co", "wss://*.supabase.co", "https://cdn.jsdelivr.net"];
     if (isDev) {
       connectSrc.push(
         "ws://localhost:*",
@@ -40,7 +40,8 @@ const nextConfig: NextConfig = {
               `connect-src ${connectSrc.join(" ")}`,
               "frame-src https://*.supabase.co https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com",
               "media-src 'self' blob: https:",
-              `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
+              `script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://cdn.jsdelivr.net${isDev ? " 'unsafe-eval'" : ""}`,
+              "worker-src 'self'",
               "style-src 'self' 'unsafe-inline'",
               isDev ? "" : "upgrade-insecure-requests",
             ].filter(Boolean).join("; "),

@@ -24,6 +24,7 @@ interface ContentResponse {
   progress?: Record<string, unknown> | null;
   lesson?: Parameters<typeof ProgrammingLessonWorkspace>[0]["lesson"];
   eve?: Parameters<typeof ProgrammingLessonWorkspace>[0]["initialEve"];
+  projectSubmissions?: Parameters<typeof ProgrammingLessonWorkspace>[0]["initialProjectSubmissions"];
 }
 
 const emptyState: MaterialLearningState = {
@@ -222,7 +223,7 @@ export function MaterialWorkspaceViewer({ roomId, material, onUploadRequested, o
 
   if (loadError || content?.kind === "unavailable") return <Notice title="Materiale temporaneamente non disponibile" detail="Il file non è stato modificato. Riprova oppure carica una copia che sei autorizzato a utilizzare." actions={<><button onClick={() => location.reload()} className="button-secondary"><RotateCcw size={14} /> Riprova</button><button onClick={onUploadRequested} className="button-primary"><FileUp size={14} /> Carica file</button></>} />;
   if (!content) return <div className="grid min-h-[360px] place-items-center bg-[#eef1ea]"><div className="text-center"><Loader2 className="mx-auto animate-spin text-moss-700" /><p className="mt-3 text-xs font-semibold text-black/45">Preparo il materiale nel workspace…</p></div></div>;
-  if (content.kind === "lesson" && content.lesson && content.eve) return <ProgrammingLessonWorkspace roomId={roomId} materialId={material.id} lesson={content.lesson} initialState={normalizeLessonProgress(content.progress?.exercise_state) as LessonProgressState} initialEve={content.eve} />;
+  if (content.kind === "lesson" && content.lesson && content.eve) return <ProgrammingLessonWorkspace roomId={roomId} materialId={material.id} lesson={content.lesson} initialState={normalizeLessonProgress(content.progress?.exercise_state) as LessonProgressState} initialEve={content.eve} initialProjectSubmissions={content.projectSubmissions ?? []} />;
   if (content.kind === "import-required" || content.kind === "unsupported") return <Notice title="Questo materiale non può essere aperto e monitorato interamente dentro l’aula" detail="Puoi cercare una risorsa compatibile oppure importare un file che possiedi e sei autorizzato a utilizzare. Non aggiriamo CSP, autenticazione o DRM." actions={<><button onClick={onChooseAlternative} className="button-secondary">Cerca alternativa compatibile</button><button onClick={onUploadRequested} className="button-primary"><FileUp size={14} /> Carica un file</button>{access.sourceUrl && <a href={access.sourceUrl} target="_blank" rel="noopener noreferrer" className="button-secondary">Apri esternamente <ExternalLink size={13} /></a>}</>} />;
 
   return <div ref={containerRef} className="relative min-h-[430px] bg-[#eef1ea]" data-testid="internal-material-viewer">

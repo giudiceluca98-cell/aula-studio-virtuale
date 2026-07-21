@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { BookOpen, Check, ChevronLeft, ChevronRight, CircleHelp, ClipboardCheck, Lightbulb, Loader2, RotateCcw, Send, Sparkles } from "lucide-react";
+import { BookOpen, Check, ChevronLeft, ChevronRight, CircleHelp, ClipboardCheck, Lightbulb, Loader2, Play, RotateCcw, Send, Sparkles, Terminal } from "lucide-react";
 import type { LessonProgressState } from "@/lib/programming-lesson-progress";
+import { usePythonRunner } from "@/hooks/use-python-runner";
 
 interface PublicLesson {
   id: string; title: string; level: string; estimatedMinutes: number; description: string; objectives: readonly string[]; lessonTitles: readonly string[];
@@ -12,7 +13,7 @@ interface PublicLesson {
   guidedExercise: { id: string; lessonId: string; kind: string; title: string; prompt: string; hints: readonly string[]; requiredCases: readonly string[] };
   exercises: ReadonlyArray<{ id: string; lessonId: string; kind: string; title: string; prompt: string; autoverification?: string }>;
   quiz: ReadonlyArray<{ id: string; concept: string; prompt: string; choices: readonly string[]; explanation: string; reviewSectionId: string }>;
-  project: { id: string; title: string; prompt: string; deliverables: readonly string[]; criteria: readonly string[]; assessments: ReadonlyArray<{ lessonId: string; title: string; prompt: string; deliverables: readonly string[]; rubric: readonly (readonly string[])[]; completionCriteria: readonly string[] }> };
+  project: { id: string; title: string; prompt: string; deliverables: readonly string[]; criteria: readonly string[]; assessments: ReadonlyArray<{ lessonId: string; title: string; prompt: string; deliverables: readonly string[]; rubric: readonly (readonly string[])[]; completionCriteria: readonly string[] }>; guidedProjects: ReadonlyArray<{ id: string; lessonId: string; title: string; difficulty: string; goal: string; concepts: readonly string[]; instructions: readonly string[]; starterCode: string; expectedResult: string }> };
   completion: { minimumQuizScore: number };
   summary: readonly string[];
 }
@@ -22,6 +23,7 @@ type Tab = "lesson" | "practice" | "quiz" | "project" | "glossary";
 type LessonNavigationItem = PublicLesson["modules"][number]["lessons"][number];
 type QuizQuestion = PublicLesson["quiz"][number];
 type LessonSection = PublicLesson["sections"][number];
+type ProjectSubmission = { activity_id: string; response: string; status: "draft" | "submitted"; updated_at?: string };
 
 function eventId() { return crypto.randomUUID(); }
 
@@ -35,8 +37,8 @@ function splitSectionBlocksAroundQuiz(section: LessonSection) {
   };
 }
 
-export function ProgrammingLessonWorkspace({ roomId, materialId, lesson, initialState, initialEve }: {
-  roomId: string; materialId: string; lesson: PublicLesson; initialState: LessonProgressState; initialEve: EveAdvice;
+export function ProgrammingLessonWorkspace({ roomId, materialId, lesson, initialState, initialEve, initialProjectSubmissions = [] }: {
+  roomId: string; materialId: string; lesson: PublicLesson; initialState: LessonProgressState; initialEve: EveAdvice; initialProjectSubmissions?: ProjectSubmission[];
 }) {
   const [progress, setProgress] = useState(initialState);
   const [eve, setEve] = useState(initialEve);
@@ -93,7 +95,7 @@ export function ProgrammingLessonWorkspace({ roomId, materialId, lesson, initial
 
   const tabs: Array<{ id: Tab; label: string; icon: typeof BookOpen }> = [
     { id: "lesson", label: "Lezione", icon: BookOpen }, { id: "practice", label: "Esercizi", icon: ClipboardCheck },
-    { id: "quiz", label: "Quiz", icon: CircleHelp }, { id: "project", label: "Progetto modulo", icon: Lightbulb },
+    { id: "quiz", label: "Quiz", icon: CircleHelp }, { id: "project", label: "Python Project", icon: Terminal },
     { id: "glossary", label: "Glossario", icon: BookOpen },
   ];
 
@@ -122,7 +124,7 @@ export function ProgrammingLessonWorkspace({ roomId, materialId, lesson, initial
         </section>}
         {tab === "practice" && selectedLesson && <PracticePanel lesson={lesson} selectedLesson={selectedLesson} progress={progress} saving={saving} act={act} />}
         {tab === "quiz" && selectedLesson && <QuizPanel lesson={lesson} selectedLesson={selectedLesson} progress={progress} saving={saving} act={act} />}
-        {tab === "project" && <ProjectPanel lesson={lesson} progress={progress} saving={saving} act={act} />}
+        {tab === "project" && <ProjectPanel lesson={lesson} progress={progress} saving={saving} act={act} initialProjectSubmissions={initialProjectSubmissions} />}
         {tab === "glossary" && selectedLesson && <section className="mx-auto max-w-3xl rounded-2xl bg-white p-5 shadow-sm sm:p-8"><p className="eyebrow">Lezione {selectedLesson.id} · {selectedLesson.glossary.length} voci</p><h3 className="mt-2 text-xl font-bold">Glossario della lezione</h3><dl className="mt-5 grid gap-3 sm:grid-cols-2">{selectedLesson.glossary.map(([term, definition], index) => <div key={`${term}-${index}`} className="rounded-xl bg-[#f7f5ee] p-4"><dt className="text-xs font-bold text-moss-900">{term}</dt><dd className="mt-1 text-xs leading-5 text-black/58">{definition}</dd></div>)}</dl><div className="mt-6 rounded-xl border border-moss-200 bg-moss-50 p-4"><p className="text-xs font-bold text-moss-900">Sintesi della lezione {selectedLesson.id}</p><ul className="mt-2 space-y-1.5 text-xs leading-5 text-black/60">{selectedLesson.summary.map((item, index) => <li key={index}>• {item}</li>)}</ul></div></section>}
       </main>
 
@@ -250,7 +252,74 @@ function QuizPanel({ lesson, selectedLesson, progress, saving, act }: { lesson: 
   return <section className="mx-auto max-w-3xl rounded-2xl bg-white p-5 shadow-sm sm:p-8"><div className="flex items-end justify-between gap-3"><div><p className="eyebrow">Lezione {selectedLesson.id} · Verifica finale</p><h3 className="mt-2 text-xl font-bold">Quiz completo della lezione</h3><p className="mt-1 text-xs text-black/45">Tutte le {questions.length} domande dei capitoli sono riunite qui. Puoi ripetere anche quelle già affrontate durante la lettura.</p></div><div className="text-right"><p className="text-2xl font-bold text-moss-800">{localScore ?? "—"}%</p><p className="text-[9px] text-black/35">{answered.length}/{questions.length} risposte</p></div></div><div className="mt-6"><QuizQuestionList questions={questions} progress={progress} saving={saving} act={act} revealExplanation /></div>{allAnswered && !allCourseAnswered && <div className="mt-6 rounded-xl bg-moss-50 p-4 text-xs font-bold text-moss-900">Verifica finale della lezione {selectedLesson.id} completata e salvata. Puoi modificare le risposte oppure scegliere la lezione successiva.</div>}{allCourseAnswered && <button disabled={saving} onClick={() => void act({ type: "quiz_completed", eventId: eventId() })} className="button-primary mt-6 w-full justify-center disabled:opacity-40">Concludi il quiz del modulo e calcola il risultato</button>}{progress.quizCompleted && (progress.quizScore ?? 0) < lesson.completion.minimumQuizScore && <p className="mt-3 rounded-lg bg-amber-50 p-3 text-xs leading-5 text-amber-950">Eve indica i capitoli associati alle risposte da ripassare; puoi cambiare le risposte e concludere nuovamente i quiz.</p>}</section>;
 }
 
-function ProjectPanel({ lesson, progress, saving, act }: { lesson: PublicLesson; progress: LessonProgressState; saving: boolean; act: (payload: Record<string, unknown>) => Promise<unknown> }) {
-  const projectDone = progress.project === "submitted";
-  return <section className="mx-auto max-w-3xl space-y-4">{lesson.project.assessments.map((assessment) => <article key={assessment.lessonId} className="rounded-2xl bg-white p-5 shadow-sm sm:p-8"><p className="eyebrow">Lezione {assessment.lessonId}</p><h3 className="mt-2 text-xl font-bold">{assessment.title}</h3><p className="mt-2 whitespace-pre-line text-xs leading-6 text-black/60">{assessment.prompt}</p><h4 className="mt-5 text-xs font-bold">Elaborati richiesti</h4><ul className="mt-2 grid gap-2 text-xs text-black/58 sm:grid-cols-2">{assessment.deliverables.map((item, index) => <li key={index} className="rounded-lg bg-[#f7f5ee] p-3">• {item}</li>)}</ul><h4 className="mt-5 text-xs font-bold">Rubrica di valutazione</h4><div className="mt-2 overflow-x-auto rounded-xl border border-black/[0.08]"><table className="min-w-full text-left text-[10px]"><tbody>{assessment.rubric.map((row, rowIndex) => <tr key={rowIndex} className={rowIndex === 0 ? "bg-moss-50 font-bold" : "border-t border-black/[0.06]"}>{row.map((cell, cellIndex) => <td key={cellIndex} className="min-w-28 px-3 py-2 align-top leading-4">{cell}</td>)}</tr>)}</tbody></table></div><h4 className="mt-5 text-xs font-bold">Criteri di completamento della lezione</h4><ul className="mt-2 space-y-2 text-xs leading-5 text-black/58">{assessment.completionCriteria.map((criterion, index) => <li key={index}>• {criterion}</li>)}</ul></article>)}<article className="rounded-2xl bg-white p-5 shadow-sm sm:p-8">{progress.project === "not_started" && <button onClick={() => void act({ type: "project_started", eventId: eventId() })} className="button-secondary mb-4">Inizia le prove finali</button>}<ResponseBox label="Consegna delle prove finali" button="Consegna prove finali" done={projectDone} saving={saving} onSubmit={(response) => act({ type: "project_submitted", eventId: eventId(), response })} /></article></section>;
+function storedProjectValue(submission: ProjectSubmission | undefined) {
+  if (!submission) return null;
+  try {
+    const value = JSON.parse(submission.response) as { code?: unknown; output?: unknown };
+    if (typeof value.code !== "string" || typeof value.output !== "string") return null;
+    return { code: value.code, output: value.output, status: submission.status };
+  } catch { return null; }
+}
+
+function ProjectPanel({ lesson, progress, saving, act, initialProjectSubmissions }: {
+  lesson: PublicLesson;
+  progress: LessonProgressState;
+  saving: boolean;
+  act: (payload: Record<string, unknown>) => Promise<unknown>;
+  initialProjectSubmissions: ProjectSubmission[];
+}) {
+  const projects = lesson.project.guidedProjects;
+  const initialValues = Object.fromEntries(projects.map((project) => {
+    const stored = storedProjectValue(initialProjectSubmissions.find((submission) => submission.activity_id === project.id));
+    return [project.lessonId, stored ?? { code: project.starterCode, output: "", status: "draft" as const }];
+  }));
+  const firstIncomplete = projects.find((project) => !progress.completedProjectLessonIds.includes(project.lessonId)) ?? projects[0];
+  const [selectedLessonId, setSelectedLessonId] = useState(firstIncomplete.lessonId);
+  const [codes, setCodes] = useState<Record<string, string>>(() => Object.fromEntries(Object.entries(initialValues).map(([id, value]) => [id, value.code])));
+  const [outputs, setOutputs] = useState<Record<string, string>>(() => Object.fromEntries(Object.entries(initialValues).map(([id, value]) => [id, value.output])));
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [lastSuccessfulCode, setLastSuccessfulCode] = useState<Record<string, string>>(() => Object.fromEntries(Object.entries(initialValues).filter(([, value]) => Boolean(value.output)).map(([id, value]) => [id, value.code])));
+  const { status: runnerStatus, errorMessage: runnerError, run } = usePythonRunner();
+  const project = projects.find((item) => item.lessonId === selectedLessonId) ?? projects[0];
+  const code = codes[project.lessonId] ?? project.starterCode;
+  const output = outputs[project.lessonId] ?? "";
+  const error = errors[project.lessonId] ?? "";
+  const submitted = progress.completedProjectLessonIds.includes(project.lessonId);
+  const canSubmit = Boolean(output && lastSuccessfulCode[project.lessonId] === code && runnerStatus === "ready" && !saving);
+
+  async function runProject() {
+    setErrors((current) => ({ ...current, [project.lessonId]: "" }));
+    const result = await run(code);
+    if (result.error) {
+      setErrors((current) => ({ ...current, [project.lessonId]: result.error! }));
+      setOutputs((current) => ({ ...current, [project.lessonId]: "" }));
+      return;
+    }
+    const nextOutput = result.output ?? "";
+    setOutputs((current) => ({ ...current, [project.lessonId]: nextOutput }));
+    setLastSuccessfulCode((current) => ({ ...current, [project.lessonId]: code }));
+    await act({ type: "project_draft_saved", eventId: eventId(), projectLessonId: project.lessonId, code, output: nextOutput });
+  }
+
+  async function submitProject() {
+    if (!canSubmit) return;
+    await act({ type: "project_submitted", eventId: eventId(), projectLessonId: project.lessonId, code, output });
+  }
+
+  return <section className="mx-auto max-w-4xl space-y-4" data-testid="python-project-panel">
+    <article className="rounded-2xl bg-[#17211d] p-5 text-white shadow-sm sm:p-7">
+      <div className="flex flex-wrap items-center justify-between gap-3"><div><p className="text-[9px] font-black uppercase tracking-[0.18em] text-[#9ec4a2]">Python Project · Modulo 0</p><h3 className="mt-2 text-xl font-bold">Impara costruendo, un passo alla volta</h3><p className="mt-2 max-w-2xl text-xs leading-5 text-white/65">Tre programmi brevi e guidati. Python viene eseguito direttamente nell’app sul tuo dispositivo; nessun codice viene eseguito sui server dell’aula.</p></div><div className="rounded-xl bg-white/10 px-4 py-3 text-center"><p className="text-xl font-bold">{progress.completedProjectLessonIds.length}/{projects.length}</p><p className="text-[9px] uppercase tracking-wide text-white/55">consegnati</p></div></div>
+    </article>
+
+    <nav aria-label="Python Project delle lezioni" className="grid gap-2 sm:grid-cols-3">{projects.map((item) => { const done = progress.completedProjectLessonIds.includes(item.lessonId); return <button key={item.id} type="button" data-project-lesson-id={item.lessonId} aria-pressed={item.lessonId === project.lessonId} onClick={() => setSelectedLessonId(item.lessonId)} className={`rounded-xl border p-3 text-left ${item.lessonId === project.lessonId ? "border-moss-500 bg-moss-50" : "border-black/[0.07] bg-white hover:bg-black/[0.02]"}`}><span className="flex items-center justify-between text-[9px] font-black uppercase tracking-wide text-moss-800"><span>Lezione {item.lessonId}</span>{done && <span className="inline-flex items-center gap-1"><Check size={10} /> Consegnato</span>}</span><span className="mt-1 block text-xs font-bold text-ink">{item.title}</span><span className="mt-1 block text-[9px] text-black/40">{item.difficulty}</span></button>; })}</nav>
+
+    <article className="overflow-hidden rounded-2xl bg-white shadow-sm">
+      <div className="border-b border-black/[0.06] p-5 sm:p-7"><p className="eyebrow">Lezione {project.lessonId} · {project.difficulty}</p><h3 className="mt-2 text-xl font-bold">{project.title}</h3><p className="mt-2 text-xs leading-6 text-black/58">{project.goal}</p><div className="mt-3 flex flex-wrap gap-1.5">{project.concepts.map((concept) => <span key={concept} className="rounded-full bg-moss-50 px-2.5 py-1 text-[9px] font-bold text-moss-800">{concept}</span>)}</div><ol className="mt-5 space-y-2">{project.instructions.map((instruction, index) => <li key={instruction} className="flex gap-3 rounded-xl bg-[#f7f5ee] p-3 text-xs leading-5 text-black/62"><span className="grid size-5 shrink-0 place-items-center rounded-full bg-moss-700 text-[9px] font-bold text-white">{index + 1}</span>{instruction}</li>)}</ol><p className="mt-4 text-[10px] font-bold text-black/45">Risultato atteso: {project.expectedResult}</p></div>
+
+      <div>
+        <section aria-label="Risultato Python" className="border-b border-black/[0.06] bg-[#101714] p-5 text-white sm:p-6"><div className="flex items-center justify-between"><p className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-wide text-[#a8caaa]"><Terminal size={14} /> Risultato</p><span className={`text-[9px] font-bold ${runnerStatus === "error" ? "text-red-300" : "text-white/40"}`}>{runnerStatus === "loading" ? "Preparazione Python…" : runnerStatus === "running" ? "Esecuzione…" : runnerStatus === "error" ? "Motore non disponibile" : "Python pronto"}</span></div><pre aria-live="polite" data-testid="python-output" className={`mt-4 min-h-40 overflow-auto whitespace-pre-wrap rounded-xl border p-4 font-mono text-xs leading-6 ${error || runnerError ? "border-red-400/30 bg-red-950/30 text-red-100" : "border-white/10 bg-black/20 text-[#d7ead8]"}`}>{error || runnerError || output || "Premi “Esegui codice” per vedere qui il risultato del programma."}</pre></section>
+        <section aria-label="Editor Python" className="p-5 sm:p-6"><div className="flex items-center justify-between"><label htmlFor={`python-code-${project.lessonId}`} className="text-[10px] font-bold uppercase tracking-wide text-black/50">Codice Python</label><span className="text-[9px] text-black/30">{code.length}/2800</span></div><textarea id={`python-code-${project.lessonId}`} data-testid="python-code-editor" value={code} maxLength={2800} spellCheck={false} onChange={(event) => { const value = event.target.value; setCodes((current) => ({ ...current, [project.lessonId]: value })); setOutputs((current) => ({ ...current, [project.lessonId]: "" })); setErrors((current) => ({ ...current, [project.lessonId]: "" })); }} className="mt-3 min-h-72 w-full resize-y rounded-xl border border-black/10 bg-[#fbfaf6] p-4 font-mono text-xs leading-6 text-ink focus:border-moss-500 focus:ring-moss-500" /><div className="mt-4 flex flex-wrap items-center gap-2"><button type="button" disabled={runnerStatus !== "ready" || saving} onClick={() => void runProject()} className="button-primary disabled:opacity-40">{runnerStatus === "running" ? <Loader2 size={13} className="animate-spin" /> : <Play size={13} />} Esegui codice</button><button type="button" disabled={!canSubmit} onClick={() => void submitProject()} className="button-secondary disabled:opacity-40"><Check size={13} /> {submitted ? "Aggiorna consegna" : "Consegna progetto"}</button><button type="button" onClick={() => { setCodes((current) => ({ ...current, [project.lessonId]: project.starterCode })); setOutputs((current) => ({ ...current, [project.lessonId]: "" })); setErrors((current) => ({ ...current, [project.lessonId]: "" })); }} className="ml-auto text-[9px] font-bold text-black/40 hover:text-moss-800"><RotateCcw size={10} className="mr-1 inline" />Ripristina codice iniziale</button></div><p className="mt-3 text-[9px] leading-4 text-black/35">L’esecuzione riuscita salva una bozza. La consegna diventa valida soltanto premendo “Consegna progetto”. Import, file, rete e cicli non sono disponibili in questi primi esercizi.</p></section>
+      </div>
+    </article>
+  </section>;
 }
