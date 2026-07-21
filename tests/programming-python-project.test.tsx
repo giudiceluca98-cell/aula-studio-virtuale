@@ -69,7 +69,7 @@ describe("Python Project guidati", () => {
     await waitFor(() => expect(actions).toContain("project_submitted"));
     expect(progress.completedProjectLessonIds).toEqual(["0.1"]);
     expect(progress.project).toBe("started");
-    expect(screen.getByText("1/5")).toBeInTheDocument();
+    expect(screen.getByText("1/6")).toBeInTheDocument();
   });
 
   it("collega ed esegue il Python Project della lezione 0.4", async () => {
@@ -92,7 +92,7 @@ describe("Python Project guidati", () => {
     await act(async () => { fireEvent.click(screen.getByRole("button", { name: "Consegna progetto" })); });
 
     await waitFor(() => expect(progress.completedProjectLessonIds).toContain("0.4"));
-    expect(screen.getByText("4/5")).toBeInTheDocument();
+    expect(screen.getByText("4/6")).toBeInTheDocument();
   });
 
   it("espone il Python Project della lezione 0.5 con input, algoritmo e output", async () => {
@@ -102,6 +102,16 @@ describe("Python Project guidati", () => {
     await act(async () => { fireEvent.click(document.querySelector<HTMLButtonElement>('[data-project-lesson-id="0.5"]')!); });
     expect(screen.getByRole("heading", { name: "Dall’algoritmo al primo programma" })).toBeInTheDocument();
     expect((screen.getByTestId("python-code-editor") as HTMLTextAreaElement).value).toContain("minuti_per_lezione");
+  });
+
+  it("espone il Python Project della lezione 0.6 con requisiti, stati e casi di test", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => ({ ok: true, json: async () => ({ state: emptyLessonProgress, eve: initialEve }) })));
+    render(<ProgrammingLessonWorkspace roomId="room-test" materialId="material-test" lesson={publicProgrammingLesson()} initialState={emptyLessonProgress} initialEve={initialEve} />);
+    await act(async () => { fireEvent.click(screen.getByRole("button", { name: "Python Project" })); });
+    await act(async () => { fireEvent.click(document.querySelector<HTMLButtonElement>('[data-project-lesson-id="0.6"]')!); });
+    expect(screen.getByRole("heading", { name: "Dal requisito al comportamento verificabile" })).toBeInTheDocument();
+    expect((screen.getByTestId("python-code-editor") as HTMLTextAreaElement).value).toContain("puo_annullare");
+    expect((screen.getByTestId("python-code-editor") as HTMLTextAreaElement).value).toContain('stato_finale = "annullata"');
   });
 
   it("ripristina codice e risultato di una consegna già salvata", async () => {

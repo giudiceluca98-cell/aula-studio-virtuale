@@ -2,6 +2,7 @@ import officialContent from "./programming-zero-official-content.json";
 import lesson03Content from "./programming-zero-lesson-0-3-official-content.json";
 import lesson04Content from "./programming-zero-lesson-0-4-official-content.json";
 import lesson05Content from "./programming-zero-lesson-0-5-official-content.json";
+import lesson06Content from "./programming-zero-lesson-0-6-official-content.json";
 
 export const PROGRAMMING_ZERO_PATH_ID = "programming-zero";
 // The existing native material keeps its identifier so rooms and saved progress remain connected.
@@ -43,7 +44,7 @@ interface OfficialExercise {
   autoverification?: string;
 }
 
-const officialLessons = [...officialContent.lessons, lesson03Content, lesson04Content, lesson05Content];
+const officialLessons = [...officialContent.lessons, lesson03Content, lesson04Content, lesson05Content, lesson06Content];
 const chapters = officialLessons.flatMap((lesson) => lesson.chapters);
 const allExercises = chapters.flatMap((chapter) => [chapter.exercises.guided, ...chapter.exercises.autonomous]);
 const [firstGuidedExercise, ...remainingExercises] = allExercises;
@@ -199,6 +200,42 @@ else:
     print("Errore: il numero di lezioni deve essere maggiore di zero")`,
     expectedResult: "Il programma deve rendere visibili input, calcolo, output e decisione finale dell'algoritmo.",
   },
+  {
+    id: "programming-zero-python-project-0-6",
+    lessonId: "0.6",
+    title: "Dal requisito al comportamento verificabile",
+    difficulty: "Base con requisiti e test",
+    goal: "Tradurre un requisito di annullamento in precondizioni, cambiamento di stato, risultato osservabile e casi di test.",
+    concepts: ["requisiti", "precondizioni", "stati", "decisione", "casi di test", "tracciabilità"],
+    instructions: [
+      "Individua nel codice gli input, le precondizioni e il cambiamento di stato prima di eseguirlo.",
+      "Verifica il caso normale con prenotazione confermata, 30 ore disponibili e utente autorizzato.",
+      "Prova il valore di confine con 24 ore e poi con 23 ore: osserva quale requisito cambia il risultato.",
+      "Prova una prenotazione già annullata oppure un utente non autorizzato e aggiungi una riga che spieghi quale precondizione non è soddisfatta.",
+    ],
+    starterCode: `stato_prenotazione = "confermata"
+ore_alla_partenza = 30
+utente_autorizzato = True
+
+stato_valido = stato_prenotazione == "confermata"
+entro_limite = ore_alla_partenza >= 24
+puo_annullare = utente_autorizzato and stato_valido and entro_limite
+
+print("Stato iniziale:", stato_prenotazione)
+print("Ore alla partenza:", ore_alla_partenza)
+print("Utente autorizzato:", utente_autorizzato)
+print("Requisito soddisfatto:", puo_annullare)
+
+if puo_annullare:
+    stato_finale = "annullata"
+    print("Esito: prenotazione annullata")
+else:
+    stato_finale = stato_prenotazione
+    print("Esito: annullamento rifiutato")
+
+print("Stato finale:", stato_finale)`,
+    expectedResult: "Il programma deve mostrare dati iniziali, valutazione del requisito, esito e stato finale, distinguendo il caso valido, il confine e i casi rifiutati.",
+  },
 ] as const;
 
 if (!firstGuidedExercise) throw new Error("Le fonti ufficiali non contengono esercizi guidati");
@@ -209,10 +246,10 @@ export const programmingLesson = {
   id: PROGRAMMING_LESSON_ID,
   pathId: PROGRAMMING_ZERO_PATH_ID,
   moduleId: "programming-module-0",
-  title: "Programmazione da Zero · Lezioni 0.1–0.5",
+  title: "Programmazione da Zero · Lezioni 0.1–0.6",
   lessonTitles: officialLessons.map((lesson) => `Lezione ${lesson.id} · ${lesson.title}`),
   level: "Lettore senza conoscenze pregresse",
-  estimatedMinutes: 450,
+  estimatedMinutes: 540,
   description: officialLessons.map((lesson) => lesson.summary[0]).join(" "),
   objectives: officialLessons.flatMap((lesson) => lesson.objectives),
   modules: programmingModules,
