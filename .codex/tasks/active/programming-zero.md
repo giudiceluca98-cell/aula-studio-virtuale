@@ -3,7 +3,7 @@
 Stato: in corso
 Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 1.2 corrente
 Branch: `codex/programming-zero-lesson-1-2`
-Pull request: Draft PR da aprire (base PR #17)
+Pull request: https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/20 (base PR #17)
 Pacchetto: `programming`
 Percorso: `programming-zero`
 
@@ -119,7 +119,7 @@ Contenuti convertiti:
 
 Verifiche: test mirato 21/21, suite completa 138/138, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 
-## Estensione in corso · Lezione 1.2
+## Estensione in revisione · Lezione 1.2
 
 Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_1.2_Installare_Python.docx`. Il DOCX non verrà caricato nel repository.
 
@@ -131,6 +131,17 @@ File riservati:
 - `tests/programming-subject.test.ts`
 
 File condivisi prenotati: nessuno. Dipendenza: PR #17; branch e Draft PR impilati sulla lezione 1.1. L'indice editoriale del Modulo 1 resta il controllo di ordine, titolo e copertura.
+
+Contenuti convertiti:
+
+- 11 sezioni e 805 blocchi renderizzabili;
+- 10 esercizi guidati e 30 esercizi autonomi;
+- 30 domande di quiz e 50 voci di glossario;
+- laboratorio finale, rubrica e criteri di completamento;
+- impronta SHA-256 `3cc6e6166ef7e3ead6e11dd70a23aca68dc7bf4773bbf928eff4260cfdef952a`, senza includere il DOCX;
+- indice editoriale del Modulo 1 usato come controllo, senza caricarlo nel repository.
+
+Verifiche: test mirato 21/21, suite completa 138/138, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 
 ## Estensione in revisione · Lezione 1.1
 
