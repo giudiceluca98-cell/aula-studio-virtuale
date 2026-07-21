@@ -143,8 +143,8 @@ export function eveLessonAdvice(stateValue: unknown) {
   const nextExercise = programmingLesson.exercises.find((exercise) => !state.independentExerciseIds.includes(exercise.id));
   if (nextExercise) return { title: "Esercizio consigliato", message: `Prosegui con “${nextExercise.title}”.`, sectionIds: [] as string[] };
   if (!state.quizCompleted) return { title: "Verifica i concetti", message: "Avvia o completa i quiz. Eve userà gli errori per indicarti i capitoli da ripassare.", sectionIds: [] as string[] };
-  if (state.project !== "submitted") return { title: "Prova finale", message: "Completa e consegna le prove finali di padronanza indicate nelle due lezioni.", sectionIds: ["programming-0-1-chapter-10", "programming-0-2-chapter-10"] };
-  return { title: "Controlla i criteri", message: "Rivedi i criteri di completamento delle lezioni 0.1 e 0.2.", sectionIds: ["programming-0-1-chapter-10", "programming-0-2-chapter-10"] };
+  if (state.project !== "submitted") return { title: "Prova finale", message: "Completa e consegna le prove finali di padronanza indicate nelle tre lezioni.", sectionIds: ["programming-0-1-chapter-10", "programming-0-2-chapter-10", "programming-0-3-chapter-10"] };
+  return { title: "Controlla i criteri", message: "Rivedi i criteri di completamento delle lezioni 0.1, 0.2 e 0.3.", sectionIds: ["programming-0-1-chapter-10", "programming-0-2-chapter-10", "programming-0-3-chapter-10"] };
 }
 
 export function lessonSubmissionFor(action: LessonAction) {
@@ -157,3 +157,4 @@ export function lessonSubmissionFor(action: LessonAction) {
     : action.type === "project_submitted" ? "project" : "self_assessment";
   return { activityId, activityType, response: action.response };
 }
+
