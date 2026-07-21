@@ -260,11 +260,15 @@ Contenuti convertiti:
 
 Verifiche: test mirato 21/21, suite completa 151/151, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 
-## Estensione in corso · Lezione 1.8
+## Estensione in revisione · Lezione 1.8
 
 Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_1.8_Eseguire_e_diagnosticare_programmi.docx`. Il DOCX non verrà caricato nel repository; l'indice editoriale del Modulo 1 viene usato soltanto per validare ordine, titolo e copertura.
 
 File riservati: artefatto 1.8, `src/lib/catalog/subjects/programming-zero-lesson.ts`, `src/lib/programming-lesson-progress.ts`, `tests/programming-subject.test.ts`. File condivisi prenotati: nessuno. Dipendenza: PR #35; branch e Draft PR impilati sulla lezione 1.7.
+
+Contenuti convertiti: 11 sezioni, 914 blocchi, 60 esercizi, 30 quiz e 60 voci di glossario; prova finale, rubrica e criteri conservati. SHA-256 `ad4a92c5766519d4e95c8df3365354af88e0dd939802cf78572e021baafa4219`; nessun DOCX caricato.
+
+Verifiche: test mirato 21/21, suite completa 151/151, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 
 ## Estensione in revisione · Lezione 1.7
 
