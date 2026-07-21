@@ -3,7 +3,7 @@
 Stato: in corso
 Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 0.4 corrente
 Branch: `codex/programming-zero-lesson-0-4`
-Pull request: Draft PR da aprire
+Pull request: https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/9
 Pacchetto: `programming`
 Percorso: `programming-zero`
 
