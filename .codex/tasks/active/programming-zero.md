@@ -1,8 +1,8 @@
 # Completamento Programmazione da zero
 
 Stato: in corso
-Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 2.1 corrente
-Branch corrente: `codex/programming-zero-lesson-2-1`
+Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 2.2 corrente
+Branch corrente: `codex/programming-zero-lesson-2-2`
 Ultima integrazione completata: Lezione 0.9 e relativo Python Project, [PR #26](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/26)
 Proposte in integrazione: Lezione 1.1, [PR #17](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/17), e Lezione 1.2, [PR #20](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/20)
 Pacchetto: `programming`
@@ -259,6 +259,10 @@ Contenuti convertiti:
 - indice editoriale del Modulo 1 usato come controllo, senza caricarlo nel repository.
 
 Verifiche: test mirato 21/21, suite completa 151/151, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
+
+## Estensione in corso · Lezione 2.2
+
+Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_2.2_Come_Python_esegue_un_programma.docx`. Il DOCX non verrà caricato nel repository. File riservati: artefatto 2.2, aggregatore, progressi e test. File condivisi prenotati: nessuno. Dipendenza: PR #38.
 
 ## Estensione in revisione · Lezione 2.1
 
