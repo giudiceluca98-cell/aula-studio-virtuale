@@ -67,4 +67,4 @@ Impronte delle fonti dichiarate negli artefatti:
 - Lezione 1.1: `adf2899abed24ff5b51ae9ec693cd24e73d40c8b0debfa25a60415cda3e8d755`;
 - Lezione 1.2: `3cc6e6166ef7e3ead6e11dd70a23aca68dc7bf4773bbf928eff4260cfdef952a`.
 
-Verifiche completate: typecheck, lint senza errori e build di produzione. L’esecuzione locale di Vitest è impedita dal profilo filesystem del sandbox; le aspettative del test dedicato sono state aggiornate e compilano correttamente.
+Verifiche completate: 24 file di test e 151 test superati, typecheck superato, lint senza errori e build di produzione superata.
