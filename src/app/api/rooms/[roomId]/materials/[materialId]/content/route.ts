@@ -48,7 +48,12 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
   const base = { material: { id: material.id, roomId: material.room_id, courseId: material.course_id, title: material.title, description: material.description }, access, progress };
 
   if (access.internalViewer === "lesson" && material.metadata?.lesson_id === PROGRAMMING_LESSON_ID) {
-    return json({ ...base, kind: "lesson", lesson: publicProgrammingLesson(), eve: eveLessonAdvice(progress?.exercise_state) });
+    const { data: projectSubmissions } = await supabase.from("native_lesson_submissions")
+      .select("activity_id,response,status,updated_at")
+      .eq("user_id", user.id)
+      .eq("material_id", values.materialId)
+      .eq("activity_type", "project");
+    return json({ ...base, kind: "lesson", lesson: publicProgrammingLesson(), eve: eveLessonAdvice(progress?.exercise_state), projectSubmissions: projectSubmissions ?? [] });
   }
   if (access.internalViewer === "video" && access.embedUrl) return json({ ...base, kind: "video", embedUrl: access.embedUrl, provider: access.provider });
   if (access.internalViewer === "pdf") {
