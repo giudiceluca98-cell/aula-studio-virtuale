@@ -4,6 +4,7 @@ import lesson04Content from "./programming-zero-lesson-0-4-official-content.json
 import lesson05Content from "./programming-zero-lesson-0-5-official-content.json";
 import lesson06Content from "./programming-zero-lesson-0-6-official-content.json";
 import lesson07Content from "./programming-zero-lesson-0-7-official-content.json";
+import lesson08Content from "./programming-zero-lesson-0-8-official-content.json";
 
 export const PROGRAMMING_ZERO_PATH_ID = "programming-zero";
 // The existing native material keeps its identifier so rooms and saved progress remain connected.
@@ -45,7 +46,7 @@ interface OfficialExercise {
   autoverification?: string;
 }
 
-const officialLessons = [...officialContent.lessons, lesson03Content, lesson04Content, lesson05Content, lesson06Content, lesson07Content];
+const officialLessons = [...officialContent.lessons, lesson03Content, lesson04Content, lesson05Content, lesson06Content, lesson07Content, lesson08Content];
 const chapters = officialLessons.flatMap((lesson) => lesson.chapters);
 const allExercises = chapters.flatMap((chapter) => [chapter.exercises.guided, ...chapter.exercises.autonomous]);
 const [firstGuidedExercise, ...remainingExercises] = allExercises;
@@ -287,6 +288,56 @@ else:
 print("Conclusione: il primato dipende dal criterio dichiarato")`,
     expectedResult: "Il programma deve produrre quattro attribuzioni qualificate e mostrare che idea, prototipo, uso e diffusione possono indicare candidati diversi.",
   },
+  {
+    id: "programming-zero-python-project-0-8",
+    lessonId: "0.8",
+    title: "La media non racconta tutto",
+    difficulty: "Base con percentuali ed equità",
+    goal: "Confrontare due tipi di errore nei risultati globali e per gruppo, rendendo visibili differenze che la sola media può nascondere.",
+    concepts: ["falsi positivi", "falsi negativi", "percentuali", "risultati per gruppo", "equità"],
+    instructions: [
+      "Individua per ciascun gruppo il numero di casi, i falsi positivi e i falsi negativi prima di eseguire il programma.",
+      "Confronta il tasso globale con i tassi separati dei due gruppi e descrivi quale informazione andrebbe persa mostrando soltanto la media.",
+      "Modifica uno dei due tipi di errore del gruppo B e verifica quali percentuali cambiano e quali restano invariate.",
+      "Aggiungi una riga stampata che proponga una verifica o una correzione su dati, obiettivo, processo oppure ricorso, come richiesto dall’esercizio ufficiale.",
+    ],
+    starterCode: `casi_gruppo_a = 100
+falsi_positivi_a = 8
+falsi_negativi_a = 4
+
+casi_gruppo_b = 100
+falsi_positivi_b = 3
+falsi_negativi_b = 2
+
+errori_a = falsi_positivi_a + falsi_negativi_a
+errori_b = falsi_positivi_b + falsi_negativi_b
+
+tasso_fp_a = falsi_positivi_a / casi_gruppo_a * 100
+tasso_fn_a = falsi_negativi_a / casi_gruppo_a * 100
+tasso_errori_a = errori_a / casi_gruppo_a * 100
+
+tasso_fp_b = falsi_positivi_b / casi_gruppo_b * 100
+tasso_fn_b = falsi_negativi_b / casi_gruppo_b * 100
+tasso_errori_b = errori_b / casi_gruppo_b * 100
+
+casi_totali = casi_gruppo_a + casi_gruppo_b
+errori_totali = errori_a + errori_b
+tasso_globale = errori_totali / casi_totali * 100
+
+print("Tasso globale di errore:", round(tasso_globale, 1), "%")
+print("Gruppo A - falsi positivi:", round(tasso_fp_a, 1), "%")
+print("Gruppo A - falsi negativi:", round(tasso_fn_a, 1), "%")
+print("Gruppo A - errori totali:", round(tasso_errori_a, 1), "%")
+print("Gruppo B - falsi positivi:", round(tasso_fp_b, 1), "%")
+print("Gruppo B - falsi negativi:", round(tasso_fn_b, 1), "%")
+print("Gruppo B - errori totali:", round(tasso_errori_b, 1), "%")
+
+if tasso_errori_a > tasso_errori_b:
+    print("Attenzione: il gruppo A presenta il tasso di errore maggiore")
+else:
+    print("Attenzione: il gruppo B presenta il tasso di errore maggiore")`,
+    expectedResult: "Il programma deve mostrare il tasso globale, i due tipi di errore per ciascun gruppo e segnalare quale gruppo presenta il tasso complessivo maggiore.",
+  },
 ] as const;
 
 if (!firstGuidedExercise) throw new Error("Le fonti ufficiali non contengono esercizi guidati");
@@ -297,10 +348,10 @@ export const programmingLesson = {
   id: PROGRAMMING_LESSON_ID,
   pathId: PROGRAMMING_ZERO_PATH_ID,
   moduleId: "programming-module-0",
-  title: "Programmazione da Zero · Lezioni 0.1–0.7",
+  title: "Programmazione da Zero · Lezioni 0.1–0.8",
   lessonTitles: officialLessons.map((lesson) => `Lezione ${lesson.id} · ${lesson.title}`),
   level: "Lettore senza conoscenze pregresse",
-  estimatedMinutes: 630,
+  estimatedMinutes: 720,
   description: officialLessons.map((lesson) => lesson.summary[0]).join(" "),
   objectives: officialLessons.flatMap((lesson) => lesson.objectives),
   modules: programmingModules,

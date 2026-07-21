@@ -69,7 +69,7 @@ describe("Python Project guidati", () => {
     await waitFor(() => expect(actions).toContain("project_submitted"));
     expect(progress.completedProjectLessonIds).toEqual(["0.1"]);
     expect(progress.project).toBe("started");
-    expect(screen.getByText("1/7")).toBeInTheDocument();
+    expect(screen.getByText("1/8")).toBeInTheDocument();
   });
 
   it("collega ed esegue il Python Project della lezione 0.4", async () => {
@@ -92,7 +92,7 @@ describe("Python Project guidati", () => {
     await act(async () => { fireEvent.click(screen.getByRole("button", { name: "Consegna progetto" })); });
 
     await waitFor(() => expect(progress.completedProjectLessonIds).toContain("0.4"));
-    expect(screen.getByText("4/7")).toBeInTheDocument();
+    expect(screen.getByText("4/8")).toBeInTheDocument();
   });
 
   it("espone il Python Project della lezione 0.5 con input, algoritmo e output", async () => {
@@ -122,6 +122,16 @@ describe("Python Project guidati", () => {
     expect(screen.getByRole("heading", { name: "Un primato con criteri espliciti" })).toBeInTheDocument();
     expect((screen.getByTestId("python-code-editor") as HTMLTextAreaElement).value).toContain("ordine_idea_a");
     expect((screen.getByTestId("python-code-editor") as HTMLTextAreaElement).value).toContain("il primato dipende dal criterio dichiarato");
+  });
+
+  it("espone il Python Project della lezione 0.8 con risultati globali e per gruppo", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => ({ ok: true, json: async () => ({ state: emptyLessonProgress, eve: initialEve }) })));
+    render(<ProgrammingLessonWorkspace roomId="room-test" materialId="material-test" lesson={publicProgrammingLesson()} initialState={emptyLessonProgress} initialEve={initialEve} />);
+    await act(async () => { fireEvent.click(screen.getByRole("button", { name: "Python Project" })); });
+    await act(async () => { fireEvent.click(document.querySelector<HTMLButtonElement>('[data-project-lesson-id="0.8"]')!); });
+    expect(screen.getByRole("heading", { name: "La media non racconta tutto" })).toBeInTheDocument();
+    expect((screen.getByTestId("python-code-editor") as HTMLTextAreaElement).value).toContain("tasso_globale");
+    expect((screen.getByTestId("python-code-editor") as HTMLTextAreaElement).value).toContain("falsi_positivi_a");
   });
 
   it("ripristina codice e risultato di una consegna già salvata", async () => {

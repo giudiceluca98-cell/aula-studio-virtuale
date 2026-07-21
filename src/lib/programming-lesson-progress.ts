@@ -2,7 +2,7 @@ import { z } from "zod";
 import { findQuizQuestion, programmingLesson } from "@/lib/catalog/subjects/programming-zero-lesson";
 
 const responseSchema = z.string().trim().min(20).max(8000);
-const projectLessonIdSchema = z.enum(["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7"]);
+const projectLessonIdSchema = z.enum(["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8"]);
 const projectCodeSchema = z.string().trim().min(20).max(2800);
 const projectOutputSchema = z.string().max(1000);
 
@@ -162,7 +162,7 @@ export function eveLessonAdvice(stateValue: unknown) {
     const nextProject = programmingLesson.project.guidedProjects.find((project) => !state.completedProjectLessonIds.includes(project.lessonId));
     return { title: "Python Project", message: nextProject ? `Esegui e consegna “${nextProject.title}” della lezione ${nextProject.lessonId}.` : "Completa i Python Project guidati delle lezioni disponibili.", sectionIds: [] as string[] };
   }
-  return { title: "Controlla i criteri", message: "Rivedi i criteri di completamento delle lezioni 0.1–0.7.", sectionIds: ["programming-0-1-chapter-10", "programming-0-2-chapter-10", "programming-0-3-chapter-10", "programming-0-4-chapter-10", "programming-0-5-chapter-10", "programming-0-6-chapter-12", "programming-0-7-chapter-12"] };
+  return { title: "Controlla i criteri", message: "Rivedi i criteri di completamento delle lezioni 0.1–0.8.", sectionIds: ["programming-0-1-chapter-10", "programming-0-2-chapter-10", "programming-0-3-chapter-10", "programming-0-4-chapter-10", "programming-0-5-chapter-10", "programming-0-6-chapter-12", "programming-0-7-chapter-12", "programming-0-8-chapter-12"] };
 }
 
 export function lessonSubmissionFor(action: LessonAction) {
