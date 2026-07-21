@@ -1,6 +1,6 @@
 # Python Project per le lezioni 0.4 e 0.5
 
-Stato: in corso
+Stato: in revisione
 Assegnazione: Codex
 Branch: `agent/python-project-lesson-0-4`
 
@@ -28,3 +28,19 @@ La Draft PR #11 è impilata sul vecchio branch della lezione 0.4 e modifica due 
 - `pnpm lint`;
 - `pnpm build`;
 - verifica della versione pubblicata.
+
+## Risultato
+
+- aggiunto “Una regola di accesso verificabile” per la lezione 0.4, con confronti, `AND`, `OR`, `NOT` e verifica dei confini;
+- aggiunto “Dall’algoritmo al primo programma” per la lezione 0.5, con input, output, sequenza, selezione e precondizione contro la divisione per zero;
+- consegne separate collegate al salvataggio e all'avanzamento esistenti;
+- Eve aggiornata per proporre tutti i Python Project disponibili;
+- area di lavoro modificata soltanto nei testi e nella griglia interna alla scheda Python Project.
+
+## Verifiche eseguite
+
+- test mirati: 25/25;
+- suite completa: 140/140;
+- typecheck: superato;
+- lint: nessun errore, un warning preesistente in `src/lib/vocabulary/mastery.ts`;
+- build di produzione: superata.
