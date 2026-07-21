@@ -2,9 +2,9 @@
 
 Stato: in corso
 Assegnazione: Codex
-Branch corrente: `agent/integrate-programming-module-1`
-Ultima integrazione completata: Lezione 0.9 e relativo Python Project, [PR #26](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/26)
-Proposte in integrazione: Lezione 1.1, [PR #17](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/17), e Lezione 1.2, [PR #20](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/20)
+Branch corrente: nessuno
+Ultima integrazione completata: Modulo 1 con lezioni 1.1 e 1.2 e relativi Python Project, [PR #29](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/29)
+Proposte in integrazione: nessuna
 Pacchetto: `programming`
 Percorso: `programming-zero`
 

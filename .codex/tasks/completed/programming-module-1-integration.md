@@ -1,6 +1,6 @@
 # Integrazione Modulo 1 · Lezioni 1.1 e 1.2
 
-Stato: in corso
+Stato: completato
 Assegnazione: Codex
 Branch: `agent/integrate-programming-module-1`
 Pull request: [PR #29](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/29)
@@ -67,4 +67,4 @@ Impronte delle fonti dichiarate negli artefatti:
 - Lezione 1.1: `adf2899abed24ff5b51ae9ec693cd24e73d40c8b0debfa25a60415cda3e8d755`;
 - Lezione 1.2: `3cc6e6166ef7e3ead6e11dd70a23aca68dc7bf4773bbf928eff4260cfdef952a`.
 
-Verifiche completate: 24 file di test e 151 test superati, typecheck superato, lint senza errori e build di produzione superata.
+Verifiche completate: 24 file di test e 151 test superati, typecheck superato, lint senza errori e build di produzione superata. PR #29 unita nel commit `6f2f1f4`; deployment Vercel `dpl_4ZzpefoqU5YJd7fZSTLuQZgPhsJY` pronto e dominio principale aggiornato.
