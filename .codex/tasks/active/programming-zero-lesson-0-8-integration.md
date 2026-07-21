@@ -1,6 +1,6 @@
 # Integrazione Programmazione da zero · Lezione 0.8
 
-Stato: in corso
+Stato: in revisione
 Assegnazione: Codex
 Branch: `agent/integrate-programming-lesson-0-8`
 Proposta sorgente: [PR #15](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/15)
@@ -34,10 +34,14 @@ La PR #15 è impilata sul branch editoriale 0.7 precedente alle integrazioni cor
 
 Nessuno. Non è prevista alcuna modifica ai file condivisi o all’area di lavoro protetta.
 
-## Verifiche previste
+## Integrazione completata
 
-- test mirati e suite completa;
-- typecheck;
-- lint;
-- build;
-- verifica online della lezione e del Python Project.
+- lezione 0.8 collegata a catalogo, aula, indice, esercizi, quiz, glossario, progressi ed Eve;
+- Python Project 0.8 “La media non racconta tutto” derivato dall’esercizio guidato ufficiale del capitolo 2 e collegato a esecuzione, bozza, consegna e avanzamento;
+- test mirati: 28 superati;
+- suite completa: 143 test superati;
+- typecheck: superato;
+- lint: superato con un avviso preesistente in `src/lib/vocabulary/mastery.ts`;
+- build di produzione: superata.
+
+Restano il merge, la pubblicazione e la verifica online.
