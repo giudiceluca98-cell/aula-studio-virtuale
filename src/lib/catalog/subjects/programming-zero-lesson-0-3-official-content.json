@@ -1,0 +1,4811 @@
+{
+  "id": "0.3",
+  "title": "Come il computer rappresenta l’informazione?",
+  "source": {
+    "filename": "Programmazione_da_Zero_Lezione_0.3_Rappresentazione_dell_informazione.docx",
+    "sha256": "91a3a14aa8f38b0e6d6b9a9f3d2a2e16aee37f6d8714c18e05304a1ca8164f89",
+    "storedInRepository": false
+  },
+  "metrics": {
+    "paragraphs": 796,
+    "tables": 12,
+    "textCharacters": 60657
+  },
+  "objectives": [
+    "Distinguere fenomeno, modello, codifica, formato e interpretazione.",
+    "Convertire piccoli numeri fra decimale, binario ed esadecimale.",
+    "Spiegare intervalli degli interi, overflow e approssimazione floating point.",
+    "Descrivere correttamente Unicode, UTF-8, grafemi e glifi.",
+    "Analizzare rappresentazioni raster, vettoriali e audio campionato.",
+    "Scegliere fra compressione con e senza perdita e riconoscere rischi di formati e metadati.",
+    "Distinguere integrità, autenticità, riservatezza, backup e qualità del dato."
+  ],
+  "sections": [
+    {
+      "id": "programming-0-3-introduction",
+      "lessonId": "0.3",
+      "chapterNumber": 0,
+      "title": "Lezione 0.3 · Come il computer rappresenta l’informazione?",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "AULA STUDIO VIRTUALE"
+        },
+        {
+          "type": "paragraph",
+          "text": "Programmazione da Zero"
+        },
+        {
+          "type": "paragraph",
+          "text": "Manuale ufficiale"
+        },
+        {
+          "type": "paragraph",
+          "text": "MODULO 0"
+        },
+        {
+          "type": "paragraph",
+          "text": "Lezione 0.3"
+        },
+        {
+          "type": "paragraph",
+          "text": "Come il computer rappresenta l’informazione?"
+        },
+        {
+          "type": "paragraph",
+          "text": "DESTINATARIO  Lettore senza conoscenze pregresse. La lezione sviluppa il significato tecnico di dato digitale prima dell’uso concreto di Python."
+        },
+        {
+          "type": "paragraph",
+          "text": "Edizione editoriale · 2026"
+        },
+        {
+          "type": "heading",
+          "text": "Come usare questa lezione"
+        },
+        {
+          "type": "paragraph",
+          "text": "La Lezione 0.2 ha introdotto bit e byte come elementi della memoria digitale. Qui il tema viene sviluppato in profondità: la stessa sequenza può rappresentare oggetti diversi, e ogni scelta di rappresentazione introduce possibilità, limiti ed errori specifici. Gli esercizi richiedono calcoli semplici, diagrammi e ragionamento sui casi limite."
+        },
+        {
+          "type": "callout",
+          "text": "PRINCIPIO GUIDA  Non chiedere soltanto ‘qual è il valore?’. Chiedi anche: con quale codifica, in quale unità, con quale precisione, entro quale intervallo e secondo quale formato?"
+        },
+        {
+          "type": "heading",
+          "text": "Risultati di apprendimento"
+        },
+        {
+          "type": "list-item",
+          "text": "Distinguere fenomeno, modello, codifica, formato e interpretazione."
+        },
+        {
+          "type": "list-item",
+          "text": "Convertire piccoli numeri fra decimale, binario ed esadecimale."
+        },
+        {
+          "type": "list-item",
+          "text": "Spiegare intervalli degli interi, overflow e approssimazione floating point."
+        },
+        {
+          "type": "list-item",
+          "text": "Descrivere correttamente Unicode, UTF-8, grafemi e glifi."
+        },
+        {
+          "type": "list-item",
+          "text": "Analizzare rappresentazioni raster, vettoriali e audio campionato."
+        },
+        {
+          "type": "list-item",
+          "text": "Scegliere fra compressione con e senza perdita e riconoscere rischi di formati e metadati."
+        },
+        {
+          "type": "list-item",
+          "text": "Distinguere integrità, autenticità, riservatezza, backup e qualità del dato."
+        },
+        {
+          "type": "heading",
+          "text": "Mappa della lezione"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Cap.",
+              "Nucleo concettuale"
+            ],
+            [
+              "1",
+              "Rappresentare non significa essere: dati, significato e convenzioni"
+            ],
+            [
+              "2",
+              "Sistemi di numerazione: dal decimale al binario"
+            ],
+            [
+              "3",
+              "Interi, segno e overflow"
+            ],
+            [
+              "4",
+              "Numeri reali, virgola mobile e precisione finita"
+            ],
+            [
+              "5",
+              "Testo digitale: caratteri, codifiche e Unicode"
+            ],
+            [
+              "6",
+              "Immagini digitali: pixel, colore, risoluzione e vettori"
+            ],
+            [
+              "7",
+              "Audio digitale: campionamento, frequenza e quantizzazione"
+            ],
+            [
+              "8",
+              "Compressione: ridondanza, perdita e compromessi"
+            ],
+            [
+              "9",
+              "File, formati, estensioni e metadati"
+            ],
+            [
+              "10",
+              "Integrità, errori, ridondanza e uso responsabile dei dati"
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Prerequisiti e materiali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Prerequisito consigliato: Lezioni 0.1 e 0.2. Sono sufficienti le quattro operazioni, le potenze semplici e la disponibilità a eseguire calcoli su carta. Una calcolatrice può essere usata per verificare, non per sostituire il procedimento."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-3-chapter-1",
+      "lessonId": "0.3",
+      "chapterNumber": 1,
+      "title": "1. Rappresentare non significa essere: dati, significato e convenzioni",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.2 · CAPITOLO 1 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "1. Rappresentare non significa essere: dati, significato e convenzioni"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto centrale, collegarlo agli altri strati del sistema, riconoscere errori di interpretazione e applicarlo a un dispositivo reale."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un computer tratta configurazioni fisiche che interpretiamo come dati. La temperatura di una stanza, il nome di una persona e una fotografia non entrano direttamente nella macchina: vengono misurati, selezionati e codificati. Comprendere questa mediazione impedisce di confondere il mondo con il modello digitale che ne conserviamo."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una cartina della metropolitana rappresenta stazioni e collegamenti, ma omette edifici, pendenze e distanze precise. Non è una copia difettosa della città: è uno strumento costruito per uno scopo. Anche un dato digitale mette in evidenza alcune proprietà e ne trascura altre. La bontà della rappresentazione dipende dall’uso previsto."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una rappresentazione associa elementi di un dominio a configurazioni di simboli secondo regole condivise. La codifica stabilisce l’associazione; il formato organizza i dati e le informazioni necessarie a interpretarli. Il significato non è contenuto nei bit isolati: deriva dalla convenzione, dal contesto e dal software che applica le regole. Rappresentare comporta sempre scelte di granularità, precisione e categorie."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Una data può essere rappresentata come testo ‘21/07/2026’, come tre numeri o come istante rispetto a un riferimento."
+        },
+        {
+          "type": "list-item",
+          "text": "Una posizione geografica può usare indirizzo, coordinate o identificatore di una zona."
+        },
+        {
+          "type": "list-item",
+          "text": "Un voto scolastico può essere numero, giudizio testuale o insieme di indicatori distinti."
+        },
+        {
+          "type": "heading",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "Il numero 42 senza unità e contesto non rappresenta automaticamente un’età o una temperatura."
+        },
+        {
+          "type": "list-item",
+          "text": "Una fotografia digitale non contiene l’oggetto fotografato, ma una rappresentazione visiva ottenuta tramite misure e trasformazioni."
+        },
+        {
+          "type": "list-item",
+          "text": "Aggiungere più campi non rende necessariamente il modello migliore: può raccogliere dati irrilevanti o dannosi."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "La mappa chiarisce selezione e finalità, ma i dati digitali possono essere trasformati automaticamente e combinati su vasta scala. Un’omissione o una categoria sbagliata può quindi propagarsi in molte decisioni senza essere immediatamente visibile."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 1.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "diagram",
+          "text": "fenomeno del mondo\n       | osservazione / misura / scelta\n       v\nmodello concettuale\n       | codifica\n       v\nsequenza di dati\n       | interpretazione secondo formato e contesto\n       v\ninformazione utilizzabile"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una rappresentazione è adeguata se conserva le proprietà necessarie al compito. Per calcolare il resto, il prezzo richiede valore, valuta e regola di arrotondamento; il colore della banconota è irrilevante. Per riconoscere una banconota falsa, invece, trama e caratteristiche visive diventano essenziali. Lo stesso oggetto richiede modelli diversi per domande diverse."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Confondere un’etichetta con la realtà descritta."
+        },
+        {
+          "type": "list-item",
+          "text": "Omettere unità di misura e riferimento temporale."
+        },
+        {
+          "type": "list-item",
+          "text": "Scegliere categorie che non ammettono casi reali importanti."
+        },
+        {
+          "type": "list-item",
+          "text": "Conservare dati perché ‘potrebbero servire’ senza uno scopo definito."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Valore sconosciuto distinto da zero."
+        },
+        {
+          "type": "list-item",
+          "text": "Persona o oggetto che appartiene a più categorie."
+        },
+        {
+          "type": "list-item",
+          "text": "Misura variabile durante la rilevazione."
+        },
+        {
+          "type": "list-item",
+          "text": "Informazione valida al momento della raccolta ma divenuta obsoleta."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso chiedi quale strato è coinvolto, quale contratto è stato violato, quale segnale è osservabile e quali prove distinguono le cause alternative."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Quali proprietà perde una mappa rispetto al territorio?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quando due rappresentazioni dello stesso fenomeno sono entrambe corrette?"
+        },
+        {
+          "type": "list-item",
+          "text": "Chi decide quali categorie sono disponibili in un sistema?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Scegli il concetto ‘indirizzo di consegna’ e definisci lo scopo."
+        },
+        {
+          "type": "list-item",
+          "text": "Elenca i dati indispensabili, facoltativi e inappropriati."
+        },
+        {
+          "type": "list-item",
+          "text": "Aggiungi casi come edificio senza numero civico e destinatario temporaneo."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Confronta tre rappresentazioni di una data."
+        },
+        {
+          "type": "list-item",
+          "text": "Progetta i dati necessari per registrare un libro in biblioteca."
+        },
+        {
+          "type": "list-item",
+          "text": "Trova un esempio in cui una categoria digitale esclude un caso reale."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Da dove deriva il significato dei dati?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Da convenzioni, contesto e regole di interpretazione"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Dai bit isolati"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Dal colore del computer"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Dalla lunghezza del nome"
+        },
+        {
+          "type": "heading",
+          "text": "2. Una rappresentazione deve conservare ogni proprietà del fenomeno?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Sì, sempre"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo se numerica"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo se online"
+        },
+        {
+          "type": "list-item",
+          "text": "D. No, deve conservare quelle rilevanti allo scopo"
+        },
+        {
+          "type": "heading",
+          "text": "3. Zero e valore sconosciuto coincidono?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Solo nei testi"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo nelle immagini"
+        },
+        {
+          "type": "list-item",
+          "text": "C. No"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Sì"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Rappresentazione",
+              "Associazione controllata fra fenomeni o concetti e simboli."
+            ],
+            [
+              "Dominio",
+              "Insieme dei valori o casi considerati."
+            ],
+            [
+              "Codifica",
+              "Regola che associa configurazioni a significati."
+            ],
+            [
+              "Formato",
+              "Struttura con cui dati e metadati sono organizzati."
+            ],
+            [
+              "Granularità",
+              "Livello di dettaglio scelto nella rappresentazione."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una rappresentazione associa elementi di un dominio a configurazioni di simboli secondo regole condivise. La codifica stabilisce l’associazione; il formato organizza i dati e le informazioni necessarie a interpretarli. Il significato non è contenuto nei bit isolati: deriva dalla convenzione, dal contesto e dal software che applica le regole. Rappresentare comporta sempre scelte di granularità, precisione e categorie. La competenza richiesta non consiste nel ricordare un elenco di componenti, ma nel saper seguire il flusso di dati e responsabilità attraverso i diversi livelli."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So classificare almeno tre casi limite e proporre un controllo."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        },
+        {
+          "type": "list-item",
+          "text": "So collegare il capitolo al percorso completo sorgente–processo–hardware–effetto."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-3-chapter-2",
+      "lessonId": "0.3",
+      "chapterNumber": 2,
+      "title": "2. Sistemi di numerazione: dal decimale al binario",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.2 · CAPITOLO 2 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "2. Sistemi di numerazione: dal decimale al binario"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto centrale, collegarlo agli altri strati del sistema, riconoscere errori di interpretazione e applicarlo a un dispositivo reale."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Siamo abituati alla base dieci, ma non è l’unico modo di scrivere numeri. I computer usano comunemente rappresentazioni binarie perché due stati fisici distinguibili sono pratici da realizzare e controllare. Il valore di un numero posizionale dipende dalle cifre, dalla loro posizione e dalla base."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Nel numero decimale 352, la cifra 3 vale tre centinaia perché occupa la posizione delle potenze di dieci. Nel numero binario 1011, le posizioni valgono otto, quattro, due e uno: 1×8 + 0×4 + 1×2 + 1×1 = 11. Le cifre cambiano, ma il principio posizionale è lo stesso."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "In base b sono disponibili cifre da 0 a b−1. Una sequenza d_k…d_1d_0 rappresenta la somma d_i×b^i. In binario la base è 2 e le cifre sono 0 e 1. Ottale ed esadecimale raggruppano convenientemente bit: una cifra esadecimale rappresenta quattro bit e usa 0–9, A–F. La base riguarda la scrittura, non il numero astratto."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "1010₂ = 10₁₀."
+        },
+        {
+          "type": "list-item",
+          "text": "11111111₂ = 255₁₀ = FF₁₆."
+        },
+        {
+          "type": "list-item",
+          "text": "Il decimale 13 si ottiene in binario come 1101."
+        },
+        {
+          "type": "heading",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "La scritta 10 non rappresenta sempre dieci: vale due in base 2, otto in base 8 e sedici in base 16."
+        },
+        {
+          "type": "list-item",
+          "text": "A non è una lettera arbitraria in esadecimale: rappresenta il valore decimale 10."
+        },
+        {
+          "type": "list-item",
+          "text": "Aggiungere uno zero a sinistra non moltiplica il valore; aggiungerlo a destra sì, nella parte intera posizionale."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Le colonne delle unità, decine e centinaia sono contenitori con capacità dieci. In binario ogni colonna ha capacità due: quando è piena, il riporto passa alla posizione successiva. L’analogia non implica che la macchina esegua materialmente conversioni scritte ogni volta."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 2.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "diagram",
+          "text": "posizione:       3   2   1   0\npeso binario:   8   4   2   1\ncifre:          1   0   1   1\ncontributi:     8 + 0 + 2 + 1 = 11"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Per convertire un intero decimale positivo in binario si possono eseguire divisioni successive per due e leggere i resti dal basso verso l’alto. Per tornare al decimale si sommano i pesi delle posizioni con cifra 1. L’esadecimale riduce la lunghezza delle sequenze binarie senza cambiare i bit rappresentati."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Leggere un binario come se fosse decimale."
+        },
+        {
+          "type": "list-item",
+          "text": "Dimenticare di dichiarare la base quando è ambigua."
+        },
+        {
+          "type": "list-item",
+          "text": "Usare cifre non ammesse dalla base."
+        },
+        {
+          "type": "list-item",
+          "text": "Confondere il numero con la sua rappresentazione testuale."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Numero zero, rappresentabile con una sola cifra 0."
+        },
+        {
+          "type": "list-item",
+          "text": "Zeri iniziali che non cambiano il valore ma possono indicare una larghezza fissa."
+        },
+        {
+          "type": "list-item",
+          "text": "Frazioni che hanno rappresentazione finita in una base ma infinita in un’altra."
+        },
+        {
+          "type": "list-item",
+          "text": "Stringa vuota, che non è una normale rappresentazione numerica."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso chiedi quale strato è coinvolto, quale contratto è stato violato, quale segnale è osservabile e quali prove distinguono le cause alternative."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Perché una cifra esadecimale corrisponde esattamente a quattro bit?"
+        },
+        {
+          "type": "list-item",
+          "text": "Il numero cambia quando cambia la base o cambia soltanto la scrittura?"
+        },
+        {
+          "type": "list-item",
+          "text": "Perché 0,1 decimale è problematico in binario?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Scrivi i pesi delle prime otto posizioni binarie."
+        },
+        {
+          "type": "list-item",
+          "text": "Converti 45 scegliendo i pesi 32, 8, 4 e 1."
+        },
+        {
+          "type": "list-item",
+          "text": "Verifica che 00101101₂ abbia lo stesso valore."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Converti da 0 a 31 in binario."
+        },
+        {
+          "type": "list-item",
+          "text": "Converti 11010110₂ in decimale ed esadecimale."
+        },
+        {
+          "type": "list-item",
+          "text": "Spiega con parole tue il meccanismo del riporto in base 2."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Quanto vale 1011₂?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. 1011₁₀"
+        },
+        {
+          "type": "list-item",
+          "text": "B. 13₁₀"
+        },
+        {
+          "type": "list-item",
+          "text": "C. 7₁₀"
+        },
+        {
+          "type": "list-item",
+          "text": "D. 11₁₀"
+        },
+        {
+          "type": "heading",
+          "text": "2. Quanti bit rappresenta una cifra esadecimale?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. 8"
+        },
+        {
+          "type": "list-item",
+          "text": "B. 16"
+        },
+        {
+          "type": "list-item",
+          "text": "C. 4"
+        },
+        {
+          "type": "list-item",
+          "text": "D. 2"
+        },
+        {
+          "type": "heading",
+          "text": "3. La base cambia il numero astratto?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Solo per numeri negativi"
+        },
+        {
+          "type": "list-item",
+          "text": "B. No, cambia la rappresentazione"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Solo per zero"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Base",
+              "Numero di cifre disponibili e fattore dei pesi posizionali."
+            ],
+            [
+              "Sistema posizionale",
+              "Sistema in cui il valore della cifra dipende dalla posizione."
+            ],
+            [
+              "Binario",
+              "Sistema in base 2."
+            ],
+            [
+              "Esadecimale",
+              "Sistema in base 16."
+            ],
+            [
+              "Riporto",
+              "Trasferimento alla posizione successiva quando una colonna supera la base."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "In base b sono disponibili cifre da 0 a b−1. Una sequenza d_k…d_1d_0 rappresenta la somma d_i×b^i. In binario la base è 2 e le cifre sono 0 e 1. Ottale ed esadecimale raggruppano convenientemente bit: una cifra esadecimale rappresenta quattro bit e usa 0–9, A–F. La base riguarda la scrittura, non il numero astratto. La competenza richiesta non consiste nel ricordare un elenco di componenti, ma nel saper seguire il flusso di dati e responsabilità attraverso i diversi livelli."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So classificare almeno tre casi limite e proporre un controllo."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        },
+        {
+          "type": "list-item",
+          "text": "So collegare il capitolo al percorso completo sorgente–processo–hardware–effetto."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-3-chapter-3",
+      "lessonId": "0.3",
+      "chapterNumber": 3,
+      "title": "3. Interi, segno e overflow",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.2 · CAPITOLO 3 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "3. Interi, segno e overflow"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto centrale, collegarlo agli altri strati del sistema, riconoscere errori di interpretazione e applicarlo a un dispositivo reale."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un insieme finito di bit può rappresentare soltanto un insieme finito di interi. Occorre quindi scegliere intervallo e convenzione per il segno. Quando un calcolo supera l’intervallo disponibile si verifica un overflow, il cui comportamento dipende dal linguaggio, dal tipo e dall’ambiente."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un contatore meccanico a tre cifre va da 000 a 999. Dopo 999 può tornare a 000: il dispositivo continua a funzionare, ma il risultato non rappresenta il conteggio matematico atteso. Un intero a larghezza fissa ha un limite analogo."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Con n bit senza segno si rappresentano normalmente valori da 0 a 2^n−1. Per gli interi con segno è diffuso il complemento a due: con n bit l’intervallo è da −2^(n−1) a 2^(n−1)−1. La stessa sequenza può quindi essere interpretata diversamente. Overflow non significa necessariamente errore segnalato: può produrre riavvolgimento, eccezione o promozione secondo il sistema."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Con 8 bit senza segno l’intervallo è 0–255."
+        },
+        {
+          "type": "list-item",
+          "text": "Con 8 bit in complemento a due l’intervallo è −128–127."
+        },
+        {
+          "type": "list-item",
+          "text": "Un contatore di secondi con spazio insufficiente può ritornare a un valore precedente."
+        },
+        {
+          "type": "heading",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "Il bit più a sinistra non è sempre semplicemente un segno separato."
+        },
+        {
+          "type": "list-item",
+          "text": "Aumentare di uno il massimo rappresentabile non produce sempre il valore matematico successivo."
+        },
+        {
+          "type": "list-item",
+          "text": "Il fatto che Python gestisca interi grandi non elimina limiti di memoria o di formati esterni."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il contatore chiarisce il riavvolgimento, ma il complemento a due possiede proprietà algebriche specifiche che permettono di usare circuiti simili per somme con e senza segno. Non basta immaginare un simbolo meno davanti alle cifre."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 3.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "diagram",
+          "text": "8 bit senza segno:  00000000 ........ 11111111\nvalori:             0        ........ 255\n8 bit con segno:    10000000 ........ 01111111\nvalori:            -128      ........ 127"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "I limiti vanno trattati nella specifica. Un’età umana può stare in un piccolo intervallo, ma un saldo finanziario richiede unità e massimi ragionati. Anche prima dell’overflow, scegliere l’unità sbagliata può produrre errori: memorizzare centesimi come euro o secondi come millisecondi cambia scala e intervallo."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Ignorare il limite del tipo o del formato."
+        },
+        {
+          "type": "list-item",
+          "text": "Confrontare valori con segno e senza segno senza comprendere la conversione."
+        },
+        {
+          "type": "list-item",
+          "text": "Usare un valore sentinella che può essere anche dato valido."
+        },
+        {
+          "type": "list-item",
+          "text": "Supporre che ogni linguaggio reagisca allo stesso modo all’overflow."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Valore minimo negativo, il cui opposto può non essere rappresentabile nella stessa larghezza."
+        },
+        {
+          "type": "list-item",
+          "text": "Moltiplicazione che supera il limite anche se gli operandi sono validi."
+        },
+        {
+          "type": "list-item",
+          "text": "Conversione da un formato più ampio a uno più stretto."
+        },
+        {
+          "type": "list-item",
+          "text": "Conteggi provenienti da sistemi che usano unità differenti."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso chiedi quale strato è coinvolto, quale contratto è stato violato, quale segnale è osservabile e quali prove distinguono le cause alternative."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Perché l’intervallo con segno è asimmetrico?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quando l’overflow dovrebbe essere bloccato invece che tollerato?"
+        },
+        {
+          "type": "list-item",
+          "text": "Come scegli una larghezza adeguata senza conoscere il futuro?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Elenca le 16 sequenze di quattro bit."
+        },
+        {
+          "type": "list-item",
+          "text": "Interpretale prima senza segno e poi in complemento a due."
+        },
+        {
+          "type": "list-item",
+          "text": "Calcola 7+1 su quattro bit con segno e descrivi l’overflow."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Trova gli intervalli per 16 e 32 bit."
+        },
+        {
+          "type": "list-item",
+          "text": "Progetta controlli per un contatore con massimo dichiarato."
+        },
+        {
+          "type": "list-item",
+          "text": "Spiega un rischio reale di conversione da intero ampio a intero stretto."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Intervallo di 8 bit senza segno?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. 0–256"
+        },
+        {
+          "type": "list-item",
+          "text": "B. −255–255"
+        },
+        {
+          "type": "list-item",
+          "text": "C. 0–255"
+        },
+        {
+          "type": "list-item",
+          "text": "D. −128–127"
+        },
+        {
+          "type": "heading",
+          "text": "2. Intervallo di 8 bit con complemento a due?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. −256–255"
+        },
+        {
+          "type": "list-item",
+          "text": "B. −128–127"
+        },
+        {
+          "type": "list-item",
+          "text": "C. −127–127"
+        },
+        {
+          "type": "list-item",
+          "text": "D. 0–255"
+        },
+        {
+          "type": "heading",
+          "text": "3. Overflow è sempre segnalato?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. No, dipende dal sistema"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo nei testi"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Solo su Internet"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Intero senza segno",
+              "Rappresentazione destinata a valori non negativi."
+            ],
+            [
+              "Complemento a due",
+              "Convenzione comune per interi con segno."
+            ],
+            [
+              "Overflow",
+              "Risultato fuori dall’intervallo rappresentabile."
+            ],
+            [
+              "Larghezza",
+              "Numero di bit assegnato alla rappresentazione."
+            ],
+            [
+              "Conversione restringente",
+              "Passaggio a un formato con intervallo o precisione minore."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Con n bit senza segno si rappresentano normalmente valori da 0 a 2^n−1. Per gli interi con segno è diffuso il complemento a due: con n bit l’intervallo è da −2^(n−1) a 2^(n−1)−1. La stessa sequenza può quindi essere interpretata diversamente. Overflow non significa necessariamente errore segnalato: può produrre riavvolgimento, eccezione o promozione secondo il sistema. La competenza richiesta non consiste nel ricordare un elenco di componenti, ma nel saper seguire il flusso di dati e responsabilità attraverso i diversi livelli."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So classificare almeno tre casi limite e proporre un controllo."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        },
+        {
+          "type": "list-item",
+          "text": "So collegare il capitolo al percorso completo sorgente–processo–hardware–effetto."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-3-chapter-4",
+      "lessonId": "0.3",
+      "chapterNumber": 4,
+      "title": "4. Numeri reali, virgola mobile e precisione finita",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.2 · CAPITOLO 4 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "4. Numeri reali, virgola mobile e precisione finita"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto centrale, collegarlo agli altri strati del sistema, riconoscere errori di interpretazione e applicarlo a un dispositivo reale."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "I numeri reali matematici sono infiniti e spesso richiedono infinite cifre. Un computer dispone di spazio finito e deve approssimarli. La rappresentazione in virgola mobile permette intervalli enormi, ma con precisione limitata e distribuita in modo non uniforme."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "La notazione scientifica scrive 6,02×10²³ usando segno, cifre significative ed esponente. La virgola mobile usa un’idea simile in base due. Conserva un numero limitato di cifre significative; quando un risultato ne richiede di più, deve essere arrotondato."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un numero floating point è composto concettualmente da segno, significando ed esponente. Standard diffusi definiscono valori finiti, zeri con segno, infiniti e NaN. Molte frazioni decimali, incluso 0,1, non hanno espansione binaria finita e vengono approssimate. Le operazioni floating point non seguono sempre le identità dei reali: l’ordine può cambiare il risultato."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "0,1 + 0,2 può non essere rappresentato esattamente come 0,3."
+        },
+        {
+          "type": "list-item",
+          "text": "Sommare un valore piccolissimo a uno enorme può non modificare il risultato memorizzato."
+        },
+        {
+          "type": "list-item",
+          "text": "Misure scientifiche tollerano spesso un errore controllato, mentre il denaro richiede regole specifiche."
+        },
+        {
+          "type": "heading",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "Più cifre visualizzate non garantiscono più informazione reale."
+        },
+        {
+          "type": "list-item",
+          "text": "Confrontare floating point con uguaglianza esatta può essere inappropriato per risultati calcolati."
+        },
+        {
+          "type": "list-item",
+          "text": "Arrotondare ogni passaggio non elimina necessariamente l’errore; può accumularlo."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un righello con tacche finite approssima una lunghezza. Aumentare le tacche migliora la risoluzione ma non produce precisione infinita. La virgola mobile aggiunge una particolarità: la distanza fra numeri rappresentabili cresce con la grandezza."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 4.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "diagram",
+          "text": "valore ≈ segno × significando × base^esponente\n              |             |\n       precisione finita    intervallo esteso\n              v\narrotondamento e valori speciali"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Per confrontare risultati approssimati si usa spesso una tolleranza assoluta e/o relativa, scelta in base al dominio. Per importi monetari si preferiscono frequentemente interi nella minima unità oppure tipi decimali con regole esplicite. Non esiste una tolleranza universale: deve riflettere scala, misura e conseguenze."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Aspettarsi esattezza da ogni numero con virgola."
+        },
+        {
+          "type": "list-item",
+          "text": "Usare una tolleranza fissa senza considerare la scala."
+        },
+        {
+          "type": "list-item",
+          "text": "Confondere numero non disponibile con NaN."
+        },
+        {
+          "type": "list-item",
+          "text": "Ignorare l’ordine delle operazioni in somme molto sbilanciate."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Overflow verso infinito e underflow verso valori piccolissimi o zero."
+        },
+        {
+          "type": "list-item",
+          "text": "NaN, che non si comporta come un numero ordinario nei confronti."
+        },
+        {
+          "type": "list-item",
+          "text": "Zero positivo e negativo distinti in alcune operazioni."
+        },
+        {
+          "type": "list-item",
+          "text": "Cancellazione quando si sottraggono numeri quasi uguali."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso chiedi quale strato è coinvolto, quale contratto è stato violato, quale segnale è osservabile e quali prove distinguono le cause alternative."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Perché 0,1 non è esatto in binario?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quando usare una tolleranza relativa?"
+        },
+        {
+          "type": "list-item",
+          "text": "Perché il denaro richiede una strategia diversa da molte misure fisiche?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Scrivi 1/2, 1/4 e 1/8 in binario frazionario."
+        },
+        {
+          "type": "list-item",
+          "text": "Prova a sviluppare 1/10 con moltiplicazioni successive per due."
+        },
+        {
+          "type": "list-item",
+          "text": "Osserva la ripetizione e spiega perché serve troncare o arrotondare."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Progetta un confronto approssimato per misure in metri."
+        },
+        {
+          "type": "list-item",
+          "text": "Spiega la cancellazione con un esempio."
+        },
+        {
+          "type": "list-item",
+          "text": "Confronta interi di centesimi e virgola mobile per prezzi."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. 0,1 decimale è normalmente esatto in binario floating point?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Solo se stampato"
+        },
+        {
+          "type": "list-item",
+          "text": "B. No"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Solo se positivo"
+        },
+        {
+          "type": "heading",
+          "text": "2. Una tolleranza deve dipendere da?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Dominio, scala e conseguenze"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Colore del codice"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Nome del file"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Numero di utenti soltanto"
+        },
+        {
+          "type": "heading",
+          "text": "3. NaN è un normale numero ordinabile?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Sempre zero"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Sempre infinito"
+        },
+        {
+          "type": "list-item",
+          "text": "D. No"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Virgola mobile",
+              "Rappresentazione approssimata con significando ed esponente."
+            ],
+            [
+              "Precisione",
+              "Quantità di informazione significativa conservata."
+            ],
+            [
+              "Arrotondamento",
+              "Scelta di un valore rappresentabile vicino al risultato ideale."
+            ],
+            [
+              "NaN",
+              "Valore speciale che indica un risultato numerico non definito."
+            ],
+            [
+              "Tolleranza",
+              "Scarto accettato in un confronto approssimato."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un numero floating point è composto concettualmente da segno, significando ed esponente. Standard diffusi definiscono valori finiti, zeri con segno, infiniti e NaN. Molte frazioni decimali, incluso 0,1, non hanno espansione binaria finita e vengono approssimate. Le operazioni floating point non seguono sempre le identità dei reali: l’ordine può cambiare il risultato. La competenza richiesta non consiste nel ricordare un elenco di componenti, ma nel saper seguire il flusso di dati e responsabilità attraverso i diversi livelli."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So classificare almeno tre casi limite e proporre un controllo."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        },
+        {
+          "type": "list-item",
+          "text": "So collegare il capitolo al percorso completo sorgente–processo–hardware–effetto."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-3-chapter-5",
+      "lessonId": "0.3",
+      "chapterNumber": 5,
+      "title": "5. Testo digitale: caratteri, codifiche e Unicode",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.2 · CAPITOLO 5 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "5. Testo digitale: caratteri, codifiche e Unicode"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto centrale, collegarlo agli altri strati del sistema, riconoscere errori di interpretazione e applicarlo a un dispositivo reale."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il testo appare naturale sullo schermo, ma richiede più livelli: caratteri astratti, punti di codice, codifica in byte, font e regole di rendering. Confondere questi livelli produce simboli errati, conteggi sorprendenti e dati incompatibili."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una partitura assegna simboli a note; un musicista e uno strumento realizzano il suono. Analogamente, Unicode assegna identità ai caratteri, una codifica come UTF-8 li trasforma in byte e un font fornisce forme grafiche. Il carattere e il suo disegno non sono la stessa cosa."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Unicode definisce un repertorio e punti di codice. UTF-8 codifica ciascun punto di codice in una sequenza variabile da uno a quattro byte. Un grafema percepito può essere formato da più punti di codice, come lettera e accento combinante o una sequenza emoji. Normalizzazione e confronto devono considerare che testi visivamente equivalenti possono avere sequenze diverse."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "La lettera A usa un byte in UTF-8."
+        },
+        {
+          "type": "list-item",
+          "text": "La è può essere un singolo carattere precomposto oppure e più accento combinante."
+        },
+        {
+          "type": "list-item",
+          "text": "Molte emoji includono più punti di codice collegati e possono apparire come un solo simbolo."
+        },
+        {
+          "type": "heading",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "Un carattere non occupa sempre un byte."
+        },
+        {
+          "type": "list-item",
+          "text": "La lunghezza in byte non coincide sempre con il numero di caratteri percepiti."
+        },
+        {
+          "type": "list-item",
+          "text": "Cambiare font non cambia necessariamente i punti di codice conservati."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il carattere è come una lettera dell’alfabeto, il punto di codice come il suo identificatore e il glifo come lo stile con cui viene disegnata. L’analogia si complica per legature, segni combinanti e sistemi di scrittura con regole contestuali."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 5.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "diagram",
+          "text": "testo percepito\n     v segmentazione\ngrafemi\n     v Unicode\npunti di codice\n     v UTF-8 / altra codifica\nbyte\n     v font + motore di rendering\nglifi sullo schermo"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "I confini delle parole, l’ordinamento alfabetico e la trasformazione maiuscolo/minuscolo dipendono dalla lingua e non sono semplici operazioni su byte. La sicurezza richiede attenzione anche a caratteri visivamente simili usati per ingannare, spazi invisibili e normalizzazioni differenti."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Aprire byte UTF-8 con una codifica diversa."
+        },
+        {
+          "type": "list-item",
+          "text": "Tagliare una stringa in mezzo a una sequenza codificata."
+        },
+        {
+          "type": "list-item",
+          "text": "Supporre che il maiuscolo abbia sempre la stessa lunghezza."
+        },
+        {
+          "type": "list-item",
+          "text": "Confrontare identificatori senza una politica di normalizzazione."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Stringa vuota e stringa contenente spazio invisibile."
+        },
+        {
+          "type": "list-item",
+          "text": "Emoji composta da più elementi."
+        },
+        {
+          "type": "list-item",
+          "text": "Testo da destra a sinistra mescolato con testo latino."
+        },
+        {
+          "type": "list-item",
+          "text": "Carattere valido ma assente nel font, mostrato come riquadro."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso chiedi quale strato è coinvolto, quale contratto è stato violato, quale segnale è osservabile e quali prove distinguono le cause alternative."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Qual è la differenza fra carattere e glifo?"
+        },
+        {
+          "type": "list-item",
+          "text": "Perché la lunghezza di una stringa è una domanda ambigua?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quando normalizzare può cambiare il significato desiderato?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Prendi la parola ‘caffè’ e individua caratteri percepiti."
+        },
+        {
+          "type": "list-item",
+          "text": "Considera le due rappresentazioni possibili della è."
+        },
+        {
+          "type": "list-item",
+          "text": "Spiega perché un confronto diretto potrebbe fallire e quale politica dichiarare."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Confronta ASCII, Unicode e UTF-8."
+        },
+        {
+          "type": "list-item",
+          "text": "Trova tre casi di testo che richiedono più di un byte per carattere."
+        },
+        {
+          "type": "list-item",
+          "text": "Progetta una regola prudente per nomi utente internazionali."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. UTF-8 codifica che cosa?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Punti di codice Unicode in byte"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Soltanto immagini"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Font in pixel"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Solo lettere inglesi"
+        },
+        {
+          "type": "heading",
+          "text": "2. Un grafema percepito può contenere più punti di codice?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. No"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo nei numeri"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo su carta"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Sì"
+        },
+        {
+          "type": "heading",
+          "text": "3. Carattere e glifo coincidono sempre?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Solo in Unicode"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo in ASCII"
+        },
+        {
+          "type": "list-item",
+          "text": "C. No"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Sì"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Unicode",
+              "Standard per identificare caratteri di molti sistemi di scrittura."
+            ],
+            [
+              "Punto di codice",
+              "Identificatore numerico di un elemento Unicode."
+            ],
+            [
+              "UTF-8",
+              "Codifica variabile dei punti di codice in byte."
+            ],
+            [
+              "Grafema",
+              "Unità di scrittura percepita dal lettore."
+            ],
+            [
+              "Glifo",
+              "Forma grafica usata per rendere un carattere."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Unicode definisce un repertorio e punti di codice. UTF-8 codifica ciascun punto di codice in una sequenza variabile da uno a quattro byte. Un grafema percepito può essere formato da più punti di codice, come lettera e accento combinante o una sequenza emoji. Normalizzazione e confronto devono considerare che testi visivamente equivalenti possono avere sequenze diverse. La competenza richiesta non consiste nel ricordare un elenco di componenti, ma nel saper seguire il flusso di dati e responsabilità attraverso i diversi livelli."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So classificare almeno tre casi limite e proporre un controllo."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        },
+        {
+          "type": "list-item",
+          "text": "So collegare il capitolo al percorso completo sorgente–processo–hardware–effetto."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-3-chapter-6",
+      "lessonId": "0.3",
+      "chapterNumber": 6,
+      "title": "6. Immagini digitali: pixel, colore, risoluzione e vettori",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.2 · CAPITOLO 6 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "6. Immagini digitali: pixel, colore, risoluzione e vettori"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto centrale, collegarlo agli altri strati del sistema, riconoscere errori di interpretazione e applicarlo a un dispositivo reale."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un’immagine digitale può essere rappresentata come griglia di pixel oppure come insieme di forme geometriche. Le due famiglie rispondono a esigenze diverse. Risoluzione, profondità di colore e compressione influenzano dimensione e qualità, ma nessun singolo numero descrive tutto."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un mosaico costruisce una figura con tessere colorate: da lontano percepiamo forme continue, da vicino vediamo elementi discreti. Un’immagine raster funziona in modo simile. Un disegno vettoriale, invece, assomiglia a istruzioni come ‘traccia un cerchio di questo raggio’."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un raster è una matrice di pixel con valori di colore e, talvolta, trasparenza. La risoluzione in pixel descrive larghezza e altezza della matrice; la densità collega pixel e dimensione fisica. Modelli come RGB rappresentano componenti di colore. Un’immagine vettoriale conserva primitive e trasformazioni, che vengono rasterizzate per un dispositivo."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Una fotografia è adatta al raster per la grande varietà di toni."
+        },
+        {
+          "type": "list-item",
+          "text": "Un logo geometrico è spesso adatto al vettoriale e può scalare senza pixelatura ideale."
+        },
+        {
+          "type": "list-item",
+          "text": "Un pixel con canale alfa può essere parzialmente trasparente."
+        },
+        {
+          "type": "heading",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "Più megapixel non garantiscono fotografia migliore se ottica, sensore o compressione sono scadenti."
+        },
+        {
+          "type": "list-item",
+          "text": "Ingrandire un raster non crea automaticamente dettagli reali."
+        },
+        {
+          "type": "list-item",
+          "text": "Un vettore non è sempre piccolo: una scena con moltissime forme può essere complessa."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il mosaico spiega i pixel, ma un pixel non è necessariamente un quadratino fisico fisso: è un campione dell’immagine e verrà reso su dispositivi diversi. Anche il colore dipende da profili, schermi e condizioni di osservazione."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 6.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "diagram",
+          "text": "SCENA\n  | campionamento\n  v\ngriglia W × H pixel\n  | per ogni pixel: canali colore + alfa\n  v\nformato + compressione\n  v\ndecodifica e visualizzazione su dispositivo"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "La dimensione grezza dipende da numero di pixel e bit per pixel. Un raster 1000×1000 con 24 bit per pixel richiede circa tre milioni di byte prima di metadati e compressione. La dimensione effettiva dipende dalla comprimibilità. Gestione del colore e gamma rendono insufficiente trattare i valori RGB come colori assoluti universali."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Confondere dimensioni in pixel e dimensioni di stampa."
+        },
+        {
+          "type": "list-item",
+          "text": "Ridimensionare ripetutamente un’immagine compressa con perdita."
+        },
+        {
+          "type": "list-item",
+          "text": "Ignorare il rapporto d’aspetto."
+        },
+        {
+          "type": "list-item",
+          "text": "Credere che trasparenza significhi assenza di dati."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Immagine con larghezza o altezza zero rifiutata dal formato."
+        },
+        {
+          "type": "list-item",
+          "text": "Valori colore fuori gamma durante una conversione."
+        },
+        {
+          "type": "list-item",
+          "text": "Metadati di orientamento non applicati."
+        },
+        {
+          "type": "list-item",
+          "text": "Trasparenza premoltiplicata interpretata con convenzione diversa."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso chiedi quale strato è coinvolto, quale contratto è stato violato, quale segnale è osservabile e quali prove distinguono le cause alternative."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Quando scegliere raster e quando vettoriale?"
+        },
+        {
+          "type": "list-item",
+          "text": "Che differenza c’è fra risoluzione e densità?"
+        },
+        {
+          "type": "list-item",
+          "text": "Perché più pixel non garantiscono più dettaglio reale?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Calcola i pixel di un’immagine 1920×1080."
+        },
+        {
+          "type": "list-item",
+          "text": "Moltiplica per 3 byte per una stima RGB grezza."
+        },
+        {
+          "type": "list-item",
+          "text": "Confronta la stima con un file compresso e spiega la differenza."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Progetta un formato minimale per una piccola immagine in bianco e nero."
+        },
+        {
+          "type": "list-item",
+          "text": "Spiega il rapporto d’aspetto con due esempi."
+        },
+        {
+          "type": "list-item",
+          "text": "Confronta ridimensionamento raster e vettoriale."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Che cos’è un raster?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Soltanto una linea"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Un file audio"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Una CPU"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Una griglia di pixel"
+        },
+        {
+          "type": "heading",
+          "text": "2. Più megapixel garantiscono qualità maggiore?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Sempre il doppio"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo nei loghi"
+        },
+        {
+          "type": "list-item",
+          "text": "C. No"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Sì"
+        },
+        {
+          "type": "heading",
+          "text": "3. Un vettore conserva principalmente?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Testo UTF-8 soltanto"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Forme e istruzioni geometriche"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Ogni pixel finale obbligatorio"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Campioni audio"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Pixel",
+              "Elemento campionato di un’immagine raster."
+            ],
+            [
+              "Risoluzione",
+              "Dimensioni della matrice in pixel."
+            ],
+            [
+              "Profondità di colore",
+              "Numero di bit usati per rappresentare il colore."
+            ],
+            [
+              "Canale alfa",
+              "Componente associata alla trasparenza."
+            ],
+            [
+              "Vettoriale",
+              "Rappresentazione tramite forme geometriche e trasformazioni."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un raster è una matrice di pixel con valori di colore e, talvolta, trasparenza. La risoluzione in pixel descrive larghezza e altezza della matrice; la densità collega pixel e dimensione fisica. Modelli come RGB rappresentano componenti di colore. Un’immagine vettoriale conserva primitive e trasformazioni, che vengono rasterizzate per un dispositivo. La competenza richiesta non consiste nel ricordare un elenco di componenti, ma nel saper seguire il flusso di dati e responsabilità attraverso i diversi livelli."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So classificare almeno tre casi limite e proporre un controllo."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        },
+        {
+          "type": "list-item",
+          "text": "So collegare il capitolo al percorso completo sorgente–processo–hardware–effetto."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-3-chapter-7",
+      "lessonId": "0.3",
+      "chapterNumber": 7,
+      "title": "7. Audio digitale: campionamento, frequenza e quantizzazione",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.2 · CAPITOLO 7 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "7. Audio digitale: campionamento, frequenza e quantizzazione"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto centrale, collegarlo agli altri strati del sistema, riconoscere errori di interpretazione e applicarlo a un dispositivo reale."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il suono fisico varia nel tempo in modo continuo. Per rappresentarlo digitalmente, un sistema misura il segnale a intervalli e assegna a ogni misura un valore fra livelli disponibili. La qualità dipende da campionamento, quantizzazione, canali, dispositivi e trasformazioni."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Immagina di fotografare molto rapidamente la posizione di una corda vibrante. Le fotografie successive descrivono il movimento con maggiore o minore fedeltà secondo la frequenza degli scatti. Se misuri anche la posizione con un righello a tacche larghe, aggiungi un secondo limite: la quantizzazione."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "La frequenza di campionamento indica campioni al secondo; la profondità in bit determina i livelli di quantizzazione. Per un segnale limitato in banda, una frequenza superiore al doppio della massima frequenza presente permette in teoria la ricostruzione, con filtraggio adeguato. I canali rappresentano flussi distinti, come sinistro e destro. Il formato può contenere audio non compresso o compresso."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Audio stereo contiene due canali."
+        },
+        {
+          "type": "list-item",
+          "text": "Aumentare la profondità in bit riduce il passo di quantizzazione disponibile."
+        },
+        {
+          "type": "list-item",
+          "text": "Un filtro antialiasing limita le frequenze prima del campionamento."
+        },
+        {
+          "type": "heading",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "Raddoppiare la frequenza non raddoppia automaticamente la qualità percepita."
+        },
+        {
+          "type": "list-item",
+          "text": "Un file più grande non garantisce una registrazione migliore se il microfono è scadente."
+        },
+        {
+          "type": "list-item",
+          "text": "Volume e frequenza non sono la stessa proprietà."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Le fotografie della corda chiariscono il campionamento, ma un sistema reale misura pressione trasformata in segnale elettrico, applica filtri e sincronizza campioni. La ricostruzione non consiste semplicemente nel collegare punti con linee rette."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 7.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "diagram",
+          "text": "onda sonora\n   v microfono e conversione\nsegnale continuo\n   v filtro + campionamento\nsequenza di misure\n   v quantizzazione\nnumeri digitali per uno o più canali"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Se frequenze troppo alte entrano nel campionamento, possono apparire come frequenze più basse: aliasing. La dimensione grezza approssimativa è frequenza × bit per campione × canali × durata. Compressione e metadati modificano la dimensione del file, non la durata rappresentata."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Confondere frequenza del suono e frequenza di campionamento."
+        },
+        {
+          "type": "list-item",
+          "text": "Modificare il volume fino al clipping."
+        },
+        {
+          "type": "list-item",
+          "text": "Convertire ripetutamente fra formati con perdita."
+        },
+        {
+          "type": "list-item",
+          "text": "Ignorare il numero di canali nel calcolo della dimensione."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Clipping quando il segnale supera l’intervallo rappresentabile."
+        },
+        {
+          "type": "list-item",
+          "text": "Silenzio digitale distinto da assenza di campioni."
+        },
+        {
+          "type": "list-item",
+          "text": "Canali fuori fase che si attenuano quando combinati."
+        },
+        {
+          "type": "list-item",
+          "text": "File con intestazione valida ma durata dichiarata incoerente."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso chiedi quale strato è coinvolto, quale contratto è stato violato, quale segnale è osservabile e quali prove distinguono le cause alternative."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Quali due discretizzazioni avvengono nella digitalizzazione?"
+        },
+        {
+          "type": "list-item",
+          "text": "Perché serve un filtro prima del campionamento?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale relazione c’è fra canali e dimensione grezza?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Calcola i campioni di un secondo a 48.000 campioni/s."
+        },
+        {
+          "type": "list-item",
+          "text": "Moltiplica per 16 bit e due canali."
+        },
+        {
+          "type": "list-item",
+          "text": "Converti in byte e confronta con dieci secondi."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Spiega aliasing con un esempio visivo o sonoro."
+        },
+        {
+          "type": "list-item",
+          "text": "Confronta mono e stereo."
+        },
+        {
+          "type": "list-item",
+          "text": "Progetta un calcolo della dimensione PCM per un minuto."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Che cosa misura la frequenza di campionamento?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Numero di file"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Lunghezza del nome"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Campioni acquisiti per secondo"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Volume massimo"
+        },
+        {
+          "type": "heading",
+          "text": "2. Che cos’è la quantizzazione?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Traduzione del testo"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Assegnazione dei campioni a livelli discreti"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Aumento dei canali"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Cancellazione del file"
+        },
+        {
+          "type": "heading",
+          "text": "3. Che cos’è il clipping?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Superamento dell’intervallo rappresentabile"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Silenzio perfetto"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Compressione senza perdita"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Aumento della memoria"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Campione",
+              "Misura discreta del segnale in un istante."
+            ],
+            [
+              "Frequenza di campionamento",
+              "Numero di campioni acquisiti al secondo."
+            ],
+            [
+              "Quantizzazione",
+              "Mappatura delle misure su livelli discreti."
+            ],
+            [
+              "Aliasing",
+              "Comparsa di componenti errate dovuta a campionamento insufficiente."
+            ],
+            [
+              "Clipping",
+              "Taglio del segnale oltre l’intervallo disponibile."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "La frequenza di campionamento indica campioni al secondo; la profondità in bit determina i livelli di quantizzazione. Per un segnale limitato in banda, una frequenza superiore al doppio della massima frequenza presente permette in teoria la ricostruzione, con filtraggio adeguato. I canali rappresentano flussi distinti, come sinistro e destro. Il formato può contenere audio non compresso o compresso. La competenza richiesta non consiste nel ricordare un elenco di componenti, ma nel saper seguire il flusso di dati e responsabilità attraverso i diversi livelli."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So classificare almeno tre casi limite e proporre un controllo."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        },
+        {
+          "type": "list-item",
+          "text": "So collegare il capitolo al percorso completo sorgente–processo–hardware–effetto."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-3-chapter-8",
+      "lessonId": "0.3",
+      "chapterNumber": 8,
+      "title": "8. Compressione: ridondanza, perdita e compromessi",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.2 · CAPITOLO 8 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "8. Compressione: ridondanza, perdita e compromessi"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto centrale, collegarlo agli altri strati del sistema, riconoscere errori di interpretazione e applicarlo a un dispositivo reale."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Dati non compressi possono occupare molto spazio e richiedere tempo per essere trasferiti. La compressione rappresenta la stessa informazione, o una sua approssimazione controllata, con meno bit. Il vantaggio non è gratuito: richiede elaborazione e, nei metodi con perdita, sacrifica dettagli."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Se un testo contiene cento volte la stessa parola, possiamo conservarla una volta insieme all’istruzione ‘ripeti cento volte’. Abbiamo sfruttato ridondanza. Se invece riassumiamo un testo eliminando dettagli, otteniamo una versione più corta ma non possiamo ricostruire esattamente l’originale."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "La compressione senza perdita consente di ricostruire esattamente i dati; quella con perdita produce una ricostruzione approssimata secondo un modello percettivo o applicativo. Il rapporto di compressione confronta dimensioni. L’efficacia dipende dalla struttura dei dati: sequenze già compresse o casuali possono non ridursi e possono persino crescere per via dei metadati."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Archivi ZIP usano tecniche senza perdita."
+        },
+        {
+          "type": "list-item",
+          "text": "JPEG applica tipicamente compressione con perdita ad immagini fotografiche."
+        },
+        {
+          "type": "list-item",
+          "text": "Formati audio compressi possono rimuovere componenti considerate meno percepibili."
+        },
+        {
+          "type": "heading",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "Comprimere ripetutamente un file con perdita non preserva la qualità originale."
+        },
+        {
+          "type": "list-item",
+          "text": "Un algoritmo non può ridurre ogni possibile file mantenendo sempre ricostruzione perfetta."
+        },
+        {
+          "type": "list-item",
+          "text": "Cambiare estensione non applica realmente una compressione diversa."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il riassunto distingue bene perdita e conservazione, ma gli algoritmi con perdita non eliminano semplicemente frasi: trasformano dati e quantizzano componenti secondo modelli. La qualità dipende dal contenuto e dalle impostazioni."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 8.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "diagram",
+          "text": "dati originali\n   |\n   +--> compressione lossless --> file ridotto --> originale identico\n   |\n   +--> compressione lossy ----> file ridotto --> ricostruzione approssimata"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il compromesso coinvolge dimensione, qualità, velocità di codifica, velocità di decodifica, memoria e compatibilità. Per dati scientifici o eseguibili, una sola differenza può essere inaccettabile; per una fotografia destinata a schermo, una perdita invisibile può essere ragionevole. La scelta è una decisione di dominio, non soltanto tecnica."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Usare perdita su dati che devono essere esatti."
+        },
+        {
+          "type": "list-item",
+          "text": "Valutare qualità soltanto dalla dimensione."
+        },
+        {
+          "type": "list-item",
+          "text": "Ricodificare molte volte anziché conservare un originale."
+        },
+        {
+          "type": "list-item",
+          "text": "Supporre che file già compressi si comprimano molto di nuovo."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "File minuscolo che cresce a causa dell’intestazione."
+        },
+        {
+          "type": "list-item",
+          "text": "Contenuto casuale quasi incomprimibile."
+        },
+        {
+          "type": "list-item",
+          "text": "Artefatti evidenti su bordi o transizioni."
+        },
+        {
+          "type": "list-item",
+          "text": "Formato supportato per decodifica ma non per codifica."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso chiedi quale strato è coinvolto, quale contratto è stato violato, quale segnale è osservabile e quali prove distinguono le cause alternative."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Perché non esiste una compressione lossless che riduce ogni file?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quando la perdita è accettabile?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale copia dovresti conservare per modifiche future?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Comprimi concettualmente AAAAABBBCC con conteggi."
+        },
+        {
+          "type": "list-item",
+          "text": "Verifica che la ricostruzione sia esatta."
+        },
+        {
+          "type": "list-item",
+          "text": "Confronta il vantaggio con una sequenza ABCDEFGHI."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Classifica cinque tipi di dati per compressione appropriata."
+        },
+        {
+          "type": "list-item",
+          "text": "Spiega la ricodifica generazionale."
+        },
+        {
+          "type": "list-item",
+          "text": "Definisci criteri per scegliere un formato di immagine web."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. La compressione lossless permette?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Solo testo"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Ricostruzione esatta"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Perdita obbligatoria"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Solo immagini"
+        },
+        {
+          "type": "heading",
+          "text": "2. Un file casuale è facilmente comprimibile?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. In genere no"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Sempre"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo se grande"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Solo con Internet"
+        },
+        {
+          "type": "heading",
+          "text": "3. Ricodificare più volte con perdita può degradare?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. No"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo i nomi"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo i file vuoti"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Sì"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Compressione",
+              "Rappresentazione con minore quantità di dati."
+            ],
+            [
+              "Lossless",
+              "Senza perdita, con ricostruzione esatta."
+            ],
+            [
+              "Lossy",
+              "Con perdita controllata di informazione."
+            ],
+            [
+              "Ridondanza",
+              "Informazione ripetuta o prevedibile sfruttabile."
+            ],
+            [
+              "Artefatto",
+              "Distorsione introdotta dalla rappresentazione o compressione."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "La compressione senza perdita consente di ricostruire esattamente i dati; quella con perdita produce una ricostruzione approssimata secondo un modello percettivo o applicativo. Il rapporto di compressione confronta dimensioni. L’efficacia dipende dalla struttura dei dati: sequenze già compresse o casuali possono non ridursi e possono persino crescere per via dei metadati. La competenza richiesta non consiste nel ricordare un elenco di componenti, ma nel saper seguire il flusso di dati e responsabilità attraverso i diversi livelli."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So classificare almeno tre casi limite e proporre un controllo."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        },
+        {
+          "type": "list-item",
+          "text": "So collegare il capitolo al percorso completo sorgente–processo–hardware–effetto."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-3-chapter-9",
+      "lessonId": "0.3",
+      "chapterNumber": 9,
+      "title": "9. File, formati, estensioni e metadati",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.2 · CAPITOLO 9 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "9. File, formati, estensioni e metadati"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto centrale, collegarlo agli altri strati del sistema, riconoscere errori di interpretazione e applicarlo a un dispositivo reale."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un file è una sequenza di byte, ma per usarla serve sapere come interpretarli. Il formato definisce struttura, campi, versioni e vincoli. L’estensione è un’indicazione nel nome, non una garanzia. I metadati descrivono contenuto, origine o parametri e possono essere indispensabili o sensibili."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una scatola etichettata ‘fotografie’ può contenere fotografie, essere vuota o contenere altro. L’etichetta aiuta, ma per sapere davvero occorre aprire la scatola e verificare l’organizzazione interna. L’estensione .png assomiglia all’etichetta; la struttura dei byte determina se il contenuto rispetta il formato PNG."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Molti formati iniziano con firme o intestazioni, seguite da campi, blocchi di dati e controlli. Un parser legge secondo la specifica e deve rifiutare o gestire input incompleti. MIME type, estensione e rilevamento del contenuto sono segnali distinti. I metadati possono includere dimensioni, codifica, autore, data, posizione o orientamento."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Un’immagine può contenere metadati di orientamento usati dal visualizzatore."
+        },
+        {
+          "type": "list-item",
+          "text": "Un file di testo richiede una codifica, anche quando non è dichiarata esplicitamente."
+        },
+        {
+          "type": "list-item",
+          "text": "Un archivio raggruppa più file e registra nomi, percorsi e informazioni di controllo."
+        },
+        {
+          "type": "heading",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "Rinominare foto.jpg in foto.png non converte il contenuto."
+        },
+        {
+          "type": "list-item",
+          "text": "Una firma corretta non garantisce che l’intero file sia integro."
+        },
+        {
+          "type": "list-item",
+          "text": "I metadati non sono sempre innocui: possono rivelare luogo o autore."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Scatola ed etichetta spiegano estensione e contenuto, ma i file possono includere strutture annidate, riferimenti e parti compresse. Un parser insicuro può essere ingannato da lunghezze o campi costruiti appositamente."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 9.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "diagram",
+          "text": "nomefile.estensione\n        | suggerimento\n        v\nsequenza di byte\n        | parser secondo specifica/versione\n        v\nintestazione + metadati + dati + controlli\n        v\noggetto interpretato oppure errore"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "La compatibilità richiede distinguere lettura, scrittura e versione. Un programma può leggere una versione vecchia ma scriverne una nuova. Migrare significa trasformare i dati preservando proprietà dichiarate. Conservazione a lungo termine richiede formati documentati, copie verificate e metadati sufficienti a interpretare il contenuto."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Fidarsi soltanto dell’estensione."
+        },
+        {
+          "type": "list-item",
+          "text": "Aprire input non attendibile senza limiti di dimensione o struttura."
+        },
+        {
+          "type": "list-item",
+          "text": "Rimuovere metadati necessari insieme a quelli sensibili."
+        },
+        {
+          "type": "list-item",
+          "text": "Sovrascrivere l’unica copia durante una conversione."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "File vuoto con estensione valida."
+        },
+        {
+          "type": "list-item",
+          "text": "Intestazione che dichiara dimensione enorme rispetto ai dati reali."
+        },
+        {
+          "type": "list-item",
+          "text": "Versione futura non riconosciuta."
+        },
+        {
+          "type": "list-item",
+          "text": "Percorsi nell’archivio che tentano di uscire dalla directory prevista."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso chiedi quale strato è coinvolto, quale contratto è stato violato, quale segnale è osservabile e quali prove distinguono le cause alternative."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Quali segnali puoi usare per riconoscere un formato?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quando i metadati sono necessari e quando rischiosi?"
+        },
+        {
+          "type": "list-item",
+          "text": "Perché una conversione dovrebbe conservare l’originale?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Immagina un formato con firma, versione, lunghezza e testo UTF-8."
+        },
+        {
+          "type": "list-item",
+          "text": "Definisci i controlli prima di leggere il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "Aggiungi casi di firma errata, lunghezza eccessiva e dati troncati."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Confronta estensione, MIME type e firma interna."
+        },
+        {
+          "type": "list-item",
+          "text": "Crea una checklist per importare file non attendibili."
+        },
+        {
+          "type": "list-item",
+          "text": "Progetta una migrazione con copia di sicurezza e verifica."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Cambiare estensione converte un formato?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. No"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Sempre"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Solo per immagini"
+        },
+        {
+          "type": "heading",
+          "text": "2. Che cosa fa un parser?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Aumenta la RAM"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Disegna ogni icona"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Cambia la CPU"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Interpreta byte secondo regole di formato"
+        },
+        {
+          "type": "heading",
+          "text": "3. I metadati possono essere sensibili?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Solo se numerici"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo se compressi"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "D. No"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "File",
+              "Sequenza di byte conservata dal file system."
+            ],
+            [
+              "Estensione",
+              "Suffisso del nome usato come indicazione del tipo."
+            ],
+            [
+              "Parser",
+              "Componente che interpreta dati secondo una grammatica o formato."
+            ],
+            [
+              "Metadato",
+              "Dato che descrive altri dati."
+            ],
+            [
+              "Migrazione",
+              "Trasformazione controllata verso struttura o versione diversa."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Molti formati iniziano con firme o intestazioni, seguite da campi, blocchi di dati e controlli. Un parser legge secondo la specifica e deve rifiutare o gestire input incompleti. MIME type, estensione e rilevamento del contenuto sono segnali distinti. I metadati possono includere dimensioni, codifica, autore, data, posizione o orientamento. La competenza richiesta non consiste nel ricordare un elenco di componenti, ma nel saper seguire il flusso di dati e responsabilità attraverso i diversi livelli."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So classificare almeno tre casi limite e proporre un controllo."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        },
+        {
+          "type": "list-item",
+          "text": "So collegare il capitolo al percorso completo sorgente–processo–hardware–effetto."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-3-chapter-10",
+      "lessonId": "0.3",
+      "chapterNumber": 10,
+      "title": "10. Integrità, errori, ridondanza e uso responsabile dei dati",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.2 · CAPITOLO 10 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "10. Integrità, errori, ridondanza e uso responsabile dei dati"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Comprendere il concetto centrale, collegarlo agli altri strati del sistema, riconoscere errori di interpretazione e applicarlo a un dispositivo reale."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "I dati possono cambiare per guasti, trasmissioni incomplete, errori umani o attacchi. Un sistema affidabile non presume che ogni sequenza ricevuta sia corretta: controlla integrità, conserva copie appropriate e distingue rilevamento, correzione e autenticità."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quando detti un numero di telefono, ripeterlo consente di scoprire una discordanza. Aggiungere informazioni di controllo crea ridondanza utile. Tuttavia un errore intenzionale può modificare sia il numero sia la ripetizione: per questo rilevare guasti casuali e difendersi da manipolazioni sono problemi diversi."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Checksum e codici di rilevamento associano ai dati un valore di controllo. Funzioni hash crittografiche producono impronte progettate per rendere difficile trovare collisioni utili, ma un hash da solo non autentica l’origine. Firme digitali e codici di autenticazione aggiungono una relazione con chiavi. Backup, versioni e verifiche periodiche proteggono da perdita e corruzione."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Un checksum può rilevare una trasmissione danneggiata."
+        },
+        {
+          "type": "list-item",
+          "text": "Un hash pubblicato tramite canale affidabile aiuta a verificare un download."
+        },
+        {
+          "type": "list-item",
+          "text": "Una strategia di backup conserva più copie e prova il ripristino."
+        },
+        {
+          "type": "heading",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "Avere una copia sullo stesso disco non protegge dal guasto del disco."
+        },
+        {
+          "type": "list-item",
+          "text": "Un hash fornito dallo stesso sito compromesso non prova autenticità."
+        },
+        {
+          "type": "list-item",
+          "text": "La cifratura protegge la riservatezza ma non sostituisce automaticamente ogni controllo di integrità e disponibilità."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il sigillo su un contenitore può mostrare manomissione; la firma del mittente collega il sigillo a un’identità. L’analogia aiuta, ma nei sistemi digitali le garanzie dipendono da algoritmi, chiavi e protezione dei canali."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 10.1 — Rappresentazione concettuale"
+        },
+        {
+          "type": "diagram",
+          "text": "DATI\n |\n +--> checksum/hash --> rilevamento di cambiamenti\n |\n +--> MAC/firma -----> autenticità e integrità secondo chiavi\n |\n +--> backup/versioni -> recupero dopo perdita o corruzione\n |\n +--> cifratura ------> riservatezza"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Integrità tecnica non equivale a qualità o verità. Un file può essere perfettamente integro e contenere dati falsi, obsoleti o raccolti senza consenso. La governance deve considerare accuratezza, provenienza, autorizzazione, minimizzazione, durata di conservazione e possibilità di correzione."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Confondere backup e sincronizzazione."
+        },
+        {
+          "type": "list-item",
+          "text": "Non provare mai il ripristino."
+        },
+        {
+          "type": "list-item",
+          "text": "Usare checksum non crittografici contro un avversario intenzionale."
+        },
+        {
+          "type": "list-item",
+          "text": "Conservare dati sensibili indefinitamente perché lo spazio costa poco."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Backup corrotto nello stesso modo dell’originale."
+        },
+        {
+          "type": "list-item",
+          "text": "Collisione del valore di controllo."
+        },
+        {
+          "type": "list-item",
+          "text": "Chiave di firma compromessa."
+        },
+        {
+          "type": "list-item",
+          "text": "Dato integro ma associato alla persona sbagliata."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI ANALISI  Per ogni caso chiedi quale strato è coinvolto, quale contratto è stato violato, quale segnale è osservabile e quali prove distinguono le cause alternative."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Che differenza c’è fra integrità e verità?"
+        },
+        {
+          "type": "list-item",
+          "text": "Perché un hash non dimostra da solo l’origine?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quali dati dovrebbero essere cancellati anziché archiviati?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizio guidato"
+        },
+        {
+          "type": "list-item",
+          "text": "Progetta la protezione di un archivio di esercizi."
+        },
+        {
+          "type": "list-item",
+          "text": "Distingui modifica accidentale, cancellazione e accesso non autorizzato."
+        },
+        {
+          "type": "list-item",
+          "text": "Associa checksum, backup, permessi e cifratura ai rischi appropriati."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Crea una strategia di backup con prova di ripristino."
+        },
+        {
+          "type": "list-item",
+          "text": "Confronta checksum, hash, MAC e firma a livello concettuale."
+        },
+        {
+          "type": "list-item",
+          "text": "Analizza il ciclo di vita responsabile di un dato personale."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Un hash da solo autentica sempre il mittente?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo se corto"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo offline"
+        },
+        {
+          "type": "list-item",
+          "text": "D. No"
+        },
+        {
+          "type": "heading",
+          "text": "2. Backup e sincronizzazione coincidono?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Sempre"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo nel cloud"
+        },
+        {
+          "type": "list-item",
+          "text": "C. No"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Sì"
+        },
+        {
+          "type": "heading",
+          "text": "3. Integrità significa che il contenuto è vero?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Solo per immagini"
+        },
+        {
+          "type": "list-item",
+          "text": "B. No, significa che non è cambiato rispetto al riferimento"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Solo per numeri"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Integrità",
+              "Proprietà di dati non modificati in modo non autorizzato o non rilevato."
+            ],
+            [
+              "Checksum",
+              "Valore di controllo per rilevare cambiamenti accidentali."
+            ],
+            [
+              "Hash crittografico",
+              "Impronta con proprietà di resistenza utili alla sicurezza."
+            ],
+            [
+              "Firma digitale",
+              "Meccanismo crittografico che collega dati e chiave di firma."
+            ],
+            [
+              "Backup",
+              "Copia separata progettata per il recupero."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Checksum e codici di rilevamento associano ai dati un valore di controllo. Funzioni hash crittografiche producono impronte progettate per rendere difficile trovare collisioni utili, ma un hash da solo non autentica l’origine. Firme digitali e codici di autenticazione aggiungono una relazione con chiavi. Backup, versioni e verifiche periodiche proteggono da perdita e corruzione. La competenza richiesta non consiste nel ricordare un elenco di componenti, ma nel saper seguire il flusso di dati e responsabilità attraverso i diversi livelli."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il concetto sia intuitivamente sia tecnicamente."
+        },
+        {
+          "type": "list-item",
+          "text": "So fornire un esempio e un controesempio motivati."
+        },
+        {
+          "type": "list-item",
+          "text": "So leggere e ricostruire il diagramma senza consultare il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So classificare almeno tre casi limite e proporre un controllo."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato l’esercizio guidato, almeno due esercizi autonomi e almeno due risposte corrette su tre nel quiz."
+        },
+        {
+          "type": "list-item",
+          "text": "So collegare il capitolo al percorso completo sorgente–processo–hardware–effetto."
+        },
+        {
+          "type": "heading",
+          "text": "Sintesi integrata della Lezione 0.3"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ogni dato digitale è una rappresentazione costruita per uno scopo. I bit acquistano significato tramite codifiche e formati; lo spazio finito impone intervalli e precisione; testi, immagini e audio richiedono modelli specifici; la compressione sfrutta ridondanza o accetta perdita; file e metadati permettono lo scambio; controlli, firme e backup proteggono proprietà diverse. Comprendere queste scelte permette di prevedere errori che la sola sintassi non rivela."
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura S.1 — Dalla realtà alla rappresentazione digitale"
+        },
+        {
+          "type": "diagram",
+          "text": "FENOMENO\n   v misura / scelta\nMODELLO\n   v codifica e quantizzazione\nBIT E BYTE\n   v formato / compressione / metadati\nFILE O FLUSSO\n   v controlli, interpretazione, rendering\nINFORMAZIONE ED EFFETTI PER L’UTENTE"
+        },
+        {
+          "type": "heading",
+          "text": "Prova finale di padronanza"
+        },
+        {
+          "type": "paragraph",
+          "text": "Scegli un contenuto digitale reale — fotografia, registrazione audio, documento testuale o insieme di misure — e produci un’analisi di 900–1.300 parole che includa:"
+        },
+        {
+          "type": "list-item",
+          "text": "fenomeno e scopo della rappresentazione;"
+        },
+        {
+          "type": "list-item",
+          "text": "unità, dominio, precisione e casi mancanti;"
+        },
+        {
+          "type": "list-item",
+          "text": "codifica e formato;"
+        },
+        {
+          "type": "list-item",
+          "text": "stima ragionata della dimensione non compressa;"
+        },
+        {
+          "type": "list-item",
+          "text": "eventuale compressione e perdita accettata;"
+        },
+        {
+          "type": "list-item",
+          "text": "metadati necessari e dati sensibili da evitare;"
+        },
+        {
+          "type": "list-item",
+          "text": "almeno quattro modi di corruzione o interpretazione errata;"
+        },
+        {
+          "type": "list-item",
+          "text": "strategia di verifica, conservazione e recupero."
+        },
+        {
+          "type": "heading",
+          "text": "Rubrica di valutazione"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Dimensione",
+              "Essenziale",
+              "Solida",
+              "Piena padronanza"
+            ],
+            [
+              "Modello",
+              "Scopo riconoscibile",
+              "Proprietà conservate e omesse dichiarate",
+              "Alternative confrontate con conseguenze"
+            ],
+            [
+              "Numeri",
+              "Base o precisione citata",
+              "Intervallo e approssimazione corretti",
+              "Casi limite calcolati e motivati"
+            ],
+            [
+              "Formato",
+              "Tipo di file nominato",
+              "Codifica, metadati e parser distinti",
+              "Compatibilità e migrazione considerate"
+            ],
+            [
+              "Qualità",
+              "Dimensione o qualità descritta",
+              "Compressione adeguata allo scopo",
+              "Compromessi misurabili e reversibilità valutati"
+            ],
+            [
+              "Protezione",
+              "Backup o controllo citato",
+              "Rischi associati a controlli appropriati",
+              "Integrità, autenticità e governance distinte"
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento della lezione"
+        },
+        {
+          "type": "list-item",
+          "text": "Tutti i dieci capitoli sono stati letti e annotati."
+        },
+        {
+          "type": "list-item",
+          "text": "Sono state completate le conversioni binarie e i calcoli guidati."
+        },
+        {
+          "type": "list-item",
+          "text": "Per ogni capitolo è stato prodotto almeno un esempio personale e un caso limite."
+        },
+        {
+          "type": "list-item",
+          "text": "Sono stati completati tutti gli esercizi guidati e almeno venti esercizi autonomi."
+        },
+        {
+          "type": "list-item",
+          "text": "Il punteggio complessivo dei quiz è almeno 24/30, con correzione motivata degli errori."
+        },
+        {
+          "type": "list-item",
+          "text": "La prova finale raggiunge almeno il livello Solida in ogni dimensione."
+        },
+        {
+          "type": "list-item",
+          "text": "Il lettore sa spiegare perché i bit non possiedono significato senza codifica, formato e contesto."
+        },
+        {
+          "type": "callout",
+          "text": "PASSAGGIO SUCCESSIVO  Dopo questa lezione il percorso può introdurre logica booleana e pensiero computazionale oppure passare al Modulo 1, collegando file, codifiche e processi all’ambiente di sviluppo."
+        }
+      ]
+    }
+  ],
+  "chapters": [
+    {
+      "number": 1,
+      "title": "1. Rappresentare non significa essere: dati, significato e convenzioni",
+      "sectionId": "programming-0-3-chapter-1",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-3-chapter-1-guided",
+          "kind": "guided",
+          "lessonId": "0.3",
+          "chapterNumber": 1,
+          "title": "1. Rappresentare non significa essere: dati, significato e convenzioni",
+          "prompt": "Scegli il concetto ‘indirizzo di consegna’ e definisci lo scopo.\nElenca i dati indispensabili, facoltativi e inappropriati.\nAggiungi casi come edificio senza numero civico e destinatario temporaneo.",
+          "autoverification": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-3-chapter-1-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 1,
+            "title": "1. Rappresentare non significa essere: dati, significato e convenzioni",
+            "prompt": "Confronta tre rappresentazioni di una data."
+          },
+          {
+            "id": "programming-0-3-chapter-1-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 1,
+            "title": "1. Rappresentare non significa essere: dati, significato e convenzioni",
+            "prompt": "Progetta i dati necessari per registrare un libro in biblioteca."
+          },
+          {
+            "id": "programming-0-3-chapter-1-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 1,
+            "title": "1. Rappresentare non significa essere: dati, significato e convenzioni",
+            "prompt": "Trova un esempio in cui una categoria digitale esclude un caso reale."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-3-chapter-1-quiz-1",
+          "concept": "1. Rappresentare non significa essere: dati, significato e convenzioni",
+          "prompt": "Da dove deriva il significato dei dati?",
+          "choices": [
+            "A. Da convenzioni, contesto e regole di interpretazione",
+            "B. Dai bit isolati",
+            "C. Dal colore del computer",
+            "D. Dalla lunghezza del nome"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-1"
+        },
+        {
+          "id": "programming-0-3-chapter-1-quiz-2",
+          "concept": "1. Rappresentare non significa essere: dati, significato e convenzioni",
+          "prompt": "Una rappresentazione deve conservare ogni proprietà del fenomeno?",
+          "choices": [
+            "A. Sì, sempre",
+            "B. Solo se numerica",
+            "C. Solo se online",
+            "D. No, deve conservare quelle rilevanti allo scopo"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-1"
+        },
+        {
+          "id": "programming-0-3-chapter-1-quiz-3",
+          "concept": "1. Rappresentare non significa essere: dati, significato e convenzioni",
+          "prompt": "Zero e valore sconosciuto coincidono?",
+          "choices": [
+            "A. Solo nei testi",
+            "B. Solo nelle immagini",
+            "C. No",
+            "D. Sì"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-1"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "2. Sistemi di numerazione: dal decimale al binario",
+      "sectionId": "programming-0-3-chapter-2",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-3-chapter-2-guided",
+          "kind": "guided",
+          "lessonId": "0.3",
+          "chapterNumber": 2,
+          "title": "2. Sistemi di numerazione: dal decimale al binario",
+          "prompt": "Scrivi i pesi delle prime otto posizioni binarie.\nConverti 45 scegliendo i pesi 32, 8, 4 e 1.\nVerifica che 00101101₂ abbia lo stesso valore.",
+          "autoverification": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-3-chapter-2-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 2,
+            "title": "2. Sistemi di numerazione: dal decimale al binario",
+            "prompt": "Converti da 0 a 31 in binario."
+          },
+          {
+            "id": "programming-0-3-chapter-2-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 2,
+            "title": "2. Sistemi di numerazione: dal decimale al binario",
+            "prompt": "Converti 11010110₂ in decimale ed esadecimale."
+          },
+          {
+            "id": "programming-0-3-chapter-2-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 2,
+            "title": "2. Sistemi di numerazione: dal decimale al binario",
+            "prompt": "Spiega con parole tue il meccanismo del riporto in base 2."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-3-chapter-2-quiz-1",
+          "concept": "2. Sistemi di numerazione: dal decimale al binario",
+          "prompt": "Quanto vale 1011₂?",
+          "choices": [
+            "A. 1011₁₀",
+            "B. 13₁₀",
+            "C. 7₁₀",
+            "D. 11₁₀"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-2"
+        },
+        {
+          "id": "programming-0-3-chapter-2-quiz-2",
+          "concept": "2. Sistemi di numerazione: dal decimale al binario",
+          "prompt": "Quanti bit rappresenta una cifra esadecimale?",
+          "choices": [
+            "A. 8",
+            "B. 16",
+            "C. 4",
+            "D. 2"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-2"
+        },
+        {
+          "id": "programming-0-3-chapter-2-quiz-3",
+          "concept": "2. Sistemi di numerazione: dal decimale al binario",
+          "prompt": "La base cambia il numero astratto?",
+          "choices": [
+            "A. Solo per numeri negativi",
+            "B. No, cambia la rappresentazione",
+            "C. Sì",
+            "D. Solo per zero"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-2"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "title": "3. Interi, segno e overflow",
+      "sectionId": "programming-0-3-chapter-3",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-3-chapter-3-guided",
+          "kind": "guided",
+          "lessonId": "0.3",
+          "chapterNumber": 3,
+          "title": "3. Interi, segno e overflow",
+          "prompt": "Elenca le 16 sequenze di quattro bit.\nInterpretale prima senza segno e poi in complemento a due.\nCalcola 7+1 su quattro bit con segno e descrivi l’overflow.",
+          "autoverification": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-3-chapter-3-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 3,
+            "title": "3. Interi, segno e overflow",
+            "prompt": "Trova gli intervalli per 16 e 32 bit."
+          },
+          {
+            "id": "programming-0-3-chapter-3-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 3,
+            "title": "3. Interi, segno e overflow",
+            "prompt": "Progetta controlli per un contatore con massimo dichiarato."
+          },
+          {
+            "id": "programming-0-3-chapter-3-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 3,
+            "title": "3. Interi, segno e overflow",
+            "prompt": "Spiega un rischio reale di conversione da intero ampio a intero stretto."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-3-chapter-3-quiz-1",
+          "concept": "3. Interi, segno e overflow",
+          "prompt": "Intervallo di 8 bit senza segno?",
+          "choices": [
+            "A. 0–256",
+            "B. −255–255",
+            "C. 0–255",
+            "D. −128–127"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-3"
+        },
+        {
+          "id": "programming-0-3-chapter-3-quiz-2",
+          "concept": "3. Interi, segno e overflow",
+          "prompt": "Intervallo di 8 bit con complemento a due?",
+          "choices": [
+            "A. −256–255",
+            "B. −128–127",
+            "C. −127–127",
+            "D. 0–255"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-3"
+        },
+        {
+          "id": "programming-0-3-chapter-3-quiz-3",
+          "concept": "3. Interi, segno e overflow",
+          "prompt": "Overflow è sempre segnalato?",
+          "choices": [
+            "A. No, dipende dal sistema",
+            "B. Sì",
+            "C. Solo nei testi",
+            "D. Solo su Internet"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-3"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "title": "4. Numeri reali, virgola mobile e precisione finita",
+      "sectionId": "programming-0-3-chapter-4",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-3-chapter-4-guided",
+          "kind": "guided",
+          "lessonId": "0.3",
+          "chapterNumber": 4,
+          "title": "4. Numeri reali, virgola mobile e precisione finita",
+          "prompt": "Scrivi 1/2, 1/4 e 1/8 in binario frazionario.\nProva a sviluppare 1/10 con moltiplicazioni successive per due.\nOsserva la ripetizione e spiega perché serve troncare o arrotondare.",
+          "autoverification": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-3-chapter-4-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 4,
+            "title": "4. Numeri reali, virgola mobile e precisione finita",
+            "prompt": "Progetta un confronto approssimato per misure in metri."
+          },
+          {
+            "id": "programming-0-3-chapter-4-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 4,
+            "title": "4. Numeri reali, virgola mobile e precisione finita",
+            "prompt": "Spiega la cancellazione con un esempio."
+          },
+          {
+            "id": "programming-0-3-chapter-4-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 4,
+            "title": "4. Numeri reali, virgola mobile e precisione finita",
+            "prompt": "Confronta interi di centesimi e virgola mobile per prezzi."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-3-chapter-4-quiz-1",
+          "concept": "4. Numeri reali, virgola mobile e precisione finita",
+          "prompt": "0,1 decimale è normalmente esatto in binario floating point?",
+          "choices": [
+            "A. Solo se stampato",
+            "B. No",
+            "C. Sì",
+            "D. Solo se positivo"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-4"
+        },
+        {
+          "id": "programming-0-3-chapter-4-quiz-2",
+          "concept": "4. Numeri reali, virgola mobile e precisione finita",
+          "prompt": "Una tolleranza deve dipendere da?",
+          "choices": [
+            "A. Dominio, scala e conseguenze",
+            "B. Colore del codice",
+            "C. Nome del file",
+            "D. Numero di utenti soltanto"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-4"
+        },
+        {
+          "id": "programming-0-3-chapter-4-quiz-3",
+          "concept": "4. Numeri reali, virgola mobile e precisione finita",
+          "prompt": "NaN è un normale numero ordinabile?",
+          "choices": [
+            "A. Sì",
+            "B. Sempre zero",
+            "C. Sempre infinito",
+            "D. No"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-4"
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "title": "5. Testo digitale: caratteri, codifiche e Unicode",
+      "sectionId": "programming-0-3-chapter-5",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-3-chapter-5-guided",
+          "kind": "guided",
+          "lessonId": "0.3",
+          "chapterNumber": 5,
+          "title": "5. Testo digitale: caratteri, codifiche e Unicode",
+          "prompt": "Prendi la parola ‘caffè’ e individua caratteri percepiti.\nConsidera le due rappresentazioni possibili della è.\nSpiega perché un confronto diretto potrebbe fallire e quale politica dichiarare.",
+          "autoverification": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-3-chapter-5-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 5,
+            "title": "5. Testo digitale: caratteri, codifiche e Unicode",
+            "prompt": "Confronta ASCII, Unicode e UTF-8."
+          },
+          {
+            "id": "programming-0-3-chapter-5-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 5,
+            "title": "5. Testo digitale: caratteri, codifiche e Unicode",
+            "prompt": "Trova tre casi di testo che richiedono più di un byte per carattere."
+          },
+          {
+            "id": "programming-0-3-chapter-5-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 5,
+            "title": "5. Testo digitale: caratteri, codifiche e Unicode",
+            "prompt": "Progetta una regola prudente per nomi utente internazionali."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-3-chapter-5-quiz-1",
+          "concept": "5. Testo digitale: caratteri, codifiche e Unicode",
+          "prompt": "UTF-8 codifica che cosa?",
+          "choices": [
+            "A. Punti di codice Unicode in byte",
+            "B. Soltanto immagini",
+            "C. Font in pixel",
+            "D. Solo lettere inglesi"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-5"
+        },
+        {
+          "id": "programming-0-3-chapter-5-quiz-2",
+          "concept": "5. Testo digitale: caratteri, codifiche e Unicode",
+          "prompt": "Un grafema percepito può contenere più punti di codice?",
+          "choices": [
+            "A. No",
+            "B. Solo nei numeri",
+            "C. Solo su carta",
+            "D. Sì"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-5"
+        },
+        {
+          "id": "programming-0-3-chapter-5-quiz-3",
+          "concept": "5. Testo digitale: caratteri, codifiche e Unicode",
+          "prompt": "Carattere e glifo coincidono sempre?",
+          "choices": [
+            "A. Solo in Unicode",
+            "B. Solo in ASCII",
+            "C. No",
+            "D. Sì"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-5"
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "title": "6. Immagini digitali: pixel, colore, risoluzione e vettori",
+      "sectionId": "programming-0-3-chapter-6",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-3-chapter-6-guided",
+          "kind": "guided",
+          "lessonId": "0.3",
+          "chapterNumber": 6,
+          "title": "6. Immagini digitali: pixel, colore, risoluzione e vettori",
+          "prompt": "Calcola i pixel di un’immagine 1920×1080.\nMoltiplica per 3 byte per una stima RGB grezza.\nConfronta la stima con un file compresso e spiega la differenza.",
+          "autoverification": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-3-chapter-6-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 6,
+            "title": "6. Immagini digitali: pixel, colore, risoluzione e vettori",
+            "prompt": "Progetta un formato minimale per una piccola immagine in bianco e nero."
+          },
+          {
+            "id": "programming-0-3-chapter-6-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 6,
+            "title": "6. Immagini digitali: pixel, colore, risoluzione e vettori",
+            "prompt": "Spiega il rapporto d’aspetto con due esempi."
+          },
+          {
+            "id": "programming-0-3-chapter-6-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 6,
+            "title": "6. Immagini digitali: pixel, colore, risoluzione e vettori",
+            "prompt": "Confronta ridimensionamento raster e vettoriale."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-3-chapter-6-quiz-1",
+          "concept": "6. Immagini digitali: pixel, colore, risoluzione e vettori",
+          "prompt": "Che cos’è un raster?",
+          "choices": [
+            "A. Soltanto una linea",
+            "B. Un file audio",
+            "C. Una CPU",
+            "D. Una griglia di pixel"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-6"
+        },
+        {
+          "id": "programming-0-3-chapter-6-quiz-2",
+          "concept": "6. Immagini digitali: pixel, colore, risoluzione e vettori",
+          "prompt": "Più megapixel garantiscono qualità maggiore?",
+          "choices": [
+            "A. Sempre il doppio",
+            "B. Solo nei loghi",
+            "C. No",
+            "D. Sì"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-6"
+        },
+        {
+          "id": "programming-0-3-chapter-6-quiz-3",
+          "concept": "6. Immagini digitali: pixel, colore, risoluzione e vettori",
+          "prompt": "Un vettore conserva principalmente?",
+          "choices": [
+            "A. Testo UTF-8 soltanto",
+            "B. Forme e istruzioni geometriche",
+            "C. Ogni pixel finale obbligatorio",
+            "D. Campioni audio"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-6"
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "title": "7. Audio digitale: campionamento, frequenza e quantizzazione",
+      "sectionId": "programming-0-3-chapter-7",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-3-chapter-7-guided",
+          "kind": "guided",
+          "lessonId": "0.3",
+          "chapterNumber": 7,
+          "title": "7. Audio digitale: campionamento, frequenza e quantizzazione",
+          "prompt": "Calcola i campioni di un secondo a 48.000 campioni/s.\nMoltiplica per 16 bit e due canali.\nConverti in byte e confronta con dieci secondi.",
+          "autoverification": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-3-chapter-7-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 7,
+            "title": "7. Audio digitale: campionamento, frequenza e quantizzazione",
+            "prompt": "Spiega aliasing con un esempio visivo o sonoro."
+          },
+          {
+            "id": "programming-0-3-chapter-7-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 7,
+            "title": "7. Audio digitale: campionamento, frequenza e quantizzazione",
+            "prompt": "Confronta mono e stereo."
+          },
+          {
+            "id": "programming-0-3-chapter-7-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 7,
+            "title": "7. Audio digitale: campionamento, frequenza e quantizzazione",
+            "prompt": "Progetta un calcolo della dimensione PCM per un minuto."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-3-chapter-7-quiz-1",
+          "concept": "7. Audio digitale: campionamento, frequenza e quantizzazione",
+          "prompt": "Che cosa misura la frequenza di campionamento?",
+          "choices": [
+            "A. Numero di file",
+            "B. Lunghezza del nome",
+            "C. Campioni acquisiti per secondo",
+            "D. Volume massimo"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-7"
+        },
+        {
+          "id": "programming-0-3-chapter-7-quiz-2",
+          "concept": "7. Audio digitale: campionamento, frequenza e quantizzazione",
+          "prompt": "Che cos’è la quantizzazione?",
+          "choices": [
+            "A. Traduzione del testo",
+            "B. Assegnazione dei campioni a livelli discreti",
+            "C. Aumento dei canali",
+            "D. Cancellazione del file"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-7"
+        },
+        {
+          "id": "programming-0-3-chapter-7-quiz-3",
+          "concept": "7. Audio digitale: campionamento, frequenza e quantizzazione",
+          "prompt": "Che cos’è il clipping?",
+          "choices": [
+            "A. Superamento dell’intervallo rappresentabile",
+            "B. Silenzio perfetto",
+            "C. Compressione senza perdita",
+            "D. Aumento della memoria"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-7"
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "title": "8. Compressione: ridondanza, perdita e compromessi",
+      "sectionId": "programming-0-3-chapter-8",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-3-chapter-8-guided",
+          "kind": "guided",
+          "lessonId": "0.3",
+          "chapterNumber": 8,
+          "title": "8. Compressione: ridondanza, perdita e compromessi",
+          "prompt": "Comprimi concettualmente AAAAABBBCC con conteggi.\nVerifica che la ricostruzione sia esatta.\nConfronta il vantaggio con una sequenza ABCDEFGHI.",
+          "autoverification": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-3-chapter-8-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 8,
+            "title": "8. Compressione: ridondanza, perdita e compromessi",
+            "prompt": "Classifica cinque tipi di dati per compressione appropriata."
+          },
+          {
+            "id": "programming-0-3-chapter-8-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 8,
+            "title": "8. Compressione: ridondanza, perdita e compromessi",
+            "prompt": "Spiega la ricodifica generazionale."
+          },
+          {
+            "id": "programming-0-3-chapter-8-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 8,
+            "title": "8. Compressione: ridondanza, perdita e compromessi",
+            "prompt": "Definisci criteri per scegliere un formato di immagine web."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-3-chapter-8-quiz-1",
+          "concept": "8. Compressione: ridondanza, perdita e compromessi",
+          "prompt": "La compressione lossless permette?",
+          "choices": [
+            "A. Solo testo",
+            "B. Ricostruzione esatta",
+            "C. Perdita obbligatoria",
+            "D. Solo immagini"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-8"
+        },
+        {
+          "id": "programming-0-3-chapter-8-quiz-2",
+          "concept": "8. Compressione: ridondanza, perdita e compromessi",
+          "prompt": "Un file casuale è facilmente comprimibile?",
+          "choices": [
+            "A. In genere no",
+            "B. Sempre",
+            "C. Solo se grande",
+            "D. Solo con Internet"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-8"
+        },
+        {
+          "id": "programming-0-3-chapter-8-quiz-3",
+          "concept": "8. Compressione: ridondanza, perdita e compromessi",
+          "prompt": "Ricodificare più volte con perdita può degradare?",
+          "choices": [
+            "A. No",
+            "B. Solo i nomi",
+            "C. Solo i file vuoti",
+            "D. Sì"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-8"
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "title": "9. File, formati, estensioni e metadati",
+      "sectionId": "programming-0-3-chapter-9",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-3-chapter-9-guided",
+          "kind": "guided",
+          "lessonId": "0.3",
+          "chapterNumber": 9,
+          "title": "9. File, formati, estensioni e metadati",
+          "prompt": "Immagina un formato con firma, versione, lunghezza e testo UTF-8.\nDefinisci i controlli prima di leggere il testo.\nAggiungi casi di firma errata, lunghezza eccessiva e dati troncati.",
+          "autoverification": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-3-chapter-9-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 9,
+            "title": "9. File, formati, estensioni e metadati",
+            "prompt": "Confronta estensione, MIME type e firma interna."
+          },
+          {
+            "id": "programming-0-3-chapter-9-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 9,
+            "title": "9. File, formati, estensioni e metadati",
+            "prompt": "Crea una checklist per importare file non attendibili."
+          },
+          {
+            "id": "programming-0-3-chapter-9-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 9,
+            "title": "9. File, formati, estensioni e metadati",
+            "prompt": "Progetta una migrazione con copia di sicurezza e verifica."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-3-chapter-9-quiz-1",
+          "concept": "9. File, formati, estensioni e metadati",
+          "prompt": "Cambiare estensione converte un formato?",
+          "choices": [
+            "A. No",
+            "B. Sì",
+            "C. Sempre",
+            "D. Solo per immagini"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-9"
+        },
+        {
+          "id": "programming-0-3-chapter-9-quiz-2",
+          "concept": "9. File, formati, estensioni e metadati",
+          "prompt": "Che cosa fa un parser?",
+          "choices": [
+            "A. Aumenta la RAM",
+            "B. Disegna ogni icona",
+            "C. Cambia la CPU",
+            "D. Interpreta byte secondo regole di formato"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-9"
+        },
+        {
+          "id": "programming-0-3-chapter-9-quiz-3",
+          "concept": "9. File, formati, estensioni e metadati",
+          "prompt": "I metadati possono essere sensibili?",
+          "choices": [
+            "A. Solo se numerici",
+            "B. Solo se compressi",
+            "C. Sì",
+            "D. No"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-9"
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "title": "10. Integrità, errori, ridondanza e uso responsabile dei dati",
+      "sectionId": "programming-0-3-chapter-10",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-3-chapter-10-guided",
+          "kind": "guided",
+          "lessonId": "0.3",
+          "chapterNumber": 10,
+          "title": "10. Integrità, errori, ridondanza e uso responsabile dei dati",
+          "prompt": "Progetta la protezione di un archivio di esercizi.\nDistingui modifica accidentale, cancellazione e accesso non autorizzato.\nAssocia checksum, backup, permessi e cifratura ai rischi appropriati.",
+          "autoverification": "AUTOVERIFICA  La risposta deve nominare i componenti, descrivere il flusso e separare ciò che è certo da ciò che è soltanto un’ipotesi."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-3-chapter-10-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 10,
+            "title": "10. Integrità, errori, ridondanza e uso responsabile dei dati",
+            "prompt": "Crea una strategia di backup con prova di ripristino."
+          },
+          {
+            "id": "programming-0-3-chapter-10-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 10,
+            "title": "10. Integrità, errori, ridondanza e uso responsabile dei dati",
+            "prompt": "Confronta checksum, hash, MAC e firma a livello concettuale."
+          },
+          {
+            "id": "programming-0-3-chapter-10-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.3",
+            "chapterNumber": 10,
+            "title": "10. Integrità, errori, ridondanza e uso responsabile dei dati",
+            "prompt": "Analizza il ciclo di vita responsabile di un dato personale."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-3-chapter-10-quiz-1",
+          "concept": "10. Integrità, errori, ridondanza e uso responsabile dei dati",
+          "prompt": "Un hash da solo autentica sempre il mittente?",
+          "choices": [
+            "A. Sì",
+            "B. Solo se corto",
+            "C. Solo offline",
+            "D. No"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-10"
+        },
+        {
+          "id": "programming-0-3-chapter-10-quiz-2",
+          "concept": "10. Integrità, errori, ridondanza e uso responsabile dei dati",
+          "prompt": "Backup e sincronizzazione coincidono?",
+          "choices": [
+            "A. Sempre",
+            "B. Solo nel cloud",
+            "C. No",
+            "D. Sì"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-10"
+        },
+        {
+          "id": "programming-0-3-chapter-10-quiz-3",
+          "concept": "10. Integrità, errori, ridondanza e uso responsabile dei dati",
+          "prompt": "Integrità significa che il contenuto è vero?",
+          "choices": [
+            "A. Solo per immagini",
+            "B. No, significa che non è cambiato rispetto al riferimento",
+            "C. Sì",
+            "D. Solo per numeri"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-3-chapter-10"
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    [
+      "Rappresentazione",
+      "Associazione controllata fra fenomeni o concetti e simboli."
+    ],
+    [
+      "Dominio",
+      "Insieme dei valori o casi considerati."
+    ],
+    [
+      "Codifica",
+      "Regola che associa configurazioni a significati."
+    ],
+    [
+      "Formato",
+      "Struttura con cui dati e metadati sono organizzati."
+    ],
+    [
+      "Granularità",
+      "Livello di dettaglio scelto nella rappresentazione."
+    ],
+    [
+      "Base",
+      "Numero di cifre disponibili e fattore dei pesi posizionali."
+    ],
+    [
+      "Sistema posizionale",
+      "Sistema in cui il valore della cifra dipende dalla posizione."
+    ],
+    [
+      "Binario",
+      "Sistema in base 2."
+    ],
+    [
+      "Esadecimale",
+      "Sistema in base 16."
+    ],
+    [
+      "Riporto",
+      "Trasferimento alla posizione successiva quando una colonna supera la base."
+    ],
+    [
+      "Intero senza segno",
+      "Rappresentazione destinata a valori non negativi."
+    ],
+    [
+      "Complemento a due",
+      "Convenzione comune per interi con segno."
+    ],
+    [
+      "Overflow",
+      "Risultato fuori dall’intervallo rappresentabile."
+    ],
+    [
+      "Larghezza",
+      "Numero di bit assegnato alla rappresentazione."
+    ],
+    [
+      "Conversione restringente",
+      "Passaggio a un formato con intervallo o precisione minore."
+    ],
+    [
+      "Virgola mobile",
+      "Rappresentazione approssimata con significando ed esponente."
+    ],
+    [
+      "Precisione",
+      "Quantità di informazione significativa conservata."
+    ],
+    [
+      "Arrotondamento",
+      "Scelta di un valore rappresentabile vicino al risultato ideale."
+    ],
+    [
+      "NaN",
+      "Valore speciale che indica un risultato numerico non definito."
+    ],
+    [
+      "Tolleranza",
+      "Scarto accettato in un confronto approssimato."
+    ],
+    [
+      "Unicode",
+      "Standard per identificare caratteri di molti sistemi di scrittura."
+    ],
+    [
+      "Punto di codice",
+      "Identificatore numerico di un elemento Unicode."
+    ],
+    [
+      "UTF-8",
+      "Codifica variabile dei punti di codice in byte."
+    ],
+    [
+      "Grafema",
+      "Unità di scrittura percepita dal lettore."
+    ],
+    [
+      "Glifo",
+      "Forma grafica usata per rendere un carattere."
+    ],
+    [
+      "Pixel",
+      "Elemento campionato di un’immagine raster."
+    ],
+    [
+      "Risoluzione",
+      "Dimensioni della matrice in pixel."
+    ],
+    [
+      "Profondità di colore",
+      "Numero di bit usati per rappresentare il colore."
+    ],
+    [
+      "Canale alfa",
+      "Componente associata alla trasparenza."
+    ],
+    [
+      "Vettoriale",
+      "Rappresentazione tramite forme geometriche e trasformazioni."
+    ],
+    [
+      "Campione",
+      "Misura discreta del segnale in un istante."
+    ],
+    [
+      "Frequenza di campionamento",
+      "Numero di campioni acquisiti al secondo."
+    ],
+    [
+      "Quantizzazione",
+      "Mappatura delle misure su livelli discreti."
+    ],
+    [
+      "Aliasing",
+      "Comparsa di componenti errate dovuta a campionamento insufficiente."
+    ],
+    [
+      "Clipping",
+      "Taglio del segnale oltre l’intervallo disponibile."
+    ],
+    [
+      "Compressione",
+      "Rappresentazione con minore quantità di dati."
+    ],
+    [
+      "Lossless",
+      "Senza perdita, con ricostruzione esatta."
+    ],
+    [
+      "Lossy",
+      "Con perdita controllata di informazione."
+    ],
+    [
+      "Ridondanza",
+      "Informazione ripetuta o prevedibile sfruttabile."
+    ],
+    [
+      "Artefatto",
+      "Distorsione introdotta dalla rappresentazione o compressione."
+    ],
+    [
+      "File",
+      "Sequenza di byte conservata dal file system."
+    ],
+    [
+      "Estensione",
+      "Suffisso del nome usato come indicazione del tipo."
+    ],
+    [
+      "Parser",
+      "Componente che interpreta dati secondo una grammatica o formato."
+    ],
+    [
+      "Metadato",
+      "Dato che descrive altri dati."
+    ],
+    [
+      "Migrazione",
+      "Trasformazione controllata verso struttura o versione diversa."
+    ],
+    [
+      "Integrità",
+      "Proprietà di dati non modificati in modo non autorizzato o non rilevato."
+    ],
+    [
+      "Checksum",
+      "Valore di controllo per rilevare cambiamenti accidentali."
+    ],
+    [
+      "Hash crittografico",
+      "Impronta con proprietà di resistenza utili alla sicurezza."
+    ],
+    [
+      "Firma digitale",
+      "Meccanismo crittografico che collega dati e chiave di firma."
+    ],
+    [
+      "Backup",
+      "Copia separata progettata per il recupero."
+    ]
+  ],
+  "summary": [
+    "Ogni dato digitale è una rappresentazione costruita per uno scopo. I bit acquistano significato tramite codifiche e formati; lo spazio finito impone intervalli e precisione; testi, immagini e audio richiedono modelli specifici; la compressione sfrutta ridondanza o accetta perdita; file e metadati permettono lo scambio; controlli, firme e backup proteggono proprietà diverse. Comprendere queste scelte permette di prevedere errori che la sola sintassi non rivela."
+  ],
+  "finalAssessment": {
+    "lessonId": "0.3",
+    "title": "Prova finale di padronanza",
+    "prompt": "Scegli un contenuto digitale reale — fotografia, registrazione audio, documento testuale o insieme di misure — e produci un’analisi di 900–1.300 parole che includa:",
+    "deliverables": [
+      "fenomeno e scopo della rappresentazione;",
+      "unità, dominio, precisione e casi mancanti;",
+      "codifica e formato;",
+      "stima ragionata della dimensione non compressa;",
+      "eventuale compressione e perdita accettata;",
+      "metadati necessari e dati sensibili da evitare;",
+      "almeno quattro modi di corruzione o interpretazione errata;",
+      "strategia di verifica, conservazione e recupero."
+    ],
+    "rubric": [
+      [
+        "Dimensione",
+        "Essenziale",
+        "Solida",
+        "Piena padronanza"
+      ],
+      [
+        "Modello",
+        "Scopo riconoscibile",
+        "Proprietà conservate e omesse dichiarate",
+        "Alternative confrontate con conseguenze"
+      ],
+      [
+        "Numeri",
+        "Base o precisione citata",
+        "Intervallo e approssimazione corretti",
+        "Casi limite calcolati e motivati"
+      ],
+      [
+        "Formato",
+        "Tipo di file nominato",
+        "Codifica, metadati e parser distinti",
+        "Compatibilità e migrazione considerate"
+      ],
+      [
+        "Qualità",
+        "Dimensione o qualità descritta",
+        "Compressione adeguata allo scopo",
+        "Compromessi misurabili e reversibilità valutati"
+      ],
+      [
+        "Protezione",
+        "Backup o controllo citato",
+        "Rischi associati a controlli appropriati",
+        "Integrità, autenticità e governance distinte"
+      ]
+    ],
+    "completionCriteria": [
+      "Tutti i dieci capitoli sono stati letti e annotati.",
+      "Sono state completate le conversioni binarie e i calcoli guidati.",
+      "Per ogni capitolo è stato prodotto almeno un esempio personale e un caso limite.",
+      "Sono stati completati tutti gli esercizi guidati e almeno venti esercizi autonomi.",
+      "Il punteggio complessivo dei quiz è almeno 24/30, con correzione motivata degli errori.",
+      "La prova finale raggiunge almeno il livello Solida in ogni dimensione.",
+      "Il lettore sa spiegare perché i bit non possiedono significato senza codifica, formato e contesto."
+    ]
+  },
+  "sourceNotes": [
+    "Il frontespizio identifica la Lezione 0.3; le intestazioni interne dei capitoli riportano Lezione 0.2.",
+    "Il documento sorgente non viene incluso nel repository su richiesta editoriale."
+  ]
+}
+
