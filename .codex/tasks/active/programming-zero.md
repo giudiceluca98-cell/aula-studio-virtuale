@@ -260,11 +260,15 @@ Contenuti convertiti:
 
 Verifiche: test mirato 21/21, suite completa 151/151, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 
-## Estensione in corso · Lezione 2.1
+## Estensione in revisione · Lezione 2.1
 
 Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_2.1_Dal_file_py_al_primo_programma.docx`. Il DOCX non verrà caricato nel repository. Al momento non è presente un indice editoriale conclusivo del Modulo 2.
 
 File riservati: artefatto 2.1, `src/lib/catalog/subjects/programming-zero-lesson.ts`, `src/lib/programming-lesson-progress.ts`, `tests/programming-subject.test.ts`. File condivisi prenotati: nessuno. Dipendenza: PR #37; branch e Draft PR impilati sulla lezione 1.9.
+
+Contenuti convertiti: 11 sezioni, 914 blocchi, 60 esercizi, 30 quiz e 60 voci di glossario; laboratorio, rubrica e criteri finali conservati. SHA-256 `e2376f901858f41528ddaead1396d38a9f5d0c4b80db726911f0e6b3f593260a`; nessun DOCX caricato.
+
+Verifiche: test mirato 21/21, suite completa 151/151, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 
 ## Estensione in revisione · Lezione 1.9
 
