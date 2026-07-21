@@ -50,6 +50,7 @@ import { useRoomRealtime } from "@/hooks/use-room-realtime";
 import { useRoomPresence } from "@/hooks/use-room-presence";
 import { useAutosaveSession } from "@/hooks/use-autosave-session";
 import { useAudioCall } from "@/hooks/use-audio-call";
+import { useIncomingCallRingtone } from "@/hooks/use-incoming-call-ringtone";
 import { copySessionSummary, generateSessionSummary } from "@/lib/session-summary";
 import type { CourseRemovalImpact, MaterialRemovalImpact } from "@/lib/room-content-removal";
 import {
@@ -515,6 +516,8 @@ export function StudyRoom({ roomId }: { roomId: string }) {
   const automaticTaskProgress = currentTrackedTasks.length
     ? Math.round((currentCompletedTasks.length / currentTrackedTasks.length) * 100)
     : 0;
+
+  useIncomingCallRingtone(Boolean(incomingCall));
 
   const audioCall = useAudioCall({
     roomId,
