@@ -8,7 +8,7 @@ Questo file registra incarichi temporanei, proprietà dei file e dipendenze tra 
 |---|---|---|---|---|---|---|---|
 | Completamento Programmazione da zero · Lezione 0.3 | Codex — contenuto ufficiale 0.3 convertito in codice | `codex/programming-zero-lesson-0-3` | Completato | Artefatto 0.3, aggregatore, progressi e test | Nessuno | [PR #4](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/4) | 2026-07-21 |
 | Suoneria chiamata in arrivo | Codex | `codex/incoming-call-ringtone` | Completato | `src/hooks/use-incoming-call-ringtone.ts`, `tests/incoming-call-ringtone.test.tsx` | `src/components/room/study-room.tsx` | [PR #5](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/5) | 2026-07-21 |
-| Navigazione moduli e lezioni separate | Codex | `codex/lesson-module-navigation` | In revisione | aggregatore, area di lavoro e test dedicati | `src/components/room/programming-lesson-workspace.tsx` (area protetta) | Da aprire | 2026-07-21 |
+| Navigazione moduli e lezioni separate | Codex | `codex/lesson-module-navigation` | In revisione | aggregatore, area di lavoro e test dedicati | `src/components/room/programming-lesson-workspace.tsx` (area protetta) | [PR #6](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/6) | 2026-07-21 |
 | Matematica da zero | Qualunque Codex, non ancora assegnato | `codex/mathematics-zero` | Disponibile | Vedere scheda attività | Da dichiarare alla presa in carico | — | 2026-07-21 |
 
 Stati ammessi: `Disponibile`, `In corso`, `In revisione`, `Bloccato`, `Completato`.

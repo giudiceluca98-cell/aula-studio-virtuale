@@ -3,7 +3,7 @@
 Stato: in revisione
 Assegnazione: Codex
 Branch: `codex/lesson-module-navigation`
-Pull request: da aprire
+Pull request: [#6](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/6)
 
 ## Obiettivo
 
