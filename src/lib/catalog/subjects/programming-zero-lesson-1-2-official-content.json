@@ -1,0 +1,4836 @@
+{
+  "id": "1.2",
+  "title": "Installare Python",
+  "source": {
+    "filename": "Programmazione_da_Zero_Lezione_1.2_Installare_Python.docx",
+    "sha256": "3cc6e6166ef7e3ead6e11dd70a23aca68dc7bf4773bbf928eff4260cfdef952a",
+    "storedInRepository": false,
+    "normalizations": []
+  },
+  "metrics": {
+    "paragraphs": 792,
+    "tables": 13,
+    "textCharacters": 61339
+  },
+  "objectives": [
+    "Scegliere una fonte e una distribuzione appropriate.",
+    "Distinguere CPU, sistema e architettura del processo.",
+    "Applicare procedure motivate su Windows, macOS e Linux.",
+    "Comprendere PATH, alias e launcher.",
+    "Identificare eseguibile, implementazione e versione.",
+    "Eseguire un collaudo non distruttivo.",
+    "Diagnosticare installazioni multiple per livelli.",
+    "Gestire aggiornamento, rimozione e dossier di accettazione."
+  ],
+  "sections": [
+    {
+      "id": "programming-1-2-introduction",
+      "lessonId": "1.2",
+      "chapterNumber": 0,
+      "title": "Lezione 1.2 · Installare Python",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "AULA STUDIO VIRTUALE"
+        },
+        {
+          "type": "paragraph",
+          "text": "Programmazione da Zero"
+        },
+        {
+          "type": "paragraph",
+          "text": "Manuale ufficiale"
+        },
+        {
+          "type": "paragraph",
+          "text": "MODULO 1"
+        },
+        {
+          "type": "paragraph",
+          "text": "Lezione 1.2"
+        },
+        {
+          "type": "paragraph",
+          "text": "Installare Python"
+        },
+        {
+          "type": "paragraph",
+          "text": "Riconoscere interprete, versione e architettura"
+        },
+        {
+          "type": "paragraph",
+          "text": "DESTINATARIO  Lettore principiante. Il testo distingue Windows, macOS e Linux e separa procedure correnti da principi di verifica durevoli."
+        },
+        {
+          "type": "paragraph",
+          "text": "Edizione editoriale · 2026"
+        },
+        {
+          "type": "heading",
+          "text": "Come usare questa lezione"
+        },
+        {
+          "type": "paragraph",
+          "text": "La Lezione 1.1 ha definito ambiente, interprete, shell, percorso e progetto. Questa lezione applica quel modello all’installazione di Python. Le procedure di piattaforma possono cambiare: ogni istruzione variabile è accompagnata da una prova locale e dalla regola di consultare la documentazione ufficiale corrente prima di modificare il sistema."
+        },
+        {
+          "type": "paragraph",
+          "text": "AVVERTENZA  Su computer scolastici, aziendali o condivisi non aggirare restrizioni e non usare privilegi amministrativi senza autorizzazione. Conserva le installazioni richieste dal sistema operativo."
+        },
+        {
+          "type": "heading",
+          "text": "Risultati di apprendimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Scegliere una fonte e una distribuzione appropriate."
+        },
+        {
+          "type": "paragraph",
+          "text": "Distinguere CPU, sistema e architettura del processo."
+        },
+        {
+          "type": "paragraph",
+          "text": "Applicare procedure motivate su Windows, macOS e Linux."
+        },
+        {
+          "type": "paragraph",
+          "text": "Comprendere PATH, alias e launcher."
+        },
+        {
+          "type": "paragraph",
+          "text": "Identificare eseguibile, implementazione e versione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Eseguire un collaudo non distruttivo."
+        },
+        {
+          "type": "paragraph",
+          "text": "Diagnosticare installazioni multiple per livelli."
+        },
+        {
+          "type": "paragraph",
+          "text": "Gestire aggiornamento, rimozione e dossier di accettazione."
+        },
+        {
+          "type": "heading",
+          "text": "Mappa della lezione"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Cap.",
+              "Nucleo concettuale"
+            ],
+            [
+              "1",
+              "Prima di installare: obiettivo, fonte e criterio di successo"
+            ],
+            [
+              "2",
+              "Inventario del sistema: sistema operativo, CPU e architettura"
+            ],
+            [
+              "3",
+              "Installazione su Windows: Python Install Manager e comandi"
+            ],
+            [
+              "4",
+              "Installazione su macOS: pacchetto ufficiale e Python di sistema"
+            ],
+            [
+              "5",
+              "Installazione su Linux: pacchetti della distribuzione e Python di sistema"
+            ],
+            [
+              "6",
+              "PATH, alias e risoluzione dei comandi"
+            ],
+            [
+              "7",
+              "Riconoscere versione, implementazione ed eseguibile"
+            ],
+            [
+              "8",
+              "Verifica funzionale: libreria standard, pip e codice di uscita"
+            ],
+            [
+              "9",
+              "Installazioni multiple, conflitti e diagnosi per livelli"
+            ],
+            [
+              "10",
+              "Aggiornamento, rimozione e dossier di accettazione"
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Prerequisiti e materiali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Prerequisito: Lezione 1.1. Servono accesso autorizzato al computer, un terminale e spazio per registrare le prove. Prima di installare si leggono i primi due capitoli e si definiscono criteri di accettazione."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-2-chapter-1",
+      "lessonId": "1.2",
+      "chapterNumber": 1,
+      "title": "1. Prima di installare: obiettivo, fonte e criterio di successo",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.2 · CAPITOLO 1 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "1. Prima di installare: obiettivo, fonte e criterio di successo"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Installare o verificare Python con metodo osservabile, distinguendo fonte, piattaforma, comando, eseguibile e proprietà del processo."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Installare Python non significa soltanto completare una procedura grafica. Significa scegliere una distribuzione affidabile, introdurre uno o più eseguibili nel sistema, stabilire come saranno trovati e verificare che l’interprete desiderato esegua i comandi del progetto. La decisione deve partire dall’uso previsto e dai vincoli della macchina."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Comprare un utensile non basta: occorre sapere chi lo produce, se è adatto al lavoro, dove verrà conservato e come controllare che funzioni. L’icona nel menu equivale alla scatola; la prova vera consiste nell’identificare l’utensile e usarlo in condizioni note."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Python è un linguaggio; CPython è l’implementazione di riferimento distribuita dal progetto Python. Una distribuzione può includere CPython, libreria standard, strumenti e modalità di aggiornamento. La fonte ufficiale generale è python.org, mentre Linux usa spesso pacchetti mantenuti dalla distribuzione. Il criterio di accettazione deve includere percorso dell’eseguibile, versione, implementazione, architettura, comando usato, import della libreria standard e codice di uscita riuscito."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Uno studente sceglie la distribuzione ufficiale compatibile con il proprio sistema e conserva la pagina di rilascio."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un computer gestito richiede autorizzazione: si documenta il vincolo invece di aggirarlo."
+        },
+        {
+          "type": "paragraph",
+          "text": "La verifica finale stampa sys.executable e non si limita a mostrare una finestra."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il primo risultato di un motore di ricerca non è automaticamente una fonte affidabile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un’icona chiamata Python non dimostra quale versione verrà usata dal terminale."
+        },
+        {
+          "type": "paragraph",
+          "text": "La versione numericamente più nuova non è sempre compatibile con il corso, il progetto o il sistema."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una carta d’identità collega nome, soggetto e caratteristiche verificabili. Il comando python è soltanto un nome; percorso, versione e implementazione formano l’identità tecnica dell’interprete trovato."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 1.1 — Installazione e verifica per livelli"
+        },
+        {
+          "type": "paragraph",
+          "text": "BISOGNO + VINCOLI  vFONTE AUTOREVOLE -> PACCHETTO ADATTO  vINSTALLAZIONE CONTROLLATA  vRISOLUZIONE DEL COMANDO  vIDENTITÀ: percorso + versione + implementazione + architettura  vPROVA -> REGISTRO -> ACCETTA O CORREGGI"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Le versioni supportate e le modalità consigliate cambiano. Un manuale durevole separa il metodo stabile dal dettaglio corrente: identifica sempre la pagina ufficiale, controlla data e stato del rilascio, legge i requisiti e registra la scelta. Non si disattivano protezioni né si richiedono privilegi amministrativi se l’obiettivo può essere raggiunto con un’installazione per utente."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere Python, CPython e una distribuzione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Installare senza inventario iniziale."
+        },
+        {
+          "type": "paragraph",
+          "text": "Usare ‘si apre’ come unico criterio di successo."
+        },
+        {
+          "type": "paragraph",
+          "text": "Scaricare da un mirror sconosciuto senza verificarne provenienza."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Macchina senza rete."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sistema operativo non più supportato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Account senza permessi di installazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Corso che richiede una versione diversa dalla più recente."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Non aggirare politiche, non disattivare protezioni e non cancellare installazioni sconosciute. Registra lo stato, modifica una cosa e verifica."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale problema deve risolvere l’installazione?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale evidenza collega il pacchetto alla fonte?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quali risultati rendono accettabile l’ambiente?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Compila inventario, vincoli e uso previsto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Definisci una fonte primaria e una procedura di verifica."
+        },
+        {
+          "type": "paragraph",
+          "text": "Scrivi sei criteri di accettazione osservabili prima di installare."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve includere fonte, piattaforma, comando, percorso effettivo, proprietà misurata ed evidenza dell’esito."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta linguaggio, implementazione e distribuzione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un download da fonte non ufficiale."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta una procedura per un computer gestito."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Quale elemento identifica davvero l’interprete?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Percorso e proprietà verificate"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. L’icona"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Il colore della finestra"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Il nome del corso"
+        },
+        {
+          "type": "heading",
+          "text": "2. Python e CPython sono sinonimi perfetti?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Solo su Windows"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Solo in IDLE"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Sì"
+        },
+        {
+          "type": "heading",
+          "text": "3. Quando va definito il criterio di successo?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Prima dell’installazione"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Mai"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Dopo aver cancellato tutto"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo in caso di errore"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Python",
+              "Linguaggio di programmazione e progetto che ne definisce le specifiche."
+            ],
+            [
+              "CPython",
+              "Implementazione di riferimento di Python."
+            ],
+            [
+              "Distribuzione",
+              "Pacchetto e metodo con cui interprete e strumenti vengono forniti."
+            ],
+            [
+              "Fonte primaria",
+              "Sito o canale ufficiale del produttore o manutentore."
+            ],
+            [
+              "Criterio di accettazione",
+              "Condizione osservabile che definisce il successo."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Python è un linguaggio; CPython è l’implementazione di riferimento distribuita dal progetto Python. Una distribuzione può includere CPython, libreria standard, strumenti e modalità di aggiornamento. La fonte ufficiale generale è python.org, mentre Linux usa spesso pacchetti mantenuti dalla distribuzione. Il criterio di accettazione deve includere percorso dell’eseguibile, versione, implementazione, architettura, comando usato, import della libreria standard e codice di uscita riuscito. La padronanza consiste nel dimostrare quale interprete è stato avviato e perché la procedura è appropriata al contesto."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre un esempio e un controesempio motivati."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e associare ogni prova a un livello."
+        },
+        {
+          "type": "paragraph",
+          "text": "So analizzare almeno tre casi limite senza aggirare protezioni."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre nel quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-2-chapter-2",
+      "lessonId": "1.2",
+      "chapterNumber": 2,
+      "title": "2. Inventario del sistema: sistema operativo, CPU e architettura",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.2 · CAPITOLO 2 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "2. Inventario del sistema: sistema operativo, CPU e architettura"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Installare o verificare Python con metodo osservabile, distinguendo fonte, piattaforma, comando, eseguibile e proprietà del processo."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Prima del download occorre sapere per quale piattaforma si sta scegliendo il pacchetto. ‘64 bit’ può riferirsi alla CPU, al sistema operativo o al processo Python; queste proprietà sono correlate ma non sempre identiche, specialmente con emulazione o compatibilità."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un adattatore deve combaciare con presa e apparecchio. Conoscere soltanto la marca del computer non basta: forma, tensione e standard possono differire. Il pacchetto Python deve essere compatibile con sistema, architettura e politiche della macchina."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’architettura della CPU descrive il set di istruzioni, per esempio x86-64 o ARM64. Il sistema operativo può eseguire processi nativi o emulati. L’architettura dell’interprete riguarda il processo effettivo e influenza moduli compilati e spazio di indirizzamento. Nome commerciale del dispositivo, architettura del sistema e bitness del processo devono essere registrati separatamente. I requisiti minimi dipendono dal rilascio scelto e vanno letti nella pagina ufficiale corrente."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un Mac Apple Silicon può eseguire software nativo ARM64 e, in alcuni casi, software Intel tramite traduzione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un Windows a 64 bit può ospitare applicazioni a 32 bit, ma i componenti compilati devono essere compatibili."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una distribuzione Linux espone pacchetti diversi per architetture diverse."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "La scritta 64-bit in una finestra non specificata non chiarisce quale livello descriva."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il modello del processore non prova che il sistema installato abbia la stessa architettura."
+        },
+        {
+          "type": "paragraph",
+          "text": "platform.machine() e la bitness del processo rispondono a domande collegate ma diverse."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Edificio, ascensore e carico hanno limiti distinti. Un edificio capiente non rende automaticamente ogni ascensore capace di trasportare ogni carico. CPU, sistema e processo formano livelli compatibili ma separati."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 2.1 — Installazione e verifica per livelli"
+        },
+        {
+          "type": "paragraph",
+          "text": "HARDWARE CPU  v supportaSISTEMA OPERATIVO / ARCHITETTURA  v avvia nativo o emulatoPROCESSO PYTHON / BITNESS  v caricaLIBRERIE PURE PYTHON O COMPONENTI COMPILATI"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Per conoscere la bitness del processo Python si può calcolare la dimensione di un puntatore: struct.calcsize('P') * 8. platform.machine() descrive la macchina osservata dal processo; sys.executable mostra l’eseguibile. Nessun singolo valore sostituisce l’inventario. L’architettura diventa particolarmente importante quando si installano pacchetti con codice nativo, tema approfondito nella Lezione 1.6."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Trattare CPU, sistema e processo come un solo dato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Scaricare un pacchetto dal nome simile senza leggere la piattaforma."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere ARM64 e x86-64."
+        },
+        {
+          "type": "paragraph",
+          "text": "Usare un’informazione dell’interfaccia senza annotare che cosa misura."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Esecuzione tramite emulazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sistema virtualizzato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Computer con architettura rara."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sistema aggiornabile ma temporaneamente incompatibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Non aggirare politiche, non disattivare protezioni e non cancellare installazioni sconosciute. Registra lo stato, modifica una cosa e verifica."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale livello descrive ciascun valore?"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’interprete è nativo o emulato?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale compatibilità richiederanno le dipendenze compilate?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Disegna CPU, sistema, processo e librerie come livelli."
+        },
+        {
+          "type": "paragraph",
+          "text": "Crea una scheda con valori distinti e fonte di ciascuno."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un caso in cui CPU e processo non coincidono."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve includere fonte, piattaforma, comando, percorso effettivo, proprietà misurata ed evidenza dell’esito."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta x86-64 e ARM64 senza dichiararne uno universalmente migliore."
+        },
+        {
+          "type": "paragraph",
+          "text": "Spiega bitness a un principiante."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta una verifica dopo una migrazione di architettura."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Quale proprietà descrive il processo Python?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Il nome utente"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Il disco"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. La bitness dell’interprete in esecuzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Il colore dell’IDE"
+        },
+        {
+          "type": "heading",
+          "text": "2. CPU e processo hanno sempre la stessa architettura?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Solo su Linux"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Solo offline"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Sì"
+        },
+        {
+          "type": "heading",
+          "text": "3. Che cosa misura struct.calcsize('P') * 8?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Il numero di file"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. La versione"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. La dimensione del puntatore del processo in bit"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. La RAM totale"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Architettura CPU",
+              "Famiglia di istruzioni supportata dal processore."
+            ],
+            [
+              "Bitness",
+              "Larghezza caratteristica del processo, spesso 32 o 64 bit."
+            ],
+            [
+              "ARM64",
+              "Architettura a 64 bit della famiglia ARM."
+            ],
+            [
+              "x86-64",
+              "Architettura a 64 bit della famiglia x86."
+            ],
+            [
+              "Emulazione",
+              "Esecuzione tramite traduzione o simulazione di un’altra piattaforma."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’architettura della CPU descrive il set di istruzioni, per esempio x86-64 o ARM64. Il sistema operativo può eseguire processi nativi o emulati. L’architettura dell’interprete riguarda il processo effettivo e influenza moduli compilati e spazio di indirizzamento. Nome commerciale del dispositivo, architettura del sistema e bitness del processo devono essere registrati separatamente. I requisiti minimi dipendono dal rilascio scelto e vanno letti nella pagina ufficiale corrente. La padronanza consiste nel dimostrare quale interprete è stato avviato e perché la procedura è appropriata al contesto."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre un esempio e un controesempio motivati."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e associare ogni prova a un livello."
+        },
+        {
+          "type": "paragraph",
+          "text": "So analizzare almeno tre casi limite senza aggirare protezioni."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre nel quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-2-chapter-3",
+      "lessonId": "1.2",
+      "chapterNumber": 3,
+      "title": "3. Installazione su Windows: Python Install Manager e comandi",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.2 · CAPITOLO 3 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "3. Installazione su Windows: Python Install Manager e comandi"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Installare o verificare Python con metodo osservabile, distinguendo fonte, piattaforma, comando, eseguibile e proprietà del processo."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Le istruzioni ufficiali correnti per Windows propongono Python Install Manager, ottenibile da python.org o Microsoft Store. Il gestore e i runtime Python sono componenti distinti: rimuovere il gestore non rimuove automaticamente i runtime, e più installazioni preesistenti possono influenzare i comandi."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un gestore ferroviario organizza treni diversi: non è il treno. Python Install Manager gestisce runtime e scorciatoie; il runtime è l’interprete che esegue il codice. Capire la distinzione evita di rimuovere o aggiornare il componente sbagliato."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Dopo l’installazione del gestore, i comandi python, py e pymanager possono diventare disponibili. python avvia il runtime predefinito secondo configurazione e contesto; py consente anche selezione e gestione di più versioni; pymanager è il nome non ambiguo del gestore. py list mostra i runtime e il predefinito. Alias di esecuzione, PATH e vecchio launcher possono cambiare quale comando viene trovato. Questi dettagli sono versionabili: prima dell’uso si controlla la documentazione Windows ufficiale della versione corrente."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’utente installa il gestore dalla fonte ufficiale, apre un nuovo terminale e verifica python, py e py list."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un vecchio launcher py viene riconosciuto come possibile conflitto invece di essere cancellato alla cieca."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un’installazione per utente evita privilegi amministrativi non necessari."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Digitare python e vedere lo Store non prova che un runtime corretto sia configurato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Aggiungere molte cartelle a PATH casualmente può cambiare la precedenza in modo imprevedibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Disinstallare il gestore non equivale a rimuovere tutti i runtime."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una rubrica associa nomi a contatti. Gli alias e PATH associano nomi di comando a eseguibili. Aggiungere voci duplicate senza ordine può far chiamare la persona sbagliata."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 3.1 — Installazione e verifica per livelli"
+        },
+        {
+          "type": "paragraph",
+          "text": "FONTE UFFICIALE  vPYTHON INSTALL MANAGER  +--> installa / elenca RUNTIME  +--> espone python | py | pymanager  vALIAS + PATH + CONFIGURAZIONE  vESEGUIBILE SCELTO -> VERIFICA IDENTITÀ"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "La guida ufficiale segnala che alias di esecuzione e modifiche a PATH possono richiedere diagnosi. Get-Command python e where.exe python aiutano a osservare la risoluzione, ma rispondono a strumenti diversi: PowerShell può includere alias e funzioni, while where.exe cerca file eseguibili. Non si rimuovono installazioni esistenti finché non se ne è documentato l’uso da parte di altri progetti."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Seguire vecchie schermate come se fossero universali."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere gestore, launcher e runtime."
+        },
+        {
+          "type": "paragraph",
+          "text": "Modificare PATH senza registrarne il valore precedente."
+        },
+        {
+          "type": "paragraph",
+          "text": "Usare privilegi amministrativi per comodità."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Windows gestito senza accesso allo Store."
+        },
+        {
+          "type": "paragraph",
+          "text": "Windows Server o politica che non accetta MSIX."
+        },
+        {
+          "type": "paragraph",
+          "text": "Vecchio launcher con priorità sul nuovo gestore."
+        },
+        {
+          "type": "paragraph",
+          "text": "Runtime non gestito già presente."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Non aggirare politiche, non disattivare protezioni e non cancellare installazioni sconosciute. Registra lo stato, modifica una cosa e verifica."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale componente ha installato il runtime?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale comando viene risolto e da dove?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale installazione preesistente non deve essere disturbata?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Scrivi una procedura per fonte, installazione e nuovo terminale."
+        },
+        {
+          "type": "paragraph",
+          "text": "Aggiungi prove con py list, sys.executable e versione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta una diagnosi che non cancelli installazioni esistenti."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve includere fonte, piattaforma, comando, percorso effettivo, proprietà misurata ed evidenza dell’esito."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta python, py e pymanager."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un alias che apre lo Store."
+        },
+        {
+          "type": "paragraph",
+          "text": "Crea un piano per una macchina gestita."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Quale comando elenca i runtime gestiti?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. py list"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. pip list"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. python list"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. pymanager.exe only"
+        },
+        {
+          "type": "heading",
+          "text": "2. Gestore e runtime sono lo stesso componente?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Sì"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Solo offline"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo con Store"
+        },
+        {
+          "type": "heading",
+          "text": "3. Che cosa va fatto prima di rimuovere una vecchia installazione?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Documentarne uso e dipendenze"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Cancellare PATH"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Chiudere l’editor"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Rinominare il progetto"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Python Install Manager",
+              "Strumento ufficiale corrente per gestire runtime su Windows."
+            ],
+            [
+              "Runtime",
+              "Installazione eseguibile di Python."
+            ],
+            [
+              "Alias di esecuzione",
+              "Associazione gestita da Windows fra nome e applicazione."
+            ],
+            [
+              "PATH",
+              "Elenco ordinato di posizioni usate per cercare comandi."
+            ],
+            [
+              "Launcher",
+              "Programma che seleziona e avvia un interprete."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Dopo l’installazione del gestore, i comandi python, py e pymanager possono diventare disponibili. python avvia il runtime predefinito secondo configurazione e contesto; py consente anche selezione e gestione di più versioni; pymanager è il nome non ambiguo del gestore. py list mostra i runtime e il predefinito. Alias di esecuzione, PATH e vecchio launcher possono cambiare quale comando viene trovato. Questi dettagli sono versionabili: prima dell’uso si controlla la documentazione Windows ufficiale della versione corrente. La padronanza consiste nel dimostrare quale interprete è stato avviato e perché la procedura è appropriata al contesto."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre un esempio e un controesempio motivati."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e associare ogni prova a un livello."
+        },
+        {
+          "type": "paragraph",
+          "text": "So analizzare almeno tre casi limite senza aggirare protezioni."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre nel quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-2-chapter-4",
+      "lessonId": "1.2",
+      "chapterNumber": 4,
+      "title": "4. Installazione su macOS: pacchetto ufficiale e Python di sistema",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.2 · CAPITOLO 4 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "4. Installazione su macOS: pacchetto ufficiale e Python di sistema"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Installare o verificare Python con metodo osservabile, distinguendo fonte, piattaforma, comando, eseguibile e proprietà del processo."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "macOS è un sistema di derivazione Unix, ma presenta convenzioni proprie. Il progetto Python distribuisce pacchetti .pkg firmati e notarizzati. Alcune installazioni di macOS o strumenti Apple possono fornire un comando python3 controllato dal sistema: non deve essere modificato o cancellato per fare spazio al Python del corso."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un edificio può avere un impianto tecnico riservato alla manutenzione e un impianto destinato agli occupanti. Anche se entrambi producono lo stesso servizio, manomettere quello di sistema può danneggiare altri strumenti. Una nuova installazione può convivere con quella controllata da Apple."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’installer python.org per macOS è un pacchetto standard. Le edizioni correnti ufficiali descrivono build universal2 per i Mac supportati, capaci di funzionare nativamente su Apple Silicon e Intel nei limiti dichiarati dal rilascio. L’installazione standard colloca un framework e applicazioni come IDLE; aggiunge collegamenti per i comandi. Il percorso effettivamente trovato deve essere verificato con command -v, type -a e sys.executable, senza presumere che python3 indichi sempre la nuova installazione."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Si controllano firma, requisiti e informazioni di integrità nella pagina ufficiale del rilascio."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dopo l’installazione si apre un nuovo Terminale e si confrontano command -v python3 e sys.executable."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il Python Apple in /usr/bin non viene modificato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Trascinare un’icona nel Cestino non rimuove necessariamente framework e collegamenti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il comando python può mancare mentre python3 è disponibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Avere due installazioni funzionanti non è di per sé un errore: l’ambiguità non osservata lo è."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Due chiavi possono aprire porte diverse pur avendo etichette simili. Il nome python3 è l’etichetta digitata; la risoluzione della shell stabilisce quale chiave viene davvero usata."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 4.1 — Installazione e verifica per livelli"
+        },
+        {
+          "type": "paragraph",
+          "text": "python.org / pagina rilascio  vPACCHETTO .pkg firmato e notarizzato  vFRAMEWORK + APPLICAZIONI + COLLEGAMENTI  vPATH DELLA SHELL  vpython3 RISOLTO -> sys.executable  +-- non modificare /usr/bin/python3"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’installer ufficiale può includere un’operazione per installare certificati radice usati dal Python appena installato; nomi e passaggi dipendono dal rilascio e vanno letti nel Read Me del pacchetto. I privilegi amministrativi richiesti dall’installer incidono sull’ambito dell’installazione. Su un Mac gestito si segue la politica dell’organizzazione e non si aggira Gatekeeper."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Cancellare o sostituire il Python controllato da Apple."
+        },
+        {
+          "type": "paragraph",
+          "text": "Supporre che la shell abbia riletto PATH senza aprire una nuova sessione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ignorare architettura nativa o tradotta."
+        },
+        {
+          "type": "paragraph",
+          "text": "Seguire una schermata di una vecchia versione senza leggere il pacchetto corrente."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Mac Apple Silicon con terminale avviato sotto traduzione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Account senza privilegi amministrativi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mac gestito con pacchetto aziendale."
+        },
+        {
+          "type": "paragraph",
+          "text": "Più gestori o distribuzioni già presenti."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Non aggirare politiche, non disattivare protezioni e non cancellare installazioni sconosciute. Registra lo stato, modifica una cosa e verifica."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale Python è controllato dal sistema?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il processo è nativo per l’architettura?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale collegamento rende disponibile il comando?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Disegna la coesistenza fra Python Apple e python.org."
+        },
+        {
+          "type": "paragraph",
+          "text": "Scrivi le prove command -v, type -a e sys.executable."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta una procedura che rispetti Gatekeeper e politiche locali."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve includere fonte, piattaforma, comando, percorso effettivo, proprietà misurata ed evidenza dell’esito."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Spiega universal2 senza confonderlo con due versioni linguistiche."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un terminale sotto traduzione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Crea una checklist post-installazione macOS."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Il Python in /usr/bin va rimosso?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Solo con IDLE"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Solo se vecchio"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo su Intel"
+        },
+        {
+          "type": "heading",
+          "text": "2. Che cosa mostra command -v?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. La RAM"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. La licenza"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Il comando risolto dalla shell"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Tutti i file del disco"
+        },
+        {
+          "type": "heading",
+          "text": "3. Un pacchetto ufficiale macOS dovrebbe essere?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Rinominato"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Eseguito senza leggere requisiti"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Firmato e verificabile"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Anonimo"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Pacchetto .pkg",
+              "Formato standard di installer macOS."
+            ],
+            [
+              "Universal2",
+              "Build macOS contenente supporto per architetture Apple Silicon e Intel."
+            ],
+            [
+              "Framework",
+              "Struttura macOS che raccoglie eseguibili e librerie."
+            ],
+            [
+              "Gatekeeper",
+              "Meccanismo macOS che verifica software e provenienza."
+            ],
+            [
+              "Python di sistema",
+              "Installazione controllata dal sistema o dai suoi strumenti."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’installer python.org per macOS è un pacchetto standard. Le edizioni correnti ufficiali descrivono build universal2 per i Mac supportati, capaci di funzionare nativamente su Apple Silicon e Intel nei limiti dichiarati dal rilascio. L’installazione standard colloca un framework e applicazioni come IDLE; aggiunge collegamenti per i comandi. Il percorso effettivamente trovato deve essere verificato con command -v, type -a e sys.executable, senza presumere che python3 indichi sempre la nuova installazione. La padronanza consiste nel dimostrare quale interprete è stato avviato e perché la procedura è appropriata al contesto."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre un esempio e un controesempio motivati."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e associare ogni prova a un livello."
+        },
+        {
+          "type": "paragraph",
+          "text": "So analizzare almeno tre casi limite senza aggirare protezioni."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre nel quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-2-chapter-5",
+      "lessonId": "1.2",
+      "chapterNumber": 5,
+      "title": "5. Installazione su Linux: pacchetti della distribuzione e Python di sistema",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.2 · CAPITOLO 5 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "5. Installazione su Linux: pacchetti della distribuzione e Python di sistema"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Installare o verificare Python con metodo osservabile, distinguendo fonte, piattaforma, comando, eseguibile e proprietà del processo."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Su molte distribuzioni Linux Python 3 è già presente o disponibile nei repository ufficiali. Il Python di sistema può essere richiesto dagli strumenti della distribuzione: sostituirlo manualmente o sovrascrivere il comando globale può compromettere il gestore dei pacchetti e altri servizi."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il quadro elettrico condominiale serve più appartamenti. Cambiarne un componente per alimentare un singolo dispositivo può interrompere servizi condivisi. Il Python gestito dalla distribuzione è infrastruttura: il progetto deve convivere con esso usando pacchetti, versioni e ambienti appropriati."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ogni famiglia Linux usa un gestore di pacchetti e nomi propri. Esempi comuni includono apt, dnf, zypper e apk, ma comando e versione dipendono dalla distribuzione e dal rilascio. I repository forniscono pacchetti integrati e aggiornamenti coerenti con il sistema. Compilare CPython dal sorgente è possibile, ma non è la scelta introduttiva e non si usa make install per sovrascrivere python3; la documentazione ufficiale raccomanda make altinstall quando si costruisce una versione parallela."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Si identifica distribuzione e rilascio prima di consultare la documentazione del relativo gestore."
+        },
+        {
+          "type": "paragraph",
+          "text": "Si verifica python3 --version e command -v python3 prima di installare altro."
+        },
+        {
+          "type": "paragraph",
+          "text": "Si mantiene il Python di sistema e si prepara isolamento per il progetto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "sudo pip install globale non è una strategia sicura per allestire il corso."
+        },
+        {
+          "type": "paragraph",
+          "text": "Aggiungere un collegamento python3 arbitrario in una posizione prioritaria può mascherare l’eseguibile di sistema."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un comando apt copiato su Fedora non è multipiattaforma."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il catalogo di una biblioteca locale seleziona edizioni compatibili con la propria collezione. Il repository della distribuzione privilegia integrazione e manutenzione; una fonte esterna può offrire novità ma richiede responsabilità aggiuntive."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 5.1 — Installazione e verifica per livelli"
+        },
+        {
+          "type": "paragraph",
+          "text": "DISTRIBUZIONE + RILASCIO + ARCHITETTURA  vREPOSITORY UFFICIALI  vGESTORE PACCHETTI  vPYTHON DI SISTEMA + COMPONENTI OPZIONALI  vPROGETTO ISOLATO  +-- non sovrascrivere python3 globale"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Alcune distribuzioni separano componenti come pip, venv, sviluppo o IDLE in pacchetti distinti. Il fatto che un modulo manchi non prova un’installazione corrotta: può essere una scelta di packaging. Le istruzioni devono indicare la distribuzione a cui si applicano e rimandare, come approfondimento facoltativo, alla sua documentazione ufficiale aggiornata."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Sovrascrivere il Python di sistema."
+        },
+        {
+          "type": "paragraph",
+          "text": "Usare comandi di una distribuzione su un’altra."
+        },
+        {
+          "type": "paragraph",
+          "text": "Installare globalmente pacchetti del progetto con privilegi elevati."
+        },
+        {
+          "type": "paragraph",
+          "text": "Compilare dal sorgente senza conoscere prefisso e strategia di rimozione."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Distribuzione minimale senza Python."
+        },
+        {
+          "type": "paragraph",
+          "text": "Repository aziendale interno."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sistema immutabile o container."
+        },
+        {
+          "type": "paragraph",
+          "text": "Versione del repository più conservativa di quella python.org."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Non aggirare politiche, non disattivare protezioni e non cancellare installazioni sconosciute. Registra lo stato, modifica una cosa e verifica."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Chi mantiene l’interprete presente?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale gestore e repository sono autorizzati?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quali componenti sono pacchetti separati?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Identifica distribuzione, rilascio e gestore in un caso simulato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta Python di sistema e ambiente di progetto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta una procedura senza sovrascrivere comandi globali."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve includere fonte, piattaforma, comando, percorso effettivo, proprietà misurata ed evidenza dell’esito."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta repository e compilazione dal sorgente."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza il rischio di sudo pip."
+        },
+        {
+          "type": "paragraph",
+          "text": "Crea istruzioni con rami per due famiglie Linux."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Qual è una fonte naturale su Linux?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. I repository della distribuzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Un allegato anonimo"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Il primo blog trovato"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Una cartella casuale"
+        },
+        {
+          "type": "heading",
+          "text": "2. sudo pip globale è consigliato per il progetto?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Solo con IDE"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Solo offline"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Sempre"
+        },
+        {
+          "type": "heading",
+          "text": "3. Perché non sovrascrivere python3 di sistema?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Può essere richiesto da strumenti del sistema"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Per usare meno file"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Per il colore"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Per la tastiera"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Distribuzione Linux",
+              "Sistema Linux con propri repository e politiche."
+            ],
+            [
+              "Repository",
+              "Raccolta gestita di pacchetti software."
+            ],
+            [
+              "Gestore di pacchetti",
+              "Strumento che installa e aggiorna componenti della distribuzione."
+            ],
+            [
+              "Prefisso",
+              "Radice scelta per collocare file di un’installazione."
+            ],
+            [
+              "make altinstall",
+              "Modalità di installazione parallela suggerita per evitare di mascherare python3."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ogni famiglia Linux usa un gestore di pacchetti e nomi propri. Esempi comuni includono apt, dnf, zypper e apk, ma comando e versione dipendono dalla distribuzione e dal rilascio. I repository forniscono pacchetti integrati e aggiornamenti coerenti con il sistema. Compilare CPython dal sorgente è possibile, ma non è la scelta introduttiva e non si usa make install per sovrascrivere python3; la documentazione ufficiale raccomanda make altinstall quando si costruisce una versione parallela. La padronanza consiste nel dimostrare quale interprete è stato avviato e perché la procedura è appropriata al contesto."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre un esempio e un controesempio motivati."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e associare ogni prova a un livello."
+        },
+        {
+          "type": "paragraph",
+          "text": "So analizzare almeno tre casi limite senza aggirare protezioni."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre nel quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-2-chapter-6",
+      "lessonId": "1.2",
+      "chapterNumber": 6,
+      "title": "6. PATH, alias e risoluzione dei comandi",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.2 · CAPITOLO 6 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "6. PATH, alias e risoluzione dei comandi"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Installare o verificare Python con metodo osservabile, distinguendo fonte, piattaforma, comando, eseguibile e proprietà del processo."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quando si digita python, la shell deve trasformare quel nome in un eseguibile. PATH è un elenco ordinato di cartelle, ma non è l’unico meccanismo possibile: alias, funzioni, launcher e associazioni del sistema possono intervenire. Per questo la diagnosi deve osservare la risoluzione, non indovinarla."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Cercare un nome in più elenchi ordinati restituisce la prima corrispondenza. Se una voce precedente punta a un omonimo, quella successiva non verrà usata. Cambiare l’ordine può cambiare il risultato anche se tutti i file restano identici."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "La shell analizza il comando e può applicare alias o funzioni prima della ricerca negli elementi di PATH. Ogni processo riceve un ambiente; modificare PATH in una finestra di configurazione non aggiorna necessariamente terminali già aperti. Su PowerShell Get-Command mostra come il nome viene risolto; where.exe cerca file nei percorsi. Su shell Unix command -v e type -a aiutano a individuare risultato e alternative. sys.executable resta la prova interna dell’interprete avviato."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un nuovo terminale vede una modifica a PATH che la vecchia sessione non aveva ricevuto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Get-Command segnala un alias mentre where.exe elenca un eseguibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "type -a mostra più python3 e spiega una differenza fra macchine."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Aggiungere la stessa cartella più volte non migliora l’affidabilità."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mettere una cartella generica all’inizio di PATH può mascherare strumenti di sistema."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il risultato di which o where, senza sys.executable, non prova che l’IDE usi lo stesso interprete."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "PATH è una sequenza di cassetti controllati in ordine. L’etichetta cercata può apparire in più cassetti; il primo decide. Alias e launcher sono come una regola che devia la ricerca prima di aprire i cassetti."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 6.1 — Installazione e verifica per livelli"
+        },
+        {
+          "type": "paragraph",
+          "text": "NOME: python  vALIAS / FUNZIONE / LAUNCHER?  v noPATH[1] -> PATH[2] -> ... -> PRIMA CORRISPONDENZA  vPROCESSO  vsys.executable CONFERMA L’IDENTITÀ"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "PATH è testo strutturato con separatori specifici del sistema. Modificarlo manualmente richiede conservare il valore precedente, evitare cancellazioni e preferire strumenti ufficiali. Una scorciatoia utile è avviare l’interprete con percorso esplicito durante la diagnosi: elimina la ricerca dal test e separa ‘l’eseguibile funziona’ da ‘il nome viene risolto correttamente’."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere PATH con il percorso di un singolo file."
+        },
+        {
+          "type": "paragraph",
+          "text": "Modificare PATH senza riaprire la sessione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cancellare voci non comprese."
+        },
+        {
+          "type": "paragraph",
+          "text": "Usare un solo comando di ricerca come prova universale."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Alias con stesso nome dell’eseguibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Terminale integrato ereditato prima della modifica."
+        },
+        {
+          "type": "paragraph",
+          "text": "Percorso con spazi o caratteri non ASCII."
+        },
+        {
+          "type": "paragraph",
+          "text": "IDE che imposta un ambiente diverso dalla shell esterna."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Non aggirare politiche, non disattivare protezioni e non cancellare installazioni sconosciute. Registra lo stato, modifica una cosa e verifica."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale regola viene applicata prima di PATH?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale sessione ha ricevuto il nuovo ambiente?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Come separi problema dell’eseguibile da problema di ricerca?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Simula un PATH con tre cartelle e due omonimi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta ricerca esterna e sys.executable."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta una modifica reversibile e la sua prova."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve includere fonte, piattaforma, comando, percorso effettivo, proprietà misurata ed evidenza dell’esito."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza un alias che maschera Python."
+        },
+        {
+          "type": "paragraph",
+          "text": "Spiega perché il riavvio del terminale conta."
+        },
+        {
+          "type": "paragraph",
+          "text": "Costruisci una matrice PowerShell, cmd e shell Unix."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. PATH è?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Una password"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Un errore"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Un elenco ordinato di posizioni"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Un solo file"
+        },
+        {
+          "type": "heading",
+          "text": "2. Quale valore conferma l’interprete avviato?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Il colore del prompt"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Il nome del progetto"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. sys.executable"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Il titolo della finestra"
+        },
+        {
+          "type": "heading",
+          "text": "3. Perché aprire un nuovo terminale?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Per rinominare PATH"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Per cancellare Python"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Per ricevere il nuovo ambiente"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Per cambiare CPU"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Variabile d’ambiente",
+              "Valore ereditato dai processi e usato dalla configurazione."
+            ],
+            [
+              "Risoluzione",
+              "Procedura che associa un nome di comando a un’azione."
+            ],
+            [
+              "Precedenza",
+              "Regola che decide quale corrispondenza vince."
+            ],
+            [
+              "Get-Command",
+              "Comando PowerShell per osservare la risoluzione."
+            ],
+            [
+              "sys.executable",
+              "Percorso dell’eseguibile Python corrente."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "La shell analizza il comando e può applicare alias o funzioni prima della ricerca negli elementi di PATH. Ogni processo riceve un ambiente; modificare PATH in una finestra di configurazione non aggiorna necessariamente terminali già aperti. Su PowerShell Get-Command mostra come il nome viene risolto; where.exe cerca file nei percorsi. Su shell Unix command -v e type -a aiutano a individuare risultato e alternative. sys.executable resta la prova interna dell’interprete avviato. La padronanza consiste nel dimostrare quale interprete è stato avviato e perché la procedura è appropriata al contesto."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre un esempio e un controesempio motivati."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e associare ogni prova a un livello."
+        },
+        {
+          "type": "paragraph",
+          "text": "So analizzare almeno tre casi limite senza aggirare protezioni."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre nel quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-2-chapter-7",
+      "lessonId": "1.2",
+      "chapterNumber": 7,
+      "title": "7. Riconoscere versione, implementazione ed eseguibile",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.2 · CAPITOLO 7 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "7. Riconoscere versione, implementazione ed eseguibile"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Installare o verificare Python con metodo osservabile, distinguendo fonte, piattaforma, comando, eseguibile e proprietà del processo."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "La verifica deve essere eseguita dallo stesso contesto che userà il progetto. Una stringa di versione è utile ma incompleta: bisogna collegarla all’eseguibile, all’implementazione, all’architettura e alla shell o IDE che lo ha avviato."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Leggere l’anno su un documento senza controllare nome e fotografia può associare il dato alla persona sbagliata. La versione deve essere letta dall’interprete la cui identità è confermata dal percorso."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "python --version fornisce una versione breve; python -VV può aggiungere dettagli dell’implementazione. Da Python, sys.version, sys.version_info e platform.python_implementation() descrivono versione e implementazione; sys.executable identifica l’eseguibile. struct.calcsize('P') * 8 misura la bitness del processo. platform.machine() descrive l’architettura osservata. Questi comandi vanno eseguiti con il nome o il percorso che il progetto userà realmente."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Due comandi stampano la stessa versione ma sys.executable rivela installazioni distinte."
+        },
+        {
+          "type": "paragraph",
+          "text": "L’IDE e il terminale mostrano percorsi diversi: il problema è di selezione, non di sintassi Python."
+        },
+        {
+          "type": "paragraph",
+          "text": "Una prova registra output completo e codice di uscita."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "python --version da solo non rivela sempre il percorso."
+        },
+        {
+          "type": "paragraph",
+          "text": "La versione dell’estensione dell’editor non è la versione dell’interprete."
+        },
+        {
+          "type": "paragraph",
+          "text": "La versione di pip non identifica Python se pip appartiene a un’altra installazione."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una scheda tecnica combina numero di serie, modello e caratteristiche. Nessun campo singolo identifica in modo sufficiente un componente quando esistono più esemplari simili."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 7.1 — Installazione e verifica per livelli"
+        },
+        {
+          "type": "paragraph",
+          "text": "COMANDO USATO  vPROCESSO PYTHON  +--> sys.executable = DOVE  +--> implementation = QUALE  +--> version = QUALE REVISIONE  +--> pointer bits + machine = QUALE ARCHITETTURA  vREGISTRO DI VERIFICA"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’opzione -c permette di eseguire una breve istruzione di verifica senza creare un programma del corso. Le virgolette dipendono dalla shell, quindi la guida deve distinguere concetto e sintassi. La prova più forte ripete le stesse interrogazioni da terminale esterno e terminale integrato, poi confronta valori."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Leggere la versione dell’applicazione sbagliata."
+        },
+        {
+          "type": "paragraph",
+          "text": "Omettere sys.executable."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere versione di Python e versione di pip."
+        },
+        {
+          "type": "paragraph",
+          "text": "Usare un comando da una shell con virgolette incompatibili."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Interprete rinominato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Symlink o launcher che seleziona versioni dinamicamente."
+        },
+        {
+          "type": "paragraph",
+          "text": "IDE con interprete remoto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Runtime prerelease scelto accidentalmente."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Non aggirare politiche, non disattivare protezioni e non cancellare installazioni sconosciute. Registra lo stato, modifica una cosa e verifica."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale percorso ha prodotto la versione?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il valore cambia fra terminale e IDE?"
+        },
+        {
+          "type": "paragraph",
+          "text": "La selezione è stabile o dinamica?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta un comando che stampi cinque proprietà."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confronta due ipotetici eseguibili."
+        },
+        {
+          "type": "paragraph",
+          "text": "Scrivi una conclusione basata su evidenze, non sul nome digitato."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve includere fonte, piattaforma, comando, percorso effettivo, proprietà misurata ed evidenza dell’esito."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Costruisci un caso con stessa versione e percorsi diversi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Spiega -VV e sys.version_info."
+        },
+        {
+          "type": "paragraph",
+          "text": "Crea una scheda di verifica per l’IDE."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Che cosa identifica il percorso dell’interprete?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. sys.executable"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Il tema"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. platform.machine"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. pip --version"
+        },
+        {
+          "type": "heading",
+          "text": "2. Quale funzione indica l’implementazione?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. platform.python_implementation()"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. print"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. len"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. open"
+        },
+        {
+          "type": "heading",
+          "text": "3. La versione dell’estensione equivale a Python?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Sì"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Solo su Windows"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo con IDLE"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Versione",
+              "Identificatore della revisione del runtime."
+            ],
+            [
+              "Implementazione",
+              "Programma concreto che realizza il linguaggio Python."
+            ],
+            [
+              "sys.version_info",
+              "Struttura con le componenti della versione Python."
+            ],
+            [
+              "Prerilascio",
+              "Versione destinata a prova prima della stabilità generale."
+            ],
+            [
+              "Symlink",
+              "Riferimento del file system verso un altro percorso."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "python --version fornisce una versione breve; python -VV può aggiungere dettagli dell’implementazione. Da Python, sys.version, sys.version_info e platform.python_implementation() descrivono versione e implementazione; sys.executable identifica l’eseguibile. struct.calcsize('P') * 8 misura la bitness del processo. platform.machine() descrive l’architettura osservata. Questi comandi vanno eseguiti con il nome o il percorso che il progetto userà realmente. La padronanza consiste nel dimostrare quale interprete è stato avviato e perché la procedura è appropriata al contesto."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre un esempio e un controesempio motivati."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e associare ogni prova a un livello."
+        },
+        {
+          "type": "paragraph",
+          "text": "So analizzare almeno tre casi limite senza aggirare protezioni."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre nel quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-2-chapter-8",
+      "lessonId": "1.2",
+      "chapterNumber": 8,
+      "title": "8. Verifica funzionale: libreria standard, pip e codice di uscita",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.2 · CAPITOLO 8 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "8. Verifica funzionale: libreria standard, pip e codice di uscita"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Installare o verificare Python con metodo osservabile, distinguendo fonte, piattaforma, comando, eseguibile e proprietà del processo."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un interprete identificato deve anche svolgere le funzioni minime richieste. La verifica usa operazioni innocue e ripetibili: importare moduli della libreria standard, eseguire un file noto, osservare output e controllare il codice di uscita. Non installa ancora pacchetti di progetto."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Controllare un forno non significa guardare soltanto che la spia si accenda: si imposta una temperatura, si misura il risultato e si verifica lo spegnimento corretto. La prova funzionale va oltre la presenza del comando."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "La libreria standard è distribuita con Python, anche se alcune distribuzioni possono separare componenti opzionali. Un comando con -c può importare sys, platform e struct e stampare proprietà. Un piccolo file di verifica controlla lettura dal file system e codice di uscita. python -m pip --version, quando pip è disponibile, collega esplicitamente pip allo stesso interprete; non autorizza installazioni globali. La disponibilità di ensurepip o pip dipende dalla distribuzione."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "python -c importa sys e termina con successo."
+        },
+        {
+          "type": "paragraph",
+          "text": "python -m pip --version mostra percorso e versione collegati all’interprete."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un file di prova viene eseguito dalla radice dichiarata e produce l’output atteso."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Avviare la modalità interattiva e uscire non verifica percorsi del progetto."
+        },
+        {
+          "type": "paragraph",
+          "text": "pip --version può riferirsi a un altro Python."
+        },
+        {
+          "type": "paragraph",
+          "text": "Un output corretto con codice di uscita fallito richiede indagine."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un collaudo verifica più requisiti distinti: accensione, funzione, misura e arresto. Una singola spia non sostituisce l’intero collaudo."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 8.1 — Installazione e verifica per livelli"
+        },
+        {
+          "type": "paragraph",
+          "text": "INTERPRETE IDENTIFICATO  +--> import libreria standard  +--> esegui file noto  +--> output atteso  +--> errore vuoto o compreso  +--> codice uscita 0  +--> python -m pip --version, se previsto  vACCETTAZIONE FUNZIONALE"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il codice di uscita zero indica convenzionalmente successo del processo, non correttezza assoluta del programma. La verifica deve evitare rete, scritture globali e privilegi elevati. Se pip manca, si consulta la documentazione della distribuzione invece di scaricare ed eseguire script casuali. La gestione completa dei pacchetti appartiene alla Lezione 1.6."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Usare pip senza legarlo all’interprete."
+        },
+        {
+          "type": "paragraph",
+          "text": "Installare pacchetti durante il collaudo di base."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ignorare il codice di uscita."
+        },
+        {
+          "type": "paragraph",
+          "text": "Usare una prova che modifica configurazioni globali."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Distribuzione senza pip preinstallato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Libreria standard parzialmente separata dal packaging."
+        },
+        {
+          "type": "paragraph",
+          "text": "Antivirus che blocca la creazione del processo."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cartella senza permessi di lettura o scrittura."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Non aggirare politiche, non disattivare protezioni e non cancellare installazioni sconosciute. Registra lo stato, modifica una cosa e verifica."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale requisito verifica ogni comando?"
+        },
+        {
+          "type": "paragraph",
+          "text": "La prova modifica lo stato globale?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Come distingui pip mancante da interprete guasto?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Definisci una batteria di cinque prove non distruttive."
+        },
+        {
+          "type": "paragraph",
+          "text": "Collega ogni prova a un criterio di accettazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta il registro di output, errore e codice di uscita."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve includere fonte, piattaforma, comando, percorso effettivo, proprietà misurata ed evidenza dell’esito."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza pip collegato al Python sbagliato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Costruisci una prova senza rete."
+        },
+        {
+          "type": "paragraph",
+          "text": "Spiega perché zero non prova correttezza totale."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Qual è la forma più esplicita per pip?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Rinominare pip"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. pip globale"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. python -m pip"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Aprire lo Store"
+        },
+        {
+          "type": "heading",
+          "text": "2. Codice di uscita zero significa?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Programma perfetto"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Nessun rischio futuro"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Successo convenzionale del processo"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Versione più nuova"
+        },
+        {
+          "type": "heading",
+          "text": "3. Il collaudo base deve installare pacchetti globali?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Sempre"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Solo per colorare l’IDE"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Mai leggere output"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Libreria standard",
+              "Moduli distribuiti con Python."
+            ],
+            [
+              "pip",
+              "Strumento comune per gestire pacchetti Python."
+            ],
+            [
+              "-m",
+              "Opzione che esegue un modulo tramite l’interprete scelto."
+            ],
+            [
+              "Codice di uscita",
+              "Valore restituito dal processo al chiamante."
+            ],
+            [
+              "Collaudo",
+              "Insieme di prove legate a requisiti osservabili."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "La libreria standard è distribuita con Python, anche se alcune distribuzioni possono separare componenti opzionali. Un comando con -c può importare sys, platform e struct e stampare proprietà. Un piccolo file di verifica controlla lettura dal file system e codice di uscita. python -m pip --version, quando pip è disponibile, collega esplicitamente pip allo stesso interprete; non autorizza installazioni globali. La disponibilità di ensurepip o pip dipende dalla distribuzione. La padronanza consiste nel dimostrare quale interprete è stato avviato e perché la procedura è appropriata al contesto."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre un esempio e un controesempio motivati."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e associare ogni prova a un livello."
+        },
+        {
+          "type": "paragraph",
+          "text": "So analizzare almeno tre casi limite senza aggirare protezioni."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre nel quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-2-chapter-9",
+      "lessonId": "1.2",
+      "chapterNumber": 9,
+      "title": "9. Installazioni multiple, conflitti e diagnosi per livelli",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.2 · CAPITOLO 9 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "9. Installazioni multiple, conflitti e diagnosi per livelli"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Installare o verificare Python con metodo osservabile, distinguendo fonte, piattaforma, comando, eseguibile e proprietà del processo."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Più installazioni possono convivere correttamente. Il problema nasce quando la selezione è implicita o incoerente fra terminale, IDE e strumenti. La diagnosi non inizia reinstallando: parte dall’osservazione del nome risolto, del percorso interno e del contesto."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Avere più stampanti è normale; inviare un documento alla stampante sbagliata produce sorpresa. Aggiungerne una terza raramente risolve la selezione. Occorre vedere quale destinazione è impostata e perché."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "La procedura a livelli controlla: shell e comando; alias o launcher; PATH; eseguibile; versione e architettura; cartella corrente; configurazione IDE; ambiente virtuale; libreria richiesta. Si registra ogni risultato prima di cambiare stato. Una reinstallazione può essere appropriata solo dopo aver identificato corruzione o assenza, non come risposta predefinita a una precedenza errata."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il terminale usa A e l’IDE usa B: si allinea la selezione senza rimuovere entrambi."
+        },
+        {
+          "type": "paragraph",
+          "text": "python manca ma py funziona su Windows: si studiano gestore e alias."
+        },
+        {
+          "type": "paragraph",
+          "text": "python3 punta al sistema su macOS mentre un percorso esplicito avvia python.org."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Installare ripetutamente crea più candidati e aumenta l’ambiguità."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cancellare cartelle a mano può lasciare alias e configurazioni incoerenti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Modificare PATH, IDE e runtime insieme impedisce di sapere quale intervento ha funzionato."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "La diagnosi idraulica segue il flusso dalla fonte al rubinetto. Sostituire tutti i tubi senza localizzare l’ostruzione è costoso e può introdurre nuove perdite."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 9.1 — Installazione e verifica per livelli"
+        },
+        {
+          "type": "paragraph",
+          "text": "SINTOMO  vSHELL / COMANDO / ALIAS  vPATH O LAUNCHER  vsys.executable + VERSIONE  vIDE / AMBIENTE / CARTELLA  vLIBRERIA O CODICE  vUNA CORREZIONE -> RIPETI LA PROVA"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Messaggi come ‘command not found’, ‘file not found’ e ‘module not found’ appartengono a livelli diversi. Il primo riguarda la risoluzione del comando, il secondo il percorso del file, il terzo l’ambiente di importazione. Leggere testualmente il messaggio evita correzioni irrilevanti. Una modifica riuscita deve essere verificata da una nuova sessione e dal contesto dell’IDE."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Reinstallare prima di osservare."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cancellare manualmente installazioni sconosciute."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere file non trovato e modulo non trovato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Concludere dalla sola finestra grafica."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Launcher che cambia predefinito dopo un aggiornamento."
+        },
+        {
+          "type": "paragraph",
+          "text": "IDE remoto o container."
+        },
+        {
+          "type": "paragraph",
+          "text": "Terminale aperto prima della configurazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetto che dipende intenzionalmente da una vecchia versione."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Non aggirare politiche, non disattivare protezioni e non cancellare installazioni sconosciute. Registra lo stato, modifica una cosa e verifica."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "A quale livello appartiene il messaggio?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale prova isola la prossima ipotesi?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale installazione serve ancora ad altri progetti?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Diagnostica tre sintomi con un albero per livelli."
+        },
+        {
+          "type": "paragraph",
+          "text": "Scegli una sola modifica per ogni ipotesi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Definisci la prova di conferma e quella di regressione."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve includere fonte, piattaforma, comando, percorso effettivo, proprietà misurata ed evidenza dell’esito."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza terminale e IDE disallineati."
+        },
+        {
+          "type": "paragraph",
+          "text": "Costruisci un caso con vecchio launcher."
+        },
+        {
+          "type": "paragraph",
+          "text": "Spiega quando reinstallare è giustificato."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Più installazioni sono sempre un errore?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. No"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Sì"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Solo su Linux"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Solo con IDE"
+        },
+        {
+          "type": "heading",
+          "text": "2. Qual è la prima azione diagnostica?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Osservare comando, percorso e contesto"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Reinstallare tutto"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Usare privilegi elevati"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Cancellare PATH"
+        },
+        {
+          "type": "heading",
+          "text": "3. Module not found riguarda principalmente?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. L’ambiente di importazione"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Il mouse"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Il monitor"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. La CPU"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Conflitto",
+              "Interazione incompatibile o selezione inattesa fra componenti."
+            ],
+            [
+              "Diagnosi per livelli",
+              "Ricerca del guasto seguendo la catena di esecuzione."
+            ],
+            [
+              "Regressione",
+              "Ricomparsa di un problema o perdita di comportamento precedente."
+            ],
+            [
+              "Contesto",
+              "Insieme di shell, cartella, configurazione e ambiente attivi."
+            ],
+            [
+              "Reinstallazione",
+              "Nuova posa del componente, giustificata da evidenze specifiche."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "La procedura a livelli controlla: shell e comando; alias o launcher; PATH; eseguibile; versione e architettura; cartella corrente; configurazione IDE; ambiente virtuale; libreria richiesta. Si registra ogni risultato prima di cambiare stato. Una reinstallazione può essere appropriata solo dopo aver identificato corruzione o assenza, non come risposta predefinita a una precedenza errata. La padronanza consiste nel dimostrare quale interprete è stato avviato e perché la procedura è appropriata al contesto."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre un esempio e un controesempio motivati."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e associare ogni prova a un livello."
+        },
+        {
+          "type": "paragraph",
+          "text": "So analizzare almeno tre casi limite senza aggirare protezioni."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre nel quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-1-2-chapter-10",
+      "lessonId": "1.2",
+      "chapterNumber": 10,
+      "title": "10. Aggiornamento, rimozione e dossier di accettazione",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 1.2 · CAPITOLO 10 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "10. Aggiornamento, rimozione e dossier di accettazione"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Installare o verificare Python con metodo osservabile, distinguendo fonte, piattaforma, comando, eseguibile e proprietà del processo."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’installazione ha un ciclo di vita. Versioni diventano obsolete, progetti mantengono requisiti specifici e strumenti cambiano. Aggiornare o rimuovere è una modifica dell’ambiente e richiede inventario, backup delle configurazioni rilevanti, verifica e possibilità di ritorno."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Sostituire un componente di una macchina richiede sapere che cosa alimenta e conservare il pezzo precedente finché il collaudo non è concluso. Rimuovere il componente solo perché sembra vecchio può fermare un servizio ancora dipendente."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il dossier di accettazione registra data, sistema, architettura, fonte, pacchetto, metodo, privilegi, comandi, sys.executable, versione, implementazione, bitness, PATH osservato, prova funzionale e anomalie. L’aggiornamento si esegue per motivo dichiarato e si verifica sui progetti interessati. La rimozione usa il meccanismo del distributore, non cancellazioni casuali; distingue gestore, runtime, ambienti virtuali e configurazioni. Le politiche di supporto vanno ricontrollate nelle fonti ufficiali."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Prima di aggiornare si crea un inventario dei progetti e degli interpreti usati."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dopo la rimozione si verifica che i comandi rimasti puntino alle installazioni attese."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il dossier permette a un’altra persona di ripetere il collaudo."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Aggiornare automaticamente nel mezzo di un’attività critica può cambiare l’ambiente senza prova."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cancellare una cartella non equivale a una disinstallazione completa."
+        },
+        {
+          "type": "paragraph",
+          "text": "Conservare ogni versione per sempre senza proprietario aumenta superficie e confusione."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il libretto di manutenzione collega intervento, motivo, componente e collaudo. Senza registro, la macchina può funzionare ma nessuno sa quali condizioni riprodurre."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 10.1 — Installazione e verifica per livelli"
+        },
+        {
+          "type": "paragraph",
+          "text": "INVENTARIO INIZIALE  vINSTALLA / AGGIORNA / RIMUOVI CON METODO UFFICIALE  vVERIFICA IDENTITÀ + FUNZIONE  vTESTA PROGETTI INTERESSATI  vREGISTRA ESITO + ANOMALIE + RITORNO  vAMBIENTE ACCETTATO"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il dossier non deve contenere password, token o dati personali non necessari. Le informazioni variabili nel tempo riportano data e fonte. Un ambiente didattico può preferire stabilità a novità; una vulnerabilità rilevante può invece rendere urgente l’aggiornamento. La decisione combina compatibilità, supporto, sicurezza e possibilità di prova."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Aggiornare senza motivo e senza test."
+        },
+        {
+          "type": "paragraph",
+          "text": "Confondere rimozione del gestore con rimozione dei runtime."
+        },
+        {
+          "type": "paragraph",
+          "text": "Inserire segreti nel dossier."
+        },
+        {
+          "type": "paragraph",
+          "text": "Non verificare i progetti dopo il cambiamento."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "paragraph",
+          "text": "Versione fuori supporto ma richiesta da un progetto storico."
+        },
+        {
+          "type": "paragraph",
+          "text": "Macchina condivisa da più utenti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Rimozione parziale dopo interruzione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Aggiornamento urgente per sicurezza con finestra di test breve."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI SICUREZZA  Non aggirare politiche, non disattivare protezioni e non cancellare installazioni sconosciute. Registra lo stato, modifica una cosa e verifica."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Chi usa ancora questa installazione?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale prova rende sicuro il cambiamento?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Quale informazione del dossier è sensibile?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Compila un dossier per un caso simulato."
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetta aggiornamento, verifica e ritorno."
+        },
+        {
+          "type": "paragraph",
+          "text": "Definisci una rimozione che distingua tutti i componenti."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve includere fonte, piattaforma, comando, percorso effettivo, proprietà misurata ed evidenza dell’esito."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza una versione fuori supporto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Crea una politica di aggiornamento didattica."
+        },
+        {
+          "type": "paragraph",
+          "text": "Revisiona un dossier eliminando dati sensibili."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Che cosa deve contenere un dossier?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Solo uno screenshot"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Solo il nome Python"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Identità, metodo e prove verificabili"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Password"
+        },
+        {
+          "type": "heading",
+          "text": "2. Come si rimuove un runtime?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Modificando il sorgente"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Spegnendo la rete"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Con il meccanismo del distributore"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Cancellando file casuali"
+        },
+        {
+          "type": "heading",
+          "text": "3. Dopo un aggiornamento bisogna?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A. Eliminare il registro"
+        },
+        {
+          "type": "paragraph",
+          "text": "B. Cambiare IDE"
+        },
+        {
+          "type": "paragraph",
+          "text": "C. Verificare i progetti interessati"
+        },
+        {
+          "type": "paragraph",
+          "text": "D. Ignorare i progetti"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Dossier di accettazione",
+              "Registro di scelta, installazione e prove dell’ambiente."
+            ],
+            [
+              "Aggiornamento",
+              "Sostituzione intenzionale con una revisione diversa."
+            ],
+            [
+              "Rimozione",
+              "Eliminazione controllata tramite il meccanismo previsto."
+            ],
+            [
+              "Supporto",
+              "Periodo e condizioni in cui una versione riceve manutenzione."
+            ],
+            [
+              "Rollback",
+              "Ritorno pianificato a uno stato precedente."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il dossier di accettazione registra data, sistema, architettura, fonte, pacchetto, metodo, privilegi, comandi, sys.executable, versione, implementazione, bitness, PATH osservato, prova funzionale e anomalie. L’aggiornamento si esegue per motivo dichiarato e si verifica sui progetti interessati. La rimozione usa il meccanismo del distributore, non cancellazioni casuali; distingue gestore, runtime, ambienti virtuali e configurazioni. Le politiche di supporto vanno ricontrollate nelle fonti ufficiali. La padronanza consiste nel dimostrare quale interprete è stato avviato e perché la procedura è appropriata al contesto."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "paragraph",
+          "text": "So spiegare il tema in modo intuitivo e tecnico."
+        },
+        {
+          "type": "paragraph",
+          "text": "So produrre un esempio e un controesempio motivati."
+        },
+        {
+          "type": "paragraph",
+          "text": "So ricostruire il diagramma e associare ogni prova a un livello."
+        },
+        {
+          "type": "paragraph",
+          "text": "So analizzare almeno tre casi limite senza aggirare protezioni."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre nel quiz."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sintesi integrata della Lezione 1.2"
+        },
+        {
+          "type": "paragraph",
+          "text": "Installare Python è una decisione controllata: si inventaria la piattaforma, si sceglie una fonte primaria, si usa il metodo adatto al sistema e si verifica il processo realmente avviato. Windows, macOS e Linux differiscono nei meccanismi, ma condividono lo stesso criterio: percorso, versione, implementazione, architettura, funzione e codice di uscita devono essere osservabili. PATH e launcher spiegano i nomi; sys.executable conferma l’identità."
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura S.1 — Procedura universale di installazione e accettazione"
+        },
+        {
+          "type": "paragraph",
+          "text": "INVENTARIO + VINCOLI  vFONTE UFFICIALE + PACCHETTO COMPATIBILE  vINSTALLAZIONE AUTORIZZATA  vCOMANDO -> RISOLUZIONE -> ESEGUIBILE  vVERSIONE + IMPLEMENTAZIONE + ARCHITETTURA  vCOLLAUDO + DOSSIER  vPRONTO PER TERMINALE E SHELL"
+        },
+        {
+          "type": "heading",
+          "text": "Laboratorio finale: installazione verificata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Esegui l’installazione solo se autorizzato; altrimenti svolgi il laboratorio come progetto documentato. Produci un dossier di 1.800–2.400 parole."
+        },
+        {
+          "type": "paragraph",
+          "text": "Registra sistema, rilascio, CPU, architettura e vincoli."
+        },
+        {
+          "type": "paragraph",
+          "text": "Motiva fonte, distribuzione e versione scelta."
+        },
+        {
+          "type": "paragraph",
+          "text": "Descrivi la procedura specifica per la piattaforma."
+        },
+        {
+          "type": "paragraph",
+          "text": "Registra privilegi richiesti e strategia di ritorno."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mostra come il comando viene risolto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Registra sys.executable, versione, implementazione e bitness."
+        },
+        {
+          "type": "paragraph",
+          "text": "Esegui prove di libreria standard, file noto e codice di uscita."
+        },
+        {
+          "type": "paragraph",
+          "text": "Verifica python -m pip --version, se previsto, senza installare pacchetti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Analizza almeno due installazioni o candidati possibili."
+        },
+        {
+          "type": "paragraph",
+          "text": "Concludi rispetto ai criteri di accettazione e annota anomalie."
+        },
+        {
+          "type": "heading",
+          "text": "Rubrica di valutazione"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Dimensione",
+              "Essenziale",
+              "Solida",
+              "Piena padronanza"
+            ],
+            [
+              "Scelta",
+              "Fonte nominata",
+              "Compatibilità motivata",
+              "Supporto, vincoli e provenienza documentati"
+            ],
+            [
+              "Piattaforma",
+              "Sistema riconosciuto",
+              "CPU e processo distinti",
+              "Natività, emulazione e packaging analizzati"
+            ],
+            [
+              "Identità",
+              "Versione letta",
+              "Percorso e implementazione",
+              "Risoluzione e contesti confrontati"
+            ],
+            [
+              "Collaudo",
+              "Comando avviato",
+              "Prove e uscita",
+              "Requisiti collegati a evidenze ripetibili"
+            ],
+            [
+              "Sicurezza",
+              "Permessi considerati",
+              "Sistema e segreti protetti",
+              "Provenienza, minimo privilegio e ritorno motivati"
+            ],
+            [
+              "Diagnosi",
+              "Sintomo descritto",
+              "Livello identificato",
+              "Ipotesi isolate con una modifica per volta"
+            ]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Riferimenti ufficiali facoltativi"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Fonte",
+              "Documento",
+              "Uso"
+            ],
+            [
+              "Python Documentation",
+              "Using Python on Windows",
+              "Gestore, runtime, comandi e diagnosi Windows"
+            ],
+            [
+              "Python Documentation",
+              "Using Python on macOS",
+              "Installer python.org e coesistenza con Python Apple"
+            ],
+            [
+              "Python Documentation",
+              "Using Python on Unix platforms",
+              "Pacchetti, percorsi e cautela sulla compilazione"
+            ],
+            [
+              "Python.org",
+              "Downloads e pagine di rilascio",
+              "Versioni, requisiti, file e informazioni di integrità"
+            ]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Le fonti esterne sono facoltative per lo studio ma obbligatorie prima di applicare istruzioni che possono essere cambiate da un nuovo rilascio. La lezione resta autosufficiente nel metodo e nelle prove."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento della lezione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Tutti i dieci capitoli sono stati letti e annotati."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sono stati completati gli esercizi guidati e almeno venti autonomi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il punteggio dei quiz è almeno 24/30, con correzione motivata."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il laboratorio raggiunge almeno il livello Solida in ogni dimensione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il lettore sa identificare l’interprete senza dipendere dal nome del comando."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il lettore sa distinguere CPU, sistema e processo."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il dossier è pronto per la Lezione 1.3 su terminale e shell."
+        },
+        {
+          "type": "callout",
+          "text": "PASSAGGIO SUCCESSIVO  La Lezione 1.3 approfondirà terminale, shell, comandi fondamentali, argomenti, quoting e modello di esecuzione."
+        }
+      ]
+    }
+  ],
+  "chapters": [
+    {
+      "number": 1,
+      "title": "1. Prima di installare: obiettivo, fonte e criterio di successo",
+      "sectionId": "programming-1-2-chapter-1",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-2-chapter-1-guided",
+          "kind": "guided",
+          "lessonId": "1.2",
+          "chapterNumber": 1,
+          "title": "1. Prima di installare: obiettivo, fonte e criterio di successo",
+          "prompt": "Compila inventario, vincoli e uso previsto.\nDefinisci una fonte primaria e una procedura di verifica.\nScrivi sei criteri di accettazione osservabili prima di installare.",
+          "autoverification": "AUTOVERIFICA  La risposta deve includere fonte, piattaforma, comando, percorso effettivo, proprietà misurata ed evidenza dell’esito."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-2-chapter-1-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 1,
+            "title": "1. Prima di installare: obiettivo, fonte e criterio di successo",
+            "prompt": "Confronta linguaggio, implementazione e distribuzione."
+          },
+          {
+            "id": "programming-1-2-chapter-1-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 1,
+            "title": "1. Prima di installare: obiettivo, fonte e criterio di successo",
+            "prompt": "Analizza un download da fonte non ufficiale."
+          },
+          {
+            "id": "programming-1-2-chapter-1-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 1,
+            "title": "1. Prima di installare: obiettivo, fonte e criterio di successo",
+            "prompt": "Progetta una procedura per un computer gestito."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-2-chapter-1-quiz-1",
+          "concept": "1. Prima di installare: obiettivo, fonte e criterio di successo",
+          "prompt": "Quale elemento identifica davvero l’interprete?",
+          "choices": [
+            "A. Percorso e proprietà verificate",
+            "B. L’icona",
+            "C. Il colore della finestra",
+            "D. Il nome del corso"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-1"
+        },
+        {
+          "id": "programming-1-2-chapter-1-quiz-2",
+          "concept": "1. Prima di installare: obiettivo, fonte e criterio di successo",
+          "prompt": "Python e CPython sono sinonimi perfetti?",
+          "choices": [
+            "A. No",
+            "B. Solo su Windows",
+            "C. Solo in IDLE",
+            "D. Sì"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-1"
+        },
+        {
+          "id": "programming-1-2-chapter-1-quiz-3",
+          "concept": "1. Prima di installare: obiettivo, fonte e criterio di successo",
+          "prompt": "Quando va definito il criterio di successo?",
+          "choices": [
+            "A. Prima dell’installazione",
+            "B. Mai",
+            "C. Dopo aver cancellato tutto",
+            "D. Solo in caso di errore"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-1"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "2. Inventario del sistema: sistema operativo, CPU e architettura",
+      "sectionId": "programming-1-2-chapter-2",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-2-chapter-2-guided",
+          "kind": "guided",
+          "lessonId": "1.2",
+          "chapterNumber": 2,
+          "title": "2. Inventario del sistema: sistema operativo, CPU e architettura",
+          "prompt": "Disegna CPU, sistema, processo e librerie come livelli.\nCrea una scheda con valori distinti e fonte di ciascuno.\nAnalizza un caso in cui CPU e processo non coincidono.",
+          "autoverification": "AUTOVERIFICA  La risposta deve includere fonte, piattaforma, comando, percorso effettivo, proprietà misurata ed evidenza dell’esito."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-2-chapter-2-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 2,
+            "title": "2. Inventario del sistema: sistema operativo, CPU e architettura",
+            "prompt": "Confronta x86-64 e ARM64 senza dichiararne uno universalmente migliore."
+          },
+          {
+            "id": "programming-1-2-chapter-2-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 2,
+            "title": "2. Inventario del sistema: sistema operativo, CPU e architettura",
+            "prompt": "Spiega bitness a un principiante."
+          },
+          {
+            "id": "programming-1-2-chapter-2-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 2,
+            "title": "2. Inventario del sistema: sistema operativo, CPU e architettura",
+            "prompt": "Progetta una verifica dopo una migrazione di architettura."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-2-chapter-2-quiz-1",
+          "concept": "2. Inventario del sistema: sistema operativo, CPU e architettura",
+          "prompt": "Quale proprietà descrive il processo Python?",
+          "choices": [
+            "A. Il nome utente",
+            "B. Il disco",
+            "C. La bitness dell’interprete in esecuzione",
+            "D. Il colore dell’IDE"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-2"
+        },
+        {
+          "id": "programming-1-2-chapter-2-quiz-2",
+          "concept": "2. Inventario del sistema: sistema operativo, CPU e architettura",
+          "prompt": "CPU e processo hanno sempre la stessa architettura?",
+          "choices": [
+            "A. Solo su Linux",
+            "B. Solo offline",
+            "C. No",
+            "D. Sì"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-2"
+        },
+        {
+          "id": "programming-1-2-chapter-2-quiz-3",
+          "concept": "2. Inventario del sistema: sistema operativo, CPU e architettura",
+          "prompt": "Che cosa misura struct.calcsize('P') * 8?",
+          "choices": [
+            "A. Il numero di file",
+            "B. La versione",
+            "C. La dimensione del puntatore del processo in bit",
+            "D. La RAM totale"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-2"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "title": "3. Installazione su Windows: Python Install Manager e comandi",
+      "sectionId": "programming-1-2-chapter-3",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-2-chapter-3-guided",
+          "kind": "guided",
+          "lessonId": "1.2",
+          "chapterNumber": 3,
+          "title": "3. Installazione su Windows: Python Install Manager e comandi",
+          "prompt": "Scrivi una procedura per fonte, installazione e nuovo terminale.\nAggiungi prove con py list, sys.executable e versione.\nProgetta una diagnosi che non cancelli installazioni esistenti.",
+          "autoverification": "AUTOVERIFICA  La risposta deve includere fonte, piattaforma, comando, percorso effettivo, proprietà misurata ed evidenza dell’esito."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-2-chapter-3-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 3,
+            "title": "3. Installazione su Windows: Python Install Manager e comandi",
+            "prompt": "Confronta python, py e pymanager."
+          },
+          {
+            "id": "programming-1-2-chapter-3-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 3,
+            "title": "3. Installazione su Windows: Python Install Manager e comandi",
+            "prompt": "Analizza un alias che apre lo Store."
+          },
+          {
+            "id": "programming-1-2-chapter-3-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 3,
+            "title": "3. Installazione su Windows: Python Install Manager e comandi",
+            "prompt": "Crea un piano per una macchina gestita."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-2-chapter-3-quiz-1",
+          "concept": "3. Installazione su Windows: Python Install Manager e comandi",
+          "prompt": "Quale comando elenca i runtime gestiti?",
+          "choices": [
+            "A. py list",
+            "B. pip list",
+            "C. python list",
+            "D. pymanager.exe only"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-3"
+        },
+        {
+          "id": "programming-1-2-chapter-3-quiz-2",
+          "concept": "3. Installazione su Windows: Python Install Manager e comandi",
+          "prompt": "Gestore e runtime sono lo stesso componente?",
+          "choices": [
+            "A. No",
+            "B. Sì",
+            "C. Solo offline",
+            "D. Solo con Store"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-3"
+        },
+        {
+          "id": "programming-1-2-chapter-3-quiz-3",
+          "concept": "3. Installazione su Windows: Python Install Manager e comandi",
+          "prompt": "Che cosa va fatto prima di rimuovere una vecchia installazione?",
+          "choices": [
+            "A. Documentarne uso e dipendenze",
+            "B. Cancellare PATH",
+            "C. Chiudere l’editor",
+            "D. Rinominare il progetto"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-3"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "title": "4. Installazione su macOS: pacchetto ufficiale e Python di sistema",
+      "sectionId": "programming-1-2-chapter-4",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-2-chapter-4-guided",
+          "kind": "guided",
+          "lessonId": "1.2",
+          "chapterNumber": 4,
+          "title": "4. Installazione su macOS: pacchetto ufficiale e Python di sistema",
+          "prompt": "Disegna la coesistenza fra Python Apple e python.org.\nScrivi le prove command -v, type -a e sys.executable.\nProgetta una procedura che rispetti Gatekeeper e politiche locali.",
+          "autoverification": "AUTOVERIFICA  La risposta deve includere fonte, piattaforma, comando, percorso effettivo, proprietà misurata ed evidenza dell’esito."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-2-chapter-4-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 4,
+            "title": "4. Installazione su macOS: pacchetto ufficiale e Python di sistema",
+            "prompt": "Spiega universal2 senza confonderlo con due versioni linguistiche."
+          },
+          {
+            "id": "programming-1-2-chapter-4-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 4,
+            "title": "4. Installazione su macOS: pacchetto ufficiale e Python di sistema",
+            "prompt": "Analizza un terminale sotto traduzione."
+          },
+          {
+            "id": "programming-1-2-chapter-4-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 4,
+            "title": "4. Installazione su macOS: pacchetto ufficiale e Python di sistema",
+            "prompt": "Crea una checklist post-installazione macOS."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-2-chapter-4-quiz-1",
+          "concept": "4. Installazione su macOS: pacchetto ufficiale e Python di sistema",
+          "prompt": "Il Python in /usr/bin va rimosso?",
+          "choices": [
+            "A. Solo con IDLE",
+            "B. Solo se vecchio",
+            "C. No",
+            "D. Solo su Intel"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-4"
+        },
+        {
+          "id": "programming-1-2-chapter-4-quiz-2",
+          "concept": "4. Installazione su macOS: pacchetto ufficiale e Python di sistema",
+          "prompt": "Che cosa mostra command -v?",
+          "choices": [
+            "A. La RAM",
+            "B. La licenza",
+            "C. Il comando risolto dalla shell",
+            "D. Tutti i file del disco"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-4"
+        },
+        {
+          "id": "programming-1-2-chapter-4-quiz-3",
+          "concept": "4. Installazione su macOS: pacchetto ufficiale e Python di sistema",
+          "prompt": "Un pacchetto ufficiale macOS dovrebbe essere?",
+          "choices": [
+            "A. Rinominato",
+            "B. Eseguito senza leggere requisiti",
+            "C. Firmato e verificabile",
+            "D. Anonimo"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-4"
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "title": "5. Installazione su Linux: pacchetti della distribuzione e Python di sistema",
+      "sectionId": "programming-1-2-chapter-5",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-2-chapter-5-guided",
+          "kind": "guided",
+          "lessonId": "1.2",
+          "chapterNumber": 5,
+          "title": "5. Installazione su Linux: pacchetti della distribuzione e Python di sistema",
+          "prompt": "Identifica distribuzione, rilascio e gestore in un caso simulato.\nConfronta Python di sistema e ambiente di progetto.\nProgetta una procedura senza sovrascrivere comandi globali.",
+          "autoverification": "AUTOVERIFICA  La risposta deve includere fonte, piattaforma, comando, percorso effettivo, proprietà misurata ed evidenza dell’esito."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-2-chapter-5-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 5,
+            "title": "5. Installazione su Linux: pacchetti della distribuzione e Python di sistema",
+            "prompt": "Confronta repository e compilazione dal sorgente."
+          },
+          {
+            "id": "programming-1-2-chapter-5-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 5,
+            "title": "5. Installazione su Linux: pacchetti della distribuzione e Python di sistema",
+            "prompt": "Analizza il rischio di sudo pip."
+          },
+          {
+            "id": "programming-1-2-chapter-5-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 5,
+            "title": "5. Installazione su Linux: pacchetti della distribuzione e Python di sistema",
+            "prompt": "Crea istruzioni con rami per due famiglie Linux."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-2-chapter-5-quiz-1",
+          "concept": "5. Installazione su Linux: pacchetti della distribuzione e Python di sistema",
+          "prompt": "Qual è una fonte naturale su Linux?",
+          "choices": [
+            "A. I repository della distribuzione",
+            "B. Un allegato anonimo",
+            "C. Il primo blog trovato",
+            "D. Una cartella casuale"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-5"
+        },
+        {
+          "id": "programming-1-2-chapter-5-quiz-2",
+          "concept": "5. Installazione su Linux: pacchetti della distribuzione e Python di sistema",
+          "prompt": "sudo pip globale è consigliato per il progetto?",
+          "choices": [
+            "A. No",
+            "B. Solo con IDE",
+            "C. Solo offline",
+            "D. Sempre"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-5"
+        },
+        {
+          "id": "programming-1-2-chapter-5-quiz-3",
+          "concept": "5. Installazione su Linux: pacchetti della distribuzione e Python di sistema",
+          "prompt": "Perché non sovrascrivere python3 di sistema?",
+          "choices": [
+            "A. Può essere richiesto da strumenti del sistema",
+            "B. Per usare meno file",
+            "C. Per il colore",
+            "D. Per la tastiera"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-5"
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "title": "6. PATH, alias e risoluzione dei comandi",
+      "sectionId": "programming-1-2-chapter-6",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-2-chapter-6-guided",
+          "kind": "guided",
+          "lessonId": "1.2",
+          "chapterNumber": 6,
+          "title": "6. PATH, alias e risoluzione dei comandi",
+          "prompt": "Simula un PATH con tre cartelle e due omonimi.\nConfronta ricerca esterna e sys.executable.\nProgetta una modifica reversibile e la sua prova.",
+          "autoverification": "AUTOVERIFICA  La risposta deve includere fonte, piattaforma, comando, percorso effettivo, proprietà misurata ed evidenza dell’esito."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-2-chapter-6-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 6,
+            "title": "6. PATH, alias e risoluzione dei comandi",
+            "prompt": "Analizza un alias che maschera Python."
+          },
+          {
+            "id": "programming-1-2-chapter-6-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 6,
+            "title": "6. PATH, alias e risoluzione dei comandi",
+            "prompt": "Spiega perché il riavvio del terminale conta."
+          },
+          {
+            "id": "programming-1-2-chapter-6-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 6,
+            "title": "6. PATH, alias e risoluzione dei comandi",
+            "prompt": "Costruisci una matrice PowerShell, cmd e shell Unix."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-2-chapter-6-quiz-1",
+          "concept": "6. PATH, alias e risoluzione dei comandi",
+          "prompt": "PATH è?",
+          "choices": [
+            "A. Una password",
+            "B. Un errore",
+            "C. Un elenco ordinato di posizioni",
+            "D. Un solo file"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-6"
+        },
+        {
+          "id": "programming-1-2-chapter-6-quiz-2",
+          "concept": "6. PATH, alias e risoluzione dei comandi",
+          "prompt": "Quale valore conferma l’interprete avviato?",
+          "choices": [
+            "A. Il colore del prompt",
+            "B. Il nome del progetto",
+            "C. sys.executable",
+            "D. Il titolo della finestra"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-6"
+        },
+        {
+          "id": "programming-1-2-chapter-6-quiz-3",
+          "concept": "6. PATH, alias e risoluzione dei comandi",
+          "prompt": "Perché aprire un nuovo terminale?",
+          "choices": [
+            "A. Per rinominare PATH",
+            "B. Per cancellare Python",
+            "C. Per ricevere il nuovo ambiente",
+            "D. Per cambiare CPU"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-6"
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "title": "7. Riconoscere versione, implementazione ed eseguibile",
+      "sectionId": "programming-1-2-chapter-7",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-2-chapter-7-guided",
+          "kind": "guided",
+          "lessonId": "1.2",
+          "chapterNumber": 7,
+          "title": "7. Riconoscere versione, implementazione ed eseguibile",
+          "prompt": "Progetta un comando che stampi cinque proprietà.\nConfronta due ipotetici eseguibili.\nScrivi una conclusione basata su evidenze, non sul nome digitato.",
+          "autoverification": "AUTOVERIFICA  La risposta deve includere fonte, piattaforma, comando, percorso effettivo, proprietà misurata ed evidenza dell’esito."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-2-chapter-7-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 7,
+            "title": "7. Riconoscere versione, implementazione ed eseguibile",
+            "prompt": "Costruisci un caso con stessa versione e percorsi diversi."
+          },
+          {
+            "id": "programming-1-2-chapter-7-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 7,
+            "title": "7. Riconoscere versione, implementazione ed eseguibile",
+            "prompt": "Spiega -VV e sys.version_info."
+          },
+          {
+            "id": "programming-1-2-chapter-7-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 7,
+            "title": "7. Riconoscere versione, implementazione ed eseguibile",
+            "prompt": "Crea una scheda di verifica per l’IDE."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-2-chapter-7-quiz-1",
+          "concept": "7. Riconoscere versione, implementazione ed eseguibile",
+          "prompt": "Che cosa identifica il percorso dell’interprete?",
+          "choices": [
+            "A. sys.executable",
+            "B. Il tema",
+            "C. platform.machine",
+            "D. pip --version"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-7"
+        },
+        {
+          "id": "programming-1-2-chapter-7-quiz-2",
+          "concept": "7. Riconoscere versione, implementazione ed eseguibile",
+          "prompt": "Quale funzione indica l’implementazione?",
+          "choices": [
+            "A. platform.python_implementation()",
+            "B. print",
+            "C. len",
+            "D. open"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-7"
+        },
+        {
+          "id": "programming-1-2-chapter-7-quiz-3",
+          "concept": "7. Riconoscere versione, implementazione ed eseguibile",
+          "prompt": "La versione dell’estensione equivale a Python?",
+          "choices": [
+            "A. No",
+            "B. Sì",
+            "C. Solo su Windows",
+            "D. Solo con IDLE"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-7"
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "title": "8. Verifica funzionale: libreria standard, pip e codice di uscita",
+      "sectionId": "programming-1-2-chapter-8",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-2-chapter-8-guided",
+          "kind": "guided",
+          "lessonId": "1.2",
+          "chapterNumber": 8,
+          "title": "8. Verifica funzionale: libreria standard, pip e codice di uscita",
+          "prompt": "Definisci una batteria di cinque prove non distruttive.\nCollega ogni prova a un criterio di accettazione.\nProgetta il registro di output, errore e codice di uscita.",
+          "autoverification": "AUTOVERIFICA  La risposta deve includere fonte, piattaforma, comando, percorso effettivo, proprietà misurata ed evidenza dell’esito."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-2-chapter-8-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 8,
+            "title": "8. Verifica funzionale: libreria standard, pip e codice di uscita",
+            "prompt": "Analizza pip collegato al Python sbagliato."
+          },
+          {
+            "id": "programming-1-2-chapter-8-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 8,
+            "title": "8. Verifica funzionale: libreria standard, pip e codice di uscita",
+            "prompt": "Costruisci una prova senza rete."
+          },
+          {
+            "id": "programming-1-2-chapter-8-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 8,
+            "title": "8. Verifica funzionale: libreria standard, pip e codice di uscita",
+            "prompt": "Spiega perché zero non prova correttezza totale."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-2-chapter-8-quiz-1",
+          "concept": "8. Verifica funzionale: libreria standard, pip e codice di uscita",
+          "prompt": "Qual è la forma più esplicita per pip?",
+          "choices": [
+            "A. Rinominare pip",
+            "B. pip globale",
+            "C. python -m pip",
+            "D. Aprire lo Store"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-8"
+        },
+        {
+          "id": "programming-1-2-chapter-8-quiz-2",
+          "concept": "8. Verifica funzionale: libreria standard, pip e codice di uscita",
+          "prompt": "Codice di uscita zero significa?",
+          "choices": [
+            "A. Programma perfetto",
+            "B. Nessun rischio futuro",
+            "C. Successo convenzionale del processo",
+            "D. Versione più nuova"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-8"
+        },
+        {
+          "id": "programming-1-2-chapter-8-quiz-3",
+          "concept": "8. Verifica funzionale: libreria standard, pip e codice di uscita",
+          "prompt": "Il collaudo base deve installare pacchetti globali?",
+          "choices": [
+            "A. Sempre",
+            "B. Solo per colorare l’IDE",
+            "C. No",
+            "D. Mai leggere output"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-8"
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "title": "9. Installazioni multiple, conflitti e diagnosi per livelli",
+      "sectionId": "programming-1-2-chapter-9",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-2-chapter-9-guided",
+          "kind": "guided",
+          "lessonId": "1.2",
+          "chapterNumber": 9,
+          "title": "9. Installazioni multiple, conflitti e diagnosi per livelli",
+          "prompt": "Diagnostica tre sintomi con un albero per livelli.\nScegli una sola modifica per ogni ipotesi.\nDefinisci la prova di conferma e quella di regressione.",
+          "autoverification": "AUTOVERIFICA  La risposta deve includere fonte, piattaforma, comando, percorso effettivo, proprietà misurata ed evidenza dell’esito."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-2-chapter-9-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 9,
+            "title": "9. Installazioni multiple, conflitti e diagnosi per livelli",
+            "prompt": "Analizza terminale e IDE disallineati."
+          },
+          {
+            "id": "programming-1-2-chapter-9-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 9,
+            "title": "9. Installazioni multiple, conflitti e diagnosi per livelli",
+            "prompt": "Costruisci un caso con vecchio launcher."
+          },
+          {
+            "id": "programming-1-2-chapter-9-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 9,
+            "title": "9. Installazioni multiple, conflitti e diagnosi per livelli",
+            "prompt": "Spiega quando reinstallare è giustificato."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-2-chapter-9-quiz-1",
+          "concept": "9. Installazioni multiple, conflitti e diagnosi per livelli",
+          "prompt": "Più installazioni sono sempre un errore?",
+          "choices": [
+            "A. No",
+            "B. Sì",
+            "C. Solo su Linux",
+            "D. Solo con IDE"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-9"
+        },
+        {
+          "id": "programming-1-2-chapter-9-quiz-2",
+          "concept": "9. Installazioni multiple, conflitti e diagnosi per livelli",
+          "prompt": "Qual è la prima azione diagnostica?",
+          "choices": [
+            "A. Osservare comando, percorso e contesto",
+            "B. Reinstallare tutto",
+            "C. Usare privilegi elevati",
+            "D. Cancellare PATH"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-9"
+        },
+        {
+          "id": "programming-1-2-chapter-9-quiz-3",
+          "concept": "9. Installazioni multiple, conflitti e diagnosi per livelli",
+          "prompt": "Module not found riguarda principalmente?",
+          "choices": [
+            "A. L’ambiente di importazione",
+            "B. Il mouse",
+            "C. Il monitor",
+            "D. La CPU"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-9"
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "title": "10. Aggiornamento, rimozione e dossier di accettazione",
+      "sectionId": "programming-1-2-chapter-10",
+      "exercises": {
+        "guided": {
+          "id": "programming-1-2-chapter-10-guided",
+          "kind": "guided",
+          "lessonId": "1.2",
+          "chapterNumber": 10,
+          "title": "10. Aggiornamento, rimozione e dossier di accettazione",
+          "prompt": "Compila un dossier per un caso simulato.\nProgetta aggiornamento, verifica e ritorno.\nDefinisci una rimozione che distingua tutti i componenti.",
+          "autoverification": "AUTOVERIFICA  La risposta deve includere fonte, piattaforma, comando, percorso effettivo, proprietà misurata ed evidenza dell’esito."
+        },
+        "autonomous": [
+          {
+            "id": "programming-1-2-chapter-10-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 10,
+            "title": "10. Aggiornamento, rimozione e dossier di accettazione",
+            "prompt": "Analizza una versione fuori supporto."
+          },
+          {
+            "id": "programming-1-2-chapter-10-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 10,
+            "title": "10. Aggiornamento, rimozione e dossier di accettazione",
+            "prompt": "Crea una politica di aggiornamento didattica."
+          },
+          {
+            "id": "programming-1-2-chapter-10-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "1.2",
+            "chapterNumber": 10,
+            "title": "10. Aggiornamento, rimozione e dossier di accettazione",
+            "prompt": "Revisiona un dossier eliminando dati sensibili."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-1-2-chapter-10-quiz-1",
+          "concept": "10. Aggiornamento, rimozione e dossier di accettazione",
+          "prompt": "Che cosa deve contenere un dossier?",
+          "choices": [
+            "A. Solo uno screenshot",
+            "B. Solo il nome Python",
+            "C. Identità, metodo e prove verificabili",
+            "D. Password"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-10"
+        },
+        {
+          "id": "programming-1-2-chapter-10-quiz-2",
+          "concept": "10. Aggiornamento, rimozione e dossier di accettazione",
+          "prompt": "Come si rimuove un runtime?",
+          "choices": [
+            "A. Modificando il sorgente",
+            "B. Spegnendo la rete",
+            "C. Con il meccanismo del distributore",
+            "D. Cancellando file casuali"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-10"
+        },
+        {
+          "id": "programming-1-2-chapter-10-quiz-3",
+          "concept": "10. Aggiornamento, rimozione e dossier di accettazione",
+          "prompt": "Dopo un aggiornamento bisogna?",
+          "choices": [
+            "A. Eliminare il registro",
+            "B. Cambiare IDE",
+            "C. Verificare i progetti interessati",
+            "D. Ignorare i progetti"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-1-2-chapter-10"
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    [
+      "Python",
+      "Linguaggio di programmazione e progetto che ne definisce le specifiche."
+    ],
+    [
+      "CPython",
+      "Implementazione di riferimento di Python."
+    ],
+    [
+      "Distribuzione",
+      "Pacchetto e metodo con cui interprete e strumenti vengono forniti."
+    ],
+    [
+      "Fonte primaria",
+      "Sito o canale ufficiale del produttore o manutentore."
+    ],
+    [
+      "Criterio di accettazione",
+      "Condizione osservabile che definisce il successo."
+    ],
+    [
+      "Architettura CPU",
+      "Famiglia di istruzioni supportata dal processore."
+    ],
+    [
+      "Bitness",
+      "Larghezza caratteristica del processo, spesso 32 o 64 bit."
+    ],
+    [
+      "ARM64",
+      "Architettura a 64 bit della famiglia ARM."
+    ],
+    [
+      "x86-64",
+      "Architettura a 64 bit della famiglia x86."
+    ],
+    [
+      "Emulazione",
+      "Esecuzione tramite traduzione o simulazione di un’altra piattaforma."
+    ],
+    [
+      "Python Install Manager",
+      "Strumento ufficiale corrente per gestire runtime su Windows."
+    ],
+    [
+      "Runtime",
+      "Installazione eseguibile di Python."
+    ],
+    [
+      "Alias di esecuzione",
+      "Associazione gestita da Windows fra nome e applicazione."
+    ],
+    [
+      "PATH",
+      "Elenco ordinato di posizioni usate per cercare comandi."
+    ],
+    [
+      "Launcher",
+      "Programma che seleziona e avvia un interprete."
+    ],
+    [
+      "Pacchetto .pkg",
+      "Formato standard di installer macOS."
+    ],
+    [
+      "Universal2",
+      "Build macOS contenente supporto per architetture Apple Silicon e Intel."
+    ],
+    [
+      "Framework",
+      "Struttura macOS che raccoglie eseguibili e librerie."
+    ],
+    [
+      "Gatekeeper",
+      "Meccanismo macOS che verifica software e provenienza."
+    ],
+    [
+      "Python di sistema",
+      "Installazione controllata dal sistema o dai suoi strumenti."
+    ],
+    [
+      "Distribuzione Linux",
+      "Sistema Linux con propri repository e politiche."
+    ],
+    [
+      "Repository",
+      "Raccolta gestita di pacchetti software."
+    ],
+    [
+      "Gestore di pacchetti",
+      "Strumento che installa e aggiorna componenti della distribuzione."
+    ],
+    [
+      "Prefisso",
+      "Radice scelta per collocare file di un’installazione."
+    ],
+    [
+      "make altinstall",
+      "Modalità di installazione parallela suggerita per evitare di mascherare python3."
+    ],
+    [
+      "Variabile d’ambiente",
+      "Valore ereditato dai processi e usato dalla configurazione."
+    ],
+    [
+      "Risoluzione",
+      "Procedura che associa un nome di comando a un’azione."
+    ],
+    [
+      "Precedenza",
+      "Regola che decide quale corrispondenza vince."
+    ],
+    [
+      "Get-Command",
+      "Comando PowerShell per osservare la risoluzione."
+    ],
+    [
+      "sys.executable",
+      "Percorso dell’eseguibile Python corrente."
+    ],
+    [
+      "Versione",
+      "Identificatore della revisione del runtime."
+    ],
+    [
+      "Implementazione",
+      "Programma concreto che realizza il linguaggio Python."
+    ],
+    [
+      "sys.version_info",
+      "Struttura con le componenti della versione Python."
+    ],
+    [
+      "Prerilascio",
+      "Versione destinata a prova prima della stabilità generale."
+    ],
+    [
+      "Symlink",
+      "Riferimento del file system verso un altro percorso."
+    ],
+    [
+      "Libreria standard",
+      "Moduli distribuiti con Python."
+    ],
+    [
+      "pip",
+      "Strumento comune per gestire pacchetti Python."
+    ],
+    [
+      "-m",
+      "Opzione che esegue un modulo tramite l’interprete scelto."
+    ],
+    [
+      "Codice di uscita",
+      "Valore restituito dal processo al chiamante."
+    ],
+    [
+      "Collaudo",
+      "Insieme di prove legate a requisiti osservabili."
+    ],
+    [
+      "Conflitto",
+      "Interazione incompatibile o selezione inattesa fra componenti."
+    ],
+    [
+      "Diagnosi per livelli",
+      "Ricerca del guasto seguendo la catena di esecuzione."
+    ],
+    [
+      "Regressione",
+      "Ricomparsa di un problema o perdita di comportamento precedente."
+    ],
+    [
+      "Contesto",
+      "Insieme di shell, cartella, configurazione e ambiente attivi."
+    ],
+    [
+      "Reinstallazione",
+      "Nuova posa del componente, giustificata da evidenze specifiche."
+    ],
+    [
+      "Dossier di accettazione",
+      "Registro di scelta, installazione e prove dell’ambiente."
+    ],
+    [
+      "Aggiornamento",
+      "Sostituzione intenzionale con una revisione diversa."
+    ],
+    [
+      "Rimozione",
+      "Eliminazione controllata tramite il meccanismo previsto."
+    ],
+    [
+      "Supporto",
+      "Periodo e condizioni in cui una versione riceve manutenzione."
+    ],
+    [
+      "Rollback",
+      "Ritorno pianificato a uno stato precedente."
+    ]
+  ],
+  "summary": [
+    "Installare Python è una decisione controllata: si inventaria la piattaforma, si sceglie una fonte primaria, si usa il metodo adatto al sistema e si verifica il processo realmente avviato. Windows, macOS e Linux differiscono nei meccanismi, ma condividono lo stesso criterio: percorso, versione, implementazione, architettura, funzione e codice di uscita devono essere osservabili. PATH e launcher spiegano i nomi; sys.executable conferma l’identità."
+  ],
+  "finalAssessment": {
+    "lessonId": "1.2",
+    "title": "Laboratorio finale: installazione verificata",
+    "prompt": "Esegui l’installazione solo se autorizzato; altrimenti svolgi il laboratorio come progetto documentato. Produci un dossier di 1.800–2.400 parole.",
+    "deliverables": [
+      "Registra sistema, rilascio, CPU, architettura e vincoli.",
+      "Motiva fonte, distribuzione e versione scelta.",
+      "Descrivi la procedura specifica per la piattaforma.",
+      "Registra privilegi richiesti e strategia di ritorno.",
+      "Mostra come il comando viene risolto.",
+      "Registra sys.executable, versione, implementazione e bitness.",
+      "Esegui prove di libreria standard, file noto e codice di uscita.",
+      "Verifica python -m pip --version, se previsto, senza installare pacchetti.",
+      "Analizza almeno due installazioni o candidati possibili.",
+      "Concludi rispetto ai criteri di accettazione e annota anomalie."
+    ],
+    "rubric": [
+      [
+        "Dimensione",
+        "Essenziale",
+        "Solida",
+        "Piena padronanza"
+      ],
+      [
+        "Scelta",
+        "Fonte nominata",
+        "Compatibilità motivata",
+        "Supporto, vincoli e provenienza documentati"
+      ],
+      [
+        "Piattaforma",
+        "Sistema riconosciuto",
+        "CPU e processo distinti",
+        "Natività, emulazione e packaging analizzati"
+      ],
+      [
+        "Identità",
+        "Versione letta",
+        "Percorso e implementazione",
+        "Risoluzione e contesti confrontati"
+      ],
+      [
+        "Collaudo",
+        "Comando avviato",
+        "Prove e uscita",
+        "Requisiti collegati a evidenze ripetibili"
+      ],
+      [
+        "Sicurezza",
+        "Permessi considerati",
+        "Sistema e segreti protetti",
+        "Provenienza, minimo privilegio e ritorno motivati"
+      ],
+      [
+        "Diagnosi",
+        "Sintomo descritto",
+        "Livello identificato",
+        "Ipotesi isolate con una modifica per volta"
+      ]
+    ],
+    "completionCriteria": [
+      "Tutti i dieci capitoli sono stati letti e annotati.",
+      "Sono stati completati gli esercizi guidati e almeno venti autonomi.",
+      "Il punteggio dei quiz è almeno 24/30, con correzione motivata.",
+      "Il laboratorio raggiunge almeno il livello Solida in ogni dimensione.",
+      "Il lettore sa identificare l’interprete senza dipendere dal nome del comando.",
+      "Il lettore sa distinguere CPU, sistema e processo.",
+      "Il dossier è pronto per la Lezione 1.3 su terminale e shell."
+    ]
+  }
+}

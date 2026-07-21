@@ -3,7 +3,7 @@
 Stato: in corso
 Assegnazione: Codex
 Branch: `agent/integrate-programming-module-1`
-Pull request: da aprire
+Pull request: [PR #29](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/29)
 
 ## Obiettivo
 
@@ -52,3 +52,19 @@ Le proposte originali sono impilate su una base precedente a tutte le integrazio
 - lint;
 - build di produzione;
 - verifica online dopo merge e deployment.
+
+## Integrazione eseguita
+
+- importati esclusivamente gli artefatti ufficiali delle lezioni 1.1 e 1.2 dai commit di AndreaGiudice94;
+- escluse le copie impilate delle lezioni 0.4–0.9 presenti nei branch sorgente;
+- creato il Modulo 1 separato nel catalogo, nel percorso e nell’indice dell’aula;
+- collegati esercizi, quiz, glossario, prove finali, Eve e avanzamento;
+- aggiunti due Python Project compatibili con l’esecutore isolato già presente;
+- verificati i contenuti tecnici della lezione 1.2 rispetto alla documentazione ufficiale Python corrente.
+
+Impronte delle fonti dichiarate negli artefatti:
+
+- Lezione 1.1: `adf2899abed24ff5b51ae9ec693cd24e73d40c8b0debfa25a60415cda3e8d755`;
+- Lezione 1.2: `3cc6e6166ef7e3ead6e11dd70a23aca68dc7bf4773bbf928eff4260cfdef952a`.
+
+Verifiche completate: typecheck, lint senza errori e build di produzione. L’esecuzione locale di Vitest è impedita dal profilo filesystem del sandbox; le aspettative del test dedicato sono state aggiornate e compilano correttamente.

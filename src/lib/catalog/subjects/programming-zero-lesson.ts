@@ -6,6 +6,8 @@ import lesson06Content from "./programming-zero-lesson-0-6-official-content.json
 import lesson07Content from "./programming-zero-lesson-0-7-official-content.json";
 import lesson08Content from "./programming-zero-lesson-0-8-official-content.json";
 import lesson09Content from "./programming-zero-lesson-0-9-official-content.json";
+import lesson11Content from "./programming-zero-lesson-1-1-official-content.json";
+import lesson12Content from "./programming-zero-lesson-1-2-official-content.json";
 
 export const PROGRAMMING_ZERO_PATH_ID = "programming-zero";
 // The existing native material keeps its identifier so rooms and saved progress remain connected.
@@ -47,7 +49,7 @@ interface OfficialExercise {
   autoverification?: string;
 }
 
-const officialLessons = [...officialContent.lessons, lesson03Content, lesson04Content, lesson05Content, lesson06Content, lesson07Content, lesson08Content, lesson09Content];
+const officialLessons = [...officialContent.lessons, lesson03Content, lesson04Content, lesson05Content, lesson06Content, lesson07Content, lesson08Content, lesson09Content, lesson11Content, lesson12Content];
 const chapters = officialLessons.flatMap((lesson) => lesson.chapters);
 const allExercises = chapters.flatMap((chapter) => [chapter.exercises.guided, ...chapter.exercises.autonomous]);
 const [firstGuidedExercise, ...remainingExercises] = allExercises;
@@ -67,6 +69,7 @@ const programmingModules = moduleNumbers.map((moduleNumber) => ({
       quizIds: lesson.chapters.flatMap((chapter) => chapter.quiz.map((question) => question.id)),
       glossary: lesson.glossary,
       summary: lesson.summary,
+      objectives: lesson.objectives,
     })),
 }));
 
@@ -392,6 +395,64 @@ else:
     print("Esito: serve recupero mirato per le dimensioni sotto soglia")`,
     expectedResult: "Il programma deve mostrare il totale, l'esito di ogni dimensione e richiedere recupero quando almeno una soglia specifica non è raggiunta.",
   },
+  {
+    id: "programming-zero-python-project-1-1",
+    lessonId: "1.1",
+    title: "Mappa dell’ambiente in esecuzione",
+    difficulty: "Base con osservazione dell’ambiente",
+    goal: "Rappresentare i componenti dell’ambiente senza confondere editor, terminale, interprete, file e risultato.",
+    concepts: ["ambiente di sviluppo", "editor", "terminale", "interprete", "file sorgente", "output"],
+    instructions: [
+      "Esegui il programma e individua il ruolo distinto di ogni componente.",
+      "Sostituisci i valori generici con i nomi degli strumenti che userai realmente, lasciando ‘da verificare’ ciò che non hai ancora installato.",
+      "Modifica il nome del file e l’output atteso senza scambiare il sorgente con il risultato.",
+      "Aggiungi una riga che spieghi quale componente esegue il codice.",
+    ],
+    starterCode: `editor = "editor da scegliere"
+terminale = "terminale del sistema"
+interprete = "Python da verificare"
+file_sorgente = "primo_programma.py"
+output_atteso = "Ciao, ambiente!"
+
+print("Editor - scrive il file:", editor)
+print("Terminale - invia il comando:", terminale)
+print("Interprete - esegue il codice:", interprete)
+print("File sorgente:", file_sorgente)
+print("Output atteso:", output_atteso)`,
+    expectedResult: "Il programma deve mostrare una mappa chiara dei componenti e mantenere distinti strumento, sorgente ed output.",
+  },
+  {
+    id: "programming-zero-python-project-1-2",
+    lessonId: "1.2",
+    title: "Dossier dell’installazione Python",
+    difficulty: "Base con verifica tecnica",
+    goal: "Registrare in modo ordinato le prove raccolte durante la verifica dell’installazione Python.",
+    concepts: ["sys.executable", "versione", "implementazione", "architettura", "bitness", "verifica funzionale"],
+    instructions: [
+      "Sostituisci i valori di esempio soltanto dopo averli osservati con i comandi indicati nella lezione.",
+      "Mantieni distinti percorso dell’eseguibile, versione, implementazione, bitness e architettura.",
+      "Imposta prova_funzionale_riuscita su True soltanto se il file di verifica termina correttamente.",
+      "Esegui il programma e controlla che il dossier segnali chiaramente se la verifica è completa o ancora da completare.",
+    ],
+    starterCode: `eseguibile = "percorso da sys.executable"
+versione = "versione osservata"
+implementazione = "CPython"
+bitness_processo = 64
+architettura_osservata = "architettura da verificare"
+prova_funzionale_riuscita = False
+
+print("Eseguibile:", eseguibile)
+print("Versione:", versione)
+print("Implementazione:", implementazione)
+print("Bitness del processo:", bitness_processo)
+print("Architettura osservata:", architettura_osservata)
+
+if prova_funzionale_riuscita:
+    print("Esito: installazione verificata")
+else:
+    print("Esito: verifica ancora da completare")`,
+    expectedResult: "Il programma deve produrre un dossier con eseguibile, versione, implementazione, bitness, architettura ed esito della prova funzionale.",
+  },
 ] as const;
 
 if (!firstGuidedExercise) throw new Error("Le fonti ufficiali non contengono esercizi guidati");
@@ -402,10 +463,10 @@ export const programmingLesson = {
   id: PROGRAMMING_LESSON_ID,
   pathId: PROGRAMMING_ZERO_PATH_ID,
   moduleId: "programming-module-0",
-  title: "Programmazione da Zero · Lezioni 0.1–0.9",
+  title: "Programmazione da Zero · Lezioni 0.1–1.2",
   lessonTitles: officialLessons.map((lesson) => `Lezione ${lesson.id} · ${lesson.title}`),
   level: "Lettore senza conoscenze pregresse",
-  estimatedMinutes: 810,
+  estimatedMinutes: 990,
   description: officialLessons.map((lesson) => lesson.summary[0]).join(" "),
   objectives: officialLessons.flatMap((lesson) => lesson.objectives),
   modules: programmingModules,
