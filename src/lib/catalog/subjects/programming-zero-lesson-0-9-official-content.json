@@ -1,0 +1,5089 @@
+{
+  "id": "0.9",
+  "title": "Laboratorio conclusivo e valutazione completa",
+  "source": {
+    "filename": "Programmazione_da_Zero_Lezione_0.9_Laboratorio_e_valutazione_finale.docx",
+    "sha256": "cac28baa626f64d6e79c10b47784704031cec4f4e8d27f26b04f25dd8773bb9b",
+    "storedInRepository": false,
+    "normalizations": []
+  },
+  "metrics": {
+    "paragraphs": 846,
+    "tables": 13,
+    "textCharacters": 61683
+  },
+  "objectives": [
+    "Spiegare che cosa significa programmare.",
+    "Seguire dati e istruzioni nel computer.",
+    "Ragionare con logica e controesempi.",
+    "Progettare algoritmi e verificarli.",
+    "Collegare artefatti nel ciclo di vita.",
+    "Leggere criticamente storia e aree.",
+    "Valutare impatti etici, privacy, sicurezza, accessibilità e sostenibilità.",
+    "Produrre e difendere un dossier integrato.",
+    "Applicare rubriche e pianificare recupero."
+  ],
+  "sections": [
+    {
+      "id": "programming-0-9-introduction",
+      "lessonId": "0.9",
+      "chapterNumber": 0,
+      "title": "Lezione 0.9 · Laboratorio conclusivo",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "AULA STUDIO VIRTUALE"
+        },
+        {
+          "type": "paragraph",
+          "text": "Programmazione da Zero"
+        },
+        {
+          "type": "paragraph",
+          "text": "Manuale ufficiale"
+        },
+        {
+          "type": "paragraph",
+          "text": "MODULO 0"
+        },
+        {
+          "type": "paragraph",
+          "text": "Lezione 0.9"
+        },
+        {
+          "type": "paragraph",
+          "text": "Laboratorio conclusivo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Progetto integrato e valutazione completa del Modulo 0"
+        },
+        {
+          "type": "paragraph",
+          "text": "DESTINATARIO  Lettore che ha completato le Lezioni 0.1–0.8. Non è richiesta programmazione Python: si valutano fondamenti, ragionamento, progettazione e responsabilità."
+        },
+        {
+          "type": "paragraph",
+          "text": "Edizione editoriale · 2026"
+        },
+        {
+          "type": "heading",
+          "text": "Come usare questa lezione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Questa lezione non introduce nuovi prerequisiti: integra e verifica il Modulo 0. Si consiglia di lavorare in tre passaggi: prova individuale senza consultazione, revisione con manuale e rubrica, nuova prova mirata. Conservare tutte le versioni nel portfolio."
+        },
+        {
+          "type": "paragraph",
+          "text": "REGOLA DI TRASPARENZA  Dichiarare persone, strumenti e materiali usati. L’aiuto non annulla l’apprendimento se il lettore sa verificare, correggere e spiegare il risultato."
+        },
+        {
+          "type": "heading",
+          "text": "Risultati di apprendimento"
+        },
+        {
+          "type": "list-item",
+          "text": "Spiegare che cosa significa programmare."
+        },
+        {
+          "type": "list-item",
+          "text": "Seguire dati e istruzioni nel computer."
+        },
+        {
+          "type": "list-item",
+          "text": "Ragionare con logica e controesempi."
+        },
+        {
+          "type": "list-item",
+          "text": "Progettare algoritmi e verificarli."
+        },
+        {
+          "type": "list-item",
+          "text": "Collegare artefatti nel ciclo di vita."
+        },
+        {
+          "type": "list-item",
+          "text": "Leggere criticamente storia e aree."
+        },
+        {
+          "type": "list-item",
+          "text": "Valutare impatti etici, privacy, sicurezza, accessibilità e sostenibilità."
+        },
+        {
+          "type": "list-item",
+          "text": "Produrre e difendere un dossier integrato."
+        },
+        {
+          "type": "list-item",
+          "text": "Applicare rubriche e pianificare recupero."
+        },
+        {
+          "type": "heading",
+          "text": "Mappa della lezione"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Cap.",
+              "Nucleo valutato"
+            ],
+            [
+              "1",
+              "Valutare per dimostrare comprensione: prove, criteri e portfolio"
+            ],
+            [
+              "2",
+              "Laboratorio di sintesi: che cosa significa programmare"
+            ],
+            [
+              "3",
+              "Laboratorio di sistemi: computer e rappresentazione dell’informazione"
+            ],
+            [
+              "4",
+              "Laboratorio di logica: proposizioni, condizioni e prove"
+            ],
+            [
+              "5",
+              "Laboratorio algoritmico: problema, pseudocodice e correttezza"
+            ],
+            [
+              "6",
+              "Laboratorio di progettazione: ciclo di vita e qualità del software"
+            ],
+            [
+              "7",
+              "Laboratorio di orientamento: storia e aree dell’informatica"
+            ],
+            [
+              "8",
+              "Laboratorio di responsabilità: impatto del software"
+            ],
+            [
+              "9",
+              "Progetto integrato: sistema di prenotazione per Aula Studio Virtuale"
+            ],
+            [
+              "10",
+              "Esame finale, rubriche, recupero e completamento del Modulo 0"
+            ]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Materiali e tempi consigliati"
+        },
+        {
+          "type": "paragraph",
+          "text": "Servono le Lezioni 0.1–0.8, carta o editor di testo e una cartella per il portfolio. Tempo indicativo: 12–18 ore distribuite in più sessioni. Gli accomodamenti devono preservare la competenza misurata e rimuovere barriere non pertinenti."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-9-chapter-1",
+      "lessonId": "0.9",
+      "chapterNumber": 1,
+      "title": "1. Valutare per dimostrare comprensione: prove, criteri e portfolio",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.9 · CAPITOLO 1 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "1. Valutare per dimostrare comprensione: prove, criteri e portfolio"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Dimostrare la competenza attraverso spiegazione, applicazione, verifica, revisione e collegamento con l’intero Modulo 0."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una valutazione valida non misura soltanto memoria immediata. Deve raccogliere evidenze che il lettore sappia spiegare concetti, applicarli, riconoscere errori, collegare aree e trasferire il ragionamento a casi nuovi. Il laboratorio conclusivo combina domande, esercizi, artefatti e riflessione per ridurre la dipendenza da una singola prova."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Valutare la capacità di cucinare chiedendo solo definizioni sugli ingredienti sarebbe incompleto. Occorre osservare pianificazione, esecuzione, correzione e spiegazione delle scelte. Allo stesso modo, conoscere il termine ‘algoritmo’ non basta: bisogna scriverne uno, simularlo e criticarlo."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "La valutazione allinea risultati di apprendimento, attività ed evidenze. Validità indica se la prova misura la competenza prevista; affidabilità riguarda coerenza dei giudizi; equità richiede accesso comparabile e accomodamenti senza ridurre l’obiettivo. Una rubrica esplicita dimensioni e livelli. Il portfolio raccoglie prodotti, revisioni, feedback e autoriflessione. La triangolazione usa più tipi di evidenza per sostenere una conclusione."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Un quiz controlla distinzioni concettuali."
+        },
+        {
+          "type": "list-item",
+          "text": "Un diagramma mostra il modello mentale."
+        },
+        {
+          "type": "list-item",
+          "text": "La revisione di un errore dimostra apprendimento meglio della sola risposta finale."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "Molte domande facili non garantiscono copertura del programma."
+        },
+        {
+          "type": "list-item",
+          "text": "Una presentazione elegante non compensa concetti errati."
+        },
+        {
+          "type": "list-item",
+          "text": "Un voto unico senza criteri non indica che cosa recuperare."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "La valutazione è un cruscotto: più strumenti mostrano aspetti diversi del sistema. Un solo indicatore può essere utile ma non sufficiente; troppi indicatori non collegati producono rumore."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 1.1 — Sintesi e verifica"
+        },
+        {
+          "type": "paragraph",
+          "text": "RISULTATI DI APPRENDIMENTO  vPROVE: quiz + esercizi + progetto + riflessione  vCRITERI E RUBRICA  vEVIDENZE TRIANGOLATE  vGIUDIZIO -> FEEDBACK -> RECUPERO -> NUOVA PROVA"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il feedback deve descrivere scarto, causa probabile e azione successiva. Il recupero non ripete identicamente la prova: propone esercizi mirati e una nuova evidenza equivalente. L’integrità accademica richiede dichiarare aiuti e fonti, ma collaborazione e strumenti possono essere parte della competenza se l’autore sa verificare e spiegare il risultato."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Valutare soltanto ricordo di termini."
+        },
+        {
+          "type": "list-item",
+          "text": "Cambiare criteri dopo la consegna."
+        },
+        {
+          "type": "list-item",
+          "text": "Confondere difficoltà e validità."
+        },
+        {
+          "type": "list-item",
+          "text": "Usare il voto senza feedback operativo."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Prestazione influenzata da barriera non pertinente."
+        },
+        {
+          "type": "list-item",
+          "text": "Ottimo progetto con spiegazione debole."
+        },
+        {
+          "type": "list-item",
+          "text": "Risposta corretta ottenuta per ragione errata."
+        },
+        {
+          "type": "list-item",
+          "text": "Aiuto esterno dichiarato ma non compreso."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI LAVORO  Produci l’artefatto, applica i criteri, cerca un controesempio, registra il feedback e conserva sia la versione iniziale sia quella revisionata."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale evidenza dimostra davvero la competenza?"
+        },
+        {
+          "type": "list-item",
+          "text": "Che cosa deve restare invariato in un accomodamento?"
+        },
+        {
+          "type": "list-item",
+          "text": "Come distingui prodotto e processo?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "list-item",
+          "text": "Scegli tre risultati del Modulo 0."
+        },
+        {
+          "type": "list-item",
+          "text": "Associa a ciascuno due prove differenti."
+        },
+        {
+          "type": "list-item",
+          "text": "Definisci criteri, livello minimo e attività di recupero."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve essere spiegabile senza affidarsi alla soluzione, collegata a un criterio e accompagnata da almeno una prova o simulazione."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Costruisci il tuo indice di portfolio."
+        },
+        {
+          "type": "list-item",
+          "text": "Critica una valutazione basata solo su quiz."
+        },
+        {
+          "type": "list-item",
+          "text": "Scrivi una dichiarazione trasparente degli aiuti usati."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Che cosa indica la validità?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Quanto la prova misura la competenza prevista"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Quanto è lunga"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Quante immagini contiene"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Il colore della rubrica"
+        },
+        {
+          "type": "heading",
+          "text": "2. A che cosa serve una rubrica?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. A sostituire ogni feedback"
+        },
+        {
+          "type": "list-item",
+          "text": "B. A nascondere i criteri"
+        },
+        {
+          "type": "list-item",
+          "text": "C. A contare file"
+        },
+        {
+          "type": "list-item",
+          "text": "D. A rendere espliciti dimensioni e livelli"
+        },
+        {
+          "type": "heading",
+          "text": "3. Il recupero deve ripetere identica la prova?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Sempre"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo oralmente"
+        },
+        {
+          "type": "list-item",
+          "text": "C. No"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Sì"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Validità",
+              "Adeguatezza della prova rispetto alla competenza."
+            ],
+            [
+              "Affidabilità",
+              "Coerenza dei risultati o giudizi."
+            ],
+            [
+              "Rubrica",
+              "Matrice di criteri e livelli di padronanza."
+            ],
+            [
+              "Portfolio",
+              "Raccolta ragionata di evidenze e revisioni."
+            ],
+            [
+              "Triangolazione",
+              "Uso di prove differenti per sostenere un giudizio."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "La valutazione allinea risultati di apprendimento, attività ed evidenze. Validità indica se la prova misura la competenza prevista; affidabilità riguarda coerenza dei giudizi; equità richiede accesso comparabile e accomodamenti senza ridurre l’obiettivo. Una rubrica esplicita dimensioni e livelli. Il portfolio raccoglie prodotti, revisioni, feedback e autoriflessione. La triangolazione usa più tipi di evidenza per sostenere una conclusione. La competenza è dimostrata quando il lettore sa applicare, verificare e revisionare, non soltanto riconoscere le parole."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il nucleo concettuale senza leggere il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So produrre un artefatto coerente e un controesempio."
+        },
+        {
+          "type": "list-item",
+          "text": "So applicare una rubrica e motivare il livello raggiunto."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho revisionato il lavoro conservando traccia delle correzioni."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre nel quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-9-chapter-2",
+      "lessonId": "0.9",
+      "chapterNumber": 2,
+      "title": "2. Laboratorio di sintesi: che cosa significa programmare",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.9 · CAPITOLO 2 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "2. Laboratorio di sintesi: che cosa significa programmare"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Dimostrare la competenza attraverso spiegazione, applicazione, verifica, revisione e collegamento con l’intero Modulo 0."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Programmare significa formulare un problema, rappresentare dati e regole, descrivere istruzioni eseguibili, verificare risultati e mantenere il sistema nel tempo. Non coincide con digitare sintassi. Questo laboratorio ricostruisce il modello completo della Lezione 0.1 e lo usa per giudicare esempi ambigui."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Dare indicazioni a una persona richiede contesto condiviso; programmare per una macchina richiede rendere esplicite le regole che una persona potrebbe inferire. La precisione non elimina creatività: sposta la creatività nella scelta del modello, dell’algoritmo e delle prove."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un programma è una rappresentazione formale di istruzioni e dati eseguita da un sistema. La sintassi definisce forme valide, la semantica il significato operativo e la pragmatica l’uso nel contesto. Programmazione comprende analisi, progettazione, implementazione, verifica, debugging e comunicazione. Correttezza rispetto alla specifica non garantisce validità del problema né assenza di effetti indesiderati."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Un foglio di calcolo con formule è una forma di programmazione."
+        },
+        {
+          "type": "list-item",
+          "text": "Configurare regole automatiche può esprimere logica programmabile."
+        },
+        {
+          "type": "list-item",
+          "text": "Scrivere pseudocodice è progettazione algoritmica, non ancora programma eseguibile."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "Usare un’applicazione non equivale sempre a programmarla."
+        },
+        {
+          "type": "list-item",
+          "text": "Copiare codice non dimostra comprensione."
+        },
+        {
+          "type": "list-item",
+          "text": "Un programma senza errori di sintassi può essere logicamente sbagliato."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Programmare è scrivere una partitura per un esecutore rigoroso. L’analogia termina dove il computer non possiede interpretazione musicale autonoma: applica semantiche definite e interagisce con un ambiente tecnico."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 2.1 — Sintesi e verifica"
+        },
+        {
+          "type": "paragraph",
+          "text": "BISOGNO  vPROBLEMA + SPECIFICA  vMODELLO + DATI + ALGORITMO  vCODICE / CONFIGURAZIONE  vESECUZIONE -> OUTPUT / ERRORE  vVERIFICA + EFFETTI + MANUTENZIONE"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "I livelli di linguaggio nascondono dettagli differenti; nessun livello annulla l’hardware e il sistema operativo. L’automazione trasferisce decisioni e può amplificarle. Un programmatore responsabile distingue ciò che il sistema fa, ciò che dovrebbe fare e ciò che le persone credono che faccia."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Ridurre programmazione alla sintassi."
+        },
+        {
+          "type": "list-item",
+          "text": "Confondere algoritmo e programma."
+        },
+        {
+          "type": "list-item",
+          "text": "Ignorare ambiente e input."
+        },
+        {
+          "type": "list-item",
+          "text": "Assumere che automazione significhi neutralità."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Configurazione dichiarativa senza istruzioni sequenziali."
+        },
+        {
+          "type": "list-item",
+          "text": "Programma che dipende da comportamento esterno."
+        },
+        {
+          "type": "list-item",
+          "text": "Codice corretto per una specifica dannosa."
+        },
+        {
+          "type": "list-item",
+          "text": "Sistema che apprende parametri dai dati."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI LAVORO  Produci l’artefatto, applica i criteri, cerca un controesempio, registra il feedback e conserva sia la versione iniziale sia quella revisionata."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale parte del lavoro è creativa?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quando una configurazione diventa programmazione?"
+        },
+        {
+          "type": "list-item",
+          "text": "Come distingui correttezza e utilità?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "list-item",
+          "text": "Classifica dieci attività come uso, configurazione o programmazione."
+        },
+        {
+          "type": "list-item",
+          "text": "Per tre casi identifica sintassi, semantica e contesto."
+        },
+        {
+          "type": "list-item",
+          "text": "Riscrivi una automazione specificando effetti e responsabilità."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve essere spiegabile senza affidarsi alla soluzione, collegata a un criterio e accompagnata da almeno una prova o simulazione."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Spiega programmare a un principiante senza usare ‘codice’."
+        },
+        {
+          "type": "list-item",
+          "text": "Trova un programma non testuale."
+        },
+        {
+          "type": "list-item",
+          "text": "Analizza un comportamento corretto ma non desiderabile."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Programmare coincide solo con scrivere sintassi?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo in Python"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo nei giochi"
+        },
+        {
+          "type": "list-item",
+          "text": "D. No"
+        },
+        {
+          "type": "heading",
+          "text": "2. Che cosa descrive la semantica?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Il nome del file"
+        },
+        {
+          "type": "list-item",
+          "text": "B. La velocità della rete"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Il significato operativo delle forme"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Il colore del testo"
+        },
+        {
+          "type": "heading",
+          "text": "3. Correttezza rispetto alla specifica prova utilità?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Solo offline"
+        },
+        {
+          "type": "list-item",
+          "text": "B. No"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Sempre"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Programma",
+              "Istruzioni e dati formalizzati per un sistema."
+            ],
+            [
+              "Sintassi",
+              "Regole delle forme valide."
+            ],
+            [
+              "Semantica",
+              "Significato operativo delle forme."
+            ],
+            [
+              "Pragmatica",
+              "Uso ed effetti nel contesto."
+            ],
+            [
+              "Automazione",
+              "Esecuzione delegata di operazioni e decisioni."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un programma è una rappresentazione formale di istruzioni e dati eseguita da un sistema. La sintassi definisce forme valide, la semantica il significato operativo e la pragmatica l’uso nel contesto. Programmazione comprende analisi, progettazione, implementazione, verifica, debugging e comunicazione. Correttezza rispetto alla specifica non garantisce validità del problema né assenza di effetti indesiderati. La competenza è dimostrata quando il lettore sa applicare, verificare e revisionare, non soltanto riconoscere le parole."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il nucleo concettuale senza leggere il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So produrre un artefatto coerente e un controesempio."
+        },
+        {
+          "type": "list-item",
+          "text": "So applicare una rubrica e motivare il livello raggiunto."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho revisionato il lavoro conservando traccia delle correzioni."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre nel quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-9-chapter-3",
+      "lessonId": "0.9",
+      "chapterNumber": 3,
+      "title": "3. Laboratorio di sistemi: computer e rappresentazione dell’informazione",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.9 · CAPITOLO 3 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "3. Laboratorio di sistemi: computer e rappresentazione dell’informazione"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Dimostrare la competenza attraverso spiegazione, applicazione, verifica, revisione e collegamento con l’intero Modulo 0."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un computer elabora rappresentazioni fisiche secondo istruzioni. Comprenderlo richiede collegare CPU, memoria, archiviazione, input/output e sistema operativo con bit, codifiche e limiti. Il laboratorio integra le Lezioni 0.2 e 0.3 attraverso diagnosi e trasformazioni."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un magazzino conserva materiali, un banco di lavoro li trasforma e una rete di trasporto li sposta. Nel computer, memoria e archiviazione non sono scaffali identici: possiedono velocità, persistenza e ruoli diversi. I bit sono etichette fisiche il cui significato dipende dalla codifica."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "La CPU esegue istruzioni e modifica stato; la memoria principale mantiene dati e codice attivi; l’archiviazione persiste; i dispositivi e il sistema operativo gestiscono I/O e risorse. Un bit assume due stati convenzionali; sequenze di bit rappresentano interi, testo, immagini e audio mediante codifiche. Capacità finita causa overflow, quantizzazione e perdita. La stessa sequenza può avere significati diversi secondo tipo e protocollo."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "UTF-8 rappresenta caratteri con sequenze di byte variabili."
+        },
+        {
+          "type": "list-item",
+          "text": "Un’immagine raster usa pixel e profondità di colore."
+        },
+        {
+          "type": "list-item",
+          "text": "Un file aperto passa da archiviazione a memoria attraverso servizi del sistema operativo."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "RAM e disco non sono intercambiabili senza conseguenze."
+        },
+        {
+          "type": "list-item",
+          "text": "Un byte non corrisponde sempre a un carattere."
+        },
+        {
+          "type": "list-item",
+          "text": "Aumentare risoluzione non recupera dettagli mai acquisiti."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "La codifica è un alfabeto concordato: simboli privi del codice non comunicano il messaggio. A differenza di un alfabeto umano, lo stesso bit può partecipare a rappresentazioni numeriche, testuali o istruzioni senza indizi intrinseci."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 3.1 — Sintesi e verifica"
+        },
+        {
+          "type": "paragraph",
+          "text": "INPUT -> I/O -> MEMORIA <-> CPU                  |          |                  v          v             ARCHIVIAZIONE  OUTPUTBIT --codifica--> numeri / testo / immagini / audioTIPO + FORMATO danno significato"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "La gerarchia di memoria bilancia velocità, costo e capacità. Cache e memoria virtuale modificano il comportamento osservabile. Compressione lossless conserva l’informazione ricostruibile; lossy elimina dettagli secondo un modello. Endianness, formati e metadati dimostrano che compatibilità richiede contratti oltre ai bit."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Confondere memoria e archiviazione."
+        },
+        {
+          "type": "list-item",
+          "text": "Contare caratteri invece di byte."
+        },
+        {
+          "type": "list-item",
+          "text": "Ignorare unità e codifica."
+        },
+        {
+          "type": "list-item",
+          "text": "Attribuire ogni lentezza alla CPU."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "File valido in una codifica e illeggibile in un’altra."
+        },
+        {
+          "type": "list-item",
+          "text": "Overflow numerico."
+        },
+        {
+          "type": "list-item",
+          "text": "Spazio disponibile ma memoria insufficiente."
+        },
+        {
+          "type": "list-item",
+          "text": "Metadato incoerente con il contenuto."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI LAVORO  Produci l’artefatto, applica i criteri, cerca un controesempio, registra il feedback e conserva sia la versione iniziale sia quella revisionata."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Dove si trova il dato durante l’esecuzione?"
+        },
+        {
+          "type": "list-item",
+          "text": "Che cosa dà significato ai bit?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale perdita è reversibile?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "list-item",
+          "text": "Traccia apertura, modifica e salvataggio di un file."
+        },
+        {
+          "type": "list-item",
+          "text": "Rappresenta un piccolo testo in byte."
+        },
+        {
+          "type": "list-item",
+          "text": "Diagnostica quattro guasti distinguendo CPU, memoria, storage e I/O."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve essere spiegabile senza affidarsi alla soluzione, collegata a un criterio e accompagnata da almeno una prova o simulazione."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Confronta raster e vettoriale."
+        },
+        {
+          "type": "list-item",
+          "text": "Analizza un caso di overflow."
+        },
+        {
+          "type": "list-item",
+          "text": "Spiega perché un file può aprirsi con caratteri corrotti."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Che cosa dà significato a una sequenza di bit?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. La grandezza del monitor"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo la CPU"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Codifica, tipo e contesto"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Il colore dei cavi"
+        },
+        {
+          "type": "heading",
+          "text": "2. Un byte equivale sempre a un carattere?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Solo per emoji"
+        },
+        {
+          "type": "list-item",
+          "text": "B. No"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Solo in UTF-8"
+        },
+        {
+          "type": "heading",
+          "text": "3. Quale memoria è normalmente volatile?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. RAM"
+        },
+        {
+          "type": "list-item",
+          "text": "B. SSD"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Disco ottico"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Carta"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "CPU",
+              "Unità che esegue istruzioni."
+            ],
+            [
+              "Memoria principale",
+              "Spazio rapido per dati e codice attivi."
+            ],
+            [
+              "Codifica",
+              "Regola che associa informazione e rappresentazione."
+            ],
+            [
+              "Overflow",
+              "Risultato fuori dall’intervallo rappresentabile."
+            ],
+            [
+              "Compressione lossy",
+              "Riduzione che elimina informazione non ricostruibile esattamente."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "La CPU esegue istruzioni e modifica stato; la memoria principale mantiene dati e codice attivi; l’archiviazione persiste; i dispositivi e il sistema operativo gestiscono I/O e risorse. Un bit assume due stati convenzionali; sequenze di bit rappresentano interi, testo, immagini e audio mediante codifiche. Capacità finita causa overflow, quantizzazione e perdita. La stessa sequenza può avere significati diversi secondo tipo e protocollo. La competenza è dimostrata quando il lettore sa applicare, verificare e revisionare, non soltanto riconoscere le parole."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il nucleo concettuale senza leggere il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So produrre un artefatto coerente e un controesempio."
+        },
+        {
+          "type": "list-item",
+          "text": "So applicare una rubrica e motivare il livello raggiunto."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho revisionato il lavoro conservando traccia delle correzioni."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre nel quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-9-chapter-4",
+      "lessonId": "0.9",
+      "chapterNumber": 4,
+      "title": "4. Laboratorio di logica: proposizioni, condizioni e prove",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.9 · CAPITOLO 4 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "4. Laboratorio di logica: proposizioni, condizioni e prove"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Dimostrare la competenza attraverso spiegazione, applicazione, verifica, revisione e collegamento con l’intero Modulo 0."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "La logica rende esplicite condizioni e inferenze. Nel software serve per decidere percorsi, definire requisiti e verificare proprietà. Il laboratorio non premia la manipolazione meccanica di simboli: chiede di tradurre frasi, individuare ambiguità e trovare controesempi."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una regola di accesso è una serratura con più condizioni. ‘Docente o tutor con prenotazione’ può significare combinazioni diverse se mancano parentesi. La logica costringe a dichiarare la struttura prima di applicarla."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una proposizione possiede valore di verità in un’interpretazione. NOT nega; AND richiede entrambi; OR inclusivo almeno uno; XOR esattamente uno; l’implicazione è falsa solo con antecedente vero e conseguente falso. Equivalenze come De Morgan trasformano formule preservando verità. Quantificatori universali ed esistenziali richiedono dominio. Validità di un argomento dipende dalla forma e dalle premesse."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Negare ‘tutti hanno completato’ produce ‘esiste almeno uno che non ha completato’."
+        },
+        {
+          "type": "list-item",
+          "text": "Una tabella di verità confronta due formule."
+        },
+        {
+          "type": "list-item",
+          "text": "Un controesempio confuta una affermazione universale."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "OR logico non è necessariamente esclusivo."
+        },
+        {
+          "type": "list-item",
+          "text": "Se l’antecedente è falso, l’implicazione non prova causalità."
+        },
+        {
+          "type": "list-item",
+          "text": "Confermare il conseguente è un’inferenza invalida."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "La logica è la grammatica del ragionamento: distingue forme ben costruite senza garantire che le premesse descrivano il mondo. Un argomento valido con premesse false può avere conclusione non affidabile."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 4.1 — Sintesi e verifica"
+        },
+        {
+          "type": "paragraph",
+          "text": "FRASE + DOMINIO  v formalizzazionePROPOSIZIONI + CONNETTIVI + QUANTIFICATORI  vTABELLA / EQUIVALENZA / INFERENZA  vVALIDO?  +--> sì, controlla premesse  +--> no, trova controesempio"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Condizioni a corto circuito influenzano esecuzione oltre alla verità astratta. Una espressione può evitare un errore se il primo termine determina il risultato. Specifiche con ‘salvo’, ‘a meno che’ e doppie negazioni richiedono riscrittura. La logica classica non rappresenta direttamente probabilità o vaghezza."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Dimenticare il dominio."
+        },
+        {
+          "type": "list-item",
+          "text": "Confondere necessaria e sufficiente."
+        },
+        {
+          "type": "list-item",
+          "text": "Negare soltanto una parola."
+        },
+        {
+          "type": "list-item",
+          "text": "Supporre precedenza senza parentesi."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Proposizione con termine indefinito."
+        },
+        {
+          "type": "list-item",
+          "text": "Dominio vuoto."
+        },
+        {
+          "type": "list-item",
+          "text": "Valore mancante distinto da falso."
+        },
+        {
+          "type": "list-item",
+          "text": "Condizione con effetto collaterale."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI LAVORO  Produci l’artefatto, applica i criteri, cerca un controesempio, registra il feedback e conserva sia la versione iniziale sia quella revisionata."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale dominio stai quantificando?"
+        },
+        {
+          "type": "list-item",
+          "text": "La condizione è necessaria, sufficiente o entrambe?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale caso confuta la regola?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "list-item",
+          "text": "Formalizza cinque regole con parentesi."
+        },
+        {
+          "type": "list-item",
+          "text": "Costruisci una tabella di verità."
+        },
+        {
+          "type": "list-item",
+          "text": "Nega due affermazioni quantificate e trova controesempi."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve essere spiegabile senza affidarsi alla soluzione, collegata a un criterio e accompagnata da almeno una prova o simulazione."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Individua un OR ambiguo."
+        },
+        {
+          "type": "list-item",
+          "text": "Dimostra una legge di De Morgan."
+        },
+        {
+          "type": "list-item",
+          "text": "Analizza una condizione a corto circuito."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Quando è falsa A implica B?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Mai"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Quando A è vera e B falsa"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Sempre con A falsa"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Quando entrambe vere"
+        },
+        {
+          "type": "heading",
+          "text": "2. Negare ‘tutti’ produce?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Esiste almeno un controesempio"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Nessuno esiste"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Tutti sono falsi"
+        },
+        {
+          "type": "list-item",
+          "text": "D. La stessa frase"
+        },
+        {
+          "type": "heading",
+          "text": "3. Validità garantisce premesse vere?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo con AND"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo nei programmi"
+        },
+        {
+          "type": "list-item",
+          "text": "D. No"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Proposizione",
+              "Affermazione valutabile come vera o falsa."
+            ],
+            [
+              "Implicazione",
+              "Connettivo falso solo da vero a falso."
+            ],
+            [
+              "Equivalenza",
+              "Formule con gli stessi valori in ogni interpretazione."
+            ],
+            [
+              "Quantificatore",
+              "Operatore che estende una proprietà a un dominio."
+            ],
+            [
+              "Controesempio",
+              "Caso che rende falsa un’affermazione generale."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una proposizione possiede valore di verità in un’interpretazione. NOT nega; AND richiede entrambi; OR inclusivo almeno uno; XOR esattamente uno; l’implicazione è falsa solo con antecedente vero e conseguente falso. Equivalenze come De Morgan trasformano formule preservando verità. Quantificatori universali ed esistenziali richiedono dominio. Validità di un argomento dipende dalla forma e dalle premesse. La competenza è dimostrata quando il lettore sa applicare, verificare e revisionare, non soltanto riconoscere le parole."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il nucleo concettuale senza leggere il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So produrre un artefatto coerente e un controesempio."
+        },
+        {
+          "type": "list-item",
+          "text": "So applicare una rubrica e motivare il livello raggiunto."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho revisionato il lavoro conservando traccia delle correzioni."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre nel quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-9-chapter-5",
+      "lessonId": "0.9",
+      "chapterNumber": 5,
+      "title": "5. Laboratorio algoritmico: problema, pseudocodice e correttezza",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.9 · CAPITOLO 5 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "5. Laboratorio algoritmico: problema, pseudocodice e correttezza"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Dimostrare la competenza attraverso spiegazione, applicazione, verifica, revisione e collegamento con l’intero Modulo 0."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il pensiero computazionale trasforma un bisogno in un problema specificato, lo scompone, astrae dettagli e costruisce una procedura verificabile. Il laboratorio riprende la Lezione 0.5 chiedendo pseudocodice, tracce, casi limite e confronto fra strategie."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Organizzare una coda richiede definire chi entra, quale ordine vale, cosa accade a rinunce e priorità. Senza queste regole, una procedura può sembrare chiara finché non arriva un caso anomalo."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un problema definisce dominio, input, output, precondizioni, postcondizioni e gestione degli errori. Un algoritmo è una sequenza effettiva con controllo e terminazione appropriata. Pseudocodice e diagrammi rappresentano sequenza, selezione e ripetizione senza legarsi a un linguaggio. Una traccia analizza una esecuzione; invarianti e argomenti di terminazione sostengono proprietà generali. Complessità confronta crescita delle risorse."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Ricerca lineare esamina elementi finché trova il bersaglio o termina."
+        },
+        {
+          "type": "list-item",
+          "text": "Un ciclo mantiene come invariante che il massimo parziale appartiene agli elementi già letti."
+        },
+        {
+          "type": "list-item",
+          "text": "Due algoritmi corretti possono usare tempo e memoria diversi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "Una lista di intenzioni vaghe non è pseudocodice traducibile."
+        },
+        {
+          "type": "list-item",
+          "text": "Tre esempi superati non dimostrano correttezza generale."
+        },
+        {
+          "type": "list-item",
+          "text": "Un ciclo con condizione di uscita non termina se lo stato non progredisce."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’invariante è un corrimano che resta disponibile a ogni gradino: collega stato iniziale, passi e risultato. L’analogia non sostituisce la prova che ogni passo preservi davvero la proprietà."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 5.1 — Sintesi e verifica"
+        },
+        {
+          "type": "paragraph",
+          "text": "SPECIFICA  vDECOMPOSIZIONE + ASTRAZIONE  vPSEUDOCODICE  +--> traccia su casi  +--> invariante  +--> terminazione  +--> costo  vALGORITMO GIUSTIFICATO"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "La validazione chiede se la specifica rappresenta il bisogno; la verifica se l’algoritmo soddisfa la specifica. Ottimizzare prima di stabilire correttezza può rendere più veloce un errore. Il costo asintotico non comprende sempre costanti, input reali e limiti di memoria."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Iniziare dal codice."
+        },
+        {
+          "type": "list-item",
+          "text": "Non definire input vuoto."
+        },
+        {
+          "type": "list-item",
+          "text": "Modificare collezione senza seguire indici."
+        },
+        {
+          "type": "list-item",
+          "text": "Confrontare solo il caso migliore."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Input vuoto."
+        },
+        {
+          "type": "list-item",
+          "text": "Valori duplicati."
+        },
+        {
+          "type": "list-item",
+          "text": "Dati già ordinati."
+        },
+        {
+          "type": "list-item",
+          "text": "Input tanto grande da esaurire risorse."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI LAVORO  Produci l’artefatto, applica i criteri, cerca un controesempio, registra il feedback e conserva sia la versione iniziale sia quella revisionata."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale proprietà resta vera?"
+        },
+        {
+          "type": "list-item",
+          "text": "Che cosa garantisce progresso?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale strategia è migliore nel contesto?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "list-item",
+          "text": "Specifica il problema di eliminare duplicati mantenendo ordine."
+        },
+        {
+          "type": "list-item",
+          "text": "Scrivi pseudocodice e traccia tre casi."
+        },
+        {
+          "type": "list-item",
+          "text": "Definisci invariante, terminazione e costo."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve essere spiegabile senza affidarsi alla soluzione, collegata a un criterio e accompagnata da almeno una prova o simulazione."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Confronta ricerca lineare e binaria."
+        },
+        {
+          "type": "list-item",
+          "text": "Correggi un ciclo infinito."
+        },
+        {
+          "type": "list-item",
+          "text": "Progetta algoritmo e controesempio per una regola vaga."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Che cosa descrive una postcondizione?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. La proprietà garantita dopo l’esecuzione valida"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Il colore del diagramma"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo l’input"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Il linguaggio scelto"
+        },
+        {
+          "type": "heading",
+          "text": "2. Una traccia prova tutti gli input?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo se lunga"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo con numeri"
+        },
+        {
+          "type": "list-item",
+          "text": "D. No"
+        },
+        {
+          "type": "heading",
+          "text": "3. Che cosa sostiene la terminazione?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Molti esempi"
+        },
+        {
+          "type": "list-item",
+          "text": "B. La memoria disponibile"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Una misura che progredisce verso l’uscita"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Un commento"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Specifica",
+              "Contratto su input, output e proprietà."
+            ],
+            [
+              "Pseudocodice",
+              "Descrizione algoritmica indipendente dalla sintassi."
+            ],
+            [
+              "Invariante",
+              "Proprietà preservata durante l’esecuzione."
+            ],
+            [
+              "Terminazione",
+              "Conclusione dell’algoritmo per gli input previsti."
+            ],
+            [
+              "Complessità",
+              "Crescita delle risorse rispetto all’input."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un problema definisce dominio, input, output, precondizioni, postcondizioni e gestione degli errori. Un algoritmo è una sequenza effettiva con controllo e terminazione appropriata. Pseudocodice e diagrammi rappresentano sequenza, selezione e ripetizione senza legarsi a un linguaggio. Una traccia analizza una esecuzione; invarianti e argomenti di terminazione sostengono proprietà generali. Complessità confronta crescita delle risorse. La competenza è dimostrata quando il lettore sa applicare, verificare e revisionare, non soltanto riconoscere le parole."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il nucleo concettuale senza leggere il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So produrre un artefatto coerente e un controesempio."
+        },
+        {
+          "type": "list-item",
+          "text": "So applicare una rubrica e motivare il livello raggiunto."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho revisionato il lavoro conservando traccia delle correzioni."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre nel quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-9-chapter-6",
+      "lessonId": "0.9",
+      "chapterNumber": 6,
+      "title": "6. Laboratorio di progettazione: ciclo di vita e qualità del software",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.9 · CAPITOLO 6 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "6. Laboratorio di progettazione: ciclo di vita e qualità del software"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Dimostrare la competenza attraverso spiegazione, applicazione, verifica, revisione e collegamento con l’intero Modulo 0."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un algoritmo diventa parte di un sistema attraverso requisiti, progettazione, sviluppo, test, rilascio e manutenzione. Il laboratorio integra gli artefatti della Lezione 0.6 e verifica la capacità di seguire una modifica lungo l’intero ciclo."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Aprire una biblioteca non consiste nel comprare scaffali. Servono regole, catalogo, personale, prove, apertura e manutenzione. Allo stesso modo, il codice è essenziale ma non sufficiente a un servizio software."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il ciclo di vita è una rete di feedback. Stakeholder e bisogni generano requisiti funzionali, qualità e vincoli; l’analisi modella dominio; l’architettura assegna responsabilità e interfacce; pianificazione e implementazione producono incrementi; verifica e validazione raccolgono evidenze; deployment ed esercizio osservano il servizio; manutenzione e ritiro governano evoluzione. Tracciabilità collega ogni artefatto."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Un requisito di risposta entro due secondi genera decisioni e test prestazionali."
+        },
+        {
+          "type": "list-item",
+          "text": "Una modifica di durata aggiorna modello, codice, test e comunicazione."
+        },
+        {
+          "type": "list-item",
+          "text": "Un rilascio progressivo limita l’impatto di un errore."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "Completare il codice non conclude il progetto."
+        },
+        {
+          "type": "list-item",
+          "text": "Un requisito ‘veloce’ non è verificabile."
+        },
+        {
+          "type": "list-item",
+          "text": "Rollback del codice non ripristina sempre i dati."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "La tracciabilità è una rete ferroviaria che consente di seguire merci fra stazioni. Il limite è che nel software le relazioni sono molti-a-molti e una modifica può propagarsi in direzioni inattese."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 6.1 — Sintesi e verifica"
+        },
+        {
+          "type": "paragraph",
+          "text": "STAKEHOLDER -> REQUISITI -> MODELLO -> DESIGN       ^                                vFEEDBACK <- TEST <- IMPLEMENTAZIONE <- PIANO       ^                                vMANUTENZIONE <- ESERCIZIO <- DEPLOYMENT       vRITIRO RESPONSABILE"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Qualità comprende correttezza, usabilità, sicurezza, prestazioni, manutenibilità e altro; massimizzarle tutte è impossibile. Le stime sono previsioni condizionate. La manutenzione domina spesso la vita utile, e il debito tecnico va valutato per costo futuro e probabilità, non come colpa morale."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Trattare le fasi come una cascata irreversibile."
+        },
+        {
+          "type": "list-item",
+          "text": "Omettere criteri di accettazione."
+        },
+        {
+          "type": "list-item",
+          "text": "Rinviare integrazione."
+        },
+        {
+          "type": "list-item",
+          "text": "Ignorare fine vita e dati residui."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Requisito che cambia durante lo sviluppo."
+        },
+        {
+          "type": "list-item",
+          "text": "Dipendenza esterna indisponibile."
+        },
+        {
+          "type": "list-item",
+          "text": "Sistema legacy senza test."
+        },
+        {
+          "type": "list-item",
+          "text": "Migrazione irreversibile."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI LAVORO  Produci l’artefatto, applica i criteri, cerca un controesempio, registra il feedback e conserva sia la versione iniziale sia quella revisionata."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale artefatto deve cambiare?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale qualità entra in tensione?"
+        },
+        {
+          "type": "list-item",
+          "text": "Come torni indietro in sicurezza?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "list-item",
+          "text": "Segui una nuova regola attraverso dieci artefatti."
+        },
+        {
+          "type": "list-item",
+          "text": "Scrivi requisiti e criteri di accettazione."
+        },
+        {
+          "type": "list-item",
+          "text": "Progetta test, rilascio, monitoraggio e manutenzione."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve essere spiegabile senza affidarsi alla soluzione, collegata a un criterio e accompagnata da almeno una prova o simulazione."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Costruisci una matrice di tracciabilità."
+        },
+        {
+          "type": "list-item",
+          "text": "Confronta due architetture."
+        },
+        {
+          "type": "list-item",
+          "text": "Redigi un piano di ritiro."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Il ciclo di vita è una linea senza feedback?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo nei progetti piccoli"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo dopo il test"
+        },
+        {
+          "type": "list-item",
+          "text": "D. No"
+        },
+        {
+          "type": "heading",
+          "text": "2. Che cosa collega la tracciabilità?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Unicamente persone"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo date"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Obiettivi, requisiti, design, codice, test e release"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Solo nomi file"
+        },
+        {
+          "type": "heading",
+          "text": "3. Una stima è?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Una licenza"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Una previsione condizionata"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Una certezza"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Un test"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Requisito",
+              "Condizione che sistema o progetto deve soddisfare."
+            ],
+            [
+              "Architettura",
+              "Strutture e decisioni significative."
+            ],
+            [
+              "Tracciabilità",
+              "Collegamento fra origine e realizzazione."
+            ],
+            [
+              "Deployment",
+              "Installazione o attivazione controllata."
+            ],
+            [
+              "Manutenzione",
+              "Correzione e adattamento del software nel tempo."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il ciclo di vita è una rete di feedback. Stakeholder e bisogni generano requisiti funzionali, qualità e vincoli; l’analisi modella dominio; l’architettura assegna responsabilità e interfacce; pianificazione e implementazione producono incrementi; verifica e validazione raccolgono evidenze; deployment ed esercizio osservano il servizio; manutenzione e ritiro governano evoluzione. Tracciabilità collega ogni artefatto. La competenza è dimostrata quando il lettore sa applicare, verificare e revisionare, non soltanto riconoscere le parole."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il nucleo concettuale senza leggere il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So produrre un artefatto coerente e un controesempio."
+        },
+        {
+          "type": "list-item",
+          "text": "So applicare una rubrica e motivare il livello raggiunto."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho revisionato il lavoro conservando traccia delle correzioni."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre nel quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-9-chapter-7",
+      "lessonId": "0.9",
+      "chapterNumber": 7,
+      "title": "7. Laboratorio di orientamento: storia e aree dell’informatica",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.9 · CAPITOLO 7 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "7. Laboratorio di orientamento: storia e aree dell’informatica"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Dimostrare la competenza attraverso spiegazione, applicazione, verifica, revisione e collegamento con l’intero Modulo 0."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "La storia evita di trattare tecnologie come inevitabili e le aree disciplinari mostrano che informatica non significa soltanto programmazione. Il laboratorio chiede di qualificare primati, costruire relazioni causali e mappare un sistema contemporaneo su competenze diverse."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una staffetta non si spiega con l’ultimo corridore. Idee matematiche, materiali, istituzioni e lavoro collettivo preparano ogni passaggio. Una tecnologia moderna è il risultato di molte traiettorie che convergono."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "La cronologia distingue progetto, prototipo, macchina operativa, diffusione e impatto. Calcolo manuale, meccanica, programmabilità, logica, elettronica, programma memorizzato, semiconduttori, linguaggi, reti e dati formano traiettorie collegate. Le aree includono teoria, algoritmi, architettura, sistemi, software engineering, reti, sicurezza, dati, IA, HCI, grafica e informatica sociale."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Z3, Colossus ed ENIAC hanno primati differenti."
+        },
+        {
+          "type": "list-item",
+          "text": "Internet e Web sono infrastruttura e servizio distinti."
+        },
+        {
+          "type": "list-item",
+          "text": "Uno smartphone coinvolge almeno dieci aree."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "‘Il computer fu inventato da una sola persona’ è una semplificazione ingannevole."
+        },
+        {
+          "type": "list-item",
+          "text": "Il progetto non equivale alla macchina completata."
+        },
+        {
+          "type": "list-item",
+          "text": "Programmazione non esaurisce la disciplina."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Le aree sono lenti su un sistema: ciascuna rende visibili proprietà differenti. Nessuna lente è superiore in assoluto; il problema determina la combinazione necessaria."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 7.1 — Sintesi e verifica"
+        },
+        {
+          "type": "paragraph",
+          "text": "NUMERI + ALGORITMI  vMECCANICA + CONTROLLO  vLOGICA + COMPUTABILITÀ  vELETTRONICA + PROGRAMMA MEMORIZZATO  vSOFTWARE + RETI + DATI  vAREE INTERCONNESSE + IMPATTO SOCIALE"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Le narrazioni dei grandi inventori nascondono programmatrici, operatori e manutentori. I confini disciplinari evolvono e creano aree ibride. Ricerca teorica e ingegneria si sovrappongono ma pongono domande diverse: conoscenza generalizzabile e soluzione sotto vincoli."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Usare ‘primo’ senza criterio."
+        },
+        {
+          "type": "list-item",
+          "text": "Confondere Internet e Web."
+        },
+        {
+          "type": "list-item",
+          "text": "Ignorare lavoro collettivo."
+        },
+        {
+          "type": "list-item",
+          "text": "Creare una gerarchia assoluta fra aree."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Scoperte indipendenti."
+        },
+        {
+          "type": "list-item",
+          "text": "Progetto segreto."
+        },
+        {
+          "type": "list-item",
+          "text": "Idea senza realizzazione."
+        },
+        {
+          "type": "list-item",
+          "text": "Sistema che appartiene a molte aree."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI LAVORO  Produci l’artefatto, applica i criteri, cerca un controesempio, registra il feedback e conserva sia la versione iniziale sia quella revisionata."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Primo secondo quale proprietà?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale ruolo è invisibile?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quali aree servono al caso?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "list-item",
+          "text": "Costruisci una cronologia con dieci relazioni."
+        },
+        {
+          "type": "list-item",
+          "text": "Qualifica tre attribuzioni di primato."
+        },
+        {
+          "type": "list-item",
+          "text": "Mappa un motore di ricerca su otto aree."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve essere spiegabile senza affidarsi alla soluzione, collegata a un criterio e accompagnata da almeno una prova o simulazione."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Analizza un mito storico."
+        },
+        {
+          "type": "list-item",
+          "text": "Confronta Internet e Web."
+        },
+        {
+          "type": "list-item",
+          "text": "Formula una domanda per ogni area coinvolta in uno smartphone."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Perché esistono più primi computer?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Perché erano identici"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Perché mancava software"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Per criteri differenti"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Perché le date non contano"
+        },
+        {
+          "type": "heading",
+          "text": "2. Internet coincide con Web?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Solo dal 1990"
+        },
+        {
+          "type": "list-item",
+          "text": "B. No"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Solo su mobile"
+        },
+        {
+          "type": "heading",
+          "text": "3. L’informatica coincide con programmazione?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. No"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo all’università"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Solo in teoria"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Primato qualificato",
+              "Precedenza limitata a una proprietà dichiarata."
+            ],
+            [
+              "Programma memorizzato",
+              "Istruzioni conservate in memoria."
+            ],
+            [
+              "Internet",
+              "Interconnessione di reti basata su protocolli."
+            ],
+            [
+              "HCI",
+              "Studio dell’interazione persona-computer."
+            ],
+            [
+              "Interdisciplinarità",
+              "Integrazione di più discipline."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "La cronologia distingue progetto, prototipo, macchina operativa, diffusione e impatto. Calcolo manuale, meccanica, programmabilità, logica, elettronica, programma memorizzato, semiconduttori, linguaggi, reti e dati formano traiettorie collegate. Le aree includono teoria, algoritmi, architettura, sistemi, software engineering, reti, sicurezza, dati, IA, HCI, grafica e informatica sociale. La competenza è dimostrata quando il lettore sa applicare, verificare e revisionare, non soltanto riconoscere le parole."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il nucleo concettuale senza leggere il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So produrre un artefatto coerente e un controesempio."
+        },
+        {
+          "type": "list-item",
+          "text": "So applicare una rubrica e motivare il livello raggiunto."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho revisionato il lavoro conservando traccia delle correzioni."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre nel quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-9-chapter-8",
+      "lessonId": "0.9",
+      "chapterNumber": 8,
+      "title": "8. Laboratorio di responsabilità: impatto del software",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.9 · CAPITOLO 8 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "8. Laboratorio di responsabilità: impatto del software"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Dimostrare la competenza attraverso spiegazione, applicazione, verifica, revisione e collegamento con l’intero Modulo 0."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il software distribuisce benefici, rischi e potere. Il laboratorio integra etica, privacy, sicurezza, accessibilità e sostenibilità, chiedendo di trasformare principi in requisiti, metriche, proprietari e condizioni di arresto."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un edificio pubblico deve essere sicuro, accessibile, rispettoso della riservatezza e sostenibile. Ottimizzare un solo aspetto può danneggiarne un altro. Una buona progettazione rende espliciti i compromessi e le soglie non negoziabili."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’analisi d’impatto identifica stakeholder, danni, equità, dati e ciclo di vita, minacce, barriere e risorse ambientali. Privacy riguarda trattamento e conseguenze; sicurezza gestisce riservatezza, integrità, disponibilità e resilienza; accessibilità rimuove barriere; sostenibilità considera energia ed emissioni incorporate. Governance, ricorso, monitoraggio e ritiro sostengono accountability."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Log aggregati bilanciano rilevazione e minimizzazione."
+        },
+        {
+          "type": "list-item",
+          "text": "Più modalità di autenticazione sostengono sicurezza e accessibilità."
+        },
+        {
+          "type": "list-item",
+          "text": "Una unità funzionale collega emissioni a un servizio."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "Cifratura non giustifica ogni raccolta."
+        },
+        {
+          "type": "list-item",
+          "text": "Test automatico non prova accessibilità completa."
+        },
+        {
+          "type": "list-item",
+          "text": "Efficienza per richiesta non garantisce riduzione totale."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una matrice d’impatto è un cruscotto, non una macchina decisionale. Gli indicatori rendono visibili problemi; valori, diritti e autorità determinano la scelta."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 8.1 — Sintesi e verifica"
+        },
+        {
+          "type": "paragraph",
+          "text": "SCOPO + STAKEHOLDER  vETICA | PRIVACY | SICUREZZA | ACCESSIBILITÀ | SOSTENIBILITÀ  vCONFLITTI + SINERGIE  vREQUISITI + EVIDENZE + PROPRIETARI  vRILASCIA / LIMITA / RIDISEGNA / RITIRA"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Non tutto può essere ridotto a un unico punteggio. Diritti e soglie minime limitano i compromessi. Il rischio residuo deve essere accettato da soggetti con autorità. La responsabilità continua con fornitori, aggiornamenti e usi imprevisti."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Trattare etica come checklist."
+        },
+        {
+          "type": "list-item",
+          "text": "Confondere privacy e sicurezza."
+        },
+        {
+          "type": "list-item",
+          "text": "Progettare accessibilità alla fine."
+        },
+        {
+          "type": "list-item",
+          "text": "Ignorare carbonio incorporato."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Equità che richiede dati sensibili."
+        },
+        {
+          "type": "list-item",
+          "text": "Sicurezza che crea barriera."
+        },
+        {
+          "type": "list-item",
+          "text": "Ridondanza che aumenta risorse."
+        },
+        {
+          "type": "list-item",
+          "text": "Fornitore senza evidenze."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI LAVORO  Produci l’artefatto, applica i criteri, cerca un controesempio, registra il feedback e conserva sia la versione iniziale sia quella revisionata."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Chi sopporta il rischio?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale soglia non è negoziabile?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quando bisogna fermare la funzione?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "list-item",
+          "text": "Valuta un servizio su cinque dimensioni."
+        },
+        {
+          "type": "list-item",
+          "text": "Definisci tre conflitti e tre sinergie."
+        },
+        {
+          "type": "list-item",
+          "text": "Assegna requisiti, metriche, proprietari e arresto."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve essere spiegabile senza affidarsi alla soluzione, collegata a un criterio e accompagnata da almeno una prova o simulazione."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Costruisci una mappa dati."
+        },
+        {
+          "type": "list-item",
+          "text": "Realizza un modello di minaccia."
+        },
+        {
+          "type": "list-item",
+          "text": "Progetta un test di accessibilità con persone."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Privacy e sicurezza coincidono?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Solo offline"
+        },
+        {
+          "type": "list-item",
+          "text": "B. No"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Solo con cifratura"
+        },
+        {
+          "type": "heading",
+          "text": "2. Un test automatico basta per accessibilità?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. No"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo se recente"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Solo con IA"
+        },
+        {
+          "type": "heading",
+          "text": "3. Non costruire può essere responsabile?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. No"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo se costoso"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo senza utenti"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Sì"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Equità",
+              "Distribuzione giustificabile di effetti e opportunità."
+            ],
+            [
+              "Minimizzazione",
+              "Riduzione dei dati al necessario."
+            ],
+            [
+              "Rischio residuo",
+              "Rischio rimasto dopo i controlli."
+            ],
+            [
+              "Accessibilità",
+              "Possibilità di uso in condizioni e abilità diverse."
+            ],
+            [
+              "Unità funzionale",
+              "Quantità di servizio usata per una misura ambientale."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’analisi d’impatto identifica stakeholder, danni, equità, dati e ciclo di vita, minacce, barriere e risorse ambientali. Privacy riguarda trattamento e conseguenze; sicurezza gestisce riservatezza, integrità, disponibilità e resilienza; accessibilità rimuove barriere; sostenibilità considera energia ed emissioni incorporate. Governance, ricorso, monitoraggio e ritiro sostengono accountability. La competenza è dimostrata quando il lettore sa applicare, verificare e revisionare, non soltanto riconoscere le parole."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il nucleo concettuale senza leggere il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So produrre un artefatto coerente e un controesempio."
+        },
+        {
+          "type": "list-item",
+          "text": "So applicare una rubrica e motivare il livello raggiunto."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho revisionato il lavoro conservando traccia delle correzioni."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre nel quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-9-chapter-9",
+      "lessonId": "0.9",
+      "chapterNumber": 9,
+      "title": "9. Progetto integrato: sistema di prenotazione per Aula Studio Virtuale",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.9 · CAPITOLO 9 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "9. Progetto integrato: sistema di prenotazione per Aula Studio Virtuale"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Dimostrare la competenza attraverso spiegazione, applicazione, verifica, revisione e collegamento con l’intero Modulo 0."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il progetto finale unisce tutti i risultati del Modulo 0 senza richiedere ancora codice Python. Il lettore deve progettare un sistema per prenotare sessioni di studio virtuali, mostrando problema, dati, logica, algoritmo, architettura, ciclo di vita, storia tecnica e impatto responsabile."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Prima di costruire una casa si producono esigenze, planimetrie, calcoli e verifiche. Il dossier è il progetto esecutivo concettuale del software: abbastanza preciso da poter essere discusso, testato e successivamente implementato."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il dossier include confine e stakeholder; requisiti e criteri; modello dei dati e codifiche; regole booleane; pseudocodice e diagrammi; componenti e interfacce; strategia di test e rilascio; mappa delle aree; valutazione d’impatto. Ogni elemento deve essere tracciato a un obiettivo. Le assunzioni sono separate dai fatti e i casi limite attraversano l’intero sistema."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Una regola impedisce sovrapposizioni per la stessa stanza."
+        },
+        {
+          "type": "list-item",
+          "text": "Il modello distingue sessione, prenotazione, partecipante e disponibilità."
+        },
+        {
+          "type": "list-item",
+          "text": "Il piano privacy conserva dati identificativi solo per il periodo necessario."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "Un elenco di schermate non è un progetto completo."
+        },
+        {
+          "type": "list-item",
+          "text": "Pseudocodice senza specifica non può essere validato."
+        },
+        {
+          "type": "list-item",
+          "text": "Una valutazione d’impatto generica non assegna controlli."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il dossier è una conversazione resa verificabile fra utenti, progettisti e revisori. Come un contratto tecnico, riduce ambiguità; diversamente da un contratto immutabile, deve poter evolvere con il feedback."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 9.1 — Sintesi e verifica"
+        },
+        {
+          "type": "paragraph",
+          "text": "OBIETTIVI  vREQUISITI -> DATI -> REGOLE -> ALGORITMI  vARCHITETTURA -> TEST -> RELEASE  vIMPATTO E GOVERNANCE  vPORTFOLIO: artefatti + tracce + decisioni + revisioni"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il progetto deve includere almeno una decisione di esclusione: qualcosa che il sistema non farà e perché. La qualità della spiegazione conta quanto l’artefatto. Una revisione incrociata usa la rubrica e formula domande, non riscrive il lavoro altrui."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Aggiungere funzioni senza obiettivo."
+        },
+        {
+          "type": "list-item",
+          "text": "Nascondere assunzioni."
+        },
+        {
+          "type": "list-item",
+          "text": "Usare diagrammi incoerenti fra loro."
+        },
+        {
+          "type": "list-item",
+          "text": "Correggere solo l’aspetto grafico."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Doppia prenotazione simultanea."
+        },
+        {
+          "type": "list-item",
+          "text": "Utente senza accesso audio."
+        },
+        {
+          "type": "list-item",
+          "text": "Perdita di rete durante conferma."
+        },
+        {
+          "type": "list-item",
+          "text": "Richiesta di cancellazione dopo backup."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI LAVORO  Produci l’artefatto, applica i criteri, cerca un controesempio, registra il feedback e conserva sia la versione iniziale sia quella revisionata."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale artefatto dimostra ogni requisito?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale caso attraversa più componenti?"
+        },
+        {
+          "type": "list-item",
+          "text": "Che cosa scegli di non costruire?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "list-item",
+          "text": "Scrivi visione, confine e otto stakeholder."
+        },
+        {
+          "type": "list-item",
+          "text": "Produci i dieci artefatti obbligatori."
+        },
+        {
+          "type": "list-item",
+          "text": "Esegui revisione con rubrica e registra correzioni."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve essere spiegabile senza affidarsi alla soluzione, collegata a un criterio e accompagnata da almeno una prova o simulazione."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Aggiungi una alternativa non software."
+        },
+        {
+          "type": "list-item",
+          "text": "Simula cinque casi limite end-to-end."
+        },
+        {
+          "type": "list-item",
+          "text": "Presenta il dossier in dieci minuti rispondendo a domande."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Che cosa collega gli artefatti agli obiettivi?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. La tracciabilità"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Il colore"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Il nome file"
+        },
+        {
+          "type": "list-item",
+          "text": "D. La lunghezza"
+        },
+        {
+          "type": "heading",
+          "text": "2. Il dossier richiede codice Python?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo classi"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo database"
+        },
+        {
+          "type": "list-item",
+          "text": "D. No"
+        },
+        {
+          "type": "heading",
+          "text": "3. Una esclusione motivata è utile?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Solo se segreta"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo dopo il rilascio"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "D. No"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Dossier",
+              "Insieme coerente di artefatti e motivazioni."
+            ],
+            [
+              "Confine",
+              "Separazione fra sistema e ambiente."
+            ],
+            [
+              "Artefatto",
+              "Prodotto verificabile del lavoro."
+            ],
+            [
+              "Revisione incrociata",
+              "Valutazione strutturata da parte di un pari."
+            ],
+            [
+              "Esclusione motivata",
+              "Funzione deliberatamente fuori perimetro."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il dossier include confine e stakeholder; requisiti e criteri; modello dei dati e codifiche; regole booleane; pseudocodice e diagrammi; componenti e interfacce; strategia di test e rilascio; mappa delle aree; valutazione d’impatto. Ogni elemento deve essere tracciato a un obiettivo. Le assunzioni sono separate dai fatti e i casi limite attraversano l’intero sistema. La competenza è dimostrata quando il lettore sa applicare, verificare e revisionare, non soltanto riconoscere le parole."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il nucleo concettuale senza leggere il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So produrre un artefatto coerente e un controesempio."
+        },
+        {
+          "type": "list-item",
+          "text": "So applicare una rubrica e motivare il livello raggiunto."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho revisionato il lavoro conservando traccia delle correzioni."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre nel quiz."
+        }
+      ]
+    },
+    {
+      "id": "programming-0-9-chapter-10",
+      "lessonId": "0.9",
+      "chapterNumber": 10,
+      "title": "10. Esame finale, rubriche, recupero e completamento del Modulo 0",
+      "blocks": [
+        {
+          "type": "callout",
+          "text": "LEZIONE 0.9 · CAPITOLO 10 DI 10"
+        },
+        {
+          "type": "heading",
+          "text": "10. Esame finale, rubriche, recupero e completamento del Modulo 0"
+        },
+        {
+          "type": "callout",
+          "text": "OBIETTIVO  Dimostrare la competenza attraverso spiegazione, applicazione, verifica, revisione e collegamento con l’intero Modulo 0."
+        },
+        {
+          "type": "heading",
+          "text": "Introduzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’esame finale sintetizza conoscenze dichiarative, applicazione e riflessione. Il completamento non richiede perfezione assoluta: richiede soglie chiare, correzione degli errori essenziali e capacità di spiegare il proprio lavoro. Il recupero trasforma lacune in un piano di studio verificabile."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione intuitiva"
+        },
+        {
+          "type": "paragraph",
+          "text": "Una patente non misura soltanto conoscenza dei segnali: osserva anche decisioni e controllo del veicolo. Il Modulo 0 combina prova scritta e progetto, perché comprendere informatica significa ragionare e produrre rappresentazioni, non solo ricordare termini."
+        },
+        {
+          "type": "heading",
+          "text": "Spiegazione tecnica"
+        },
+        {
+          "type": "paragraph",
+          "text": "La valutazione finale usa quattro componenti: quiz di capitolo, prova scritta integrata, progetto e colloquio riflessivo. Le soglie minime impediscono che eccellenza in una parte nasconda una lacuna critica. La rubrica descrive accuratezza, collegamenti, verifica, comunicazione e responsabilità. Il recupero identifica obiettivi non raggiunti, assegna esercizi equivalenti e richiede nuova prova. Il risultato è documentato nel portfolio."
+        },
+        {
+          "type": "heading",
+          "text": "Esempi reali"
+        },
+        {
+          "type": "list-item",
+          "text": "Errore su byte e carattere genera esercizi di codifica, non ripetizione dell’intero modulo."
+        },
+        {
+          "type": "list-item",
+          "text": "Progetto forte ma impatto debole richiede revisione della matrice responsabile."
+        },
+        {
+          "type": "list-item",
+          "text": "Colloquio chiarisce se il lettore comprende un artefatto prodotto con aiuto."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controesempi"
+        },
+        {
+          "type": "list-item",
+          "text": "La media aritmetica non deve compensare una competenza essenziale assente."
+        },
+        {
+          "type": "list-item",
+          "text": "Recupero non significa abbassare il criterio."
+        },
+        {
+          "type": "list-item",
+          "text": "Memorizzare le soluzioni non dimostra trasferimento."
+        },
+        {
+          "type": "heading",
+          "text": "Analogia ragionata"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il piano di recupero è una diagnosi con terapia mirata: identifica causa e verifica il miglioramento. Non è una punizione né un semplice aumento del tempo di studio."
+        },
+        {
+          "type": "heading",
+          "text": "Diagramma testuale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Figura 10.1 — Sintesi e verifica"
+        },
+        {
+          "type": "paragraph",
+          "text": "QUIZ + PROVA SCRITTA + PROGETTO + COLLOQUIO  vRUBRICA + SOGLIE MINIME  +--> raggiunte: completamento  +--> non raggiunte: diagnosi                   vESERCIZI MIRATI -> NUOVA EVIDENZA -> RIVALUTAZIONE"
+        },
+        {
+          "type": "heading",
+          "text": "Approfondimento"
+        },
+        {
+          "type": "paragraph",
+          "text": "Le prove devono essere accessibili e concedere accomodamenti che non cambiano la competenza valutata. L’autovalutazione confronta evidenze e criteri, non autostima generica. Dichiarare incertezza è preferibile a inventare: la capacità di delimitare ciò che non si sa prepara allo studio dei moduli successivi."
+        },
+        {
+          "type": "heading",
+          "text": "Errori comuni"
+        },
+        {
+          "type": "list-item",
+          "text": "Guardare solo il punteggio totale."
+        },
+        {
+          "type": "list-item",
+          "text": "Recuperare con le stesse domande."
+        },
+        {
+          "type": "list-item",
+          "text": "Valutare stile al posto del contenuto."
+        },
+        {
+          "type": "list-item",
+          "text": "Nascondere strumenti o collaborazione."
+        },
+        {
+          "type": "heading",
+          "text": "Casi limite"
+        },
+        {
+          "type": "list-item",
+          "text": "Competenze molto disomogenee."
+        },
+        {
+          "type": "list-item",
+          "text": "Barriera linguistica non pertinente."
+        },
+        {
+          "type": "list-item",
+          "text": "Progetto collettivo con contributi non distinguibili."
+        },
+        {
+          "type": "list-item",
+          "text": "Risposta corretta ma non spiegabile."
+        },
+        {
+          "type": "callout",
+          "text": "METODO DI LAVORO  Produci l’artefatto, applica i criteri, cerca un controesempio, registra il feedback e conserva sia la versione iniziale sia quella revisionata."
+        },
+        {
+          "type": "heading",
+          "text": "Domande di riflessione"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale soglia protegge una competenza essenziale?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale evidenza nuova serve?"
+        },
+        {
+          "type": "list-item",
+          "text": "Che cosa sai spiegare senza il documento?"
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi guidati"
+        },
+        {
+          "type": "list-item",
+          "text": "Calcola il profilo per dimensione, non solo la media."
+        },
+        {
+          "type": "list-item",
+          "text": "Scegli due lacune e pianifica recupero."
+        },
+        {
+          "type": "list-item",
+          "text": "Sostieni una mini-difesa orale del progetto."
+        },
+        {
+          "type": "callout",
+          "text": "AUTOVERIFICA  La risposta deve essere spiegabile senza affidarsi alla soluzione, collegata a un criterio e accompagnata da almeno una prova o simulazione."
+        },
+        {
+          "type": "heading",
+          "text": "Esercizi autonomi"
+        },
+        {
+          "type": "list-item",
+          "text": "Crea una nuova prova equivalente."
+        },
+        {
+          "type": "list-item",
+          "text": "Scrivi riflessione su tre revisioni."
+        },
+        {
+          "type": "list-item",
+          "text": "Prepara un piano per il Modulo 1."
+        },
+        {
+          "type": "heading",
+          "text": "Quiz"
+        },
+        {
+          "type": "heading",
+          "text": "1. Una media alta compensa sempre una competenza essenziale assente?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Sì"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Solo nei quiz"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Solo nel progetto"
+        },
+        {
+          "type": "list-item",
+          "text": "D. No"
+        },
+        {
+          "type": "heading",
+          "text": "2. Il recupero modifica il criterio?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Elimina la rubrica"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Riduce gli obiettivi"
+        },
+        {
+          "type": "list-item",
+          "text": "C. No, modifica percorso e prova"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Sì sempre"
+        },
+        {
+          "type": "heading",
+          "text": "3. Perché dichiarare gli aiuti?"
+        },
+        {
+          "type": "list-item",
+          "text": "A. Per sostituire il portfolio"
+        },
+        {
+          "type": "list-item",
+          "text": "B. Per trasparenza e valutazione della comprensione"
+        },
+        {
+          "type": "list-item",
+          "text": "C. Per perdere punti automaticamente"
+        },
+        {
+          "type": "list-item",
+          "text": "D. Per evitare spiegazioni"
+        },
+        {
+          "type": "callout",
+          "text": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla."
+        },
+        {
+          "type": "heading",
+          "text": "Glossario del capitolo"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Termine",
+              "Definizione operativa"
+            ],
+            [
+              "Soglia minima",
+              "Livello necessario in una dimensione essenziale."
+            ],
+            [
+              "Recupero",
+              "Percorso mirato verso una nuova evidenza."
+            ],
+            [
+              "Prova equivalente",
+              "Attività diversa che misura la stessa competenza."
+            ],
+            [
+              "Colloquio riflessivo",
+              "Discussione che verifica comprensione e processo."
+            ],
+            [
+              "Completamento",
+              "Raggiungimento documentato dei criteri del modulo."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Riepilogo"
+        },
+        {
+          "type": "paragraph",
+          "text": "La valutazione finale usa quattro componenti: quiz di capitolo, prova scritta integrata, progetto e colloquio riflessivo. Le soglie minime impediscono che eccellenza in una parte nasconda una lacuna critica. La rubrica descrive accuratezza, collegamenti, verifica, comunicazione e responsabilità. Il recupero identifica obiettivi non raggiunti, assegna esercizi equivalenti e richiede nuova prova. Il risultato è documentato nel portfolio. La competenza è dimostrata quando il lettore sa applicare, verificare e revisionare, non soltanto riconoscere le parole."
+        },
+        {
+          "type": "heading",
+          "text": "Criteri di completamento"
+        },
+        {
+          "type": "list-item",
+          "text": "So spiegare il nucleo concettuale senza leggere il testo."
+        },
+        {
+          "type": "list-item",
+          "text": "So produrre un artefatto coerente e un controesempio."
+        },
+        {
+          "type": "list-item",
+          "text": "So applicare una rubrica e motivare il livello raggiunto."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho revisionato il lavoro conservando traccia delle correzioni."
+        },
+        {
+          "type": "list-item",
+          "text": "Ho completato gli esercizi guidati, almeno due autonomi e almeno due risposte corrette su tre nel quiz."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prova scritta integrata: 32 quesiti"
+        },
+        {
+          "type": "paragraph",
+          "text": "Rispondi senza consultare il manuale. Per ogni risposta indica una motivazione o un esempio; una lettera isolata non è sufficiente. Punteggio: 2 punti per risposta corretta e motivata, 1 per risposta parziale, 0 per errata o assente."
+        },
+        {
+          "type": "list-item",
+          "text": "Distingui programma, algoritmo e codice sorgente."
+        },
+        {
+          "type": "list-item",
+          "text": "Spiega sintassi e semantica con un esempio."
+        },
+        {
+          "type": "list-item",
+          "text": "Segui un file dal disco alla CPU e ritorno."
+        },
+        {
+          "type": "list-item",
+          "text": "Perché un byte non coincide sempre con un carattere?"
+        },
+        {
+          "type": "list-item",
+          "text": "Descrivi overflow e un modo per rilevarlo."
+        },
+        {
+          "type": "list-item",
+          "text": "Formalizza una regola con AND, OR e parentesi."
+        },
+        {
+          "type": "list-item",
+          "text": "Nega correttamente una proposizione universale."
+        },
+        {
+          "type": "list-item",
+          "text": "Fornisci un controesempio alla conferma del conseguente."
+        },
+        {
+          "type": "list-item",
+          "text": "Definisci precondizione e postcondizione."
+        },
+        {
+          "type": "list-item",
+          "text": "Scrivi pseudocodice per trovare il minimo, includendo input vuoto."
+        },
+        {
+          "type": "list-item",
+          "text": "Proponi un invariante per il minimo parziale."
+        },
+        {
+          "type": "list-item",
+          "text": "Confronta due algoritmi corretti rispetto alle risorse."
+        },
+        {
+          "type": "list-item",
+          "text": "Distingui requisito funzionale, qualità e vincolo."
+        },
+        {
+          "type": "list-item",
+          "text": "Spiega a che cosa serve la tracciabilità."
+        },
+        {
+          "type": "list-item",
+          "text": "Distingui verifica e validazione."
+        },
+        {
+          "type": "list-item",
+          "text": "Descrivi release, deployment e rollback."
+        },
+        {
+          "type": "list-item",
+          "text": "Perché esistono più ‘primi computer’?"
+        },
+        {
+          "type": "list-item",
+          "text": "Distingui Internet e Web."
+        },
+        {
+          "type": "list-item",
+          "text": "Nomina sei aree dell’informatica e una domanda per ciascuna."
+        },
+        {
+          "type": "list-item",
+          "text": "Spiega programma memorizzato e microprocessore."
+        },
+        {
+          "type": "list-item",
+          "text": "Distingui privacy e sicurezza."
+        },
+        {
+          "type": "list-item",
+          "text": "Costruisci asset, minaccia, vulnerabilità e rischio in un caso."
+        },
+        {
+          "type": "list-item",
+          "text": "Distingui autenticazione e autorizzazione."
+        },
+        {
+          "type": "list-item",
+          "text": "Spiega perché uno scanner non prova accessibilità completa."
+        },
+        {
+          "type": "list-item",
+          "text": "Definisci emissioni operative e incorporate."
+        },
+        {
+          "type": "list-item",
+          "text": "Descrivi un conflitto fra sicurezza e accessibilità."
+        },
+        {
+          "type": "list-item",
+          "text": "Fornisci un esempio di proxy discriminatorio."
+        },
+        {
+          "type": "list-item",
+          "text": "Definisci criterio di arresto di una funzione."
+        },
+        {
+          "type": "list-item",
+          "text": "Spiega validità e affidabilità di una prova."
+        },
+        {
+          "type": "list-item",
+          "text": "Che cosa deve contenere una dichiarazione degli aiuti?"
+        },
+        {
+          "type": "list-item",
+          "text": "Come si progetta un recupero mirato?"
+        },
+        {
+          "type": "list-item",
+          "text": "Quale evidenza dimostra che sei pronto per il Modulo 1?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Griglia orientativa delle risposte"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Quesiti",
+              "Elementi indispensabili"
+            ],
+            [
+              "1–4",
+              "Distinzioni corrette; flusso hardware-software; codifica dipendente dal contesto."
+            ],
+            [
+              "5–8",
+              "Limiti di rappresentazione; formula non ambigua; negazione quantificata; inferenza invalida."
+            ],
+            [
+              "9–12",
+              "Contratto, pseudocodice con confini, invariante e confronto di costo."
+            ],
+            [
+              "13–16",
+              "Tipi di requisito, tracciabilità, verifica/validazione, rilascio e ripristino."
+            ],
+            [
+              "17–20",
+              "Primati qualificati, Internet/Web, aree con domande, architettura memorizzata."
+            ],
+            [
+              "21–24",
+              "Privacy distinta, rischio strutturato, identità/autorizzazione, test accessibilità misti."
+            ],
+            [
+              "25–28",
+              "Ciclo ambientale, conflitto esplicito, proxy, soglia e responsabilità."
+            ],
+            [
+              "29–32",
+              "Qualità valutativa, trasparenza, recupero equivalente, evidenza di prontezza."
+            ]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Punteggio e soglie"
+        },
+        {
+          "type": "list-item",
+          "text": "Prova scritta: almeno 45/64 e almeno metà dei punti in ciascuno dei quattro blocchi da otto quesiti."
+        },
+        {
+          "type": "list-item",
+          "text": "Quiz dei capitoli: almeno 24/30."
+        },
+        {
+          "type": "list-item",
+          "text": "Progetto integrato: almeno livello Solida in ogni dimensione della rubrica."
+        },
+        {
+          "type": "list-item",
+          "text": "Colloquio riflessivo: spiegazione autonoma di almeno tre artefatti e una revisione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Rubrica del progetto integrato"
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "Dimensione",
+              "Essenziale",
+              "Solida",
+              "Piena padronanza"
+            ],
+            [
+              "Problema e dati",
+              "Confine e dati principali",
+              "Specifiche e codifiche coerenti",
+              "Assunzioni, limiti e casi estremi verificati"
+            ],
+            [
+              "Logica e algoritmo",
+              "Regole e passi",
+              "Pseudocodice tracciabile",
+              "Invariante, terminazione e alternative motivate"
+            ],
+            [
+              "Sistema e ciclo di vita",
+              "Componenti citati",
+              "Interfacce, test e release",
+              "Tracciabilità, operazioni e ritiro integrati"
+            ],
+            [
+              "Storia e aree",
+              "Collegamenti minimi",
+              "Aree pertinenti e primati qualificati",
+              "Traiettorie e contributi collettivi argomentati"
+            ],
+            [
+              "Impatto",
+              "Cinque dimensioni citate",
+              "Rischi, controlli e proprietari",
+              "Conflitti, soglie, ricorso e arresto governati"
+            ],
+            [
+              "Comunicazione",
+              "Artefatti leggibili",
+              "Coerenza e motivazioni",
+              "Revisioni ed evidenze rendono il lavoro auditabile"
+            ]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Piano di recupero"
+        },
+        {
+          "type": "list-item",
+          "text": "Individua la dimensione sotto soglia e cita l’evidenza."
+        },
+        {
+          "type": "list-item",
+          "text": "Rileggi soltanto le sezioni pertinenti delle lezioni."
+        },
+        {
+          "type": "list-item",
+          "text": "Completa due esercizi nuovi, non le stesse domande."
+        },
+        {
+          "type": "list-item",
+          "text": "Produci una nuova evidenza equivalente."
+        },
+        {
+          "type": "list-item",
+          "text": "Spiega oralmente errore, correzione e principio trasferibile."
+        },
+        {
+          "type": "list-item",
+          "text": "Aggiorna il portfolio mantenendo entrambe le versioni."
+        },
+        {
+          "type": "paragraph",
+          "text": "Modello dettagliato del portfolio finale"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il portfolio non è una cartella di file accumulati. È un argomento documentato: mostra che cosa il lettore sa fare, quali criteri ha applicato, dove ha sbagliato e come ha corretto il proprio modello. Ogni elemento deve avere titolo, data, obiettivo, versione, strumenti usati e breve nota di verifica. La struttura seguente può essere copiata come indice operativo."
+        },
+        {
+          "type": "list-item",
+          "text": "Dichiarazione iniziale di competenza: descrivi in 250–350 parole che cosa ritieni significhi programmare, quali parti del Modulo 0 padroneggi e quali richiedono ancora verifica. Non anticipare un voto; formula ipotesi che le prove successive confermeranno o smentiranno."
+        },
+        {
+          "type": "list-item",
+          "text": "Mappa del sistema informatico: rappresenta CPU, memoria, archiviazione, input/output, sistema operativo e interprete. Accompagna il diagramma con il percorso completo di un file e con due diagnosi alternative per un comportamento lento."
+        },
+        {
+          "type": "list-item",
+          "text": "Quaderno delle rappresentazioni: includi esempi di numeri, testo, immagini e audio, specificando unità, codifica, precisione e perdita. Aggiungi almeno un errore di interpretazione dello stesso insieme di bit con metadati differenti."
+        },
+        {
+          "type": "list-item",
+          "text": "Tavola logica: formalizza cinque regole del progetto, inserisci parentesi esplicite, produci una tabella di verità e documenta un controesempio. Spiega inoltre una condizione in cui il corto circuito evita una operazione non valida."
+        },
+        {
+          "type": "list-item",
+          "text": "Dossier algoritmico: presenta specifica, pseudocodice, diagramma, tre tracce, invariante, argomento di terminazione e confronto con una alternativa. I casi devono includere input normale, vuoto, duplicato e anomalo."
+        },
+        {
+          "type": "list-item",
+          "text": "Mappa degli stakeholder e dei requisiti: collega bisogni, requisiti funzionali, qualità, vincoli e criteri di accettazione. Evidenzia almeno un conflitto e una assunzione che, se falsa, richiede revisione del progetto."
+        },
+        {
+          "type": "list-item",
+          "text": "Architettura e ciclo di vita: assegna responsabilità a componenti, definisci due interfacce e segui una modifica attraverso progettazione, implementazione, test, release, monitoraggio, manutenzione e ritiro."
+        },
+        {
+          "type": "list-item",
+          "text": "Cronologia ragionata: collega almeno quindici passaggi storici mediante relazioni di influenza, convergenza o adozione. Ogni attribuzione di primato deve nominare la proprietà e distinguere progetto, prototipo e diffusione."
+        },
+        {
+          "type": "list-item",
+          "text": "Mappa delle aree: associa al progetto teoria, algoritmi, sistemi, software engineering, reti, sicurezza, dati, HCI e almeno una area interdisciplinare. Per ciascuna formula una domanda a cui un esperto dovrebbe rispondere."
+        },
+        {
+          "type": "list-item",
+          "text": "Valutazione integrata d’impatto: analizza etica, equità, privacy, sicurezza, accessibilità e sostenibilità. Definisci requisiti, metriche, proprietari, rischio residuo, meccanismo di ricorso e criterio di sospensione."
+        },
+        {
+          "type": "list-item",
+          "text": "Registro delle revisioni: seleziona almeno quattro artefatti e conserva versione iniziale, feedback ricevuto, decisione di modifica e versione finale. Spiega perché alcune osservazioni sono state accolte e altre respinte."
+        },
+        {
+          "type": "list-item",
+          "text": "Dichiarazione degli aiuti: elenca persone, strumenti, modelli, materiali e suggerimenti usati. Per ogni contributo indica che cosa hai verificato personalmente e quale parte sei in grado di spiegare senza assistenza."
+        },
+        {
+          "type": "list-item",
+          "text": "Autovalutazione con rubrica: assegna un livello per dimensione citando una evidenza precisa. Evita formule generiche come ‘ho capito’; indica il paragrafo, diagramma, test o revisione che sostiene il giudizio."
+        },
+        {
+          "type": "list-item",
+          "text": "Piano di recupero: per ogni dimensione sotto soglia definisci concetto mancante, errore osservabile, due esercizi nuovi, prova equivalente e data di rivalutazione. Il piano è concluso soltanto quando la nuova evidenza è stata giudicata."
+        },
+        {
+          "type": "list-item",
+          "text": "Riflessione conclusiva: in 500–700 parole confronta la dichiarazione iniziale con le prove. Descrivi tre cambiamenti del tuo modello mentale, due errori utili, una domanda ancora aperta e la preparazione necessaria per il Modulo 1."
+        },
+        {
+          "type": "paragraph",
+          "text": "Protocollo di revisione del portfolio"
+        },
+        {
+          "type": "paragraph",
+          "text": "La revisione avviene in quattro passaggi. Primo: controllo di completezza, verificando che ogni artefatto dichiari obiettivo, versione e criterio. Secondo: controllo di coerenza, seguendo gli stessi termini e regole fra specifica, dati, algoritmo, architettura e impatto. Terzo: controllo avversariale, cercando un caso limite o un’interpretazione capace di smentire il lavoro. Quarto: controllo di comunicazione, chiedendo a un lettore esterno di ricostruire il ragionamento senza spiegazioni orali aggiuntive."
+        },
+        {
+          "type": "list-item",
+          "text": "Una correzione deve rimuovere la causa, non soltanto modificare la frase segnalata."
+        },
+        {
+          "type": "list-item",
+          "text": "Ogni diagramma deve essere confermato dal testo e ogni simbolo deve avere significato dichiarato."
+        },
+        {
+          "type": "list-item",
+          "text": "Le risposte copiate o generate devono essere sottoposte a esempi, controesempi e spiegazione autonoma."
+        },
+        {
+          "type": "list-item",
+          "text": "Un artefatto non conforme resta nel portfolio insieme alla revisione, perché documenta il processo di apprendimento."
+        },
+        {
+          "type": "list-item",
+          "text": "La versione finale deve poter essere valutata senza collegamenti esterni obbligatori o conoscenze non dichiarate."
+        },
+        {
+          "type": "list-item",
+          "text": "Il revisore formula osservazioni rispetto alla rubrica; non sostituisce l’autore né riscrive silenziosamente il lavoro."
+        },
+        {
+          "type": "paragraph",
+          "text": "Criteri finali di completamento del Modulo 0"
+        },
+        {
+          "type": "list-item",
+          "text": "Tutte le Lezioni 0.1–0.9 sono state studiate."
+        },
+        {
+          "type": "list-item",
+          "text": "Il portfolio contiene almeno dodici artefatti, con quattro revisioni documentate."
+        },
+        {
+          "type": "list-item",
+          "text": "Le soglie di quiz, prova scritta, progetto e colloquio sono tutte raggiunte."
+        },
+        {
+          "type": "list-item",
+          "text": "Ogni lacuna essenziale è stata recuperata con prova equivalente."
+        },
+        {
+          "type": "list-item",
+          "text": "Il lettore sa spiegare i collegamenti fra hardware, dati, logica, algoritmi, software e impatto."
+        },
+        {
+          "type": "list-item",
+          "text": "Il lettore è pronto a configurare l’ambiente del Modulo 1 senza confondere strumenti e concetti."
+        },
+        {
+          "type": "paragraph",
+          "text": "CONCLUSIONE  Il Modulo 0 è completato quando le evidenze mostrano comprensione trasferibile. Il passo successivo è il Modulo 1 – Ambiente di sviluppo, dove questi modelli guideranno installazione, terminale, editor e interprete Python."
+        }
+      ]
+    }
+  ],
+  "chapters": [
+    {
+      "number": 1,
+      "title": "1. Valutare per dimostrare comprensione: prove, criteri e portfolio",
+      "sectionId": "programming-0-9-chapter-1",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-9-chapter-1-guided",
+          "kind": "guided",
+          "lessonId": "0.9",
+          "chapterNumber": 1,
+          "title": "1. Valutare per dimostrare comprensione: prove, criteri e portfolio",
+          "prompt": "Scegli tre risultati del Modulo 0.\nAssocia a ciascuno due prove differenti.\nDefinisci criteri, livello minimo e attività di recupero.",
+          "autoverification": "AUTOVERIFICA  La risposta deve essere spiegabile senza affidarsi alla soluzione, collegata a un criterio e accompagnata da almeno una prova o simulazione."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-9-chapter-1-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 1,
+            "title": "1. Valutare per dimostrare comprensione: prove, criteri e portfolio",
+            "prompt": "Costruisci il tuo indice di portfolio."
+          },
+          {
+            "id": "programming-0-9-chapter-1-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 1,
+            "title": "1. Valutare per dimostrare comprensione: prove, criteri e portfolio",
+            "prompt": "Critica una valutazione basata solo su quiz."
+          },
+          {
+            "id": "programming-0-9-chapter-1-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 1,
+            "title": "1. Valutare per dimostrare comprensione: prove, criteri e portfolio",
+            "prompt": "Scrivi una dichiarazione trasparente degli aiuti usati."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-9-chapter-1-quiz-1",
+          "concept": "1. Valutare per dimostrare comprensione: prove, criteri e portfolio",
+          "prompt": "Che cosa indica la validità?",
+          "choices": [
+            "A. Quanto la prova misura la competenza prevista",
+            "B. Quanto è lunga",
+            "C. Quante immagini contiene",
+            "D. Il colore della rubrica"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-1"
+        },
+        {
+          "id": "programming-0-9-chapter-1-quiz-2",
+          "concept": "1. Valutare per dimostrare comprensione: prove, criteri e portfolio",
+          "prompt": "A che cosa serve una rubrica?",
+          "choices": [
+            "A. A sostituire ogni feedback",
+            "B. A nascondere i criteri",
+            "C. A contare file",
+            "D. A rendere espliciti dimensioni e livelli"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-1"
+        },
+        {
+          "id": "programming-0-9-chapter-1-quiz-3",
+          "concept": "1. Valutare per dimostrare comprensione: prove, criteri e portfolio",
+          "prompt": "Il recupero deve ripetere identica la prova?",
+          "choices": [
+            "A. Sempre",
+            "B. Solo oralmente",
+            "C. No",
+            "D. Sì"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-1"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "2. Laboratorio di sintesi: che cosa significa programmare",
+      "sectionId": "programming-0-9-chapter-2",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-9-chapter-2-guided",
+          "kind": "guided",
+          "lessonId": "0.9",
+          "chapterNumber": 2,
+          "title": "2. Laboratorio di sintesi: che cosa significa programmare",
+          "prompt": "Classifica dieci attività come uso, configurazione o programmazione.\nPer tre casi identifica sintassi, semantica e contesto.\nRiscrivi una automazione specificando effetti e responsabilità.",
+          "autoverification": "AUTOVERIFICA  La risposta deve essere spiegabile senza affidarsi alla soluzione, collegata a un criterio e accompagnata da almeno una prova o simulazione."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-9-chapter-2-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 2,
+            "title": "2. Laboratorio di sintesi: che cosa significa programmare",
+            "prompt": "Spiega programmare a un principiante senza usare ‘codice’."
+          },
+          {
+            "id": "programming-0-9-chapter-2-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 2,
+            "title": "2. Laboratorio di sintesi: che cosa significa programmare",
+            "prompt": "Trova un programma non testuale."
+          },
+          {
+            "id": "programming-0-9-chapter-2-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 2,
+            "title": "2. Laboratorio di sintesi: che cosa significa programmare",
+            "prompt": "Analizza un comportamento corretto ma non desiderabile."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-9-chapter-2-quiz-1",
+          "concept": "2. Laboratorio di sintesi: che cosa significa programmare",
+          "prompt": "Programmare coincide solo con scrivere sintassi?",
+          "choices": [
+            "A. Sì",
+            "B. Solo in Python",
+            "C. Solo nei giochi",
+            "D. No"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-2"
+        },
+        {
+          "id": "programming-0-9-chapter-2-quiz-2",
+          "concept": "2. Laboratorio di sintesi: che cosa significa programmare",
+          "prompt": "Che cosa descrive la semantica?",
+          "choices": [
+            "A. Il nome del file",
+            "B. La velocità della rete",
+            "C. Il significato operativo delle forme",
+            "D. Il colore del testo"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-2"
+        },
+        {
+          "id": "programming-0-9-chapter-2-quiz-3",
+          "concept": "2. Laboratorio di sintesi: che cosa significa programmare",
+          "prompt": "Correttezza rispetto alla specifica prova utilità?",
+          "choices": [
+            "A. Solo offline",
+            "B. No",
+            "C. Sì",
+            "D. Sempre"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-2"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "title": "3. Laboratorio di sistemi: computer e rappresentazione dell’informazione",
+      "sectionId": "programming-0-9-chapter-3",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-9-chapter-3-guided",
+          "kind": "guided",
+          "lessonId": "0.9",
+          "chapterNumber": 3,
+          "title": "3. Laboratorio di sistemi: computer e rappresentazione dell’informazione",
+          "prompt": "Traccia apertura, modifica e salvataggio di un file.\nRappresenta un piccolo testo in byte.\nDiagnostica quattro guasti distinguendo CPU, memoria, storage e I/O.",
+          "autoverification": "AUTOVERIFICA  La risposta deve essere spiegabile senza affidarsi alla soluzione, collegata a un criterio e accompagnata da almeno una prova o simulazione."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-9-chapter-3-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 3,
+            "title": "3. Laboratorio di sistemi: computer e rappresentazione dell’informazione",
+            "prompt": "Confronta raster e vettoriale."
+          },
+          {
+            "id": "programming-0-9-chapter-3-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 3,
+            "title": "3. Laboratorio di sistemi: computer e rappresentazione dell’informazione",
+            "prompt": "Analizza un caso di overflow."
+          },
+          {
+            "id": "programming-0-9-chapter-3-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 3,
+            "title": "3. Laboratorio di sistemi: computer e rappresentazione dell’informazione",
+            "prompt": "Spiega perché un file può aprirsi con caratteri corrotti."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-9-chapter-3-quiz-1",
+          "concept": "3. Laboratorio di sistemi: computer e rappresentazione dell’informazione",
+          "prompt": "Che cosa dà significato a una sequenza di bit?",
+          "choices": [
+            "A. La grandezza del monitor",
+            "B. Solo la CPU",
+            "C. Codifica, tipo e contesto",
+            "D. Il colore dei cavi"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-3"
+        },
+        {
+          "id": "programming-0-9-chapter-3-quiz-2",
+          "concept": "3. Laboratorio di sistemi: computer e rappresentazione dell’informazione",
+          "prompt": "Un byte equivale sempre a un carattere?",
+          "choices": [
+            "A. Solo per emoji",
+            "B. No",
+            "C. Sì",
+            "D. Solo in UTF-8"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-3"
+        },
+        {
+          "id": "programming-0-9-chapter-3-quiz-3",
+          "concept": "3. Laboratorio di sistemi: computer e rappresentazione dell’informazione",
+          "prompt": "Quale memoria è normalmente volatile?",
+          "choices": [
+            "A. RAM",
+            "B. SSD",
+            "C. Disco ottico",
+            "D. Carta"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-3"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "title": "4. Laboratorio di logica: proposizioni, condizioni e prove",
+      "sectionId": "programming-0-9-chapter-4",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-9-chapter-4-guided",
+          "kind": "guided",
+          "lessonId": "0.9",
+          "chapterNumber": 4,
+          "title": "4. Laboratorio di logica: proposizioni, condizioni e prove",
+          "prompt": "Formalizza cinque regole con parentesi.\nCostruisci una tabella di verità.\nNega due affermazioni quantificate e trova controesempi.",
+          "autoverification": "AUTOVERIFICA  La risposta deve essere spiegabile senza affidarsi alla soluzione, collegata a un criterio e accompagnata da almeno una prova o simulazione."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-9-chapter-4-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 4,
+            "title": "4. Laboratorio di logica: proposizioni, condizioni e prove",
+            "prompt": "Individua un OR ambiguo."
+          },
+          {
+            "id": "programming-0-9-chapter-4-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 4,
+            "title": "4. Laboratorio di logica: proposizioni, condizioni e prove",
+            "prompt": "Dimostra una legge di De Morgan."
+          },
+          {
+            "id": "programming-0-9-chapter-4-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 4,
+            "title": "4. Laboratorio di logica: proposizioni, condizioni e prove",
+            "prompt": "Analizza una condizione a corto circuito."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-9-chapter-4-quiz-1",
+          "concept": "4. Laboratorio di logica: proposizioni, condizioni e prove",
+          "prompt": "Quando è falsa A implica B?",
+          "choices": [
+            "A. Mai",
+            "B. Quando A è vera e B falsa",
+            "C. Sempre con A falsa",
+            "D. Quando entrambe vere"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-4"
+        },
+        {
+          "id": "programming-0-9-chapter-4-quiz-2",
+          "concept": "4. Laboratorio di logica: proposizioni, condizioni e prove",
+          "prompt": "Negare ‘tutti’ produce?",
+          "choices": [
+            "A. Esiste almeno un controesempio",
+            "B. Nessuno esiste",
+            "C. Tutti sono falsi",
+            "D. La stessa frase"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-4"
+        },
+        {
+          "id": "programming-0-9-chapter-4-quiz-3",
+          "concept": "4. Laboratorio di logica: proposizioni, condizioni e prove",
+          "prompt": "Validità garantisce premesse vere?",
+          "choices": [
+            "A. Sì",
+            "B. Solo con AND",
+            "C. Solo nei programmi",
+            "D. No"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-4"
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "title": "5. Laboratorio algoritmico: problema, pseudocodice e correttezza",
+      "sectionId": "programming-0-9-chapter-5",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-9-chapter-5-guided",
+          "kind": "guided",
+          "lessonId": "0.9",
+          "chapterNumber": 5,
+          "title": "5. Laboratorio algoritmico: problema, pseudocodice e correttezza",
+          "prompt": "Specifica il problema di eliminare duplicati mantenendo ordine.\nScrivi pseudocodice e traccia tre casi.\nDefinisci invariante, terminazione e costo.",
+          "autoverification": "AUTOVERIFICA  La risposta deve essere spiegabile senza affidarsi alla soluzione, collegata a un criterio e accompagnata da almeno una prova o simulazione."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-9-chapter-5-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 5,
+            "title": "5. Laboratorio algoritmico: problema, pseudocodice e correttezza",
+            "prompt": "Confronta ricerca lineare e binaria."
+          },
+          {
+            "id": "programming-0-9-chapter-5-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 5,
+            "title": "5. Laboratorio algoritmico: problema, pseudocodice e correttezza",
+            "prompt": "Correggi un ciclo infinito."
+          },
+          {
+            "id": "programming-0-9-chapter-5-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 5,
+            "title": "5. Laboratorio algoritmico: problema, pseudocodice e correttezza",
+            "prompt": "Progetta algoritmo e controesempio per una regola vaga."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-9-chapter-5-quiz-1",
+          "concept": "5. Laboratorio algoritmico: problema, pseudocodice e correttezza",
+          "prompt": "Che cosa descrive una postcondizione?",
+          "choices": [
+            "A. La proprietà garantita dopo l’esecuzione valida",
+            "B. Il colore del diagramma",
+            "C. Solo l’input",
+            "D. Il linguaggio scelto"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-5"
+        },
+        {
+          "id": "programming-0-9-chapter-5-quiz-2",
+          "concept": "5. Laboratorio algoritmico: problema, pseudocodice e correttezza",
+          "prompt": "Una traccia prova tutti gli input?",
+          "choices": [
+            "A. Sì",
+            "B. Solo se lunga",
+            "C. Solo con numeri",
+            "D. No"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-5"
+        },
+        {
+          "id": "programming-0-9-chapter-5-quiz-3",
+          "concept": "5. Laboratorio algoritmico: problema, pseudocodice e correttezza",
+          "prompt": "Che cosa sostiene la terminazione?",
+          "choices": [
+            "A. Molti esempi",
+            "B. La memoria disponibile",
+            "C. Una misura che progredisce verso l’uscita",
+            "D. Un commento"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-5"
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "title": "6. Laboratorio di progettazione: ciclo di vita e qualità del software",
+      "sectionId": "programming-0-9-chapter-6",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-9-chapter-6-guided",
+          "kind": "guided",
+          "lessonId": "0.9",
+          "chapterNumber": 6,
+          "title": "6. Laboratorio di progettazione: ciclo di vita e qualità del software",
+          "prompt": "Segui una nuova regola attraverso dieci artefatti.\nScrivi requisiti e criteri di accettazione.\nProgetta test, rilascio, monitoraggio e manutenzione.",
+          "autoverification": "AUTOVERIFICA  La risposta deve essere spiegabile senza affidarsi alla soluzione, collegata a un criterio e accompagnata da almeno una prova o simulazione."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-9-chapter-6-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 6,
+            "title": "6. Laboratorio di progettazione: ciclo di vita e qualità del software",
+            "prompt": "Costruisci una matrice di tracciabilità."
+          },
+          {
+            "id": "programming-0-9-chapter-6-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 6,
+            "title": "6. Laboratorio di progettazione: ciclo di vita e qualità del software",
+            "prompt": "Confronta due architetture."
+          },
+          {
+            "id": "programming-0-9-chapter-6-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 6,
+            "title": "6. Laboratorio di progettazione: ciclo di vita e qualità del software",
+            "prompt": "Redigi un piano di ritiro."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-9-chapter-6-quiz-1",
+          "concept": "6. Laboratorio di progettazione: ciclo di vita e qualità del software",
+          "prompt": "Il ciclo di vita è una linea senza feedback?",
+          "choices": [
+            "A. Sì",
+            "B. Solo nei progetti piccoli",
+            "C. Solo dopo il test",
+            "D. No"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-6"
+        },
+        {
+          "id": "programming-0-9-chapter-6-quiz-2",
+          "concept": "6. Laboratorio di progettazione: ciclo di vita e qualità del software",
+          "prompt": "Che cosa collega la tracciabilità?",
+          "choices": [
+            "A. Unicamente persone",
+            "B. Solo date",
+            "C. Obiettivi, requisiti, design, codice, test e release",
+            "D. Solo nomi file"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-6"
+        },
+        {
+          "id": "programming-0-9-chapter-6-quiz-3",
+          "concept": "6. Laboratorio di progettazione: ciclo di vita e qualità del software",
+          "prompt": "Una stima è?",
+          "choices": [
+            "A. Una licenza",
+            "B. Una previsione condizionata",
+            "C. Una certezza",
+            "D. Un test"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-6"
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "title": "7. Laboratorio di orientamento: storia e aree dell’informatica",
+      "sectionId": "programming-0-9-chapter-7",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-9-chapter-7-guided",
+          "kind": "guided",
+          "lessonId": "0.9",
+          "chapterNumber": 7,
+          "title": "7. Laboratorio di orientamento: storia e aree dell’informatica",
+          "prompt": "Costruisci una cronologia con dieci relazioni.\nQualifica tre attribuzioni di primato.\nMappa un motore di ricerca su otto aree.",
+          "autoverification": "AUTOVERIFICA  La risposta deve essere spiegabile senza affidarsi alla soluzione, collegata a un criterio e accompagnata da almeno una prova o simulazione."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-9-chapter-7-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 7,
+            "title": "7. Laboratorio di orientamento: storia e aree dell’informatica",
+            "prompt": "Analizza un mito storico."
+          },
+          {
+            "id": "programming-0-9-chapter-7-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 7,
+            "title": "7. Laboratorio di orientamento: storia e aree dell’informatica",
+            "prompt": "Confronta Internet e Web."
+          },
+          {
+            "id": "programming-0-9-chapter-7-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 7,
+            "title": "7. Laboratorio di orientamento: storia e aree dell’informatica",
+            "prompt": "Formula una domanda per ogni area coinvolta in uno smartphone."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-9-chapter-7-quiz-1",
+          "concept": "7. Laboratorio di orientamento: storia e aree dell’informatica",
+          "prompt": "Perché esistono più primi computer?",
+          "choices": [
+            "A. Perché erano identici",
+            "B. Perché mancava software",
+            "C. Per criteri differenti",
+            "D. Perché le date non contano"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-7"
+        },
+        {
+          "id": "programming-0-9-chapter-7-quiz-2",
+          "concept": "7. Laboratorio di orientamento: storia e aree dell’informatica",
+          "prompt": "Internet coincide con Web?",
+          "choices": [
+            "A. Solo dal 1990",
+            "B. No",
+            "C. Sì",
+            "D. Solo su mobile"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-7"
+        },
+        {
+          "id": "programming-0-9-chapter-7-quiz-3",
+          "concept": "7. Laboratorio di orientamento: storia e aree dell’informatica",
+          "prompt": "L’informatica coincide con programmazione?",
+          "choices": [
+            "A. No",
+            "B. Sì",
+            "C. Solo all’università",
+            "D. Solo in teoria"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: C · 2: B · 3: A. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-7"
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "title": "8. Laboratorio di responsabilità: impatto del software",
+      "sectionId": "programming-0-9-chapter-8",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-9-chapter-8-guided",
+          "kind": "guided",
+          "lessonId": "0.9",
+          "chapterNumber": 8,
+          "title": "8. Laboratorio di responsabilità: impatto del software",
+          "prompt": "Valuta un servizio su cinque dimensioni.\nDefinisci tre conflitti e tre sinergie.\nAssegna requisiti, metriche, proprietari e arresto.",
+          "autoverification": "AUTOVERIFICA  La risposta deve essere spiegabile senza affidarsi alla soluzione, collegata a un criterio e accompagnata da almeno una prova o simulazione."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-9-chapter-8-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 8,
+            "title": "8. Laboratorio di responsabilità: impatto del software",
+            "prompt": "Costruisci una mappa dati."
+          },
+          {
+            "id": "programming-0-9-chapter-8-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 8,
+            "title": "8. Laboratorio di responsabilità: impatto del software",
+            "prompt": "Realizza un modello di minaccia."
+          },
+          {
+            "id": "programming-0-9-chapter-8-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 8,
+            "title": "8. Laboratorio di responsabilità: impatto del software",
+            "prompt": "Progetta un test di accessibilità con persone."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-9-chapter-8-quiz-1",
+          "concept": "8. Laboratorio di responsabilità: impatto del software",
+          "prompt": "Privacy e sicurezza coincidono?",
+          "choices": [
+            "A. Solo offline",
+            "B. No",
+            "C. Sì",
+            "D. Solo con cifratura"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-8"
+        },
+        {
+          "id": "programming-0-9-chapter-8-quiz-2",
+          "concept": "8. Laboratorio di responsabilità: impatto del software",
+          "prompt": "Un test automatico basta per accessibilità?",
+          "choices": [
+            "A. No",
+            "B. Sì",
+            "C. Solo se recente",
+            "D. Solo con IA"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-8"
+        },
+        {
+          "id": "programming-0-9-chapter-8-quiz-3",
+          "concept": "8. Laboratorio di responsabilità: impatto del software",
+          "prompt": "Non costruire può essere responsabile?",
+          "choices": [
+            "A. No",
+            "B. Solo se costoso",
+            "C. Solo senza utenti",
+            "D. Sì"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: B · 2: A · 3: D. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-8"
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "title": "9. Progetto integrato: sistema di prenotazione per Aula Studio Virtuale",
+      "sectionId": "programming-0-9-chapter-9",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-9-chapter-9-guided",
+          "kind": "guided",
+          "lessonId": "0.9",
+          "chapterNumber": 9,
+          "title": "9. Progetto integrato: sistema di prenotazione per Aula Studio Virtuale",
+          "prompt": "Scrivi visione, confine e otto stakeholder.\nProduci i dieci artefatti obbligatori.\nEsegui revisione con rubrica e registra correzioni.",
+          "autoverification": "AUTOVERIFICA  La risposta deve essere spiegabile senza affidarsi alla soluzione, collegata a un criterio e accompagnata da almeno una prova o simulazione."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-9-chapter-9-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 9,
+            "title": "9. Progetto integrato: sistema di prenotazione per Aula Studio Virtuale",
+            "prompt": "Aggiungi una alternativa non software."
+          },
+          {
+            "id": "programming-0-9-chapter-9-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 9,
+            "title": "9. Progetto integrato: sistema di prenotazione per Aula Studio Virtuale",
+            "prompt": "Simula cinque casi limite end-to-end."
+          },
+          {
+            "id": "programming-0-9-chapter-9-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 9,
+            "title": "9. Progetto integrato: sistema di prenotazione per Aula Studio Virtuale",
+            "prompt": "Presenta il dossier in dieci minuti rispondendo a domande."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-9-chapter-9-quiz-1",
+          "concept": "9. Progetto integrato: sistema di prenotazione per Aula Studio Virtuale",
+          "prompt": "Che cosa collega gli artefatti agli obiettivi?",
+          "choices": [
+            "A. La tracciabilità",
+            "B. Il colore",
+            "C. Il nome file",
+            "D. La lunghezza"
+          ],
+          "correctChoice": 0,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-9"
+        },
+        {
+          "id": "programming-0-9-chapter-9-quiz-2",
+          "concept": "9. Progetto integrato: sistema di prenotazione per Aula Studio Virtuale",
+          "prompt": "Il dossier richiede codice Python?",
+          "choices": [
+            "A. Sì",
+            "B. Solo classi",
+            "C. Solo database",
+            "D. No"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-9"
+        },
+        {
+          "id": "programming-0-9-chapter-9-quiz-3",
+          "concept": "9. Progetto integrato: sistema di prenotazione per Aula Studio Virtuale",
+          "prompt": "Una esclusione motivata è utile?",
+          "choices": [
+            "A. Solo se segreta",
+            "B. Solo dopo il rilascio",
+            "C. Sì",
+            "D. No"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: A · 2: D · 3: C. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-9"
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "title": "10. Esame finale, rubriche, recupero e completamento del Modulo 0",
+      "sectionId": "programming-0-9-chapter-10",
+      "exercises": {
+        "guided": {
+          "id": "programming-0-9-chapter-10-guided",
+          "kind": "guided",
+          "lessonId": "0.9",
+          "chapterNumber": 10,
+          "title": "10. Esame finale, rubriche, recupero e completamento del Modulo 0",
+          "prompt": "Calcola il profilo per dimensione, non solo la media.\nScegli due lacune e pianifica recupero.\nSostieni una mini-difesa orale del progetto.",
+          "autoverification": "AUTOVERIFICA  La risposta deve essere spiegabile senza affidarsi alla soluzione, collegata a un criterio e accompagnata da almeno una prova o simulazione."
+        },
+        "autonomous": [
+          {
+            "id": "programming-0-9-chapter-10-autonomous-1",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 10,
+            "title": "10. Esame finale, rubriche, recupero e completamento del Modulo 0",
+            "prompt": "Crea una nuova prova equivalente."
+          },
+          {
+            "id": "programming-0-9-chapter-10-autonomous-2",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 10,
+            "title": "10. Esame finale, rubriche, recupero e completamento del Modulo 0",
+            "prompt": "Scrivi riflessione su tre revisioni."
+          },
+          {
+            "id": "programming-0-9-chapter-10-autonomous-3",
+            "kind": "autonomous",
+            "lessonId": "0.9",
+            "chapterNumber": 10,
+            "title": "10. Esame finale, rubriche, recupero e completamento del Modulo 0",
+            "prompt": "Prepara un piano per il Modulo 1."
+          }
+        ]
+      },
+      "quiz": [
+        {
+          "id": "programming-0-9-chapter-10-quiz-1",
+          "concept": "10. Esame finale, rubriche, recupero e completamento del Modulo 0",
+          "prompt": "Una media alta compensa sempre una competenza essenziale assente?",
+          "choices": [
+            "A. Sì",
+            "B. Solo nei quiz",
+            "C. Solo nel progetto",
+            "D. No"
+          ],
+          "correctChoice": 3,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-10"
+        },
+        {
+          "id": "programming-0-9-chapter-10-quiz-2",
+          "concept": "10. Esame finale, rubriche, recupero e completamento del Modulo 0",
+          "prompt": "Il recupero modifica il criterio?",
+          "choices": [
+            "A. Elimina la rubrica",
+            "B. Riduce gli obiettivi",
+            "C. No, modifica percorso e prova",
+            "D. Sì sempre"
+          ],
+          "correctChoice": 2,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-10"
+        },
+        {
+          "id": "programming-0-9-chapter-10-quiz-3",
+          "concept": "10. Esame finale, rubriche, recupero e completamento del Modulo 0",
+          "prompt": "Perché dichiarare gli aiuti?",
+          "choices": [
+            "A. Per sostituire il portfolio",
+            "B. Per trasparenza e valutazione della comprensione",
+            "C. Per perdere punti automaticamente",
+            "D. Per evitare spiegazioni"
+          ],
+          "correctChoice": 1,
+          "explanation": "SOLUZIONI  1: D · 2: C · 3: B. Motiva sempre la risposta prima di controllarla.",
+          "reviewSectionId": "programming-0-9-chapter-10"
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    [
+      "Validità",
+      "Adeguatezza della prova rispetto alla competenza."
+    ],
+    [
+      "Affidabilità",
+      "Coerenza dei risultati o giudizi."
+    ],
+    [
+      "Rubrica",
+      "Matrice di criteri e livelli di padronanza."
+    ],
+    [
+      "Portfolio",
+      "Raccolta ragionata di evidenze e revisioni."
+    ],
+    [
+      "Triangolazione",
+      "Uso di prove differenti per sostenere un giudizio."
+    ],
+    [
+      "Programma",
+      "Istruzioni e dati formalizzati per un sistema."
+    ],
+    [
+      "Sintassi",
+      "Regole delle forme valide."
+    ],
+    [
+      "Semantica",
+      "Significato operativo delle forme."
+    ],
+    [
+      "Pragmatica",
+      "Uso ed effetti nel contesto."
+    ],
+    [
+      "Automazione",
+      "Esecuzione delegata di operazioni e decisioni."
+    ],
+    [
+      "CPU",
+      "Unità che esegue istruzioni."
+    ],
+    [
+      "Memoria principale",
+      "Spazio rapido per dati e codice attivi."
+    ],
+    [
+      "Codifica",
+      "Regola che associa informazione e rappresentazione."
+    ],
+    [
+      "Overflow",
+      "Risultato fuori dall’intervallo rappresentabile."
+    ],
+    [
+      "Compressione lossy",
+      "Riduzione che elimina informazione non ricostruibile esattamente."
+    ],
+    [
+      "Proposizione",
+      "Affermazione valutabile come vera o falsa."
+    ],
+    [
+      "Implicazione",
+      "Connettivo falso solo da vero a falso."
+    ],
+    [
+      "Equivalenza",
+      "Formule con gli stessi valori in ogni interpretazione."
+    ],
+    [
+      "Quantificatore",
+      "Operatore che estende una proprietà a un dominio."
+    ],
+    [
+      "Controesempio",
+      "Caso che rende falsa un’affermazione generale."
+    ],
+    [
+      "Specifica",
+      "Contratto su input, output e proprietà."
+    ],
+    [
+      "Pseudocodice",
+      "Descrizione algoritmica indipendente dalla sintassi."
+    ],
+    [
+      "Invariante",
+      "Proprietà preservata durante l’esecuzione."
+    ],
+    [
+      "Terminazione",
+      "Conclusione dell’algoritmo per gli input previsti."
+    ],
+    [
+      "Complessità",
+      "Crescita delle risorse rispetto all’input."
+    ],
+    [
+      "Requisito",
+      "Condizione che sistema o progetto deve soddisfare."
+    ],
+    [
+      "Architettura",
+      "Strutture e decisioni significative."
+    ],
+    [
+      "Tracciabilità",
+      "Collegamento fra origine e realizzazione."
+    ],
+    [
+      "Deployment",
+      "Installazione o attivazione controllata."
+    ],
+    [
+      "Manutenzione",
+      "Correzione e adattamento del software nel tempo."
+    ],
+    [
+      "Primato qualificato",
+      "Precedenza limitata a una proprietà dichiarata."
+    ],
+    [
+      "Programma memorizzato",
+      "Istruzioni conservate in memoria."
+    ],
+    [
+      "Internet",
+      "Interconnessione di reti basata su protocolli."
+    ],
+    [
+      "HCI",
+      "Studio dell’interazione persona-computer."
+    ],
+    [
+      "Interdisciplinarità",
+      "Integrazione di più discipline."
+    ],
+    [
+      "Equità",
+      "Distribuzione giustificabile di effetti e opportunità."
+    ],
+    [
+      "Minimizzazione",
+      "Riduzione dei dati al necessario."
+    ],
+    [
+      "Rischio residuo",
+      "Rischio rimasto dopo i controlli."
+    ],
+    [
+      "Accessibilità",
+      "Possibilità di uso in condizioni e abilità diverse."
+    ],
+    [
+      "Unità funzionale",
+      "Quantità di servizio usata per una misura ambientale."
+    ],
+    [
+      "Dossier",
+      "Insieme coerente di artefatti e motivazioni."
+    ],
+    [
+      "Confine",
+      "Separazione fra sistema e ambiente."
+    ],
+    [
+      "Artefatto",
+      "Prodotto verificabile del lavoro."
+    ],
+    [
+      "Revisione incrociata",
+      "Valutazione strutturata da parte di un pari."
+    ],
+    [
+      "Esclusione motivata",
+      "Funzione deliberatamente fuori perimetro."
+    ],
+    [
+      "Soglia minima",
+      "Livello necessario in una dimensione essenziale."
+    ],
+    [
+      "Recupero",
+      "Percorso mirato verso una nuova evidenza."
+    ],
+    [
+      "Prova equivalente",
+      "Attività diversa che misura la stessa competenza."
+    ],
+    [
+      "Colloquio riflessivo",
+      "Discussione che verifica comprensione e processo."
+    ],
+    [
+      "Completamento",
+      "Raggiungimento documentato dei criteri del modulo."
+    ]
+  ],
+  "summary": [
+    "La valutazione finale usa quattro componenti: quiz di capitolo, prova scritta integrata, progetto e colloquio riflessivo. Le soglie minime impediscono che eccellenza in una parte nasconda una lacuna critica. La rubrica descrive accuratezza, collegamenti, verifica, comunicazione e responsabilità. Il recupero identifica obiettivi non raggiunti, assegna esercizi equivalenti e richiede nuova prova. Il risultato è documentato nel portfolio. La competenza è dimostrata quando il lettore sa applicare, verificare e revisionare, non soltanto riconoscere le parole."
+  ],
+  "finalAssessment": {
+    "lessonId": "0.9",
+    "title": "Prova scritta integrata: 32 quesiti",
+    "prompt": "Rispondi senza consultare il manuale. Per ogni risposta indica una motivazione o un esempio; una lettera isolata non è sufficiente. Punteggio: 2 punti per risposta corretta e motivata, 1 per risposta parziale, 0 per errata o assente.",
+    "deliverables": [
+      "Distingui programma, algoritmo e codice sorgente.",
+      "Spiega sintassi e semantica con un esempio.",
+      "Segui un file dal disco alla CPU e ritorno.",
+      "Perché un byte non coincide sempre con un carattere?",
+      "Descrivi overflow e un modo per rilevarlo.",
+      "Formalizza una regola con AND, OR e parentesi.",
+      "Nega correttamente una proposizione universale.",
+      "Fornisci un controesempio alla conferma del conseguente.",
+      "Definisci precondizione e postcondizione.",
+      "Scrivi pseudocodice per trovare il minimo, includendo input vuoto.",
+      "Proponi un invariante per il minimo parziale.",
+      "Confronta due algoritmi corretti rispetto alle risorse.",
+      "Distingui requisito funzionale, qualità e vincolo.",
+      "Spiega a che cosa serve la tracciabilità.",
+      "Distingui verifica e validazione.",
+      "Descrivi release, deployment e rollback.",
+      "Perché esistono più ‘primi computer’?",
+      "Distingui Internet e Web.",
+      "Nomina sei aree dell’informatica e una domanda per ciascuna.",
+      "Spiega programma memorizzato e microprocessore.",
+      "Distingui privacy e sicurezza.",
+      "Costruisci asset, minaccia, vulnerabilità e rischio in un caso.",
+      "Distingui autenticazione e autorizzazione.",
+      "Spiega perché uno scanner non prova accessibilità completa.",
+      "Definisci emissioni operative e incorporate.",
+      "Descrivi un conflitto fra sicurezza e accessibilità.",
+      "Fornisci un esempio di proxy discriminatorio.",
+      "Definisci criterio di arresto di una funzione.",
+      "Spiega validità e affidabilità di una prova.",
+      "Che cosa deve contenere una dichiarazione degli aiuti?",
+      "Come si progetta un recupero mirato?",
+      "Quale evidenza dimostra che sei pronto per il Modulo 1?",
+      "Prova scritta: almeno 45/64 e almeno metà dei punti in ciascuno dei quattro blocchi da otto quesiti.",
+      "Quiz dei capitoli: almeno 24/30.",
+      "Progetto integrato: almeno livello Solida in ogni dimensione della rubrica.",
+      "Colloquio riflessivo: spiegazione autonoma di almeno tre artefatti e una revisione."
+    ],
+    "rubric": [
+      [
+        "Dimensione",
+        "Essenziale",
+        "Solida",
+        "Piena padronanza"
+      ],
+      [
+        "Problema e dati",
+        "Confine e dati principali",
+        "Specifiche e codifiche coerenti",
+        "Assunzioni, limiti e casi estremi verificati"
+      ],
+      [
+        "Logica e algoritmo",
+        "Regole e passi",
+        "Pseudocodice tracciabile",
+        "Invariante, terminazione e alternative motivate"
+      ],
+      [
+        "Sistema e ciclo di vita",
+        "Componenti citati",
+        "Interfacce, test e release",
+        "Tracciabilità, operazioni e ritiro integrati"
+      ],
+      [
+        "Storia e aree",
+        "Collegamenti minimi",
+        "Aree pertinenti e primati qualificati",
+        "Traiettorie e contributi collettivi argomentati"
+      ],
+      [
+        "Impatto",
+        "Cinque dimensioni citate",
+        "Rischi, controlli e proprietari",
+        "Conflitti, soglie, ricorso e arresto governati"
+      ],
+      [
+        "Comunicazione",
+        "Artefatti leggibili",
+        "Coerenza e motivazioni",
+        "Revisioni ed evidenze rendono il lavoro auditabile"
+      ]
+    ],
+    "completionCriteria": [
+      "Tutte le Lezioni 0.1–0.9 sono state studiate.",
+      "Il portfolio contiene almeno dodici artefatti, con quattro revisioni documentate.",
+      "Le soglie di quiz, prova scritta, progetto e colloquio sono tutte raggiunte.",
+      "Ogni lacuna essenziale è stata recuperata con prova equivalente.",
+      "Il lettore sa spiegare i collegamenti fra hardware, dati, logica, algoritmi, software e impatto.",
+      "Il lettore è pronto a configurare l’ambiente del Modulo 1 senza confondere strumenti e concetti."
+    ]
+  }
+}
