@@ -7,7 +7,7 @@ Questo file registra incarichi temporanei, proprietà dei file e dipendenze tra 
 | Attività | Assegnazione prevista | Branch | Stato | File riservati | File condivisi richiesti | Pull request | Ultimo aggiornamento |
 |---|---|---|---|---|---|---|---|
 | Completamento Programmazione da zero | Codex — fonti ufficiali 0.1 e 0.2 | `codex/programming-zero` | Completato | Vedere scheda attività | — | [PR #3](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/3) | 2026-07-21 |
-| Suoneria chiamata in arrivo | Codex | `codex/incoming-call-ringtone` | In revisione | `src/hooks/use-incoming-call-ringtone.ts`, `tests/incoming-call-ringtone.test.tsx` | `src/components/room/study-room.tsx` | Da aprire | 2026-07-21 |
+| Suoneria chiamata in arrivo | Codex | `codex/incoming-call-ringtone` | In revisione | `src/hooks/use-incoming-call-ringtone.ts`, `tests/incoming-call-ringtone.test.tsx` | `src/components/room/study-room.tsx` | [PR #5](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/5) | 2026-07-21 |
 | Matematica da zero | Qualunque Codex, non ancora assegnato | `codex/mathematics-zero` | Disponibile | Vedere scheda attività | Da dichiarare alla presa in carico | — | 2026-07-21 |
 
 Stati ammessi: `Disponibile`, `In corso`, `In revisione`, `Bloccato`, `Completato`.
