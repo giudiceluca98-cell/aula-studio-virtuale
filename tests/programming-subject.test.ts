@@ -58,7 +58,7 @@ describe("pacchetto editoriale Programmazione da zero", () => {
     expect(programmingLesson.exercises).toHaveLength(295);
     expect(programmingLesson.quiz).toHaveLength(222);
     expect(programmingLesson.project.assessments).toHaveLength(7);
-    expect(programmingLesson.project.guidedProjects.map((project) => project.lessonId)).toEqual(["0.1", "0.2", "0.3", "0.4", "0.5", "0.6"]);
+    expect(programmingLesson.project.guidedProjects.map((project) => project.lessonId)).toEqual(["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7"]);
     expect(programmingLesson.project.guidedProjects.every((project) => project.starterCode.includes("print("))).toBe(true);
     expect(programmingLesson.completion.minimumQuizScore).toBe(80);
     expect(programmingLesson.completion.requiredExerciseIds).toHaveLength(221);
@@ -129,7 +129,7 @@ describe("pacchetto editoriale Programmazione da zero", () => {
       state = applyLessonAction(state, { type: "project_submitted", eventId: crypto.randomUUID(), projectLessonId: project.lessonId, code: project.starterCode, output: "Programma eseguito correttamente." }, timestamp).state;
     }
     expect(state.quizScore).toBe(100);
-    expect(state.completedProjectLessonIds).toEqual(["0.1", "0.2", "0.3", "0.4", "0.5", "0.6"]);
+    expect(state.completedProjectLessonIds).toEqual(["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7"]);
     expect(state.lessonCompleted).toBe(true);
     expect(state.completionPercentage).toBe(100);
   });
@@ -157,7 +157,7 @@ describe("pacchetto editoriale Programmazione da zero", () => {
       state = applyLessonAction(state, action, "2026-07-21T10:00:00.000Z").state;
     }
     expect(state.project).toBe("submitted");
-    expect(state.completedProjectLessonIds).toEqual(["0.1", "0.2", "0.3", "0.4", "0.5", "0.6"]);
+    expect(state.completedProjectLessonIds).toEqual(["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7"]);
   });
 
   it("Eve è attiva senza OpenAI e usa solo lo stato didattico consentito", () => {
