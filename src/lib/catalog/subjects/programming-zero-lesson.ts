@@ -11,6 +11,7 @@ import lesson12Content from "./programming-zero-lesson-1-2-official-content.json
 import lesson13Content from "./programming-zero-lesson-1-3-official-content.json";
 import lesson14Content from "./programming-zero-lesson-1-4-official-content.json";
 import lesson15Content from "./programming-zero-lesson-1-5-official-content.json";
+import lesson16Content from "./programming-zero-lesson-1-6-official-content.json";
 
 export const PROGRAMMING_ZERO_PATH_ID = "programming-zero";
 // The existing native material keeps its identifier so rooms and saved progress remain connected.
@@ -52,7 +53,7 @@ interface OfficialExercise {
   autoverification?: string;
 }
 
-const officialLessons = [...officialContent.lessons, lesson03Content, lesson04Content, lesson05Content, lesson06Content, lesson07Content, lesson08Content, lesson09Content, lesson11Content, lesson12Content, lesson13Content, lesson14Content, lesson15Content];
+const officialLessons = [...officialContent.lessons, lesson03Content, lesson04Content, lesson05Content, lesson06Content, lesson07Content, lesson08Content, lesson09Content, lesson11Content, lesson12Content, lesson13Content, lesson14Content, lesson15Content, lesson16Content];
 const chapters = officialLessons.flatMap((lesson) => lesson.chapters);
 const allExercises = chapters.flatMap((chapter) => [chapter.exercises.guided, ...chapter.exercises.autonomous]);
 const [firstGuidedExercise, ...remainingExercises] = allExercises;
@@ -466,10 +467,10 @@ export const programmingLesson = {
   id: PROGRAMMING_LESSON_ID,
   pathId: PROGRAMMING_ZERO_PATH_ID,
   moduleId: "programming-module-0",
-  title: "Programmazione da Zero · Lezioni 0.1–1.5",
+  title: "Programmazione da Zero · Lezioni 0.1–1.6",
   lessonTitles: officialLessons.map((lesson) => `Lezione ${lesson.id} · ${lesson.title}`),
   level: "Lettore senza conoscenze pregresse",
-  estimatedMinutes: 1260,
+  estimatedMinutes: 1350,
   description: officialLessons.map((lesson) => lesson.summary[0]).join(" "),
   objectives: officialLessons.flatMap((lesson) => lesson.objectives),
   modules: programmingModules,

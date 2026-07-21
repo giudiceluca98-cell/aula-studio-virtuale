@@ -270,11 +270,15 @@ Contenuti convertiti: 11 sezioni, 762 blocchi, 40 esercizi, 30 quiz e 50 voci di
 
 Verifiche: test mirato 21/21, suite completa 151/151, typecheck e build superati; lint senza errori e con il solo warning preesistente.
 
-## Estensione in corso · Lezione 1.6
+## Estensione in revisione · Lezione 1.6
 
 Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_1.6_Ambienti_virtuali_e_dipendenze.docx`. Il DOCX non verrà caricato nel repository; l'indice editoriale del Modulo 1 viene usato soltanto per validare ordine, titolo e copertura.
 
 File riservati: artefatto 1.6, `src/lib/catalog/subjects/programming-zero-lesson.ts`, `src/lib/programming-lesson-progress.ts`, `tests/programming-subject.test.ts`. File condivisi prenotati: nessuno. Dipendenza: PR #33; branch e Draft PR impilati sulla lezione 1.5.
+
+Contenuti convertiti: 11 sezioni, 914 blocchi, 60 esercizi, 30 quiz e 60 voci di glossario; prova finale, rubrica e criteri conservati. SHA-256 `0f7386291c9410bc54b59da3f86c970ffe9424495cdcdccdbc88b0f1d28d1c6f`; nessun DOCX caricato.
+
+Verifiche: test mirato 21/21, suite completa 151/151, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 
 ## Estensione in revisione · Lezione 1.4
 
