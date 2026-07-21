@@ -3,7 +3,7 @@
 Stato: in corso
 Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 0.5 corrente
 Branch: `codex/programming-zero-lesson-0-5`
-Pull request: Draft PR da aprire, impilata sulla PR #9
+Pull request: https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/11 (base PR #9)
 Pacchetto: `programming`
 Percorso: `programming-zero`
 
@@ -119,7 +119,7 @@ Contenuti convertiti:
 
 Verifiche: test mirato 21/21, suite completa 138/138, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 
-## Estensione in corso · Lezione 0.5
+## Estensione in revisione · Lezione 0.5
 
 Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_0.5_Pensiero_computazionale_e_pseudocodice.docx`. Il DOCX non verrà caricato nel repository.
 
@@ -131,4 +131,14 @@ File riservati:
 - `tests/programming-subject.test.ts`
 
 File condivisi prenotati: nessuno. Dipendenza: PR #9; il branch e la Draft PR 0.5 sono impilati sulla lezione 0.4.
+
+Contenuti convertiti:
+
+- 11 sezioni e 800 blocchi renderizzabili;
+- 10 esercizi guidati e 30 esercizi autonomi;
+- 30 domande di quiz e 50 voci di glossario;
+- prova finale, rubrica e criteri di completamento;
+- impronta SHA-256 `1faa694e1279feb929c9c145ba0a253cfc1b4281a3e7fde2155ca69bf05ac5ca`, senza includere il DOCX.
+
+Verifiche: test mirato 21/21, suite completa 138/138, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 

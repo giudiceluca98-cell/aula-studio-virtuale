@@ -162,7 +162,7 @@ export function eveLessonAdvice(stateValue: unknown) {
     const nextProject = programmingLesson.project.guidedProjects.find((project) => !state.completedProjectLessonIds.includes(project.lessonId));
     return { title: "Python Project", message: nextProject ? `Esegui e consegna “${nextProject.title}” della lezione ${nextProject.lessonId}.` : "Completa i tre Python Project guidati.", sectionIds: [] as string[] };
   }
-  return { title: "Controlla i criteri", message: "Rivedi i criteri di completamento delle lezioni 0.1–0.4.", sectionIds: ["programming-0-1-chapter-10", "programming-0-2-chapter-10", "programming-0-3-chapter-10", "programming-0-4-chapter-10"] };
+  return { title: "Controlla i criteri", message: "Rivedi i criteri di completamento delle lezioni 0.1–0.5.", sectionIds: ["programming-0-1-chapter-10", "programming-0-2-chapter-10", "programming-0-3-chapter-10", "programming-0-4-chapter-10", "programming-0-5-chapter-10"] };
 }
 
 export function lessonSubmissionFor(action: LessonAction) {
