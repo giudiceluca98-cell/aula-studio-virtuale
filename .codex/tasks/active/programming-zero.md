@@ -1,9 +1,9 @@
 # Completamento Programmazione da zero
 
 Stato: in revisione
-Assegnazione: Codex — integrazione delle sole fonti ufficiali 0.1 e 0.2
-Branch: `codex/programming-zero`
-Pull request: https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/3
+Assegnazione: Codex — integrazione del contenuto ufficiale della Lezione 0.3
+Branch: `codex/programming-zero-lesson-0-3`
+Pull request: https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/4
 Pacchetto: `programming`
 Percorso: `programming-zero`
 
@@ -51,7 +51,7 @@ L'agente può collegare direttamente i contenuti al corso, al catalogo e all'aul
 
 ## File condivisi prenotati
 
-- `src/lib/catalog/roadmap.ts` — prenotato per collegare le lezioni ufficiali 0.1 e 0.2 al percorso esistente.
+Nessuno. La Lezione 0.3 usa l’integrazione dinamica già presente e non modifica file condivisi o l’area di lavoro protetta.
 
 ## Criteri di completamento
 
@@ -72,3 +72,24 @@ L'agente può collegare direttamente i contenuti al corso, al catalogo e all'aul
 - test, typecheck, lint e build eseguiti; resta un solo warning lint preesistente in `src/lib/vocabulary/mastery.ts`.
 
 Terminata e unita questa attività, lo stesso Codex potrà prendere in carico qualsiasi altro corso o funzione.
+
+## Estensione in revisione · Lezione 0.3
+
+Il documento locale `Programmazione_da_Zero_Lezione_0.3_Rappresentazione_dell_informazione.docx` è stato usato soltanto come fonte e, secondo l’indicazione editoriale, non viene caricato nel repository.
+
+File della proposta:
+
+- `src/lib/catalog/subjects/programming-zero-lesson-0-3-official-content.json`
+- `src/lib/catalog/subjects/programming-zero-lesson.ts`
+- `src/lib/programming-lesson-progress.ts`
+- `tests/programming-subject.test.ts`
+
+Contenuti convertiti:
+
+- 11 sezioni e 808 blocchi renderizzabili;
+- 10 esercizi guidati e 30 esercizi autonomi;
+- 30 domande di quiz;
+- 50 voci di glossario;
+- prova finale, rubrica e criteri di completamento;
+- impronta SHA-256 della fonte locale, senza includere il DOCX.
+
