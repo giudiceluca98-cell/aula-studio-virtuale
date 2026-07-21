@@ -260,9 +260,13 @@ Contenuti convertiti:
 
 Verifiche: test mirato 21/21, suite completa 151/151, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 
-## Estensione in corso · Lezione 2.2
+## Estensione in revisione · Lezione 2.2
 
 Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_2.2_Come_Python_esegue_un_programma.docx`. Il DOCX non verrà caricato nel repository. File riservati: artefatto 2.2, aggregatore, progressi e test. File condivisi prenotati: nessuno. Dipendenza: PR #38.
+
+Contenuti convertiti: 11 sezioni, 914 blocchi, 60 esercizi, 30 quiz e 60 voci di glossario; laboratorio, rubrica e criteri finali conservati. SHA-256 `00657c9f2fa9147c42c5585ac2c0ba0d66fdf6376e1efe8eb3a237b2d37c0e9f`; nessun DOCX caricato.
+
+Verifiche: test mirato 21/21, suite completa 151/151, typecheck e build superati; lint senza errori e con il solo warning preesistente.
 
 ## Estensione in revisione · Lezione 2.1
 
