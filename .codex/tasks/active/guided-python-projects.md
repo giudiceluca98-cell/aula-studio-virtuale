@@ -1,9 +1,9 @@
 # Python Project guidati
 
-Stato: in corso
+Stato: in revisione
 Assegnazione: Codex
 Branch: `codex/guided-python-projects`
-Pull request: da aprire
+Pull request: [#8](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/8)
 
 ## Obiettivo
 
@@ -46,3 +46,10 @@ Nessun file dell'elenco condiviso. Non sono previste dipendenze o migrazioni Sup
 - le consegne restano disponibili dopo il ricaricamento;
 - il modulo considera concluso il progetto soltanto dopo le tre consegne;
 - test, typecheck, lint e build superati.
+
+## Verifica eseguita
+
+- runtime Pyodide reale avviato nel Web Worker;
+- programma di prova eseguito nel browser con output `Ciao Luca`;
+- persistenza di bozza e consegna coperta dai test;
+- `pnpm typecheck`, `pnpm lint`, `pnpm test` e `pnpm build` superati.

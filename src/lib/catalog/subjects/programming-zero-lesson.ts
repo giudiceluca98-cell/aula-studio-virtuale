@@ -64,6 +64,79 @@ const programmingModules = moduleNumbers.map((moduleNumber) => ({
     })),
 }));
 
+export const programmingPythonProjects = [
+  {
+    id: "programming-zero-python-project-0-1",
+    lessonId: "0.1",
+    title: "Il mio primo messaggio",
+    difficulty: "Primi passi",
+    goal: "Capire che un programma contiene dati e istruzioni che producono un risultato osservabile.",
+    concepts: ["variabili", "testo", "numeri", "print"],
+    instructions: [
+      "Esegui una prima volta il codice già pronto.",
+      "Sostituisci nome e obiettivo con informazioni tue.",
+      "Cambia il numero di ore settimanali e aggiungi una quarta riga stampata dal programma.",
+    ],
+    starterCode: `nome = "Studente"
+obiettivo = "imparare a programmare"
+ore_settimanali = 3
+
+print("Ciao, mi chiamo", nome)
+print("Il mio obiettivo è", obiettivo)
+print("Studierò", ore_settimanali, "ore alla settimana")`,
+    expectedResult: "Il programma deve mostrare almeno tre righe personalizzate.",
+  },
+  {
+    id: "programming-zero-python-project-0-2",
+    lessonId: "0.2",
+    title: "Carta d’identità del computer",
+    difficulty: "Base",
+    goal: "Rappresentare alcune caratteristiche di un computer e prendere una decisione semplice usando una condizione.",
+    concepts: ["variabili", "numeri", "confronto", "if/else"],
+    instructions: [
+      "Personalizza i dati del dispositivo, della RAM e dello spazio libero.",
+      "Esegui il programma e osserva quale messaggio sceglie la condizione.",
+      "Prova uno spazio libero inferiore a 20 GB e verifica che il risultato cambi.",
+    ],
+    starterCode: `dispositivo = "computer portatile"
+memoria_ram_gb = 8
+spazio_libero_gb = 120
+
+print("Dispositivo:", dispositivo)
+print("RAM:", memoria_ram_gb, "GB")
+print("Spazio libero:", spazio_libero_gb, "GB")
+
+if spazio_libero_gb >= 20:
+    print("Stato: spazio sufficiente")
+else:
+    print("Stato: serve liberare spazio")`,
+    expectedResult: "Il programma deve descrivere il dispositivo e mostrare uno dei due possibili stati.",
+  },
+  {
+    id: "programming-zero-python-project-0-3",
+    lessonId: "0.3",
+    title: "Quanto spazio occupano i miei dati?",
+    difficulty: "Base con calcolo",
+    goal: "Usare numeri e operazioni per stimare la dimensione di un insieme di contenuti digitali.",
+    concepts: ["dati digitali", "moltiplicazione", "divisione", "round"],
+    instructions: [
+      "Scegli un numero realistico di fotografie e la dimensione media di ciascuna.",
+      "Esegui il calcolo in megabyte e gigabyte.",
+      "Aggiungi una stampa che spieghi con parole tue che cosa rappresenta il risultato.",
+    ],
+    starterCode: `numero_foto = 120
+dimensione_foto_mb = 4
+
+totale_mb = numero_foto * dimensione_foto_mb
+totale_gb = totale_mb / 1024
+
+print("Numero di fotografie:", numero_foto)
+print("Spazio totale in MB:", totale_mb)
+print("Spazio totale in GB:", round(totale_gb, 2))`,
+    expectedResult: "Il programma deve mostrare quantità, megabyte totali e gigabyte arrotondati.",
+  },
+] as const;
+
 if (!firstGuidedExercise) throw new Error("Le fonti ufficiali non contengono esercizi guidati");
 
 export const programmingCurriculumOutline = officialLessons.map((lesson) => `Lezione ${lesson.id} · ${lesson.title}`);
@@ -96,6 +169,7 @@ export const programmingLesson = {
     deliverables: finalAssessments.flatMap((assessment) => assessment.deliverables),
     criteria: finalAssessments.flatMap((assessment) => assessment.rubric.slice(1).map((row) => row.join(" · "))),
     assessments: finalAssessments,
+    guidedProjects: programmingPythonProjects,
   },
   completion: {
     minimumQuizScore: 80,

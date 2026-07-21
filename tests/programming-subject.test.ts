@@ -6,7 +6,7 @@ import { createSubjectRoadmap } from "@/lib/catalog/roadmap";
 import { resolveLearningPath, resolveSubjectPackage } from "@/lib/catalog/subjects/registry";
 import { programmingCurriculumOutline, programmingSubjectPackage } from "@/lib/catalog/subjects/programming";
 import { PROGRAMMING_LESSON_SOURCE_URL, programmingLesson } from "@/lib/catalog/subjects/programming-zero-lesson";
-import { applyLessonAction, emptyLessonProgress, eveLessonAdvice } from "@/lib/programming-lesson-progress";
+import { applyLessonAction, emptyLessonProgress, eveLessonAdvice, lessonSubmissionFor } from "@/lib/programming-lesson-progress";
 
 const root = process.cwd();
 const migration = readFileSync(join(root, "supabase/migrations/0016_programming_zero_native_lesson.sql"), "utf8").toLowerCase();
@@ -53,6 +53,8 @@ describe("pacchetto editoriale Programmazione da zero", () => {
     expect(programmingLesson.exercises).toHaveLength(119);
     expect(programmingLesson.quiz).toHaveLength(90);
     expect(programmingLesson.project.assessments).toHaveLength(3);
+    expect(programmingLesson.project.guidedProjects.map((project) => project.lessonId)).toEqual(["0.1", "0.2", "0.3"]);
+    expect(programmingLesson.project.guidedProjects.every((project) => project.starterCode.includes("print("))).toBe(true);
     expect(programmingLesson.completion.minimumQuizScore).toBe(80);
     expect(programmingLesson.completion.requiredExerciseIds).toHaveLength(89);
     expect(new Set(programmingLesson.sections.map((section) => section.id)).size).toBe(33);
@@ -109,8 +111,11 @@ describe("pacchetto editoriale Programmazione da zero", () => {
     for (const exerciseId of programmingLesson.completion.requiredExerciseIds) state = applyLessonAction(state, { type: "independent_exercise_completed", eventId: crypto.randomUUID(), exerciseId, response: "Risposta completa all’esercizio richiesto." }, timestamp).state;
     for (const question of programmingLesson.quiz) state = applyLessonAction(state, { type: "quiz_answer_submitted", eventId: crypto.randomUUID(), questionId: question.id, choice: question.correctChoice, elapsedSeconds: 10 }, timestamp).state;
     state = applyLessonAction(state, { type: "quiz_completed", eventId: crypto.randomUUID() }, timestamp).state;
-    state = applyLessonAction(state, { type: "project_submitted", eventId: crypto.randomUUID(), response: "Consegna completa delle tre prove finali di padronanza." }, timestamp).state;
+    for (const project of programmingLesson.project.guidedProjects) {
+      state = applyLessonAction(state, { type: "project_submitted", eventId: crypto.randomUUID(), projectLessonId: project.lessonId, code: project.starterCode, output: "Programma eseguito correttamente." }, timestamp).state;
+    }
     expect(state.quizScore).toBe(100);
+    expect(state.completedProjectLessonIds).toEqual(["0.1", "0.2", "0.3"]);
     expect(state.lessonCompleted).toBe(true);
     expect(state.completionPercentage).toBe(100);
   });
@@ -121,6 +126,24 @@ describe("pacchetto editoriale Programmazione da zero", () => {
     const result = applyLessonAction(emptyLessonProgress, { type: "quiz_answer_submitted", eventId: crypto.randomUUID(), questionId: question.id, choice: wrongChoice, elapsedSeconds: 18 }, "2026-07-20T10:00:00.000Z");
     expect(result.state.quizAnswers[question.id]).toMatchObject({ correct: false, attempts: 1, elapsedSeconds: 18, concept: question.concept, reviewSectionId: question.reviewSectionId, answeredAt: "2026-07-20T10:00:00.000Z" });
     expect(result.feedback?.explanation).toBe(question.explanation);
+  });
+
+  it("salva bozze e consegne Python separatamente senza completare in anticipo il modulo", () => {
+    const project = programmingLesson.project.guidedProjects[0];
+    const draftAction = { type: "project_draft_saved" as const, eventId: crypto.randomUUID(), projectLessonId: project.lessonId, code: project.starterCode, output: "Output della bozza Python." };
+    const draftState = applyLessonAction(emptyLessonProgress, draftAction, "2026-07-21T10:00:00.000Z").state;
+    expect(draftState.project).toBe("started");
+    expect(draftState.completedProjectLessonIds).toEqual([]);
+    expect(lessonSubmissionFor(draftAction)).toMatchObject({ activityId: project.id, activityType: "project", status: "draft" });
+
+    let state = draftState;
+    for (const item of programmingLesson.project.guidedProjects) {
+      const action = { type: "project_submitted" as const, eventId: crypto.randomUUID(), projectLessonId: item.lessonId, code: item.starterCode, output: "Output del progetto Python." };
+      expect(lessonSubmissionFor(action)).toMatchObject({ activityId: item.id, status: "submitted" });
+      state = applyLessonAction(state, action, "2026-07-21T10:00:00.000Z").state;
+    }
+    expect(state.project).toBe("submitted");
+    expect(state.completedProjectLessonIds).toEqual(["0.1", "0.2", "0.3"]);
   });
 
   it("Eve è attiva senza OpenAI e usa solo lo stato didattico consentito", () => {
