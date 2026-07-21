@@ -260,11 +260,15 @@ Contenuti convertiti:
 
 Verifiche: test mirato 21/21, suite completa 151/151, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 
-## Estensione in corso · Lezione 1.9
+## Estensione in revisione · Lezione 1.9
 
 Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_1.9_Laboratorio_e_valutazione_finale.docx`. Il DOCX non verrà caricato nel repository; l'indice editoriale del Modulo 1 viene usato soltanto per validare ordine, titolo e copertura.
 
 File riservati: artefatto 1.9, `src/lib/catalog/subjects/programming-zero-lesson.ts`, `src/lib/programming-lesson-progress.ts`, `tests/programming-subject.test.ts`. File condivisi prenotati: nessuno. Dipendenza: PR #36; branch e Draft PR impilati sulla lezione 1.8.
+
+Contenuti convertiti: 11 sezioni, 914 blocchi, 60 esercizi, 30 quiz e 60 voci di glossario; laboratorio integrato, rubrica di autovalutazione e criteri di accesso al Modulo 2 conservati. SHA-256 `208ebf5e21fb0828ce07ce0649899827f893217d400fccd857626d648b40a089`; nessun DOCX caricato.
+
+Verifiche: test mirato 21/21, suite completa 151/151, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 
 ## Estensione in revisione · Lezione 1.8
 
