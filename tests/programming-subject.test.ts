@@ -32,6 +32,16 @@ describe("pacchetto editoriale Programmazione da zero", () => {
     expect(programmingSubjectPackage.stages).toHaveLength(1);
     expect(programmingSubjectPackage.stages[0].id).toBe("programming-module-0");
     expect(programmingSubjectPackage.stages[0].lessons).toEqual(programmingCurriculumOutline);
+    expect(programmingLesson.modules).toHaveLength(1);
+    expect(programmingLesson.modules[0]).toMatchObject({ id: "programming-module-0", title: "Modulo 0" });
+    expect(programmingLesson.modules[0].lessons.map((lesson) => lesson.id)).toEqual(["0.1", "0.2", "0.3"]);
+    for (const lesson of programmingLesson.modules[0].lessons) {
+      expect(lesson.sectionIds).toHaveLength(11);
+      expect(lesson.exerciseIds).toHaveLength(40);
+      expect(lesson.quizIds).toHaveLength(30);
+      expect(lesson.glossary).toHaveLength(50);
+      expect(lesson.summary.length).toBeGreaterThan(0);
+    }
   });
 
   it("estende i contenuti ufficiali con la lezione 0.3", () => {

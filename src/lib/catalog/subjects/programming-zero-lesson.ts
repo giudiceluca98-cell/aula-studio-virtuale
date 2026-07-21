@@ -46,6 +46,23 @@ const chapters = officialLessons.flatMap((lesson) => lesson.chapters);
 const allExercises = chapters.flatMap((chapter) => [chapter.exercises.guided, ...chapter.exercises.autonomous]);
 const [firstGuidedExercise, ...remainingExercises] = allExercises;
 const finalAssessments = officialLessons.map((lesson) => lesson.finalAssessment);
+const moduleNumbers = [...new Set(officialLessons.map((lesson) => lesson.id.split(".")[0] ?? "0"))];
+const programmingModules = moduleNumbers.map((moduleNumber) => ({
+  id: `programming-module-${moduleNumber}`,
+  title: `Modulo ${moduleNumber}`,
+  lessons: officialLessons
+    .filter((lesson) => lesson.id.split(".")[0] === moduleNumber)
+    .map((lesson) => ({
+      id: lesson.id,
+      title: lesson.title,
+      description: lesson.summary[0],
+      sectionIds: lesson.sections.map((section) => section.id),
+      exerciseIds: lesson.chapters.flatMap((chapter) => [chapter.exercises.guided.id, ...chapter.exercises.autonomous.map((exercise) => exercise.id)]),
+      quizIds: lesson.chapters.flatMap((chapter) => chapter.quiz.map((question) => question.id)),
+      glossary: lesson.glossary,
+      summary: lesson.summary,
+    })),
+}));
 
 if (!firstGuidedExercise) throw new Error("Le fonti ufficiali non contengono esercizi guidati");
 
@@ -61,6 +78,7 @@ export const programmingLesson = {
   estimatedMinutes: 270,
   description: officialLessons.map((lesson) => lesson.summary[0]).join(" "),
   objectives: officialLessons.flatMap((lesson) => lesson.objectives),
+  modules: programmingModules,
   sourceDocuments: officialLessons.map((lesson) => ({ lessonId: lesson.id, ...lesson.source, metrics: lesson.metrics })),
   sections: officialLessons.flatMap((lesson) => lesson.sections) as LessonSection[],
   glossary: officialLessons.flatMap((lesson) => lesson.glossary) as string[][],
