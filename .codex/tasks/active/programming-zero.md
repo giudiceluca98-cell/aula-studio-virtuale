@@ -1,9 +1,9 @@
 # Completamento Programmazione da zero
 
 Stato: in corso
-Assegnazione: disponibile per la prossima lezione sequenziale
-Ultima integrazione completata: Lezione 0.6 e relativo Python Project, [PR #19](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/19)
-Prossima proposta disponibile: Lezione 0.7, [PR #13](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/13)
+Assegnazione: Codex — integrazione verificata della Lezione 0.7 e relativo Python Project
+Branch: `agent/integrate-programming-lesson-0-7`
+Pull request: https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/22
 Pacchetto: `programming`
 Percorso: `programming-zero`
 
@@ -118,6 +118,29 @@ Contenuti convertiti:
 - normalizzato il solo refuso `LEZIONE 0.2` → `LEZIONE 0.4` nelle dieci intestazioni di capitolo, dopo confronto con il contenuto distinto della fonte 0.2.
 
 Verifiche: test mirato 21/21, suite completa 138/138, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
+
+## Estensione in revisione · Lezione 0.7
+
+Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_0.7_Storia_e_aree_dell_informatica.docx`. Il DOCX non verrà caricato nel repository.
+
+File riservati:
+
+- `src/lib/catalog/subjects/programming-zero-lesson-0-7-official-content.json`
+- `src/lib/catalog/subjects/programming-zero-lesson.ts`
+- `src/lib/programming-lesson-progress.ts`
+- `tests/programming-subject.test.ts`
+
+File condivisi prenotati: nessuno. Dipendenza: PR #12; branch e Draft PR impilati sulla lezione 0.6.
+
+Contenuti convertiti:
+
+- 13 sezioni e 956 blocchi renderizzabili;
+- 12 esercizi guidati e 36 esercizi autonomi;
+- 36 domande di quiz e 60 voci di glossario;
+- prova finale, rubrica e criteri di completamento;
+- impronta SHA-256 `e66df7f6d2469614a86f66274fe36078dcae5e27dfc24ad690d133c4f94dfaff`, senza includere il DOCX.
+
+Verifiche dichiarate dalla proposta originale: test mirato 21/21, suite completa 138/138, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`. L’integrazione su `main` e il nuovo Python Project vengono verificati nuovamente nella PR #22.
 
 ## Estensione in revisione · Lezione 0.6
 
