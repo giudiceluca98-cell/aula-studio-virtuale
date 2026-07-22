@@ -58,7 +58,8 @@ Ogni rapporto di checkpoint deve contenere:
 | Fase 2 | Dashboard: uscita/cancellazione | APPROVATO | 2026-07-22 | Approvato dall'utente dopo verifica della demo HTML 1.2.0-alpha.4. |
 | Fase 2 | Dashboard: collegamento Catalogo | APPROVATO | 2026-07-22 | Approvato dall'utente dopo verifica della demo HTML 1.2.0-alpha.5. |
 | Fase 2 | Dashboard: stati di errore | APPROVATO | 2026-07-22 | Approvato dall'utente dopo verifica della demo HTML 1.2.0-alpha.6. |
-| Fase 3 | Materiali: pannello e selezione | IN_ATTESA_APPROVAZIONE | 2026-07-22 | Demo HTML 1.3.0-alpha.1 pronta da aprire e verificare. |
+| Fase 3 | Materiali: pannello e selezione | APPROVATO | 2026-07-22 | Prosecuzione autorizzata dall'utente per l'intera Fase 3; checkpoint 1.3.0-alpha.1 archiviato. |
+| Fase 3 | Materiali: upload e collegamenti | IN_ATTESA_APPROVAZIONE | 2026-07-22 | Demo HTML 1.3.0-alpha.2 prodotta; prosecuzione automatica autorizzata. |
 | Fasi 2–10 | Passaggi successivi | DA_INIZIARE | — | Ogni passaggio avrà un checkpoint separato. |
 
 ## Come approvare

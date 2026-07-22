@@ -39,6 +39,29 @@ Per ogni modifica futura:
 
 ---
 
+## [1.3.0-alpha.2] — 2026-07-22
+
+### Materiali: upload e collegamenti
+
+- Dialog accessibile per collegamento HTTPS o file locale.
+- Validazione URL pubblico e blocco indirizzi locali.
+- Limite file 10 MB e formati PDF/TXT/MD/DOC/DOCX/PPT/PPTX.
+- Generazione di un nome file sicuro e salvataggio dei soli metadati locali.
+- Nuovo materiale immediatamente disponibile nel drawer.
+
+### Identificatori
+
+- Dimensione: `639741` byte
+- Righe: `18474`
+- SHA-256: `41d16b4dc64f6d86bafff282620228866f05459928c5ebda8506834839c43628`
+- Git blob SHA: `31dcbe51fa53adabf16f339d3738268de9706fbe`
+
+### Stato
+
+Checkpoint HTML completo prodotto durante l'autorizzazione dell'utente a completare l'intera Fase 3.
+
+---
+
 ## [1.3.0-alpha.1] — 2026-07-22
 
 ### Materiali e workspace — pannello Materiali

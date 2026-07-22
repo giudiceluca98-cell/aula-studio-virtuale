@@ -447,6 +447,20 @@ Da verificare manualmente:
 
 ---
 
+
+## Materiali: upload e collegamenti
+
+Stato: 🟢 — completato automaticamente nell'autorizzazione Fase 3
+
+Versione: `1.3.0-alpha.2`
+
+- upload locale simulato e collegamenti HTTPS con validazione;
+- HTML canonico aggiornato;
+- copia scaricabile: `reference/checkpoints/phase-3/demo-aula-studio-virtuale-1.3.0-alpha.2.html`;
+- controlli statici e sintattici eseguiti dal workflow.
+
+---
+
 # Regola per Codex
 
 Prima di modificare una funzione:

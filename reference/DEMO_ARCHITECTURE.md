@@ -645,3 +645,7 @@ Il retry dell'errore temporaneo è deterministico e idempotente: aggiunge `recov
 La demo 1.3.0-alpha.1 introduce un modello locale di `UiMaterial` coerente con l'app ufficiale: corso, formato, `access_mode`, `monitoring_level`, viewer previsto e avanzamento. La selezione viene salvata in `aula-demo-materials-panel-v1`.
 
 La lezione nativa riusa il workspace completo esistente. Per TXT, PDF, DOCX, PPTX e link esterni questa sottofase mostra soltanto selezione, metadati e stato di disponibilità. I viewer e il tracking specifico vengono integrati separatamente nelle sottofasi successive della Fase 3.
+
+## Fase 3 · 1.3.0-alpha.2
+
+Upload locale simulato e collegamenti https con validazione. La demo mantiene dati deterministici e non dichiara chiamate remote reali. La copia del checkpoint è salvata in `reference/checkpoints/phase-3/`.
