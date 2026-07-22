@@ -39,6 +39,32 @@ Per ogni modifica futura:
 
 ---
 
+## [1.2.0-alpha.2] — 2026-07-22
+
+### Dashboard — ruoli e presenza
+
+- Aggiunti i ruoli proprietario, amministratore e partecipante.
+- Aggiunti stati online, studio, pausa, assente, chiamata e offline.
+- Aggiunta anteprima partecipanti su ogni scheda stanza.
+- Aggiunto pannello dettagli con attività corrente, dispositivo, sessioni e ultimo accesso.
+- Aggiunto conteggio separato di partecipanti, utenti online e sessioni attive.
+- Aggiunti chiusura con Escape, click sullo sfondo e ripristino del focus.
+- Corretto il testo `Supabase collegato`: la demo dichiara ora esplicitamente che la presenza è locale e simulata.
+- Conservati create/join, Catalogo, Aula, Eve, chat e audio.
+
+### Identificatori
+
+- Dimensione: `526559` byte
+- Righe: `15656`
+- SHA-256: `a0597eed70fc26fc8c57419c403428fbebf79a29d6a67de674805b7436ab40b7`
+- Git blob SHA: `6f086d95e76cce2da458c026754611927c50dd2e`
+
+### Stato
+
+Checkpoint HTML completo e in attesa di verifica visuale e funzionale dell'utente.
+
+---
+
 ## [1.2.0-alpha.1] — 2026-07-22
 
 ### Dashboard — creazione e ingresso stanza

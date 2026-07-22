@@ -604,3 +604,14 @@ Funzioni principali:
 - `portalDashboardJoinRoom()`;
 - `portalDashboardSetWorking()`;
 - `portalDashboardFieldFeedback()`.
+
+## Ruoli e presenza nella Dashboard demo
+
+La demo 1.2.0-alpha.2 usa preset locali per mostrare gli effetti utente di membership e Presence. I dati non sono Realtime e l'interfaccia lo dichiara. Nell'app ufficiale restano autorevoli `room_members`, i record server di presenza, heartbeat e grace period prima dell'offline.
+
+La matrice rappresentata comprende:
+
+- ruoli `owner`, `admin`, `member`;
+- stati `online`, `studying`, `break`, `away`, `in_call`, `offline`;
+- attività, dispositivo, ultimo accesso e numero di sessioni;
+- separazione tra utenti online e sessioni aperte.

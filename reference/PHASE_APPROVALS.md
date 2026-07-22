@@ -52,7 +52,8 @@ Ogni rapporto di checkpoint deve contenere:
 | Fase 1 | Catalogo: materiali e salvati | APPROVATO | 2026-07-22 | Incluso e approvato nel checkpoint 1.1.0-alpha.1. |
 | Fase 1 | Catalogo: aggiunta URL | APPROVATO | 2026-07-22 | Approvato dall'utente dopo verifica della demo HTML 1.1.0-alpha.2. |
 | Fase 1 | Catalogo: percorso Eve e importazione | APPROVATO | 2026-07-22 | Incluso e approvato nel checkpoint 1.1.0-alpha.1. |
-| Fase 2 | Dashboard: create/join | IN_ATTESA_APPROVAZIONE | 2026-07-22 | Demo HTML 1.2.0-alpha.1 pronta da aprire e verificare. |
+| Fase 2 | Dashboard: create/join | APPROVATO | 2026-07-22 | Approvato dall'utente dopo verifica della demo HTML 1.2.0-alpha.1. |
+| Fase 2 | Dashboard: ruoli e presenza | IN_ATTESA_APPROVAZIONE | 2026-07-22 | Demo HTML 1.2.0-alpha.2 pronta da aprire e verificare. |
 | Fasi 2–10 | Passaggi successivi | DA_INIZIARE | — | Ogni passaggio avrà un checkpoint separato. |
 
 ## Come approvare

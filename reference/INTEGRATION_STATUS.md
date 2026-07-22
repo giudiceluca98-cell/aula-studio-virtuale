@@ -270,6 +270,33 @@ Da verificare manualmente:
 
 ---
 
+
+## Ruoli e presenza Dashboard
+
+Stato: 🟡 — checkpoint HTML 1.2.0-alpha.2 in attesa di approvazione
+
+Integrato:
+
+- ruoli owner/admin/member;
+- sei stati presenza;
+- attività corrente;
+- dispositivo e sessioni multiple;
+- ultimo accesso;
+- anteprima sulle schede stanza;
+- dialog dettagli accessibile;
+- indicazione esplicita di simulazione locale.
+
+Da verificare manualmente:
+
+- apertura dettagli delle tre stanze;
+- resa dei sei stati;
+- conteggi partecipanti/online/sessioni;
+- chiusura Escape e ripristino focus;
+- creazione di una nuova stanza;
+- mobile e tastiera.
+
+---
+
 # Regola per Codex
 
 Prima di modificare una funzione:
