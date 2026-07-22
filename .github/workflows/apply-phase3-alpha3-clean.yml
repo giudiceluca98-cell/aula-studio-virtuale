@@ -1,0 +1,154 @@
+name: Applica Fase 3 alpha.3 pulita
+
+on:
+  push:
+    branches:
+      - demo-canonica
+    paths:
+      - .github/workflows/apply-phase3-alpha3-clean.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: demo-canonica-phase3-alpha3-clean
+  cancel-in-progress: false
+
+jobs:
+  apply-alpha-3:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout demo-canonica
+        uses: actions/checkout@v4
+        with:
+          ref: demo-canonica
+          fetch-depth: 0
+
+      - name: Configura Git e verifica baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --ff-only origin demo-canonica
+          python -m py_compile scripts/apply-phase3-alpha3-clean.py
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib
+
+          canonical = Path('reference/demo-aula-studio-virtuale-canonica.html')
+          alpha2 = Path('reference/checkpoints/phase-3/demo-aula-studio-virtuale-1.3.0-alpha.2.html')
+          current = canonical.read_bytes()
+          checkpoint = alpha2.read_bytes()
+          assert current == checkpoint, 'Il canonico non coincide con alpha.2'
+          assert len(current) == 639741
+          assert current.count(b'\n') + 1 == 18474
+          assert hashlib.sha256(current).hexdigest() == '41d16b4dc64f6d86bafff282620228866f05459928c5ebda8506834839c43628'
+          print('Baseline alpha.2 verificata')
+          PY
+
+      - name: Applica alpha.3
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/apply-phase3-alpha3-clean.py | tee /tmp/phase3-alpha3-result.txt
+
+      - name: Verifica HTML e classificazione
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib
+          import re
+
+          canonical = Path('reference/demo-aula-studio-virtuale-canonica.html')
+          checkpoint = Path('reference/checkpoints/phase-3/demo-aula-studio-virtuale-1.3.0-alpha.3.html')
+          html = canonical.read_text(encoding='utf-8')
+          data = canonical.read_bytes()
+
+          required = [
+              'MATERIALI E WORKSPACE — TIPI E CLASSIFICAZIONE 1.3.0-alpha.3',
+              'function aulaMaterialOfficialDescriptor(material)',
+              'function aulaMaterialApplyDescriptor(material)',
+              'function aulaMaterialClassifyAll()',
+              'Access mode',
+              'Viewer previsto',
+              'Provider',
+              'Import status',
+              'internal · embedded · import-required · external-unmonitored · unsupported',
+              'completo · parziale · solo apertura · non monitorabile',
+              'explicitClassification',
+              'opened-only',
+              'https://pythontutor.com/',
+              'MATERIALI E WORKSPACE — UPLOAD E LINK 1.3.0-alpha.2',
+              'DASHBOARD REALE — STATI DI ERRORE 1.2.0-alpha.6',
+          ]
+          for marker in required:
+              assert marker in html, f'Marker assente: {marker}'
+
+          assert checkpoint.exists(), 'Checkpoint alpha.3 assente'
+          assert checkpoint.read_bytes() == data, 'Checkpoint alpha.3 diverso dal canonico'
+          assert '1.3.0-alpha.3' in Path('reference/README.md').read_text(encoding='utf-8')
+          assert '1.3.0-alpha.3' in Path('reference/checkpoints/phase-3/README.md').read_text(encoding='utf-8')
+
+          ids = [value for value in re.findall(r'\bid=["\']([^"\']+)["\']', html) if '${' not in value]
+          duplicates = sorted({value for value in ids if ids.count(value) > 1})
+          assert not duplicates, f'ID duplicati: {duplicates}'
+          assert html.count('<script') == html.count('</script>'), 'Tag script sbilanciati'
+          assert html.count('<style') == html.count('</style>'), 'Tag style sbilanciati'
+          assert html.rstrip().endswith('</html>'), 'Chiusura HTML assente'
+
+          readme = Path('reference/README.md').read_text(encoding='utf-8')
+          expected_size = int(re.search(r'- dimensione: `(\d+)` byte', readme).group(1))
+          expected_lines = int(re.search(r'- righe: `(\d+)`', readme).group(1))
+          expected_sha = re.search(r'- SHA-256: `([0-9a-f]{64})`', readme).group(1)
+          assert len(data) == expected_size
+          assert data.count(b'\n') + 1 == expected_lines
+          assert hashlib.sha256(data).hexdigest() == expected_sha
+          print(f'HTML alpha.3 verificato: {expected_size} byte, {expected_lines} righe, {expected_sha}')
+          PY
+
+      - name: Verifica JavaScript inline
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/phase3-alpha3-js
+          mkdir -p /tmp/phase3-alpha3-js
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          html = Path('reference/demo-aula-studio-virtuale-canonica.html').read_text(encoding='utf-8')
+          scripts = re.findall(r'<script([^>]*)>(.*?)</script>', html, flags=re.I | re.S)
+          output = Path('/tmp/phase3-alpha3-js')
+          count = 0
+          for attrs, body in scripts:
+              type_match = re.search(r'type=["\']([^"\']+)', attrs, flags=re.I)
+              script_type = type_match.group(1).lower() if type_match else ''
+              if script_type and script_type not in {'text/javascript', 'application/javascript'}:
+                  continue
+              if 'src=' in attrs.lower() or not body.strip():
+                  continue
+              (output / f'script-{count}.js').write_text(body, encoding='utf-8')
+              count += 1
+          assert count > 0, 'Nessuno script classico estratto'
+          print(f'Script estratti: {count}')
+          PY
+          for file in /tmp/phase3-alpha3-js/*.js; do
+            node --check "$file"
+          done
+
+      - name: Commit finale alpha.3
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f scripts/apply-phase3-alpha3-clean.py
+          rm -f .github/workflows/apply-phase3-alpha3-clean.yml
+          git add -A
+          git diff --cached --quiet && { echo 'Alpha.3 non ha prodotto modifiche'; exit 1; }
+          git commit -m "[phase3][materials-classification] Finalizza checkpoint 1.3.0-alpha.3"
+          git push origin HEAD:demo-canonica
+          git fetch origin demo-canonica
+          test "$(git rev-parse HEAD)" = "$(git rev-parse origin/demo-canonica)"
