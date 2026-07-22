@@ -627,3 +627,9 @@ Il codice precedente non viene conservato tra i codici attivi. Nell'app ufficial
 La demo 1.2.0-alpha.4 rappresenta gli effetti utente di `leave_study_room` e del route `DELETE /api/rooms/[roomId]` con stato locale. L'uscita trasferisce simbolicamente la proprietà prima a un admin e poi a un membro; se non resta nessuno, la stanza viene rimossa dalla Scrivania come archiviata.
 
 La cancellazione è visibile solo agli owner, richiede `ELIMINA STANZA` e mostra le tre fasi del flusso reale: tombstone/revoca inviti, pulizia Storage, cancellazione database. Autorizzazione, transazioni e idempotenza restano responsabilità dell'app ufficiale.
+
+## Collegamento contestuale Dashboard → Catalogo
+
+La demo 1.2.0-alpha.5 riproduce il parametro `roomId` della route Catalogo dell'app ufficiale mediante `portalCatalogPreferredRoomId` e `localStorage` (`aula-demo-catalog-room-context-v1`). La destinazione viene impostata dal banner Dashboard, dalla scheda stanza o dall'Aula.
+
+Le firme di importazione sono salvate per stanza in `aula-demo-catalog-room-imports-v1`, così lo stesso percorso può essere importato in stanze diverse ma non duplicato nella stessa. Nell'app ufficiale membership, autorizzazione e importazione restano server-side.

@@ -524,7 +524,7 @@ def validate(html: str) -> None:
         "portal-room-catalog-button",
         "Scegli una stanza di destinazione",
         "portalCatalogRoomImportsStorageKey",
-        "preferredRoomId",
+        "portalCatalogPreferredRoomId",
     ]
     for marker in required:
         if marker not in html:

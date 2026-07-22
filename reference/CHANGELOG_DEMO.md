@@ -39,6 +39,33 @@ Per ogni modifica futura:
 
 ---
 
+## [1.2.0-alpha.5] — 2026-07-22
+
+### Dashboard — collegamento contestuale al Catalogo
+
+- Trasformato il banner Catalogo in un ingresso principale con scelta della stanza.
+- Aggiunto il pulsante `Catalogo` su ogni scheda stanza.
+- Aggiunto il contesto stanza nell'header del Catalogo.
+- Aggiunto cambio destinazione direttamente dal Catalogo.
+- Il pulsante importazione mostra la stanza selezionata.
+- L'importazione idempotente è ora separata per stanza.
+- Aggiunta modalità esplorazione senza stanza, con importazione disabilitata e messaggio esplicito.
+- Il Catalogo aperto dall'Aula conserva il contesto della stanza Python.
+- Conservati create/join, presenza, inviti, gestione stanza, Eve, chat e audio.
+
+### Identificatori
+
+- Dimensione: `584031` byte
+- Righe: `17256`
+- SHA-256: `dd73c77c783d7c703cdefd0989f0315cf32392cf23c227bcd70859925e14667f`
+- Git blob SHA: `37577e51e6e1e57d88c208761c69b435d6cd4207`
+
+### Stato
+
+Checkpoint HTML completo e in attesa di verifica visuale e funzionale dell'utente.
+
+---
+
 ## [1.2.0-alpha.4] — 2026-07-22
 
 ### Dashboard — uscita e cancellazione stanza

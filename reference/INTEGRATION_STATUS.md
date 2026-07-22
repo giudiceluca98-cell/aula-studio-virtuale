@@ -353,6 +353,35 @@ Da verificare manualmente:
 
 ---
 
+
+## Collegamento Dashboard Catalogo
+
+Stato: 🟡 — checkpoint HTML 1.2.0-alpha.5 in attesa di approvazione
+
+Integrato:
+
+- Catalogo come CTA principale Dashboard;
+- scelta stanza prima dell'apertura;
+- accesso Catalogo da ogni stanza;
+- contesto stanza visibile e modificabile;
+- importazione disabilitata senza stanza;
+- idempotenza separata per stanza;
+- persistenza locale della destinazione;
+- accesso contestuale dall'Aula.
+
+Da verificare manualmente:
+
+- selezione stanza nel banner;
+- pulsante Catalogo su ogni scheda;
+- cambio stanza nel Catalogo;
+- importazione in due stanze diverse;
+- seconda importazione idempotente;
+- esplorazione senza stanza;
+- persistenza dopo refresh;
+- mobile e tastiera.
+
+---
+
 # Regola per Codex
 
 Prima di modificare una funzione:
