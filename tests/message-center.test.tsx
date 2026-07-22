@@ -23,4 +23,14 @@ describe("Centro messaggi", () => {
     await act(async () => { fireEvent.click(submit); await Promise.resolve(); });
     expect(create).toHaveBeenCalledWith("private", "", ["demo-tatiana"]);
   });
+
+  it("riduce la conversazione in una barretta riapribile", () => {
+    const active = vi.fn();
+    render(<MessageCenter data={makeDemoData()} activeConversationId="demo-lobby" onActiveConversation={active} draft="" onDraft={vi.fn()} unreadTotal={1} unreadByConversation={{ "demo-lobby": 1 }} pending={false} schemaAvailable onSend={vi.fn(async () => true)} onOpenAttachment={vi.fn(async () => undefined)} onCreate={vi.fn()} onClose={vi.fn()} />);
+    fireEvent.click(screen.getByRole("button", { name: "Riduci conversazione" }));
+    expect(screen.getByTestId("minimized-chat-dock")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Apri chat ridotta Lobby generale" }));
+    expect(active).toHaveBeenCalledWith("demo-lobby");
+    expect(screen.getByTestId("message-center-panel")).toBeInTheDocument();
+  });
 });

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowUp, BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, CircleHelp, ClipboardCheck, Lightbulb, Loader2, Minus, PanelLeftClose, PanelLeftOpen, Play, Plus, RotateCcw, Send, Sparkles, Terminal } from "lucide-react";
+import { ArrowUp, BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, CircleHelp, ClipboardCheck, Lightbulb, Loader2, Minus, PanelLeftClose, PanelLeftOpen, Play, Plus, RotateCcw, Send, Terminal } from "lucide-react";
 import type { LessonProgressState } from "@/lib/programming-lesson-progress";
 import { usePythonRunner } from "@/hooks/use-python-runner";
 import { EveLessonAudio } from "@/components/room/eve-lesson-audio";
@@ -50,6 +50,7 @@ export function ProgrammingLessonWorkspace({ roomId, materialId, lesson, initial
   const [selectedLessonId, setSelectedLessonId] = useState(() => lesson.sections[initialSectionIndex]?.lessonId ?? lesson.modules[0]?.lessons[0]?.id ?? "");
   const [readingZoom, setReadingZoom] = useState(100);
   const [modulesCollapsed, setModulesCollapsed] = useState(false);
+  const [mobileIndexOpen, setMobileIndexOpen] = useState(false);
   const [progressExpanded, setProgressExpanded] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -104,7 +105,7 @@ export function ProgrammingLessonWorkspace({ roomId, materialId, lesson, initial
 
   function openSection(index: number) {
     const bounded = Math.max(0, Math.min(lesson.sections.length - 1, index));
-    setSectionIndex(bounded); setSelectedLessonId(lesson.sections[bounded].lessonId); setTab("lesson");
+    setSectionIndex(bounded); setSelectedLessonId(lesson.sections[bounded].lessonId); setTab("lesson"); setMobileIndexOpen(false);
     void act({ type: "lesson_section_viewed", eventId: eventId(), sectionId: lesson.sections[bounded].id });
   }
 
@@ -147,28 +148,38 @@ export function ProgrammingLessonWorkspace({ roomId, materialId, lesson, initial
     { label: "Python Project", value: progress.completedProjectLessonIds.length, total: lesson.project.guidedProjects.length, done: progress.completedProjectLessonIds.length === lesson.project.guidedProjects.length },
   ];
 
-  return <div data-ui-lesson-workspace className="min-h-[650px] bg-[#f4f1e8]" data-testid="programming-native-lesson">
-    <header className="border-b border-black/[0.07] bg-white px-4 py-3 sm:px-6">
+  return <div data-ui-lesson-workspace className="lesson-workspace min-h-[650px]" data-testid="programming-native-lesson">
+    <header data-ui-lesson-header className="lesson-workspace-header border-b border-black/[0.07] bg-white px-4 py-3 sm:px-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div><p className="eyebrow">Programmazione da zero · {selectedModule?.title} · Lezione {selectedLesson?.id}</p><h2 className="mt-1 text-lg font-bold text-ink">{selectedLesson?.title ?? lesson.title}</h2><p className="mt-1 text-[11px] text-black/45">{lesson.level} · circa {lesson.estimatedMinutes} minuti per il corso · Italiano</p></div>
         <div className="min-w-44"><div className="mb-1 flex items-center justify-between gap-2 text-[10px] font-bold text-moss-800"><span>Avanzamento reale</span><span className="flex items-center gap-1"><span>{progress.completionPercentage}%</span><button type="button" onClick={toggleProgress} aria-expanded={progressExpanded} aria-controls="lesson-progress-missions" aria-label={progressExpanded ? "Riduci missioni" : "Espandi missioni"} className="grid size-6 place-items-center rounded-md bg-black/[0.04]">{progressExpanded ? <ChevronUp size={11} /> : <ChevronDown size={11} />}</button></span></div><div className="h-2 overflow-hidden rounded-full bg-black/[0.07]"><div className="h-full rounded-full bg-moss-600 transition-all" style={{ width: `${progress.completionPercentage}%` }} /></div><p className="mt-1 text-right text-[9px] text-black/35">{saving ? "Salvataggio…" : "Salvato automaticamente"}</p></div>
       </div>
       {progressExpanded && <div id="lesson-progress-missions" className="mt-3 grid gap-2 rounded-xl border border-black/[0.06] bg-black/[0.025] p-3 sm:grid-cols-2 lg:grid-cols-4">{missions.map((mission) => <div key={mission.label} className="rounded-lg bg-white/70 p-2.5"><div className="flex items-center justify-between gap-2"><span className="text-[9px] font-bold">{mission.label}</span><span className={`text-[8px] font-black ${mission.done ? "text-moss-700" : "text-black/35"}`}>{mission.done ? "Completata" : `${mission.value}/${mission.total}`}</span></div><div className="mt-2 h-1 overflow-hidden rounded-full bg-black/[0.07]"><div className="h-full rounded-full bg-moss-600" style={{ width: `${Math.min(100, Math.round((mission.value / Math.max(1, mission.total)) * 100))}%` }} /></div></div>)}</div>}
       <nav aria-label="Aree della lezione" className="mt-3 flex gap-1 overflow-x-auto pb-1">{tabs.map(({ id, label, icon: Icon }) => <button key={id} onClick={() => setTab(id)} className={`inline-flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-2 text-[10px] font-bold ${tab === id ? "bg-moss-700 text-white" : "bg-black/[0.04] text-black/55 hover:bg-black/[0.07]"}`}><Icon size={12} />{label}</button>)}</nav>
-      <div className="mt-3 lg:hidden"><CourseLessonIndex lesson={lesson} selectedLessonId={selectedLessonId} sectionIndex={sectionIndex} tab={tab} progress={progress} openLesson={openLesson} openSection={openSection} compact /></div>
+      <div className="mt-3 lg:hidden">
+        <button type="button" onClick={() => setMobileIndexOpen((current) => !current)} aria-expanded={mobileIndexOpen} aria-controls="mobile-course-index" className="flex w-full items-center justify-between rounded-xl border border-black/[0.07] bg-black/[0.035] px-3 py-2.5 text-left">
+          <span><span className="block text-[8px] font-black uppercase tracking-[0.14em] text-black/35">Percorso attivo</span><span className="mt-0.5 block text-[10px] font-bold">Lezione {selectedLesson?.id} · {selectedLesson?.title}</span></span>
+          {mobileIndexOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+        </button>
+        {mobileIndexOpen && <div id="mobile-course-index" className="mt-2 max-h-[58vh] overflow-y-auto rounded-2xl border border-black/[0.07] bg-white p-2 shadow-xl"><CourseLessonIndex lesson={lesson} selectedLessonId={selectedLessonId} sectionIndex={sectionIndex} tab={tab} progress={progress} openLesson={openLesson} openSection={openSection} compact /></div>}
+      </div>
     </header>
 
-    <div className={`grid ${modulesCollapsed ? "lg:grid-cols-[64px_minmax(0,1fr)_260px]" : "lg:grid-cols-[220px_minmax(0,1fr)_260px]"}`}>
-      <aside className="hidden max-h-[78vh] overflow-y-auto border-r border-black/[0.06] bg-white/65 p-3 lg:block"><button type="button" onClick={toggleModules} aria-expanded={!modulesCollapsed} aria-label={modulesCollapsed ? "Apri moduli e lezioni" : "Riduci moduli e lezioni"} className={`mb-2 grid size-9 place-items-center rounded-xl bg-black/[0.04] ${modulesCollapsed ? "mx-auto" : "ml-auto"}`}>{modulesCollapsed ? <PanelLeftOpen size={15} /> : <PanelLeftClose size={15} />}</button>{!modulesCollapsed && <CourseLessonIndex lesson={lesson} selectedLessonId={selectedLessonId} sectionIndex={sectionIndex} tab={tab} progress={progress} openLesson={openLesson} openSection={openSection} />}</aside>
+    <div className={`learning-layout${modulesCollapsed ? " modules-panel-collapsed" : ""}`}>
+      <aside className="lesson-sidebar hidden overflow-y-auto border-r border-black/[0.06] bg-white/65 p-3 lg:block"><button type="button" onClick={toggleModules} aria-expanded={!modulesCollapsed} aria-label={modulesCollapsed ? "Apri moduli e lezioni" : "Riduci moduli e lezioni"} className={`mb-2 grid size-9 place-items-center rounded-xl bg-black/[0.04] ${modulesCollapsed ? "mx-auto" : "ml-auto"}`}>{modulesCollapsed ? <PanelLeftOpen size={15} /> : <PanelLeftClose size={15} />}</button>{!modulesCollapsed && <CourseLessonIndex lesson={lesson} selectedLessonId={selectedLessonId} sectionIndex={sectionIndex} tab={tab} progress={progress} openLesson={openLesson} openSection={openSection} />}</aside>
 
-      <main className="min-w-0 p-4 sm:p-6">
+      <main className="reader-area min-w-0 p-4 sm:p-6">
         {error && <div role="alert" className="mb-4 rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-800">{error}</div>}
-        {tab === "lesson" && <section data-ui-reading-surface aria-labelledby={`section-${section.id}`} className="mx-auto max-w-3xl rounded-2xl bg-white p-5 shadow-sm sm:p-8">
+        {tab === "lesson" && <section data-ui-reading-surface aria-labelledby={`section-${section.id}`} className="document mx-auto max-w-3xl rounded-2xl bg-white p-5 shadow-sm sm:p-8">
           <p className="eyebrow">Lezione {selectedLesson?.id} · Sezione {sectionPosition + 1} di {lessonSections.length}</p><h3 id={`section-${section.id}`} className="mt-2 font-[family-name:var(--font-serif)] font-bold text-ink" style={{ fontSize: `${1.5 * readingZoom / 100}rem`, lineHeight: 1.3 }}>{section.title}</h3>
           <div data-testid="lesson-reading-content" data-reading-zoom={readingZoom} className="mt-5 space-y-4 font-[family-name:var(--font-serif)] text-black/72">{sectionBlocks.beforeQuiz.map((block, index) => <LessonBlock key={index} block={block} fontScale={readingZoom / 100} />)}</div>
           {chapterQuestions.length > 0 && <InlineChapterQuiz questions={chapterQuestions} progress={progress} saving={saving} act={act} />}
           {sectionBlocks.afterQuiz.length > 0 && <div className="mt-6 space-y-4 font-[family-name:var(--font-serif)] text-black/72">{sectionBlocks.afterQuiz.map((block, index) => <LessonBlock key={index} block={block} fontScale={readingZoom / 100} />)}</div>}
-          <div className="mt-7 flex flex-wrap items-center justify-between gap-2 border-t border-black/[0.06] pt-4"><button disabled={sectionPosition === 0} onClick={() => moveInsideLesson(-1)} className="button-secondary disabled:opacity-30"><ChevronLeft size={13} /> Indietro</button><button disabled={saving || progress.completedSectionIds.includes(section.id)} onClick={() => void act({ type: "lesson_section_completed", eventId: eventId(), sectionId: section.id })} className="button-primary min-w-52 disabled:opacity-60"><Check size={13} />{progress.completedSectionIds.includes(section.id) ? "Contenuto compreso" : "Ho compreso questo contenuto"}</button><button disabled={sectionPosition === lessonSections.length - 1} onClick={() => moveInsideLesson(1)} className="button-primary disabled:opacity-30">Avanti <ChevronRight size={13} /></button></div>
+          <div className="reader-footer mt-7 border-t border-black/[0.06] pt-4">
+            <button disabled={sectionPosition === 0} onClick={() => moveInsideLesson(-1)} className="button-secondary disabled:opacity-30"><ChevronLeft size={13} /> Sezione precedente</button>
+            <button aria-pressed={progress.completedSectionIds.includes(section.id)} disabled={saving || progress.completedSectionIds.includes(section.id)} onClick={() => void act({ type: "lesson_section_completed", eventId: eventId(), sectionId: section.id })} className={`comprehension-action${progress.completedSectionIds.includes(section.id) ? " is-complete" : ""} disabled:opacity-60`}><span className="comprehension-icon"><Check size={18} /></span><span className="comprehension-copy"><strong>{progress.completedSectionIds.includes(section.id) ? "Contenuto compreso" : "Ho compreso questo contenuto"}</strong><small>Conferma quando riesci a spiegarlo con parole tue</small></span></button>
+            <button disabled={sectionPosition === lessonSections.length - 1} onClick={() => moveInsideLesson(1)} className="button-primary disabled:opacity-30">Sezione successiva <ChevronRight size={13} /></button>
+          </div>
           <p className="mt-3 text-center text-[9px] text-black/35">Scorrere non completa la lezione: contano comprensione, esercizi, quiz, progetto e autovalutazione.</p>
         </section>}
         {tab === "practice" && selectedLesson && <PracticePanel lesson={lesson} selectedLesson={selectedLesson} progress={progress} saving={saving} act={act} />}
@@ -177,7 +188,7 @@ export function ProgrammingLessonWorkspace({ roomId, materialId, lesson, initial
         {tab === "glossary" && selectedLesson && <section className="mx-auto max-w-3xl rounded-2xl bg-white p-5 shadow-sm sm:p-8"><p className="eyebrow">Lezione {selectedLesson.id} · {selectedLesson.glossary.length} voci</p><h3 className="mt-2 text-xl font-bold">Glossario della lezione</h3><dl className="mt-5 grid gap-3 sm:grid-cols-2">{selectedLesson.glossary.map(([term, definition], index) => <div key={`${term}-${index}`} className="rounded-xl bg-[#f7f5ee] p-4"><dt className="text-xs font-bold text-moss-900">{term}</dt><dd className="mt-1 text-xs leading-5 text-black/58">{definition}</dd></div>)}</dl><div className="mt-6 rounded-xl border border-moss-200 bg-moss-50 p-4"><p className="text-xs font-bold text-moss-900">Sintesi della lezione {selectedLesson.id}</p><ul className="mt-2 space-y-1.5 text-xs leading-5 text-black/60">{selectedLesson.summary.map((item, index) => <li key={index}>• {item}</li>)}</ul></div></section>}
       </main>
 
-      <aside className="border-t border-black/[0.06] bg-[#e9efe8] p-4 lg:border-l lg:border-t-0"><div className="sticky top-4 rounded-2xl bg-white p-4 shadow-sm"><span className="grid size-9 place-items-center rounded-xl bg-moss-100 text-moss-800"><Sparkles size={17} /></span><p className="mt-3 text-[9px] font-black uppercase tracking-[0.16em] text-moss-700">Eve · tutor attivo</p><h3 className="mt-1 text-sm font-bold">{eve.title}</h3><p className="mt-2 text-xs leading-5 text-black/58">{eve.message}</p>{eve.sectionIds.length > 0 && <div className="mt-3 flex flex-wrap gap-1">{eve.sectionIds.map((id) => { const index = lesson.sections.findIndex((item) => item.id === id); return index >= 0 ? <button key={id} onClick={() => openSection(index)} className="rounded-md bg-moss-50 px-2 py-1 text-[9px] font-bold text-moss-800">Ripassa {lesson.sections[index].title}</button> : null; })}</div>}<button onClick={() => void act({ type: "review_requested", eventId: eventId() })} className="mt-4 inline-flex items-center gap-1 text-[10px] font-bold text-moss-800"><RotateCcw size={11} /> Aggiorna consiglio</button><div className="mt-4 border-t border-black/[0.06] pt-3 text-[9px] leading-4 text-black/38">Eve usa solo progressi, esercizi, quiz e progetto di questa lezione. Non legge chat, chiamate, note private o dati degli altri partecipanti.</div><EveLessonAudio sections={lesson.sections} currentIndex={sectionIndex} onNavigate={openSection} /></div></aside>
+      <aside className="tutor-column border-t border-black/[0.06] bg-[#e9efe8] p-4 lg:border-l lg:border-t-0"><div className="eve-assistant-card rounded-2xl bg-white p-4 shadow-sm"><div className="eve-identity"><span className="eve-rest-mascot" aria-hidden="true"><span className="eve-rest-ring" /><span className="eve-rest-orb" /><span className="eve-rest-face"><span className="eve-rest-eyes"><span className="eve-rest-eye" /><span className="eve-rest-eye" /></span><span className="eve-rest-mouth" /></span></span><div><p className="text-[9px] font-black uppercase tracking-[0.16em] text-moss-700">Eve · tutor e assistente vocale</p><p className="mt-1 text-[9px] font-bold text-emerald-700">● Disponibile</p></div></div><section className="eve-guidance mt-4"><p className="text-[9px] font-black uppercase tracking-[0.14em] text-black/35">Prossimo passo</p><h3 className="mt-1 text-sm font-bold">{eve.title}</h3><p className="mt-2 text-xs leading-5 text-black/58">{eve.message}</p>{eve.sectionIds.length > 0 && <div className="mt-3 flex flex-wrap gap-1">{eve.sectionIds.map((id) => { const index = lesson.sections.findIndex((item) => item.id === id); return index >= 0 ? <button key={id} onClick={() => openSection(index)} className="rounded-md bg-moss-50 px-2 py-1 text-[9px] font-bold text-moss-800">Ripassa {lesson.sections[index].title}</button> : null; })}</div>}<button onClick={() => void act({ type: "review_requested", eventId: eventId() })} className="mt-4 inline-flex items-center gap-1 text-[10px] font-bold text-moss-800"><RotateCcw size={11} /> Chiedi un suggerimento</button></section><EveLessonAudio sections={lesson.sections} currentIndex={sectionIndex} onNavigate={openSection} /><div className="mt-4 border-t border-black/[0.06] pt-3 text-[9px] leading-4 text-black/38">Eve usa solo progressi, esercizi, quiz e progetto di questa lezione. Non legge chat, chiamate, note private o dati degli altri partecipanti.</div></div></aside>
     </div>
     {tab === "lesson" && <div data-testid="lesson-reading-controls" className="fixed bottom-3 right-3 z-40 flex items-center gap-1 rounded-2xl border border-black/10 bg-white/95 p-1.5 shadow-xl backdrop-blur sm:bottom-5 sm:right-5">
       <button type="button" aria-label="Riduci dimensione testo" disabled={readingZoom <= 80} onClick={() => setReadingZoom((value) => Math.max(80, value - 10))} className="grid size-9 place-items-center rounded-xl text-black/55 hover:bg-black/[0.05] disabled:opacity-25"><Minus size={15} /></button>
@@ -199,27 +210,27 @@ function CourseLessonIndex({ lesson, selectedLessonId, sectionIndex, tab, progre
   openSection: (index: number) => void;
   compact?: boolean;
 }) {
-  return <nav aria-label="Moduli, lezioni e sezioni" data-testid={compact ? "course-module-index-mobile" : "course-module-index-desktop"}>
+  return <nav aria-label="Moduli, lezioni e sezioni" data-compact={compact ? "true" : "false"} data-testid={compact ? "course-module-index-mobile" : "course-module-index-desktop"}>
     <p className="px-2 pb-2 text-[9px] font-black uppercase tracking-[0.16em] text-black/35">Moduli e lezioni</p>
     {lesson.modules.map((module) => <section key={module.id} aria-label={module.title} className="mb-3 rounded-xl border border-black/[0.06] bg-white/70 p-2">
       <p className="px-1 py-1 text-[10px] font-black text-ink">{module.title}</p>
-      <div className={compact ? "flex gap-2 overflow-x-auto pb-1" : "space-y-1"}>{module.lessons.map((item) => {
+      <div className="space-y-1">{module.lessons.map((item) => {
         const selected = item.id === selectedLessonId;
         const completed = item.sectionIds.filter((id) => progress.completedSectionIds.includes(id)).length;
-        return <button key={item.id} type="button" data-lesson-id={item.id} aria-pressed={selected} onClick={() => openLesson(item.id)} className={`rounded-lg px-2 py-2 text-left ${compact ? "min-w-44 shrink-0" : "w-full"} ${selected ? "bg-moss-100 text-moss-950" : "text-black/55 hover:bg-black/[0.035]"}`}>
+        return <button key={item.id} type="button" data-lesson-id={item.id} aria-pressed={selected} onClick={() => openLesson(item.id)} className={`w-full rounded-lg px-2 py-2 text-left ${selected ? "bg-moss-100 text-moss-950" : "text-black/55 hover:bg-black/[0.035]"}`}>
           <span className="block text-[9px] font-black uppercase tracking-[0.12em]">Lezione {item.id}</span>
           <span className="mt-0.5 block text-[10px] font-bold leading-4">{item.title}</span>
           <span className="mt-1 block text-[8px] text-black/38">{completed}/{item.sectionIds.length} sezioni comprese</span>
         </button>;
       })}</div>
-      {module.lessons.map((item) => item.id === selectedLessonId ? <div key={`${item.id}-sections`} className={`${compact ? "mt-2 flex gap-1 overflow-x-auto pb-1" : "mt-2 border-t border-black/[0.05] pt-2"}`}>
+      {module.lessons.map((item) => item.id === selectedLessonId ? <div key={`${item.id}-sections`} className="mt-2 border-t border-black/[0.05] pt-2">
         {item.sectionIds.map((sectionId, localIndex) => {
           const globalIndex = lesson.sections.findIndex((section) => section.id === sectionId);
           const section = lesson.sections[globalIndex];
           if (!section) return null;
           const active = globalIndex === sectionIndex && tab === "lesson";
           const done = progress.completedSectionIds.includes(section.id);
-          return <button key={section.id} type="button" data-section-id={section.id} onClick={() => openSection(globalIndex)} className={`flex items-start gap-2 rounded-lg px-2 py-2 text-left text-[10px] leading-4 ${compact ? "min-w-48 shrink-0 border border-black/[0.06]" : "mb-1 w-full"} ${active ? "bg-moss-700 font-bold text-white" : "text-black/55 hover:bg-white"}`}>
+          return <button key={section.id} type="button" data-section-id={section.id} onClick={() => openSection(globalIndex)} className={`mb-1 flex w-full items-start gap-2 rounded-lg px-2 py-2 text-left text-[10px] leading-4 ${active ? "bg-moss-700 font-bold text-white" : "text-black/55 hover:bg-white"}`}>
             <span className={`mt-0.5 grid size-4 shrink-0 place-items-center rounded-full text-[8px] ${active ? "bg-white/20 text-white" : done ? "bg-moss-600 text-white" : "bg-black/[0.06]"}`}>{done ? <Check size={9} /> : localIndex + 1}</span>
             <span>{section.title}</span>
           </button>;

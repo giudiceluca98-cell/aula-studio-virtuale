@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { EveLessonAudio } from "@/components/room/eve-lesson-audio";
 
@@ -45,7 +45,11 @@ describe("Audio-lezione di Eve", () => {
     fireEvent.click(screen.getByRole("button", { name: "Avvia lettura" }));
     await waitFor(() => expect(speak).toHaveBeenCalledTimes(1));
     expect(navigate).toHaveBeenCalledWith(1);
-    expect((speak.mock.calls[0][0] as MockUtterance).text).toContain("Seconda pagina. Contenuto due");
+    expect((speak.mock.calls[0][0] as MockUtterance).text).toBe("Seconda pagina");
+    await act(async () => { (speak.mock.calls[0][0] as MockUtterance).onend?.(); await Promise.resolve(); });
+    await waitFor(() => expect(speak).toHaveBeenCalledTimes(2));
+    expect((speak.mock.calls[1][0] as MockUtterance).text).toBe("Contenuto due");
+    expect(screen.getByText("Frequenza didattica di Eve")).toBeInTheDocument();
   });
 
   it("permette di selezionare le pagine in modo compatto", () => {
@@ -56,5 +60,17 @@ describe("Audio-lezione di Eve", () => {
     fireEvent.click(second);
     expect(second).toHaveAttribute("aria-pressed", "false");
     expect(screen.getByText("1 pagine selezionate")).toBeInTheDocument();
+  });
+
+  it("espone spiegazione, anteprima voce e controlli completi della demo", () => {
+    render(<EveLessonAudio sections={sections} currentIndex={0} onNavigate={vi.fn()} />);
+    expect(screen.getByRole("option", { name: "Lettura fedele" })).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "Spiegazione di Eve" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Ascolta voce" }));
+    expect(speak).toHaveBeenCalledTimes(1);
+    expect((speak.mock.calls[0][0] as MockUtterance).text).toContain("sono Eve");
+    expect(screen.getByRole("button", { name: "Passaggio precedente" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Passaggio successivo" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Ferma lettura" })).toBeInTheDocument();
   });
 });

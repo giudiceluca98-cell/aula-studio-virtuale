@@ -1,89 +1,51 @@
 import Link from "next/link";
-import {
-  ArrowRight,
-  BookOpen,
-  Check,
-  Clock3,
-  MessageCircle,
-  Sparkles,
-  Users,
-} from "lucide-react";
-import { isDemoMode } from "@/lib/config";
+import { ArrowRight, Check, Clock3, Focus, LockKeyhole, MessageCircle, Route, Sparkles, Users } from "lucide-react";
+import { ThemeQuickToggle } from "@/components/theme/theme-quick-toggle";
 
 const features = [
-  { icon: Users, title: "Presenza discreta", text: "Sai quando l'altra persona c'e, studia o si prende una pausa." },
-  { icon: Clock3, title: "Tempo che conta", text: "Sessioni e Pomodoro salvati con timestamp affidabili." },
-  { icon: MessageCircle, title: "Un filo diretto", text: "Chat, appunti e piccoli aggiornamenti senza lasciare la stanza." },
+  { icon: Users, title: "Presenza discreta", text: "Vedi chi è online, chi sta leggendo e chi ha avviato una sessione focus, senza notifiche invasive o pressioni continue." },
+  { icon: Clock3, title: "Tempo realmente tracciato", text: "Sessioni libere e Pomodoro vengono associate alla stanza, alla persona e all’attività, creando una cronologia utile." },
+  { icon: MessageCircle, title: "Comunicazione nel contesto", text: "Chat e aggiornamenti rimangono vicino al materiale. Non serve cercare altrove per ricordare cosa stavate studiando." },
+  { icon: Route, title: "Percorsi ordinati", text: "Lezioni, esercizi, quiz, glossario e progetti sono organizzati in una sequenza leggibile anche da chi parte da zero." },
+  { icon: Focus, title: "Progressi sincronizzati", text: "Ogni persona conserva i propri risultati, mentre il gruppo vede l’avanzamento generale e sceglie il prossimo obiettivo." },
+  { icon: Sparkles, title: "Eve accompagna lo studio", text: "Eve legge la lezione, evidenzia i passaggi e distingue spiegazioni, concetti critici, esempi e codice." },
 ];
 
+const steps = [
+  ["01", "Crea una stanza", "Scegli un nome e ricevi un codice privato. La stanza diventa il contenitore stabile di persone, materiali e attività."],
+  ["02", "Costruisci il percorso", "Apri il catalogo, seleziona corso e modulo e aggiungi alla tua aula il materiale da affrontare."],
+  ["03", "Invita gli altri", "Condividi il codice. Quando un partecipante entra, la presenza viene mostrata senza interrompere chi sta già studiando."],
+  ["04", "Studia in sincronia", "Apri la lezione, avvia il timer e continua dal punto corretto. Appunti, messaggi e progressi restano disponibili."],
+] as const;
+
 export default function HomePage() {
-  return (
-    <main data-ui-surface="dark" data-ui-page="presentation" className="mx-auto min-h-screen max-w-[1480px] overflow-hidden px-5 pb-12 pt-5 sm:px-8 lg:px-12">
-      <nav className="flex items-center justify-between rounded-2xl border border-black/[0.05] bg-white/70 px-4 py-3 backdrop-blur-xl sm:px-6">
-        <Link href="/" className="flex items-center gap-3 font-bold tracking-tight">
-          <span className="grid size-9 place-items-center rounded-xl bg-moss-800 text-white"><BookOpen size={18} /></span>
-          Aula
-        </Link>
-        <div className="flex items-center gap-2">
-          <Link href="/login" className="hidden rounded-xl px-4 py-2 text-sm font-semibold text-black/65 hover:bg-black/[0.04] sm:block">Accedi</Link>
-          <Link href="/register" className="button-primary">Crea la tua aula <ArrowRight size={15} /></Link>
-        </div>
-      </nav>
+  return <main data-ui-page="presentation" className="portal-presentation min-h-screen overflow-hidden">
+    <header className="portal-header">
+      <div className="portal-container portal-navbar">
+        <Link href="/" className="portal-brand"><span className="portal-brand-mark" aria-hidden="true" /><span>Aula</span></Link>
+        <nav className="portal-nav" aria-label="Navigazione presentazione">
+          <a className="portal-nav-link optional" href="#funzioni">Funzioni</a><a className="portal-nav-link optional" href="#come-funziona">Come funziona</a><a className="portal-nav-link optional" href="#eve">Eve</a>
+          <ThemeQuickToggle className="portal-button" /><Link className="portal-button" href="/login">Accedi</Link><Link className="portal-button primary" href="/register">Crea la tua aula <ArrowRight size={14} /></Link>
+        </nav>
+      </div>
+    </header>
 
-      <section className="grid items-center gap-12 py-16 lg:grid-cols-[0.9fr_1.1fr] lg:py-24">
-        <div className="max-w-2xl">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-moss-200 bg-moss-50 px-3 py-1.5 text-xs font-bold text-moss-800">
-            <Sparkles size={13} /> Il posto tranquillo dove restare in rotta
-          </div>
-          <h1 className="font-[family-name:var(--font-serif)] text-5xl font-medium leading-[0.98] tracking-[-0.04em] text-ink sm:text-7xl">
-            Studiare insieme, <span className="italic text-moss-700">anche da lontano.</span>
-          </h1>
-          <p className="mt-7 max-w-xl text-base leading-7 text-black/58 sm:text-lg">
-            Una stanza privata per due o piu persone: materiali, progressi, timer e messaggi restano sincronizzati mentre ognuno segue il proprio ritmo.
-          </p>
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <Link href="/register" className="button-primary px-5 py-3">Inizia gratuitamente <ArrowRight size={16} /></Link>
-            {isDemoMode && <Link href="/room/demo" className="button-secondary px-5 py-3">Esplora la stanza demo</Link>}
-          </div>
-          <ul className="mt-7 flex flex-wrap gap-x-5 gap-y-2 text-xs font-medium text-black/48">
-            <li className="flex items-center gap-1.5"><Check size={14} className="text-moss-600" /> Nessuna carta</li>
-            <li className="flex items-center gap-1.5"><Check size={14} className="text-moss-600" /> Dati privati per stanza</li>
-            <li className="flex items-center gap-1.5"><Check size={14} className="text-moss-600" /> Pronta per il tempo reale</li>
-          </ul>
-        </div>
+    <section className="portal-hero">
+      <div className="portal-container portal-hero-grid">
+        <div><div className="portal-eyebrow">Il posto tranquillo dove restare in rotta</div><h1>Studiare insieme,<em>anche da lontano.</em></h1><p className="portal-hero-copy">Aula è uno spazio di studio condiviso in cui materiali, progressi, timer, appunti, messaggi e presenza dei partecipanti restano nello stesso ambiente. Ognuno mantiene il proprio ritmo, mentre il gruppo conserva una direzione comune e una cronologia ordinata del lavoro svolto.</p><div className="portal-actions"><Link className="portal-button primary large" href="/register">Inizia gratuitamente <ArrowRight size={16} /></Link><a className="portal-button large" href="#come-funziona">Scopri come funziona</a></div><div className="portal-trust"><span>Nessuna carta richiesta</span><span>Dati separati per stanza</span><span>Progettata per il tempo reale</span></div></div>
+        <div className="portal-room-preview" aria-label="Anteprima di una stanza di studio"><div className="portal-preview-inner"><div className="portal-preview-head"><div><span className="portal-mini-label">Stanza</span><strong>Esame di Programmazione</strong></div><span className="portal-sync-badge">● In sincronia</span></div><div className="portal-preview-grid"><div className="portal-preview-column"><span className="portal-mini-label">Il tuo percorso</span>{[["Fondamenti Python",72],["Strutture dati",42],["Progetto finale",18]].map(([name,value],index) => <div key={String(name)} className={`portal-lesson-chip${index === 0 ? " active" : ""}`}>{name}<div className="portal-progress-line"><span style={{ width: `${value}%` }} /></div></div>)}</div><div className="portal-preview-column portal-preview-main"><span className="portal-mini-label accent">Lezione corrente</span><h3>Perché programmare?</h3><p>Obiettivi, esercizi, quiz, progetto e appunti rimangono nello stesso spazio, pronti per la prossima sessione.</p><div className="portal-preview-actions"><Link className="portal-button primary" href="/login">Apri materiale</Link><span className="portal-button">Aggiungi nota</span></div><div className="portal-metrics"><div className="portal-metric"><span className="portal-mini-label">Progresso</span><strong>68%</strong></div><div className="portal-metric"><span className="portal-mini-label">Focus oggi</span><strong>52m</strong></div></div></div><div className="portal-preview-column"><span className="portal-mini-label">In aula</span><div className="portal-person"><span className="portal-avatar">M</span><div><strong>Marco</strong><small>Sta studiando</small></div></div><div className="portal-person"><span className="portal-avatar blue">T</span><div><strong>Tatiana</strong><small>Online ora</small></div></div><div className="portal-focus-card"><span className="portal-mini-label">Sessione focus</span><strong>24:18</strong><small>Marco studia con te</small></div></div></div></div></div>
+      </div>
+    </section>
 
-        <div className="relative mx-auto w-full max-w-3xl">
-          <div className="absolute -inset-10 -z-10 rounded-full bg-moss-200/30 blur-3xl" />
-          <div className="rotate-[1.2deg] rounded-[2rem] border border-black/[0.07] bg-[#e8ece5] p-3 shadow-soft">
-            <div className="overflow-hidden rounded-[1.45rem] border border-black/[0.06] bg-paper shadow-card">
-              <div className="flex items-center justify-between border-b border-black/[0.06] bg-white/70 px-5 py-3">
-                <div><p className="text-[10px] font-bold uppercase tracking-widest text-moss-700">Stanza</p><p className="text-sm font-bold">Esame di Programmazione</p></div>
-                <div className="flex items-center gap-2 rounded-full bg-moss-50 px-3 py-1.5 text-[11px] font-bold text-moss-700"><span className="size-2 rounded-full bg-moss-500" /> In sincronia</div>
-              </div>
-              <div className="grid min-h-[430px] gap-px bg-black/[0.05] md:grid-cols-[0.7fr_1.4fr_0.85fr]">
-                <div className="bg-white/75 p-4">
-                  <p className="eyebrow mb-4">Il tuo percorso</p>
-                  {["Fondamenti Python", "Strutture dati", "Progetto finale"].map((x, i) => <div key={x} className={`mb-2 rounded-xl p-3 text-xs font-semibold ${i === 0 ? "bg-moss-100 text-moss-900" : "bg-white text-black/50"}`}>{x}<div className="mt-2 h-1 rounded-full bg-black/10"><div className="h-1 rounded-full bg-moss-500" style={{ width: `${72 - i * 24}%` }} /></div></div>)}
-                </div>
-                <div className="bg-paper p-5">
-                  <div className="rounded-2xl border border-black/[0.06] bg-white p-5"><p className="text-[10px] font-bold uppercase tracking-widest text-apricot">Lezione corrente</p><p className="mt-2 font-[family-name:var(--font-serif)] text-2xl">Perche programmare?</p><p className="mt-3 text-xs leading-5 text-black/45">Obiettivi, esercizi e appunti restano nello stesso spazio.</p><div className="mt-5 flex gap-2"><span className="rounded-lg bg-moss-700 px-3 py-2 text-[10px] font-bold text-white">Apri materiale</span><span className="rounded-lg border border-black/10 px-3 py-2 text-[10px] font-bold">Aggiungi nota</span></div></div>
-                  <div className="mt-4 grid grid-cols-2 gap-3"><div className="rounded-2xl bg-moss-800 p-4 text-white"><p className="text-[10px] uppercase tracking-wider text-white/60">Progresso</p><p className="mt-1 text-3xl font-semibold">68%</p></div><div className="rounded-2xl bg-[#f4e5d7] p-4"><p className="text-[10px] uppercase tracking-wider text-black/45">Focus oggi</p><p className="mt-1 text-3xl font-semibold">52m</p></div></div>
-                </div>
-                <div className="bg-white/80 p-4">
-                  <p className="eyebrow">In aula</p>
-                  <div className="mt-4 flex items-center gap-3"><span className="grid size-9 place-items-center rounded-full bg-[#d8b9a6] text-xs font-bold">M</span><div><p className="text-xs font-bold">Marco</p><p className="text-[10px] text-moss-700">Sta studiando</p></div></div>
-                  <div className="mt-3 flex items-center gap-3"><span className="grid size-9 place-items-center rounded-full bg-sky/50 text-xs font-bold">T</span><div><p className="text-xs font-bold">Tatiana</p><p className="text-[10px] text-black/40">Online ora</p></div></div>
-                  <div className="mt-6 rounded-2xl bg-ink p-4 text-center text-white"><p className="text-[9px] uppercase tracking-[.2em] text-white/45">Sessione focus</p><p className="mt-2 font-mono text-3xl">24:18</p><p className="mt-2 text-[10px] text-white/50">Marco studia con te</p></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+    <section className="portal-section" id="funzioni"><div className="portal-container"><div className="portal-section-heading"><div className="portal-eyebrow">Uno spazio unico</div><h2>Tutto ciò che serve per studiare senza disperdersi.</h2><p className="portal-section-copy">Aula riunisce attività che normalmente finiscono in applicazioni separate. Il materiale rimane accanto alla chat, il timer rimane collegato alla stanza, gli appunti seguono la lezione e ogni avanzamento conserva il proprio contesto.</p></div><div className="portal-feature-grid">{features.map(({ icon: Icon, title, text }) => <article className="portal-feature-card" key={title}><span className="portal-feature-icon"><Icon size={20} /></span><h3>{title}</h3><p>{text}</p></article>)}</div></div></section>
 
-      <section className="grid gap-4 border-t border-black/[0.06] pt-8 md:grid-cols-3">
-        {features.map(({ icon: Icon, title, text }) => <article key={title} className="rounded-3xl bg-white/60 p-6"><Icon size={20} className="text-moss-700" /><h2 className="mt-5 font-bold">{title}</h2><p className="mt-2 text-sm leading-6 text-black/48">{text}</p></article>)}
-      </section>
-    </main>
-  );
+    <section className="portal-section" id="come-funziona"><div className="portal-container"><div className="portal-section-heading center"><div className="portal-eyebrow">Quattro passaggi</div><h2>Dalla creazione della stanza alla prima sessione focus.</h2><p className="portal-section-copy">Il flusso riduce configurazioni e passaggi inutili: si crea uno spazio, si sceglie il materiale e si comincia.</p></div><div className="portal-steps">{steps.map(([number,title,text]) => <article className="portal-step-card" key={number}><div className="portal-step-number">{number}</div><h3>{title}</h3><p>{text}</p></article>)}</div></div></section>
+
+    <section className="portal-section" id="eve"><div className="portal-container portal-split"><div><div className="portal-eyebrow">Eve Voice e attenzione guidata</div><h2>Una guida che resta accanto al materiale.</h2><p className="portal-section-copy">Eve non sostituisce il percorso: lo rende più leggibile. Durante l’audio-lezione il testo viene suddiviso in blocchi e classificato in base alla funzione didattica. Il visualizzatore cambia comportamento per concetti normali, passaggi chiave, avvisi critici, esempi e codice.</p><div className="portal-detail-stack"><article className="portal-detail-card"><h3>Lettura sincronizzata</h3><p>La voce selezionata legge il passaggio corrente e lo collega allo stesso colore mostrato nella frequenza didattica.</p></article><article className="portal-detail-card"><h3>Controlli completi</h3><p>Velocità, pausa, ripresa, stop, passaggio precedente e successivo restano disponibili nel pannello Eve Voice.</p></article><article className="portal-detail-card"><h3>Presenza non invasiva</h3><p>Il pannello può essere minimizzato, sganciato e spostato, senza coprire stabilmente la lezione.</p></article></div></div><div className="portal-visual-console"><div className="portal-eve-row"><span className="portal-eve-orb" /><div><span className="portal-mini-label">Tutor contestuale</span><strong>Eve Voice</strong><p>Concetto chiave rilevato nella sezione corrente.</p></div></div><div className="portal-frequency">{Array.from({length:25},(_,index)=><span key={index} style={{height:`${28 + ((index * 29) % 69)}%`}} />)}</div><div className="portal-console-copy"><strong>Passaggio chiave</strong><br />Il programma non “capisce” l’obiettivo umano: esegue istruzioni precise. Eve rallenta, evidenzia il blocco e aumenta l’intensità del visualizzatore.</div></div></div></section>
+
+    <section className="portal-section"><div className="portal-container portal-security-grid"><div className="portal-security-main"><div className="portal-eyebrow">Spazi privati e continuità</div><h3>Ogni stanza conserva il proprio contesto.</h3><p className="portal-section-copy">Supabase Auth, Postgres, Realtime, Presence, Storage e regole RLS separano materiali e attività per stanza e per utente.</p><div className="portal-security-list">{["Accesso tramite account e codice stanza controllato.","Presenza e aggiornamenti in tempo reale senza ricaricare la pagina.","Progressi personali separati dal progresso generale del gruppo.","Materiali aperti nel workspace interno per mantenere il tracciamento."].map((item)=><div className="portal-security-item" key={item}><Check size={14}/>{item}</div>)}</div></div><div className="portal-security-side"><div className="portal-security-emblem"><LockKeyhole size={34}/></div>{[["Workspace","1","spazio coerente"],["Strumenti","9","nella stessa aula"],["Modalità","Live","presenza e sync"],["Percorso","Continuo","tra le sessioni"]].map(([label,value,note])=><div className="portal-stat" key={label}><span>{label}</span><strong>{value}</strong><small>{note}</small></div>)}</div></div></section>
+
+    <section className="portal-section"><div className="portal-container"><div className="portal-cta"><div><div className="portal-eyebrow">Pronta per la prossima sessione</div><h2>Il tuo spazio di studio, senza rumore.</h2><p>Crea la stanza, scegli il materiale e invita le persone che vuoi avere accanto.</p></div><Link className="portal-button primary large" href="/register">Crea la tua aula <ArrowRight size={16}/></Link></div></div></section>
+    <footer className="portal-footer"><div className="portal-container portal-footer-row"><span>© 2026 Aula Studio Virtuale</span><span>Privacy · Sicurezza · Supporto · Stato del servizio</span></div></footer>
+  </main>;
 }
