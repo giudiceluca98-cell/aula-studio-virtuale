@@ -1,40 +1,47 @@
 # Demo canonica — Aula Studio Virtuale
 
-Questa cartella ospita il riferimento visivo e funzionale usato per trasferire nella app Next.js ufficiale le funzioni sviluppate nella demo autonoma.
+Questa cartella contiene la fonte visiva e funzionale ufficiale usata per trasferire nell'app Next.js le funzioni sviluppate nella demo autonoma.
 
-## File richiesto
+## Stato
 
-Caricare in questa cartella il file con il nome esatto:
+**Demo importata e verificata.**
 
-`demo-aula-studio-virtuale-canonica.html`
+File canonico:
 
-Versione sorgente locale verificata:
+`reference/demo-aula-studio-virtuale-canonica.html`
 
-- nome originale: `demo-aula-studio-virtuale-eve-esercizi-vocali.html`
+Identificatori della versione corrente:
+
 - dimensione: `436216` byte
 - righe: `13145`
 - SHA-256: `4727ddde31f968c5ecf9c931b303579c7ba27b2850f0fd407fc0ae72f8b4485a`
+- Git blob SHA: `8beb580fbf16f87bbb9aaaef6c616067d12f259a`
 
-Dopo il caricamento verificare:
+Il Git blob SHA del file presente nel branch coincide con quello calcolato sul file locale verificato: il contenuto è identico byte per byte.
 
-```bash
-sha256sum reference/demo-aula-studio-virtuale-canonica.html
-```
+## Fonte di verità
 
-Il risultato deve coincidere esattamente con l'hash sopra.
+Codex e gli altri agenti devono leggere la demo direttamente dal branch `demo-canonica`. Non devono usare copie locali non versionate, vecchi add-on, screenshot o ricostruzioni manuali come fonte principale.
 
-## Uso da parte di Codex
+La demo definisce:
 
-La demo non deve sostituire la app ufficiale. Deve essere usata come specifica eseguibile per:
-
+- portale, presentazione, dashboard e aula;
 - layout e responsive;
-- portale, dashboard e aula;
 - progressi e missioni;
 - sidebar e pannelli comprimibili;
 - Eve Voice, selezione pagine e lettura automatica;
 - assistenza vocale negli esercizi;
 - chat completa e chat minimizzate;
 - cursore personalizzato;
-- timer, modali, drawer e persistenza della demo.
+- timer, modali, drawer e persistenza locale della demo.
 
-Ogni trasferimento nell'app Next.js deve preservare autenticazione, RLS, Realtime, routing e persistenza Supabase già presenti nel repository.
+## Flusso di lavoro
+
+1. Le modifiche visuali e funzionali alla demo vengono applicate nel branch `demo-canonica`.
+2. Ogni aggiornamento modifica il file canonico, il manifesto e il changelog.
+3. Codex esegue `git fetch origin --prune` e legge la versione più recente del branch.
+4. Codex integra una funzione per volta nell'app ufficiale su un branch dedicato.
+5. L'integrazione deve conservare autenticazione, routing, Supabase, RLS e Realtime.
+6. Prima della consegna deve essere eseguito un confronto visivo e funzionale con la demo canonica.
+
+La demo non deve essere copiata sopra l'app Next.js e non deve sostituire persistenza o servizi reali con mock o `localStorage`.
