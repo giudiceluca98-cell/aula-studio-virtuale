@@ -1,0 +1,129 @@
+name: Completa Fase 3 materiali e workspace
+
+on:
+  push:
+    branches:
+      - demo-canonica
+    paths:
+      - .github/workflows/apply-demo-phase3-complete.yml
+      - scripts/apply-demo-phase3-complete.py
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: demo-canonica-phase3-complete
+  cancel-in-progress: false
+
+jobs:
+  complete-phase-3:
+    if: ${{ !contains(github.event.head_commit.message || '', '[phase3-auto]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout demo-canonica
+        uses: actions/checkout@v4
+        with:
+          ref: demo-canonica
+          fetch-depth: 0
+
+      - name: Prepara copia di esecuzione corretta
+        shell: bash
+        run: |
+          cp scripts/apply-demo-phase3-complete.py /tmp/apply-demo-phase3-complete.py
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('/tmp/apply-demo-phase3-complete.py')
+          text = path.read_text(encoding='utf-8')
+
+          old = 'if(material.access&&material.explicitClassification)d={access:material.access,monitoring:material.monitoring,viewer:material.viewer||null,importStatus:material.importStatus||"not-required",provider:material.provider||"none",reason:material.reason||"Classificazione esplicita della demo."};'
+          new = 'if(material.access&&(material.explicitClassification||["lesson","text","pdf","document","presentation"].includes(material.kind)||material.access==="external-unmonitored")){const inferredViewer=material.viewer||(material.kind==="lesson"?"lesson":material.kind==="text"?"text":material.kind==="pdf"?"pdf":material.kind==="document"?"document":material.kind==="presentation"?"presentation":material.access==="external-unmonitored"?"web-article":null);d={access:material.access,monitoring:material.monitoring,viewer:inferredViewer,importStatus:material.importStatus||"not-required",provider:material.provider||(material.access==="internal"?"internal":"web"),reason:material.reason||"Classificazione esplicita della demo."};}'
+          if old not in text:
+              raise SystemExit('Classificazione runtime: ancora non trovata')
+          text = text.replace(old, new, 1)
+
+          old_resume = 'const result=aulaMaterialsOpenBeforeTracking(id);window.setTimeout(()=>{if(saved){const material=aulaMaterialsPanelData.find(item=>item.id===id),viewer=material?aulaMaterialOfficialDescriptor(material).viewer:null;if((viewer==="document"||viewer==="text")&&saved.scrollTop)pageScroll?.scrollTo({top:saved.scrollTop,behavior:"auto"})}aulaMaterialTrackingBanner(id,saved);'
+          new_resume = 'const result=aulaMaterialsOpenBeforeTracking(id);window.setTimeout(()=>{if(saved){const material=aulaMaterialsPanelData.find(item=>item.id===id),viewer=material?aulaMaterialOfficialDescriptor(material).viewer:null;if((viewer==="document"||viewer==="text")&&saved.scrollTop)pageScroll?.scrollTo({top:saved.scrollTop,behavior:"auto"});if(viewer==="video"){aulaVideoState.current=Number(saved.videoTime||0);aulaVideoState.ranges=Array.isArray(saved.videoRanges)?saved.videoRanges:[];aulaVideoRender()}if(viewer==="pdf"&&saved.page){aulaPdfState.page=saved.page;aulaPdfRender()}if(viewer==="presentation"&&saved.slide){aulaPresentationState.slide=saved.slide;aulaPresentationRender()}}aulaMaterialTrackingBanner(id,saved);'
+          if old_resume not in text:
+              raise SystemExit('Ripresa runtime: ancora non trovata')
+          text = text.replace(old_resume, new_resume, 1)
+
+          path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Applica tutti i checkpoint della Fase 3
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          for step in 2 3 4 5 6 7 8 9; do
+            python /tmp/apply-demo-phase3-complete.py --step "$step" | tee "/tmp/phase3-step-${step}.txt"
+
+            python - <<'PY'
+          import re
+          from pathlib import Path
+
+          html = Path('reference/demo-aula-studio-virtuale-canonica.html').read_text(encoding='utf-8')
+          ids = [value for value in re.findall(r'\bid=["\']([^"\']+)["\']', html) if '${' not in value]
+          duplicates = sorted({value for value in ids if ids.count(value) > 1})
+          assert not duplicates, duplicates
+          assert html.count('<script') == html.count('</script>')
+          assert html.count('<style') == html.count('</style>')
+          assert html.rstrip().endswith('</html>')
+          PY
+
+            rm -rf /tmp/phase3-js
+            mkdir -p /tmp/phase3-js
+            python - <<'PY'
+          import re
+          from pathlib import Path
+
+          html = Path('reference/demo-aula-studio-virtuale-canonica.html').read_text(encoding='utf-8')
+          scripts = re.findall(r'<script([^>]*)>(.*?)</script>', html, flags=re.I | re.S)
+          output = Path('/tmp/phase3-js')
+          index = 0
+          for attrs, body in scripts:
+              type_match = re.search(r'type=["\']([^"\']+)', attrs, flags=re.I)
+              script_type = type_match.group(1).lower() if type_match else ''
+              if script_type and script_type not in {'text/javascript', 'application/javascript', 'module'}:
+                  continue
+              if 'src=' in attrs.lower() or not body.strip():
+                  continue
+              (output / f'script-{index}.js').write_text(body, encoding='utf-8')
+              index += 1
+          print(f'Classic scripts extracted: {index}')
+          PY
+            for js in /tmp/phase3-js/*.js; do
+              node --check "$js"
+            done
+
+            case "$step" in
+              2) message='[phase3-auto][materials-upload-link] Integra upload e link nella demo' ;;
+              3) message='[phase3-auto][materials-classification] Integra tipi e classificazione materiali' ;;
+              4) message='[phase3-auto][materials-pdf] Integra viewer PDF locale' ;;
+              5) message='[phase3-auto][materials-docx-pptx] Integra documenti e presentazioni' ;;
+              6) message='[phase3-auto][materials-video] Integra player video simulato' ;;
+              7) message='[phase3-auto][materials-import-required] Integra importazione richiesta' ;;
+              8) message='[phase3-auto][materials-tracking] Integra tracking e ripresa materiali' ;;
+              9) message='[phase3-auto][materials-errors] Completa la Fase 3 materiali' ;;
+            esac
+
+            git add reference
+            git commit -m "$message"
+          done
+
+          git push origin HEAD:demo-canonica
+
+      - name: Pubblica tutti gli HTML scaricabili
+        uses: actions/upload-artifact@v4
+        with:
+          name: demo-canonica-fase-3-completa
+          path: |
+            reference/demo-aula-studio-virtuale-canonica.html
+            reference/checkpoints/phase-3/*.html
+            reference/checkpoints/phase-3/README.md
+          if-no-files-found: error
+          retention-days: 30
