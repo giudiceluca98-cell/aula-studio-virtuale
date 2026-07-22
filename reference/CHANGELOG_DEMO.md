@@ -39,6 +39,28 @@ Per ogni modifica futura:
 
 ---
 
+## [1.3.0-alpha.8] — 2026-07-23
+
+### Materiali: tracking e ripresa
+
+- Salvataggio locale separato per ogni materiale.
+- Posizione PDF, slide, video e scroll dei documenti ripristinata dopo l’apertura del viewer.
+- Intervalli video realmente visti conservati insieme alla posizione temporale.
+- Tempo attivo conteggiato soltanto con scheda visibile e interazione recente, oppure durante la riproduzione video.
+- Autosalvataggio ogni cinque secondi attivi e dopo i cambi di posizione.
+- Cronologia locale degli eventi aperto, ripreso, chiuso e posizione salvata.
+- Banner visibile con stato, ultima posizione e minuti attivi.
+- Gli stati `import-required` non vengono conteggiati come consultazione del materiale.
+
+### Identificatori
+
+- Dimensione: `714395` byte
+- Righe: `19627`
+- SHA-256: `4c08e2c1736bd40d9fc0d971668663487cf5c878a1631d12c53fac19533b1f8f`
+- Git blob SHA: `74b81f90f32336c7ac9058c180e3ff0fc8fe2b4d`
+
+---
+
 ## [1.3.0-alpha.7] — 2026-07-23
 
 ### Materiali: import-required

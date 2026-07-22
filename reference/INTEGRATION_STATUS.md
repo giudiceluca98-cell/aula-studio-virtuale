@@ -544,3 +544,17 @@ Versione: `1.3.0-alpha.7`
 - conversione coerente a materiale interno;
 - seconda richiesta idempotente e senza duplicati;
 - checkpoint: `reference/checkpoints/phase-3/demo-aula-studio-virtuale-1.3.0-alpha.7.html`.
+
+
+## Materiali: tracking e ripresa
+
+Stato: 🟢 — checkpoint prodotto
+
+Versione: `1.3.0-alpha.8`
+
+- autosalvataggio per materiale ogni cinque secondi attivi;
+- ripresa di pagina PDF, slide, posizione e intervalli video, scroll documento;
+- tempo attivo basato su visibilità e interazione;
+- cronologia apertura, ripresa, chiusura e posizione;
+- nessun tracking durante lo stato import-required;
+- checkpoint: `reference/checkpoints/phase-3/demo-aula-studio-virtuale-1.3.0-alpha.8.html`.
