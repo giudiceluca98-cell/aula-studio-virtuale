@@ -39,6 +39,27 @@ Per ogni modifica futura:
 
 ---
 
+## [1.3.0-alpha.6] — 2026-07-23
+
+### Materiali: video
+
+- Materiali dimostrativi per YouTube, Vimeo e video MP4 HTTPS.
+- Player locale simulato con riproduzione, pausa, seek e controlli da tastiera.
+- Nessun iframe, download o incorporamento remoto nella demo canonica.
+- Copertura calcolata sugli intervalli unici realmente riprodotti.
+- Gli spostamenti con il cursore non vengono conteggiati come tempo visto.
+- Completamento attribuito soltanto dopo almeno il 90% di copertura.
+- Pausa automatica quando la scheda del browser diventa nascosta.
+
+### Identificatori
+
+- Dimensione: `686506` byte
+- Righe: `19117`
+- SHA-256: `35f4ca7cb7b9d302f1f8d2850be08b1457aa3fbf69ac34a9bcb600f15dae1d1f`
+- Git blob SHA: `4d1c3b88b51cdead868ab228f06efbb264d918ac`
+
+---
+
 ## [1.3.0-alpha.5] — 2026-07-23
 
 ### Materiali: DOCX e PPTX

@@ -664,3 +664,8 @@ Il viewer PDF della demo usa pagine locali deterministiche e aggiorna l’avanza
 ## Fase 3 · 1.3.0-alpha.5
 
 I documenti DOCX vengono presentati come sezioni testuali sicure e le presentazioni PPTX come slide testuali. La demo non apre né analizza realmente i file binari caricati: per i materiali manuali usa fallback deterministici e dichiara chiaramente il limite. I viewer si attivano soltanto per descrittori interni compatibili.
+
+
+## Fase 3 · 1.3.0-alpha.6
+
+Il player video della demo non usa iframe o sorgenti remote. YouTube, Vimeo e file HTTPS condividono una superficie locale deterministica. Il progresso deriva dall’unione degli intervalli effettivamente riprodotti e il completamento richiede una copertura di almeno il 90%; il semplice seek non incrementa la copertura.

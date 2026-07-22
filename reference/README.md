@@ -4,7 +4,7 @@ Questa cartella contiene la fonte visiva e funzionale ufficiale usata per trasfe
 
 ## Stato
 
-**Demo 1.3.0-alpha.5 pronta per verifica: DOCX come testo sicuro e PPTX come slide testuali.**
+**Demo 1.3.0-alpha.6 pronta per verifica: player video locale simulato con copertura realmente vista.**
 
 File canonico:
 
@@ -12,12 +12,12 @@ File canonico:
 
 Identificatori della versione corrente:
 
-- versione: `1.3.0-alpha.5`
+- versione: `1.3.0-alpha.6`
 
-- dimensione: `672684` byte
-- righe: `18874`
-- SHA-256: `7059b095d76e0e56983fcdabfc721f48ff5a75bd84f49751ca3ddb9d6b9046d7`
-- Git blob SHA: `0b6e15a09c4d3ec7065734fd859952071a805080`
+- dimensione: `686506` byte
+- righe: `19117`
+- SHA-256: `35f4ca7cb7b9d302f1f8d2850be08b1457aa3fbf69ac34a9bcb600f15dae1d1f`
+- Git blob SHA: `4d1c3b88b51cdead868ab228f06efbb264d918ac`
 
 Il Git blob SHA del file presente nel branch coincide con quello calcolato sul file locale verificato: il contenuto è identico byte per byte.
 

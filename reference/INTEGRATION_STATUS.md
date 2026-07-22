@@ -517,3 +517,16 @@ Versione: `1.3.0-alpha.5`
 - presentazione PPTX come slide testuali navigabili;
 - fallback trasparente per file manuali non realmente analizzati;
 - checkpoint: `reference/checkpoints/phase-3/demo-aula-studio-virtuale-1.3.0-alpha.5.html`.
+
+
+## Materiali: video
+
+Stato: 🟢 — checkpoint prodotto
+
+Versione: `1.3.0-alpha.6`
+
+- player locale per provider YouTube, Vimeo e HTML5;
+- play, pausa, seek e controlli tastiera;
+- copertura basata sui secondi unici realmente riprodotti;
+- completamento dopo almeno il 90%;
+- checkpoint: `reference/checkpoints/phase-3/demo-aula-studio-virtuale-1.3.0-alpha.6.html`.
