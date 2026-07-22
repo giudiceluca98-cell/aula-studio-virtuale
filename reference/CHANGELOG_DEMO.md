@@ -39,6 +39,26 @@ Per ogni modifica futura:
 
 ---
 
+## [1.3.0-alpha.4] — 2026-07-23
+
+### Materiali: viewer PDF
+
+- Viewer PDF locale e deterministico senza iframe o richieste remote.
+- Navigazione pagina precedente/successiva e scorciatoie freccia sinistra/destra.
+- Percentuale, progressbar accessibile e aggiornamento dell’avanzamento del materiale.
+- Ripresa iniziale derivata dal progresso corrente della sessione.
+- Attivazione esclusiva per PDF classificati `internal`; i PDF remoti restano `import-required`.
+- Rispetto di `prefers-reduced-motion` durante lo spostamento fra pagine.
+
+### Identificatori
+
+- Dimensione: `659450` byte
+- Righe: `18710`
+- SHA-256: `00047a9696e596da120da0e6b7a01f9fac74b5a874167bc89715aceaf24d2d02`
+- Git blob SHA: `7e71848ab8b5fc2e1e04b03154786d43c30d82ff`
+
+---
+
 ## [1.3.0-alpha.3] — 2026-07-23
 
 ### Materiali: tipi e classificazione

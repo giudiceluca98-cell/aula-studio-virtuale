@@ -4,7 +4,7 @@ Questa cartella contiene la fonte visiva e funzionale ufficiale usata per trasfe
 
 ## Stato
 
-**Demo 1.3.0-alpha.3 pronta per verifica: tipi, accesso, viewer, provider, importazione e monitoraggio dei materiali.**
+**Demo 1.3.0-alpha.4 pronta per verifica: viewer PDF locale con pagine, navigazione e avanzamento.**
 
 File canonico:
 
@@ -12,12 +12,12 @@ File canonico:
 
 Identificatori della versione corrente:
 
-- versione: `1.3.0-alpha.3`
+- versione: `1.3.0-alpha.4`
 
-- dimensione: `649900` byte
-- righe: `18601`
-- SHA-256: `a70215459d7919a020b673d9285574f8017e8098c5ccf74355e0fcf74bf0413a`
-- Git blob SHA: `4a69dd1df5134bfdeba57f91d350156d4a1062b7`
+- dimensione: `659450` byte
+- righe: `18710`
+- SHA-256: `00047a9696e596da120da0e6b7a01f9fac74b5a874167bc89715aceaf24d2d02`
+- Git blob SHA: `7e71848ab8b5fc2e1e04b03154786d43c30d82ff`
 
 Il Git blob SHA del file presente nel branch coincide con quello calcolato sul file locale verificato: il contenuto è identico byte per byte.
 

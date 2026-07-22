@@ -654,3 +654,8 @@ Upload locale simulato e collegamenti https con validazione. La demo mantiene da
 ## Fase 3 · 1.3.0-alpha.3
 
 La demo usa la stessa tassonomia dell’app ufficiale per descrivere ogni materiale: access mode, livello di monitoraggio, viewer interno previsto, provider e stato di importazione. La classificazione viene inferita dal formato e dalla provenienza; gli override sono applicati solo alle risorse marcate esplicitamente.
+
+
+## Fase 3 · 1.3.0-alpha.4
+
+Il viewer PDF della demo usa pagine locali deterministiche e aggiorna l’avanzamento del materiale nella sessione. Si attiva soltanto per descrittori `internal` con viewer `pdf`; una sorgente remota classificata `import-required` non viene aperta come se fosse già importata.

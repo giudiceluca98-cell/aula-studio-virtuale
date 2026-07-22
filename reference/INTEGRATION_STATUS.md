@@ -493,3 +493,15 @@ Versione: `1.3.0-alpha.3`
 - classificazione visibile nel pannello e nel workspace;
 - checkpoint: `reference/checkpoints/phase-3/demo-aula-studio-virtuale-1.3.0-alpha.3.html`;
 - verifica statica e sintattica affidata al workflow dedicato.
+
+
+## Materiali: viewer PDF
+
+Stato: 🟢 — checkpoint prodotto
+
+Versione: `1.3.0-alpha.4`
+
+- viewer locale a pagine con navigazione e percentuale;
+- avanzamento aggiornato nella sessione;
+- nessun iframe o caricamento remoto;
+- checkpoint: `reference/checkpoints/phase-3/demo-aula-studio-virtuale-1.3.0-alpha.4.html`.
