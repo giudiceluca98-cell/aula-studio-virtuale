@@ -1,8 +1,8 @@
 # Completamento Programmazione da zero
 
 Stato: in corso
-Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 4.3 corrente
-Branch corrente: `codex/programming-zero-lesson-4-3`
+Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 4.4 corrente
+Branch corrente: `codex/programming-zero-lesson-4-4`
 Ultima integrazione completata: Lezione 0.9 e relativo Python Project, [PR #26](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/26)
 Proposte in integrazione: Lezione 1.1, [PR #17](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/17), e Lezione 1.2, [PR #20](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/20)
 Pacchetto: `programming`
@@ -275,6 +275,14 @@ Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_2.3_Sintassi_rientri_rig
 Contenuti convertiti: 11 sezioni, 914 blocchi, 60 esercizi, 30 quiz e 60 voci di glossario; laboratorio e criteri finali conservati. SHA-256 `d0f99a4174d942baf6404e8c4834006e5d2d5e43989ca36f454cc2ce9d08906e`.
 
 Verifiche: test 151/151, typecheck e build superati; lint solo warning preesistente.
+
+## Estensione in revisione · Lezione 4.4
+
+Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_4.4_Operatori_aritmetici_precedenza_associativita.docx`. Il DOCX non verrà caricato. File riservati: artefatto 4.4, aggregatore, progressi e test. Dipendenza: PR #62.
+
+Contenuti convertiti: 11 sezioni, 915 blocchi, 60 esercizi, 30 quiz e 80 voci di glossario; laboratorio, rubrica e otto criteri finali conservati. SHA-256 `4770f7ee5d2ff89a2b427e8cc25e7b5bb9a201c95bf2a25c61055863d687ca5b`; nessun DOCX caricato.
+
+Verifiche: test 151/151, typecheck e build superati; lint senza errori e con il solo warning preesistente. Timeout del test cumulativo adeguato a 30 secondi per la crescita del corso.
 
 ## Estensione in revisione · Lezione 4.3
 

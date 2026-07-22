@@ -64,6 +64,7 @@ describe("pacchetto editoriale Programmazione da zero", () => {
       "Lezione 4.1 · Acquisire input con input",
       "Lezione 4.2 · Testo ricevuto, spazi e normalizzazione",
       "Lezione 4.3 · Convertire input in numeri",
+      "Lezione 4.4 · Operatori aritmetici",
     ]);
     expect(programmingSubjectPackage.stages).toHaveLength(5);
     expect(programmingSubjectPackage.stages[0].id).toBe("programming-module-0");
@@ -111,7 +112,7 @@ describe("pacchetto editoriale Programmazione da zero", () => {
       expect(lesson.objectives).toHaveLength(10);
     }
     expect(programmingLesson.modules[4]).toMatchObject({ id: "programming-module-4", title: "Modulo 4" });
-    expect(programmingLesson.modules[4].lessons.map((lesson) => lesson.id)).toEqual(["4.1", "4.2", "4.3"]);
+    expect(programmingLesson.modules[4].lessons.map((lesson) => lesson.id)).toEqual(["4.1", "4.2", "4.3", "4.4"]);
     for (const lesson of programmingLesson.modules[4].lessons) {
       expect(lesson.sectionIds).toHaveLength(11);
       expect(lesson.exerciseIds).toHaveLength(60);
@@ -120,23 +121,23 @@ describe("pacchetto editoriale Programmazione da zero", () => {
     }
   });
 
-  it("estende i contenuti ufficiali fino alla lezione 4.3", () => {
+  it("estende i contenuti ufficiali fino alla lezione 4.4", () => {
     expect(programmingLesson.id).toBe("programming-0-1");
     expect(programmingLesson.lessonTitles).toEqual(programmingCurriculumOutline);
-    expect(programmingLesson.objectives).toHaveLength(370);
-    expect(programmingLesson.sections).toHaveLength(435);
-    expect(programmingLesson.glossary).toHaveLength(2400);
-    expect(programmingLesson.exercises).toHaveLength(2083);
-    expect(programmingLesson.quiz).toHaveLength(1188);
-    expect(programmingLesson.project.assessments).toHaveLength(39);
+    expect(programmingLesson.objectives).toHaveLength(380);
+    expect(programmingLesson.sections).toHaveLength(446);
+    expect(programmingLesson.glossary).toHaveLength(2480);
+    expect(programmingLesson.exercises).toHaveLength(2143);
+    expect(programmingLesson.quiz).toHaveLength(1218);
+    expect(programmingLesson.project.assessments).toHaveLength(40);
     expect(programmingLesson.project.guidedProjects.map((project) => project.lessonId)).toEqual(["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.1", "1.2"]);
     expect(programmingLesson.project.guidedProjects.every((project) => project.starterCode.includes("print("))).toBe(true);
     expect(programmingLesson.project.guidedProjects.filter((project) => project.lessonId.startsWith("1.")).every((project) => !project.starterCode.includes("import "))).toBe(true);
     expect(programmingLesson.completion.minimumQuizScore).toBe(80);
-    expect(programmingLesson.completion.requiredExerciseIds).toHaveLength(1187);
-    expect(new Set(programmingLesson.sections.map((section) => section.id)).size).toBe(435);
-    expect(new Set([programmingLesson.guidedExercise.id, ...programmingLesson.exercises.map((exercise) => exercise.id)]).size).toBe(2084);
-    expect(new Set(programmingLesson.quiz.map((question) => question.id)).size).toBe(1188);
+    expect(programmingLesson.completion.requiredExerciseIds).toHaveLength(1217);
+    expect(new Set(programmingLesson.sections.map((section) => section.id)).size).toBe(446);
+    expect(new Set([programmingLesson.guidedExercise.id, ...programmingLesson.exercises.map((exercise) => exercise.id)]).size).toBe(2144);
+    expect(new Set(programmingLesson.quiz.map((question) => question.id)).size).toBe(1218);
     expect(programmingLesson.sections[0].blocks.some((block) => block.text === "Che cosa significa programmare?")).toBe(true);
     expect(programmingLesson.sections[11].blocks.some((block) => block.text === "Che cos’è un computer e come esegue un programma?")).toBe(true);
     expect(programmingLesson.sections[22].blocks.some((block) => block.text === "Come il computer rappresenta l’informazione?")).toBe(true);
@@ -176,6 +177,7 @@ describe("pacchetto editoriale Programmazione da zero", () => {
     expect(programmingLesson.sections[402].blocks.some((block) => block.text === "Acquisire input con input")).toBe(true);
     expect(programmingLesson.sections[413].blocks.some((block) => block.text === "Testo ricevuto, spazi e normalizzazione")).toBe(true);
     expect(programmingLesson.sections[424].blocks.some((block) => block.text === "Convertire input in numeri")).toBe(true);
+    expect(programmingLesson.sections[435].blocks.some((block) => block.text === "Operatori aritmetici")).toBe(true);
   });
 
   it("lega gli artefatti alle impronte delle fonti senza richiedere i DOCX locali nel repository", () => {
@@ -223,6 +225,7 @@ describe("pacchetto editoriale Programmazione da zero", () => {
           "4.1": "3d8ff60535ee7a78734784f64fb0aa23291fbb6e3ec6b52aa8bfb349322291ab",
           "4.2": "d6d7877fcebd0db3d2531acd3bddef0ccb67b049e487ba7303ce7207bb0c1633",
           "4.3": "111f3d7c8106210097443dfd8f149633fcfde36963a983e0bf5fc8f5fd88f6c8",
+          "4.4": "4770f7ee5d2ff89a2b427e8cc25e7b5bb9a201c95bf2a25c61055863d687ca5b",
         }).toMatchObject({ [source.lessonId]: source.sha256 });
       }
       expect(source.metrics.paragraphs).toBeGreaterThan(700);
@@ -256,8 +259,8 @@ describe("pacchetto editoriale Programmazione da zero", () => {
     expect(draft.modules[3].items.filter((item) => item.itemType === "checkpoint")).toHaveLength(9);
     expect(draft.modules[3].items.filter((item) => item.itemType === "project")).toHaveLength(2);
     expect(draft.modules[4].stageId).toBe("programming-module-4");
-    expect(draft.modules[4].items.filter((item) => item.itemType === "exercise")).toHaveLength(3);
-    expect(draft.modules[4].items.filter((item) => item.itemType === "checkpoint")).toHaveLength(3);
+    expect(draft.modules[4].items.filter((item) => item.itemType === "exercise")).toHaveLength(4);
+    expect(draft.modules[4].items.filter((item) => item.itemType === "checkpoint")).toHaveLength(4);
     expect(draft.modules[4].items.filter((item) => item.itemType === "project")).toHaveLength(2);
   });
 
@@ -284,7 +287,7 @@ describe("pacchetto editoriale Programmazione da zero", () => {
     expect(state.completedProjectLessonIds).toEqual(["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.1", "1.2"]);
     expect(state.lessonCompleted).toBe(true);
     expect(state.completionPercentage).toBe(100);
-  }, 20_000);
+  }, 30_000);
 
   it("associa errori, tentativi, tempo e ripasso ai concetti del quiz", () => {
     const question = programmingLesson.quiz[0];
