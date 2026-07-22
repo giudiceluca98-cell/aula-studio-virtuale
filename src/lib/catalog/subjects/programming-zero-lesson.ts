@@ -32,6 +32,7 @@ import lesson35Content from "./programming-zero-lesson-3-5-official-content.json
 import lesson36Content from "./programming-zero-lesson-3-6-official-content.json";
 import lesson37Content from "./programming-zero-lesson-3-7-official-content.json";
 import lesson38Content from "./programming-zero-lesson-3-8-official-content.json";
+import lesson39Content from "./programming-zero-lesson-3-9-official-content.json";
 
 export const PROGRAMMING_ZERO_PATH_ID = "programming-zero";
 // The existing native material keeps its identifier so rooms and saved progress remain connected.
@@ -73,7 +74,7 @@ interface OfficialExercise {
   autoverification?: string;
 }
 
-const officialLessons = [...officialContent.lessons, lesson03Content, lesson04Content, lesson05Content, lesson06Content, lesson07Content, lesson08Content, lesson09Content, lesson11Content, lesson12Content, lesson13Content, lesson14Content, lesson15Content, lesson16Content, lesson17Content, lesson18Content, lesson19Content, lesson21Content, lesson22Content, lesson23Content, lesson24Content, lesson25Content, lesson26Content, lesson27Content, lesson28Content, lesson29Content, lesson31Content, lesson32Content, lesson33Content, lesson34Content, lesson35Content, lesson36Content, lesson37Content, lesson38Content];
+const officialLessons = [...officialContent.lessons, lesson03Content, lesson04Content, lesson05Content, lesson06Content, lesson07Content, lesson08Content, lesson09Content, lesson11Content, lesson12Content, lesson13Content, lesson14Content, lesson15Content, lesson16Content, lesson17Content, lesson18Content, lesson19Content, lesson21Content, lesson22Content, lesson23Content, lesson24Content, lesson25Content, lesson26Content, lesson27Content, lesson28Content, lesson29Content, lesson31Content, lesson32Content, lesson33Content, lesson34Content, lesson35Content, lesson36Content, lesson37Content, lesson38Content, lesson39Content];
 const chapters = officialLessons.flatMap((lesson) => lesson.chapters);
 const allExercises = chapters.flatMap((chapter) => [chapter.exercises.guided, ...chapter.exercises.autonomous]);
 const [firstGuidedExercise, ...remainingExercises] = allExercises;
@@ -487,10 +488,10 @@ export const programmingLesson = {
   id: PROGRAMMING_LESSON_ID,
   pathId: PROGRAMMING_ZERO_PATH_ID,
   moduleId: "programming-module-0",
-  title: "Programmazione da Zero · Lezioni 0.1–3.8",
+  title: "Programmazione da Zero · Lezioni 0.1–3.9",
   lessonTitles: officialLessons.map((lesson) => `Lezione ${lesson.id} · ${lesson.title}`),
   level: "Lettore senza conoscenze pregresse",
-  estimatedMinutes: 3150,
+  estimatedMinutes: 3240,
   description: officialLessons.map((lesson) => lesson.summary[0]).join(" "),
   objectives: officialLessons.flatMap((lesson) => lesson.objectives),
   modules: programmingModules,

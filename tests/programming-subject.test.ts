@@ -60,6 +60,7 @@ describe("pacchetto editoriale Programmazione da zero", () => {
       "Lezione 3.6 · Numeri in virgola mobile e complessi",
       "Lezione 3.7 · Stringhe, booleani e None",
       "Lezione 3.8 · Conversioni, coercizioni, mutabilità e identità",
+      "Lezione 3.9 · Laboratorio conclusivo e valutazione completa",
     ]);
     expect(programmingSubjectPackage.stages).toHaveLength(4);
     expect(programmingSubjectPackage.stages[0].id).toBe("programming-module-0");
@@ -97,33 +98,33 @@ describe("pacchetto editoriale Programmazione da zero", () => {
       expect(lesson.objectives).toHaveLength(10);
     }
     expect(programmingLesson.modules[3]).toMatchObject({ id: "programming-module-3", title: "Modulo 3" });
-    expect(programmingLesson.modules[3].lessons.map((lesson) => lesson.id)).toEqual(["3.1", "3.2", "3.3", "3.4", "3.5", "3.6", "3.7", "3.8"]);
+    expect(programmingLesson.modules[3].lessons.map((lesson) => lesson.id)).toEqual(["3.1", "3.2", "3.3", "3.4", "3.5", "3.6", "3.7", "3.8", "3.9"]);
     for (const lesson of programmingLesson.modules[3].lessons) {
       expect(lesson.sectionIds).toHaveLength(11);
       expect(lesson.exerciseIds).toHaveLength(60);
       expect(lesson.quizIds).toHaveLength(30);
-      expect(lesson.glossary).toHaveLength(lesson.id === "3.8" ? 90 : lesson.id === "3.7" ? 80 : ["3.3", "3.4", "3.5", "3.6"].includes(lesson.id) ? 70 : 60);
+      expect(lesson.glossary).toHaveLength(lesson.id === "3.8" ? 90 : ["3.7", "3.9"].includes(lesson.id) ? 80 : ["3.3", "3.4", "3.5", "3.6"].includes(lesson.id) ? 70 : 60);
       expect(lesson.objectives).toHaveLength(10);
     }
   });
 
-  it("estende i contenuti ufficiali fino alla lezione 3.8", () => {
+  it("estende i contenuti ufficiali fino alla lezione 3.9", () => {
     expect(programmingLesson.id).toBe("programming-0-1");
     expect(programmingLesson.lessonTitles).toEqual(programmingCurriculumOutline);
-    expect(programmingLesson.objectives).toHaveLength(330);
-    expect(programmingLesson.sections).toHaveLength(391);
-    expect(programmingLesson.glossary).toHaveLength(2080);
-    expect(programmingLesson.exercises).toHaveLength(1843);
-    expect(programmingLesson.quiz).toHaveLength(1068);
-    expect(programmingLesson.project.assessments).toHaveLength(35);
+    expect(programmingLesson.objectives).toHaveLength(340);
+    expect(programmingLesson.sections).toHaveLength(402);
+    expect(programmingLesson.glossary).toHaveLength(2160);
+    expect(programmingLesson.exercises).toHaveLength(1903);
+    expect(programmingLesson.quiz).toHaveLength(1098);
+    expect(programmingLesson.project.assessments).toHaveLength(36);
     expect(programmingLesson.project.guidedProjects.map((project) => project.lessonId)).toEqual(["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.1", "1.2"]);
     expect(programmingLesson.project.guidedProjects.every((project) => project.starterCode.includes("print("))).toBe(true);
     expect(programmingLesson.project.guidedProjects.filter((project) => project.lessonId.startsWith("1.")).every((project) => !project.starterCode.includes("import "))).toBe(true);
     expect(programmingLesson.completion.minimumQuizScore).toBe(80);
-    expect(programmingLesson.completion.requiredExerciseIds).toHaveLength(1067);
-    expect(new Set(programmingLesson.sections.map((section) => section.id)).size).toBe(391);
-    expect(new Set([programmingLesson.guidedExercise.id, ...programmingLesson.exercises.map((exercise) => exercise.id)]).size).toBe(1844);
-    expect(new Set(programmingLesson.quiz.map((question) => question.id)).size).toBe(1068);
+    expect(programmingLesson.completion.requiredExerciseIds).toHaveLength(1097);
+    expect(new Set(programmingLesson.sections.map((section) => section.id)).size).toBe(402);
+    expect(new Set([programmingLesson.guidedExercise.id, ...programmingLesson.exercises.map((exercise) => exercise.id)]).size).toBe(1904);
+    expect(new Set(programmingLesson.quiz.map((question) => question.id)).size).toBe(1098);
     expect(programmingLesson.sections[0].blocks.some((block) => block.text === "Che cosa significa programmare?")).toBe(true);
     expect(programmingLesson.sections[11].blocks.some((block) => block.text === "Che cos’è un computer e come esegue un programma?")).toBe(true);
     expect(programmingLesson.sections[22].blocks.some((block) => block.text === "Come il computer rappresenta l’informazione?")).toBe(true);
@@ -159,6 +160,7 @@ describe("pacchetto editoriale Programmazione da zero", () => {
     expect(programmingLesson.sections[358].blocks.some((block) => block.text === "Numeri in virgola mobile e complessi")).toBe(true);
     expect(programmingLesson.sections[369].blocks.some((block) => block.text === "Stringhe, booleani e None")).toBe(true);
     expect(programmingLesson.sections[380].blocks.some((block) => block.text === "Conversioni, coercizioni, mutabilità e identità")).toBe(true);
+    expect(programmingLesson.sections[391].blocks.some((block) => block.text === "Laboratorio conclusivo e valutazione completa")).toBe(true);
   });
 
   it("lega gli artefatti alle impronte delle fonti senza richiedere i DOCX locali nel repository", () => {
@@ -202,6 +204,7 @@ describe("pacchetto editoriale Programmazione da zero", () => {
           "3.6": "f9fa0d5f33dbe34f4a69ee2dcc4024e9a7c3883b617006a0d13a9f5dd8cabeb7",
           "3.7": "b347def95309c812088dfe86621a7851a1bc99639adb45d0625221e1efbc4e0a",
           "3.8": "e5ce5e20b30e96474cbb029e5302fee41f35a04d63ebe8d434540ec2cfcd92be",
+          "3.9": "4ebd25ed4fdb8a71c06fa782f3a692a6db1e0507a1b8765a58dda1fe5c2421b4",
         }).toMatchObject({ [source.lessonId]: source.sha256 });
       }
       expect(source.metrics.paragraphs).toBeGreaterThan(700);
@@ -231,8 +234,8 @@ describe("pacchetto editoriale Programmazione da zero", () => {
     expect(draft.modules[2].items.filter((item) => item.itemType === "checkpoint")).toHaveLength(9);
     expect(draft.modules[2].items.filter((item) => item.itemType === "project")).toHaveLength(2);
     expect(draft.modules[3].stageId).toBe("programming-module-3");
-    expect(draft.modules[3].items.filter((item) => item.itemType === "exercise")).toHaveLength(8);
-    expect(draft.modules[3].items.filter((item) => item.itemType === "checkpoint")).toHaveLength(8);
+    expect(draft.modules[3].items.filter((item) => item.itemType === "exercise")).toHaveLength(9);
+    expect(draft.modules[3].items.filter((item) => item.itemType === "checkpoint")).toHaveLength(9);
     expect(draft.modules[3].items.filter((item) => item.itemType === "project")).toHaveLength(2);
   });
 

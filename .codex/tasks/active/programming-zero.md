@@ -1,8 +1,8 @@
 # Completamento Programmazione da zero
 
 Stato: in corso
-Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 3.8 corrente
-Branch corrente: `codex/programming-zero-lesson-3-8`
+Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 3.9 corrente
+Branch corrente: `codex/programming-zero-lesson-3-9`
 Ultima integrazione completata: Lezione 0.9 e relativo Python Project, [PR #26](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/26)
 Proposte in integrazione: Lezione 1.1, [PR #17](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/17), e Lezione 1.2, [PR #20](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/20)
 Pacchetto: `programming`
@@ -275,6 +275,14 @@ Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_2.3_Sintassi_rientri_rig
 Contenuti convertiti: 11 sezioni, 914 blocchi, 60 esercizi, 30 quiz e 60 voci di glossario; laboratorio e criteri finali conservati. SHA-256 `d0f99a4174d942baf6404e8c4834006e5d2d5e43989ca36f454cc2ce9d08906e`.
 
 Verifiche: test 151/151, typecheck e build superati; lint solo warning preesistente.
+
+## Estensione in revisione · Lezione 3.9
+
+Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_3.9_Laboratorio_conclusivo_valutazione_completa.docx`. Il DOCX non verrà caricato. File riservati: artefatto 3.9, aggregatore, progressi e test. Dipendenza: PR #56. Indice editoriale e registro conclusivi del Modulo 3 confermano ordine e copertura e non vengono caricati.
+
+Contenuti convertiti: 11 sezioni, 926 blocchi, 60 esercizi, 30 quiz e 80 voci di glossario; laboratorio conclusivo, valutazione completa, rubrica e nove criteri finali conservati. SHA-256 `4ebd25ed4fdb8a71c06fa782f3a692a6db1e0507a1b8765a58dda1fe5c2421b4`; nessun DOCX caricato.
+
+Verifiche: test 151/151, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 
 ## Estensione in revisione · Lezione 3.8
 
