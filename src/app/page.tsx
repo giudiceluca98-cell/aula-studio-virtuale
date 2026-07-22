@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Check, Clock3, Focus, LockKeyhole, MessageCircle, Route, Sparkles, Users } from "lucide-react";
 import { ThemeQuickToggle } from "@/components/theme/theme-quick-toggle";
+import { AppLogo } from "@/components/brand/app-logo";
 
 const features = [
   { icon: Users, title: "Presenza discreta", text: "Vedi chi è online, chi sta leggendo e chi ha avviato una sessione focus, senza notifiche invasive o pressioni continue." },
@@ -22,7 +23,7 @@ export default function HomePage() {
   return <main data-ui-page="presentation" className="portal-presentation min-h-screen overflow-hidden">
     <header className="portal-header">
       <div className="portal-container portal-navbar">
-        <Link href="/" className="portal-brand"><span className="portal-brand-mark" aria-hidden="true" /><span>Aula</span></Link>
+        <Link href="/" className="portal-brand"><AppLogo size="sm" showName priority /></Link>
         <nav className="portal-nav" aria-label="Navigazione presentazione">
           <a className="portal-nav-link optional" href="#funzioni">Funzioni</a><a className="portal-nav-link optional" href="#come-funziona">Come funziona</a><a className="portal-nav-link optional" href="#eve">Eve</a>
           <ThemeQuickToggle className="portal-button" /><Link className="portal-button" href="/login">Accedi</Link><Link className="portal-button primary" href="/register">Crea la tua aula <ArrowRight size={14} /></Link>

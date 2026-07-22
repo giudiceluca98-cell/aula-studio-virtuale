@@ -43,6 +43,7 @@ import {
   X,
 } from "lucide-react";
 import clsx from "clsx";
+import { AppLogo } from "@/components/brand/app-logo";
 import { createClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/config";
 import { useRoomRealtime } from "@/hooks/use-room-realtime";
@@ -1369,6 +1370,7 @@ export function StudyRoom({ roomId }: { roomId: string }) {
         <header data-ui-room-header className="flex min-h-[72px] flex-wrap items-center justify-between gap-3 border-b border-black/[0.06] bg-white/80 px-4 py-3 backdrop-blur-xl sm:px-6">
           <div className="flex min-w-0 items-center gap-3">
             <Link href="/dashboard" aria-label="Torna alle stanze" className="grid size-9 shrink-0 place-items-center rounded-xl border border-black/[0.07] bg-white text-black/50 hover:text-ink"><ArrowLeft size={17} /></Link>
+            <AppLogo size="xs" priority />
             <div className="min-w-0"><p className="text-[9px] font-bold uppercase tracking-[.18em] text-moss-700">Aula condivisa · {data.room.invite_code}</p><h1 data-ui-room-title className="truncate text-base font-bold sm:text-lg">{data.room.name}</h1></div>
           </div>
           <div className="flex items-center gap-2">
