@@ -1,0 +1,87 @@
+name: Applica collegamento contestuale Dashboard Catalogo
+
+on:
+  push:
+    branches:
+      - demo-canonica
+    paths:
+      - .github/workflows/apply-demo-dashboard-catalog-link.yml
+      - scripts/apply-demo-dashboard-catalog-link.py
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: demo-canonica-dashboard-catalog-link
+  cancel-in-progress: false
+
+jobs:
+  apply-dashboard-catalog-link:
+    if: ${{ !contains(github.event.head_commit.message || '', '[dashboard-catalog-link]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout demo-canonica
+        uses: actions/checkout@v4
+        with:
+          ref: demo-canonica
+          fetch-depth: 0
+
+      - name: Allinea controllo del nome stato demo
+        run: sed -i 's/"preferredRoomId"/"portalCatalogPreferredRoomId"/' scripts/apply-demo-dashboard-catalog-link.py
+
+      - name: Applica collegamento Dashboard Catalogo
+        run: python scripts/apply-demo-dashboard-catalog-link.py
+
+      - name: Verifiche statiche
+        shell: bash
+        run: |
+          python - <<'PY'
+          import re
+          from pathlib import Path
+
+          html = Path('reference/demo-aula-studio-virtuale-canonica.html').read_text(encoding='utf-8')
+          required = [
+              'DASHBOARD REALE — COLLEGAMENTO CATALOGO 1.2.0-alpha.5',
+              'id="portalDashboardCatalogRoom"',
+              'id="catalogRoomContext"',
+              'id="catalogRoomContextSelect"',
+              'function portalDashboardOpenCatalogForRoom(',
+              'function portalCatalogSetRoomContext(',
+              'function portalCatalogLoadRoomImports(',
+              'portal-room-catalog-button',
+              'portalCatalogRoomImportsStorageKey',
+              'portalCatalogPreferredRoomId',
+          ]
+          for marker in required:
+              assert marker in html, marker
+
+          ids = [value for value in re.findall(r'\bid=["\']([^"\']+)["\']', html) if '${' not in value]
+          duplicates = sorted({value for value in ids if ids.count(value) > 1})
+          assert not duplicates, duplicates
+          assert html.count('<script') == html.count('</script>')
+          assert html.count('<style') == html.count('</style>')
+          assert html.rstrip().endswith('</html>')
+          print('Controlli statici superati')
+          PY
+
+      - name: Pubblica HTML come artefatto
+        uses: actions/upload-artifact@v4
+        with:
+          name: demo-canonica-dashboard-1.2.0-alpha.5
+          path: reference/demo-aula-studio-virtuale-canonica.html
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Commit sul solo branch demo-canonica
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reference scripts/apply-demo-dashboard-catalog-link.py
+          if git diff --cached --quiet; then
+            echo "Nessuna modifica da registrare"
+            exit 0
+          fi
+          git commit -m "[dashboard-catalog-link] Integra collegamento contestuale al Catalogo"
+          git push origin HEAD:demo-canonica
