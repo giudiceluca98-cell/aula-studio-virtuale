@@ -382,6 +382,41 @@ Da verificare manualmente:
 
 ---
 
+
+## Stati di errore Dashboard
+
+Stato: 🟡 — checkpoint HTML 1.2.0-alpha.6 in attesa di approvazione
+
+Integrato:
+
+- caricamento iniziale accessibile;
+- codice errato/revocato;
+- stanza archiviata;
+- accesso non autorizzato;
+- errore temporaneo;
+- retry idempotente;
+- fallback storage;
+- feedback e focus accessibili.
+
+Codici demo:
+
+- `ARCHIVIATA26`;
+- `NEGATO2026`;
+- `OFFLINE2026`.
+
+Da verificare manualmente:
+
+- scheletri al primo ingresso;
+- messaggio per codice generico errato;
+- tre codici demo;
+- secondo tentativo riuscito;
+- nessun duplicato dopo un altro retry;
+- chiusura degli avvisi;
+- create/join normali dopo gli errori;
+- mobile e tastiera.
+
+---
+
 # Regola per Codex
 
 Prima di modificare una funzione:

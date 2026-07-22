@@ -39,6 +39,33 @@ Per ogni modifica futura:
 
 ---
 
+## [1.2.0-alpha.6] — 2026-07-22
+
+### Dashboard — stati di errore e recupero
+
+- Aggiunto caricamento iniziale con schede scheletro e `aria-busy`.
+- Aggiunto stato dedicato per codice errato o revocato.
+- Aggiunto stato stanza archiviata tramite codice demo `ARCHIVIATA26`.
+- Aggiunto accesso non autorizzato tramite codice demo `NEGATO2026`.
+- Aggiunto errore temporaneo recuperabile tramite `OFFLINE2026`.
+- Il pulsante `Riprova accesso` completa il secondo tentativo senza duplicare la stanza.
+- Aggiunto ripristino sicuro quando il salvataggio locale è illeggibile o bloccato.
+- Aggiunti annunci accessibili, focus controllato e responsive.
+- Conservati create/join, presenza, inviti, gestione stanza, Catalogo, Aula, Eve, chat e audio.
+
+### Identificatori
+
+- Dimensione: `600685` byte
+- Righe: `17700`
+- SHA-256: `5a6f42d2182bce875063c7adac32c30335bd9086da6a9b6d689d1b9f67ab9225`
+- Git blob SHA: `34f2dc43927fb684b76d488a7b3a4756f293a14d`
+
+### Stato
+
+Checkpoint HTML completo e in attesa di verifica visuale e funzionale dell'utente.
+
+---
+
 ## [1.2.0-alpha.5] — 2026-07-22
 
 ### Dashboard — collegamento contestuale al Catalogo

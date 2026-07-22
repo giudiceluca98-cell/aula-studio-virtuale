@@ -633,3 +633,9 @@ La cancellazione è visibile solo agli owner, richiede `ELIMINA STANZA` e mostra
 La demo 1.2.0-alpha.5 riproduce il parametro `roomId` della route Catalogo dell'app ufficiale mediante `portalCatalogPreferredRoomId` e `localStorage` (`aula-demo-catalog-room-context-v1`). La destinazione viene impostata dal banner Dashboard, dalla scheda stanza o dall'Aula.
 
 Le firme di importazione sono salvate per stanza in `aula-demo-catalog-room-imports-v1`, così lo stesso percorso può essere importato in stanze diverse ma non duplicato nella stessa. Nell'app ufficiale membership, autorizzazione e importazione restano server-side.
+
+## Stati di errore della Dashboard demo
+
+La demo 1.2.0-alpha.6 rappresenta gli effetti utente delle risposte RPC e dei controlli membership senza simulare un backend. `ARCHIVIATA26`, `NEGATO2026` e `OFFLINE2026` attivano rispettivamente stanza archiviata, accesso negato ed errore temporaneo.
+
+Il retry dell'errore temporaneo è deterministico e idempotente: aggiunge `recovery-room` una sola volta. Il caricamento iniziale espone `aria-busy`; gli errori di `localStorage` usano una copia sicura delle stanze predefinite e dichiarano la possibile mancata persistenza.

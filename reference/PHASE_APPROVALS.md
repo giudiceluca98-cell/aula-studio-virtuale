@@ -56,7 +56,8 @@ Ogni rapporto di checkpoint deve contenere:
 | Fase 2 | Dashboard: ruoli e presenza | APPROVATO | 2026-07-22 | Approvato dall'utente dopo verifica della demo HTML 1.2.0-alpha.2. |
 | Fase 2 | Dashboard: codice invito | APPROVATO | 2026-07-22 | Approvato dall'utente dopo verifica della demo HTML 1.2.0-alpha.3. |
 | Fase 2 | Dashboard: uscita/cancellazione | APPROVATO | 2026-07-22 | Approvato dall'utente dopo verifica della demo HTML 1.2.0-alpha.4. |
-| Fase 2 | Dashboard: collegamento Catalogo | IN_ATTESA_APPROVAZIONE | 2026-07-22 | Demo HTML 1.2.0-alpha.5 pronta da aprire e verificare. |
+| Fase 2 | Dashboard: collegamento Catalogo | APPROVATO | 2026-07-22 | Approvato dall'utente dopo verifica della demo HTML 1.2.0-alpha.5. |
+| Fase 2 | Dashboard: stati di errore | IN_ATTESA_APPROVAZIONE | 2026-07-22 | Demo HTML 1.2.0-alpha.6 pronta da aprire e verificare. |
 | Fasi 2–10 | Passaggi successivi | DA_INIZIARE | — | Ogni passaggio avrà un checkpoint separato. |
 
 ## Come approvare

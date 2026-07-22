@@ -7985,6 +7985,241 @@
 
 
 
+
+
+    /* ==========================================================
+       DASHBOARD REALE — STATI DI ERRORE 1.2.0-alpha.6
+       ========================================================== */
+
+    .portal-dashboard-state[hidden] {
+      display: none !important;
+    }
+
+    .portal-dashboard-state {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+      margin: 14px 0 4px;
+      padding: 14px;
+      border: 1px solid rgba(255,176,91,0.24);
+      border-radius: 16px;
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, rgba(255,176,91,0.075), transparent 62%),
+        rgba(255,255,255,0.018);
+    }
+
+    .portal-dashboard-state[data-state="unauthorized"],
+    .portal-dashboard-state[data-state="invalid-code"] {
+      border-color: rgba(255,108,121,0.28);
+      background:
+        linear-gradient(90deg, rgba(255,92,105,0.075), transparent 62%),
+        rgba(255,255,255,0.018);
+    }
+
+    .portal-dashboard-state[data-state="recovered"] {
+      border-color: rgba(82,232,176,0.25);
+      background:
+        linear-gradient(90deg, rgba(82,232,176,0.07), transparent 62%),
+        rgba(255,255,255,0.018);
+    }
+
+    .portal-dashboard-state-icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid currentColor;
+      border-radius: 13px;
+      color: #ffd7a7;
+      background: rgba(255,176,91,0.055);
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .portal-dashboard-state[data-state="unauthorized"] .portal-dashboard-state-icon,
+    .portal-dashboard-state[data-state="invalid-code"] .portal-dashboard-state-icon {
+      color: #ffb7bf;
+      background: rgba(255,92,105,0.06);
+    }
+
+    .portal-dashboard-state[data-state="recovered"] .portal-dashboard-state-icon {
+      color: #91f7d3;
+      background: rgba(82,232,176,0.055);
+    }
+
+    .portal-dashboard-state-copy {
+      min-width: 0;
+    }
+
+    .portal-dashboard-state-copy strong,
+    .portal-dashboard-state-copy span,
+    .portal-dashboard-state-copy small {
+      display: block;
+    }
+
+    .portal-dashboard-state-copy strong {
+      font-size: 12px;
+    }
+
+    .portal-dashboard-state-copy span {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .portal-dashboard-state-copy small {
+      margin-top: 5px;
+      color: color-mix(in srgb, var(--muted) 84%, transparent);
+      font-size: 8px;
+      font-weight: 760;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .portal-dashboard-state-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 7px;
+    }
+
+    .portal-dashboard-state-actions button {
+      min-height: 36px;
+      padding: 0 11px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      color: var(--ink);
+      background: rgba(255,255,255,0.025);
+      font-size: 9px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .portal-dashboard-state-actions .primary {
+      color: #eaffff;
+      border-color: rgba(125,235,255,0.25);
+      background: rgba(0,223,242,0.07);
+    }
+
+    .portal-dashboard-state-actions button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .portal-dashboard-test-codes {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 8px;
+      line-height: 1.55;
+    }
+
+    .portal-dashboard-test-codes code {
+      display: inline-block;
+      margin: 2px 2px 0 0;
+      padding: 2px 5px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--green-2);
+      background: rgba(0,223,242,0.04);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 8px;
+    }
+
+    .portal-room-loading-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      grid-column: 1 / -1;
+    }
+
+    .portal-room-loading-card {
+      min-height: 216px;
+      padding: 18px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.018);
+    }
+
+    .portal-room-loading-line,
+    .portal-room-loading-circle {
+      position: relative;
+      overflow: hidden;
+      background: rgba(125,235,255,0.08);
+    }
+
+    .portal-room-loading-line::after,
+    .portal-room-loading-circle::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      transform: translateX(-110%);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+      animation: portal-dashboard-shimmer 1.1s ease-in-out infinite;
+    }
+
+    .portal-room-loading-circle {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+    }
+
+    .portal-room-loading-line {
+      height: 9px;
+      margin-top: 13px;
+      border-radius: 999px;
+    }
+
+    .portal-room-loading-line.wide { width: 78%; margin-top: 34px; }
+    .portal-room-loading-line.medium { width: 58%; }
+    .portal-room-loading-line.short { width: 38%; }
+
+    @keyframes portal-dashboard-shimmer {
+      to { transform: translateX(110%); }
+    }
+
+    .portal-dashboard[data-loading="true"] .portal-create-grid,
+    .portal-dashboard[data-loading="true"] .portal-study-banner {
+      opacity: 0.58;
+      pointer-events: none;
+    }
+
+    @media (max-width: 900px) {
+      .portal-room-loading-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 620px) {
+      .portal-dashboard-state {
+        grid-template-columns: auto minmax(0, 1fr);
+      }
+
+      .portal-dashboard-state-actions {
+        grid-column: 1 / -1;
+        justify-content: stretch;
+      }
+
+      .portal-dashboard-state-actions button {
+        flex: 1;
+      }
+
+      .portal-room-loading-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .portal-room-loading-line::after,
+      .portal-room-loading-circle::after {
+        animation: none !important;
+      }
+    }
+
+
     /* ==========================================================
        DASHBOARD REALE — COLLEGAMENTO CATALOGO 1.2.0-alpha.5
        ========================================================== */
@@ -10635,6 +10870,20 @@ display: none !important;
 
         <div class="portal-dashboard-feedback" id="portalDashboardFeedback" role="status" aria-live="polite"></div>
 
+        <section class="portal-dashboard-state" id="portalDashboardStatePanel" data-state="" role="alert" aria-live="assertive" hidden>
+          <span class="portal-dashboard-state-icon" id="portalDashboardStateIcon" aria-hidden="true">!</span>
+          <div class="portal-dashboard-state-copy">
+            <strong id="portalDashboardStateTitle">Operazione non completata</strong>
+            <span id="portalDashboardStateText"></span>
+            <small id="portalDashboardStateCode"></small>
+          </div>
+          <div class="portal-dashboard-state-actions">
+            <button class="primary" id="portalDashboardRetryButton" type="button" onclick="portalDashboardRetryLastAction()" hidden>Riprova</button>
+            <button id="portalDashboardDismissButton" type="button" onclick="portalDashboardDismissState()">Chiudi</button>
+          </div>
+        </section>
+
+
         <div class="portal-create-grid">
           <form class="portal-dashboard-panel" id="portalCreateRoomForm" onsubmit="portalDashboardCreateRoom(event)" novalidate>
             <div class="portal-room-icon">＋</div>
@@ -10662,6 +10911,7 @@ display: none !important;
               <button class="portal-button" id="portalJoinRoomButton" type="submit">Entra</button>
             </div>
             <p class="portal-form-help" id="portalJoinRoomHelp">Il codice non distingue maiuscole e minuscole.</p>
+            <p class="portal-dashboard-test-codes">Stati demo: <code>ARCHIVIATA26</code> <code>NEGATO2026</code> <code>OFFLINE2026</code></p>
           </form>
         </div>
 
@@ -12987,6 +13237,193 @@ print(nome)</div>
 
 
 
+
+
+    /* ==========================================================
+       DASHBOARD — STATI DI ERRORE DETERMINISTICI
+       ========================================================== */
+
+    const portalDashboardDemoErrorCodes = {
+      ARCHIVIATA26: "archived",
+      NEGATO2026: "unauthorized",
+      OFFLINE2026: "temporary"
+    };
+
+    function portalDashboardStateElements() {
+      return {
+        panel: document.getElementById("portalDashboardStatePanel"),
+        icon: document.getElementById("portalDashboardStateIcon"),
+        title: document.getElementById("portalDashboardStateTitle"),
+        text: document.getElementById("portalDashboardStateText"),
+        code: document.getElementById("portalDashboardStateCode"),
+        retry: document.getElementById("portalDashboardRetryButton"),
+        dismiss: document.getElementById("portalDashboardDismissButton")
+      };
+    }
+
+    function portalDashboardShowState(state, title, text, options = {}) {
+      const elements = portalDashboardStateElements();
+      if (!elements.panel) return;
+      const icons = {
+        archived: "▣",
+        unauthorized: "⊘",
+        "invalid-code": "×",
+        temporary: "↻",
+        storage: "!",
+        recovered: "✓"
+      };
+      elements.panel.hidden = false;
+      elements.panel.dataset.state = state;
+      if (elements.icon) elements.icon.textContent = icons[state] || "!";
+      if (elements.title) elements.title.textContent = title;
+      if (elements.text) elements.text.textContent = text;
+      if (elements.code) elements.code.textContent = options.code ? `Riferimento demo: ${options.code}` : "";
+      if (elements.retry) {
+        elements.retry.hidden = !options.retry;
+        elements.retry.disabled = false;
+        elements.retry.textContent = options.retryLabel || "Riprova";
+      }
+      if (elements.dismiss) elements.dismiss.disabled = false;
+      portalDashboardState.retryAction = options.retryAction || null;
+      if (options.focus !== false) window.setTimeout(() => (options.retry ? elements.retry : elements.dismiss)?.focus(), 20);
+    }
+
+    function portalDashboardDismissState(options = {}) {
+      const elements = portalDashboardStateElements();
+      if (!elements.panel) return;
+      elements.panel.hidden = true;
+      elements.panel.dataset.state = "";
+      portalDashboardState.retryAction = null;
+      if (options.focusInput) document.getElementById(options.focusInput)?.focus();
+    }
+
+    function portalDashboardSetLoading(loading, message = "Caricamento delle stanze…") {
+      const dashboard = document.getElementById("portalDashboard");
+      const grid = document.getElementById("portalRoomGrid");
+      const count = document.getElementById("portalRoomCount");
+      const controls = document.querySelectorAll("#portalDashboard input, #portalDashboard select, #portalDashboard button");
+      portalDashboardState.loading = Boolean(loading);
+      if (dashboard) {
+        dashboard.dataset.loading = String(Boolean(loading));
+        dashboard.setAttribute("aria-busy", String(Boolean(loading)));
+      }
+      controls.forEach((control) => {
+        if (control.id === "portalDashboardDismissButton") return;
+        control.disabled = Boolean(loading);
+      });
+      if (loading && grid) {
+        grid.innerHTML = `<div class="portal-room-loading-grid" aria-label="${portalDashboardEscape(message)}">
+          ${[1, 2, 3].map(() => `<div class="portal-room-loading-card" aria-hidden="true"><div class="portal-room-loading-circle"></div><div class="portal-room-loading-line wide"></div><div class="portal-room-loading-line medium"></div><div class="portal-room-loading-line short"></div></div>`).join("")}
+        </div>`;
+      }
+      if (loading && count) count.textContent = "Caricamento…";
+      if (!loading) controls.forEach((control) => { control.disabled = false; });
+    }
+
+    function portalDashboardSafeLoadRooms() {
+      try {
+        const storedRaw = localStorage.getItem(portalDashboardRoomsStorageKey);
+        if (storedRaw === null) {
+          portalDashboardState.rooms = portalDashboardDefaultRooms.map((room) => ({ ...room }));
+          return { ok: true, restored: false };
+        }
+        let stored;
+        try {
+          stored = JSON.parse(storedRaw);
+        } catch {
+          portalDashboardState.rooms = portalDashboardDefaultRooms.map((room) => ({ ...room }));
+          return { ok: false, reason: "invalid-json" };
+        }
+        portalDashboardState.rooms = Array.isArray(stored)
+          ? stored.map(portalDashboardNormalizeRoom).filter(Boolean)
+          : portalDashboardDefaultRooms.map((room) => ({ ...room }));
+        return { ok: Array.isArray(stored), restored: true };
+      } catch {
+        portalDashboardState.rooms = portalDashboardDefaultRooms.map((room) => ({ ...room }));
+        return { ok: false, reason: "storage-blocked" };
+      }
+    }
+
+    function portalDashboardHandleDemoJoinError(code, input) {
+      const state = portalDashboardDemoErrorCodes[code];
+      if (!state) return false;
+      portalDashboardSetWorking("join", false);
+      if (state === "archived") {
+        portalDashboardFieldFeedback("portalInviteCode", "portalJoinRoomHelp", "Questa stanza è stata archiviata e non accetta più ingressi.", "error");
+        portalDashboardFeedback("Ingresso bloccato: la stanza non è più attiva.", "error");
+        portalDashboardShowState(
+          "archived",
+          "Stanza archiviata",
+          "Il proprietario ha chiuso questa stanza. Il codice è stato revocato e non può essere usato per un nuovo ingresso.",
+          { code, focus: false }
+        );
+      } else if (state === "unauthorized") {
+        portalDashboardFieldFeedback("portalInviteCode", "portalJoinRoomHelp", "Non hai l’autorizzazione necessaria per questa stanza.", "error");
+        portalDashboardFeedback("Accesso negato: la membership non risulta attiva.", "error");
+        portalDashboardShowState(
+          "unauthorized",
+          "Accesso non autorizzato",
+          "La stanza esiste, ma questo account non dispone di una membership attiva. Nessun contenuto è stato mostrato.",
+          { code, focus: false }
+        );
+      } else {
+        portalDashboardFieldFeedback("portalInviteCode", "portalJoinRoomHelp", "Il servizio non è raggiungibile. Puoi riprovare senza reinserire il codice.", "error");
+        portalDashboardFeedback("Errore temporaneo durante la verifica dell’invito.", "error");
+        portalDashboardShowState(
+          "temporary",
+          "Connessione temporaneamente non disponibile",
+          "La richiesta non è stata completata e non ha creato una membership parziale. Riprova quando sei pronto.",
+          { code, retry: true, retryLabel: "Riprova accesso", retryAction: { kind: "recover-join", code }, focus: false }
+        );
+      }
+      input?.focus();
+      return true;
+    }
+
+    async function portalDashboardRetryLastAction() {
+      const action = portalDashboardState.retryAction;
+      const elements = portalDashboardStateElements();
+      if (!action || portalDashboardState.working || portalDashboardState.loading) return;
+      if (elements.retry) {
+        elements.retry.disabled = true;
+        elements.retry.textContent = "Nuovo tentativo…";
+      }
+      if (elements.dismiss) elements.dismiss.disabled = true;
+      portalDashboardSetWorking("join", true);
+      await new Promise((resolve) => window.setTimeout(resolve, 620));
+
+      if (action.kind === "recover-join") {
+        const existing = portalDashboardState.rooms.find((room) => room.id === "recovery-room");
+        if (!existing) {
+          portalDashboardState.rooms.unshift({
+            id: "recovery-room",
+            name: "Stanza di prova ripristinata",
+            inviteCode: "OFFLINE2026",
+            role: "member",
+            online: 2,
+            lastActivity: "Adesso · Connessione ripristinata",
+            createdAt: Date.now()
+          });
+          portalDashboardSaveRooms();
+        }
+        portalDashboardRenderRooms();
+        portalDashboardCatalogSync();
+        portalDashboardSetWorking("join", false);
+        const input = document.getElementById("portalInviteCode");
+        if (input) input.value = "";
+        portalDashboardFieldFeedback("portalInviteCode", "portalJoinRoomHelp", "Connessione ripristinata. La stanza è stata aggiunta senza duplicati.");
+        portalDashboardFeedback("Nuovo tentativo riuscito: ingresso completato.", "success");
+        portalDashboardShowState(
+          "recovered",
+          "Connessione ripristinata",
+          "Il secondo tentativo è riuscito. La stanza è stata aggiunta una sola volta alla Scrivania.",
+          { code: action.code, focus: false }
+        );
+        portalNotify("Accesso completato dopo il nuovo tentativo");
+      }
+    }
+
+
     /* ==========================================================
        DASHBOARD — COLLEGAMENTO CONTESTUALE AL CATALOGO
        ========================================================== */
@@ -13795,6 +14232,8 @@ print(nome)</div>
     const portalDashboardState = {
       initialized: false,
       working: null,
+      loading: false,
+      retryAction: null,
       rooms: []
     };
 
@@ -13823,20 +14262,7 @@ print(nome)</div>
     }
 
     function portalDashboardLoadRooms() {
-      const storedRaw = localStorage.getItem(portalDashboardRoomsStorageKey);
-      if (storedRaw === null) {
-        portalDashboardState.rooms = portalDashboardDefaultRooms.map((room) => ({ ...room }));
-        return;
-      }
-      let stored = [];
-      try {
-        stored = JSON.parse(storedRaw);
-      } catch {
-        stored = [];
-      }
-      portalDashboardState.rooms = Array.isArray(stored)
-        ? stored.map(portalDashboardNormalizeRoom).filter(Boolean)
-        : [];
+      return portalDashboardSafeLoadRooms();
     }
 
     function portalDashboardSaveRooms() {
@@ -13924,6 +14350,7 @@ print(nome)</div>
       const input = document.getElementById("portalRoomName");
       const name = String(input?.value || "").trim().replace(/\s+/g, " ");
       portalDashboardFeedback();
+      portalDashboardDismissState();
       if (name.length < 3) {
         portalDashboardFieldFeedback("portalRoomName", "portalCreateRoomHelp", "Inserisci almeno 3 caratteri.", "error");
         input?.focus();
@@ -13968,6 +14395,7 @@ print(nome)</div>
       const input = document.getElementById("portalInviteCode");
       const code = String(input?.value || "").trim().toUpperCase().replace(/\s+/g, "");
       portalDashboardFeedback();
+      portalDashboardDismissState();
       if (code.length < 8) {
         portalDashboardFieldFeedback("portalInviteCode", "portalJoinRoomHelp", "Il codice deve contenere almeno 8 caratteri.", "error");
         input?.focus();
@@ -13977,6 +14405,7 @@ print(nome)</div>
       portalDashboardFieldFeedback("portalInviteCode", "portalJoinRoomHelp", "Verifica del codice in corso…");
       portalDashboardSetWorking("join", true);
       await new Promise((resolve) => window.setTimeout(resolve, 420));
+      if (portalDashboardHandleDemoJoinError(code, input)) return;
       const localRoom = portalDashboardState.rooms.find((room) => room.inviteCode === code);
       if (localRoom) {
         portalDashboardSetWorking("join", false);
@@ -13990,6 +14419,7 @@ print(nome)</div>
         portalDashboardSetWorking("join", false);
         portalDashboardFieldFeedback("portalInviteCode", "portalJoinRoomHelp", "Codice errato o non più valido. Prova STUDY2026.", "error");
         portalDashboardFeedback("Non è stato possibile entrare: il codice non corrisponde a una stanza attiva.", "error");
+        portalDashboardShowState("invalid-code", "Codice non valido", "Il codice non corrisponde a una stanza attiva oppure è stato revocato. Nessuna stanza è stata aggiunta.", { code, focus: false });
         input?.focus();
         return;
       }
@@ -14013,11 +14443,25 @@ print(nome)</div>
       portalNotify("Ingresso nella stanza completato");
     }
 
-    function portalDashboardInit() {
+    async function portalDashboardInit() {
       if (!document.getElementById("portalDashboard")) return;
       if (!portalDashboardState.initialized) {
         portalDashboardState.initialized = true;
-        portalDashboardLoadRooms();
+        portalDashboardSetLoading(true);
+        await new Promise((resolve) => window.setTimeout(resolve, 460));
+        const loadResult = portalDashboardLoadRooms();
+        portalDashboardSetLoading(false);
+        if (!loadResult?.ok) {
+          const storageBlocked = loadResult?.reason === "storage-blocked";
+          portalDashboardShowState(
+            "storage",
+            storageBlocked ? "Salvataggio locale non disponibile" : "Dati locali ripristinati",
+            storageBlocked
+              ? "Il browser ha bloccato lo spazio locale. La demo resta utilizzabile, ma le modifiche potrebbero non restare dopo la chiusura."
+              : "Il salvataggio precedente non era leggibile. È stata caricata una copia sicura delle stanze iniziali.",
+            { focus: false }
+          );
+        }
       }
       portalDashboardRenderRooms();
       portalDashboardCatalogSync();
