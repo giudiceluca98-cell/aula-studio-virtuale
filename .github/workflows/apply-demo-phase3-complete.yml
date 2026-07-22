@@ -41,7 +41,7 @@ jobs:
             git push origin HEAD:demo-canonica
           fi
 
-      - name: Applica e pubblica i checkpoint
+      - name: Applica e pubblica alpha.2
         shell: bash
         run: |
           set -euo pipefail
@@ -54,26 +54,19 @@ jobs:
           from pathlib import Path
 
           step = int(sys.argv[1])
-          html_path = Path('reference/demo-aula-studio-virtuale-canonica.html')
-          html = html_path.read_text(encoding='utf-8')
+          html_path = Path("reference/demo-aula-studio-virtuale-canonica.html")
+          html = html_path.read_text(encoding="utf-8")
           markers = {
-              2: 'MATERIALI E WORKSPACE — UPLOAD E LINK 1.3.0-alpha.2',
-              3: 'MATERIALI E WORKSPACE — TIPI E CLASSIFICAZIONE 1.3.0-alpha.3',
-              4: 'MATERIALI E WORKSPACE — VIEWER PDF 1.3.0-alpha.4',
-              5: 'MATERIALI E WORKSPACE — DOCX E PPTX 1.3.0-alpha.5',
-              6: 'MATERIALI E WORKSPACE — VIDEO 1.3.0-alpha.6',
-              7: 'MATERIALI E WORKSPACE — IMPORT REQUIRED 1.3.0-alpha.7',
-              8: 'MATERIALI E WORKSPACE — TRACKING E RIPRESA 1.3.0-alpha.8',
-              9: 'MATERIALI E WORKSPACE — ERRORI E ALTERNATIVE 1.3.0-alpha.9',
+              2: "MATERIALI E WORKSPACE — UPLOAD E LINK 1.3.0-alpha.2",
           }
           assert markers[step] in html
-          ids = [value for value in re.findall(r'\bid=["\']([^"\']+)["\']', html) if '${' not in value]
+          ids = [value for value in re.findall(r"\bid=[\"']([^\"']+)[\"']", html) if "${" not in value]
           duplicates = sorted({value for value in ids if ids.count(value) > 1})
-          assert not duplicates, f'ID duplicati: {duplicates}'
-          assert html.count('<script') == html.count('</script>')
-          assert html.count('<style') == html.count('</style>')
-          assert html.rstrip().endswith('</html>')
-          checkpoint = Path(f'reference/checkpoints/phase-3/demo-aula-studio-virtuale-1.3.0-alpha.{step}.html')
+          assert not duplicates, f"ID duplicati: {duplicates}"
+          assert html.count("<script") == html.count("</script>")
+          assert html.count("<style") == html.count("</style>")
+          assert html.rstrip().endswith("</html>")
+          checkpoint = Path("reference/checkpoints/phase-3/demo-aula-studio-virtuale-1.3.0-alpha.2.html")
           assert checkpoint.exists()
           assert checkpoint.read_bytes() == html_path.read_bytes()
           PY
@@ -84,60 +77,48 @@ jobs:
           import re
           from pathlib import Path
 
-          html = Path('reference/demo-aula-studio-virtuale-canonica.html').read_text(encoding='utf-8')
-          scripts = re.findall(r'<script([^>]*)>(.*?)</script>', html, flags=re.I | re.S)
-          output = Path('/tmp/phase3-js')
+          html = Path("reference/demo-aula-studio-virtuale-canonica.html").read_text(encoding="utf-8")
+          scripts = re.findall(r"<script([^>]*)>(.*?)</script>", html, flags=re.I | re.S)
+          output = Path("/tmp/phase3-js")
           index = 0
           for attrs, body in scripts:
-              type_match = re.search(r'type=["\']([^"\']+)', attrs, flags=re.I)
-              script_type = type_match.group(1).lower() if type_match else ''
-              if script_type and script_type not in {'text/javascript', 'application/javascript'}:
+              type_match = re.search(r"type=[\"']([^\"']+)", attrs, flags=re.I)
+              script_type = type_match.group(1).lower() if type_match else ""
+              if script_type and script_type not in {"text/javascript", "application/javascript"}:
                   continue
-              if 'src=' in attrs.lower() or not body.strip():
+              if "src=" in attrs.lower() or not body.strip():
                   continue
-              (output / f'script-{index}.js').write_text(body, encoding='utf-8')
+              (output / f"script-{index}.js").write_text(body, encoding="utf-8")
               index += 1
           assert index > 0
-          print(f'Script classici estratti: {index}')
+          print(f"Script classici estratti: {index}")
           PY
+
             for js in /tmp/phase3-js/*.js; do
               node --check "$js"
             done
           }
 
-          for step in 2 3 4 5 6 7 8 9; do
-            git pull --ff-only origin demo-canonica
-            before="$(git rev-parse HEAD)"
-            python scripts/apply-demo-phase3-complete.py --step "$step" | tee "/tmp/phase3-step-${step}.txt"
-            validate_checkpoint "$step"
+          git pull --ff-only origin demo-canonica
+          before="$(git rev-parse HEAD)"
+          python scripts/apply-demo-phase3-complete.py --step 2 | tee /tmp/phase3-step-2.txt
+          validate_checkpoint 2
 
-            case "$step" in
-              2) message='[phase3-auto][materials-upload-link] Integra upload e link nella demo' ;;
-              3) message='[phase3-auto][materials-classification] Integra tipi e classificazione materiali' ;;
-              4) message='[phase3-auto][materials-pdf] Integra viewer PDF locale' ;;
-              5) message='[phase3-auto][materials-docx-pptx] Integra documenti e presentazioni' ;;
-              6) message='[phase3-auto][materials-video] Integra player video simulato' ;;
-              7) message='[phase3-auto][materials-import-required] Integra importazione richiesta' ;;
-              8) message='[phase3-auto][materials-tracking] Integra tracking e ripresa materiali' ;;
-              9) message='[phase3-auto][materials-errors] Completa la Fase 3 materiali' ;;
-            esac
+          git add reference
+          git diff --cached --quiet && { echo "Checkpoint 2 non ha prodotto modifiche"; exit 1; }
+          git commit -m "[phase3-auto][materials-upload-link] Integra upload e link nella demo"
+          git push origin HEAD:demo-canonica
+          git fetch origin demo-canonica
+          test "$(git rev-parse HEAD)" = "$(git rev-parse origin/demo-canonica)"
+          test "$(git rev-parse HEAD)" != "$before"
 
-            git add reference
-            git diff --cached --quiet && { echo "Checkpoint $step non ha prodotto modifiche"; exit 1; }
-            git commit -m "$message"
-            git push origin HEAD:demo-canonica
-            git fetch origin demo-canonica
-            test "$(git rev-parse HEAD)" = "$(git rev-parse origin/demo-canonica)"
-            test "$(git rev-parse HEAD)" != "$before"
-          done
-
-      - name: Pubblica gli HTML scaricabili
+      - name: Pubblica HTML alpha.2 scaricabile
         uses: actions/upload-artifact@v4
         with:
-          name: demo-canonica-fase-3-completa
+          name: demo-canonica-1.3.0-alpha.2
           path: |
             reference/demo-aula-studio-virtuale-canonica.html
-            reference/checkpoints/phase-3/*.html
+            reference/checkpoints/phase-3/demo-aula-studio-virtuale-1.3.0-alpha.2.html
             reference/checkpoints/phase-3/README.md
           if-no-files-found: error
           retention-days: 30
