@@ -6,7 +6,6 @@ on:
       - demo-canonica
     paths:
       - .github/workflows/apply-demo-phase3-complete.yml
-      - scripts/harden-demo-phase3.py
   workflow_dispatch:
 
 permissions:
@@ -27,19 +26,13 @@ jobs:
           ref: demo-canonica
           fetch-depth: 0
 
-      - name: Configura Git e corregge lo script
+      - name: Configura Git e verifica lo script alpha.2
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          python scripts/harden-demo-phase3.py
-          if ! git diff --quiet -- scripts/apply-demo-phase3-complete.py; then
-            python -m py_compile scripts/apply-demo-phase3-complete.py
-            git add scripts/apply-demo-phase3-complete.py
-            git commit -m "[phase3-prep] Corregge classificazione, ripresa e approvazioni"
-            git push origin HEAD:demo-canonica
-          fi
+          python -m py_compile scripts/apply-demo-phase3-complete.py
 
       - name: Applica e pubblica alpha.2
         shell: bash
@@ -47,28 +40,25 @@ jobs:
           set -euo pipefail
 
           validate_checkpoint() {
-            local step="$1"
-            python - "$step" <<'PY'
+            python - <<'PY'
           import re
-          import sys
           from pathlib import Path
 
-          step = int(sys.argv[1])
           html_path = Path("reference/demo-aula-studio-virtuale-canonica.html")
           html = html_path.read_text(encoding="utf-8")
-          markers = {
-              2: "MATERIALI E WORKSPACE — UPLOAD E LINK 1.3.0-alpha.2",
-          }
-          assert markers[step] in html
+          marker = "MATERIALI E WORKSPACE — UPLOAD E LINK 1.3.0-alpha.2"
+          assert marker in html, "Marker alpha.2 assente"
+
           ids = [value for value in re.findall(r"\bid=[\"']([^\"']+)[\"']", html) if "${" not in value]
           duplicates = sorted({value for value in ids if ids.count(value) > 1})
           assert not duplicates, f"ID duplicati: {duplicates}"
-          assert html.count("<script") == html.count("</script>")
-          assert html.count("<style") == html.count("</style>")
-          assert html.rstrip().endswith("</html>")
+          assert html.count("<script") == html.count("</script>"), "Tag script sbilanciati"
+          assert html.count("<style") == html.count("</style>"), "Tag style sbilanciati"
+          assert html.rstrip().endswith("</html>"), "Tag html finale assente"
+
           checkpoint = Path("reference/checkpoints/phase-3/demo-aula-studio-virtuale-1.3.0-alpha.2.html")
-          assert checkpoint.exists()
-          assert checkpoint.read_bytes() == html_path.read_bytes()
+          assert checkpoint.exists(), "Checkpoint alpha.2 non creato"
+          assert checkpoint.read_bytes() == html_path.read_bytes(), "Checkpoint diverso dal canonico"
           PY
 
             rm -rf /tmp/phase3-js
@@ -90,7 +80,7 @@ jobs:
                   continue
               (output / f"script-{index}.js").write_text(body, encoding="utf-8")
               index += 1
-          assert index > 0
+          assert index > 0, "Nessuno script classico estratto"
           print(f"Script classici estratti: {index}")
           PY
 
@@ -102,7 +92,7 @@ jobs:
           git pull --ff-only origin demo-canonica
           before="$(git rev-parse HEAD)"
           python scripts/apply-demo-phase3-complete.py --step 2 | tee /tmp/phase3-step-2.txt
-          validate_checkpoint 2
+          validate_checkpoint
 
           git add reference
           git diff --cached --quiet && { echo "Checkpoint 2 non ha prodotto modifiche"; exit 1; }
