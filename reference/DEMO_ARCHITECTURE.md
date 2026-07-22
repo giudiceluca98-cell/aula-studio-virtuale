@@ -679,3 +679,8 @@ Le risorse `import-required` passano attraverso tre stati locali deterministici.
 ## Fase 3 · 1.3.0-alpha.8
 
 Il tracking viene applicato solo dopo l’apertura effettiva di un viewer interno o incorporato. La posizione è ripristinata dopo il rendering iniziale, evitando che PDF, presentazioni o video la sovrascrivano. Il tempo attivo richiede visibilità e attività recente, salvo la riproduzione video, e viene conservato localmente insieme agli eventi della sessione.
+
+
+## Fase 3 · 1.3.0-alpha.9
+
+Gli errori dei materiali sono rappresentati come stati separati dal tracking. Formati non supportati e contenuti rimossi non vengono eseguiti; il retry temporaneo modifica in modo idempotente lo stesso oggetto materiale, preservando progresso e dati locali. Le alternative proposte sono esclusivamente risorse interne con viewer sicuro.

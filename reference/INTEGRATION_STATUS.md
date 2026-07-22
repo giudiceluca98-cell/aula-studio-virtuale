@@ -558,3 +558,18 @@ Versione: `1.3.0-alpha.8`
 - cronologia apertura, ripresa, chiusura e posizione;
 - nessun tracking durante lo stato import-required;
 - checkpoint: `reference/checkpoints/phase-3/demo-aula-studio-virtuale-1.3.0-alpha.8.html`.
+
+
+## Materiali: errori e alternative
+
+Stato: 🟢 — checkpoint prodotto
+
+Versione: `1.3.0-alpha.9`
+
+- formato ZIP non supportato;
+- materiale rimosso con cronologia conservata;
+- errore temporaneo recuperabile senza duplicati;
+- progresso precedente preservato;
+- alternative esclusivamente interne e sicure;
+- tracking disattivato durante gli stati di errore;
+- checkpoint: `reference/checkpoints/phase-3/demo-aula-studio-virtuale-1.3.0-alpha.9.html`.

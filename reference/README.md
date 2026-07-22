@@ -4,7 +4,7 @@ Questa cartella contiene la fonte visiva e funzionale ufficiale usata per trasfe
 
 ## Stato
 
-**Demo 1.3.0-alpha.8 pronta per verifica: tracking, autosalvataggio, tempo attivo e ripresa della posizione.**
+**Demo 1.3.0-alpha.9 pronta per verifica: errori sicuri, retry recuperabile e alternative interne.**
 
 File canonico:
 
@@ -12,12 +12,12 @@ File canonico:
 
 Identificatori della versione corrente:
 
-- versione: `1.3.0-alpha.8`
+- versione: `1.3.0-alpha.9`
 
-- dimensione: `714395` byte
-- righe: `19627`
-- SHA-256: `4c08e2c1736bd40d9fc0d971668663487cf5c878a1631d12c53fac19533b1f8f`
-- Git blob SHA: `74b81f90f32336c7ac9058c180e3ff0fc8fe2b4d`
+- dimensione: `727961` byte
+- righe: `19865`
+- SHA-256: `957ae6c18adf653dbcfa7bafeab33e57fb49a87a210717584a555b9abb534318`
+- Git blob SHA: `e0a11bec94aa876c36789430842f498ee97d4e03`
 
 Il Git blob SHA del file presente nel branch coincide con quello calcolato sul file locale verificato: il contenuto è identico byte per byte.
 

@@ -39,6 +39,28 @@ Per ogni modifica futura:
 
 ---
 
+## [1.3.0-alpha.9] — 2026-07-23
+
+### Materiali: errori e alternative
+
+- Stato dedicato per formato ZIP non supportato.
+- Stato materiale non disponibile con progresso e cronologia conservati.
+- Errore temporaneo recuperabile al secondo tentativo.
+- Il retry trasforma lo stesso materiale in documento interno e non crea duplicati.
+- Progresso e dati locali precedenti vengono mantenuti durante il recupero.
+- Tracking interrotto durante le schermate di errore e riavviato soltanto dopo l’apertura del viewer recuperato.
+- Alternative limitate a materiali interni con viewer sicuro.
+- Nessun file non supportato viene eseguito o aperto esternamente.
+
+### Identificatori
+
+- Dimensione: `727961` byte
+- Righe: `19865`
+- SHA-256: `957ae6c18adf653dbcfa7bafeab33e57fb49a87a210717584a555b9abb534318`
+- Git blob SHA: `e0a11bec94aa876c36789430842f498ee97d4e03`
+
+---
+
 ## [1.3.0-alpha.8] — 2026-07-23
 
 ### Materiali: tracking e ripresa
