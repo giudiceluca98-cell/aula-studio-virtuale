@@ -1,5 +1,6 @@
 # Checkpoint scaricabili — Fase 3
 
-Queste copie sono snapshot di verifica. La fonte autorevole resta `reference/demo-aula-studio-virtuale-canonica.html`.
+La fonte autorevole resta `reference/demo-aula-studio-virtuale-canonica.html`.
 
+- `1.3.0-alpha.1` — `demo-aula-studio-virtuale-1.3.0-alpha.1.html` — SHA-256 `a9cca058bf0029e71c4d53273da80c61057f12d579a355f0cdf191addfcaa6c6` — 624620 byte — 18408 righe
 - `1.3.0-alpha.2` — `demo-aula-studio-virtuale-1.3.0-alpha.2.html` — SHA-256 `41d16b4dc64f6d86bafff282620228866f05459928c5ebda8506834839c43628` — 639741 byte — 18474 righe
