@@ -102,4 +102,19 @@ describe("navigazione separata di moduli e lezioni", () => {
     expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: "smooth" });
     expect(scrollIntoView).toHaveBeenCalledWith({ behavior: "smooth", block: "start" });
   });
+
+  it("minimizza l’intero pannello Eve lasciando la mascotte per riaprirlo", async () => {
+    window.localStorage.removeItem("aula:eve-panel-collapsed");
+    render(<ProgrammingLessonWorkspace roomId="room-test" materialId="material-test" lesson={lightweightLessonFixture()} initialState={{ ...emptyLessonProgress }} initialEve={initialEve} />);
+    await waitFor(() => expect(fetch).toHaveBeenCalled());
+
+    const workspace = screen.getByTestId("programming-native-lesson");
+    fireEvent.click(screen.getByRole("button", { name: "Minimizza il pannello di Eve" }));
+    expect(workspace.querySelector(".learning-layout")).toHaveClass("eve-panel-collapsed");
+    expect(screen.queryByRole("region", { name: "Audio-lezione di Eve" })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Apri il pannello di Eve" }));
+    expect(workspace.querySelector(".learning-layout")).not.toHaveClass("eve-panel-collapsed");
+    expect(screen.getByRole("region", { name: "Audio-lezione di Eve" })).toBeInTheDocument();
+  });
 });

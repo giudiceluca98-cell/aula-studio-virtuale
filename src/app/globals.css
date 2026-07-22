@@ -567,6 +567,187 @@ select:focus-visible {
   .eve-audio-panel.is-detached { top: auto; right: 0.75rem; bottom: 4.75rem; width: calc(100vw - 1.5rem); max-height: 62vh; }
 }
 
+/* Aula reale: fedeltà strutturale alla demo ufficiale, condivisa fra entrambi i temi. */
+.lesson-workspace {
+  --lesson-shell: #f3f0e7;
+  --lesson-panel: #faf8f1;
+  --lesson-paper: #f8f6ee;
+  --lesson-border: rgba(25, 52, 42, .1);
+  --lesson-ink: #17251f;
+  --lesson-muted: rgba(23, 37, 31, .56);
+  --lesson-accent: #2f7766;
+  --lesson-accent-soft: rgba(47, 119, 102, .1);
+  --eve-panel: #e8f4ed;
+  --eve-panel-deep: #d9ebe3;
+  color: var(--lesson-ink);
+  background: var(--lesson-shell);
+}
+
+:root[data-ui-theme="futuristic-focus"] .lesson-workspace {
+  --lesson-shell: #081720;
+  --lesson-panel: #0b2029;
+  --lesson-paper: #f7f4ea;
+  --lesson-border: rgba(125, 235, 255, .14);
+  --lesson-ink: #e9fbfd;
+  --lesson-muted: rgba(226, 247, 250, .58);
+  --lesson-accent: #67edf4;
+  --lesson-accent-soft: rgba(103, 237, 244, .09);
+  --eve-panel: #0b2630;
+  --eve-panel-deep: #0b1e27;
+}
+
+.lesson-workspace .lesson-workspace-header {
+  display: grid;
+  grid-template-columns: minmax(260px, .8fr) minmax(440px, 1.2fr);
+  gap: 16px 24px;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--lesson-border);
+  background: color-mix(in srgb, var(--lesson-panel) 94%, transparent);
+}
+
+.lesson-workspace .lesson-heading-copy { min-width: 0; }
+.lesson-workspace .lesson-heading-copy .eyebrow { color: var(--lesson-accent); font-size: 8px; font-weight: 900; letter-spacing: .15em; text-transform: uppercase; }
+.lesson-workspace .lesson-heading-copy h2 { margin-top: 5px; overflow: hidden; color: var(--lesson-ink); font-family: var(--font-serif); font-size: clamp(19px, 2vw, 28px); font-weight: 750; line-height: 1.15; text-overflow: ellipsis; white-space: nowrap; }
+.lesson-workspace .lesson-heading-copy > p:last-child { margin-top: 6px; color: var(--lesson-muted); font-size: 9px; }
+.lesson-workspace .lesson-area-tabs { display: flex; min-width: 0; align-items: center; justify-content: flex-end; gap: 6px; overflow-x: auto; }
+.lesson-workspace .lesson-area-tabs button { display: inline-flex; min-height: 35px; flex: 0 0 auto; align-items: center; gap: 6px; border: 1px solid transparent; border-radius: 10px; padding: 7px 10px; color: var(--lesson-muted); font-size: 9px; font-weight: 850; transition: border-color .2s ease, color .2s ease, background .2s ease, transform .2s ease; }
+.lesson-workspace .lesson-area-tabs button:hover { transform: translateY(-1px); color: var(--lesson-ink); background: var(--lesson-accent-soft); }
+.lesson-workspace .lesson-area-tabs button[aria-pressed="true"] { border-color: color-mix(in srgb, var(--lesson-accent) 28%, transparent); color: var(--lesson-accent); background: var(--lesson-accent-soft); }
+
+.lesson-workspace .progress-dashboard { grid-column: 1 / -1; display: grid; gap: 8px; border: 1px solid var(--lesson-border); border-radius: 14px; padding: 11px 14px; background: color-mix(in srgb, var(--lesson-panel) 76%, transparent); }
+.lesson-workspace .progress-summary-row, .lesson-workspace .progress-summary-actions { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.lesson-workspace .progress-summary-row strong, .lesson-workspace .progress-summary-row span { display: block; }
+.lesson-workspace .progress-summary-row strong { color: var(--lesson-ink); font-size: 9px; }
+.lesson-workspace .progress-summary-row span { margin-top: 2px; color: var(--lesson-muted); font-size: 8px; }
+.lesson-workspace .progress-summary-actions b { color: var(--lesson-accent); font-size: 14px; }
+.lesson-workspace .progress-summary-actions button { display: grid; width: 25px; height: 25px; place-items: center; border-radius: 8px; color: var(--lesson-muted); background: var(--lesson-accent-soft); }
+.lesson-workspace .progress-track, .lesson-workspace .mission-track { overflow: hidden; border-radius: 99px; background: color-mix(in srgb, var(--lesson-ink) 8%, transparent); }
+.lesson-workspace .progress-track { height: 4px; }
+.lesson-workspace .progress-track span, .lesson-workspace .mission-track span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--lesson-accent), #8d83f5); transition: width .3s ease; }
+.lesson-workspace .progress-missions { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; padding-top: 4px; }
+.lesson-workspace .progress-mission { border: 1px solid var(--lesson-border); border-radius: 9px; padding: 7px; }
+.lesson-workspace .progress-mission > div:first-child { display: flex; justify-content: space-between; gap: 6px; color: var(--lesson-muted); font-size: 7px; }
+.lesson-workspace .mission-track { height: 3px; margin-top: 6px; }
+.lesson-workspace .autosave { color: var(--lesson-muted); font-size: 7px; text-align: right; }
+
+.lesson-workspace .learning-layout { grid-template-columns: 245px minmax(0, 1fr) 340px; min-height: 690px; }
+.lesson-workspace .learning-layout.modules-panel-collapsed { grid-template-columns: 64px minmax(0, 1fr) 340px; }
+.lesson-workspace .learning-layout.eve-panel-collapsed { grid-template-columns: 245px minmax(0, 1fr) 82px; }
+.lesson-workspace .learning-layout.modules-panel-collapsed.eve-panel-collapsed { grid-template-columns: 64px minmax(0, 1fr) 82px; }
+.lesson-workspace .lesson-sidebar, .lesson-workspace .tutor-column { max-height: calc(100dvh - 106px); }
+.lesson-workspace .lesson-sidebar { z-index: 2; overflow-y: auto; border-right: 1px solid var(--lesson-border); background: color-mix(in srgb, var(--lesson-panel) 92%, transparent); }
+.lesson-workspace .sidebar-heading { position: sticky; top: 0; z-index: 2; display: flex; min-height: 53px; align-items: center; justify-content: space-between; gap: 8px; border-bottom: 1px solid var(--lesson-border); padding: 12px 14px; background: color-mix(in srgb, var(--lesson-panel) 96%, transparent); }
+.lesson-workspace .sidebar-heading p { color: var(--lesson-ink); font-size: 9px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.lesson-workspace .modules-panel-toggle { display: grid; width: 29px; height: 29px; flex: 0 0 auto; place-items: center; border: 1px solid var(--lesson-border); border-radius: 9px; color: var(--lesson-accent); background: var(--lesson-accent-soft); }
+.lesson-workspace .lesson-sidebar.is-collapsed .sidebar-heading { justify-content: center; padding-inline: 8px; }
+.lesson-workspace .lesson-sidebar.is-collapsed .sidebar-heading p { display: none; }
+.lesson-workspace .lesson-sidebar-content { padding: 12px 10px 26px; }
+:root[data-ui-theme="futuristic-focus"] [data-ui-surface="dark"] .lesson-workspace .lesson-sidebar-content button[aria-pressed="true"] { color: #17352c !important; background: #dcece2 !important; }
+:root[data-ui-theme="futuristic-focus"] [data-ui-surface="dark"] .lesson-workspace .lesson-sidebar-content button[aria-pressed="true"] [class*="text-black/"] { color: rgba(23, 53, 44, .62) !important; }
+
+.lesson-workspace .reader-area { min-height: 690px; padding: 28px 22px 42px; background: color-mix(in srgb, var(--lesson-shell) 91%, var(--lesson-panel)); }
+.lesson-workspace .reader-area > section { color: #17201b; }
+.lesson-workspace .reader-area .document { width: min(100%, 820px); border: 1px solid rgba(28, 47, 39, .08); border-radius: 20px; background: var(--lesson-paper) !important; box-shadow: 0 17px 55px rgba(19, 34, 29, .1); }
+:root[data-ui-theme="futuristic-focus"] [data-ui-surface="dark"] .lesson-workspace [data-ui-reading-surface],
+:root[data-ui-theme="futuristic-focus"] [data-ui-surface="dark"] .lesson-workspace .reader-area .document {
+  color: #17201b !important;
+  background: #f7f4ea !important;
+}
+:root[data-ui-theme="futuristic-focus"] [data-ui-surface="dark"] .lesson-workspace [data-ui-reading-surface] [class*="text-black/"] { color: rgba(23, 32, 27, .72) !important; }
+:root[data-ui-theme="futuristic-focus"] [data-ui-surface="dark"] .lesson-workspace [data-ui-reading-surface] .eyebrow { color: #2f7766 !important; }
+
+.lesson-workspace .tutor-column { z-index: 3; overflow: visible; border-left: 1px solid var(--lesson-border); background: var(--eve-panel-deep); }
+.lesson-workspace .eve-assistant-card { max-height: calc(100dvh - 106px); overflow-y: auto; padding: 18px 15px 24px; color: var(--lesson-ink); background: linear-gradient(180deg, color-mix(in srgb, var(--eve-panel) 96%, transparent), var(--eve-panel-deep)); scrollbar-width: thin; }
+.lesson-workspace .eve-assistant-card.is-panel-collapsed { display: grid; min-height: 186px; overflow: visible; place-items: start center; padding: 14px 8px; }
+.lesson-workspace .eve-panel-minimize { position: sticky; top: 4px; z-index: 6; display: grid; width: 26px; height: 26px; margin: -7px 0 -20px auto; place-items: center; border: 1px solid var(--lesson-border); border-radius: 8px; color: var(--lesson-muted); background: color-mix(in srgb, var(--eve-panel) 90%, transparent); font-size: 17px; font-weight: 800; box-shadow: 0 5px 15px rgba(0, 0, 0, .06); }
+.lesson-workspace .eve-panel-toggle { display: grid; flex: 0 0 auto; place-items: center; border-radius: 50%; }
+.lesson-workspace .eve-identity-copy { min-width: 0; padding-right: 24px; }
+.lesson-workspace .eve-identity-copy > p { color: var(--lesson-ink); font-size: 10px; font-weight: 900; }
+.lesson-workspace .eve-presence-row { display: flex; margin-top: 4px; align-items: center; gap: 6px; }
+.lesson-workspace .eve-presence { color: #2b9b77; font-size: 7px; font-weight: 850; }
+.lesson-workspace .eve-detach-toggle { border-radius: 6px; padding: 3px 5px; color: var(--lesson-muted); background: color-mix(in srgb, var(--lesson-ink) 5%, transparent); font-size: 6.5px; font-weight: 800; }
+.lesson-workspace .eve-rest-mascot { width: 66px; height: 66px; }
+.lesson-workspace .eve-rest-ring { inset: 0; border-color: color-mix(in srgb, #74ecff 58%, transparent); box-shadow: 0 0 20px rgba(64, 214, 236, .2); }
+.lesson-workspace .eve-rest-orb { inset: 9px; background: radial-gradient(circle at 34% 27%, #fff 0 5%, #99f9ff 13%, #34bccc 38%, #536ac8 68%, #182b49); box-shadow: 0 0 24px rgba(52, 188, 204, .38), 0 0 45px rgba(83, 106, 200, .2); }
+.lesson-workspace .eve-rest-eye, .lesson-workspace .eve-rest-mouth { background: #10263a; border-color: #10263a; }
+.lesson-workspace .eve-assistant-card.is-panel-collapsed .eve-identity-copy { display: none; }
+.lesson-workspace .eve-assistant-card.is-panel-collapsed .eve-rest-mascot { width: 54px; height: 54px; }
+.lesson-workspace .eve-guidance { margin-top: 14px; border: 1px solid var(--lesson-border); border-radius: 13px; padding: 12px; background: color-mix(in srgb, var(--lesson-panel) 48%, transparent); }
+.lesson-workspace .eve-guidance-label { color: var(--lesson-accent); font-size: 7px; font-weight: 900; letter-spacing: .13em; text-transform: uppercase; }
+.lesson-workspace .eve-guidance h3 { margin-top: 5px; color: var(--lesson-ink); font-size: 10px; font-weight: 900; }
+.lesson-workspace .eve-guidance > p:not(.eve-guidance-label) { margin-top: 5px; color: var(--lesson-muted); font-size: 8px; line-height: 1.55; }
+.lesson-workspace .eve-guidance > button, .lesson-workspace .eve-review-links button { display: inline-flex; margin-top: 8px; align-items: center; gap: 5px; border-radius: 7px; padding: 6px 8px; color: var(--lesson-accent); background: var(--lesson-accent-soft); font-size: 7px; font-weight: 850; }
+.lesson-workspace .eve-review-links { display: flex; flex-wrap: wrap; gap: 4px; }
+.lesson-workspace .eve-privacy-note { margin-top: 14px; border-top: 1px solid var(--lesson-border); padding-top: 11px; color: var(--lesson-muted); font-size: 7px; line-height: 1.55; }
+
+.lesson-workspace .eve-voice-console { margin-top: 14px; border: 1px solid var(--lesson-border); border-radius: 15px; padding: 13px; background: color-mix(in srgb, var(--lesson-panel) 58%, transparent); }
+.lesson-workspace .eve-voice-console.is-detached { --lesson-panel:#f8faf6; --lesson-border:rgba(23,53,44,.12); --lesson-ink:#17251f; --lesson-muted:rgba(23,37,31,.58); --lesson-accent:#2f7766; --lesson-accent-soft:rgba(47,119,102,.1); position: fixed; top: 86px; right: 18px; z-index: 70; width: min(325px, calc(100vw - 36px)); max-height: calc(100dvh - 108px); overflow-y: auto; color: #17251f; background: rgba(248, 250, 246, .98); box-shadow: 0 25px 75px rgba(0, 0, 0, .28); backdrop-filter: blur(18px); }
+.lesson-workspace .eve-voice-heading, .lesson-workspace .eve-visualizer-heading, .lesson-workspace .eve-page-selector-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.lesson-workspace .eve-voice-eyebrow, .lesson-workspace .eve-visualizer-heading p { color: var(--lesson-accent); font-size: 6.5px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
+.lesson-workspace .eve-voice-heading h3 { margin-top: 3px; color: var(--lesson-ink); font-size: 12px; font-weight: 950; }
+.lesson-workspace .eve-audio-badge { border: 1px solid color-mix(in srgb, var(--lesson-accent) 28%, transparent); border-radius: 99px; padding: 4px 7px; color: var(--lesson-accent); background: var(--lesson-accent-soft); font-size: 6px; font-weight: 950; letter-spacing: .08em; }
+.lesson-workspace .eve-voice-status { display: flex; margin-top: 8px; align-items: center; gap: 5px; color: var(--lesson-muted); font-size: 7px; }
+.lesson-workspace .eve-voice-status > span { width: 5px; height: 5px; border-radius: 50%; background: #38bd91; box-shadow: 0 0 8px #38bd91; }
+.lesson-workspace .eve-audio-warning { margin-top: 8px; border-radius: 8px; padding: 7px; color: #8d5e17; background: #fff4d9; font-size: 7px; line-height: 1.45; }
+.lesson-workspace .eve-attention-visualizer { margin-top: 11px; border: 1px solid var(--lesson-border); border-radius: 12px; padding: 10px; }
+.lesson-workspace .eve-visualizer-heading strong { display: block; margin-top: 3px; color: var(--lesson-ink); font-size: 9px; }
+.lesson-workspace .eve-frequency-level { border-radius: 99px; padding: 4px 6px; color: var(--lesson-muted); background: color-mix(in srgb, var(--lesson-ink) 5%, transparent); font-size: 6px; font-weight: 900; }
+.lesson-workspace .eve-frequency { height: 38px; margin-top: 9px; background: color-mix(in srgb, var(--lesson-ink) 5%, transparent); }
+.lesson-workspace .eve-frequency span { width: 3px; }
+.lesson-workspace .eve-focus-copy { margin-top: 7px; color: var(--lesson-muted); font-size: 7px; line-height: 1.45; }
+.lesson-workspace .eve-frequency-legend { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 6px; margin-top: 7px; color: var(--lesson-muted); font-size: 6px; }
+.lesson-workspace .eve-audio-field { display: block; margin-top: 10px; color: var(--lesson-muted); font-size: 7px; font-weight: 850; }
+.lesson-workspace .eve-audio-field select { width: 100%; height: 32px; margin-top: 4px; border: 1px solid var(--lesson-border); border-radius: 8px; padding: 0 25px 0 8px; color: var(--lesson-ink); background: color-mix(in srgb, var(--lesson-panel) 90%, transparent); font-size: 8px; }
+.lesson-workspace .eve-scope-note { margin-top: 5px; color: var(--lesson-muted); font-size: 6.5px; line-height: 1.45; }
+.lesson-workspace .eve-page-selector { margin-top: 8px; border: 1px solid var(--lesson-border); border-radius: 10px; padding: 8px; }
+.lesson-workspace .eve-page-selector-heading { align-items: center; color: var(--lesson-muted); font-size: 6.5px; }
+.lesson-workspace .eve-page-actions { display: flex; gap: 3px; }
+.lesson-workspace .eve-page-actions button { border-radius: 5px; padding: 4px 5px; color: var(--lesson-ink); background: color-mix(in srgb, var(--lesson-ink) 5%, transparent); font-size: 6px; font-weight: 850; }
+.lesson-workspace .eve-page-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; margin-top: 7px; }
+.lesson-workspace .eve-page-grid button { display: grid; height: 27px; place-items: center; border-radius: 6px; color: var(--lesson-muted); background: color-mix(in srgb, var(--lesson-ink) 5%, transparent); font-size: 7px; font-weight: 900; }
+.lesson-workspace .eve-page-grid button[aria-pressed="true"] { color: #fff; background: linear-gradient(135deg, #2d8f7a, #6478da); }
+.lesson-workspace .eve-audio-pair { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(76px, .5fr); gap: 7px; }
+.lesson-workspace .eve-voice-field > span { display: block; margin-top: 4px; color: var(--lesson-muted); font-size: 6px; font-weight: 500; }
+.lesson-workspace .eve-voice-tools { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+.lesson-workspace .eve-voice-tools button { display: inline-flex; min-height: 30px; align-items: center; justify-content: center; gap: 5px; border: 1px solid var(--lesson-border); border-radius: 8px; color: var(--lesson-ink); background: color-mix(in srgb, var(--lesson-panel) 70%, transparent); font-size: 7px; font-weight: 850; }
+.lesson-workspace .eve-voice-console .text-black\/48 { color: var(--lesson-muted) !important; }
+.lesson-workspace .eve-transport { display: flex; margin-top: 12px; align-items: center; justify-content: center; gap: 9px; }
+.lesson-workspace .eve-transport button { display: grid; width: 34px; height: 34px; place-items: center; border: 1px solid var(--lesson-border); border-radius: 50%; color: var(--lesson-ink); background: color-mix(in srgb, var(--lesson-panel) 80%, transparent); }
+.lesson-workspace .eve-transport button.eve-transport-primary { width: 44px; height: 44px; border: 0; color: #071b1a; background: linear-gradient(135deg, #72f3df, #72d9f4); box-shadow: 0 8px 22px rgba(54, 195, 190, .25); }
+.lesson-workspace .eve-transport button:disabled { opacity: .28; }
+.lesson-workspace .eve-audio-progress { height: 4px; margin-top: 11px; overflow: hidden; border-radius: 99px; background: color-mix(in srgb, var(--lesson-ink) 8%, transparent); }
+.lesson-workspace .eve-audio-progress span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #4fd8db, #867af0); transition: width .25s ease; }
+.lesson-workspace .eve-audio-position { display: block; margin-top: 5px; color: var(--lesson-muted); font-size: 6px; font-weight: 800; text-align: right; }
+
+@media (max-width: 1160px) {
+  .lesson-workspace .learning-layout,
+  .lesson-workspace .learning-layout.modules-panel-collapsed,
+  .lesson-workspace .learning-layout.eve-panel-collapsed,
+  .lesson-workspace .learning-layout.modules-panel-collapsed.eve-panel-collapsed { grid-template-columns: 220px minmax(0, 1fr); }
+  .lesson-workspace .tutor-column { position: relative; grid-column: 1 / -1; max-height: none; border-top: 1px solid var(--lesson-border); border-left: 0; }
+  .lesson-workspace .eve-assistant-card { max-width: 760px; max-height: none; margin-inline: auto; }
+}
+
+@media (max-width: 820px) {
+  .lesson-workspace .lesson-workspace-header { display: block; padding: 16px 14px 13px; }
+  .lesson-workspace .lesson-area-tabs { margin-top: 12px; justify-content: flex-start; }
+  .lesson-workspace .progress-dashboard { margin-top: 12px; }
+  .lesson-workspace .progress-missions { grid-template-columns: 1fr 1fr; }
+  .lesson-workspace .learning-layout,
+  .lesson-workspace .learning-layout.modules-panel-collapsed,
+  .lesson-workspace .learning-layout.eve-panel-collapsed,
+  .lesson-workspace .learning-layout.modules-panel-collapsed.eve-panel-collapsed { display: block; }
+  .lesson-workspace .reader-area { min-height: 0; padding: 14px 10px 28px; }
+  .lesson-workspace .tutor-column { padding: 0; }
+}
+
+@media (max-width: 520px) {
+  .lesson-workspace .lesson-heading-copy h2 { white-space: normal; }
+  .lesson-workspace .lesson-area-tabs button { padding-inline: 8px; }
+  .lesson-workspace .progress-missions { grid-template-columns: 1fr; }
+  .lesson-workspace .eve-audio-pair, .lesson-workspace .eve-voice-tools { grid-template-columns: 1fr; }
+}
+
 @keyframes breathe {
   0%, 100% { transform: scale(1); opacity: 0.9; }
   50% { transform: scale(1.35); opacity: 0.45; }

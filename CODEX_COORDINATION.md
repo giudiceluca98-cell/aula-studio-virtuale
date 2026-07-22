@@ -6,6 +6,7 @@ Questo file registra incarichi temporanei, proprietà dei file e dipendenze tra 
 
 | Attività | Assegnazione prevista | Branch | Stato | File riservati | File condivisi richiesti | Pull request | Ultimo aggiornamento |
 |---|---|---|---|---|---|---|---|
+| Fedeltà pannello Eve e area di lavoro alla demo ufficiale | Codex | `agent/eve-panel-reference-fidelity` | In revisione | `globals.css`, workspace lezione, Eve Voice e test | nessuno | confronto visivo completato; 7/7 test mirati, typecheck, lint e build superati | 2026-07-22 |
 | Completamento fedele demo e parità tra temi | Codex | `agent/complete-demo-layout` | Completato | intro completa, workspace lezione, Eve, centro messaggi, CSS e test | nessuno | Intro demo, layout condiviso, Eve Voice completa e chat flottanti verificati; pronto per pubblicazione | 2026-07-22 |
 | Tema Futuristica Focus e aggiornamenti master | Codex | `agent/futuristic-focus-theme` | In revisione | temi, CSS, impostazioni, centro messaggi, Eve lezione/esercizi, migrazione 0017 e test | `src/components/room/study-room.tsx`, `programming-lesson-workspace.tsx`, `src/hooks/use-room-realtime.ts`, `src/lib/types.ts`, `supabase/migrations/0017_message_center.sql` | — | 2026-07-22 |
 | Controlli di lettura e scorrimento dell’aula | Codex | `agent/lesson-reading-controls` | In revisione | `programming-lesson-workspace.tsx`, test dedicato | `src/components/room/study-room.tsx` | — | 2026-07-22 |
