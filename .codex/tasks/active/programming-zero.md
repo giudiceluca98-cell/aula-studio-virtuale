@@ -1,8 +1,8 @@
 # Completamento Programmazione da zero
 
 Stato: in corso
-Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 4.2 corrente
-Branch corrente: `codex/programming-zero-lesson-4-2`
+Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 4.3 corrente
+Branch corrente: `codex/programming-zero-lesson-4-3`
 Ultima integrazione completata: Lezione 0.9 e relativo Python Project, [PR #26](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/26)
 Proposte in integrazione: Lezione 1.1, [PR #17](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/17), e Lezione 1.2, [PR #20](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/20)
 Pacchetto: `programming`
@@ -275,6 +275,14 @@ Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_2.3_Sintassi_rientri_rig
 Contenuti convertiti: 11 sezioni, 914 blocchi, 60 esercizi, 30 quiz e 60 voci di glossario; laboratorio e criteri finali conservati. SHA-256 `d0f99a4174d942baf6404e8c4834006e5d2d5e43989ca36f454cc2ce9d08906e`.
 
 Verifiche: test 151/151, typecheck e build superati; lint solo warning preesistente.
+
+## Estensione in revisione · Lezione 4.3
+
+Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_4.3_Convertire_input_numeri_primi_errori.docx`. Il DOCX non verrà caricato. File riservati: artefatto 4.3, aggregatore, progressi e test. Dipendenza: PR #61.
+
+Contenuti convertiti: 11 sezioni, 915 blocchi, 60 esercizi, 30 quiz e 80 voci di glossario; laboratorio, rubrica e otto criteri finali conservati. SHA-256 `111f3d7c8106210097443dfd8f149633fcfde36963a983e0bf5fc8f5fd88f6c8`; nessun DOCX caricato.
+
+Verifiche: test 151/151, typecheck e build superati; lint senza errori e con il solo warning preesistente.
 
 ## Estensione in revisione · Lezione 4.2
 
