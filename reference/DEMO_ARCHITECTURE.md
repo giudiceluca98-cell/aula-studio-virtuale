@@ -649,3 +649,8 @@ La lezione nativa riusa il workspace completo esistente. Per TXT, PDF, DOCX, PPT
 ## Fase 3 · 1.3.0-alpha.2
 
 Upload locale simulato e collegamenti https con validazione. La demo mantiene dati deterministici e non dichiara chiamate remote reali. La copia del checkpoint è salvata in `reference/checkpoints/phase-3/`.
+
+
+## Fase 3 · 1.3.0-alpha.3
+
+La demo usa la stessa tassonomia dell’app ufficiale per descrivere ogni materiale: access mode, livello di monitoraggio, viewer interno previsto, provider e stato di importazione. La classificazione viene inferita dal formato e dalla provenienza; gli override sono applicati solo alle risorse marcate esplicitamente.

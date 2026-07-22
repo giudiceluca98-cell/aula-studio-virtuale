@@ -481,3 +481,15 @@ Mai sostituire una funzione reale backend con una simulazione demo.
 2. verifica Eve completa;
 3. verifica chat completa;
 4. aggiornamento stato a ✅ solo dopo test manuale.
+
+
+## Materiali: tipi e classificazione
+
+Stato: 🟢 — checkpoint prodotto
+
+Versione: `1.3.0-alpha.3`
+
+- tassonomia allineata a `src/lib/material-access.ts`;
+- classificazione visibile nel pannello e nel workspace;
+- checkpoint: `reference/checkpoints/phase-3/demo-aula-studio-virtuale-1.3.0-alpha.3.html`;
+- verifica statica e sintattica affidata al workflow dedicato.

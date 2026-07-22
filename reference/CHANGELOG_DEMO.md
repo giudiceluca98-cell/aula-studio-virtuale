@@ -39,6 +39,26 @@ Per ogni modifica futura:
 
 ---
 
+## [1.3.0-alpha.3] — 2026-07-23
+
+### Materiali: tipi e classificazione
+
+- Tassonomia coerente con `src/lib/material-access.ts`.
+- Access mode, viewer previsto, provider e import status visibili in ogni scheda.
+- Monitoraggio distinto fra completo, parziale, solo apertura e non monitorabile.
+- Classificazione inferita per materiali interni, video incorporabili, pagine da importare e formati non supportati.
+- I valori espliciti hanno precedenza soltanto quando `explicitClassification` è dichiarato.
+- Python Tutor classificato come risorsa esterna con sola apertura.
+
+### Identificatori
+
+- Dimensione: `649900` byte
+- Righe: `18601`
+- SHA-256: `a70215459d7919a020b673d9285574f8017e8098c5ccf74355e0fcf74bf0413a`
+- Git blob SHA: `4a69dd1df5134bfdeba57f91d350156d4a1062b7`
+
+---
+
 ## [1.3.0-alpha.2] — 2026-07-22
 
 ### Materiali: upload e collegamenti
