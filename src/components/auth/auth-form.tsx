@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { ArrowRight, BookOpen, Loader2, LockKeyhole, Mail, UserRound } from "lucide-react";
+import { ArrowRight, Loader2, LockKeyhole, Mail, UserRound } from "lucide-react";
+import { AppLogo } from "@/components/brand/app-logo";
 import { createClient } from "@/lib/supabase/client";
 import { isDemoMode, isSupabaseConfigured } from "@/lib/config";
 
@@ -99,8 +100,7 @@ export function AuthForm({ mode }: AuthFormProps) {
     <main data-ui-surface="dark" data-ui-page="auth" className="grid min-h-screen lg:grid-cols-[0.9fr_1.1fr]">
       <section className="flex min-h-screen flex-col px-6 py-6 sm:px-10 lg:px-16">
         <Link href="/" className="flex w-fit items-center gap-3 font-bold tracking-tight">
-          <span className="grid size-9 place-items-center rounded-xl bg-moss-800 text-white"><BookOpen size={18} /></span>
-          Aula
+          <AppLogo size="sm" showName priority />
         </Link>
 
         <div className="my-auto w-full max-w-md py-12 lg:mx-auto">

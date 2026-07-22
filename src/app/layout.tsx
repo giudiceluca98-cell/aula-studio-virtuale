@@ -6,6 +6,12 @@ export const metadata: Metadata = {
   title: { default: "Aula — studiare insieme, davvero", template: "%s · Aula" },
   description: "Un'aula studio privata e condivisa, con progressi, timer e presenza in tempo reale.",
   applicationName: "Aula",
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: [{ url: "/aula-app-icon.png", type: "image/png", sizes: "1254x1254" }],
+    shortcut: "/aula-app-icon.png",
+    apple: "/aula-app-icon.png",
+  },
 };
 
 export const viewport: Viewport = {

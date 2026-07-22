@@ -1,6 +1,6 @@
 # Logo circolare dell'app
 
-Stato: in corso
+Stato: in revisione
 Assegnazione: Codex
 Branch: `agent/app-round-logo`
 
@@ -34,3 +34,14 @@ Integrare il simbolo grafico fornito dall'utente come logo circolare ufficiale d
 - favicon e metadati per installazione sul dispositivo collegati allo stesso simbolo;
 - nessuna modifica al comportamento dell'area di lavoro o di Eve;
 - test, typecheck, lint e build.
+
+## Verifiche eseguite
+
+- controllo visivo locale: logo caricato, 36 × 36 px, ritaglio circolare e simbolo leggibile;
+- test mirati logo e presentazione: 3/3 superati;
+- suite completa: 167/171 superati; quattro timeout dovuti alla concorrenza del runner;
+- riesecuzione isolata dei quattro test in timeout: 14/14 superati;
+- typecheck: superato;
+- lint: superato;
+- build di produzione: superata, incluso `/manifest.webmanifest`;
+- Draft Pull Request: [PR #60](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/60).

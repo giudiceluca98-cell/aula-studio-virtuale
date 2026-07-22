@@ -8,6 +8,7 @@ import {
   ChevronDown, ChevronRight, Clock3, ExternalLink, Filter, GraduationCap,
   Languages, Loader2, Plus, Route, Search, ShieldCheck, Sparkles, X,
 } from "lucide-react";
+import { AppLogo } from "@/components/brand/app-logo";
 import type {
   CatalogFilters, CatalogInterpretation, CatalogMaterial, CatalogTopic,
   LearningPathDraft, RankedCatalogMaterial, WebResourceType,
@@ -268,7 +269,7 @@ export function CatalogExplorer({ preferredRoomId }: { preferredRoomId?: string 
     <main data-ui-surface="dark" data-ui-page="catalog" className="min-h-screen px-4 py-5 sm:px-7 lg:px-10">
       <nav className="mx-auto flex max-w-7xl items-center justify-between">
         <Link href={preferredRoomId ? `/room/${preferredRoomId}` : "/dashboard"} className="button-secondary px-3 py-2"><ArrowLeft size={16} /> {preferredRoomId ? "Torna all’aula" : "Scrivania"}</Link>
-        <div className="flex items-center gap-2 text-sm font-bold"><span className="grid size-9 place-items-center rounded-xl bg-moss-800 text-white"><BookOpen size={18} /></span>Catalogo</div>
+        <div className="flex items-center gap-2 text-sm font-bold"><AppLogo size="sm" showName label="Catalogo" priority /></div>
         <span className="flex items-center gap-2 rounded-full bg-white px-3 py-2 text-xs font-bold shadow-sm"><Bot size={16} className="text-moss-700" /> Eve</span>
       </nav>
 
