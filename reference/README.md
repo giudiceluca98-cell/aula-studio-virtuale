@@ -4,7 +4,7 @@ Questa cartella contiene la fonte visiva e funzionale ufficiale usata per trasfe
 
 ## Stato
 
-**Demo 1.2.0-alpha.6 pronta per verifica: stati di errore della Dashboard.**
+**Demo 1.3.0-alpha.1 pronta per verifica: pannello Materiali e selezione workspace.**
 
 File canonico:
 
@@ -12,12 +12,12 @@ File canonico:
 
 Identificatori della versione corrente:
 
-- versione: `1.2.0-alpha.6`
+- versione: `1.3.0-alpha.1`
 
-- dimensione: `600685` byte
-- righe: `17700`
-- SHA-256: `5a6f42d2182bce875063c7adac32c30335bd9086da6a9b6d689d1b9f67ab9225`
-- Git blob SHA: `34f2dc43927fb684b76d488a7b3a4756f293a14d`
+- dimensione: `624620` byte
+- righe: `18408`
+- SHA-256: `a9cca058bf0029e71c4d53273da80c61057f12d579a355f0cdf191addfcaa6c6`
+- Git blob SHA: `3966405bb650a357a684ba330f3846b6bc66de81`
 
 Il Git blob SHA del file presente nel branch coincide con quello calcolato sul file locale verificato: il contenuto è identico byte per byte.
 

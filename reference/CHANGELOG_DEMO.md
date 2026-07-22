@@ -39,6 +39,33 @@ Per ogni modifica futura:
 
 ---
 
+## [1.3.0-alpha.1] — 2026-07-22
+
+### Materiali e workspace — pannello Materiali
+
+- Sostituito il contenuto statico del drawer Materiali con un selettore realistico.
+- Aggiunti ricerca, filtro corso e filtro formato.
+- Aggiunte schede con formato, corso, accesso, monitorabilità e avanzamento.
+- Aggiunta selezione persistente del materiale.
+- Aggiunta apertura nel workspace centrale.
+- La lezione nativa conserva il lettore completo già approvato.
+- I viewer TXT/PDF/DOCX/PPTX sono rappresentati onestamente come sottofasi successive, senza simulare servizi già operativi.
+- Le risorse esterne sono dichiarate non monitorabili.
+- Conservati Dashboard, Catalogo, Eve, audio, esercizi, chat e responsive.
+
+### Identificatori
+
+- Dimensione: `624620` byte
+- Righe: `18408`
+- SHA-256: `a9cca058bf0029e71c4d53273da80c61057f12d579a355f0cdf191addfcaa6c6`
+- Git blob SHA: `3966405bb650a357a684ba330f3846b6bc66de81`
+
+### Stato
+
+Checkpoint HTML completo e in attesa di verifica visuale e funzionale dell'utente.
+
+---
+
 ## [1.2.0-alpha.6] — 2026-07-22
 
 ### Dashboard — stati di errore e recupero

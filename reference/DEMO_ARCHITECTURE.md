@@ -639,3 +639,9 @@ Le firme di importazione sono salvate per stanza in `aula-demo-catalog-room-impo
 La demo 1.2.0-alpha.6 rappresenta gli effetti utente delle risposte RPC e dei controlli membership senza simulare un backend. `ARCHIVIATA26`, `NEGATO2026` e `OFFLINE2026` attivano rispettivamente stanza archiviata, accesso negato ed errore temporaneo.
 
 Il retry dell'errore temporaneo è deterministico e idempotente: aggiunge `recovery-room` una sola volta. Il caricamento iniziale espone `aria-busy`; gli errori di `localStorage` usano una copia sicura delle stanze predefinite e dichiarano la possibile mancata persistenza.
+
+## Pannello Materiali della Fase 3
+
+La demo 1.3.0-alpha.1 introduce un modello locale di `UiMaterial` coerente con l'app ufficiale: corso, formato, `access_mode`, `monitoring_level`, viewer previsto e avanzamento. La selezione viene salvata in `aula-demo-materials-panel-v1`.
+
+La lezione nativa riusa il workspace completo esistente. Per TXT, PDF, DOCX, PPTX e link esterni questa sottofase mostra soltanto selezione, metadati e stato di disponibilità. I viewer e il tracking specifico vengono integrati separatamente nelle sottofasi successive della Fase 3.

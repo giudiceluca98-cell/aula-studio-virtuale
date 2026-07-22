@@ -417,6 +417,36 @@ Da verificare manualmente:
 
 ---
 
+
+## Pannello Materiali e workspace
+
+Stato: 🟡 — checkpoint HTML 1.3.0-alpha.1 in attesa di approvazione
+
+Integrato:
+
+- drawer Materiali dinamico;
+- ricerca e filtri;
+- corso, formato e accesso;
+- monitorabilità;
+- avanzamento;
+- materiale selezionato persistente;
+- apertura nel workspace;
+- distinzione onesta tra viewer pronto e sottofase futura.
+
+Da verificare manualmente:
+
+- apertura drawer Materiali;
+- ricerca;
+- filtri corso/formato;
+- selezione persistente;
+- apertura lezione nativa;
+- apertura anteprima PDF/DOCX/PPTX;
+- risorsa esterna non monitorabile;
+- ritorno alla lezione;
+- mobile e tastiera.
+
+---
+
 # Regola per Codex
 
 Prima di modificare una funzione:
