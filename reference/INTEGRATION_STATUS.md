@@ -240,6 +240,36 @@ Da verificare manualmente:
 
 ---
 
+
+# Dashboard reale e gestione stanze
+
+## Create e join
+
+Stato: 🟡 — checkpoint HTML 1.2.0-alpha.1 in attesa di approvazione
+
+Integrato nella demo:
+
+- elenco stanze dinamico;
+- creazione con validazione;
+- generazione codice;
+- ingresso tramite invito;
+- loading e feedback;
+- errori codice corto/errato;
+- idempotenza su stanza già presente;
+- persistenza locale privata;
+- ruolo, presenza sintetica e ultima attività.
+
+Da verificare manualmente:
+
+- creazione valida e duplicata;
+- ingresso con `STUDY2026`;
+- codice errato;
+- permanenza dopo ricaricamento;
+- apertura della stanza;
+- mobile e tastiera.
+
+---
+
 # Regola per Codex
 
 Prima di modificare una funzione:

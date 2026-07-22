@@ -39,6 +39,32 @@ Per ogni modifica futura:
 
 ---
 
+## [1.2.0-alpha.1] — 2026-07-22
+
+### Dashboard — creazione e ingresso stanza
+
+- Sostituita la stanza statica con un elenco renderizzato da stato demo.
+- Aggiunta creazione stanza con validazione 3–60 caratteri, duplicati e caricamento.
+- Aggiunta generazione del codice invito e persistenza locale privata.
+- Aggiunto ingresso tramite codici demo `STUDY2026` e `MATEMATICA24`.
+- Aggiunti errori per codice corto, errato e stanza già presente.
+- Aggiunti ruolo, partecipanti online e ultima attività nelle schede stanza.
+- Aggiunto invio dei form con Enter e feedback accessibili.
+- Conservato il collegamento principale al Catalogo approvato.
+
+### Identificatori
+
+- Dimensione: `505707` byte
+- Righe: `15085`
+- SHA-256: `47c2b54336bb84ec52fd5e1a2bed2cefe171c2af0fb7a17e2e46515d09e0db16`
+- Git blob SHA: `b5c9881525ae32f71bc0a7243236642d5e190312`
+
+### Stato
+
+Checkpoint HTML completo e in attesa di verifica visuale e funzionale dell'utente.
+
+---
+
 ## [1.1.0-alpha.2] — 2026-07-22
 
 ### Catalogo — aggiunta manuale di materiali

@@ -591,3 +591,16 @@ Funzioni:
 - `catalogDemoPersistManualMaterials()` — persistenza locale;
 - `catalogDemoAddManualMaterial()` — validazione, deduplicazione e selezione;
 - `catalogDemoOpenManualMaterial()` / `catalogDemoCloseManualMaterial()` — dialog e focus.
+
+## Dashboard create/join nella demo
+
+La demo 1.2.0-alpha.1 riproduce gli effetti utente delle RPC reali `create_study_room` e `join_study_room` usando dati locali e `localStorage` (`aula-demo-dashboard-rooms-v1`). Nell'app ufficiale restano autorevoli autenticazione, RPC, RLS e membership server-side.
+
+Funzioni principali:
+
+- `portalDashboardLoadRooms()` / `portalDashboardSaveRooms()`;
+- `portalDashboardRenderRooms()`;
+- `portalDashboardCreateRoom()`;
+- `portalDashboardJoinRoom()`;
+- `portalDashboardSetWorking()`;
+- `portalDashboardFieldFeedback()`.
