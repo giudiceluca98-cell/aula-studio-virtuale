@@ -4,7 +4,7 @@ Questa cartella contiene la fonte visiva e funzionale ufficiale usata per trasfe
 
 ## Stato
 
-**Demo 1.3.0-alpha.4 pronta per verifica: viewer PDF locale con pagine, navigazione e avanzamento.**
+**Demo 1.3.0-alpha.5 pronta per verifica: DOCX come testo sicuro e PPTX come slide testuali.**
 
 File canonico:
 
@@ -12,12 +12,12 @@ File canonico:
 
 Identificatori della versione corrente:
 
-- versione: `1.3.0-alpha.4`
+- versione: `1.3.0-alpha.5`
 
-- dimensione: `659450` byte
-- righe: `18710`
-- SHA-256: `00047a9696e596da120da0e6b7a01f9fac74b5a874167bc89715aceaf24d2d02`
-- Git blob SHA: `7e71848ab8b5fc2e1e04b03154786d43c30d82ff`
+- dimensione: `672684` byte
+- righe: `18874`
+- SHA-256: `7059b095d76e0e56983fcdabfc721f48ff5a75bd84f49751ca3ddb9d6b9046d7`
+- Git blob SHA: `0b6e15a09c4d3ec7065734fd859952071a805080`
 
 Il Git blob SHA del file presente nel branch coincide con quello calcolato sul file locale verificato: il contenuto è identico byte per byte.
 

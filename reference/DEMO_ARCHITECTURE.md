@@ -659,3 +659,8 @@ La demo usa la stessa tassonomia dell’app ufficiale per descrivere ogni materi
 ## Fase 3 · 1.3.0-alpha.4
 
 Il viewer PDF della demo usa pagine locali deterministiche e aggiorna l’avanzamento del materiale nella sessione. Si attiva soltanto per descrittori `internal` con viewer `pdf`; una sorgente remota classificata `import-required` non viene aperta come se fosse già importata.
+
+
+## Fase 3 · 1.3.0-alpha.5
+
+I documenti DOCX vengono presentati come sezioni testuali sicure e le presentazioni PPTX come slide testuali. La demo non apre né analizza realmente i file binari caricati: per i materiali manuali usa fallback deterministici e dichiara chiaramente il limite. I viewer si attivano soltanto per descrittori interni compatibili.

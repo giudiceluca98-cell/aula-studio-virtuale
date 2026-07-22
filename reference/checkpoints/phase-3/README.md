@@ -6,3 +6,4 @@ La fonte autorevole resta `reference/demo-aula-studio-virtuale-canonica.html`.
 - `1.3.0-alpha.2` — `demo-aula-studio-virtuale-1.3.0-alpha.2.html` — SHA-256 `41d16b4dc64f6d86bafff282620228866f05459928c5ebda8506834839c43628` — 639741 byte — 18474 righe
 - `1.3.0-alpha.3` — `demo-aula-studio-virtuale-1.3.0-alpha.3.html` — SHA-256 `a70215459d7919a020b673d9285574f8017e8098c5ccf74355e0fcf74bf0413a` — 649900 byte — 18601 righe
 - `1.3.0-alpha.4` — `demo-aula-studio-virtuale-1.3.0-alpha.4.html` — SHA-256 `00047a9696e596da120da0e6b7a01f9fac74b5a874167bc89715aceaf24d2d02` — 659450 byte — 18710 righe
+- `1.3.0-alpha.5` — `demo-aula-studio-virtuale-1.3.0-alpha.5.html` — SHA-256 `7059b095d76e0e56983fcdabfc721f48ff5a75bd84f49751ca3ddb9d6b9046d7` — 672684 byte — 18874 righe

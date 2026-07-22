@@ -505,3 +505,15 @@ Versione: `1.3.0-alpha.4`
 - avanzamento aggiornato nella sessione;
 - nessun iframe o caricamento remoto;
 - checkpoint: `reference/checkpoints/phase-3/demo-aula-studio-virtuale-1.3.0-alpha.4.html`.
+
+
+## Materiali: DOCX e PPTX
+
+Stato: 🟢 — checkpoint prodotto
+
+Versione: `1.3.0-alpha.5`
+
+- documento DOCX come sezioni di testo sicuro;
+- presentazione PPTX come slide testuali navigabili;
+- fallback trasparente per file manuali non realmente analizzati;
+- checkpoint: `reference/checkpoints/phase-3/demo-aula-studio-virtuale-1.3.0-alpha.5.html`.

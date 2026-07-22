@@ -39,6 +39,27 @@ Per ogni modifica futura:
 
 ---
 
+## [1.3.0-alpha.5] — 2026-07-23
+
+### Materiali: DOCX e PPTX
+
+- DOCX rappresentato come documento testuale strutturato e sicuro.
+- PPTX rappresentato come sequenza di slide testuali navigabili.
+- Contenuti demo specifici per i materiali predefiniti e fallback dichiarato per i file caricati manualmente.
+- Nessuna macro, animazione, immagine incorporata o contenuto eseguibile viene avviato.
+- Navigazione slide con pulsanti e frecce della tastiera.
+- Percentuale e avanzamento aggiornati per le presentazioni.
+- Attivazione esclusiva per materiali interni classificati `document` o `presentation`.
+
+### Identificatori
+
+- Dimensione: `672684` byte
+- Righe: `18874`
+- SHA-256: `7059b095d76e0e56983fcdabfc721f48ff5a75bd84f49751ca3ddb9d6b9046d7`
+- Git blob SHA: `0b6e15a09c4d3ec7065734fd859952071a805080`
+
+---
+
 ## [1.3.0-alpha.4] — 2026-07-23
 
 ### Materiali: viewer PDF
