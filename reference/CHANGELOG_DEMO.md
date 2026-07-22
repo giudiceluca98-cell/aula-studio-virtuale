@@ -39,6 +39,32 @@ Per ogni modifica futura:
 
 ---
 
+## [1.1.0-alpha.1] — 2026-07-22
+
+### Catalogo intelligente — vista, ricerca e percorso
+
+- Aggiunta una route `#catalog` completa nello stesso HTML canonico.
+- Collegati Dashboard e pulsante Catalogo dell'Aula alla nuova vista.
+- Aggiunti ricerca locale, filtri per livello/formato/lingua e filtro fonti verificate.
+- Aggiunti otto materiali demo deterministici con monitorabilità e provenienza.
+- Aggiunti materiali salvati, selezione per il percorso e rimozione dal percorso.
+- Aggiunta interpretazione locale di Eve senza chiamate OpenAI.
+- Aggiunta importazione simulata idempotente nella stanza Python.
+- Aggiunti responsive mobile, pulsante Scrivania sempre visibile, focus nativo e rispetto di `prefers-reduced-motion`.
+
+### Identificatori
+
+- Dimensione: `471894` byte
+- Righe: `14177`
+- SHA-256: `fe15bb3424c0243bfb86fc2858a32477531061e1b9109745e19d2ab54e7284fd`
+- Git blob SHA: `a78322051cb80af1e7f79c71fbb59c1c75d653c8`
+
+### Stato
+
+Checkpoint HTML completo e in attesa di verifica visuale e funzionale dell'utente.
+
+---
+
 ## [1.0.0] — 2026-07-22
 
 ### Importazione iniziale verificata

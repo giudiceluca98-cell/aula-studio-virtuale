@@ -184,6 +184,35 @@ Da integrare nell'app ufficiale solo dopo aver verificato accessibilità e compa
 
 ---
 
+
+# Catalogo intelligente
+
+## Vista, navigazione, ricerca e percorso locale
+
+Stato: 🟡 — checkpoint HTML in attesa di approvazione
+
+Integrato nella demo canonica 1.1.0-alpha.1:
+
+- route autonoma `#catalog`;
+- navigazione Dashboard ↔ Catalogo e Aula → Catalogo;
+- ricerca e filtri;
+- argomenti rapidi;
+- materiali salvati;
+- selezione del percorso;
+- interpretazione deterministica di Eve;
+- importazione simulata idempotente;
+- responsive e stato vuoto.
+
+Da verificare manualmente:
+
+- resa visuale desktop e mobile;
+- navigazione avanti/indietro del browser;
+- filtri combinati;
+- salvataggio e selezione;
+- doppia importazione senza duplicati.
+
+---
+
 # Regola per Codex
 
 Prima di modificare una funzione:

@@ -1180,7 +1180,11 @@ def validate(html: str) -> None:
         if value not in html:
             raise RuntimeError(f"Missing required marker: {value}")
 
-    ids = re.findall(r'\bid=["\']([^"\']+)["\']', html)
+    ids = [
+        value
+        for value in re.findall(r'\bid=["\']([^"\']+)["\']', html)
+        if '${' not in value
+    ]
     duplicates = sorted({value for value in ids if ids.count(value) > 1})
     if duplicates:
         raise RuntimeError(f"Duplicate HTML ids: {duplicates}")

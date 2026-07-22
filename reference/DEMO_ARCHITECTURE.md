@@ -563,3 +563,18 @@ Un aggiornamento è completato soltanto quando:
 5. il risultato reale è stato confrontato con la demo;
 6. backend, sicurezza e persistenza reale sono rimasti intatti;
 7. la pull request documenta test eseguiti e limiti residui.
+
+## Catalogo intelligente nella demo canonica
+
+La route `#catalog` è una vista autonoma dello stesso documento HTML. Usa dati mock deterministici e riproduce il flusso operativo dell'app ufficiale senza chiamare backend o provider esterni.
+
+Componenti logici:
+
+- `catalogDemoMaterials` — inventario materiali;
+- `catalogDemoState` — salvati, selezione e firma dell'importazione;
+- `catalogDemoFilteredMaterials()` — ricerca e filtri combinati;
+- `catalogDemoRender()` — risultati, feedback Eve e stati vuoti;
+- `catalogDemoRenderPath()` — percorso selezionato;
+- `catalogDemoImportPath()` — importazione locale idempotente.
+
+L'app reale conserva come fonti autorevoli API, Supabase, RLS e importazione server-side; la demo definisce UX, stati e responsive.

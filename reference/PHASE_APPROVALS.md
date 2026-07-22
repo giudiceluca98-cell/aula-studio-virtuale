@@ -10,7 +10,7 @@ Dopo ogni passaggio o sottofase completata:
 2. eseguire tutte le verifiche disponibili;
 3. indicare chiaramente ciò che è stato verificato e ciò che non è stato verificato;
 4. fornire all'utente il percorso del file HTML aggiornato e le istruzioni per aprirlo;
-5. fermarsi con stato `IN_ATTESA_APPROVAZIONE`;
+5. fermarsi con stato `IN_ATTESA_APPROVAZIONE` soltanto dopo avere modificato realmente l'HTML canonico e avere prodotto una versione apribile;
 6. non iniziare il passaggio successivo finché l'utente non scrive esplicitamente che il checkpoint è approvato;
 7. dopo l'approvazione, registrare data e risultato in questo file e soltanto allora riprendere.
 
@@ -46,8 +46,8 @@ Ogni rapporto di checkpoint deve contenere:
 
 | Fase | Passaggio | Stato | Data | Note |
 |---|---|---|---|---|
-| Fase 0 | Baseline documentale e controlli statici | IN_ATTESA_APPROVAZIONE | 2026-07-22 | Creato `BASELINE_VERIFICATION.md`; l'HTML non è stato modificato. |
-| Fase 1 | Catalogo: vista e navigazione | DA_INIZIARE | — | Non iniziare prima dell'approvazione della Fase 0. |
+| Fase 0 | Baseline documentale e controlli statici | APPROVATO | 2026-07-22 | Superata su richiesta dell'utente: nessun checkpoint può fermarsi senza una modifica HTML visibile. |
+| Fase 1 | Catalogo: vista, navigazione, ricerca e percorso | IN_ATTESA_APPROVAZIONE | 2026-07-22 | Demo HTML 1.1.0-alpha.1 pronta da aprire e verificare. |
 | Fase 1 | Catalogo: ricerca e filtri | DA_INIZIARE | — | — |
 | Fase 1 | Catalogo: materiali e salvati | DA_INIZIARE | — | — |
 | Fase 1 | Catalogo: aggiunta URL | DA_INIZIARE | — | — |
