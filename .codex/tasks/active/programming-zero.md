@@ -1,8 +1,8 @@
 # Completamento Programmazione da zero
 
 Stato: in corso
-Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 2.9 corrente
-Branch corrente: `codex/programming-zero-lesson-2-9`
+Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 3.1 corrente
+Branch corrente: `codex/programming-zero-lesson-3-1`
 Ultima integrazione completata: Lezione 0.9 e relativo Python Project, [PR #26](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/26)
 Proposte in integrazione: Lezione 1.1, [PR #17](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/17), e Lezione 1.2, [PR #20](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/20)
 Pacchetto: `programming`
@@ -281,6 +281,14 @@ Verifiche: test 151/151, typecheck e build superati; lint solo warning preesiste
 Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_2.9_Laboratorio_conclusivo_e_valutazione.docx`. Il DOCX non verrà caricato. File riservati: artefatto 2.9, aggregatore, progressi e test. Dipendenza: PR #46. Indice e registro conclusivi confermano ordine, copertura e chiusura editoriale del Modulo 2 e non vengono caricati.
 
 Contenuti convertiti: 11 sezioni, 914 blocchi, 60 esercizi, 30 quiz e 60 voci di glossario; laboratorio conclusivo, valutazione e criteri finali conservati. SHA-256 `c8cdfbcc889f605d31ada72b5f3146cdafbbaee20e9497441261f55549472978`.
+
+Verifiche: test 151/151, typecheck e build superati; lint solo warning preesistente.
+
+## Estensione in revisione · Lezione 3.1
+
+Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_3.1_Valori_oggetti_nomi_variabili.docx`. Il DOCX non verrà caricato. File riservati: artefatto 3.1, aggregatore, progressi e test. Dipendenza: PR #47.
+
+Contenuti convertiti: 11 sezioni, 914 blocchi, 60 esercizi, 30 quiz e 60 voci di glossario; laboratorio e criteri finali conservati. SHA-256 `8d6381855ff985eb103c7f76b07f198a859de58704bdd11b2f478c94eab57f53`.
 
 Verifiche: test 151/151, typecheck e build superati; lint solo warning preesistente.
 
