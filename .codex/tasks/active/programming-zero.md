@@ -1,8 +1,8 @@
 # Completamento Programmazione da zero
 
 Stato: in corso
-Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 3.1 corrente
-Branch corrente: `codex/programming-zero-lesson-3-1`
+Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 3.2 corrente
+Branch corrente: `codex/programming-zero-lesson-3-2`
 Ultima integrazione completata: Lezione 0.9 e relativo Python Project, [PR #26](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/26)
 Proposte in integrazione: Lezione 1.1, [PR #17](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/17), e Lezione 1.2, [PR #20](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/20)
 Pacchetto: `programming`
@@ -273,6 +273,14 @@ Verifiche: test mirato 21/21, suite completa 151/151, typecheck e build superati
 Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_2.3_Sintassi_rientri_righe_vuote_commenti.docx`. Il DOCX non verrà caricato. File riservati: artefatto 2.3, aggregatore, progressi e test. Dipendenza: PR #39.
 
 Contenuti convertiti: 11 sezioni, 914 blocchi, 60 esercizi, 30 quiz e 60 voci di glossario; laboratorio e criteri finali conservati. SHA-256 `d0f99a4174d942baf6404e8c4834006e5d2d5e43989ca36f454cc2ce9d08906e`.
+
+Verifiche: test 151/151, typecheck e build superati; lint solo warning preesistente.
+
+## Estensione in revisione · Lezione 3.2
+
+Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_3.2_Assegnazione_riassegnazione_aggiornamenti_stato.docx`. Il DOCX non verrà caricato. File riservati: artefatto 3.2, aggregatore, progressi e test. Dipendenza: PR #48.
+
+Contenuti convertiti: 11 sezioni, 915 blocchi, 60 esercizi, 30 quiz e 60 voci di glossario; laboratorio e otto criteri finali conservati. SHA-256 `d4e5a610eaf9a42ad3e72ec051b457fb5ead3af0bf3e8c8d59b28d5c481e383e`.
 
 Verifiche: test 151/151, typecheck e build superati; lint solo warning preesistente.
 
