@@ -59,7 +59,7 @@ describe("Audio-lezione di Eve", () => {
     expect(second).toHaveAttribute("aria-pressed", "true");
     fireEvent.click(second);
     expect(second).toHaveAttribute("aria-pressed", "false");
-    expect(screen.getByText("1 pagine selezionate")).toBeInTheDocument();
+    expect(screen.getByText("1 pagina selezionata")).toBeInTheDocument();
   });
 
   it("espone spiegazione, anteprima voce e controlli completi della demo", () => {
