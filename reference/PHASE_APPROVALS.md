@@ -63,7 +63,8 @@ Ogni rapporto di checkpoint deve contenere:
 | Fase 3 | Materiali: tipi e classificazione | APPROVATO | 2026-07-23 | L’utente ha approvato il checkpoint e autorizzato la prosecuzione. |
 | Fase 3 | Materiali: viewer PDF | APPROVATO | 2026-07-23 | L’utente ha approvato il checkpoint e autorizzato la prosecuzione. |
 | Fase 3 | Materiali: DOCX e PPTX | APPROVATO | 2026-07-23 | L’utente ha approvato il checkpoint e autorizzato la prosecuzione. |
-| Fase 3 | Materiali: video | IN_ATTESA_APPROVAZIONE | 2026-07-23 | Demo HTML 1.3.0-alpha.6 prodotta e pronta per verifica. |
+| Fase 3 | Materiali: video | APPROVATO | 2026-07-23 | L’utente ha approvato il checkpoint e autorizzato la prosecuzione. |
+| Fase 3 | Materiali: import-required | IN_ATTESA_APPROVAZIONE | 2026-07-23 | Demo HTML 1.3.0-alpha.7 prodotta e pronta per verifica. |
 | Fasi 2–10 | Passaggi successivi | DA_INIZIARE | — | Ogni passaggio avrà un checkpoint separato. |
 
 ## Come approvare

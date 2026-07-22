@@ -39,6 +39,27 @@ Per ogni modifica futura:
 
 ---
 
+## [1.3.0-alpha.7] — 2026-07-23
+
+### Materiali: import-required
+
+- Aggiunti una pagina web HTTPS e un PDF remoto che richiedono importazione.
+- Flusso visuale in tre passaggi: verifica sorgente, copia protetta, classificazione e monitorabilità.
+- Nessun contenuto remoto viene scaricato dalla demo.
+- Gli ID importati vengono conservati localmente nel browser.
+- Dopo l’importazione la pagina web diventa documento interno e il PDF diventa PDF interno.
+- La seconda richiesta riutilizza la copia già presente e non crea duplicati.
+- Stato e messaggi dichiarano esplicitamente il carattere simulato dell’operazione.
+
+### Identificatori
+
+- Dimensione: `699358` byte
+- Righe: `19340`
+- SHA-256: `dcd007394aece2c5dde6a134fd7744e5d38ca422d83062ad59664920970cafdb`
+- Git blob SHA: `b68bdaa1e5d06e69e1fef7e1c4416156cf9f5af8`
+
+---
+
 ## [1.3.0-alpha.6] — 2026-07-23
 
 ### Materiali: video

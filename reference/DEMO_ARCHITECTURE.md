@@ -669,3 +669,8 @@ I documenti DOCX vengono presentati come sezioni testuali sicure e le presentazi
 ## Fase 3 · 1.3.0-alpha.6
 
 Il player video della demo non usa iframe o sorgenti remote. YouTube, Vimeo e file HTTPS condividono una superficie locale deterministica. Il progresso deriva dall’unione degli intervalli effettivamente riprodotti e il completamento richiede una copertura di almeno il 90%; il semplice seek non incrementa la copertura.
+
+
+## Fase 3 · 1.3.0-alpha.7
+
+Le risorse `import-required` passano attraverso tre stati locali deterministici. La demo non effettua fetch remoti: persiste soltanto l’identificatore dell’importazione e converte la risorsa in una copia interna coerente con il viewer previsto. La procedura è idempotente: richieste successive riutilizzano la copia già presente.

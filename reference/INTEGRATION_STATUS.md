@@ -530,3 +530,17 @@ Versione: `1.3.0-alpha.6`
 - copertura basata sui secondi unici realmente riprodotti;
 - completamento dopo almeno il 90%;
 - checkpoint: `reference/checkpoints/phase-3/demo-aula-studio-virtuale-1.3.0-alpha.6.html`.
+
+
+## Materiali: import-required
+
+Stato: 🟢 — checkpoint prodotto
+
+Versione: `1.3.0-alpha.7`
+
+- pagina web e PDF remoto in stato import-required;
+- importazione simulata in tre passaggi;
+- persistenza locale degli ID importati;
+- conversione coerente a materiale interno;
+- seconda richiesta idempotente e senza duplicati;
+- checkpoint: `reference/checkpoints/phase-3/demo-aula-studio-virtuale-1.3.0-alpha.7.html`.

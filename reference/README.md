@@ -4,7 +4,7 @@ Questa cartella contiene la fonte visiva e funzionale ufficiale usata per trasfe
 
 ## Stato
 
-**Demo 1.3.0-alpha.6 pronta per verifica: player video locale simulato con copertura realmente vista.**
+**Demo 1.3.0-alpha.7 pronta per verifica: importazione simulata, copia interna e comportamento idempotente.**
 
 File canonico:
 
@@ -12,12 +12,12 @@ File canonico:
 
 Identificatori della versione corrente:
 
-- versione: `1.3.0-alpha.6`
+- versione: `1.3.0-alpha.7`
 
-- dimensione: `686506` byte
-- righe: `19117`
-- SHA-256: `35f4ca7cb7b9d302f1f8d2850be08b1457aa3fbf69ac34a9bcb600f15dae1d1f`
-- Git blob SHA: `4d1c3b88b51cdead868ab228f06efbb264d918ac`
+- dimensione: `699358` byte
+- righe: `19340`
+- SHA-256: `dcd007394aece2c5dde6a134fd7744e5d38ca422d83062ad59664920970cafdb`
+- Git blob SHA: `b68bdaa1e5d06e69e1fef7e1c4416156cf9f5af8`
 
 Il Git blob SHA del file presente nel branch coincide con quello calcolato sul file locale verificato: il contenuto è identico byte per byte.
 
