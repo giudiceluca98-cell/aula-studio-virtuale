@@ -615,3 +615,9 @@ La matrice rappresentata comprende:
 - stati `online`, `studying`, `break`, `away`, `in_call`, `offline`;
 - attività, dispositivo, ultimo accesso e numero di sessioni;
 - separazione tra utenti online e sessioni aperte.
+
+## Codice invito nella Dashboard demo
+
+La demo 1.2.0-alpha.3 riproduce l'effetto utente di `copyInvite()` e della RPC `rotate_room_invite` usando lo stato locale della Dashboard. La rotazione è disponibile soltanto per `owner`, incrementa `inviteRevision`, sostituisce `inviteCode` e registra `inviteRotatedAt`.
+
+Il codice precedente non viene conservato tra i codici attivi. Nell'app ufficiale autorizzazione, atomicità e revoca sono garantite dal server; la demo mostra soltanto gli stati e il flusso dell'interfaccia.

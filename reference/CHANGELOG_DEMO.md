@@ -39,6 +39,33 @@ Per ogni modifica futura:
 
 ---
 
+## [1.2.0-alpha.3] — 2026-07-22
+
+### Dashboard — codice invito
+
+- Aggiunto il pulsante `Invito` su ogni scheda stanza.
+- Aggiunto un dialog accessibile per copiare il codice attivo.
+- Aggiunto fallback di copia per il file HTML aperto fuori da un contesto HTTPS.
+- Aggiunta revoca e rigenerazione riservata al proprietario.
+- Aggiunta conferma esplicita prima della revoca.
+- Il codice precedente smette di corrispondere alla stanza dopo la rotazione.
+- Aggiunti revisione, data dell'ultima rigenerazione e persistenza locale.
+- Aggiunto controllo join per riconoscere una stanza già presente tramite il codice attuale.
+- Conservati create/join, presenza, Catalogo, Aula, Eve, chat e audio.
+
+### Identificatori
+
+- Dimensione: `546698` byte
+- Righe: `16253`
+- SHA-256: `4f1f174f800c87ffa59ed2d8f40b4344549e2382ed996100c8b9ce68afa1c66a`
+- Git blob SHA: `f9050783bd7d559adf66fb8c39ffb1fe54b73e5b`
+
+### Stato
+
+Checkpoint HTML completo e in attesa di verifica visuale e funzionale dell'utente.
+
+---
+
 ## [1.2.0-alpha.2] — 2026-07-22
 
 ### Dashboard — ruoli e presenza

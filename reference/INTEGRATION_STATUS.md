@@ -297,6 +297,34 @@ Da verificare manualmente:
 
 ---
 
+
+## Codice invito Dashboard
+
+Stato: 🟡 — checkpoint HTML 1.2.0-alpha.3 in attesa di approvazione
+
+Integrato:
+
+- copia codice con fallback locale;
+- permesso owner-only per rotazione;
+- conferma revoca;
+- nuovo codice deterministico per revisione;
+- invalidazione del codice precedente;
+- persistenza revisione e timestamp;
+- dialog accessibile e responsive;
+- riconoscimento join di stanza già presente.
+
+Da verificare manualmente:
+
+- copia codice;
+- rotazione su stanza proprietaria;
+- impossibilità di rotazione su stanza partecipata;
+- cambio immediato del codice sulla scheda;
+- permanenza dopo ricaricamento;
+- vecchio codice non riconosciuto;
+- Escape, focus e mobile.
+
+---
+
 # Regola per Codex
 
 Prima di modificare una funzione:

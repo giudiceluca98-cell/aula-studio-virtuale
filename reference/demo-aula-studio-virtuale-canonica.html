@@ -7979,6 +7979,335 @@
 
 
 
+
+
+    /* ==========================================================
+       DASHBOARD REALE — CODICE INVITO 1.2.0-alpha.3
+       ========================================================== */
+
+    .portal-room-preview-actions {
+      display: flex;
+      flex: 0 0 auto;
+      gap: 6px;
+    }
+
+    .portal-room-invite-button {
+      min-height: 34px;
+      padding: 0 10px;
+      border: 1px solid rgba(122,124,255,0.20);
+      border-radius: 10px;
+      color: #c7c8ff;
+      background: rgba(122,124,255,0.055);
+      font-size: 9px;
+      font-weight: 780;
+      cursor: pointer;
+    }
+
+    .portal-invite-dialog[hidden] {
+      display: none !important;
+    }
+
+    .portal-invite-dialog {
+      position: fixed;
+      inset: 0;
+      z-index: 12200;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      background: rgba(1,7,12,0.76);
+      backdrop-filter: blur(12px) saturate(120%);
+    }
+
+    .portal-invite-card {
+      width: min(680px, 100%);
+      max-height: min(88vh, 760px);
+      overflow: auto;
+      border: 1px solid rgba(125,235,255,0.22);
+      border-radius: 24px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(0,223,242,0.10), transparent 38%),
+        linear-gradient(180deg, var(--surface-strong), var(--surface));
+      box-shadow: 0 34px 110px rgba(0,0,0,0.50), 0 0 38px rgba(0,223,242,0.08);
+    }
+
+    .portal-invite-head {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 20px 22px 17px;
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--surface-strong) 96%, transparent);
+      backdrop-filter: blur(16px);
+    }
+
+    .portal-invite-head h2 {
+      margin: 5px 0 6px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(25px, 4vw, 38px);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+    }
+
+    .portal-invite-head p {
+      max-width: 520px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .portal-invite-close {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      flex: 0 0 auto;
+      place-items: center;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      color: var(--muted);
+      background: rgba(255,255,255,0.025);
+      cursor: pointer;
+    }
+
+    .portal-invite-body {
+      padding: 20px 22px 22px;
+    }
+
+    .portal-invite-code-box {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid rgba(125,235,255,0.19);
+      border-radius: 15px;
+      background: rgba(0,223,242,0.045);
+    }
+
+    .portal-invite-code-copy {
+      min-width: 0;
+    }
+
+    .portal-invite-code-copy span,
+    .portal-invite-code-copy strong {
+      display: block;
+    }
+
+    .portal-invite-code-copy span {
+      color: var(--muted);
+      font-size: 8px;
+      font-weight: 820;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .portal-invite-code-copy strong {
+      overflow: hidden;
+      margin-top: 6px;
+      color: #eaffff;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: clamp(16px, 4vw, 24px);
+      letter-spacing: 0.12em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .portal-invite-copy-button,
+    .portal-invite-rotate-button,
+    .portal-invite-confirm-button,
+    .portal-invite-cancel-button {
+      min-height: 42px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      color: var(--ink);
+      background: rgba(255,255,255,0.025);
+      font-size: 10px;
+      font-weight: 780;
+      cursor: pointer;
+    }
+
+    .portal-invite-copy-button {
+      color: var(--green-2);
+      border-color: rgba(125,235,255,0.24);
+      background: rgba(0,223,242,0.055);
+    }
+
+    .portal-invite-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+      margin-top: 12px;
+    }
+
+    .portal-invite-meta div {
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .portal-invite-meta span,
+    .portal-invite-meta strong {
+      display: block;
+    }
+
+    .portal-invite-meta span {
+      color: var(--muted);
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .portal-invite-meta strong {
+      margin-top: 5px;
+      font-size: 11px;
+    }
+
+    .portal-invite-owner-actions {
+      margin-top: 16px;
+      padding: 14px;
+      border: 1px solid rgba(255,176,91,0.19);
+      border-radius: 14px;
+      background: rgba(255,176,91,0.045);
+    }
+
+    .portal-invite-owner-actions h3 {
+      margin: 0;
+      font-size: 12px;
+    }
+
+    .portal-invite-owner-actions p {
+      margin: 6px 0 12px;
+      color: var(--muted);
+      font-size: 9px;
+      line-height: 1.55;
+    }
+
+    .portal-invite-rotate-button {
+      color: #ffd7a7;
+      border-color: rgba(255,176,91,0.25);
+      background: rgba(255,176,91,0.07);
+    }
+
+    .portal-invite-confirmation[hidden] {
+      display: none !important;
+    }
+
+    .portal-invite-confirmation {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,176,91,0.16);
+    }
+
+    .portal-invite-confirmation strong,
+    .portal-invite-confirmation span {
+      display: block;
+    }
+
+    .portal-invite-confirmation span {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 9px;
+      line-height: 1.5;
+    }
+
+    .portal-invite-confirm-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .portal-invite-confirm-button {
+      color: #fff0dd;
+      border-color: rgba(255,176,91,0.32);
+      background: linear-gradient(135deg, rgba(155,82,40,0.88), rgba(146,59,75,0.84));
+    }
+
+    .portal-invite-status {
+      min-height: 22px;
+      margin-top: 12px;
+      color: #91f7d3;
+      font-size: 10px;
+      line-height: 1.45;
+    }
+
+    .portal-invite-status[data-tone="error"] {
+      color: #ffacb4;
+    }
+
+    .portal-invite-privacy {
+      margin-top: 12px;
+      padding: 11px 12px;
+      border: 1px solid rgba(122,124,255,0.17);
+      border-radius: 12px;
+      color: var(--muted);
+      background: rgba(122,124,255,0.05);
+      font-size: 9px;
+      line-height: 1.55;
+    }
+
+    .portal-invite-dialog button:disabled {
+      opacity: 0.48;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 620px) {
+      .portal-room-presence-preview {
+        flex-wrap: wrap;
+      }
+
+      .portal-room-presence-copy {
+        flex: 1 1 120px;
+      }
+
+      .portal-room-preview-actions {
+        width: 100%;
+      }
+
+      .portal-room-preview-actions button {
+        flex: 1;
+      }
+
+      .portal-invite-dialog {
+        align-items: end;
+        padding: 8px;
+      }
+
+      .portal-invite-card {
+        max-height: 92vh;
+        border-radius: 20px 20px 13px 13px;
+      }
+
+      .portal-invite-body {
+        padding: 16px;
+      }
+
+      .portal-invite-code-box {
+        grid-template-columns: 1fr;
+      }
+
+      .portal-invite-meta {
+        grid-template-columns: 1fr;
+      }
+
+      .portal-invite-copy-button,
+      .portal-invite-rotate-button,
+      .portal-invite-confirm-button,
+      .portal-invite-cancel-button {
+        width: 100%;
+      }
+    }
+
+
     /* ==========================================================
        DASHBOARD REALE — RUOLI E PRESENZA 1.2.0-alpha.2
        ========================================================== */
@@ -9901,6 +10230,57 @@ display: none !important;
 
 
 
+
+
+
+  <div class="portal-invite-dialog" id="portalInviteDialog" hidden onclick="portalDashboardInviteBackdrop(event)">
+    <section class="portal-invite-card" role="dialog" aria-modal="true" aria-labelledby="portalInviteTitle">
+      <header class="portal-invite-head">
+        <div>
+          <div class="portal-eyebrow">Accesso alla stanza</div>
+          <h2 id="portalInviteTitle">Codice invito</h2>
+          <p id="portalInviteSubtitle">Condividi il codice soltanto con le persone che vuoi ammettere nella stanza.</p>
+        </div>
+        <button class="portal-invite-close" type="button" onclick="portalDashboardCloseInvite()" aria-label="Chiudi gestione invito">×</button>
+      </header>
+
+      <div class="portal-invite-body">
+        <div class="portal-invite-code-box">
+          <div class="portal-invite-code-copy">
+            <span>Codice attivo</span>
+            <strong id="portalInviteCodeValue">••••••••</strong>
+          </div>
+          <button class="portal-invite-copy-button" id="portalInviteCopyButton" type="button" onclick="portalDashboardCopyInvite()">Copia codice</button>
+        </div>
+
+        <div class="portal-invite-meta">
+          <div><span>Il tuo ruolo</span><strong id="portalInviteRole">Partecipante</strong></div>
+          <div><span>Ultima rigenerazione</span><strong id="portalInviteRotatedAt">Mai</strong></div>
+        </div>
+
+        <div class="portal-invite-owner-actions" id="portalInviteOwnerActions" hidden>
+          <h3>Revoca il codice attuale</h3>
+          <p>Il vecchio codice smetterà immediatamente di funzionare. Le persone già presenti nella stanza non verranno espulse.</p>
+          <button class="portal-invite-rotate-button" id="portalInviteRotateButton" type="button" onclick="portalDashboardShowInviteConfirmation()">Revoca e rigenera</button>
+
+          <div class="portal-invite-confirmation" id="portalInviteConfirmation" hidden>
+            <strong>Confermi la revoca?</strong>
+            <span>Questa azione non può ripristinare il codice precedente.</span>
+            <div class="portal-invite-confirm-actions">
+              <button class="portal-invite-confirm-button" id="portalInviteConfirmButton" type="button" onclick="portalDashboardRotateInvite()">Sì, genera un nuovo codice</button>
+              <button class="portal-invite-cancel-button" type="button" onclick="portalDashboardHideInviteConfirmation()">Annulla</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="portal-invite-status" id="portalInviteStatus" role="status" aria-live="polite"></div>
+
+        <div class="portal-invite-privacy">
+          <strong>Demo locale.</strong> Copia, revoca e rigenerazione sono salvate soltanto in questo browser. Nell’app ufficiale la rotazione passa dalla RPC protetta `rotate_room_invite` e il permesso viene verificato dal server.
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="portal-presence-dialog" id="portalPresenceDialog" hidden onclick="portalDashboardPresenceBackdrop(event)">
     <section class="portal-presence-card" role="dialog" aria-modal="true" aria-labelledby="portalPresenceTitle">
@@ -11994,6 +12374,210 @@ print(nome)</div>
 
 
 
+
+
+    /* ==========================================================
+       DASHBOARD — CODICE INVITO LOCALE E DETERMINISTICO
+       ========================================================== */
+
+    let portalDashboardInviteRoomId = null;
+    let portalDashboardInvitePreviousFocus = null;
+    let portalDashboardInviteBusy = false;
+
+    function portalDashboardInviteRoleLabel(role) {
+      return portalDashboardRoleLabels[role] || "Partecipante";
+    }
+
+    function portalDashboardInviteTimestamp(value) {
+      if (!value) return "Mai";
+      const date = new Date(value);
+      if (!Number.isFinite(date.getTime())) return "Mai";
+      return new Intl.DateTimeFormat("it-IT", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      }).format(date);
+    }
+
+    function portalDashboardRotatedCode(room) {
+      const revision = Math.max(0, Number(room.inviteRevision || 0)) + 1;
+      let hash = 2166136261;
+      const source = `${room.id}|${room.name}|${revision}`;
+      for (const character of source) {
+        hash ^= character.charCodeAt(0);
+        hash = Math.imul(hash, 16777619);
+      }
+      return {
+        revision,
+        code: `AULA${(hash >>> 0).toString(36).toUpperCase().padStart(8, "0").slice(0, 8)}`
+      };
+    }
+
+    function portalDashboardInviteStatus(message = "", tone = "") {
+      const status = document.getElementById("portalInviteStatus");
+      if (!status) return;
+      status.textContent = message;
+      if (tone) status.dataset.tone = tone;
+      else status.removeAttribute("data-tone");
+    }
+
+    function portalDashboardRenderInviteDialog() {
+      const room = portalDashboardState.rooms.find((item) => item.id === portalDashboardInviteRoomId);
+      const title = document.getElementById("portalInviteTitle");
+      const subtitle = document.getElementById("portalInviteSubtitle");
+      const code = document.getElementById("portalInviteCodeValue");
+      const role = document.getElementById("portalInviteRole");
+      const rotatedAt = document.getElementById("portalInviteRotatedAt");
+      const ownerActions = document.getElementById("portalInviteOwnerActions");
+      const copyButton = document.getElementById("portalInviteCopyButton");
+      const rotateButton = document.getElementById("portalInviteRotateButton");
+      const confirmButton = document.getElementById("portalInviteConfirmButton");
+      if (!room) return false;
+      if (title) title.textContent = room.name;
+      if (subtitle) subtitle.textContent = room.role === "owner"
+        ? "Puoi condividere il codice oppure revocarlo e generarne uno nuovo."
+        : "Puoi copiare il codice, ma soltanto il proprietario può revocarlo.";
+      if (code) code.textContent = room.inviteCode;
+      if (role) role.textContent = portalDashboardInviteRoleLabel(room.role);
+      if (rotatedAt) rotatedAt.textContent = portalDashboardInviteTimestamp(room.inviteRotatedAt);
+      if (ownerActions) ownerActions.hidden = room.role !== "owner";
+      if (copyButton) copyButton.disabled = portalDashboardInviteBusy;
+      if (rotateButton) rotateButton.disabled = portalDashboardInviteBusy;
+      if (confirmButton) confirmButton.disabled = portalDashboardInviteBusy;
+      return true;
+    }
+
+    function portalDashboardOpenInvite(roomId, trigger) {
+      const room = portalDashboardState.rooms.find((item) => item.id === roomId);
+      const dialog = document.getElementById("portalInviteDialog");
+      if (!room || !dialog) {
+        portalDashboardFeedback("La stanza non è più disponibile.", "error");
+        return;
+      }
+      portalDashboardInviteRoomId = roomId;
+      portalDashboardInvitePreviousFocus = trigger || document.activeElement;
+      portalDashboardInviteBusy = false;
+      portalDashboardInviteStatus();
+      portalDashboardHideInviteConfirmation();
+      portalDashboardRenderInviteDialog();
+      dialog.hidden = false;
+      document.body.classList.add("portal-invite-open");
+      window.setTimeout(() => document.getElementById("portalInviteCopyButton")?.focus(), 30);
+    }
+
+    function portalDashboardCloseInvite() {
+      const dialog = document.getElementById("portalInviteDialog");
+      if (!dialog) return;
+      dialog.hidden = true;
+      document.body.classList.remove("portal-invite-open");
+      portalDashboardInviteRoomId = null;
+      portalDashboardInviteBusy = false;
+      portalDashboardInviteStatus();
+      portalDashboardHideInviteConfirmation();
+      if (portalDashboardInvitePreviousFocus?.focus) portalDashboardInvitePreviousFocus.focus();
+      portalDashboardInvitePreviousFocus = null;
+    }
+
+    function portalDashboardInviteBackdrop(event) {
+      if (event.target?.id === "portalInviteDialog") portalDashboardCloseInvite();
+    }
+
+    function portalDashboardShowInviteConfirmation() {
+      const room = portalDashboardState.rooms.find((item) => item.id === portalDashboardInviteRoomId);
+      const confirmation = document.getElementById("portalInviteConfirmation");
+      if (!room || room.role !== "owner" || !confirmation) {
+        portalDashboardInviteStatus("Solo il proprietario può rigenerare il codice.", "error");
+        return;
+      }
+      confirmation.hidden = false;
+      portalDashboardInviteStatus("Controlla l’avviso e conferma la revoca.");
+      window.setTimeout(() => document.getElementById("portalInviteConfirmButton")?.focus(), 20);
+    }
+
+    function portalDashboardHideInviteConfirmation() {
+      const confirmation = document.getElementById("portalInviteConfirmation");
+      if (confirmation) confirmation.hidden = true;
+    }
+
+    function portalDashboardFallbackCopy(value) {
+      const textarea = document.createElement("textarea");
+      textarea.value = value;
+      textarea.setAttribute("readonly", "");
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      const copied = document.execCommand("copy");
+      textarea.remove();
+      return copied;
+    }
+
+    async function portalDashboardCopyInvite() {
+      const room = portalDashboardState.rooms.find((item) => item.id === portalDashboardInviteRoomId);
+      if (!room || portalDashboardInviteBusy) return;
+      portalDashboardInviteBusy = true;
+      portalDashboardRenderInviteDialog();
+      try {
+        let copied = false;
+        if (navigator.clipboard?.writeText && window.isSecureContext) {
+          await navigator.clipboard.writeText(room.inviteCode);
+          copied = true;
+        } else {
+          copied = portalDashboardFallbackCopy(room.inviteCode);
+        }
+        if (!copied) throw new Error("Copia non consentita dal browser");
+        portalDashboardInviteStatus(`Codice ${room.inviteCode} copiato.`, "success");
+        portalNotify("Codice invito copiato");
+      } catch {
+        portalDashboardInviteStatus("Il browser ha bloccato la copia automatica. Seleziona manualmente il codice.", "error");
+      } finally {
+        portalDashboardInviteBusy = false;
+        portalDashboardRenderInviteDialog();
+      }
+    }
+
+    async function portalDashboardRotateInvite() {
+      const room = portalDashboardState.rooms.find((item) => item.id === portalDashboardInviteRoomId);
+      if (!room || portalDashboardInviteBusy) return;
+      if (room.role !== "owner") {
+        portalDashboardInviteStatus("Solo il proprietario può rigenerare il codice.", "error");
+        return;
+      }
+      portalDashboardInviteBusy = true;
+      portalDashboardRenderInviteDialog();
+      portalDashboardInviteStatus("Revoca del codice precedente in corso…");
+      await new Promise((resolve) => window.setTimeout(resolve, 460));
+      const next = portalDashboardRotatedCode(room);
+      const rotatedAt = new Date().toISOString();
+      portalDashboardState.rooms = portalDashboardState.rooms.map((item) => item.id === room.id
+        ? {
+            ...item,
+            inviteCode: next.code,
+            inviteRevision: next.revision,
+            inviteRotatedAt: rotatedAt,
+            lastActivity: "Adesso · Codice invito rigenerato"
+          }
+        : item);
+      portalDashboardSaveRooms();
+      portalDashboardRenderRooms();
+      portalDashboardInviteBusy = false;
+      portalDashboardHideInviteConfirmation();
+      portalDashboardRenderInviteDialog();
+      portalDashboardInviteStatus(`Nuovo codice attivo: ${next.code}. Il precedente è stato revocato.`, "success");
+      portalNotify("Nuovo codice invito creato");
+    }
+
+    window.addEventListener("keydown", (event) => {
+      const dialog = document.getElementById("portalInviteDialog");
+      if (event.key === "Escape" && dialog && !dialog.hidden) {
+        event.preventDefault();
+        portalDashboardCloseInvite();
+      }
+    });
+
+
     /* ==========================================================
        DASHBOARD — RUOLI E PRESENZA DETERMINISTICI
        ========================================================== */
@@ -12087,7 +12671,10 @@ print(nome)</div>
             <strong>${online.length} ${online.length === 1 ? "persona attiva" : "persone attive"}</strong>
             <span>${active ? portalDashboardEscape(active.activity || portalDashboardStatusLabels[active.status]) : "Nessuno online"}</span>
           </div>
-          <button class="portal-room-details-button" type="button" onclick="portalDashboardOpenPresence('${portalDashboardEscape(room.id)}', this)">Dettagli</button>
+          <div class="portal-room-preview-actions">
+            <button class="portal-room-details-button" type="button" onclick="portalDashboardOpenPresence('${portalDashboardEscape(room.id)}', this)">Dettagli</button>
+            <button class="portal-room-invite-button" type="button" onclick="portalDashboardOpenInvite('${portalDashboardEscape(room.id)}', this)">Invito</button>
+          </div>
         </div>`;
     }
 
@@ -12243,7 +12830,9 @@ print(nome)</div>
         role: room.role === "owner" ? "owner" : "member",
         online: Math.max(0, Math.min(99, Number(room.online || 0))),
         lastActivity: String(room.lastActivity || "Nessuna attività recente").slice(0, 120),
-        createdAt: Number(room.createdAt || Date.now())
+        createdAt: Number(room.createdAt || Date.now()),
+        inviteRevision: Math.max(0, Number(room.inviteRevision || 0)),
+        inviteRotatedAt: room.inviteRotatedAt ? String(room.inviteRotatedAt) : null
       };
     }
 
@@ -12398,6 +12987,14 @@ print(nome)</div>
       portalDashboardFieldFeedback("portalInviteCode", "portalJoinRoomHelp", "Verifica del codice in corso…");
       portalDashboardSetWorking("join", true);
       await new Promise((resolve) => window.setTimeout(resolve, 420));
+      const localRoom = portalDashboardState.rooms.find((room) => room.inviteCode === code);
+      if (localRoom) {
+        portalDashboardSetWorking("join", false);
+        portalDashboardFieldFeedback("portalInviteCode", "portalJoinRoomHelp", "Sei già membro di questa stanza.");
+        portalDashboardFeedback(`La stanza “${localRoom.name}” è già presente nella tua scrivania.`, "success");
+        portalDashboardRenderRooms();
+        return;
+      }
       const invitedRoom = portalDashboardInvites[code];
       if (!invitedRoom) {
         portalDashboardSetWorking("join", false);
