@@ -66,7 +66,7 @@ describe("navigazione separata di moduli e lezioni", () => {
     const index = screen.getByTestId("course-module-index-desktop");
     await clickAndSettle(index.querySelector<HTMLButtonElement>('[data-lesson-id="0.3"]')!);
     await clickAndSettle(index.querySelector<HTMLButtonElement>('[data-section-id="programming-0-3-chapter-10"]')!);
-    expect(screen.getByRole("button", { name: "Avanti" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: /Sezione successiva/ })).toBeDisabled();
 
     await clickAndSettle(screen.getByRole("button", { name: "Esercizi" }));
     expect(document.querySelectorAll('[data-exercise-id^="programming-0-3-"]')).toHaveLength(2);

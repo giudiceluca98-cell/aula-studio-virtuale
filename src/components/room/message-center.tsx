@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { Check, ChevronLeft, FileText, Info, MessageCircle, Minus, Paperclip, Plus, Search, Send, Smile, Users, X } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Check, ChevronLeft, FileText, GripHorizontal, Info, MessageCircle, Minus, Paperclip, Plus, Search, Send, Smile, Users, X } from "lucide-react";
 import clsx from "clsx";
 import type { RoomViewData, UiMessageConversation } from "./demo-data";
 
@@ -78,7 +78,10 @@ export function MessageCenter({
   const [selectedPeople, setSelectedPeople] = useState<string[]>([]);
   const [showInfo, setShowInfo] = useState(false);
   const [minimized, setMinimized] = useState(false);
+  const [minimizedIds, setMinimizedIds] = useState<string[]>([]);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
   const [files, setFiles] = useState<File[]>([]);
+  const dragRef = useRef<{ pointerId: number; x: number; y: number; startX: number; startY: number } | null>(null);
 
   const sorted = useMemo(() => [...data.messageConversations]
     .filter((conversation) => !conversation.archived_at)
@@ -96,7 +99,27 @@ export function MessageCenter({
   const participants = active ? conversationMembers(active, data) : [];
   const selectableMembers = data.members.filter((member) => member.user_id !== data.currentUserId);
 
-  if (minimized) return <button type="button" onClick={() => setMinimized(false)} className="fixed bottom-4 right-4 z-[80] flex items-center gap-2 rounded-full bg-ink px-4 py-3 text-xs font-bold text-white shadow-2xl"><MessageCircle size={15} /><span>Messaggi</span>{unreadTotal > 0 && <span className="grid min-w-5 place-items-center rounded-full bg-apricot px-1 text-[9px] text-ink">{unreadTotal}</span>}</button>;
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(window.localStorage.getItem("aula:message-center-state") ?? "{}") as { minimizedIds?: string[]; position?: { x: number; y: number } };
+      if (Array.isArray(saved.minimizedIds)) setMinimizedIds(saved.minimizedIds.filter((id) => data.messageConversations.some((conversation) => conversation.id === id)));
+      if (saved.position && Number.isFinite(saved.position.x) && Number.isFinite(saved.position.y)) setPosition(saved.position);
+    } catch { /* Stato locale facoltativo. */ }
+  }, [data.messageConversations]);
+
+  useEffect(() => {
+    try { window.localStorage.setItem("aula:message-center-state", JSON.stringify({ minimizedIds, position })); } catch { /* Stato locale facoltativo. */ }
+  }, [minimizedIds, position]);
+
+  useEffect(() => {
+    function move(event: PointerEvent) { const drag = dragRef.current; if (!drag || drag.pointerId !== event.pointerId || window.innerWidth < 768) return; setPosition({ x: drag.startX + event.clientX - drag.x, y: drag.startY + event.clientY - drag.y }); }
+    function stop(event?: PointerEvent) { if (event && dragRef.current?.pointerId !== event.pointerId) return; dragRef.current = null; }
+    function stopOnBlur() { dragRef.current = null; }
+    window.addEventListener("pointermove", move); window.addEventListener("pointerup", stop); window.addEventListener("pointercancel", stop); window.addEventListener("blur", stopOnBlur);
+    return () => { window.removeEventListener("pointermove", move); window.removeEventListener("pointerup", stop); window.removeEventListener("pointercancel", stop); window.removeEventListener("blur", stopOnBlur); };
+  }, []);
+
+  if (minimized) return <div data-testid="minimized-chat-dock" className="fixed bottom-4 right-4 z-[80] flex max-w-[calc(100vw-2rem)] flex-col items-end gap-2">{minimizedIds.map((id) => { const conversation = data.messageConversations.find((item) => item.id === id); if (!conversation) return null; const title = conversationTitle(conversation, data); return <div key={id} className="flex items-center rounded-full bg-[#111917] text-white shadow-2xl"><button type="button" aria-label={`Apri chat ridotta ${title}`} onClick={() => { onActiveConversation(id); setMinimized(false); }} className="flex items-center gap-2 px-4 py-3 text-xs font-bold"><span className="grid size-6 place-items-center rounded-full bg-cyan-300/15 text-[8px] text-cyan-100">{conversation.kind === "lobby" ? <Users size={12} /> : initials(title)}</span><span className="max-w-36 truncate">{title}</span>{(unreadByConversation[id] ?? 0) > 0 && <span className="grid min-w-5 place-items-center rounded-full bg-apricot px-1 text-[9px] text-ink">{unreadByConversation[id]}</span>}</button><button type="button" aria-label={`Chiudi chat ridotta ${title}`} onClick={() => setMinimizedIds((current) => current.filter((item) => item !== id))} className="mr-2 grid size-7 place-items-center rounded-full text-white/45 hover:bg-white/10"><X size={11} /></button></div>; })}<button type="button" onClick={() => setMinimized(false)} className="flex items-center gap-2 rounded-full bg-ink px-4 py-3 text-xs font-bold text-white shadow-2xl"><MessageCircle size={15} /><span>Centro messaggi</span>{unreadTotal > 0 && <span className="grid min-w-5 place-items-center rounded-full bg-apricot px-1 text-[9px] text-ink">{unreadTotal}</span>}</button></div>;
 
   async function createConversation() {
     if (createKind === "private" && selectedPeople.length !== 1) return;
@@ -105,10 +128,10 @@ export function MessageCenter({
     setCreateOpen(false); setGroupTitle(""); setSelectedPeople([]);
   }
 
-  return <section aria-label="Centro messaggi" className="fixed inset-2 top-20 z-[75] mx-auto flex max-w-6xl flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#111917] text-white shadow-2xl sm:inset-5 sm:top-24">
-    <header className="flex items-center justify-between border-b border-white/10 bg-[#18221f] px-4 py-3">
+  return <section data-testid="message-center-panel" aria-label="Centro messaggi" style={{ transform: `translate3d(${position.x}px, ${position.y}px, 0)` }} className="fixed inset-2 top-20 z-[75] mx-auto flex max-w-6xl flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#111917] text-white shadow-2xl sm:inset-5 sm:top-24">
+    <header className="flex touch-none items-center justify-between border-b border-white/10 bg-[#18221f] px-4 py-3 md:cursor-grab" onPointerDown={(event) => { if ((event.target as HTMLElement).closest("button,input,select")) return; dragRef.current = { pointerId: event.pointerId, x: event.clientX, y: event.clientY, startX: position.x, startY: position.y }; }}>
       <div className="flex items-center gap-3"><span className="grid size-9 place-items-center rounded-xl bg-cyan-300/15 text-cyan-200"><MessageCircle size={17} /></span><div><h2 className="text-sm font-bold">Messaggi</h2><p className="text-[9px] text-white/45">Lobby generale, chat private e gruppi</p></div></div>
-      <div className="flex gap-1"><button type="button" disabled={!schemaAvailable} onClick={() => setCreateOpen(true)} title={schemaAvailable ? "Nuova conversazione" : "Applica prima la migrazione 0017"} className="grid size-8 place-items-center rounded-lg bg-cyan-300/15 text-cyan-100 disabled:opacity-35"><Plus size={14} /></button><button type="button" onClick={() => setMinimized(true)} aria-label="Riduci messaggi" className="grid size-8 place-items-center rounded-lg bg-white/5 text-white/60"><Minus size={14} /></button><button type="button" onClick={onClose} aria-label="Chiudi messaggi" className="grid size-8 place-items-center rounded-lg bg-white/5 text-white/60"><X size={14} /></button></div>
+      <div className="flex items-center gap-1"><GripHorizontal size={14} className="hidden text-white/25 md:block" /><button type="button" disabled={!schemaAvailable} onClick={() => setCreateOpen(true)} title={schemaAvailable ? "Nuova conversazione" : "Applica prima la migrazione 0017"} className="grid size-8 place-items-center rounded-lg bg-cyan-300/15 text-cyan-100 disabled:opacity-35"><Plus size={14} /></button><button type="button" onClick={() => { if (active) setMinimizedIds((current) => current.includes(active.id) ? current : [...current, active.id]); setMinimized(true); }} aria-label="Riduci conversazione" className="grid size-8 place-items-center rounded-lg bg-white/5 text-white/60"><Minus size={14} /></button><button type="button" onClick={onClose} aria-label="Chiudi messaggi" className="grid size-8 place-items-center rounded-lg bg-white/5 text-white/60"><X size={14} /></button></div>
     </header>
 
     <div className="grid min-h-0 flex-1 md:grid-cols-[290px_minmax(0,1fr)]">
