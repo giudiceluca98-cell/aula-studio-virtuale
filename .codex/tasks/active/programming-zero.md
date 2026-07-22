@@ -1,8 +1,8 @@
 # Completamento Programmazione da zero
 
 Stato: in corso
-Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 3.7 corrente
-Branch corrente: `codex/programming-zero-lesson-3-7`
+Assegnazione: Codex — integrazione sequenziale dei contenuti ufficiali, Lezione 3.8 corrente
+Branch corrente: `codex/programming-zero-lesson-3-8`
 Ultima integrazione completata: Lezione 0.9 e relativo Python Project, [PR #26](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/26)
 Proposte in integrazione: Lezione 1.1, [PR #17](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/17), e Lezione 1.2, [PR #20](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/20)
 Pacchetto: `programming`
@@ -275,6 +275,14 @@ Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_2.3_Sintassi_rientri_rig
 Contenuti convertiti: 11 sezioni, 914 blocchi, 60 esercizi, 30 quiz e 60 voci di glossario; laboratorio e criteri finali conservati. SHA-256 `d0f99a4174d942baf6404e8c4834006e5d2d5e43989ca36f454cc2ce9d08906e`.
 
 Verifiche: test 151/151, typecheck e build superati; lint solo warning preesistente.
+
+## Estensione in revisione · Lezione 3.8
+
+Fonte locale esclusiva: `Programmazione_da_Zero_Lezione_3.8_Conversioni_coercizioni_mutabilita_identita.docx`. Il DOCX non verrà caricato. File riservati: artefatto 3.8, aggregatore, progressi e test. Dipendenza: PR #55. Indice editoriale e registro del Modulo 3 letti integralmente come controllo e non caricati.
+
+Contenuti convertiti: 11 sezioni, 915 blocchi, 60 esercizi, 30 quiz e 90 voci di glossario; laboratorio, rubrica e otto criteri finali conservati. SHA-256 `e5ce5e20b30e96474cbb029e5302fee41f35a04d63ebe8d434540ec2cfcd92be`; nessun DOCX caricato.
+
+Verifiche: test 151/151, typecheck e build superati; lint senza errori e con il solo warning preesistente in `src/lib/vocabulary/mastery.ts`.
 
 ## Estensione in revisione · Lezione 3.7
 
