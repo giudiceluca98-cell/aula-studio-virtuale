@@ -4,7 +4,7 @@ Questa cartella contiene la fonte visiva e funzionale ufficiale usata per trasfe
 
 ## Stato
 
-**Demo 1.1.0-alpha.1 pronta per verifica del checkpoint Catalogo.**
+**Demo 1.1.0-alpha.2 pronta per verifica: aggiunta manuale materiali nel Catalogo.**
 
 File canonico:
 
@@ -12,12 +12,12 @@ File canonico:
 
 Identificatori della versione corrente:
 
-- versione: `1.1.0-alpha.1`
+- versione: `1.1.0-alpha.2`
 
-- dimensione: `471894` byte
-- righe: `14177`
-- SHA-256: `fe15bb3424c0243bfb86fc2858a32477531061e1b9109745e19d2ab54e7284fd`
-- Git blob SHA: `a78322051cb80af1e7f79c71fbb59c1c75d653c8`
+- dimensione: `490224` byte
+- righe: `14678`
+- SHA-256: `9e7ae793062922540d8991eeed96021134507c02bb4d0fa6892f215c6d178cac`
+- Git blob SHA: `2e9b628ccb691545d73cf46894f359572930200a`
 
 Il Git blob SHA del file presente nel branch coincide con quello calcolato sul file locale verificato: il contenuto è identico byte per byte.
 

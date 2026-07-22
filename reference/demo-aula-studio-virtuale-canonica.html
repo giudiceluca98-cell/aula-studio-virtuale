@@ -8485,6 +8485,241 @@
       line-height: 1.45;
     }
 
+
+
+    /* ==========================================================
+       CATALOGO — AGGIUNTA MANUALE MATERIALI 1.1.0-alpha.2
+       ========================================================== */
+
+    .catalog-demo-add-material {
+      color: #eaffff;
+      border-color: rgba(125, 235, 255, 0.26);
+      background: linear-gradient(135deg, rgba(9,107,129,0.92), rgba(75,77,178,0.88));
+    }
+
+    .catalog-demo-manual-dialog[hidden] {
+      display: none !important;
+    }
+
+    .catalog-demo-manual-dialog {
+      position: fixed;
+      inset: 0;
+      z-index: 12000;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      background: rgba(1, 7, 12, 0.72);
+      backdrop-filter: blur(12px) saturate(120%);
+    }
+
+    .catalog-demo-manual-card {
+      width: min(700px, 100%);
+      max-height: min(88vh, 780px);
+      overflow: auto;
+      border: 1px solid rgba(125, 235, 255, 0.22);
+      border-radius: 24px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(0,223,242,0.10), transparent 38%),
+        linear-gradient(180deg, var(--surface-strong), var(--surface));
+      box-shadow: 0 34px 110px rgba(0,0,0,0.48), 0 0 38px rgba(0,223,242,0.08);
+    }
+
+    .catalog-demo-manual-head {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 20px 22px 17px;
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--surface-strong) 96%, transparent);
+      backdrop-filter: blur(16px);
+    }
+
+    .catalog-demo-manual-head h2 {
+      margin: 5px 0 6px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(25px, 4vw, 38px);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+    }
+
+    .catalog-demo-manual-head p {
+      max-width: 550px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .catalog-demo-manual-close {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      flex: 0 0 auto;
+      place-items: center;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      color: var(--muted);
+      background: rgba(255,255,255,0.025);
+      cursor: pointer;
+    }
+
+    .catalog-demo-manual-form {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      padding: 20px 22px 22px;
+    }
+
+    .catalog-demo-manual-form label {
+      display: grid;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .catalog-demo-manual-form .wide {
+      grid-column: 1 / -1;
+    }
+
+    .catalog-demo-manual-form input,
+    .catalog-demo-manual-form select,
+    .catalog-demo-manual-form textarea {
+      width: 100%;
+      min-width: 0;
+      padding: 10px 11px;
+      outline: none;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: var(--surface);
+    }
+
+    .catalog-demo-manual-form input,
+    .catalog-demo-manual-form select {
+      min-height: 42px;
+    }
+
+    .catalog-demo-manual-form textarea {
+      min-height: 96px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .catalog-demo-manual-form input:focus,
+    .catalog-demo-manual-form select:focus,
+    .catalog-demo-manual-form textarea:focus {
+      border-color: rgba(125,235,255,0.40);
+      box-shadow: 0 0 0 3px rgba(0,223,242,0.06);
+    }
+
+    .catalog-demo-manual-note {
+      grid-column: 1 / -1;
+      padding: 11px 12px;
+      border: 1px solid rgba(122,124,255,0.17);
+      border-radius: 12px;
+      color: var(--muted);
+      background: rgba(122,124,255,0.05);
+      font-size: 9px;
+      line-height: 1.55;
+    }
+
+    .catalog-demo-manual-error {
+      grid-column: 1 / -1;
+      min-height: 20px;
+      color: #ff9da6;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    .catalog-demo-manual-actions {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: flex-end;
+      gap: 9px;
+      padding-top: 2px;
+    }
+
+    .catalog-demo-manual-actions button {
+      min-height: 42px;
+      padding: 0 16px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--ink);
+      background: rgba(255,255,255,0.025);
+      font-weight: 760;
+      cursor: pointer;
+    }
+
+    .catalog-demo-manual-actions .primary {
+      color: #eaffff;
+      border-color: rgba(125,235,255,0.26);
+      background: linear-gradient(135deg, rgba(9,107,129,0.94), rgba(75,77,178,0.90));
+    }
+
+    .catalog-demo-card-actions .catalog-demo-external {
+      grid-column: 1 / -1;
+      display: inline-flex;
+      min-height: 35px;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      color: var(--green-2);
+      border: 1px solid rgba(125,235,255,0.18);
+      border-radius: 10px;
+      background: rgba(0,223,242,0.045);
+      font-size: 9px;
+      font-weight: 760;
+      text-decoration: none;
+    }
+
+    @media (max-width: 620px) {
+      .catalog-demo-manual-dialog {
+        align-items: end;
+        padding: 8px;
+      }
+
+      .catalog-demo-manual-card {
+        max-height: 92vh;
+        border-radius: 20px 20px 13px 13px;
+      }
+
+      .catalog-demo-manual-form {
+        grid-template-columns: 1fr;
+        padding: 16px;
+      }
+
+      .catalog-demo-manual-form .wide,
+      .catalog-demo-manual-note,
+      .catalog-demo-manual-error,
+      .catalog-demo-manual-actions {
+        grid-column: 1;
+      }
+
+      .catalog-demo-manual-actions {
+        flex-direction: column-reverse;
+      }
+
+      .catalog-demo-manual-actions button {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .catalog-demo-manual-dialog,
+      .catalog-demo-manual-card {
+        scroll-behavior: auto !important;
+      }
+    }
+
+
     @media (max-width: 1120px) {
       .catalog-demo-layout {
         grid-template-columns: 220px minmax(0, 1fr);
@@ -9192,6 +9427,8 @@ display: none !important;
             <button class="catalog-demo-shortcut" type="button" onclick="catalogDemoUseQuery('Matematica dalle basi')">Matematica</button>
             <button class="catalog-demo-shortcut" type="button" onclick="catalogDemoUseQuery('Inglese per il lavoro')">Lingue</button>
             <button class="catalog-demo-shortcut" type="button" onclick="catalogDemoUseQuery('Non so da dove iniziare')">✦ Non so da dove iniziare</button>
+
+            <button class="catalog-demo-shortcut catalog-demo-add-material" type="button" onclick="catalogDemoOpenManualMaterial()">＋ Aggiungi materiale</button>
           </div>
         </section>
 
@@ -9231,6 +9468,7 @@ display: none !important;
                   <option value="all">Tutte le lingue</option>
                   <option value="it">Italiano</option>
                   <option value="en">Inglese</option>
+                  <option value="und">Altra / non specificata</option>
                 </select>
               </label>
 
@@ -9292,6 +9530,79 @@ display: none !important;
         </div>
       </div>
     </main>
+
+
+    <div class="catalog-demo-manual-dialog" id="catalogDemoManualDialog" hidden onclick="catalogDemoManualBackdrop(event)">
+      <section class="catalog-demo-manual-card" role="dialog" aria-modal="true" aria-labelledby="catalogDemoManualTitle">
+        <header class="catalog-demo-manual-head">
+          <div>
+            <div class="portal-eyebrow">Amplia il catalogo personale</div>
+            <h2 id="catalogDemoManualTitle">Aggiungi un materiale</h2>
+            <p>Incolla un collegamento HTTPS. La risorsa resta privata nella demo finché non la inserisci esplicitamente nel percorso o nella stanza.</p>
+          </div>
+          <button class="catalog-demo-manual-close" type="button" onclick="catalogDemoCloseManualMaterial()" aria-label="Chiudi aggiunta materiale">×</button>
+        </header>
+
+        <form class="catalog-demo-manual-form" id="catalogDemoManualForm" onsubmit="catalogDemoAddManualMaterial(event)" novalidate>
+          <label class="wide">
+            Titolo *
+            <input id="catalogDemoManualTitleInput" name="title" type="text" maxlength="240" required placeholder="Es. Introduzione alla biologia cellulare">
+          </label>
+
+          <label class="wide">
+            Link HTTPS *
+            <input id="catalogDemoManualUrl" name="url" type="url" maxlength="4096" inputmode="url" required placeholder="https://...">
+          </label>
+
+          <label>
+            Tipo
+            <select id="catalogDemoManualType" name="resourceType">
+              <option value="page">Pagina web</option>
+              <option value="pdf">PDF</option>
+              <option value="document">Documento</option>
+              <option value="dataset">Dataset</option>
+              <option value="notebook">Notebook</option>
+              <option value="archive">Archivio</option>
+              <option value="file">File</option>
+              <option value="video">Video</option>
+              <option value="course">Corso</option>
+              <option value="book">Libro</option>
+              <option value="podcast">Podcast</option>
+            </select>
+          </label>
+
+          <label>
+            Lingua
+            <select id="catalogDemoManualLanguage" name="language">
+              <option value="it">Italiano</option>
+              <option value="en">Inglese</option>
+              <option value="und">Altra / non specificata</option>
+            </select>
+          </label>
+
+          <label class="wide">
+            Fonte o autore
+            <input id="catalogDemoManualProvider" name="provider" type="text" maxlength="160" placeholder="Facoltativo: useremo il nome del sito">
+          </label>
+
+          <label class="wide">
+            Descrizione
+            <textarea id="catalogDemoManualDescription" name="description" maxlength="4000" placeholder="Cosa contiene e per quale argomento è utile"></textarea>
+          </label>
+
+          <div class="catalog-demo-manual-note">
+            Sono accettati soltanto URL pubblici <strong>https://</strong>. La demo rifiuta reti locali, indirizzi privati e comuni formati eseguibili. Il collegamento non viene scaricato né analizzato automaticamente.
+          </div>
+
+          <div class="catalog-demo-manual-error" id="catalogDemoManualError" role="alert" aria-live="assertive"></div>
+
+          <div class="catalog-demo-manual-actions">
+            <button type="button" onclick="catalogDemoCloseManualMaterial()">Annulla</button>
+            <button class="primary" type="submit">＋ Aggiungi al catalogo</button>
+          </div>
+        </form>
+      </section>
+    </div>
   </section>
 
   <section class="portal-view portal-aula-view" id="portalAula" hidden>
@@ -11300,6 +11611,194 @@ print(nome)</div>
       };
     }
 
+
+
+    const catalogDemoManualStorageKey = "aula-demo-catalog-manual-v1";
+    let catalogDemoManualPreviousFocus = null;
+
+    const catalogDemoManualTypeMap = {
+      page: { format: "documentazione", label: "Pagina web" },
+      pdf: { format: "pdf", label: "PDF" },
+      document: { format: "documentazione", label: "Documento" },
+      dataset: { format: "documentazione", label: "Dataset" },
+      notebook: { format: "esercizi", label: "Notebook" },
+      archive: { format: "documentazione", label: "Archivio" },
+      file: { format: "documentazione", label: "File" },
+      video: { format: "video", label: "Video" },
+      course: { format: "corso", label: "Corso" },
+      book: { format: "documentazione", label: "Libro" },
+      podcast: { format: "video", label: "Podcast" }
+    };
+
+    function catalogDemoNormalizeManualUrl(rawValue) {
+      const url = new URL(String(rawValue || "").trim());
+      if (url.protocol !== "https:") throw new Error("Inserisci un collegamento che inizi con https://");
+      url.hash = "";
+      const hostname = url.hostname.toLocaleLowerCase("en");
+      const privateIpv4 = /^(10\.|127\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/;
+      if (!hostname || hostname === "localhost" || hostname === "::1" || hostname.endsWith(".local") || privateIpv4.test(hostname)) {
+        throw new Error("Gli indirizzi locali o appartenenti a reti private non sono ammessi.");
+      }
+      const filename = url.pathname.split("/").pop() || "";
+      const extension = filename.includes(".") ? filename.split(".").pop().toLocaleLowerCase("en") : "";
+      const blocked = new Set(["exe", "msi", "bat", "cmd", "com", "scr", "ps1", "sh", "jar", "apk"]);
+      if (blocked.has(extension)) throw new Error("Questo formato eseguibile non può essere aggiunto al Catalogo.");
+      if (url.pathname !== "/") url.pathname = url.pathname.replace(/\/+$/, "") || "/";
+      return url;
+    }
+
+    function catalogDemoManualId(url) {
+      let hash = 2166136261;
+      for (const character of url) {
+        hash ^= character.charCodeAt(0);
+        hash = Math.imul(hash, 16777619);
+      }
+      return `manual-${(hash >>> 0).toString(16)}`;
+    }
+
+    function catalogDemoLoadManualMaterials() {
+      let stored = [];
+      try {
+        stored = JSON.parse(localStorage.getItem(catalogDemoManualStorageKey) || "[]");
+      } catch {
+        stored = [];
+      }
+      if (!Array.isArray(stored)) return;
+      stored.forEach((material) => {
+        if (!material || typeof material !== "object" || !material.id || !material.sourceUrl) return;
+        if (!catalogDemoMaterials.some((item) => item.id === material.id || item.sourceUrl === material.sourceUrl)) {
+          catalogDemoMaterials.unshift({ ...material, personal: true, verified: false });
+        }
+        catalogDemoState.saved.add(material.id);
+        catalogDemoState.selected.add(material.id);
+      });
+    }
+
+    function catalogDemoPersistManualMaterials() {
+      try {
+        const materials = catalogDemoMaterials.filter((material) => material.personal);
+        localStorage.setItem(catalogDemoManualStorageKey, JSON.stringify(materials));
+      } catch {
+        // La demo resta utilizzabile anche quando lo storage del browser è bloccato.
+      }
+    }
+
+    function catalogDemoOpenManualMaterial() {
+      const dialog = document.getElementById("catalogDemoManualDialog");
+      const error = document.getElementById("catalogDemoManualError");
+      if (!dialog) return;
+      catalogDemoManualPreviousFocus = document.activeElement;
+      if (error) error.textContent = "";
+      dialog.hidden = false;
+      document.body.classList.add("catalog-demo-dialog-open");
+      window.setTimeout(() => document.getElementById("catalogDemoManualTitleInput")?.focus(), 30);
+    }
+
+    function catalogDemoCloseManualMaterial(options = {}) {
+      const dialog = document.getElementById("catalogDemoManualDialog");
+      const form = document.getElementById("catalogDemoManualForm");
+      const error = document.getElementById("catalogDemoManualError");
+      if (!dialog) return;
+      dialog.hidden = true;
+      document.body.classList.remove("catalog-demo-dialog-open");
+      if (options.reset !== false) form?.reset();
+      if (error) error.textContent = "";
+      if (catalogDemoManualPreviousFocus?.focus) catalogDemoManualPreviousFocus.focus();
+      catalogDemoManualPreviousFocus = null;
+    }
+
+    function catalogDemoManualBackdrop(event) {
+      if (event.target?.id === "catalogDemoManualDialog") catalogDemoCloseManualMaterial();
+    }
+
+    function catalogDemoAddManualMaterial(event) {
+      event.preventDefault();
+      const titleInput = document.getElementById("catalogDemoManualTitleInput");
+      const urlInput = document.getElementById("catalogDemoManualUrl");
+      const typeInput = document.getElementById("catalogDemoManualType");
+      const languageInput = document.getElementById("catalogDemoManualLanguage");
+      const providerInput = document.getElementById("catalogDemoManualProvider");
+      const descriptionInput = document.getElementById("catalogDemoManualDescription");
+      const error = document.getElementById("catalogDemoManualError");
+      const title = String(titleInput?.value || "").trim();
+      if (!title) {
+        if (error) error.textContent = "Inserisci il titolo del materiale.";
+        titleInput?.focus();
+        return;
+      }
+
+      let normalizedUrl;
+      try {
+        normalizedUrl = catalogDemoNormalizeManualUrl(urlInput?.value || "");
+      } catch (failure) {
+        if (error) error.textContent = failure instanceof Error ? failure.message : "Controlla il collegamento HTTPS.";
+        urlInput?.focus();
+        return;
+      }
+
+      const sourceUrl = normalizedUrl.toString();
+      const existing = catalogDemoMaterials.find((material) => material.sourceUrl === sourceUrl);
+      if (existing) {
+        catalogDemoState.saved.add(existing.id);
+        catalogDemoState.selected.add(existing.id);
+        catalogDemoCloseManualMaterial();
+        catalogDemoRender();
+        const elements = catalogDemoElements();
+        if (elements.status) elements.status.textContent = "Questo collegamento era già presente: è stato selezionato senza creare duplicati.";
+        portalNotify("Materiale già presente nel Catalogo");
+        return;
+      }
+
+      const resourceType = String(typeInput?.value || "page");
+      const typeData = catalogDemoManualTypeMap[resourceType] || catalogDemoManualTypeMap.page;
+      const language = String(languageInput?.value || "it");
+      const provider = String(providerInput?.value || "").trim() || normalizedUrl.hostname;
+      const description = String(descriptionInput?.value || "").trim() || "Materiale aggiunto manualmente al catalogo personale.";
+      const id = catalogDemoManualId(sourceUrl);
+      const material = {
+        id,
+        title,
+        provider,
+        format: typeData.format,
+        resourceType,
+        resourceTypeLabel: typeData.label,
+        level: "base",
+        language,
+        verified: false,
+        personal: true,
+        sourceUrl,
+        topic: `${title} ${description} ${provider} materiale personale`,
+        monitoring: "Aggiunto da te · accesso esterno non monitorato",
+        description
+      };
+
+      catalogDemoMaterials.unshift(material);
+      catalogDemoState.saved.add(id);
+      catalogDemoState.selected.add(id);
+      catalogDemoState.importedSignature = "";
+      catalogDemoPersistManualMaterials();
+      catalogDemoCloseManualMaterial();
+
+      const elements = catalogDemoElements();
+      if (elements.search) elements.search.value = "";
+      if (elements.level) elements.level.value = "all";
+      if (elements.format) elements.format.value = "all";
+      if (elements.language) elements.language.value = "all";
+      if (elements.verified) elements.verified.checked = false;
+      catalogDemoRender();
+      if (elements.status) elements.status.textContent = "Materiale aggiunto al catalogo personale e selezionato per il percorso.";
+      portalNotify("Materiale aggiunto al Catalogo");
+    }
+
+    window.addEventListener("keydown", (event) => {
+      const dialog = document.getElementById("catalogDemoManualDialog");
+      if (event.key === "Escape" && dialog && !dialog.hidden) {
+        event.preventDefault();
+        catalogDemoCloseManualMaterial();
+      }
+    });
+
+
     function catalogDemoFilteredMaterials() {
       const elements = catalogDemoElements();
       const query = String(elements.search?.value || "").trim().toLocaleLowerCase("it");
@@ -11336,6 +11835,7 @@ print(nome)</div>
           <div class="catalog-demo-card-actions">
             <button type="button" onclick="catalogDemoToggleSaved('${catalogDemoEscape(material.id)}')">${saved ? "★ Salvato" : "☆ Salva"}</button>
             <button class="primary" type="button" onclick="catalogDemoToggleSelected('${catalogDemoEscape(material.id)}')">${selected ? "✓ Nel percorso" : "+ Usa nel percorso"}</button>
+            ${material.sourceUrl ? `<a class="catalog-demo-external" href="${catalogDemoEscape(material.sourceUrl)}" target="_blank" rel="noopener noreferrer">↗ Apri fonte esterna</a>` : ""}
           </div>
         </article>
       `;
@@ -11445,6 +11945,7 @@ print(nome)</div>
       if (!document.getElementById("portalCatalog")) return;
       if (!catalogDemoState.initialized) {
         catalogDemoState.initialized = true;
+        catalogDemoLoadManualMaterials();
         const elements = catalogDemoElements();
         if (elements.search && !elements.search.value) elements.search.value = "programmazione";
       }

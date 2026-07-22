@@ -47,11 +47,11 @@ Ogni rapporto di checkpoint deve contenere:
 | Fase | Passaggio | Stato | Data | Note |
 |---|---|---|---|---|
 | Fase 0 | Baseline documentale e controlli statici | APPROVATO | 2026-07-22 | Superata su richiesta dell'utente: nessun checkpoint può fermarsi senza una modifica HTML visibile. |
-| Fase 1 | Catalogo: vista, navigazione, ricerca e percorso | IN_ATTESA_APPROVAZIONE | 2026-07-22 | Demo HTML 1.1.0-alpha.1 pronta da aprire e verificare. |
-| Fase 1 | Catalogo: ricerca e filtri | DA_INIZIARE | — | — |
-| Fase 1 | Catalogo: materiali e salvati | DA_INIZIARE | — | — |
-| Fase 1 | Catalogo: aggiunta URL | DA_INIZIARE | — | — |
-| Fase 1 | Catalogo: percorso Eve e importazione | DA_INIZIARE | — | — |
+| Fase 1 | Catalogo: vista, navigazione, ricerca e percorso | APPROVATO | 2026-07-22 | Approvato dall'utente dopo verifica della demo HTML 1.1.0-alpha.1. |
+| Fase 1 | Catalogo: ricerca e filtri | APPROVATO | 2026-07-22 | Incluso e approvato nel checkpoint 1.1.0-alpha.1. |
+| Fase 1 | Catalogo: materiali e salvati | APPROVATO | 2026-07-22 | Incluso e approvato nel checkpoint 1.1.0-alpha.1. |
+| Fase 1 | Catalogo: aggiunta URL | IN_ATTESA_APPROVAZIONE | 2026-07-22 | Demo HTML 1.1.0-alpha.2 pronta da aprire e verificare. |
+| Fase 1 | Catalogo: percorso Eve e importazione | APPROVATO | 2026-07-22 | Incluso e approvato nel checkpoint 1.1.0-alpha.1. |
 | Fasi 2–10 | Passaggi successivi | DA_INIZIARE | — | Ogni passaggio avrà un checkpoint separato. |
 
 ## Come approvare

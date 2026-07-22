@@ -578,3 +578,16 @@ Componenti logici:
 - `catalogDemoImportPath()` — importazione locale idempotente.
 
 L'app reale conserva come fonti autorevoli API, Supabase, RLS e importazione server-side; la demo definisce UX, stati e responsive.
+
+### Materiali manuali del Catalogo
+
+La demo 1.1.0-alpha.2 conserva le risorse inserite dall'utente in `localStorage` con la chiave `aula-demo-catalog-manual-v1`. Questa è esclusivamente una simulazione privata del browser. Nell'app reale la fonte autorevole resta il backend con RLS.
+
+Funzioni:
+
+- `catalogDemoNormalizeManualUrl()` — HTTPS, rete pubblica e formato;
+- `catalogDemoManualId()` — identificatore stabile derivato dall'URL;
+- `catalogDemoLoadManualMaterials()` — ripristino locale;
+- `catalogDemoPersistManualMaterials()` — persistenza locale;
+- `catalogDemoAddManualMaterial()` — validazione, deduplicazione e selezione;
+- `catalogDemoOpenManualMaterial()` / `catalogDemoCloseManualMaterial()` — dialog e focus.

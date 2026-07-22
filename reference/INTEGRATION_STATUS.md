@@ -213,6 +213,33 @@ Da verificare manualmente:
 
 ---
 
+
+## Aggiunta manuale URL HTTPS
+
+Stato: 🟡 — checkpoint HTML 1.1.0-alpha.2 in attesa di approvazione
+
+Integrato:
+
+- form completo;
+- URL HTTPS obbligatorio;
+- blocco reti private e formati eseguibili;
+- deduplicazione URL;
+- materiale personale `da verificare`;
+- selezione automatica nel percorso;
+- persistenza locale privata della demo;
+- apertura esterna sicura;
+- dialog accessibile e responsive.
+
+Da verificare manualmente:
+
+- inserimento valido;
+- messaggi per URL HTTP, locale ed eseguibile;
+- inserimento duplicato;
+- permanenza dopo ricaricamento;
+- chiusura con Escape e ripristino focus.
+
+---
+
 # Regola per Codex
 
 Prima di modificare una funzione:

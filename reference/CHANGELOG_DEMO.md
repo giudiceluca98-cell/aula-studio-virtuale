@@ -39,6 +39,33 @@ Per ogni modifica futura:
 
 ---
 
+## [1.1.0-alpha.2] — 2026-07-22
+
+### Catalogo — aggiunta manuale di materiali
+
+- Aggiunto il pulsante `Aggiungi materiale` nella vista Catalogo.
+- Aggiunto un dialog accessibile con titolo, URL HTTPS, tipo, lingua, fonte e descrizione.
+- Aggiunta validazione contro URL non HTTPS, reti locali/private e comuni formati eseguibili.
+- Aggiunta deduplicazione per URL normalizzato.
+- Le risorse personali vengono marcate `da verificare`, salvate e selezionate automaticamente.
+- Aggiunta persistenza locale privata della demo tramite `localStorage`.
+- Aggiunto collegamento esterno sicuro con `noopener noreferrer`.
+- Aggiunti chiusura con `Escape`, click sullo sfondo e ripristino del focus.
+- Aggiunto layout mobile del dialog.
+
+### Identificatori
+
+- Dimensione: `490224` byte
+- Righe: `14678`
+- SHA-256: `9e7ae793062922540d8991eeed96021134507c02bb4d0fa6892f215c6d178cac`
+- Git blob SHA: `2e9b628ccb691545d73cf46894f359572930200a`
+
+### Stato
+
+Checkpoint HTML completo e in attesa di verifica visuale e funzionale dell'utente.
+
+---
+
 ## [1.1.0-alpha.1] — 2026-07-22
 
 ### Catalogo intelligente — vista, ricerca e percorso
