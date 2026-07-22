@@ -325,6 +325,34 @@ Da verificare manualmente:
 
 ---
 
+
+## Uscita e cancellazione Dashboard
+
+Stato: 🟡 — checkpoint HTML 1.2.0-alpha.4 in attesa di approvazione
+
+Integrato:
+
+- uscita per owner/admin/member;
+- trasferimento proprietà simulato;
+- archiviazione stanza senza altri membri;
+- cancellazione owner-only;
+- conferma testuale distruttiva;
+- fasi di cancellazione sicura;
+- persistenza corretta dello stato vuoto;
+- dialog accessibile e responsive.
+
+Da verificare manualmente:
+
+- uscita da stanza partecipata;
+- uscita owner con nuovo proprietario;
+- cancellazione owner-only;
+- frase errata e corretta;
+- permanenza della rimozione dopo refresh;
+- creazione nuova stanza dopo Dashboard vuota;
+- Escape, focus e mobile.
+
+---
+
 # Regola per Codex
 
 Prima di modificare una funzione:

@@ -39,6 +39,33 @@ Per ogni modifica futura:
 
 ---
 
+## [1.2.0-alpha.4] — 2026-07-22
+
+### Dashboard — uscita e cancellazione stanza
+
+- Aggiunto il comando `Gestisci` su ogni stanza.
+- Aggiunta uscita con conferma e chiusura della presenza/membership simulata.
+- Per il proprietario viene mostrato il passaggio di proprietà ad admin o partecipante.
+- Se il proprietario è solo, l'uscita archivia la stanza e revoca l'invito nella rappresentazione demo.
+- Aggiunta cancellazione completa owner-only con frase `ELIMINA STANZA`.
+- Aggiunte fasi visibili: blocco accessi, pulizia file, eliminazione dati condivisi.
+- Corretto il caricamento locale: una Dashboard volutamente vuota resta vuota dopo il refresh.
+- Aggiunti Escape, backdrop, ripristino focus e responsive.
+- Conservati create/join, presenza, inviti, Catalogo, Aula, Eve, chat e audio.
+
+### Identificatori
+
+- Dimensione: `571517` byte
+- Righe: `16899`
+- SHA-256: `b6671183a838d7a7a85cfe7ab9934982bdc36177cdaf1ee4856574ed520fe392`
+- Git blob SHA: `dcbdc41a7b0e1db3b9c9fefc3050e1ed72368432`
+
+### Stato
+
+Checkpoint HTML completo e in attesa di verifica visuale e funzionale dell'utente.
+
+---
+
 ## [1.2.0-alpha.3] — 2026-07-22
 
 ### Dashboard — codice invito

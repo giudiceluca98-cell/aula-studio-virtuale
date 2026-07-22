@@ -621,3 +621,9 @@ La matrice rappresentata comprende:
 La demo 1.2.0-alpha.3 riproduce l'effetto utente di `copyInvite()` e della RPC `rotate_room_invite` usando lo stato locale della Dashboard. La rotazione è disponibile soltanto per `owner`, incrementa `inviteRevision`, sostituisce `inviteCode` e registra `inviteRotatedAt`.
 
 Il codice precedente non viene conservato tra i codici attivi. Nell'app ufficiale autorizzazione, atomicità e revoca sono garantite dal server; la demo mostra soltanto gli stati e il flusso dell'interfaccia.
+
+## Uscita e cancellazione nella Dashboard demo
+
+La demo 1.2.0-alpha.4 rappresenta gli effetti utente di `leave_study_room` e del route `DELETE /api/rooms/[roomId]` con stato locale. L'uscita trasferisce simbolicamente la proprietà prima a un admin e poi a un membro; se non resta nessuno, la stanza viene rimossa dalla Scrivania come archiviata.
+
+La cancellazione è visibile solo agli owner, richiede `ELIMINA STANZA` e mostra le tre fasi del flusso reale: tombstone/revoca inviti, pulizia Storage, cancellazione database. Autorizzazione, transazioni e idempotenza restano responsabilità dell'app ufficiale.

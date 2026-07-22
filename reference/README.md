@@ -4,7 +4,7 @@ Questa cartella contiene la fonte visiva e funzionale ufficiale usata per trasfe
 
 ## Stato
 
-**Demo 1.2.0-alpha.3 pronta per verifica: gestione del codice invito.**
+**Demo 1.2.0-alpha.4 pronta per verifica: uscita e cancellazione stanza.**
 
 File canonico:
 
@@ -12,12 +12,12 @@ File canonico:
 
 Identificatori della versione corrente:
 
-- versione: `1.2.0-alpha.3`
+- versione: `1.2.0-alpha.4`
 
-- dimensione: `546698` byte
-- righe: `16253`
-- SHA-256: `4f1f174f800c87ffa59ed2d8f40b4344549e2382ed996100c8b9ce68afa1c66a`
-- Git blob SHA: `f9050783bd7d559adf66fb8c39ffb1fe54b73e5b`
+- dimensione: `571517` byte
+- righe: `16899`
+- SHA-256: `b6671183a838d7a7a85cfe7ab9934982bdc36177cdaf1ee4856574ed520fe392`
+- Git blob SHA: `dcbdc41a7b0e1db3b9c9fefc3050e1ed72368432`
 
 Il Git blob SHA del file presente nel branch coincide con quello calcolato sul file locale verificato: il contenuto è identico byte per byte.
 
