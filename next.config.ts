@@ -7,6 +7,45 @@ const nextConfig: NextConfig = {
   // Allowing both keeps Next's development scripts (including hydration)
   // available instead of leaving forms as inert server-rendered HTML.
   allowedDevOrigins: ["127.0.0.1", "localhost"],
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/aula-studio-virtuale.html#presentation",
+        permanent: false,
+      },
+      {
+        source: "/dashboard",
+        destination: "/aula-studio-virtuale.html#dashboard",
+        permanent: false,
+      },
+      {
+        source: "/catalog",
+        destination: "/aula-studio-virtuale.html#catalog",
+        permanent: false,
+      },
+      {
+        source: "/room/:path*",
+        destination: "/aula-studio-virtuale.html#aula",
+        permanent: false,
+      },
+      {
+        source: "/login",
+        destination: "/aula-studio-virtuale.html#dashboard",
+        permanent: false,
+      },
+      {
+        source: "/register",
+        destination: "/aula-studio-virtuale.html#dashboard",
+        permanent: false,
+      },
+      {
+        source: "/auth/confirm",
+        destination: "/aula-studio-virtuale.html#dashboard",
+        permanent: false,
+      },
+    ];
+  },
   async headers() {
     const isDev = process.env.NODE_ENV !== "production";
     const connectSrc = ["'self'", "https://*.supabase.co", "wss://*.supabase.co", "https://cdn.jsdelivr.net"];
