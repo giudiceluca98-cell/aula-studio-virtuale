@@ -102,6 +102,99 @@
     `;
   }
 
+  function splitEditorialLabel(value) {
+    const text = String(value || "").trim();
+    const match = text.match(
+      /^([A-ZÀ-ÖØ-Þ0-9][A-ZÀ-ÖØ-Þ0-9 ·/’'()-]{2,}?)\s{2,}(.+)$/u
+    );
+    return match
+      ? { label: match[1].trim(), body: match[2].trim() }
+      : { label: "", body: text };
+  }
+
+  function renderEditorialCallout(value) {
+    const { label, body } = splitEditorialLabel(value);
+    return `
+      <aside class="official-editorial-callout">
+        ${label ? `<strong>${escape(label)}</strong>` : ""}
+        <p>${escape(body)}</p>
+      </aside>
+    `;
+  }
+
+  function isStandaloneHeading(text) {
+    return [
+      "controesempi",
+      "prerequisiti e durata",
+      "prerequisiti e materiali",
+    ].includes(String(text || "").trim().toLocaleLowerCase("it"));
+  }
+
+  function formatDiagramText(value) {
+    return String(value || "")
+      .replace(/\s{2,}v(?=[A-Z[(])/g, "\n      v\n")
+      .trim();
+  }
+
+  function renderLessonCover(lesson, blocks) {
+    const firstHeadingIndex = blocks.findIndex((block) => block.type === "heading");
+    const metadataBlocks = firstHeadingIndex < 0 ? blocks : blocks.slice(0, firstHeadingIndex);
+    const contentBlocks = firstHeadingIndex < 0 ? [] : blocks.slice(firstHeadingIndex);
+    const metadata = metadataBlocks
+      .filter((block) => block.type === "paragraph")
+      .map((block) => String(block.text || "").trim())
+      .filter(Boolean);
+    const audience = metadata.find((text) => /^DESTINATARIO\s+/i.test(text));
+    const edition = metadata.find((text) => /^Edizione\b/i.test(text));
+    const publication = metadata.find((text) => /manuale ufficiale/i.test(text));
+    const brand = metadata.find((text) => /aula studio virtuale/i.test(text));
+    const courseName = metadata.find((text) => /programmazione da zero/i.test(text));
+    const audienceText = audience
+      ? audience.replace(/^DESTINATARIO\s+/i, "").trim()
+      : lesson.summary?.[0] || "";
+    const moduleId = lesson.id.split(".")[0];
+
+    return {
+      contentBlocks,
+      html: `
+        <header class="official-lesson-cover">
+          <div class="official-cover-brand">${escape(brand || "Aula Studio Virtuale")}</div>
+          <div class="official-cover-kicker">
+            ${escape(courseName || "Programmazione da Zero")} · Modulo ${escape(moduleId)} · Lezione ${escape(lesson.id)}
+          </div>
+          <h1>${escape(lesson.title)}</h1>
+          ${audienceText ? `
+            <div class="official-cover-audience">
+              <strong>Destinatario</strong>
+              <p>${escape(audienceText)}</p>
+            </div>
+          ` : ""}
+          <div class="official-cover-meta">
+            <span>${escape(publication || "Manuale ufficiale")}</span>
+            ${edition ? `<span>${escape(edition)}</span>` : ""}
+          </div>
+        </header>
+      `,
+    };
+  }
+
+  function prepareChapterBlocks(section) {
+    const blocks = [...section.blocks];
+    if (
+      blocks[0]?.type === "callout" &&
+      /^LEZIONE\s+.+CAPITOLO\s+/i.test(String(blocks[0].text || ""))
+    ) {
+      blocks.shift();
+    }
+    if (
+      blocks[0]?.type === "heading" &&
+      String(blocks[0].text || "").trim() === String(section.title || "").trim()
+    ) {
+      blocks.shift();
+    }
+    return blocks;
+  }
+
   function renderBlocks(blocks, lesson, section) {
     const chapter = lesson.chapters.find(
       (item) => Number(item.number) === Number(section.chapterNumber)
@@ -109,6 +202,7 @@
     let html = "";
     let list = [];
     let skippingTextQuiz = false;
+    let headingContext = "";
 
     const flushList = () => {
       if (!list.length) return;
@@ -145,10 +239,29 @@
       }
       flushList();
 
-      if (block.type === "heading") html += `<h2>${escape(text)}</h2>`;
+      if (block.type === "heading") {
+        headingContext = text.trim().toLocaleLowerCase("it");
+        html += `<h2>${escape(text)}</h2>`;
+      }
+      else if (
+        block.type === "paragraph" &&
+        headingContext.includes("diagramma testuale") &&
+        !/^Figura\b/i.test(text)
+      ) {
+        html += `<pre class="code-block official-diagram">${escape(formatDiagramText(text))}</pre>`;
+      }
+      else if (block.type === "paragraph" && /^Figura\b/i.test(text)) {
+        html += `<p class="official-figure-caption">${escape(text)}</p>`;
+      }
+      else if (block.type === "paragraph" && isStandaloneHeading(text)) {
+        headingContext = text.trim().toLocaleLowerCase("it");
+        html += `<h2>${escape(text)}</h2>`;
+      }
       else if (block.type === "paragraph") html += `<p>${escape(text)}</p>`;
-      else if (block.type === "callout") html += `<div class="callout">${escape(text)}</div>`;
-      else if (block.type === "diagram") html += `<pre class="code-block">${escape(text)}</pre>`;
+      else if (block.type === "callout") html += renderEditorialCallout(text);
+      else if (block.type === "diagram") {
+        html += `<pre class="code-block official-diagram">${escape(formatDiagramText(text))}</pre>`;
+      }
       else if (block.type === "table") html += renderTable(block.rows);
     }
     flushList();
@@ -156,15 +269,33 @@
   }
 
   function sectionsForLesson(lesson) {
-    return lesson.sections.map((section, index) => ({
-      label: `Lezione ${lesson.id} · Sezione ${index + 1} di ${lesson.sections.length}`,
-      title: section.title,
-      html: `
-        <div class="document-section-label">Lezione ${escape(lesson.id)} · Sezione ${index + 1} di ${lesson.sections.length}</div>
-        ${index === 0 ? `<h1>${escape(lesson.title)}</h1>` : ""}
-        ${renderBlocks(section.blocks, lesson, section)}
-      `,
-    }));
+    return lesson.sections.map((section, index) => {
+      const isIntroduction = index === 0;
+      const cover = isIntroduction
+        ? renderLessonCover(lesson, section.blocks)
+        : null;
+      const blocks = isIntroduction
+        ? cover.contentBlocks
+        : prepareChapterBlocks(section);
+      return {
+        label: `Lezione ${lesson.id} · Sezione ${index + 1} di ${lesson.sections.length}`,
+        title: section.title,
+        html: `
+          <section class="official-lesson-section ${isIntroduction ? "is-introduction" : "is-chapter"}">
+            <div class="document-section-label">Lezione ${escape(lesson.id)} · Sezione ${index + 1} di ${lesson.sections.length}</div>
+            ${isIntroduction ? cover.html : `
+              <header class="official-chapter-header">
+                <span>Lezione ${escape(lesson.id)} · Capitolo ${escape(section.chapterNumber || index)}</span>
+                <h1>${escape(section.title)}</h1>
+              </header>
+            `}
+            <div class="official-lesson-body">
+              ${renderBlocks(blocks, lesson, section)}
+            </div>
+          </section>
+        `,
+      };
+    });
   }
 
   function exercisesForLesson(lesson) {
@@ -391,6 +522,7 @@
     );
     renderAudioPageSelection();
     renderLessonSection();
+    document.getElementById("documentContent")?.classList.add("official-course-document");
     updateProgress();
     updateSidebarStatuses();
     isApplyingLesson = false;
@@ -471,6 +603,31 @@
   const style = document.createElement("style");
   style.dataset.officialCourse = "true";
   style.textContent = `
+    .official-course-document{padding:clamp(22px,4vw,46px);color:#19313b}
+    .official-lesson-section{display:grid;gap:26px}
+    .official-lesson-cover{position:relative;display:grid;gap:16px;padding:clamp(26px,5vw,52px);overflow:hidden;border:1px solid rgba(12,123,148,.22);border-radius:22px;background:linear-gradient(145deg,#f9feff 0%,#edfafd 58%,#f7f8ff 100%);box-shadow:0 18px 46px rgba(16,77,94,.11);color:#0c2b36}
+    .official-lesson-cover::after{content:"";position:absolute;right:-75px;top:-95px;width:240px;height:240px;border:1px solid rgba(0,202,229,.22);border-radius:50%;box-shadow:0 0 70px rgba(0,202,229,.12)}
+    .official-cover-brand,.official-cover-kicker,.official-chapter-header span{position:relative;z-index:1;text-transform:uppercase;letter-spacing:.16em;font:800 11px/1.45 Inter,ui-sans-serif,system-ui,sans-serif;color:#087d95}
+    .official-cover-kicker{padding-top:8px;border-top:1px solid rgba(12,123,148,.18);color:#496873}
+    .official-lesson-cover h1,.official-chapter-header h1{position:relative;z-index:1;max-width:18ch;margin:0;font:600 clamp(34px,5vw,54px)/1.04 Georgia,"Times New Roman",serif;letter-spacing:-.025em;color:#102b36}
+    .official-cover-audience{position:relative;z-index:1;display:grid;grid-template-columns:minmax(95px,auto) 1fr;gap:16px;padding:16px 18px;border-left:3px solid #16b8cd;border-radius:0 12px 12px 0;background:rgba(255,255,255,.72)}
+    .official-cover-audience strong{font:800 11px/1.5 Inter,ui-sans-serif,system-ui,sans-serif;text-transform:uppercase;letter-spacing:.09em;color:#087d95}
+    .official-cover-audience p{margin:0!important;max-width:none!important;font:500 16px/1.65 Inter,ui-sans-serif,system-ui,sans-serif!important;color:#284650}
+    .official-cover-meta{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:8px 18px;color:#627983;font:700 12px/1.5 Inter,ui-sans-serif,system-ui,sans-serif}
+    .official-cover-meta span+span::before{content:"·";margin-right:18px;color:#12aabd}
+    .official-chapter-header{display:grid;gap:10px;padding:4px 0 24px;border-bottom:1px solid rgba(12,123,148,.2)}
+    .official-chapter-header h1{max-width:24ch;font-size:clamp(30px,4vw,46px);line-height:1.08}
+    .official-lesson-body{width:min(100%,70ch);margin:0 auto}
+    .official-lesson-body>h2{margin:2.1em 0 .65em;padding:0;font:600 clamp(24px,3vw,31px)/1.2 Georgia,"Times New Roman",serif;letter-spacing:-.012em;color:#143541}
+    .official-lesson-body>h2:first-child{margin-top:.25em}
+    .official-lesson-body>p{max-width:none;margin:0 0 1.05em;font:400 clamp(16px,1.35vw,18px)/1.78 Georgia,"Times New Roman",serif;color:#263e47}
+    .official-lesson-body>ul{display:grid;gap:9px;margin:0 0 1.4em;padding-left:1.35em}
+    .official-lesson-body>ul li{padding-left:.25em;font:400 clamp(15px,1.25vw,17px)/1.68 Inter,ui-sans-serif,system-ui,sans-serif;color:#29434d}
+    .official-editorial-callout{display:grid;gap:7px;margin:1.55em 0;padding:16px 18px;border:1px solid rgba(12,123,148,.19);border-left:4px solid #16b8cd;border-radius:0 13px 13px 0;background:linear-gradient(90deg,rgba(18,184,205,.09),rgba(18,184,205,.025))}
+    .official-editorial-callout strong{font:800 11px/1.4 Inter,ui-sans-serif,system-ui,sans-serif;text-transform:uppercase;letter-spacing:.11em;color:#087d95}
+    .official-editorial-callout p{margin:0;font:500 15px/1.65 Inter,ui-sans-serif,system-ui,sans-serif;color:#29434d}
+    .official-figure-caption{margin:1.7em 0 .5em!important;font:700 12px/1.5 Inter,ui-sans-serif,system-ui,sans-serif!important;text-transform:uppercase;letter-spacing:.06em;color:#53717b!important}
+    .official-diagram{margin-top:0!important;white-space:pre-wrap;overflow-wrap:anywhere}
     .official-course-table-wrap{max-width:100%;overflow:auto;margin:16px 0}
     .official-course-table{width:100%;border-collapse:collapse;font-size:.94em}
     .official-course-table th,.official-course-table td{padding:10px;border:1px solid var(--line);text-align:left;vertical-align:top}
@@ -482,6 +639,15 @@
     .official-glossary{display:grid;gap:12px}
     .official-glossary>div{padding:14px;border:1px solid var(--line);border-radius:12px}
     .official-glossary dt{font-weight:800}.official-glossary dd{margin:6px 0 0;color:var(--muted)}
+    @media(max-width:700px){
+      .official-course-document{padding:20px 16px}
+      .official-lesson-section{gap:20px}
+      .official-lesson-cover{padding:26px 20px;border-radius:16px}
+      .official-cover-audience{grid-template-columns:1fr;gap:5px}
+      .official-cover-meta{display:grid;gap:5px}
+      .official-cover-meta span+span::before{display:none}
+      .official-lesson-body{width:100%}
+    }
   `;
   document.head.appendChild(style);
 

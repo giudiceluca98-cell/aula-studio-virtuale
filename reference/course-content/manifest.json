@@ -7,13 +7,13 @@
   },
   "adapter": {
     "file": "programming-zero-adapter.js",
-    "sha256": "f384e064fe52d4635dce506fac61c47b2e4b37ef4d7cb2751959e3bdbd5417e5",
-    "bytes": 20425
+    "sha256": "b60c42ba3f4e84ec37820e5875148aa5ebf8c34cc508180b2c5a512955d28709",
+    "bytes": 29351
   },
   "integratedDemo": {
     "file": "../demo-aula-studio-virtuale-integrata.html",
     "sourceCanonicalSha256": "6d8fd182954be313b51049831d54dfdb529a523ed9715b46737e1810776c7974",
-    "sha256": "2f8918d5dd9832abc618f45a67289082aad877d1e6e1d2d8de08f8511a76c99c",
+    "sha256": "314c11013506b679e214a013a0cef35c4973bfbd45a64865a0937acd69c22fcd",
     "bytes": 15514
   },
   "totals": {

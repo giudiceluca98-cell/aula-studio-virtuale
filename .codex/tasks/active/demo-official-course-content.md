@@ -78,4 +78,28 @@ considerate approvate e non entrano in questo primo pacchetto.
 Draft Pull Request:
 https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/66
 
+## Rifinitura editoriale completata
+
+Su richiesta dell'utente, il renderer dei contenuti ufficiali viene rifinito prima
+della futura sincronizzazione con il checkpoint canonico 1.4 approvato.
+
+Perimetro:
+
+- struttura editoriale della copertina e dei metadati della lezione;
+- gerarchia visiva di titoli, paragrafi, elenchi, callout, diagrammi e tabelle;
+- larghezza e ritmo tipografico responsive del solo foglio di lettura;
+- nessuna modifica al checkpoint canonico, a Eve o alla logica generale della demo.
+
+Verifiche:
+
+- copertina, metadati, corpo introduttivo e pagine di capitolo controllati
+  nell'anteprima locale;
+- diagrammi testuali ricomposti su righe leggibili senza riscriverne il contenuto;
+- suite completa: 32 file e 177 test superati;
+- test mirato finale: 6/6 superati;
+- typecheck superato;
+- lint senza errori, con il solo avviso storico in
+  `src/lib/vocabulary/mastery.ts`;
+- build di produzione superata.
+
 La pubblicazione resta sospesa fino alla verifica visiva dell’utente.

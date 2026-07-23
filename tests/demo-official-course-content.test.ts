@@ -146,4 +146,20 @@ describe("contenuti ufficiali nella demo canonica", () => {
     expect(adapter).toContain("pythonProject.starterCode");
     expect(adapter).toContain("viewTemplates.glossary");
   });
+
+  it("impagina i contenuti ufficiali con una gerarchia editoriale responsive", () => {
+    expect(adapter).toContain("function renderLessonCover");
+    expect(adapter).toContain("function renderEditorialCallout");
+    expect(adapter).toContain("function prepareChapterBlocks");
+    expect(adapter).toContain("function formatDiagramText");
+    expect(adapter).toContain("official-lesson-cover");
+    expect(adapter).toContain("official-chapter-header");
+    expect(adapter).toContain("official-lesson-body");
+    expect(adapter).toContain("official-cover-audience");
+    expect(adapter).toContain("official-diagram");
+    expect(adapter).toContain("@media(max-width:700px)");
+    expect(adapter).not.toContain(
+      '${index === 0 ? `<h1>${escape(lesson.title)}</h1>` : ""}'
+    );
+  });
 });
