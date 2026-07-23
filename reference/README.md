@@ -4,7 +4,7 @@ Questa cartella contiene la fonte visiva e funzionale ufficiale usata per trasfe
 
 ## Stato
 
-**Demo 1.3.0-alpha.9 pronta per verifica: errori sicuri, retry recuperabile e alternative interne.**
+**Demo 1.3.0-alpha.10 pronta per verifica: Fase 3 consolidata con lettore TXT/Markdown e diagnostica integrata.**
 
 File canonico:
 
@@ -12,14 +12,14 @@ File canonico:
 
 Identificatori della versione corrente:
 
-- versione: `1.3.0-alpha.9`
+- versione: `1.3.0-alpha.10`
 
-- dimensione: `727961` byte
-- righe: `19865`
-- SHA-256: `957ae6c18adf653dbcfa7bafeab33e57fb49a87a210717584a555b9abb534318`
-- Git blob SHA: `e0a11bec94aa876c36789430842f498ee97d4e03`
+- dimensione: `7997` byte
+- righe: `22`
+- SHA-256: `7125ae833c32daf9742a0310d6dd69227a1638c9934ddfd564320df28a86fede`
+- Git blob SHA: `6c9848a82ef8e6ef8160cbc7ae05caf42ba9ffc2`
 
-Il Git blob SHA del file presente nel branch coincide con quello calcolato sul file locale verificato: il contenuto è identico byte per byte.
+Il file canonico e il checkpoint alpha.10 coincidono byte per byte. Alpha.10 è un caricatore verificato: recupera il checkpoint immutabile alpha.9 dalla stessa cartella, ne controlla il SHA-256 e applica localmente il lettore TXT/Markdown e la diagnostica della Fase 3.
 
 ## Fonte di verità
 
