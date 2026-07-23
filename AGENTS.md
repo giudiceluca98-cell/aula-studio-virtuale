@@ -21,6 +21,33 @@ Queste regole si applicano all'intero repository. Gli agenti sono generalisti: n
 7. Se non è possibile prenotare un file condiviso, l'integrazione viene affidata a un'attività separata.
 8. Non modificare migrazioni Supabase già applicate. Creare una nuova migrazione incrementale.
 
+## Demo canonica
+
+Il branch `demo-canonica` contiene il riferimento visivo e funzionale ufficiale della demo.
+Il file canonico deve essere collocato in:
+
+`reference/demo-aula-studio-virtuale-canonica.html`
+
+Regole obbligatorie:
+
+1. Non ricostruire la demo da descrizioni, screenshot o vecchi add-on.
+2. Usare il file canonico come fonte di verità per aspetto, interazioni e stati.
+3. Non sostituire l'app Next.js con il singolo HTML della demo.
+4. Trasferire ogni funzione nell'architettura ufficiale conservando autenticazione, routing, Supabase, RLS e Realtime.
+5. Non copiare `localStorage` o dati mock quando nell'app ufficiale esiste una persistenza reale.
+6. Integrare una funzione per volta in un branch dedicato.
+7. Confrontare visivamente il risultato con la demo prima di dichiarare il lavoro concluso.
+8. Non eliminare o semplificare funzioni presenti nella demo per far passare più facilmente l'integrazione.
+
+Una funzione è equivalente soltanto quando:
+
+- aspetto e comportamento corrispondono alla demo;
+- funzionano anche gli stati intermedi;
+- refresh, navigazione e responsive non rompono il flusso;
+- non compaiono errori in console;
+- la persistenza usa il livello corretto;
+- test, typecheck, lint e build passano.
+
 ## Sicurezza
 
 1. Non committare `.env`, segreti, token, password, dati personali, log privati, dump o file caricati dagli utenti.
