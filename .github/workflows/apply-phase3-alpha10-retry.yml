@@ -1,3 +1,4 @@
+# Trigger esplicito su workflow già presente nel branch
 name: Riattiva Fase 3 alpha.10
 
 on:
