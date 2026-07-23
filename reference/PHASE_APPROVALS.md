@@ -28,8 +28,7 @@ Ogni rapporto di checkpoint deve contenere:
 - file modificati;
 - controlli superati;
 - controlli non eseguiti o limiti reali;
-- percorso della demo:
-  `reference/demo-aula-studio-virtuale-canonica.html`;
+- percorso della demo: `reference/demo-aula-studio-virtuale-canonica.html`;
 - istruzioni per scaricare e aprire il file HTML nel browser;
 - elenco breve delle azioni che l'utente deve provare;
 - stato finale `IN_ATTESA_APPROVAZIONE`.
@@ -67,13 +66,12 @@ Ogni rapporto di checkpoint deve contenere:
 | Fase 3 | Materiali: import-required | APPROVATO | 2026-07-23 | L’utente ha verificato il funzionamento e autorizzato la prosecuzione. |
 | Fase 3 | Materiali: tracking e ripresa | APPROVATO | 2026-07-23 | L’utente ha autorizzato la prosecuzione dopo la consegna del checkpoint. |
 | Fase 3 | Materiali: errori e alternative | APPROVATO | 2026-07-23 | L’utente ha autorizzato la prosecuzione dopo la consegna del checkpoint 1.3.0-alpha.9. |
-| Fase 3 | Consolidamento finale Materiali | IN_ATTESA_APPROVAZIONE | 2026-07-23 | Demo HTML 1.3.0-alpha.10 e rapporto integrato prodotti. |
-| Fasi 4–10 | Passaggi successivi | DA_INIZIARE | — | Ogni passaggio avrà un checkpoint separato. |
+| Fase 3 | Consolidamento finale Materiali | APPROVATO | 2026-07-23 | L’utente ha scritto “procediamo con il passaggio successivo” dopo la consegna di 1.3.0-alpha.10. |
+| Fase 4 | Checklist: elenco, filtri e gestione stato | IN_ATTESA_APPROVAZIONE | 2026-07-23 | Demo HTML 1.4.0-alpha.1 prodotta e pronta per verifica. |
+| Fasi 5–10 | Passaggi successivi | DA_INIZIARE | — | Ogni passaggio avrà un checkpoint separato. |
 
 ## Come approvare
 
-L'utente approva con una frase esplicita, per esempio:
-
-`Approvo il checkpoint Fase 1 — Catalogo: vista e navigazione.`
+L'utente approva scrivendo esplicitamente di procedere con il passaggio successivo.
 
 Dopo l'approvazione, il registro deve essere aggiornato a `APPROVATO` prima di qualsiasi altro cambiamento alla demo.
