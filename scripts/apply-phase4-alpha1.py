@@ -2,26 +2,34 @@ from __future__ import annotations
 
 from pathlib import Path
 import base64
+import bz2
 import hashlib
 import re
 import subprocess
-import zlib
+import tempfile
 
 VERSION = "1.4.0-alpha.1"
+BASE_SHA256 = "957ae6c18adf653dbcfa7bafeab33e57fb49a87a210717584a555b9abb534318"
 SIZE = 763281
 LINES = 20872
 SHA256 = "85ad819914cf85740b0013f0d3147adaa2ff7b233f99935ba67f4fb77fefe95c"
 GIT_BLOB = "1a4b68f4aa04bd5602afddb7a9feba867da33574"
 ROOT = Path(__file__).resolve().parents[1]
+PATCH_PATH = ROOT / "scripts" / "phase4-alpha1.patch.bz2.b64"
 REFERENCE = ROOT / "reference"
 CANONICAL = REFERENCE / "demo-aula-studio-virtuale-canonica.html"
 CHECKPOINT_DIR = REFERENCE / "checkpoints" / "phase-4"
 CHECKPOINT = CHECKPOINT_DIR / f"demo-aula-studio-virtuale-{VERSION}.html"
 
-parts = sorted((ROOT / "scripts").glob("phase4-alpha1.part*"))
-assert parts, "Payload alpha1 assente"
-payload = "".join(part.read_text(encoding="ascii").strip() for part in parts)
-data = zlib.decompress(base64.b64decode(payload))
+base = CANONICAL.read_bytes()
+assert hashlib.sha256(base).hexdigest() == BASE_SHA256, "Il canonico non coincide con alpha.9"
+patch_data = bz2.decompress(base64.b64decode(PATCH_PATH.read_text(encoding="ascii")))
+with tempfile.NamedTemporaryFile(suffix=".patch") as patch_file:
+    patch_file.write(patch_data)
+    patch_file.flush()
+    subprocess.run(["patch", "--silent", "--batch", str(CANONICAL), patch_file.name], check=True)
+
+data = CANONICAL.read_bytes()
 assert len(data) == SIZE, (len(data), SIZE)
 assert data.count(b"\n") + 1 == LINES
 assert hashlib.sha256(data).hexdigest() == SHA256
@@ -48,11 +56,9 @@ duplicates = sorted({v for v in ids if ids.count(v) > 1})
 assert not duplicates, f"ID duplicati: {duplicates}"
 
 CHECKPOINT_DIR.mkdir(parents=True, exist_ok=True)
-CANONICAL.write_bytes(data)
 CHECKPOINT.write_bytes(data)
 assert CANONICAL.read_bytes() == CHECKPOINT.read_bytes()
 
-# Controllo sintattico di ogni script inline classico.
 tmp = ROOT / ".phase4-js-check"
 tmp.mkdir(exist_ok=True)
 scripts = re.findall(r"<script([^>]*)>(.*?)</script>", text, flags=re.I | re.S)
