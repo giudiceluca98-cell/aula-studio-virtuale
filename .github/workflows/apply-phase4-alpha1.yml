@@ -1,5 +1,6 @@
 name: Applica Fase 4 alpha.1 autonoma
 
+# Workflow temporaneo: si elimina nello stesso commit finale.
 on:
   push:
     branches:
