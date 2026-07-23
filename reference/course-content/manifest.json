@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "payload": {
+    "file": "programming-zero.json",
+    "sha256": "44360e276db36e8e96bd03787178149e492325fe3ff590981e4b585f7cd179eb",
+    "bytes": 1461426
+  },
+  "adapter": {
+    "file": "programming-zero-adapter.js",
+    "sha256": "f384e064fe52d4635dce506fac61c47b2e4b37ef4d7cb2751959e3bdbd5417e5",
+    "bytes": 20425
+  },
+  "totals": {
+    "lessons": 11,
+    "sections": 127,
+    "chapters": 116,
+    "exercises": 464,
+    "quizQuestions": 348,
+    "glossaryEntries": 580,
+    "pythonProjects": 11
+  }
+}
