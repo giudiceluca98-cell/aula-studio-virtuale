@@ -1,8 +1,8 @@
 # Correzione pubblicazione checkpoint 1.4 autonomo
 
-Stato: in corso
+Stato: completato
 Assegnazione: Codex
-Branch: `agent/phase4-publisher-fix`
+Branch: `agent/phase4-publisher-fix-2`
 
 ## Obiettivo
 
@@ -21,3 +21,11 @@ Correggere esclusivamente i due marker JavaScript errati che bloccano il workflo
 - presenza delle funzioni effettive `aulaTextOpen` e `aulaMaterialDiagnosticsOpen`;
 - workflow GitHub completato con successo;
 - nessuna modifica alla logica della demo o dell'applicazione.
+
+## Risultato
+
+- PR #67 e PR #68 unite in `demo-canonica`;
+- workflow GitHub `30008621608` completato con successo;
+- checkpoint autonomo pubblicato nel commit `acb9029`;
+- SHA-256 ufficiale confermato:
+  `85ad819914cf85740b0013f0d3147adaa2ff7b233f99935ba67f4fb77fefe95c`.

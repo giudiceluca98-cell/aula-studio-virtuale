@@ -20,6 +20,10 @@ Identificatori della versione corrente:
 
 Il canonico e il checkpoint della Fase 4 coincidono byte per byte. Il file è autonomo: può essere aperto con doppio clic e non richiede Internet o checkpoint esterni.
 
+## Copia integrata con i corsi ufficiali
+
+`reference/demo-aula-studio-virtuale-integrata.html` deriva dal canonico sopra indicato e aggiunge esclusivamente il pacchetto editoriale di “Programmazione da Zero”. Il canonico e i checkpoint non vengono modificati. La copia integrata incorpora payload e adattatore nello stesso HTML, quindi non dipende da richieste esterne per aprire le lezioni.
+
 ## Fonte di verità
 
 Codex e gli altri agenti devono leggere la demo direttamente dal branch `demo-canonica`. Non devono usare copie locali non versionate, vecchi add-on, screenshot o ricostruzioni manuali come fonte principale.
