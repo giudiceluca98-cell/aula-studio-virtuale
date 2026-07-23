@@ -6,7 +6,7 @@ Questo file registra incarichi temporanei, proprietà dei file e dipendenze tra 
 
 | Attività | Assegnazione prevista | Branch | Stato | File riservati | File condivisi richiesti | Pull request | Ultimo aggiornamento |
 |---|---|---|---|---|---|---|---|
-| Parità Dashboard con la demo canonica | Codex | `agent/canonical-demo-staging` | In corso | `src/components/dashboard/room-launcher.tsx`, test Dashboard e scheda attività | nessuno | — | 2026-07-23 |
+| Parità Dashboard con la demo canonica | Codex | `agent/canonical-demo-staging` | In revisione | `src/components/dashboard/room-launcher.tsx`, test Dashboard e scheda attività | nessuno | [PR #65](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/65) · anteprima locale in attesa di approvazione | 2026-07-23 |
 | Logo circolare ufficiale dell'app | Codex | `agent/app-round-logo` | In revisione | asset logo, componente brand, metadati, presentazione, autenticazione, dashboard e test | `src/components/catalog/catalog-explorer.tsx`, `src/components/room/study-room.tsx` | [PR #60](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/60) | 2026-07-22 |
 | Fedeltà pannello Eve e area di lavoro alla demo ufficiale | Codex | `agent/eve-panel-reference-fidelity` | In revisione | `globals.css`, workspace lezione, Eve Voice e test | nessuno | [PR #57](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/57) · confronto visivo completato; controlli superati | 2026-07-22 |
 | Completamento fedele demo e parità tra temi | Codex | `agent/complete-demo-layout` | Completato | intro completa, workspace lezione, Eve, centro messaggi, CSS e test | nessuno | Intro demo, layout condiviso, Eve Voice completa e chat flottanti verificati; pronto per pubblicazione | 2026-07-22 |

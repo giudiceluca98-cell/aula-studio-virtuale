@@ -1,6 +1,6 @@
 # Parità Dashboard con la demo canonica
 
-Stato: in corso
+Stato: in revisione
 Assegnazione: Codex
 Branch: `agent/canonical-demo-staging`
 
@@ -46,3 +46,28 @@ Nessuno.
 - nessuna pubblicazione prima dell'approvazione dell'anteprima locale;
 - le altre aree della demo canonica restano attività successive separate.
 
+## Risultato
+
+- Dashboard reale allineata alla struttura del checkpoint canonico;
+- selettore stanza e collegamento contestuale al Catalogo sempre disponibili;
+- schede stanza con ruolo, partecipanti, presenza recente, invito e gestione;
+- dialog invito con codice reale e collegamento alla rotazione autorizzata;
+- attività recente, progressi, esercizi e tempo focus caricati da Supabase;
+- stati caricamento, vuoto, errore e conferma accessibili;
+- presenza Dashboard considerata online con tolleranza di due minuti;
+- layout verificato in Futuristica Focus su desktop e mobile senza overflow.
+
+## Verifiche
+
+- test mirato Dashboard: 1/1;
+- suite completa: 32 file, 172/172 test;
+- typecheck: superato;
+- lint: nessun errore, un warning preesistente in `src/lib/vocabulary/mastery.ts`;
+- build Next.js di produzione: superata;
+- verifica browser: dati reali caricati, Catalogo contestuale e dialog invito operativi;
+- Draft Pull Request: [PR #65](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/65).
+
+## Stato consegna
+
+Anteprima locale in attesa di approvazione. Nessun merge e nessun deployment di
+produzione eseguiti.
