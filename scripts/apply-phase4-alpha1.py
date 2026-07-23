@@ -40,8 +40,8 @@ required = [
     'AULA STUDIO VIRTUALE — CHECKPOINT AUTONOMO 1.4.0-alpha.1',
     'aula-demo-checklist-v2',
     'window.buildChecklistDrawerHtml',
-    'window.openMaterialTextViewer',
-    'window.openMaterialDiagnostics',
+    'window.aulaMaterialTextOpen',
+    'window.aulaMaterialDiagnosticsOpen',
     'MATERIALI E WORKSPACE — ERRORI E ALTERNATIVE 1.3.0-alpha.9',
 ]
 for marker in required:
