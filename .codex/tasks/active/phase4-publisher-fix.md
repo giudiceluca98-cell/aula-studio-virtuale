@@ -18,6 +18,6 @@ Correggere esclusivamente i due marker JavaScript errati che bloccano il workflo
 
 - ricostruzione dell'artefatto con dimensione `763281` byte;
 - SHA-256 `85ad819914cf85740b0013f0d3147adaa2ff7b233f99935ba67f4fb77fefe95c`;
-- presenza delle funzioni effettive `aulaMaterialTextOpen` e `aulaMaterialDiagnosticsOpen`;
+- presenza delle funzioni effettive `aulaTextOpen` e `aulaMaterialDiagnosticsOpen`;
 - workflow GitHub completato con successo;
 - nessuna modifica alla logica della demo o dell'applicazione.
