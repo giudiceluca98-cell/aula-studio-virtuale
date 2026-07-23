@@ -4,7 +4,7 @@ Questa cartella contiene la fonte visiva e funzionale ufficiale usata per trasfe
 
 ## Stato
 
-**Demo 1.3.0-alpha.10 pronta per verifica: Fase 3 consolidata con lettore TXT/Markdown e diagnostica integrata.**
+**Demo 1.4.0-alpha.1 pronta per verifica: Fase 4 avviata con Checklist dinamica, filtri, assegnazioni e persistenza locale dichiarata.**
 
 File canonico:
 
@@ -12,14 +12,13 @@ File canonico:
 
 Identificatori della versione corrente:
 
-- versione: `1.3.0-alpha.10`
+- versione: `1.4.0-alpha.1`
+- dimensione: `14445` byte
+- righe: `1`
+- SHA-256: `6d8fd182954be313b51049831d54dfdb529a523ed9715b46737e1810776c7974`
+- Git blob SHA: `ebd236cea4a6deac902b8c618319a85663394bb3`
 
-- dimensione: `7997` byte
-- righe: `22`
-- SHA-256: `7125ae833c32daf9742a0310d6dd69227a1638c9934ddfd564320df28a86fede`
-- Git blob SHA: `6c9848a82ef8e6ef8160cbc7ae05caf42ba9ffc2`
-
-Il file canonico e il checkpoint alpha.10 coincidono byte per byte. Alpha.10 è un caricatore verificato: recupera il checkpoint immutabile alpha.9 dalla stessa cartella, ne controlla il SHA-256 e applica localmente il lettore TXT/Markdown e la diagnostica della Fase 3.
+Il file canonico e il checkpoint 1.4.0-alpha.1 coincidono byte per byte. Il caricatore verifica il checkpoint immutabile `1.3.0-alpha.9` e applica localmente il consolidamento della Fase 3 e la Checklist della Fase 4.
 
 ## Fonte di verità
 
@@ -35,7 +34,8 @@ La demo definisce:
 - assistenza vocale negli esercizi;
 - chat completa e chat minimizzate;
 - cursore personalizzato;
-- timer, modali, drawer e persistenza locale della demo.
+- timer, modali, drawer e persistenza locale della demo;
+- Checklist dinamica della stanza con filtri, priorità, assegnatari e scadenze.
 
 ## Flusso di lavoro
 
