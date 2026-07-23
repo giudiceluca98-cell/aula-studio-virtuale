@@ -4,7 +4,7 @@ Questa cartella contiene la fonte visiva e funzionale ufficiale usata per trasfe
 
 ## Stato
 
-**Demo 1.3.0-alpha.9 pronta per verifica: errori sicuri, retry recuperabile e alternative interne.**
+**Demo 1.4.0-alpha.1 approvata: consolidamento dei Materiali e primo checkpoint della Checklist.**
 
 File canonico:
 
@@ -12,14 +12,17 @@ File canonico:
 
 Identificatori della versione corrente:
 
-- versione: `1.3.0-alpha.9`
+- versione: `1.4.0-alpha.1`
+- dimensione: `763281` byte
+- righe: `20872`
+- SHA-256: `85ad819914cf85740b0013f0d3147adaa2ff7b233f99935ba67f4fb77fefe95c`
+- Git blob SHA: `1a4b68f4aa04bd5602afddb7a9feba867da33574`
 
-- dimensione: `727961` byte
-- righe: `19865`
-- SHA-256: `957ae6c18adf653dbcfa7bafeab33e57fb49a87a210717584a555b9abb534318`
-- Git blob SHA: `e0a11bec94aa876c36789430842f498ee97d4e03`
+Il canonico e il checkpoint della Fase 4 coincidono byte per byte. Il file è autonomo: può essere aperto con doppio clic e non richiede Internet o checkpoint esterni.
 
-Il Git blob SHA del file presente nel branch coincide con quello calcolato sul file locale verificato: il contenuto è identico byte per byte.
+## Copia integrata con i corsi ufficiali
+
+`reference/demo-aula-studio-virtuale-integrata.html` deriva dal canonico sopra indicato e aggiunge esclusivamente il pacchetto editoriale di “Programmazione da Zero”. Il canonico e i checkpoint non vengono modificati. La copia integrata incorpora payload e adattatore nello stesso HTML, quindi non dipende da richieste esterne per aprire le lezioni.
 
 ## Fonte di verità
 
@@ -35,12 +38,14 @@ La demo definisce:
 - assistenza vocale negli esercizi;
 - chat completa e chat minimizzate;
 - cursore personalizzato;
-- timer, modali, drawer e persistenza locale della demo.
+- timer, modali, drawer e persistenza locale della demo;
+- viewer testuale e diagnostica dei Materiali;
+- Checklist con ricerca, filtri, assegnatari, priorità, scadenze, stati e persistenza locale.
 
 ## Flusso di lavoro
 
 1. Le modifiche visuali e funzionali alla demo vengono applicate nel branch `demo-canonica`.
-2. Ogni aggiornamento modifica il file canonico, il manifesto e il changelog.
+2. Ogni aggiornamento modifica il file canonico, il manifesto e il changelog del checkpoint.
 3. Codex esegue `git fetch origin --prune` e legge la versione più recente del branch.
 4. Codex integra una funzione per volta nell'app ufficiale su un branch dedicato.
 5. L'integrazione deve conservare autenticazione, routing, Supabase, RLS e Realtime.
