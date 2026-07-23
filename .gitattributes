@@ -1,7 +1,0 @@
-# Gli artefatti della demo e dei corsi sono verificati tramite SHA-256.
-# Mantieni LF su ogni piattaforma per evitare impronte diverse su Windows.
-/.gitattributes text eol=lf
-reference/**/*.html text eol=lf
-reference/course-content/*.json text eol=lf
-reference/course-content/*.js text eol=lf
-scripts/*.mjs text eol=lf
