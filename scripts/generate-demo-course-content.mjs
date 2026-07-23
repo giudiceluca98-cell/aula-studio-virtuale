@@ -144,39 +144,41 @@ const canonicalPath = join(
   "demo-aula-studio-virtuale-canonica.html"
 );
 const canonical = await readFile(canonicalPath);
-let integratedDemo = canonical.toString("utf8");
-const constantsNeedle = ',s=document.getElementById("status")';
-const loadingNeedle =
-  'try{let x=await g();b.style.width="45%";if(hex(await crypto.subtle.digest("SHA-256",x))!==H)throw Error("Hash base non valido");let t=new TextDecoder().decode(x);';
-const injectionNeedle =
-  't=t.replace("</head>",css+"</head>").replace("</body>",js+"</body>");';
+const canonicalText = canonical.toString("utf8").replaceAll("\r\n", "\n");
+const canonicalNeedles = [
+  '<meta name="aula-demo-version" content="1.4.0-alpha.1" />',
+  "AULA STUDIO VIRTUALE — CHECKPOINT AUTONOMO 1.4.0-alpha.1",
+  "window.buildChecklistDrawerHtml",
+  "window.aulaTextOpen",
+  "window.aulaMaterialDiagnosticsOpen",
+  "</body>",
+];
 
-for (const needle of [constantsNeedle, loadingNeedle, injectionNeedle]) {
-  if (!integratedDemo.includes(needle)) {
+for (const needle of canonicalNeedles) {
+  if (!canonicalText.includes(needle)) {
     throw new Error(`Demo canonica incompatibile: marcatore assente ${needle}`);
   }
 }
 
-integratedDemo = integratedDemo
+if (canonicalText.includes("data-official-course-adapter")) {
+  throw new Error("La demo canonica contiene già l'adattatore dei corsi");
+}
+
+const embeddedPayload = JSON.stringify(payload).replaceAll("<", "\\u003c");
+const courseScripts = [
+  '<script data-official-course>',
+  `window.AULA_OFFICIAL_COURSE_PAYLOAD=${embeddedPayload};`,
+  "</script>",
+  '<script data-official-course-adapter>',
+  adapter.toString("utf8"),
+  "</script>",
+].join("\n");
+
+let integratedDemo = canonicalText
+  .replace("</body>", `${courseScripts}\n</body>`)
   .replace(
-    constantsNeedle,
-    `,P="course-content/programming-zero.json",PH="${payloadSha256}",A="course-content/programming-zero-adapter.js",AH="${adapterSha256}"${constantsNeedle}`
-  )
-  .replace(
-    loadingNeedle,
-    'try{let [x,pr,ar]=await Promise.all([g(),fetch(P,{cache:"no-store"}),fetch(A,{cache:"no-store"})]);if(!pr.ok||!ar.ok)throw Error("Contenuti ufficiali non disponibili: "+pr.status+"/"+ar.status);b.style.width="35%";let [y,z]=await Promise.all([pr.arrayBuffer(),ar.arrayBuffer()]),t0=new TextDecoder().decode(x).replaceAll("\\r\\n","\\n"),nx=new TextEncoder().encode(t0),[h,ph,ah]=await Promise.all([nx,y,z].map(v=>crypto.subtle.digest("SHA-256",v).then(hex)));if(h!==H)throw Error("Hash base non valido");if(ph!==PH)throw Error("Hash contenuti non valido");if(ah!==AH)throw Error("Hash adattatore non valido");let t=t0,payload=JSON.parse(new TextDecoder().decode(y)),courseJs=\'<script data-official-course>window.AULA_OFFICIAL_COURSE_PAYLOAD=\'+JSON.stringify(payload).replaceAll("<","\\\\u003c")+\';<\\\\/script><script data-official-course-adapter>\'+new TextDecoder().decode(z)+\'<\\\\/script>\';'
-  )
-  .replace(
-    injectionNeedle,
-    't=t.replace("</head>",css+"</head>").replace("</body>",js.replaceAll("<"+String.fromCharCode(92)+"/script>","<"+"/script>")+courseJs+"</body>");'
-  )
-  .replace(
-    "Base verificata. Apertura Checklist…",
-    "Base, Checklist e contenuti verificati. Apertura dell’aula…"
-  )
-  .replace(
-    "<title>Aula Studio Virtuale 1.4.0-alpha.1</title>",
-    "<title>Aula Studio Virtuale 1.4.0-alpha.1 · Corsi ufficiali</title>"
+    "<title>Aula Studio Virtuale — Presentazione</title>",
+    "<title>Aula Studio Virtuale — Corsi ufficiali</title>"
   );
 
 const integratedDemoPath = join(
@@ -200,7 +202,7 @@ const manifest = {
   },
   integratedDemo: {
     file: "../demo-aula-studio-virtuale-integrata.html",
-    sourceCanonicalSha256: sha256(canonical),
+    sourceCanonicalSha256: sha256(canonicalText),
     sha256: sha256(integratedDemo),
     bytes: Buffer.byteLength(integratedDemo),
   },

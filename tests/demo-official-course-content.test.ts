@@ -13,11 +13,10 @@ const canonicalPath = join(
   referenceRoot,
   "demo-aula-studio-virtuale-canonica.html"
 );
-const loaderPath = join(
+const integratedPath = join(
   referenceRoot,
   "demo-aula-studio-virtuale-integrata.html"
 );
-const basePath = join(referenceRoot, "demo-aula-studio-virtuale-1.3.0-alpha.9.html");
 
 const sha256 = (value: Buffer | string) =>
   createHash("sha256").update(value).digest("hex");
@@ -25,7 +24,7 @@ const sha256 = (value: Buffer | string) =>
 const payload = JSON.parse(readFileSync(payloadPath, "utf8"));
 const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
 const adapter = readFileSync(adapterPath, "utf8");
-const loader = readFileSync(loaderPath, "utf8");
+const integrated = readFileSync(integratedPath, "utf8");
 
 describe("contenuti ufficiali nella demo canonica", () => {
   it("pubblica in ordine soltanto le undici lezioni ufficiali approvate", () => {
@@ -71,11 +70,14 @@ describe("contenuti ufficiali nella demo canonica", () => {
       sha256: sha256(adapterBytes),
       bytes: adapterBytes.byteLength,
     });
-    const canonicalBytes = readFileSync(canonicalPath);
-    const integratedBytes = readFileSync(loaderPath);
+    const canonicalText = readFileSync(canonicalPath, "utf8").replaceAll(
+      "\r\n",
+      "\n"
+    );
+    const integratedBytes = readFileSync(integratedPath);
     expect(manifest.integratedDemo).toMatchObject({
       file: "../demo-aula-studio-virtuale-integrata.html",
-      sourceCanonicalSha256: sha256(canonicalBytes),
+      sourceCanonicalSha256: sha256(canonicalText),
       sha256: sha256(integratedBytes),
       bytes: integratedBytes.byteLength,
     });
@@ -112,22 +114,27 @@ describe("contenuti ufficiali nella demo canonica", () => {
     }
   });
 
-  it("compone il pacchetto sopra la demo canonica senza modificare i checkpoint", () => {
-    const normalizedBase = readFileSync(basePath, "utf8").replaceAll("\r\n", "\n");
-    expect(sha256(normalizedBase)).toBe(
-      "957ae6c18adf653dbcfa7bafeab33e57fb49a87a210717584a555b9abb534318"
+  it("compone il pacchetto autonomo sopra la demo canonica senza modificare i checkpoint", () => {
+    const normalizedCanonical = readFileSync(canonicalPath, "utf8").replaceAll(
+      "\r\n",
+      "\n"
     );
-    expect(loader).toContain(`PH="${manifest.payload.sha256}"`);
-    expect(loader).toContain(`AH="${manifest.adapter.sha256}"`);
-    expect(loader).toContain("window.AULA_OFFICIAL_COURSE_PAYLOAD");
-    expect(loader).toContain('replaceAll("\\r\\n","\\n")');
-    expect(readFileSync(canonicalPath)).toEqual(
+    expect(sha256(normalizedCanonical)).toBe(
+      "85ad819914cf85740b0013f0d3147adaa2ff7b233f99935ba67f4fb77fefe95c"
+    );
+    expect(integrated).toContain('<script data-official-course>');
+    expect(integrated).toContain('<script data-official-course-adapter>');
+    expect(integrated).toContain("window.AULA_OFFICIAL_COURSE_PAYLOAD");
+    expect(integrated).toContain(`"sha256":"${payload.sources[0].sha256}"`);
+    expect(integrated).not.toContain('fetch("course-content/');
+    expect(normalizedCanonical).toEqual(
       readFileSync(
         join(
           referenceRoot,
           "checkpoints/phase-4/demo-aula-studio-virtuale-1.4.0-alpha.1.html"
-        )
-      )
+        ),
+        "utf8"
+      ).replaceAll("\r\n", "\n")
     );
   });
 

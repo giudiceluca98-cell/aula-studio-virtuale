@@ -55,10 +55,10 @@ considerate approvate e non entrano in questo primo pacchetto.
 
 ## Risultato
 
-- demo canonica sorgente: `1.4.0-alpha.1`, SHA-256
-  `6d8fd182954be313b51049831d54dfdb529a523ed9715b46737e1810776c7974`;
+- demo canonica autonoma sorgente: `1.4.0-alpha.1`, SHA-256
+  `85ad819914cf85740b0013f0d3147adaa2ff7b233f99935ba67f4fb77fefe95c`;
 - checkpoint canonico conservato byte per byte;
-- loader integrato rigenerabile:
+- copia integrata autonoma e rigenerabile:
   `reference/demo-aula-studio-virtuale-integrata.html`;
 - lezioni ufficiali collegate: `0.1`–`0.9`, `1.1`, `1.2`;
 - totali: 127 sezioni, 464 esercizi, 348 domande, 580 voci di glossario
@@ -102,4 +102,18 @@ Verifiche:
   `src/lib/vocabulary/mastery.ts`;
 - build di produzione superata.
 
-La pubblicazione resta sospesa fino alla verifica visiva dell’utente.
+L'utente ha confermato l'anteprima e autorizzato la pubblicazione. È in corso la
+verifica finale sulla base canonica autonoma.
+
+## Verifica finale sulla base autonoma
+
+- checkpoint ufficiale GitHub: `acb9029`;
+- SHA-256 canonico: `85ad819914cf85740b0013f0d3147adaa2ff7b233f99935ba67f4fb77fefe95c`;
+- copia integrata autonoma: 2.254.426 byte;
+- test mirati del pacchetto: 6/6 superati;
+- suite completa: 173/177 superati al primo passaggio, con quattro timeout sotto carico;
+- riesecuzione isolata delle tre suite in timeout: 14/14 superati;
+- typecheck superato;
+- lint senza errori, con il solo avviso storico in `src/lib/vocabulary/mastery.ts`;
+- build di produzione Next.js superata;
+- anteprima locale `v=5` verificata senza ID duplicati e con impaginazione responsive.

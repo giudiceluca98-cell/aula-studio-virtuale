@@ -12,9 +12,9 @@
   },
   "integratedDemo": {
     "file": "../demo-aula-studio-virtuale-integrata.html",
-    "sourceCanonicalSha256": "6d8fd182954be313b51049831d54dfdb529a523ed9715b46737e1810776c7974",
-    "sha256": "314c11013506b679e214a013a0cef35c4973bfbd45a64865a0937acd69c22fcd",
-    "bytes": 15514
+    "sourceCanonicalSha256": "85ad819914cf85740b0013f0d3147adaa2ff7b233f99935ba67f4fb77fefe95c",
+    "sha256": "589cfa40e7fac7e11fc6a486f21750ccc572981503e10e1c2cf2fb05515567a9",
+    "bytes": 2254426
   },
   "totals": {
     "lessons": 11,
