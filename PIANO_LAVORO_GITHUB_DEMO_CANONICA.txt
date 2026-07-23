@@ -1,0 +1,423 @@
+PIANO UFFICIALE DI LAVORO
+AULA STUDIO VIRTUALE
+
+Versione iniziale della demo canonica:
+1.4.0-alpha.1
+
+Data di adozione del piano:
+24 luglio 2026
+
+
+1. OBIETTIVO
+
+Questo documento stabilisce come organizzare il progetto su GitHub e come
+dividere il lavoro tra i Codex.
+
+Da questo momento esistono soltanto tre ambienti ufficiali:
+
+1. DEMO CANONICA
+   Serve per sviluppare e approvare grafica, struttura, comportamento e nuove
+   funzioni dell'app.
+
+2. SERVER DI ANTEPRIMA SU IP LOCALE
+   Serve per mostrare gli aggiornamenti all'utente prima della pubblicazione.
+   Non è una versione separata e non contiene modifiche proprie.
+
+3. APP UFFICIALE ONLINE
+   È la versione pubblica destinata agli utenti. Riceve soltanto aggiornamenti
+   già controllati e approvati nel server di anteprima.
+
+I due Codex devono poter vedere chiaramente su GitHub:
+
+- qual è la fonte canonica;
+- quale commit è in anteprima;
+- quale commit è pubblicato online.
+
+Non devono esistere altre versioni concorrenti o copie ambigue.
+
+
+2. FONTE UNICA
+
+La sola fonte ufficiale per design, layout e comportamento dell'interfaccia è:
+
+branch GitHub:
+demo-canonica
+
+file:
+reference/demo-aula-studio-virtuale-canonica.html
+
+versione corrente:
+1.4.0-alpha.1
+
+Il nome del file non deve cambiare quando cambia la versione.
+
+La versione deve essere registrata nel manifesto, nel changelog e nel tag Git,
+non aggiunta al nome del file.
+
+Esempio corretto:
+reference/demo-aula-studio-virtuale-canonica.html
+
+Esempi vietati:
+demo-finale.html
+demo-finale-2.html
+demo-nuova.html
+demo-corretta.html
+demo-review.html
+demo-integrata.html
+demo-1.4.0-alpha.2-copia.html
+
+
+3. STRUTTURA GITHUB UFFICIALE
+
+Devono essere mantenute tre branch principali e riconoscibili.
+
+A. demo-canonica
+
+Funzione:
+- sviluppo della demo;
+- approvazione di design e funzionamenti;
+- fonte letta da entrambi i Codex.
+
+Contiene:
+- il file canonico con nome invariabile;
+- il manifesto della versione;
+- il changelog;
+- eventuali dati ufficiali necessari alla demo;
+- test e documentazione riferiti alla demo corrente.
+
+Non contiene:
+- copie della demo con nomi diversi;
+- vecchie versioni utilizzabili come alternative;
+- file temporanei;
+- esperimenti non approvati;
+- codice della vecchia interfaccia.
+
+
+B. preview
+
+Funzione:
+- rappresenta esattamente ciò che viene eseguito sul server locale/IP;
+- permette all'utente di controllare l'aggiornamento prima della pubblicazione.
+
+Regola:
+- preview non sviluppa funzioni proprie;
+- preview riceve soltanto aggiornamenti provenienti da demo-canonica;
+- il server IP deve eseguire un commit presente nella branch preview;
+- sul server non devono esistere modifiche non committate;
+- il commit mostrato sul server deve essere identificabile.
+
+Indirizzi previsti:
+- computer principale: http://127.0.0.1:3000/
+- rete locale: http://IP-DEL-COMPUTER:3000/
+
+L'indirizzo IP può cambiare, ma la branch e i nomi dei file non cambiano.
+
+
+C. main
+
+Funzione:
+- contiene la versione ufficiale dell'app;
+- è la sola branch collegata alla pubblicazione Vercel di produzione;
+- rappresenta ciò che gli utenti vedono online.
+
+Regola:
+- nessun Codex pubblica direttamente da demo-canonica;
+- nessun Codex modifica direttamente main;
+- main riceve soltanto una Pull Request proveniente da preview;
+- la Pull Request viene unita soltanto dopo approvazione dell'anteprima;
+- il deployment online deve corrispondere al commit unito in main.
+
+
+4. FLUSSO OBBLIGATORIO DEGLI AGGIORNAMENTI
+
+Ogni aggiornamento segue sempre questo ordine:
+
+FASE 1 - SVILUPPO
+
+1. Il Codex che sviluppa legge l'ultima demo canonica.
+2. Crea una branch temporanea con nome chiaro.
+3. Modifica la demo senza creare copie con nomi differenti.
+4. Apre una Pull Request verso demo-canonica.
+5. Esegue test e confronto visivo.
+6. La modifica approvata viene unita in demo-canonica.
+
+Formato consigliato per le branch temporanee:
+
+demo/nome-funzione
+demo/correzione-nome-funzione
+content/nome-corso-lezione
+
+
+FASE 2 - ANTEPRIMA
+
+1. Il Codex responsabile della pubblicazione legge demo-canonica.
+2. Sincronizza preview con il commit canonico approvato.
+3. Avvia il server locale/IP dalla branch preview.
+4. Comunica:
+   - versione;
+   - commit;
+   - indirizzo locale;
+   - indirizzo IP;
+   - funzioni da controllare.
+5. L'utente verifica l'anteprima.
+6. Se l'utente rifiuta l'anteprima, main non viene modificata.
+7. Le correzioni tornano in demo-canonica e il ciclo riparte.
+
+
+FASE 3 - PUBBLICAZIONE
+
+1. L'utente approva esplicitamente l'anteprima.
+2. Viene aperta una Pull Request da preview verso main.
+3. Si verificano nuovamente test, build e commit.
+4. La Pull Request viene unita.
+5. Vercel pubblica esclusivamente il commit presente in main.
+6. Si verifica l'app online.
+7. Si registra il commit pubblicato e il relativo tag.
+
+
+5. DIVISIONE DEL LAVORO TRA I DUE CODEX
+
+CODEX DEMO E CONTENUTI
+
+Responsabilità:
+- sviluppare nuove funzioni nella demo canonica;
+- aggiornare design e comportamento;
+- preparare testi, lezioni, esercizi e materiali;
+- mantenere invariati i nomi ufficiali;
+- aprire Pull Request verso demo-canonica;
+- non pubblicare direttamente online.
+
+
+CODEX INTEGRAZIONE, VERIFICA E PUBBLICAZIONE
+
+Responsabilità:
+- controllare gli aggiornamenti presenti in demo-canonica;
+- verificare che non esistano file duplicati o nomi differenti;
+- sincronizzare la branch preview;
+- avviare e mantenere il server locale/IP;
+- eseguire test e confronto visivo;
+- raccogliere l'approvazione dell'utente;
+- aprire la Pull Request preview verso main;
+- pubblicare e verificare l'app ufficiale.
+
+
+REGOLE COMUNI
+
+- Entrambi i Codex leggono GitHub prima di iniziare.
+- Entrambi eseguono git fetch origin --prune.
+- Nessun Codex lavora su file non committati dall'altro.
+- Nessun Codex modifica direttamente main.
+- Un file condiviso viene modificato da un solo Codex alla volta.
+- Ogni attività dichiara branch, file e obiettivo.
+- Ogni aggiornamento usa una Pull Request.
+- Nessun Codex rinomina il file canonico.
+- Nessun Codex crea una propria variante della demo.
+- In caso di conflitto prevale demo-canonica.
+
+
+6. NOMI INVARIABILI
+
+I seguenti nomi sono permanenti.
+
+Repository:
+giudiceluca98-cell/aula-studio-virtuale
+
+Branch:
+demo-canonica
+preview
+main
+
+File canonico:
+reference/demo-aula-studio-virtuale-canonica.html
+
+Manifesto:
+reference/demo-manifest.json
+
+Changelog:
+reference/CHANGELOG_DEMO.md
+
+Documento di coordinamento:
+CODEX_COORDINATION.md
+
+Piano operativo:
+PIANO_LAVORO_GITHUB_DEMO_CANONICA.txt
+
+Il contenuto può essere aggiornato.
+Il percorso e il nome non devono essere cambiati.
+
+
+7. VERSIONAMENTO
+
+La versione corrente è:
+1.4.0-alpha.1
+
+Formato delle versioni:
+MAJOR.MINOR.PATCH-STATO.NUMERO
+
+Esempi:
+1.4.0-alpha.1
+1.4.0-alpha.2
+1.4.0-beta.1
+1.4.0
+
+Tag Git:
+demo-v1.4.0-alpha.1
+
+Regole:
+- il nome del file canonico resta invariato;
+- il numero di versione cambia nel manifesto;
+- ogni versione approvata riceve un tag;
+- preview e main devono indicare il commit canonico di origine;
+- non si sostituisce una versione già pubblicata con un file dallo stesso tag.
+
+
+8. COSA DEVE ESSERE ELIMINATO DA GITHUB
+
+Deve essere eliminato tutto ciò che può essere confuso con la demo canonica o
+che appartiene a flussi di lavoro abbandonati.
+
+Eliminare:
+- vecchie demo HTML concorrenti;
+- copie locali caricate per errore;
+- file chiamati finale, nuovo, corretto, review, preview o integrata;
+- vecchi add-on già incorporati nella demo;
+- screenshot usati come falsa fonte dell'interfaccia;
+- vecchi temi o layout non appartenenti alla demo canonica;
+- vecchio frontend non più utilizzato;
+- file temporanei e log;
+- branch già unite o abbandonate;
+- Pull Request obsolete;
+- attività concluse lasciate nella cartella active;
+- documenti che indicano una fonte differente dalla demo canonica;
+- checkpoint annullati o non approvati;
+- duplicati dei contenuti ufficiali.
+
+
+9. COSA NON DEVE ESSERE ELIMINATO
+
+Non eliminare ciò che serve a trasformare la demo in un'app reale.
+
+Conservare:
+- autenticazione;
+- API;
+- schema e migrazioni Supabase;
+- RLS;
+- Realtime;
+- Storage;
+- configurazione Vercel;
+- test di sicurezza;
+- contenuti didattici ufficiali;
+- dati e manifesti ufficiali;
+- documentazione necessaria;
+- script di verifica e pubblicazione realmente utilizzati.
+
+Questi elementi devono essere riordinati e collegati alla demo canonica, non
+confusi con il vecchio frontend.
+
+
+10. PROCEDURA SICURA DI PULIZIA
+
+La pulizia non deve essere eseguita cancellando file direttamente da main.
+
+Procedura:
+
+1. Creare un tag di sicurezza dell'ultimo stato precedente alla pulizia.
+2. Creare una branch dedicata:
+   cleanup/canonical-only
+3. Preparare l'inventario completo:
+   - conservare;
+   - spostare;
+   - eliminare;
+   - chiudere.
+4. Verificare che nessun segreto sia presente.
+5. Chiudere Pull Request obsolete.
+6. Eliminare branch remote già unite o abbandonate.
+7. Spostare le attività concluse da active a completed.
+8. Eliminare duplicati e vecchie demo.
+9. Aggiornare README e CODEX_COORDINATION.md.
+10. Eseguire test, typecheck, lint e build.
+11. Aprire una Pull Request di pulizia.
+12. Mostrare l'elenco esatto delle eliminazioni all'utente.
+13. Unire la pulizia soltanto dopo approvazione.
+
+
+11. REGOLA SUL SERVER IP
+
+Il server IP non è una fonte del progetto.
+
+È soltanto una visualizzazione del commit presente nella branch preview.
+
+È vietato:
+- modificare file direttamente sul server senza commit;
+- mostrare una copia locale diversa da GitHub;
+- usare un nome diverso per la demo;
+- pubblicare su Vercel una versione non approvata;
+- dichiarare pronta una versione con modifiche locali non caricate.
+
+Prima di mostrare l'anteprima devono essere comunicati:
+- branch;
+- commit;
+- versione;
+- stato della working tree;
+- indirizzo di visualizzazione.
+
+
+12. CRITERI DI APPROVAZIONE
+
+Un aggiornamento può passare da demo-canonica a preview quando:
+- usa il file canonico con nome corretto;
+- non introduce copie;
+- supera i test previsti;
+- il comportamento è verificabile;
+- la versione è registrata.
+
+Un aggiornamento può passare da preview a main quando:
+- l'utente ha controllato il server IP;
+- l'utente ha dato conferma esplicita;
+- preview non contiene modifiche locali;
+- test e build sono superati;
+- il commit è identificato;
+- il deployment userà lo stesso commit.
+
+
+13. STATO VISIBILE SU GITHUB
+
+Il README principale deve mostrare sempre:
+
+DEMO CANONICA
+- versione;
+- branch;
+- commit;
+- stato.
+
+ANTEPRIMA IP
+- branch preview;
+- commit in esecuzione;
+- indirizzo locale;
+- indirizzo di rete;
+- stato approvazione.
+
+APP UFFICIALE
+- branch main;
+- commit pubblicato;
+- URL Vercel;
+- data dell'ultimo deployment.
+
+In questo modo entrambi i Codex e l'utente vedono subito quale versione stanno
+guardando e non possono confondere demo, anteprima e produzione.
+
+
+14. REGOLA FINALE
+
+La demo canonica 1.4.0-alpha.1 è il nuovo punto di partenza.
+
+Non si integra più il vecchio design nella demo.
+Non si ricostruisce la demo partendo dalla vecchia app.
+Non si mantengono versioni grafiche alternative.
+
+Si sviluppa nella demo canonica.
+Si controlla nella branch preview tramite server IP.
+Si pubblica da main soltanto dopo approvazione.
+
+Tutto ciò che non appartiene a questo flusso deve essere inventariato e rimosso
+con una Pull Request di pulizia approvata.

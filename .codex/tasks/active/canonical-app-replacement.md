@@ -20,6 +20,7 @@ Non devono convivere due strutture grafiche e non deve essere introdotto un seco
 - `scripts/publish-canonical-demo.mjs`
 - `next.config.ts`
 - `tests/canonical-app-replacement.test.ts`
+- `PIANO_LAVORO_GITHUB_DEMO_CANONICA.txt`
 
 ## File condivisi richiesti
 
