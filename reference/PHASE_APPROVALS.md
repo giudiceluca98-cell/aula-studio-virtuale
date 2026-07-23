@@ -66,8 +66,10 @@ Ogni rapporto di checkpoint deve contenere:
 | Fase 3 | Materiali: video | APPROVATO | 2026-07-23 | L’utente ha approvato il checkpoint e autorizzato la prosecuzione. |
 | Fase 3 | Materiali: import-required | APPROVATO | 2026-07-23 | L’utente ha verificato il funzionamento e autorizzato la prosecuzione. |
 | Fase 3 | Materiali: tracking e ripresa | APPROVATO | 2026-07-23 | L’utente ha autorizzato la prosecuzione dopo la consegna del checkpoint. |
-| Fase 3 | Materiali: errori e alternative | IN_ATTESA_APPROVAZIONE | 2026-07-23 | Demo HTML 1.3.0-alpha.9 prodotta e pronta per verifica. |
-| Fasi 2–10 | Passaggi successivi | DA_INIZIARE | — | Ogni passaggio avrà un checkpoint separato. |
+| Fase 3 | Materiali: errori e alternative | APPROVATO | 2026-07-23 | Il checkpoint 1.3.0-alpha.9 è stato conservato come base autonoma valida. |
+| Fase 3 | Consolidamento Materiali | APPROVATO | 2026-07-23 | Le integrazioni previste per alpha.10 sono state assorbite nel file autonomo 1.4.0-alpha.1. |
+| Fase 4 | Checklist: elenco, filtri e gestione attività | APPROVATO | 2026-07-23 | L’utente ha verificato il file autonomo, ha confermato che funziona e ne ha autorizzato il caricamento. |
+| Fasi 5–10 | Passaggi successivi | DA_INIZIARE | — | Ogni passaggio avrà un checkpoint separato. |
 
 ## Come approvare
 
