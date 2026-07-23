@@ -1,6 +1,6 @@
 # Contenuti ufficiali dei corsi nella demo canonica
 
-Stato: in corso
+Stato: in revisione
 Assegnazione: Codex
 Branch: `agent/demo-course-content-sync`
 
@@ -31,7 +31,7 @@ considerate approvate e non entrano in questo primo pacchetto.
 
 - `scripts/generate-demo-course-content.mjs`
 - `reference/course-content/**`
-- `reference/demo-aula-studio-virtuale-canonica.html`
+- `reference/demo-aula-studio-virtuale-integrata.html`
 - test mirati del pacchetto didattico della demo
 - `.codex/tasks/active/demo-official-course-content.md`
 - `CODEX_COORDINATION.md`
@@ -52,3 +52,30 @@ considerate approvate e non entrano in questo primo pacchetto.
 - selezione reale di ogni lezione nella demo;
 - funzionamento di lettore, Eve, esercizi, quiz, progetto e avanzamento;
 - anteprima locale prima della pubblicazione.
+
+## Risultato
+
+- demo canonica sorgente: `1.4.0-alpha.1`, SHA-256
+  `6d8fd182954be313b51049831d54dfdb529a523ed9715b46737e1810776c7974`;
+- checkpoint canonico conservato byte per byte;
+- loader integrato rigenerabile:
+  `reference/demo-aula-studio-virtuale-integrata.html`;
+- lezioni ufficiali collegate: `0.1`–`0.9`, `1.1`, `1.2`;
+- totali: 127 sezioni, 464 esercizi, 348 domande, 580 voci di glossario
+  e 11 Python Project;
+- Checklist 1.4 e corsi verificati insieme nell’anteprima locale;
+- selezione lezione, quiz interattivi, ripristino risposte e avanzamento verificati;
+- test mirati: 5/5;
+- suite completa: 172 test superati al primo passaggio e 4 timeout sotto carico;
+  le tre suite interessate sono state rieseguite in sequenza con 14/14 test superati;
+- typecheck superato;
+- lint superato con un avviso storico non collegato in
+  `src/lib/vocabulary/mastery.ts`;
+- build di produzione superata.
+
+## Consegna
+
+Draft Pull Request:
+https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/66
+
+La pubblicazione resta sospesa fino alla verifica visiva dell’utente.

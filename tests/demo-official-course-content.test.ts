@@ -9,7 +9,14 @@ const courseRoot = join(referenceRoot, "course-content");
 const payloadPath = join(courseRoot, "programming-zero.json");
 const adapterPath = join(courseRoot, "programming-zero-adapter.js");
 const manifestPath = join(courseRoot, "manifest.json");
-const loaderPath = join(referenceRoot, "demo-aula-studio-virtuale-canonica.html");
+const canonicalPath = join(
+  referenceRoot,
+  "demo-aula-studio-virtuale-canonica.html"
+);
+const loaderPath = join(
+  referenceRoot,
+  "demo-aula-studio-virtuale-integrata.html"
+);
 const basePath = join(referenceRoot, "demo-aula-studio-virtuale-1.3.0-alpha.9.html");
 
 const sha256 = (value: Buffer | string) =>
@@ -64,6 +71,14 @@ describe("contenuti ufficiali nella demo canonica", () => {
       sha256: sha256(adapterBytes),
       bytes: adapterBytes.byteLength,
     });
+    const canonicalBytes = readFileSync(canonicalPath);
+    const integratedBytes = readFileSync(loaderPath);
+    expect(manifest.integratedDemo).toMatchObject({
+      file: "../demo-aula-studio-virtuale-integrata.html",
+      sourceCanonicalSha256: sha256(canonicalBytes),
+      sha256: sha256(integratedBytes),
+      bytes: integratedBytes.byteLength,
+    });
     expect(manifest.totals).toEqual(payload.totals);
   });
 
@@ -97,7 +112,7 @@ describe("contenuti ufficiali nella demo canonica", () => {
     }
   });
 
-  it("collega il pacchetto alla demo senza modificare il checkpoint immutabile", () => {
+  it("compone il pacchetto sopra la demo canonica senza modificare i checkpoint", () => {
     const normalizedBase = readFileSync(basePath, "utf8").replaceAll("\r\n", "\n");
     expect(sha256(normalizedBase)).toBe(
       "957ae6c18adf653dbcfa7bafeab33e57fb49a87a210717584a555b9abb534318"
@@ -106,6 +121,14 @@ describe("contenuti ufficiali nella demo canonica", () => {
     expect(loader).toContain(`AH="${manifest.adapter.sha256}"`);
     expect(loader).toContain("window.AULA_OFFICIAL_COURSE_PAYLOAD");
     expect(loader).toContain('replaceAll("\\r\\n","\\n")');
+    expect(readFileSync(canonicalPath)).toEqual(
+      readFileSync(
+        join(
+          referenceRoot,
+          "checkpoints/phase-4/demo-aula-studio-virtuale-1.4.0-alpha.1.html"
+        )
+      )
+    );
   });
 
   it("adatta navigazione, progressi e attività interattive alla lezione selezionata", () => {

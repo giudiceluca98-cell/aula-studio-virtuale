@@ -10,6 +10,12 @@
     "sha256": "f384e064fe52d4635dce506fac61c47b2e4b37ef4d7cb2751959e3bdbd5417e5",
     "bytes": 20425
   },
+  "integratedDemo": {
+    "file": "../demo-aula-studio-virtuale-integrata.html",
+    "sourceCanonicalSha256": "6d8fd182954be313b51049831d54dfdb529a523ed9715b46737e1810776c7974",
+    "sha256": "2f8918d5dd9832abc618f45a67289082aad877d1e6e1d2d8de08f8511a76c99c",
+    "bytes": 15514
+  },
   "totals": {
     "lessons": 11,
     "sections": 127,
