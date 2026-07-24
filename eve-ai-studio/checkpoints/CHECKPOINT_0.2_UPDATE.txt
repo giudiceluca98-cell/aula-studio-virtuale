@@ -1,0 +1,337 @@
+EVE AI STUDIO
+FILE DI AGGIORNAMENTO CHECKPOINT 0.2
+
+Data: 24 luglio 2026
+Repository: giudiceluca98-cell/aula-studio-virtuale
+Branch: eve-ai-studio
+Base protetta: demo-canonica
+
+Titolo:
+0.2 — Separazione dei moduli e importatore strutturato del piano approfondito
+
+======================================================================
+1. OBIETTIVO
+======================================================================
+
+Trasformare il plaintext approfondito di Eve da documento consultabile a sorgente
+strutturata e verificabile per lo sviluppo del software.
+
+Il checkpoint separa inoltre il codice della fondazione in moduli con responsabilità
+singola, seguendo le regole del piano:
+
+- Eve cresce per moduli indipendenti;
+- ogni modifica viene instradata alla cartella responsabile;
+- il modello non decide permessi o accessi;
+- ogni capacità deve essere verificabile;
+- il database non viene chiamato direttamente dal modello.
+
+======================================================================
+2. STATO PRIMA DEL CHECKPOINT
+======================================================================
+
+La branch conteneva:
+
+- anteprima interattiva approvata;
+- servizio FastAPI versione 0.1.0;
+- provider mock;
+- modelli chat;
+- contesto didattico;
+- permessi;
+- audit;
+- quattro test automatici.
+
+app/foundation.py conteneva insieme configurazione, provider, audit, permessi e
+validazione del contesto.
+
+Non esisteva un sistema capace di leggere e catalogare le 1.197 schede del
+plaintext approfondito.
+
+======================================================================
+3. MODIFICHE REALIZZATE
+======================================================================
+
+3.1 Separazione del nucleo
+
+Create:
+
+app/core/
+app/context/
+app/providers/
+app/requirements/
+
+Configurazione:
+app/core/config.py
+
+Permessi:
+app/core/permissions.py
+
+Audit:
+app/core/audit.py
+
+Validazione contesto:
+app/context/validation.py
+
+Contratto provider:
+app/providers/base.py
+
+Provider simulato:
+app/providers/mock.py
+
+Registro provider:
+app/providers/registry.py
+
+app/foundation.py rimane soltanto come compatibilità temporanea e non contiene
+più l'implementazione principale.
+
+3.2 Importatore del piano
+
+Creati:
+
+app/requirements/models.py
+app/requirements/parser.py
+app/requirements/routing.py
+app/requirements/registry.py
+app/requirements/cli.py
+
+Il parser riconosce:
+
+- sezioni numerate;
+- identificativo SCHEDA X.Y;
+- titolo;
+- obiettivo operativo;
+- esperienza dell'utente;
+- implementazione proposta;
+- dati, permessi e tracciabilità;
+- casi limite e rischi;
+- verifica e criterio di completamento;
+- area principale;
+- modulo tecnico.
+
+Il parser blocca:
+
+- piano senza sezioni;
+- piano senza schede;
+- campo obbligatorio mancante;
+- campo obbligatorio vuoto;
+- identificatore duplicato;
+- conteggio diverso da quello atteso, quando specificato.
+
+3.3 Registro dei requisiti
+
+Il registro in memoria può:
+
+- importare il plaintext;
+- sostituire il catalogo corrente;
+- mostrare stato e checksum;
+- elencare le sezioni;
+- recuperare una scheda per ID;
+- filtrare per sezione;
+- filtrare per modulo;
+- cercare nel titolo e nell'obiettivo;
+- gestire offset e limite.
+
+La persistenza su database è esclusa dal checkpoint.
+
+3.4 API aggiunte
+
+GET /v1/requirements/status
+POST /v1/requirements/import
+GET /v1/requirements/sections
+GET /v1/requirements
+GET /v1/requirements/{requirement_id}
+
+3.5 CLI
+
+Comando:
+
+python -m app.requirements.cli
+
+Può leggere un plaintext UTF-8, verificare conteggi, calcolare il checksum e
+produrre un indice JSON. L'opzione --full include tutti i campi testuali.
+
+3.6 Manifesto ufficiale
+
+Creato:
+
+data/requirements-import-manifest.json
+
+Contiene:
+
+- checksum della sorgente;
+- numero di sezioni e schede;
+- primo e ultimo identificativo;
+- numero degli ID unici;
+- distribuzione per modulo;
+- elenco delle 36 sezioni.
+
+Il testo completo del piano non viene duplicato nel repository. L'indice completo
+può essere rigenerato dalla CLI.
+
+======================================================================
+4. VERIFICA DEL FILE UFFICIALE
+======================================================================
+
+File:
+PIANO_EVE_AI_APPROFONDITO_COMPLETO.txt
+
+Sezioni: 36
+Schede: 1.197
+Identificativi unici: 1.197
+Primo ID: 1.1
+Ultimo ID: 36.10
+Avvisi: 0
+
+SHA-256 del contenuto normalizzato:
+da527e3a5edb5ccc8b5a436d5eb5873d3fac26ecba10b8402c66414bd75b6313
+
+======================================================================
+5. TEST
+======================================================================
+
+Test totali: 9
+Risultato: 9 superati
+
+Test della fondazione:
+
+1. stato del servizio e provider;
+2. risposta chat strutturata;
+3. limite del contesto;
+4. gerarchia dei permessi.
+
+Nuovi test:
+
+5. estrazione e routing delle schede;
+6. rifiuto dei campi mancanti;
+7. importazione, lista e dettaglio tramite API;
+8. controllo dei conteggi attesi;
+9. integrità, unicità e checksum del manifesto ufficiale.
+
+Comando:
+PYTHONPATH=. pytest -q
+
+Risultato:
+9 passed
+
+======================================================================
+6. FILE CREATI
+======================================================================
+
+app/core/__init__.py
+app/core/config.py
+app/core/permissions.py
+app/core/audit.py
+
+app/context/__init__.py
+app/context/validation.py
+
+app/providers/__init__.py
+app/providers/base.py
+app/providers/mock.py
+app/providers/registry.py
+
+app/requirements/__init__.py
+app/requirements/models.py
+app/requirements/parser.py
+app/requirements/routing.py
+app/requirements/registry.py
+app/requirements/cli.py
+
+tests/test_requirements.py
+tests/test_requirements_index.py
+data/requirements-import-manifest.json
+checkpoints/CHECKPOINT_0.2_UPDATE.txt
+
+======================================================================
+7. FILE MODIFICATI
+======================================================================
+
+.env.example
+README.md
+PHASE_STATUS.md
+pyproject.toml
+app/models.py
+app/foundation.py
+app/main.py
+tests/test_foundation.py
+
+======================================================================
+8. ELEMENTI NON MODIFICATI
+======================================================================
+
+Non sono stati modificati:
+
+- branch main;
+- branch demo-canonica;
+- HTML canonico;
+- app ufficiale;
+- anteprima interattiva approvata;
+- file preesistenti fuori da eve-ai-studio/.
+
+Non sono state create pull request.
+Non sono stati eseguiti merge.
+Non è stato collegato alcun modello esterno.
+
+======================================================================
+9. LIMITI ATTUALI
+======================================================================
+
+Il catalogo vive ancora in memoria durante l'esecuzione del servizio.
+
+Non sono ancora presenti:
+
+- database persistente;
+- cronologia delle importazioni;
+- confronto tra versioni del piano;
+- autenticazione;
+- RAG;
+- modello AI reale;
+- Supabase;
+- memoria;
+- voce;
+- strumenti di modifica dell'app.
+
+======================================================================
+10. ROLLBACK
+======================================================================
+
+Il checkpoint può essere annullato riportando eve-ai-studio al commit precedente
+al checkpoint 0.2.
+
+La demo approvata è separata in:
+reference/eve-ai-studio-preview/
+
+La fondazione è separata in:
+eve-ai-studio/
+
+Il rollback non richiede modifiche a demo-canonica o main.
+
+======================================================================
+11. PROSSIMO CHECKPOINT
+======================================================================
+
+Checkpoint 0.3:
+
+- persistenza locale del catalogo requisiti;
+- registro delle importazioni;
+- versionamento del piano;
+- confronto tra due importazioni;
+- report di schede aggiunte, rimosse o modificate;
+- test di migrazione e rollback.
+
+======================================================================
+12. REGOLA PER I CHECKPOINT SUCCESSIVI
+======================================================================
+
+Alla chiusura di ogni checkpoint devono essere prodotti:
+
+1. codice realmente salvato sulla branch eve-ai-studio;
+2. test automatici;
+3. aggiornamento di PHASE_STATUS.md;
+4. aggiornamento di README.md quando necessario;
+5. plaintext dedicato dentro eve-ai-studio/checkpoints/;
+6. copia scaricabile consegnata all'utente;
+7. elenco preciso dei file creati e modificati;
+8. commit finale verificato;
+9. dichiarazione esplicita di ciò che resta escluso.
+
+FINE FILE
