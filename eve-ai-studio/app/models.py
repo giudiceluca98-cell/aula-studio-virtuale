@@ -49,3 +49,4 @@ class HealthResponse(BaseModel):
     enabled: bool
     provider: str
     environment: str
+    service_version: str
