@@ -67,5 +67,9 @@
     {"number": 34, "title": "CRITERI PER DICHIARARE EVE UNA VERA AI"},
     {"number": 35, "title": "MAPPA DELLE FUTURE MODIFICHE"},
     {"number": 36, "title": "REGOLA FINALE"}
-  ]
+  ],
+  "catalog_sha256": "886e2cd4146431da68a0bb7c86975cc7900ca863370eea29d8bad9ec4555ed9f",
+  "verified_with_service_version": "0.3.0",
+  "storage_schema_version": 1,
+  "persistence": "sqlite"
 }
