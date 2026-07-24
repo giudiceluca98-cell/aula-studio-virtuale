@@ -2,101 +2,94 @@
 
 ## Fase 0 — Fondazione
 
-Stato: **checkpoint 0.2 implementato**
-
-Riferimenti del piano:
-
-- struttura separata;
-- provider AI astratto;
-- permessi;
-- contesto;
-- privacy e consenso;
-- log e limiti;
-- test minimi;
-- crescita per moduli indipendenti;
-- mappa stabile delle future modifiche.
+Stato: **checkpoint 0.3 implementato**
 
 ### Checkpoint 0.1 — Fondazione iniziale
 
-Implementato:
-
-- directory isolata `eve-ai-studio/`;
-- progetto Python;
 - FastAPI;
-- endpoint salute e chat simulata;
-- provider deterministico `mock`;
-- contratti Pydantic;
+- provider `mock`;
+- contratti tipizzati;
 - contesto didattico;
-- livelli di permesso;
-- limiti del contesto;
+- permessi;
+- limiti;
 - audit pseudonimizzato;
 - feature flag;
-- quattro test iniziali.
+- 4 test.
 
-### Checkpoint 0.2 — Modularità e importatore del piano
+### Checkpoint 0.2 — Modularità e importatore
+
+- separazione di core, contesto e provider;
+- parser delle 36 sezioni e 1.197 schede;
+- validazione dei campi obbligatori;
+- checksum sorgente;
+- routing dei requisiti;
+- API e CLI;
+- manifesto ufficiale;
+- anteprima interattiva aggiornata;
+- 9 test.
+
+### Checkpoint 0.3 — Persistenza, versioni e rollback
 
 Implementato:
 
-- separazione di configurazione, audit, permessi, contesto e provider;
-- file `foundation.py` mantenuto soltanto come compatibilità temporanea;
-- modulo `app/requirements/`;
-- parser deterministico delle sezioni e delle schede;
-- validazione dei sei campi operativi obbligatori;
-- controllo degli identificativi duplicati;
-- controllo opzionale del numero atteso di sezioni e schede;
-- calcolo SHA-256 della sorgente;
-- routing delle schede verso moduli tecnici;
-- registro in memoria;
-- ricerca e filtri;
-- CLI di importazione;
-- API di importazione e consultazione;
-- manifesto verificabile dell'importazione ufficiale delle 1.197 schede;
-- cinque nuovi test automatici, compresa l'integrità del manifesto ufficiale.
+- storage SQLite separato in `app/requirements/storage.py`;
+- migrazione automatica schema `1`;
+- percorso database configurabile;
+- cronologia di tutte le importazioni;
+- registrazione degli errori senza salvare il plaintext completo;
+- snapshot immutabili delle versioni;
+- versione attiva persistente;
+- modalità `replace` e `merge`;
+- deduplicazione dei cataloghi identici;
+- hash separato della sorgente e del catalogo strutturato;
+- elenco e dettaglio delle versioni;
+- confronto aggiunte/rimozioni/modifiche/invariati;
+- elenco dei campi modificati;
+- rollback non distruttivo;
+- persistenza verificata dopo riapertura del database;
+- anteprima approvata aggiornata allo stesso URL;
+- 15 test automatici superati.
 
-### Verifica del plaintext ufficiale
+### Verifica del piano ufficiale
 
 ```text
-File: PIANO_EVE_AI_APPROFONDITO_COMPLETO.txt
 Sezioni: 36
 Schede: 1.197
 Avvisi: 0
-SHA-256: da527e3a5edb5ccc8b5a436d5eb5873d3fac26ecba10b8402c66414bd75b6313
+Versione creata: 1
+Seconda importazione: unchanged
+Versioni totali dopo il reimport: 1
+SHA-256 sorgente: da527e3a5edb5ccc8b5a436d5eb5873d3fac26ecba10b8402c66414bd75b6313
+SHA-256 catalogo: 886e2cd4146431da68a0bb7c86975cc7900ca863370eea29d8bad9ec4555ed9f
 ```
 
-### Verifica automatica
-
-```bash
-PYTHONPATH=. pytest -q
-```
-
-Risultato locale:
+### Test
 
 ```text
-9 passed
+15 passed
 ```
 
-### Sicurezza confermata
+Test nuovi del Checkpoint 0.3:
 
-- nessuna chiave API;
-- nessun provider esterno;
-- nessun accesso a Supabase;
-- nessuna modifica dell'app pubblica;
-- nessuna azione autonoma;
-- nessun contenuto delle chat nei log;
-- nessun testo completo del piano duplicato nel repository.
+1. creazione e versione dello schema SQLite;
+2. persistenza tra due istanze del servizio;
+3. confronto tra versioni;
+4. rollback del catalogo attivo;
+5. riuso di una versione identica;
+6. gestione di versioni inesistenti;
+7. registrazione delle importazioni fallite.
 
 ### Escluso dal checkpoint
 
-- persistenza database del catalogo;
-- interfaccia amministrativa reale;
-- autenticazione;
-- modello AI;
+- provider AI reale;
 - RAG;
+- Supabase;
+- autenticazione;
 - memoria;
 - voce;
-- strumenti di scrittura;
-- integrazione con Aula Studio Virtuale.
+- strumenti che modificano Aula Studio Virtuale;
+- integrazione con la produzione.
 
 ### Prossimo checkpoint previsto
 
-**Checkpoint 0.3 — persistenza locale del catalogo requisiti, versionamento delle importazioni e report di differenza tra due versioni del plaintext.**
+**Checkpoint 0.4 — configurazione versionata dei prompt e delle modalità didattiche, con stato bozza/revisione/pubblicazione e confronto tra configurazioni.**
