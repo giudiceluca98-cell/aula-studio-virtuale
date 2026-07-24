@@ -1,563 +1,287 @@
 EVE AI STUDIO
-FILE DI AGGIORNAMENTO CHECKPOINT 0.3
+CHECKPOINT 0.3 — AGGIORNAMENTO FINALE
 
 Data: 24 luglio 2026
 Repository: giudiceluca98-cell/aula-studio-virtuale
-Branch di lavoro: eve-ai-studio
+Branch: eve-ai-studio
 Base protetta: demo-canonica
 
-Titolo:
-0.3 — Persistenza locale, cronologia delle importazioni, versionamento,
-confronto e rollback del catalogo requisiti
+TITOLO
+Persistenza locale, cronologia delle importazioni, versionamento,
+confronto e rollback del catalogo requisiti.
 
 ======================================================================
-1. OBIETTIVO
+OBIETTIVO
 ======================================================================
 
-Eliminare il limite principale del Checkpoint 0.2, nel quale il catalogo dei
-requisiti viveva soltanto nella memoria del processo.
-
-Il Checkpoint 0.3 deve garantire che:
-
-- il catalogo rimanga disponibile dopo il riavvio del servizio;
-- ogni importazione venga registrata;
-- ogni catalogo differente diventi una versione immutabile;
-- un'importazione identica non crei duplicati;
-- due versioni possano essere confrontate;
-- una versione precedente possa essere riattivata;
-- il rollback non cancelli le versioni successive;
-- gli errori di importazione non conservino il plaintext completo;
-- l'interfaccia approvata mostri visivamente le funzioni sviluppate.
+Rendere persistente il catalogo delle 1.197 schede del piano di Eve e
+permettere di conservare, confrontare e ripristinare le sue versioni.
 
 ======================================================================
-2. STATO PRIMA DEL CHECKPOINT
+IMPLEMENTATO
 ======================================================================
 
-Il servizio era alla versione 0.2.0.
-
-Erano presenti:
-
-- parser del plaintext;
-- 36 sezioni e 1.197 schede riconosciute;
-- registro in memoria;
-- ricerca e filtri;
-- API di importazione e consultazione;
+- database locale SQLite;
+- migrazione automatica dello schema;
+- cronologia di ogni importazione;
+- stati running, success, unchanged e failed;
+- snapshot immutabili;
+- versione attiva persistente;
+- importazioni replace e merge;
+- deduplicazione dei cataloghi identici;
 - checksum della sorgente;
-- manifesto ufficiale;
-- 9 test superati;
-- anteprima aggiornata al Checkpoint 0.2.
-
-Limite principale:
-
-- alla chiusura del processo venivano persi catalogo, stato e cronologia.
+- checksum del catalogo strutturato;
+- confronto tra versioni;
+- elenco dei campi modificati;
+- rollback non distruttivo;
+- persistenza verificata dopo il riavvio;
+- anteprima interattiva aggiornata allo stesso URL;
+- sorgenti dell’anteprima resi leggibili su GitHub.
 
 ======================================================================
-3. PERSISTENZA SQLITE
+DATABASE
 ======================================================================
 
-Creato:
-
+File:
 app/requirements/storage.py
 
-Lo storage usa esclusivamente la libreria standard sqlite3 e non aggiunge una
-nuova dipendenza esterna.
-
 Percorso predefinito:
-
 data/eve-requirements.sqlite3
 
-Variabile di configurazione:
-
+Configurazione:
 EVE_REQUIREMENTS_DB_PATH
 
-Il database e i relativi file WAL/SHM sono esclusi da Git.
-
-Tabelle create:
-
-1. requirement_imports
-   Cronologia dei tentativi di importazione.
-
-2. requirement_versions
-   Metadati degli snapshot immutabili.
-
-3. requirement_sections
-   Sezioni associate a ogni versione.
-
-4. requirement_cards
-   Schede complete associate a ogni versione.
-
-5. requirement_catalog_state
-   Versione attualmente attiva.
-
-6. requirement_activation_events
-   Eventi di importazione, riattivazione e rollback.
-
-Indici aggiunti:
-
-- ricerca per versione e modulo;
-- ordinamento della cronologia importazioni;
-- ordinamento delle versioni.
-
-======================================================================
-4. MIGRAZIONI
-======================================================================
-
-Lo storage usa:
-
-PRAGMA user_version
-
-Versione schema corrente:
-
+Versione schema:
 1
 
-Comportamento:
+Tabelle:
+- requirement_imports
+- requirement_versions
+- requirement_sections
+- requirement_cards
+- requirement_catalog_state
+- requirement_activation_events
 
-- un database vuoto viene inizializzato automaticamente;
-- le tabelle vengono create in transazione;
-- un database con schema più recente del software viene rifiutato;
-- le foreign key sono attive;
-- SQLite usa WAL per rendere più sicure le operazioni locali concorrenti.
-
-======================================================================
-5. CRONOLOGIA DELLE IMPORTAZIONI
-======================================================================
-
-Ogni tentativo registra:
-
-- identificativo importazione;
-- data di avvio;
-- data di completamento;
-- stato;
-- SHA-256 della sorgente;
-- conteggi attesi;
-- etichetta;
-- nota;
-- modalità replace/merge;
-- versione prodotta o riutilizzata;
-- messaggio di errore limitato.
-
-Stati possibili implementati:
-
-- running;
-- success;
-- unchanged;
-- failed.
-
-Il plaintext completo non viene scritto nella cronologia.
+Il database locale e i file WAL/SHM sono esclusi da Git.
 
 ======================================================================
-6. VERSIONAMENTO
+API AGGIUNTE
 ======================================================================
 
-Ogni snapshot salva:
-
-- ID versione;
-- data;
-- SHA-256 della sorgente;
-- SHA-256 del catalogo strutturato;
-- numero di sezioni;
-- numero di schede;
-- etichetta;
-- nota;
-- versione genitore;
-- importazione di origine;
-- modalità replace o merge.
-
-Le schede di una versione non vengono sovrascritte.
-
-SHA-256 del catalogo ufficiale strutturato:
-
-886e2cd4146431da68a0bb7c86975cc7900ca863370eea29d8bad9ec4555ed9f
-
-======================================================================
-7. DEDUPLICAZIONE
-======================================================================
-
-Quando una nuova importazione genera un catalogo già esistente:
-
-- l'importazione viene comunque registrata;
-- lo stato diventa unchanged;
-- non viene creata una versione duplicata;
-- viene riutilizzata la versione equivalente;
-- la versione può essere riattivata se non era quella corrente.
-
-Verifica eseguita sul piano ufficiale:
-
-Prima importazione:
-
-- versione creata: 1;
-- sezioni: 36;
-- schede: 1.197.
-
-Seconda importazione identica:
-
-- versione restituita: 1;
-- nuova versione creata: no;
-- stato importazione: unchanged;
-- versioni totali: 1.
-
-======================================================================
-8. CONFRONTO TRA VERSIONI
-======================================================================
-
-Il confronto restituisce:
-
-- schede aggiunte;
-- schede rimosse;
-- schede modificate;
-- schede invariate.
-
-Per ogni scheda modificata vengono indicati i campi cambiati.
-
-Campi confrontati:
-
-- sezione;
-- titolo sezione;
-- numero scheda;
-- titolo;
-- obiettivo;
-- esperienza utente;
-- implementazione;
-- dati e permessi;
-- rischi;
-- verifica;
-- ownership;
-- modulo tecnico.
-
-======================================================================
-9. ROLLBACK
-======================================================================
-
-Il rollback:
-
-- verifica che la versione esista;
-- registra la versione precedente;
-- rende attiva la versione scelta;
-- ricarica la cache del catalogo;
-- non elimina versioni o importazioni successive;
-- restituisce conteggi e checksum della versione attiva.
-
-Il rollback è quindi non distruttivo e reversibile.
-
-======================================================================
-10. API AGGIUNTE
-======================================================================
-
-GET /v1/requirements/imports
-
-Elenca la cronologia delle importazioni.
-
-GET /v1/requirements/versions
-
-Elenca gli snapshot disponibili e identifica quello attivo.
-
-GET /v1/requirements/versions/{version_id}
-
-Restituisce il dettaglio di una versione.
-
-GET /v1/requirements/compare?from_version_id=X&to_version_id=Y
-
-Confronta due versioni.
-
+GET  /v1/requirements/imports
+GET  /v1/requirements/versions
+GET  /v1/requirements/versions/{version_id}
+GET  /v1/requirements/compare
 POST /v1/requirements/rollback
 
-Payload:
-
-{
-  "version_id": 1,
-  "note": "Motivo del ripristino"
-}
-
-======================================================================
-11. API AGGIORNATE
-======================================================================
-
-POST /v1/requirements/import
-
-Nuovi campi opzionali:
-
-- label;
-- note.
-
-Nuovi dati restituiti:
-
+Le API di importazione e stato restituiscono ora anche:
 - catalog_sha256;
 - import_id;
 - version_id;
 - previous_version_id;
 - created_new_version;
-- active.
-
-GET /v1/requirements/status
-
-Nuovi dati:
-
-- catalog_sha256;
 - active_version_id;
 - versions_count;
 - persistent;
 - schema_version.
 
 ======================================================================
-12. TEST
+VERIFICA DEL PIANO UFFICIALE
 ======================================================================
 
-Test totali:
+Sezioni: 36
+Schede: 1.197
+Identificativi unici: 1.197
+Avvisi: 0
 
-15
+Prima importazione:
+- versione creata: 1.
 
-Risultato:
-
-15 passed in 0.43s
-
-Test del Checkpoint 0.3:
-
-1. migrazione e creazione delle tabelle SQLite;
-2. versione dello schema;
-3. persistenza dopo chiusura e riapertura del database;
-4. cronologia degli errori di importazione;
-5. confronto con schede aggiunte, rimosse e modificate;
-6. elenco dei campi modificati;
-7. rollback della versione attiva;
-8. disponibilità della vecchia scheda dopo rollback;
-9. scomparsa della scheda della versione successiva dopo rollback;
-10. riuso di una versione identica;
-11. mancata duplicazione degli snapshot;
-12. risposta 404 per versioni inesistenti.
-
-Restano inoltre superati i test precedenti su:
-
-- provider mock;
-- contesto;
-- limiti;
-- permessi;
-- parser;
-- routing;
-- API di base;
-- integrità del manifesto ufficiale.
-
-======================================================================
-13. VERIFICA DEL PIANO UFFICIALE
-======================================================================
-
-File:
-
-PIANO_EVE_AI_APPROFONDITO_COMPLETO.txt
-
-Risultato:
-
-- sezioni: 36;
-- schede: 1.197;
-- avvisi: 0;
-- prima versione: 1;
-- seconda importazione identica: unchanged;
-- versioni duplicate create: 0.
+Seconda importazione identica:
+- stato: unchanged;
+- versione riutilizzata: 1;
+- versioni duplicate: 0.
 
 SHA-256 sorgente:
-
 da527e3a5edb5ccc8b5a436d5eb5873d3fac26ecba10b8402c66414bd75b6313
 
 SHA-256 catalogo:
-
 886e2cd4146431da68a0bb7c86975cc7900ca863370eea29d8bad9ec4555ed9f
 
 ======================================================================
-14. ANTEPRIMA INTERATTIVA AGGIORNATA
+TEST
 ======================================================================
 
-È stata aggiornata la stessa anteprima approvata:
+Risultato locale:
+15 passed
 
+Verificati:
+- provider mock;
+- servizio 0.3.0;
+- contesto, limiti e permessi;
+- parser e routing;
+- integrità del manifesto;
+- migrazione SQLite;
+- persistenza tra riavvii;
+- cronologia degli errori;
+- confronto;
+- campi modificati;
+- rollback;
+- deduplicazione;
+- versioni inesistenti.
+
+Non è stato eseguito un workflow GitHub Actions.
+
+======================================================================
+ANTEPRIMA APPROVATA
+======================================================================
+
+Percorso invariato:
 reference/eve-ai-studio-preview/index.html
 
 Versione mostrata:
-
 Eve 0.3-preview
 
-Nuova area:
-
+Nuova sezione:
 Versioni del piano
 
-Elementi visuali:
+Elementi verificabili:
+- 3 versioni dimostrative;
+- 4 importazioni dimostrative;
+- schema SQLite 1;
+- persistenza attiva;
+- cronologia success, unchanged e failed;
+- confronto interattivo;
+- schede aggiunte, rimosse e modificate;
+- finestra di conferma del rollback;
+- cambio della versione attiva;
+- conservazione delle altre versioni.
 
-- stato della persistenza SQLite;
-- numero versioni e importazioni;
-- cronologia success/failed/unchanged;
-- protezione degli snapshot;
-- confronto interattivo tra versioni;
-- conteggi aggiunte/rimozioni/modifiche/invariati;
-- esempi delle schede cambiate;
-- pulsanti di rollback;
-- conferma del rollback;
-- aggiornamento visuale della versione attiva.
-
-Nota:
-
-I dati numerici delle tre versioni mostrate nell'interfaccia sono dimostrativi.
-Le funzioni di storage, cronologia, confronto e rollback sono reali nel backend.
-
-Verifica automatica dell'anteprima:
-
-- JavaScript valido;
-- nessun errore console durante il test controllato;
-- apertura dell'area Versioni;
-- selezione delle versioni;
-- confronto;
-- apertura della conferma rollback;
-- attivazione visuale della versione v1.
+I dati delle tre versioni nell’interfaccia sono dimostrativi.
+Storage, cronologia, confronto e rollback sono reali nel backend.
 
 ======================================================================
-15. COSA CONTROLLARE NELL'ANTEPRIMA
+SORGENTI LEGGIBILI DELL’ANTEPRIMA
+======================================================================
+
+File utilizzati:
+- index.html
+- styles.css
+- app.js
+- markup-01.js
+- markup-02.js
+- markup-03.js
+- markup-04.js
+- markup-05.js
+
+Rimossi:
+- chunk-1.js
+- chunk-2.js
+- chunk-3.js
+- chunk-4.js
+- chunk-5.js
+- payload-01.js
+- payload-02.js
+
+I vecchi file erano compressi o temporanei e non sono più referenziati.
+
+======================================================================
+COSA CONTROLLARE
 ======================================================================
 
 1. Aprire Versioni dal menu laterale.
 
-2. Controllare il riepilogo superiore:
-
+2. Verificare:
 - Versioni: 3;
 - Importazioni: 4;
 - Schema SQLite: 1;
 - Persistenza: Attiva.
 
-3. Controllare la cronologia:
+3. Nella cronologia verificare:
+- due success;
+- un unchanged;
+- un failed.
 
-- una importazione unchanged;
-- due importazioni success;
-- una importazione failed.
-
-4. Usare i menu del confronto:
-
-- selezionare v1 e v3;
+4. Confrontare v1 con v3:
 - premere Confronta;
-- verificare che cambino i conteggi e l'elenco.
+- controllare conteggi ed elenco delle modifiche.
 
-5. Provare un confronto tra la stessa versione:
+5. Confrontare v2 con v2:
+- aggiunte 0;
+- rimosse 0;
+- modificate 0.
 
-- selezionare v2 in entrambi i menu;
-- premere Confronta;
-- verificare che aggiunte, rimosse e modificate siano zero.
-
-6. Provare il rollback:
-
-- premere Ripristina su v1 o v2;
-- leggere la finestra di conferma;
+6. Premere Ripristina su v1 o v2:
+- leggere la conferma;
 - confermare;
-- verificare il badge Versione attiva;
+- controllare il badge Versione attiva;
 - verificare che le altre versioni restino disponibili.
 
-7. Controllare la Panoramica:
-
+7. Tornare alla Panoramica:
 - Eve 0.3-preview;
 - Checkpoint 0.3 integrato;
 - 15 test backend superati.
 
 ======================================================================
-16. FILE CREATI
+FILE PRINCIPALI CREATI
 ======================================================================
 
-.gitignore
-app/requirements/storage.py
-tests/conftest.py
-checkpoints/CHECKPOINT_0.3_UPDATE.txt
+eve-ai-studio/.gitignore
+eve-ai-studio/app/requirements/storage.py
+eve-ai-studio/tests/conftest.py
+eve-ai-studio/checkpoints/CHECKPOINT_0.3_UPDATE.txt
+
+reference/eve-ai-studio-preview/styles.css
+reference/eve-ai-studio-preview/app.js
+reference/eve-ai-studio-preview/markup-01.js
+reference/eve-ai-studio-preview/markup-02.js
+reference/eve-ai-studio-preview/markup-03.js
+reference/eve-ai-studio-preview/markup-04.js
+reference/eve-ai-studio-preview/markup-05.js
 
 ======================================================================
-17. FILE MODIFICATI
+PROTEZIONI
 ======================================================================
 
-.env.example
-README.md
-PHASE_STATUS.md
-pyproject.toml
-app/core/config.py
-app/main.py
-app/requirements/models.py
-app/requirements/registry.py
-data/requirements-import-manifest.json
-tests/test_foundation.py
-tests/test_requirements.py
-reference/eve-ai-studio-preview/chunk-1.js
-reference/eve-ai-studio-preview/chunk-2.js
-reference/eve-ai-studio-preview/chunk-3.js
-reference/eve-ai-studio-preview/chunk-4.js
-reference/eve-ai-studio-preview/chunk-5.js
-
-Il loader index.html dell'anteprima non richiede modifiche perché continua a caricare
-lo stesso numero di payload.
-
-======================================================================
-18. ELEMENTI NON MODIFICATI
-======================================================================
-
-Non sono stati modificati:
-
-- branch main;
-- branch demo-canonica;
+Non modificati:
+- main;
+- demo-canonica;
 - HTML canonico;
-- app ufficiale;
-- file fuori da eve-ai-studio/ e reference/eve-ai-studio-preview/.
+- app ufficiale.
 
-Non sono state create pull request.
-Non sono stati eseguiti merge.
-Non è stato collegato un provider AI esterno.
+Non eseguiti:
+- pull request;
+- merge;
+- collegamento a un provider AI esterno.
 
 ======================================================================
-19. LIMITI ATTUALI
+LIMITI ATTUALI
 ======================================================================
 
-Non sono ancora presenti:
-
+Non sono ancora implementati:
 - autenticazione del pannello;
 - Supabase;
-- sincronizzazione remota del database;
+- sincronizzazione remota;
 - modello AI reale;
 - RAG;
 - memoria didattica;
 - voce;
-- strumenti di scrittura nell'app;
-- pubblicazione nell'app ufficiale.
-
-SQLite è locale al processo/server che esegue Eve AI Studio.
+- strumenti di scrittura nell’app;
+- pubblicazione nell’app ufficiale.
 
 ======================================================================
-20. ROLLBACK TECNICO DEL CHECKPOINT
-======================================================================
-
-Il Checkpoint 0.3 può essere annullato riportando la branch al commit finale del
-Checkpoint 0.2 e della relativa integrazione visuale.
-
-Il database SQLite non è tracciato da Git e deve essere eliminato o archiviato
-separatamente durante un rollback locale.
-
-======================================================================
-21. PROSSIMO CHECKPOINT
+PROSSIMO CHECKPOINT
 ======================================================================
 
 Checkpoint 0.4:
-
-- configurazione versionata dei prompt;
+- prompt versionati;
 - modalità didattiche;
 - stato bozza;
 - stato revisione;
 - stato pubblicabile;
-- confronto tra due configurazioni;
+- confronto delle configurazioni;
 - rollback dei prompt;
-- test delle transizioni di stato;
+- test delle transizioni;
 - aggiornamento della stessa anteprima approvata.
-
-======================================================================
-22. REGOLA DI CHIUSURA
-======================================================================
-
-Il checkpoint è completato soltanto quando sono presenti:
-
-1. codice salvato sulla branch eve-ai-studio;
-2. test automatici superati;
-3. README aggiornato;
-4. PHASE_STATUS aggiornato;
-5. plaintext dedicato;
-6. copia scaricabile;
-7. anteprima approvata aggiornata;
-8. verifica visuale;
-9. elenco di cosa controllare;
-10. verifica che main e demo-canonica non siano state modificate.
 
 FINE FILE
