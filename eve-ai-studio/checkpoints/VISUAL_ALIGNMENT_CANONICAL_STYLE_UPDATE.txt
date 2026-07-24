@@ -1,0 +1,88 @@
+EVE AI STUDIO
+AGGIORNAMENTO VISIVO PRE-CHECKPOINT 0.4
+
+Data: 24 luglio 2026
+Repository: giudiceluca98-cell/aula-studio-virtuale
+Branch: eve-ai-studio
+Base funzionale: Checkpoint 0.3
+
+OBIETTIVO
+
+Riallineare l'anteprima di Eve AI Studio allo stile visivo della demo canonica
+prima di iniziare il Checkpoint funzionale 0.4.
+
+MODIFICHE
+
+- adottata la palette canonica:
+  - pagina #050b12;
+  - pagina profonda #02060b;
+  - accento ciano #00dff2;
+  - ciano chiaro #8df7ff;
+  - viola #7a7cff;
+  - accento arancio #ff8a3d;
+  - testo #ecfbff;
+  - testo secondario #8aa9b7;
+- applicati i gradienti e le superfici della demo canonica;
+- applicati bordi ciano trasparenti;
+- applicati riquadri con raggi 26, 16 e 11 pixel;
+- applicati ombre, profondità e bagliori coerenti;
+- aggiornata la barra laterale;
+- aggiornata la testata fissa;
+- aggiornati pulsanti, tag, metriche, campi e finestre modali;
+- aggiunta griglia ambientale;
+- aggiunto effetto particellare animato;
+- supportata la preferenza reduced motion;
+- sostituito il precedente avatar umano;
+- creato il nuovo avatar sferico di Eve come SVG integrato.
+
+AVATAR DI EVE
+
+L'immagine fornita dall'utente è stata usata come riferimento visivo.
+Gli elementi trasferiti nell'avatar sono:
+
+- sfera blu scuro;
+- grandi occhi viola;
+- riflessi bianchi e ciano;
+- sorriso luminoso;
+- alone energetico;
+- anelli orbitanti ciano, viola e arancio;
+- piccole stelle e punti luminosi;
+- base olografica.
+
+L'immagine originale non è stata copiata integralmente nel repository.
+L'avatar è una rappresentazione SVG autonoma e scalabile basata sui suoi
+elementi identificativi.
+
+FILE MODIFICATI
+
+reference/eve-ai-studio-preview/index.html
+reference/eve-ai-studio-preview/markup-01.js
+reference/eve-ai-studio-preview/styles.css
+
+FILE CREATO
+
+reference/eve-ai-studio-preview/particles.js
+
+VERIFICA
+
+- Panoramica caricata;
+- avatar sferico presente;
+- canvas particellare presente;
+- pannelli e riquadri leggibili;
+- layout desktop verificato a 1440 x 1100;
+- funzioni del Checkpoint 0.3 conservate;
+- nessuna modifica al backend;
+- nessuna modifica a main;
+- nessuna modifica a demo-canonica;
+- nessuna pull request;
+- nessun merge.
+
+STATO
+
+Questo aggiornamento non è il Checkpoint 0.4.
+Il prossimo checkpoint funzionale resta:
+
+0.4 — prompt versionati, modalità didattiche e flusso
+bozza, revisione e pubblicazione.
+
+FINE FILE
