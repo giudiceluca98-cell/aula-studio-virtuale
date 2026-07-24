@@ -6,13 +6,13 @@
 <title>Eve AI Studio — Anteprima interattiva</title>
 <link rel="stylesheet" href="styles.css">
 <style>
-#loader{max-width:560px;margin:20vh auto;padding:32px;text-align:center;color:#f6f3ff}
-.spinner{width:42px;height:42px;margin:0 auto 18px;border:4px solid #2b3150;border-top-color:#9a72ff;border-radius:50%;animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+#loader{max-width:560px;margin:20vh auto;padding:32px;text-align:center;color:#ecfbff}
+.spinner{width:42px;height:42px;margin:0 auto 18px;border:4px solid rgba(125,235,255,.16);border-top-color:#00dff2;border-radius:50%;box-shadow:0 0 24px rgba(0,223,242,.16);animation:spin .8s linear infinite}
+#loader small{color:#8aa9b7}@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
-<main id="loader"><div class="spinner"></div><strong>Caricamento di Eve AI Studio…</strong><br><small>Anteprima interattiva approvata · Checkpoint 0.3</small></main>
+<main id="loader"><div class="spinner"></div><strong>Caricamento di Eve AI Studio…</strong><br><small>Anteprima interattiva approvata · stile demo canonica</small></main>
 <script src="markup-01.js"></script>
 <script src="markup-02.js"></script>
 <script src="markup-03.js"></script>
@@ -23,10 +23,16 @@ try {
   const parts=window.__EVE_HTML_PARTS||[];
   if(parts.length!==5) throw new Error(`Markup incompleto: ${parts.length}/5 blocchi caricati.`);
   document.body.innerHTML=parts.join("");
-  const script=document.createElement("script");
-  script.src="app.js";
-  script.onerror=()=>{document.body.innerHTML="<main id='loader'><h1>Anteprima non caricata</h1><p>Il file app.js non è disponibile.</p></main>"};
-  document.body.appendChild(script);
+  const appScript=document.createElement("script");
+  appScript.src="app.js";
+  appScript.onerror=()=>{document.body.innerHTML="<main id='loader'><h1>Anteprima non caricata</h1><p>Il file app.js non è disponibile.</p></main>"};
+  appScript.onload=()=>{
+    const particleScript=document.createElement("script");
+    particleScript.src="particles.js";
+    particleScript.onerror=()=>console.warn("Effetto particellare non disponibile.");
+    document.body.appendChild(particleScript);
+  };
+  document.body.appendChild(appScript);
 } catch(error) {
   document.getElementById("loader").innerHTML=`<h1>Anteprima non caricata</h1><p>${error.message}</p>`;
 }
