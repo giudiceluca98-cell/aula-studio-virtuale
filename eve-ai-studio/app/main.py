@@ -13,23 +13,31 @@ from .requirements.models import (
     PlanSection,
     RequirementCard,
     RequirementCatalogStatus,
+    RequirementImportListResponse,
     RequirementListResponse,
+    RequirementRollbackRequest,
+    RequirementRollbackResult,
+    RequirementVersionDiff,
+    RequirementVersionListResponse,
+    RequirementVersionSummary,
 )
 from .requirements.parser import PlanParseError
 from .requirements.registry import RequirementNotFoundError, RequirementRegistry
+from .requirements.storage import RequirementVersionNotFoundError, SqliteRequirementStore
 
-SERVICE_VERSION = "0.2.0"
+SERVICE_VERSION = "0.3.0"
 
 settings = EveSettings()
 provider = get_provider(settings)
 audit = AuditLogger(enabled=settings.audit_enabled)
-requirements = RequirementRegistry()
+requirement_store = SqliteRequirementStore(settings.requirements_db_path)
+requirements = RequirementRegistry(store=requirement_store)
 
 app = FastAPI(
     title="Eve AI Studio",
     version=SERVICE_VERSION,
     description=(
-        "Fondazione modulare di Eve e importatore del piano requisiti. "
+        "Fondazione modulare di Eve con catalogo requisiti persistente, versionato e reversibile. "
         "Nessun modello esterno è collegato."
     ),
 )
@@ -83,9 +91,54 @@ async def import_requirements(request: PlanImportRequest) -> PlanImportResult:
             expected_sections=request.expected_sections,
             expected_cards=request.expected_cards,
             replace=request.replace,
+            label=request.label,
+            note=request.note,
         )
     except PlanParseError as exc:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=str(exc)) from exc
+
+
+@app.get("/v1/requirements/imports", response_model=RequirementImportListResponse)
+async def list_requirement_imports(
+    limit: int = Query(default=100, ge=1, le=500),
+) -> RequirementImportListResponse:
+    items = requirements.imports(limit=limit)
+    return RequirementImportListResponse(total=len(items), items=items)
+
+
+@app.get("/v1/requirements/versions", response_model=RequirementVersionListResponse)
+async def list_requirement_versions(
+    limit: int = Query(default=100, ge=1, le=500),
+) -> RequirementVersionListResponse:
+    items = requirements.versions(limit=limit)
+    return RequirementVersionListResponse(total=len(items), items=items)
+
+
+@app.get("/v1/requirements/versions/{version_id}", response_model=RequirementVersionSummary)
+async def get_requirement_version(version_id: int) -> RequirementVersionSummary:
+    try:
+        return requirements.version(version_id)
+    except RequirementVersionNotFoundError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Versione non trovata") from exc
+
+
+@app.get("/v1/requirements/compare", response_model=RequirementVersionDiff)
+async def compare_requirement_versions(
+    from_version_id: int = Query(ge=1),
+    to_version_id: int = Query(ge=1),
+) -> RequirementVersionDiff:
+    try:
+        return requirements.compare(from_version_id, to_version_id)
+    except RequirementVersionNotFoundError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Versione non trovata") from exc
+
+
+@app.post("/v1/requirements/rollback", response_model=RequirementRollbackResult)
+async def rollback_requirements(request: RequirementRollbackRequest) -> RequirementRollbackResult:
+    try:
+        return requirements.rollback(request.version_id, note=request.note)
+    except RequirementVersionNotFoundError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Versione non trovata") from exc
 
 
 @app.get("/v1/requirements/sections", response_model=list[PlanSection])
