@@ -15,3 +15,4 @@ class EveSettings(BaseSettings):
     max_context_chars: int = 12_000
     max_plan_chars: int = 4_000_000
     audit_enabled: bool = True
+    requirements_db_path: str = "data/eve-requirements.sqlite3"
