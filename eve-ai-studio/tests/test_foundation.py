@@ -1,18 +1,20 @@
 from fastapi.testclient import TestClient
 import pytest
 
-from app.foundation import PermissionDeniedError, require_permission
+from app.core.permissions import PermissionDeniedError, require_permission
 from app.main import app
 from app.models import PermissionLevel
 
 client = TestClient(app)
 
 
-def test_health_reports_mock_provider() -> None:
+def test_health_reports_modular_mock_provider() -> None:
     response = client.get("/health")
     assert response.status_code == 200
-    assert response.json()["provider"] == "mock"
-    assert response.json()["enabled"] is True
+    payload = response.json()
+    assert payload["provider"] == "mock"
+    assert payload["enabled"] is True
+    assert payload["service_version"] == "0.2.0"
 
 
 def test_chat_returns_structured_simulation_and_source() -> None:
