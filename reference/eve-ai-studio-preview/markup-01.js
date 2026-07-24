@@ -1,46 +1,79 @@
-window.__EVE_HTML_PARTS=window.__EVE_HTML_PARTS||[];window.__EVE_HTML_PARTS.push(String.raw`<div class="app">
+window.__EVE_HTML_PARTS=window.__EVE_HTML_PARTS||[];window.__EVE_HTML_PARTS.push(String.raw`<canvas id="particleField" aria-hidden="true"></canvas>
+<div class="app">
 <aside class="sidebar">
-  <div class="brand"><div class="logo">E</div><div><strong>Eve AI Studio</strong><small>Laboratorio di Aula Studio</small></div></div>
+  <div class="brand"><div class="logo" aria-hidden="true">✦</div><div><strong>Eve AI Studio</strong><small>Laboratorio di Aula Studio</small></div></div>
 
   <section class="eve-card" aria-label="Identità canonica di Eve">
-    <svg class="eve-portrait" viewBox="0 0 420 420" role="img" aria-label="Eve, capelli lilla e occhi viola">
-      <defs>
-        <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#6e35ae"/><stop offset=".55" stop-color="#32206e"/><stop offset="1" stop-color="#1a1840"/></linearGradient>
-        <linearGradient id="hair" x1=".2" y1="0" x2=".8" y2="1"><stop stop-color="#efe4ff"/><stop offset=".45" stop-color="#cdb7ec"/><stop offset="1" stop-color="#8d70b8"/></linearGradient>
-        <linearGradient id="skin" x1=".2" y1="0" x2=".8" y2="1"><stop stop-color="#fff7f7"/><stop offset=".75" stop-color="#edcfd2"/><stop offset="1" stop-color="#c894a0"/></linearGradient>
-        <radialGradient id="eye"><stop stop-color="#fff"/><stop offset=".2" stop-color="#dbc9ff"/><stop offset=".58" stop-color="#8e54e9"/><stop offset="1" stop-color="#1d123e"/></radialGradient>
-        <filter id="glow"><feGaussianBlur stdDeviation="9"/></filter>
-      </defs>
-      <rect width="420" height="420" fill="url(#bg)"/>
-      <circle cx="326" cy="90" r="84" fill="#b664ff" opacity=".25" filter="url(#glow)"/>
-      <circle cx="72" cy="335" r="105" fill="#716dff" opacity=".18" filter="url(#glow)"/>
-      <path d="M93 420c9-73 55-116 117-116s111 43 121 116z" fill="#080912"/>
-      <path d="M184 274h52l11 54h-75z" fill="url(#skin)"/>
-      <ellipse cx="210" cy="206" rx="93" ry="112" fill="url(#skin)"/>
-      <path d="M111 218c-13-108 35-172 106-178 73-6 116 61 103 152-17-52-38-82-91-95-35 29-73 41-118 45z" fill="url(#hair)"/>
-      <path d="M103 141c20-86 95-133 168-88 49 30 65 101 35 179-8-55-34-93-81-112-30 25-65 40-122 43z" fill="url(#hair)"/>
-      <path d="M112 170c-17 87 10 139 60 158-34-5-62-19-78-45-20-34-17-79 18-113z" fill="#a98bcf"/>
-      <path d="M307 164c26 56 17 127-53 166 42-11 75-35 85-74 8-32-2-67-32-92z" fill="#9a78c5"/>
-      <path d="M120 124c34-55 74-80 123-74-5 30-20 52-39 68-25 22-52 33-84 38z" fill="#eadcff"/>
-      <path d="M228 53c60 8 91 50 92 106-30-11-57-27-78-48-10-11-17-31-14-58z" fill="#c1a8e4"/>
-      <path d="M131 151c20-10 46-10 65 1" fill="none" stroke="#795a9a" stroke-width="6" stroke-linecap="round"/>
-      <path d="M224 152c20-11 47-9 64 4" fill="none" stroke="#795a9a" stroke-width="6" stroke-linecap="round"/>
-      <path d="M139 181c15-18 44-20 58 0-11 28-46 29-58 0z" fill="#fff"/>
-      <path d="M224 181c15-18 44-20 58 0-11 28-46 29-58 0z" fill="#fff"/>
-      <ellipse cx="169" cy="181" rx="15" ry="22" fill="url(#eye)"/><ellipse cx="254" cy="181" rx="15" ry="22" fill="url(#eye)"/>
-      <ellipse cx="169" cy="184" rx="5" ry="10" fill="#120b26"/><ellipse cx="254" cy="184" rx="5" ry="10" fill="#120b26"/>
-      <circle cx="164" cy="173" r="4" fill="#fff"/><circle cx="249" cy="173" r="4" fill="#fff"/>
-      <path d="M203 190c-4 16-5 29 7 31" fill="none" stroke="#c38e98" stroke-width="3" stroke-linecap="round"/>
-      <path d="M177 244c22 16 47 15 68-2" fill="none" stroke="#b55a73" stroke-width="5" stroke-linecap="round"/>
-      <path d="M181 244c17 8 40 8 58-1" fill="none" stroke="#fff0f4" stroke-width="2" stroke-linecap="round"/>
-      <path d="M147 322l28-15 35 63 34-63 32 16-9 97H154z" fill="#07080e"/>
-      <path d="M175 308l35 62 34-62" fill="none" stroke="#2b273b" stroke-width="4"/>
-      <path d="M126 95c-19 30-30 70-24 107" fill="none" stroke="#f4e9ff" stroke-width="12" stroke-linecap="round" opacity=".8"/>
-      <path d="M309 88c22 35 28 72 19 110" fill="none" stroke="#b294db" stroke-width="13" stroke-linecap="round" opacity=".8"/>
-    </svg>
+    <div class="eve-orb-stage">
+      <svg class="eve-portrait" viewBox="0 0 420 360" role="img" aria-label="Eve, sfera blu luminosa con grandi occhi viola e anelli energetici">
+        <defs>
+          <radialGradient id="eveCore" cx="38%" cy="30%" r="74%">
+            <stop offset="0" stop-color="#173c85"/>
+            <stop offset=".42" stop-color="#0b255e"/>
+            <stop offset=".76" stop-color="#071a49"/>
+            <stop offset="1" stop-color="#02091d"/>
+          </radialGradient>
+          <radialGradient id="eveIris" cx="38%" cy="30%" r="72%">
+            <stop offset="0" stop-color="#ffffff"/>
+            <stop offset=".16" stop-color="#b8eeff"/>
+            <stop offset=".38" stop-color="#7a7cff"/>
+            <stop offset=".68" stop-color="#6f2ee8"/>
+            <stop offset="1" stop-color="#120b3b"/>
+          </radialGradient>
+          <linearGradient id="eveRing" x1="0" y1="0" x2="1" y2="1">
+            <stop stop-color="#00dff2" stop-opacity=".08"/>
+            <stop offset=".22" stop-color="#8df7ff" stop-opacity=".95"/>
+            <stop offset=".52" stop-color="#7a7cff" stop-opacity=".82"/>
+            <stop offset=".78" stop-color="#ff8a3d" stop-opacity=".74"/>
+            <stop offset="1" stop-color="#00dff2" stop-opacity=".08"/>
+          </linearGradient>
+          <filter id="eveGlow" x="-80%" y="-80%" width="260%" height="260%">
+            <feGaussianBlur stdDeviation="10" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="eveSoft" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="22"/></filter>
+          <clipPath id="eveSphereClip"><circle cx="210" cy="172" r="106"/></clipPath>
+        </defs>
+        <ellipse cx="210" cy="318" rx="118" ry="20" fill="#00dff2" opacity=".12" filter="url(#eveSoft)"/>
+        <ellipse cx="210" cy="314" rx="92" ry="10" fill="none" stroke="#00dff2" stroke-width="2" opacity=".55"/>
+        <ellipse cx="210" cy="172" rx="168" ry="112" fill="none" stroke="url(#eveRing)" stroke-width="5" opacity=".88" transform="rotate(-12 210 172)" filter="url(#eveGlow)"/>
+        <ellipse cx="210" cy="172" rx="146" ry="92" fill="none" stroke="#8df7ff" stroke-width="2" opacity=".48" transform="rotate(18 210 172)"/>
+        <ellipse cx="210" cy="172" rx="132" ry="80" fill="none" stroke="#7a7cff" stroke-width="2" opacity=".44" transform="rotate(-31 210 172)"/>
+        <circle cx="210" cy="172" r="122" fill="#00dff2" opacity=".13" filter="url(#eveSoft)"/>
+        <circle cx="210" cy="172" r="111" fill="#7a7cff" opacity=".17" filter="url(#eveGlow)"/>
+        <circle cx="210" cy="172" r="106" fill="url(#eveCore)" stroke="#79f4ff" stroke-opacity=".7" stroke-width="3"/>
+        <g clip-path="url(#eveSphereClip)">
+          <ellipse cx="172" cy="118" rx="78" ry="48" fill="#2b73db" opacity=".22" transform="rotate(-20 172 118)"/>
+          <path d="M96 196c44 38 153 52 226 8" fill="none" stroke="#00dff2" stroke-width="10" opacity=".08"/>
+          <circle cx="148" cy="86" r="6" fill="#fff" opacity=".36"/>
+          <circle cx="276" cy="102" r="4" fill="#8df7ff" opacity=".4"/>
+        </g>
+        <g filter="url(#eveGlow)">
+          <ellipse cx="166" cy="164" rx="31" ry="42" fill="#f8fdff"/>
+          <ellipse cx="254" cy="164" rx="31" ry="42" fill="#f8fdff"/>
+          <ellipse cx="170" cy="168" rx="20" ry="29" fill="url(#eveIris)"/>
+          <ellipse cx="250" cy="168" rx="20" ry="29" fill="url(#eveIris)"/>
+          <ellipse cx="173" cy="173" rx="8" ry="14" fill="#07051d"/>
+          <ellipse cx="247" cy="173" rx="8" ry="14" fill="#07051d"/>
+          <circle cx="163" cy="153" r="8" fill="#fff"/>
+          <circle cx="240" cy="153" r="8" fill="#fff"/>
+          <circle cx="178" cy="181" r="4" fill="#6ff7ff"/>
+          <circle cx="255" cy="181" r="4" fill="#6ff7ff"/>
+        </g>
+        <path d="M185 219c16 15 35 15 51 0" fill="none" stroke="#8df7ff" stroke-width="5" stroke-linecap="round" filter="url(#eveGlow)"/>
+        <path d="M142 126c13-11 28-15 42-10M237 116c16-4 31 0 42 11" fill="none" stroke="#8df7ff" stroke-width="5" stroke-linecap="round" opacity=".78"/>
+        <g fill="#ecfbff" filter="url(#eveGlow)">
+          <path d="M55 76l4 11 11 4-11 4-4 11-4-11-11-4 11-4z"/>
+          <path d="M350 116l3 8 8 3-8 3-3 8-3-8-8-3 8-3z"/>
+          <circle cx="94" cy="242" r="3"/><circle cx="326" cy="244" r="3"/>
+        </g>
+        <circle cx="59" cy="214" r="5" fill="#ff8a3d" filter="url(#eveGlow)"/>
+        <circle cx="349" cy="189" r="5" fill="#7a7cff" filter="url(#eveGlow)"/>
+      </svg>
+    </div>
     <div class="eve-meta">
       <div class="eve-line"><h2>Eve</h2><span class="pill"><span class="dot"></span> Anteprima attiva</span></div>
-      <p>Tutor contestuale, assistente vocale e agente controllato.</p>
+      <p>La tua assistente AI per studio, comprensione e progresso.</p>
     </div>
   </section>
 
