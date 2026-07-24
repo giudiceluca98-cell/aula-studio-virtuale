@@ -1,0 +1,92 @@
+EVE AI STUDIO
+REGOLA UFFICIALE DI AGGIORNAMENTO VISIVO DEI CHECKPOINT
+
+Data di introduzione: 24 luglio 2026
+Branch: eve-ai-studio
+
+SCOPO
+
+Eve AI Studio deve seguire lo stesso metodo di verifica usato per la demo canonica.
+Il codice da solo non è sufficiente per dichiarare concluso un checkpoint: ogni funzione
+verificabile dall'utente deve essere rappresentata anche nella stessa anteprima interattiva
+approvata.
+
+ANTEPRIMA CANONICA DI EVE AI STUDIO
+
+Percorso:
+reference/eve-ai-studio-preview/index.html
+
+La pagina resta la stessa per tutta la lavorazione. Non devono essere create anteprime
+separate a ogni checkpoint, salvo richiesta esplicita. L'anteprima esistente deve essere
+aggiornata progressivamente e deve conservare Eve come identità visiva canonica.
+
+REQUISITI OBBLIGATORI PER CHIUDERE UN CHECKPOINT
+
+1. Codice del checkpoint realmente salvato sulla branch eve-ai-studio.
+2. Test automatici eseguiti e risultati documentati.
+3. PHASE_STATUS.md aggiornato.
+4. README.md aggiornato quando necessario.
+5. File plaintext del checkpoint creato dentro eve-ai-studio/checkpoints/.
+6. Copia scaricabile del plaintext consegnata all'utente.
+7. Stessa anteprima interattiva approvata aggiornata con le funzioni visibili.
+8. Verifica dell'anteprima dopo l'aggiornamento.
+9. Distinzione esplicita tra funzioni reali, simulate e non ancora collegate.
+10. Verifica che main, demo-canonica e l'HTML canonico non siano stati modificati.
+11. Elenco preciso dei file creati e modificati.
+12. Commit finale verificato.
+
+REGOLA DI APPROVAZIONE
+
+Un checkpoint non può essere dichiarato completato quando:
+- il backend è stato modificato ma l'anteprima non mostra il risultato verificabile;
+- l'anteprima mostra una funzione che il backend non possiede senza indicarla come simulata;
+- il plaintext di aggiornamento non corrisponde allo stato del codice e dell'anteprima;
+- i test critici non sono stati eseguiti o risultano falliti.
+
+INTEGRAZIONE RETROATTIVA DEL CHECKPOINT 0.2
+
+Il Checkpoint 0.2 è stato integrato nella stessa anteprima approvata.
+
+Aggiornamenti visibili:
+- versione aggiornata a Eve 0.2-preview;
+- nuova sezione Requisiti del piano;
+- 36 sezioni riconosciute;
+- 1.197 schede riconosciute;
+- 1.197 identificativi unici;
+- 0 avvisi;
+- checksum della sorgente visualizzato;
+- ricerca per ID, titolo e modulo;
+- filtro per modulo tecnico;
+- simulazione della verifica dell'importazione;
+- distribuzione principale dei moduli;
+- indicazione dei 9 test backend superati.
+
+STATO DELLE FUNZIONI VISUALIZZATE NEL CHECKPOINT 0.2
+
+Reali nel backend:
+- parser del plaintext;
+- validazione dei campi;
+- controllo degli identificativi;
+- checksum;
+- routing per modulo;
+- registro in memoria;
+- API dei requisiti;
+- CLI di importazione;
+- 9 test automatici superati localmente.
+
+Simulate nell'anteprima:
+- caricamento del file mediante pulsante;
+- ricerca visuale su un campione rappresentativo;
+- filtro visuale su un campione rappresentativo;
+- pubblicazione della versione.
+
+Non ancora collegate:
+- chiamata dell'anteprima al servizio FastAPI;
+- persistenza del catalogo;
+- Supabase;
+- modello AI reale;
+- RAG;
+- memoria permanente;
+- voce.
+
+FINE REGOLA UFFICIALE
