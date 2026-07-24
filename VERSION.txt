@@ -1,0 +1,6 @@
+Aula Studio Virtuale
+Versione: 1.4.0-alpha.1
+Fonte: demo-canonica
+Commit sorgente: acb9029b682885a419771e864c051752e325bac2
+Git blob HTML: 1a4b68f4aa04bd5602afddb7a9feba867da33574
+SHA-256 HTML: 85ad819914cf85740b0013f0d3147adaa2ff7b233f99935ba67f4fb77fefe95c
