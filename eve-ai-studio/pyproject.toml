@@ -1,7 +1,7 @@
 [project]
 name = "eve-ai-studio"
-version = "0.6.0"
-description = "Fondazione modulare, requisiti, prompt, valutazioni persistenti e runner automatico di Eve AI Studio"
+version = "0.7.0"
+description = "Fondazione modulare di Eve con provider, profili, telemetria, valutazioni e runner controllati"
 requires-python = ">=3.11"
 dependencies = [
   "fastapi>=0.115,<1",
@@ -13,8 +13,10 @@ dependencies = [
 dev = [
   "httpx>=0.27,<1",
   "pytest>=8.3,<10",
+  "pytest-asyncio>=0.23,<1",
 ]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
+asyncio_mode = "auto"
