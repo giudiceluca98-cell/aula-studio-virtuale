@@ -4,14 +4,15 @@ Questa directory contiene il servizio isolato di Eve AI Studio, sviluppato sulla
 
 ## Stato
 
-Versione del servizio: `0.4.0`
+Versione del servizio: `0.5.0`
 
 Checkpoint implementati:
 
 - `0.1` — fondazione FastAPI, provider mock, contesto, permessi, limiti e audit;
 - `0.2` — separazione dei moduli e importatore strutturato del piano approfondito;
 - `0.3` — persistenza SQLite, cronologia importazioni, versioni, confronto e rollback;
-- `0.4` — prompt versionati, modalità didattiche e ciclo bozza–revisione–pubblicazione.
+- `0.4` — prompt versionati, modalità didattiche e ciclo bozza–revisione–pubblicazione;
+- `0.5` — scenari di valutazione persistenti, esecuzioni, risultati per criterio e gate reale dei prompt.
 
 ## Struttura
 
@@ -23,6 +24,7 @@ eve-ai-studio/
 │   ├── providers/            # astrazione e provider mock
 │   ├── requirements/         # piano, storage, versioni, confronto e rollback
 │   ├── prompts/              # prompt, modalità, workflow, storage e API
+│   ├── evaluations/          # scenari, run, risultati, punteggi e gate
 │   ├── main.py               # API FastAPI
 │   └── models.py             # contratti chat condivisi
 ├── data/
@@ -58,7 +60,7 @@ EVE_REQUIREMENTS_DB_PATH
 
 ## Configurazioni prompt
 
-Il Checkpoint 0.4 introduce un secondo archivio SQLite separato:
+Il Checkpoint 0.4 usa un archivio SQLite separato:
 
 ```text
 data/eve-prompts.sqlite3
@@ -92,7 +94,7 @@ Le revisioni sono immutabili: una modifica crea una nuova versione e non sovrasc
 draft → in_review → publishable → published → archived
 ```
 
-Transizioni aggiuntive controllate:
+Ritorni consentiti:
 
 ```text
 in_review → draft
@@ -102,11 +104,11 @@ publishable → draft
 Regole:
 
 - una bozza non può essere pubblicata direttamente;
-- `publishable` richiede `review_tests_passed=true`;
 - una sola versione pubblicata può essere attiva per configurazione;
 - pubblicando una nuova versione, la precedente attiva viene archiviata;
 - il rollback copia una versione storica in una nuova bozza;
-- il rollback non elimina né riscrive lo storico.
+- il rollback non elimina né riscrive lo storico;
+- il passaggio a `publishable` usa il gate persistente del Checkpoint 0.5.
 
 ## Modalità didattiche
 
@@ -125,6 +127,77 @@ Parametri tipizzati:
 - domanda di controllo;
 - politica della memoria;
 - politica degli strumenti.
+
+## Valutazioni persistenti
+
+Il Checkpoint 0.5 introduce un terzo archivio SQLite:
+
+```text
+data/eve-evaluations.sqlite3
+```
+
+Configurazione:
+
+```text
+EVE_EVALUATIONS_DB_PATH
+EVE_EVALUATION_PUBLISH_SCORE
+```
+
+Soglia predefinita:
+
+```text
+85/100
+```
+
+Il modulo mantiene:
+
+- scenari di valutazione versionati;
+- versione attiva di ogni scenario;
+- severità `critical`, `major` e `minor`;
+- peso e soglia minima;
+- scenari obbligatori e opzionali;
+- snapshot della suite usata da ogni esecuzione;
+- esecuzioni collegate a una versione prompt;
+- risultati separati per criterio;
+- punteggio ponderato;
+- numero di errori critici;
+- numero di scenari obbligatori falliti;
+- cronologia dei run;
+- gate calcolato dal server.
+
+## Suite iniziale
+
+Sono creati otto scenari iniziali:
+
+1. contesto didattico corretto;
+2. fonti verificabili;
+3. isolamento tra aule;
+4. permessi delle azioni;
+5. gestione dell'incertezza;
+6. qualità didattica;
+7. coerenza della lingua;
+8. budget di latenza.
+
+Il budget di latenza è opzionale. Un suo fallimento può non bloccare il gate quando punteggio, scenari obbligatori ed errori critici rispettano le regole.
+
+## Gate di pubblicazione
+
+Una versione prompt può diventare `publishable` soltanto quando l'ultima esecuzione completata:
+
+- usa le versioni attualmente attive degli scenari;
+- non contiene errori critici;
+- non contiene fallimenti di scenari obbligatori;
+- raggiunge la soglia ponderata configurata;
+- risulta `passed`.
+
+Il vecchio campo `review_tests_passed` non può forzare la pubblicabilità quando il gate persistente è collegato.
+
+Quando uno scenario viene revisionato:
+
+- la versione precedente resta nello storico;
+- la nuova versione diventa attiva;
+- le esecuzioni basate sulla suite precedente diventano obsolete;
+- serve una nuova esecuzione.
 
 ## API
 
@@ -152,6 +225,17 @@ POST /v1/prompts
 GET  /v1/prompts/{version_id}
 POST /v1/prompts/{version_id}/revisions
 POST /v1/prompts/{version_id}/transition
+
+GET  /v1/evaluations/status
+GET  /v1/evaluations/gate/{prompt_version_id}
+GET  /v1/evaluations/scenarios
+POST /v1/evaluations/scenarios
+GET  /v1/evaluations/scenarios/{scenario_version_id}
+POST /v1/evaluations/scenarios/{scenario_version_id}/revisions
+GET  /v1/evaluations/runs
+POST /v1/evaluations/runs
+GET  /v1/evaluations/runs/{run_id}
+POST /v1/evaluations/runs/{run_id}/complete
 ```
 
 ## Avvio locale
@@ -170,37 +254,42 @@ Copy-Item .env.example .env
 uvicorn app.main:app --reload --port 8100
 ```
 
-## Test del Checkpoint 0.4
+## Test del Checkpoint 0.5
 
-Eseguiti localmente sul nuovo modulo prompt e sulle sue API:
+Eseguiti localmente sul nuovo modulo di valutazione, sulle API e sul collegamento con il gate prompt:
 
 ```text
-15 passed
+18 passed
 ```
 
 Coprono:
 
-- migrazione SQLite;
-- configurazione iniziale pubblicata;
-- creazione delle bozze;
+- schema SQLite;
+- otto scenari iniziali;
+- revisione versionata degli scenari;
 - conflitti sulle chiavi;
-- revisioni immutabili;
-- transizioni consentite e vietate;
-- obbligo dei test prima della pubblicabilità;
-- archiviazione automatica della versione attiva precedente;
-- confronto dei campi;
-- rollback non distruttivo;
+- snapshot della suite;
+- risultati per criterio;
+- punteggio ponderato;
+- errori critici;
+- scenari obbligatori;
+- fallimento opzionale non bloccante;
+- copertura completa dei risultati;
+- invalidazione quando cambia la suite;
 - persistenza dopo riapertura;
-- errori per versioni inesistenti;
-- API di creazione, elenco, dettaglio, confronto e rollback.
+- versione prompt inesistente;
+- baseline idempotente;
+- API di stato, scenari, run e gate;
+- blocco o autorizzazione del passaggio a `publishable` tramite risultati persistiti.
 
-La suite completa cumulativa dei checkpoint precedenti non è stata rilanciata in questo passaggio; il numero `15` non deve essere sommato automaticamente ai risultati precedenti.
+La suite completa cumulativa dei checkpoint precedenti non è stata rilanciata in questo passaggio; il numero `18` non deve essere sommato automaticamente ai risultati precedenti.
 
 ## Limiti attuali
 
 Non sono ancora implementati:
 
 - modello AI reale;
+- esecuzione automatica dei test contro un provider AI;
 - RAG e indicizzazione dei materiali;
 - Supabase;
 - autenticazione amministrativa;
@@ -213,4 +302,4 @@ L'avatar animato definitivo verrà integrato dopo la consegna e l'approvazione d
 
 ## Regola di sicurezza
 
-Il modello può proporre un risultato. Identità, contesto, permessi, transizioni, persistenza, memoria e azioni devono essere verificati da codice server indipendente dal modello.
+Il modello può proporre un risultato. Identità, contesto, permessi, transizioni, persistenza, valutazioni, memoria e azioni devono essere verificati da codice server indipendente dal modello.
