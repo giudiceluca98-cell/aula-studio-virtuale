@@ -1,7 +1,7 @@
 [project]
 name = "eve-ai-studio"
-version = "0.5.0"
-description = "Fondazione modulare, requisiti, prompt e valutazioni persistenti di Eve AI Studio"
+version = "0.6.0"
+description = "Fondazione modulare, requisiti, prompt, valutazioni persistenti e runner automatico di Eve AI Studio"
 requires-python = ">=3.11"
 dependencies = [
   "fastapi>=0.115,<1",
