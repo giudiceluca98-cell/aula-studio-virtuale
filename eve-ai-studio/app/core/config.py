@@ -19,3 +19,5 @@ class EveSettings(BaseSettings):
     prompts_db_path: str = "data/eve-prompts.sqlite3"
     evaluations_db_path: str = "data/eve-evaluations.sqlite3"
     evaluation_publish_score: float = 85.0
+    evaluation_evidence_max_chars: int = 500
+    evaluation_latency_budget_ms: float = 750.0
