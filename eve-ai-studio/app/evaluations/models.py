@@ -118,6 +118,10 @@ class EvaluationRunCreateRequest(BaseModel):
         return self
 
 
+class EvaluationAutomaticRunRequest(EvaluationRunCreateRequest):
+    pass
+
+
 class EvaluationRunCompleteRequest(BaseModel):
     results: list[ScenarioResultInput] = Field(min_length=1, max_length=500)
 
@@ -174,6 +178,43 @@ class EvaluationRunDetail(EvaluationRunSummary):
 class EvaluationRunListResponse(BaseModel):
     total: int
     items: list[EvaluationRunSummary]
+
+
+class EvaluationRunArtifactInput(BaseModel):
+    scenario_version_id: int = Field(ge=1)
+    provider: str = Field(min_length=1, max_length=100)
+    model: str = Field(min_length=1, max_length=160)
+    duration_ms: float = Field(ge=0)
+    output_sha256: str = Field(min_length=64, max_length=64)
+    output_chars: int = Field(ge=0)
+    sources_count: int = Field(ge=0)
+    proposed_actions_count: int = Field(ge=0)
+    redacted: bool = True
+    error_code: str | None = Field(default=None, max_length=120)
+
+
+class EvaluationRunArtifact(EvaluationRunArtifactInput):
+    run_id: int = Field(ge=1)
+
+
+class EvaluationArtifactListResponse(BaseModel):
+    total: int
+    items: list[EvaluationRunArtifact]
+
+
+class EvaluationRunnerStatus(BaseModel):
+    provider: str
+    model: str
+    deterministic: bool
+    raw_output_stored: bool = False
+    evidence_max_chars: int
+    latency_budget_ms: float
+
+
+class EvaluationAutomaticRunResult(BaseModel):
+    run: EvaluationRunDetail
+    artifacts: list[EvaluationRunArtifact]
+    runner: EvaluationRunnerStatus
 
 
 class EvaluationGateStatus(BaseModel):
