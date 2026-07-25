@@ -1,0 +1,830 @@
+EVE AI STUDIO
+FILE DI AGGIORNAMENTO CHECKPOINT 0.7
+
+Data: 25 luglio 2026
+Repository: giudiceluca98-cell/aula-studio-virtuale
+Branch di lavoro: eve-ai-studio
+Base protetta: demo-canonica
+Commit iniziale del checkpoint: 3596fa6542e724d7374286970303dd565bf8f3d6
+
+Titolo:
+0.7 — Registro provider e modelli, profili di esecuzione,
+timeout, retry, fallback, token, costi e telemetria
+
+======================================================================
+1. OBIETTIVO
+======================================================================
+
+Creare uno strato server indipendente che controlli come Eve seleziona ed
+esegue i provider.
+
+Il checkpoint deve impedire che:
+
+- il client scelga liberamente un provider;
+- il modello scelga da solo il proprio fallback;
+- una chiamata superi i budget senza controllo;
+- un provider esterno venga attivato accidentalmente;
+- errori, prompt o risposte complete finiscano nella telemetria;
+- chat e valutazioni condividano implicitamente le stesse regole.
+
+======================================================================
+2. RISULTATO
+======================================================================
+
+Versione del servizio:
+
+0.7.0
+
+Implementati:
+
+- catalogo provider;
+- catalogo modelli;
+- modello mock primario;
+- modello mock di fallback;
+- provider esterno segnaposto;
+- provider esterni disattivati;
+- profili di esecuzione;
+- controllo dello scopo;
+- timeout;
+- retry;
+- backoff;
+- fallback;
+- limiti token;
+- budget giornalieri;
+- stima costi;
+- telemetria SQLite;
+- hash richiesta e risposta;
+- redazione degli errori;
+- API;
+- chat instradata tramite orchestratore;
+- runner valutazioni instradato tramite profilo dedicato;
+- stessa anteprima approvata aggiornata.
+
+======================================================================
+3. PROVIDER REGISTRATI
+======================================================================
+
+3.1 — mock
+
+Stato:
+
+attivo
+
+Tipo:
+
+mock deterministico
+
+Caratteristiche:
+
+- nessuna rete;
+- nessuna chiave;
+- nessun costo;
+- output ripetibile;
+- utilizzabile da chat e valutazioni.
+
+3.2 — external-template
+
+Stato:
+
+disattivato
+
+Tipo:
+
+provider esterno segnaposto
+
+Caratteristiche:
+
+- nessuna factory;
+- nessuna credenziale;
+- nessuna chiamata;
+- nessun modello utilizzabile;
+- motivo del blocco visibile nel catalogo.
+
+Configurazione predefinita:
+
+EVE_EXTERNAL_PROVIDERS_ENABLED=false
+
+Anche impostando true questa variabile, il segnaposto resta inutilizzabile
+finché provider, modello e factory non vengono implementati e abilitati.
+
+======================================================================
+4. MODELLI REGISTRATI
+======================================================================
+
+4.1 — eve-foundation-mock-v2
+
+- provider: mock;
+- ruolo: primario;
+- attivo: sì;
+- deterministico: sì;
+- contesto dichiarato: 128.000 token;
+- costo input: 0;
+- costo output: 0.
+
+4.2 — eve-foundation-mock-fallback-v1
+
+- provider: mock;
+- ruolo: fallback;
+- attivo: sì;
+- deterministico: sì;
+- contesto dichiarato: 64.000 token;
+- costo input: 0;
+- costo output: 0.
+
+4.3 — external-model-placeholder
+
+- provider: external-template;
+- attivo: no;
+- factory: assente;
+- costo: non configurato;
+- uso: vietato.
+
+======================================================================
+5. PROFILI DI ESECUZIONE
+======================================================================
+
+5.1 — chat-development
+
+Scopo:
+
+chat
+
+Target:
+
+mock / eve-foundation-mock-v2
+
+Regole:
+
+- timeout 2.000 ms;
+- massimo 2 tentativi;
+- backoff 10 ms;
+- provider esterni vietati;
+- input massimo 8.000 token;
+- output massimo 4.000 token;
+- totale massimo 12.000 token;
+- costo massimo per run 0 USD;
+- budget giornaliero 250.000 token.
+
+5.2 — evaluation-safe
+
+Scopo:
+
+evaluation
+
+Target primario:
+
+mock / eve-foundation-mock-v2
+
+Fallback:
+
+mock / eve-foundation-mock-fallback-v1
+
+Regole:
+
+- timeout 1.500 ms per tentativo;
+- massimo 2 tentativi per target;
+- backoff 5 ms;
+- provider esterni vietati;
+- input massimo 12.000 token;
+- output massimo 4.000 token;
+- totale massimo 16.000 token;
+- costo massimo per run 0 USD;
+- budget giornaliero 1.000.000 token.
+
+5.3 — external-review
+
+Stato:
+
+disattivato
+
+Scopo:
+
+review
+
+Target:
+
+external-template / external-model-placeholder
+
+Il profilo non può essere ottenuto dal registro mentre è disattivato.
+
+======================================================================
+6. ORCHESTRAZIONE
+======================================================================
+
+Flusso:
+
+ChatRequest
+    ↓
+selezione profilo server-side
+    ↓
+verifica dello scopo
+    ↓
+verifica provider e modello
+    ↓
+blocco provider esterno
+    ↓
+stima token input
+    ↓
+controllo budget per run e giornaliero
+    ↓
+tentativo primario con timeout
+    ↓
+retry controllato
+    ↓
+fallback ordinato
+    ↓
+stima token output e costo
+    ↓
+controllo budget finale
+    ↓
+telemetria redatta
+    ↓
+ChatResponse
+
+Il modello non controlla:
+
+- profilo;
+- timeout;
+- numero di tentativi;
+- fallback;
+- budget;
+- telemetria;
+- attivazione dei provider esterni.
+
+======================================================================
+7. TIMEOUT, RETRY E FALLBACK
+======================================================================
+
+Timeout:
+
+- applicato con controllo asincrono;
+- configurato per profilo;
+- valutato per ogni tentativo.
+
+Retry:
+
+- numero massimo configurato;
+- errori registrati solo tramite nome della classe;
+- backoff configurabile;
+- nessun testo completo dell’eccezione salvato.
+
+Fallback:
+
+- ordinato;
+- usato solo quando il profilo contiene più target;
+- indicato nella telemetria;
+- non scelto dal modello.
+
+Caso verificato:
+
+1. modello primario lento;
+2. TimeoutError;
+3. passaggio al modello fallback;
+4. risposta riuscita;
+5. fallback_used=true;
+6. due tentativi registrati.
+
+======================================================================
+8. TOKEN
+======================================================================
+
+Il Checkpoint 0.7 introduce una stima deterministica.
+
+Metodo:
+
+- serializzazione JSON canonica;
+- lunghezza in caratteri;
+- divisione approssimativa per quattro;
+- arrotondamento per eccesso.
+
+Vengono stimati:
+
+- input_tokens;
+- output_tokens;
+- total_tokens.
+
+La stima è adatta ai test e ai limiti preliminari.
+
+Non è ancora il tokenizer ufficiale di un modello reale.
+
+======================================================================
+9. COSTI
+======================================================================
+
+Ogni modello può dichiarare:
+
+- costo input per milione di token;
+- costo output per milione di token.
+
+Formula:
+
+costo input =
+input_tokens × input_cost_per_million_usd / 1.000.000
+
+costo output =
+output_tokens × output_cost_per_million_usd / 1.000.000
+
+costo totale =
+costo input + costo output
+
+I modelli mock hanno costo zero.
+
+I profili possono imporre:
+
+- costo massimo per esecuzione;
+- budget costi giornaliero.
+
+======================================================================
+10. TELEMETRIA
+======================================================================
+
+Database:
+
+data/eve-provider-telemetry.sqlite3
+
+Variabile:
+
+EVE_PROVIDER_TELEMETRY_DB_PATH
+
+Schema:
+
+1
+
+Tabella:
+
+provider_execution_events
+
+Campi:
+
+- ID;
+- data;
+- scopo;
+- profilo;
+- provider;
+- modello;
+- stato;
+- numero tentativi;
+- fallback;
+- durata;
+- token input;
+- token output;
+- token totali;
+- costo stimato;
+- hash richiesta;
+- hash risposta;
+- classe errore;
+- dettagli redatti dei tentativi.
+
+Aggregazioni:
+
+- eventi totali;
+- token giornalieri;
+- costo giornaliero.
+
+======================================================================
+11. PRIVACY DELLA TELEMETRIA
+======================================================================
+
+Non vengono salvati:
+
+- messaggio utente;
+- testo selezionato;
+- risposta completa;
+- contenuto della lezione;
+- corpo completo dell’eccezione;
+- chiavi API;
+- credenziali;
+- dati personali non necessari.
+
+Vengono salvati hash SHA-256 della rappresentazione strutturata.
+
+Gli hash servono a:
+
+- distinguere esecuzioni;
+- verificare stabilità;
+- confrontare output;
+- evitare la conservazione del testo completo.
+
+======================================================================
+12. CHAT
+======================================================================
+
+L’endpoint:
+
+POST /v1/chat
+
+usa ora:
+
+profilo chat-development
+
+Il server applica:
+
+- limite contesto;
+- limite token;
+- limite giornaliero;
+- timeout;
+- retry;
+- telemetria.
+
+Errori:
+
+- contesto troppo grande: HTTP 413;
+- budget superato: HTTP 429;
+- provider non disponibile: HTTP 502.
+
+======================================================================
+13. RUNNER DELLE VALUTAZIONI
+======================================================================
+
+Il runner automatico usa ora un ManagedEveProvider.
+
+Profilo:
+
+evaluation-safe
+
+Questo permette di applicare anche alle valutazioni:
+
+- timeout;
+- retry;
+- fallback;
+- budget;
+- telemetria.
+
+Il runner continua a conservare separatamente gli artefatti redatti della
+valutazione.
+
+Telemetria provider e artefatti di valutazione non sostituiscono l’uno l’altro.
+
+======================================================================
+14. CONFIGURAZIONE
+======================================================================
+
+Variabili aggiunte:
+
+EVE_PROVIDER_TELEMETRY_DB_PATH=data/eve-provider-telemetry.sqlite3
+EVE_EXTERNAL_PROVIDERS_ENABLED=false
+EVE_CHAT_EXECUTION_PROFILE=chat-development
+EVE_EVALUATION_EXECUTION_PROFILE=evaluation-safe
+
+Variabili precedenti conservate:
+
+EVE_ENVIRONMENT
+EVE_PROVIDER
+EVE_ENABLED
+EVE_DAILY_REQUEST_LIMIT
+EVE_MAX_CONTEXT_CHARS
+EVE_MAX_PLAN_CHARS
+EVE_AUDIT_ENABLED
+EVE_REQUIREMENTS_DB_PATH
+EVE_PROMPTS_DB_PATH
+EVE_EVALUATIONS_DB_PATH
+EVE_EVALUATION_PUBLISH_SCORE
+EVE_EVALUATION_EVIDENCE_MAX_CHARS
+EVE_EVALUATION_LATENCY_BUDGET_MS
+
+======================================================================
+15. API AGGIUNTE
+======================================================================
+
+GET /v1/providers/status
+
+Restituisce:
+
+- provider;
+- provider attivi;
+- stato provider esterni;
+- modelli;
+- modelli attivi;
+- profili;
+- eventi telemetrici;
+- token giornalieri;
+- costo giornaliero.
+
+GET /v1/providers/catalog
+
+Restituisce il catalogo provider.
+
+GET /v1/providers/models
+
+Restituisce il catalogo modelli e i costi dichiarati.
+
+GET /v1/providers/profiles
+
+Restituisce profili, target, retry, timeout e budget.
+
+GET /v1/providers/telemetry
+
+Restituisce eventi redatti con limite di paginazione.
+
+======================================================================
+16. TEST
+======================================================================
+
+Ultima esecuzione locale del nuovo modulo:
+
+28 passed in 0.43s
+
+Sono test specifici del Checkpoint 0.7.
+
+La suite cumulativa completa dei checkpoint precedenti non è stata rilanciata.
+
+I conteggi non devono essere sommati automaticamente.
+
+Verificati:
+
+1. catalogo predefinito;
+2. segnaposto esterno;
+3. provider esterno disattivato;
+4. modelli mock attivi;
+5. modello primario;
+6. appartenenza modello-provider;
+7. modello disattivato;
+8. numero profili;
+9. fallback evaluation-safe;
+10. retry e timeout chat;
+11. profilo esterno disattivato;
+12. schema telemetria;
+13. scrittura e lettura telemetria;
+14. aggregazione giornaliera;
+15. persistenza dopo riapertura;
+16. stima token;
+17. esecuzione riuscita;
+18. telemetria dell’esecuzione;
+19. ManagedEveProvider;
+20. blocco budget input;
+21. blocco scopo profilo;
+22. retry e successo;
+23. timeout e fallback;
+24. fallimento di tutti i target;
+25. redazione dell’errore;
+26. budget token giornaliero;
+27. API catalogo, modelli e profili;
+28. API telemetria.
+
+GitHub Actions non eseguito.
+
+======================================================================
+17. ANTEPRIMA
+======================================================================
+
+Percorso invariato:
+
+reference/eve-ai-studio-preview/index.html
+
+Versione mostrata:
+
+Eve 0.7-preview
+
+Nuova area:
+
+Provider e modelli
+
+Nuovo file:
+
+reference/eve-ai-studio-preview/provider-workflow.js
+
+Elementi mostrati:
+
+- due provider;
+- tre modelli;
+- tre profili;
+- provider esterno disattivato;
+- timeout;
+- retry;
+- fallback;
+- budget;
+- token;
+- costi;
+- telemetria;
+- hash;
+- redazione.
+
+======================================================================
+18. VERIFICA VISUALE
+======================================================================
+
+Percorso verificato localmente:
+
+1. apertura Provider e modelli;
+2. selezione evaluation-safe;
+3. selezione Timeout e fallback;
+4. esecuzione;
+5. validazione del profilo;
+6. controllo budget;
+7. TimeoutError del primario;
+8. successo del fallback;
+9. telemetria con due tentativi;
+10. fallback_used=true;
+11. token giornalieri aggiornati;
+12. costo zero;
+13. nessun errore JavaScript.
+
+Risultato:
+
+- titolo Provider e modelli;
+- area visibile;
+- badge Completato;
+- un evento telemetrico;
+- test 28/28;
+- fallback mostrato correttamente.
+
+======================================================================
+19. COSA CONTROLLARE
+======================================================================
+
+Aprire Provider e modelli.
+
+Controllare le metriche:
+
+- Provider registrati: 2;
+- Modelli registrati: 3;
+- Profili: 3;
+- Test Checkpoint 0.7: 28/28.
+
+Provider:
+
+- mock deve essere Attivo;
+- external-template deve essere Disattivato.
+
+Modelli:
+
+- eve-foundation-mock-v2 deve essere Attivo;
+- eve-foundation-mock-fallback-v1 deve essere Attivo;
+- external-model-placeholder deve essere Bloccato.
+
+Profili:
+
+- chat-development disponibile;
+- evaluation-safe disponibile;
+- external-review disattivato.
+
+Simulazione successo:
+
+- un tentativo;
+- fallback no;
+- token aggiornati;
+- evento telemetrico creato.
+
+Simulazione retry:
+
+- primo RuntimeError redatto;
+- secondo tentativo riuscito;
+- nessun testo completo dell’errore.
+
+Simulazione timeout e fallback:
+
+- TimeoutError sul primario;
+- fallback v1;
+- tentativi 2;
+- fallback sì;
+- evento telemetrico.
+
+Simulazione budget:
+
+- blocco durante il controllo budget;
+- nessuna chiamata;
+- nessun evento telemetrico.
+
+Simulazione provider esterno:
+
+- blocco durante la validazione profilo;
+- external_providers_enabled=false;
+- nessuna chiamata;
+- nessun evento telemetrico.
+
+Premere Azzera dati demo:
+
+- eventi a zero;
+- token a zero;
+- conferma che non erano presenti contenuti conversazionali.
+
+======================================================================
+20. FILE CREATI
+======================================================================
+
+eve-ai-studio/app/providers/catalog.py
+eve-ai-studio/app/providers/models.py
+eve-ai-studio/app/providers/orchestrator.py
+eve-ai-studio/app/providers/profiles.py
+eve-ai-studio/app/providers/router.py
+eve-ai-studio/app/providers/telemetry.py
+
+eve-ai-studio/tests/test_provider_api.py
+eve-ai-studio/tests/test_provider_catalog.py
+eve-ai-studio/tests/test_provider_orchestrator.py
+eve-ai-studio/tests/test_provider_profiles.py
+eve-ai-studio/tests/test_provider_telemetry.py
+
+reference/eve-ai-studio-preview/provider-workflow.js
+
+eve-ai-studio/checkpoints/CHECKPOINT_0.7_UPDATE.txt
+
+======================================================================
+21. FILE MODIFICATI
+======================================================================
+
+eve-ai-studio/.env.example
+eve-ai-studio/PHASE_STATUS.md
+eve-ai-studio/README.md
+eve-ai-studio/app/core/config.py
+eve-ai-studio/app/main.py
+eve-ai-studio/app/providers/__init__.py
+eve-ai-studio/app/providers/mock.py
+eve-ai-studio/app/providers/registry.py
+eve-ai-studio/pyproject.toml
+eve-ai-studio/tests/conftest.py
+eve-ai-studio/tests/test_foundation.py
+
+reference/eve-ai-studio-preview/index.html
+
+======================================================================
+22. DIFFERENZA GITHUB PRIMA DEL REPORT
+======================================================================
+
+Base:
+
+3596fa6542e724d7374286970303dd565bf8f3d6
+
+Stato:
+
+ahead
+
+Commit avanti:
+
+24
+
+Commit indietro:
+
+0
+
+File coinvolti:
+
+24
+
+Il commit del presente report aumenta il conteggio finale.
+
+======================================================================
+23. PROTEZIONI
+======================================================================
+
+Non modificati:
+
+- main;
+- demo-canonica;
+- HTML canonico;
+- app ufficiale;
+- Supabase;
+- avatar definitivo.
+
+Non eseguiti:
+
+- pull request;
+- merge;
+- provider esterni;
+- chiamate di rete AI;
+- GitHub Actions.
+
+======================================================================
+24. LIMITI
+======================================================================
+
+- nessun provider AI reale implementato;
+- nessuna chiave API;
+- tokenizer ufficiale assente;
+- costo reale non misurato;
+- nessun circuit breaker distribuito;
+- nessuna coda;
+- nessuna esecuzione parallela dei target;
+- nessun rate limiter persistente per utente;
+- nessun RAG;
+- nessun Supabase;
+- nessuna autenticazione amministrativa;
+- nessuna memoria didattica;
+- nessuna voce;
+- nessuno strumento di scrittura nell’app ufficiale;
+- animazioni definitive in attesa di consegna.
+
+======================================================================
+25. PROSSIMO CHECKPOINT
+======================================================================
+
+Checkpoint 0.8:
+
+- catalogo materiali;
+- importazione documentale controllata;
+- metadati;
+- checksum;
+- deduplicazione;
+- stato di elaborazione;
+- estrazione testuale iniziale;
+- limiti;
+- errori redatti;
+- versioni dei materiali;
+- preparazione della pipeline RAG;
+- nessun embedding esterno;
+- stessa anteprima;
+- test;
+- plaintext;
+- indicazioni di verifica.
+
+FINE FILE
