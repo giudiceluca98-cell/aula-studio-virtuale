@@ -7,3 +7,4 @@ from pathlib import Path
 _TEST_DATA_DIR = Path(tempfile.mkdtemp(prefix="eve-ai-studio-tests-"))
 os.environ["EVE_REQUIREMENTS_DB_PATH"] = str(_TEST_DATA_DIR / "requirements.sqlite3")
 os.environ["EVE_PROMPTS_DB_PATH"] = str(_TEST_DATA_DIR / "prompts.sqlite3")
+os.environ["EVE_EVALUATIONS_DB_PATH"] = str(_TEST_DATA_DIR / "evaluations.sqlite3")
