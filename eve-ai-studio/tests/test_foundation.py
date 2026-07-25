@@ -14,7 +14,7 @@ def test_health_reports_modular_mock_provider() -> None:
     payload = response.json()
     assert payload["provider"] == "mock"
     assert payload["enabled"] is True
-    assert payload["service_version"] == "0.3.0"
+    assert payload["service_version"] == "0.6.0"
 
 
 def test_chat_returns_structured_simulation_and_source() -> None:
