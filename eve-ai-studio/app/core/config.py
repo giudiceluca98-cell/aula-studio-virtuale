@@ -17,3 +17,5 @@ class EveSettings(BaseSettings):
     audit_enabled: bool = True
     requirements_db_path: str = "data/eve-requirements.sqlite3"
     prompts_db_path: str = "data/eve-prompts.sqlite3"
+    evaluations_db_path: str = "data/eve-evaluations.sqlite3"
+    evaluation_publish_score: float = 85.0
