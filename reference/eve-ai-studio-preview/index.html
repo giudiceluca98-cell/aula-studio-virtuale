@@ -12,30 +12,33 @@
 </style>
 </head>
 <body>
-<main id="loader"><div class="spinner"></div><strong>Caricamento di Eve AI Studio…</strong><br><small>Anteprima interattiva approvata · stile demo canonica</small></main>
+<main id="loader"><div class="spinner"></div><strong>Caricamento di Eve AI Studio…</strong><br><small>Anteprima interattiva approvata · Checkpoint 0.4</small></main>
 <script src="markup-01.js"></script>
 <script src="markup-02.js"></script>
 <script src="markup-03.js"></script>
 <script src="markup-04.js"></script>
 <script src="markup-05.js"></script>
 <script>
-try {
+function loadPreviewScript(source){
+  return new Promise((resolve,reject)=>{
+    const script=document.createElement("script");
+    script.src=source;
+    script.onload=resolve;
+    script.onerror=()=>reject(new Error(`Il file ${source} non è disponibile.`));
+    document.body.appendChild(script);
+  });
+}
+(async()=>{
   const parts=window.__EVE_HTML_PARTS||[];
   if(parts.length!==5) throw new Error(`Markup incompleto: ${parts.length}/5 blocchi caricati.`);
   document.body.innerHTML=parts.join("");
-  const appScript=document.createElement("script");
-  appScript.src="app.js";
-  appScript.onerror=()=>{document.body.innerHTML="<main id='loader'><h1>Anteprima non caricata</h1><p>Il file app.js non è disponibile.</p></main>"};
-  appScript.onload=()=>{
-    const particleScript=document.createElement("script");
-    particleScript.src="particles.js";
-    particleScript.onerror=()=>console.warn("Effetto particellare non disponibile.");
-    document.body.appendChild(particleScript);
-  };
-  document.body.appendChild(appScript);
-} catch(error) {
-  document.getElementById("loader").innerHTML=`<h1>Anteprima non caricata</h1><p>${error.message}</p>`;
-}
+  await loadPreviewScript("prompt-compat.js");
+  await loadPreviewScript("app.js");
+  await loadPreviewScript("prompt-workflow.js");
+  try{await loadPreviewScript("particles.js")}catch(error){console.warn(error.message)}
+})().catch(error=>{
+  document.body.innerHTML=`<main id="loader"><h1>Anteprima non caricata</h1><p>${error.message}</p></main>`;
+});
 </script>
 </body>
 </html>
