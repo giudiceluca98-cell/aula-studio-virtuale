@@ -5,6 +5,8 @@ from fastapi import FastAPI, HTTPException, Query, status
 from .context.validation import ContextTooLargeError, validate_context_size
 from .core.audit import AuditLogger
 from .core.config import EveSettings
+from .evaluations.automatic import AutomaticEvaluationService
+from .evaluations.automatic_router import create_automatic_evaluation_router
 from .evaluations.router import create_evaluation_router
 from .evaluations.service import EvaluationService
 from .evaluations.storage import SqliteEvaluationStore
@@ -31,7 +33,7 @@ from .requirements.parser import PlanParseError
 from .requirements.registry import RequirementNotFoundError, RequirementRegistry
 from .requirements.storage import RequirementVersionNotFoundError, SqliteRequirementStore
 
-SERVICE_VERSION = "0.5.0"
+SERVICE_VERSION = "0.6.0"
 
 settings = EveSettings()
 provider = get_provider(settings)
@@ -49,6 +51,15 @@ evaluations = EvaluationService(
     prompt_version_getter=prompts.get,
     seed_default=True,
 )
+automatic_evaluations = AutomaticEvaluationService(
+    evaluations,
+    evaluation_store,
+    provider=provider,
+    prompt_version_getter=prompts.get,
+    evidence_max_chars=settings.evaluation_evidence_max_chars,
+    latency_budget_ms=settings.evaluation_latency_budget_ms,
+    migrate_empty_inputs=True,
+)
 active_prompt_version_id = prompts.status().active_version_id
 if active_prompt_version_id is not None and not evaluation_store.runs_count(
     prompt_version_id=active_prompt_version_id
@@ -60,12 +71,13 @@ app = FastAPI(
     title="Eve AI Studio",
     version=SERVICE_VERSION,
     description=(
-        "Fondazione modulare di Eve con requisiti e prompt versionati, scenari di valutazione "
-        "persistenti e gate di pubblicazione calcolato dai risultati. Nessun modello esterno è collegato."
+        "Fondazione modulare di Eve con requisiti e prompt versionati, scenari persistenti, "
+        "gate di pubblicazione e runner automatico deterministico. Nessun modello esterno è collegato."
     ),
 )
 app.include_router(create_prompt_router(prompts))
 app.include_router(create_evaluation_router(evaluations))
+app.include_router(create_automatic_evaluation_router(automatic_evaluations))
 
 
 @app.get("/health", response_model=HealthResponse)
