@@ -4,7 +4,7 @@ Questa directory contiene il servizio isolato di Eve AI Studio, sviluppato sulla
 
 ## Stato
 
-Versione del servizio: `0.5.0`
+Versione del servizio: `0.6.0`
 
 Checkpoint implementati:
 
@@ -12,7 +12,8 @@ Checkpoint implementati:
 - `0.2` — separazione dei moduli e importatore strutturato del piano approfondito;
 - `0.3` — persistenza SQLite, cronologia importazioni, versioni, confronto e rollback;
 - `0.4` — prompt versionati, modalità didattiche e ciclo bozza–revisione–pubblicazione;
-- `0.5` — scenari di valutazione persistenti, esecuzioni, risultati per criterio e gate reale dei prompt.
+- `0.5` — scenari di valutazione persistenti, risultati per criterio e gate reale dei prompt;
+- `0.6` — runner deterministico, input eseguibili, grader automatici e artefatti redatti.
 
 ## Struttura
 
@@ -24,7 +25,7 @@ eve-ai-studio/
 │   ├── providers/            # astrazione e provider mock
 │   ├── requirements/         # piano, storage, versioni, confronto e rollback
 │   ├── prompts/              # prompt, modalità, workflow, storage e API
-│   ├── evaluations/          # scenari, run, risultati, punteggi e gate
+│   ├── evaluations/          # scenari, grader, runner, risultati, artefatti e gate
 │   ├── main.py               # API FastAPI
 │   └── models.py             # contratti chat condivisi
 ├── data/
@@ -66,71 +67,19 @@ Il Checkpoint 0.4 usa un archivio SQLite separato:
 data/eve-prompts.sqlite3
 ```
 
-Configurazione:
+Ogni configurazione dispone di versione, checksum, stato, modalità didattica, parametri tipizzati, storico delle transizioni e collegamento alla versione attiva.
 
-```text
-EVE_PROMPTS_DB_PATH
-```
-
-Ogni configurazione dispone di:
-
-- chiave stabile;
-- numero progressivo di versione;
-- prompt di sistema;
-- modalità didattica;
-- parametri tipizzati;
-- checksum;
-- versione genitore;
-- stato;
-- indicazione della versione attiva;
-- data di pubblicazione;
-- storico delle transizioni.
-
-Le revisioni sono immutabili: una modifica crea una nuova versione e non sovrascrive la precedente.
-
-## Stati dei prompt
+Workflow:
 
 ```text
 draft → in_review → publishable → published → archived
 ```
 
-Ritorni consentiti:
-
-```text
-in_review → draft
-publishable → draft
-```
-
-Regole:
-
-- una bozza non può essere pubblicata direttamente;
-- una sola versione pubblicata può essere attiva per configurazione;
-- pubblicando una nuova versione, la precedente attiva viene archiviata;
-- il rollback copia una versione storica in una nuova bozza;
-- il rollback non elimina né riscrive lo storico;
-- il passaggio a `publishable` usa il gate persistente del Checkpoint 0.5.
-
-## Modalità didattiche
-
-- `adaptive_explanation` — spiegazione adattiva;
-- `socratic` — metodo socratico;
-- `quiz` — quiz e interrogazione;
-- `correction` — correzione guidata;
-- `planning` — pianificazione dello studio.
-
-Parametri tipizzati:
-
-- tono;
-- profondità da 1 a 4;
-- politica delle fonti;
-- politica della soluzione;
-- domanda di controllo;
-- politica della memoria;
-- politica degli strumenti.
+Il passaggio a `publishable` usa il gate persistente delle valutazioni e non può essere forzato dal modello.
 
 ## Valutazioni persistenti
 
-Il Checkpoint 0.5 introduce un terzo archivio SQLite:
+Database:
 
 ```text
 data/eve-evaluations.sqlite3
@@ -141,33 +90,35 @@ Configurazione:
 ```text
 EVE_EVALUATIONS_DB_PATH
 EVE_EVALUATION_PUBLISH_SCORE
+EVE_EVALUATION_EVIDENCE_MAX_CHARS
+EVE_EVALUATION_LATENCY_BUDGET_MS
 ```
 
-Soglia predefinita:
+Valori predefiniti:
 
 ```text
-85/100
+Soglia pubblicazione: 85/100
+Evidenza massima: 500 caratteri
+Budget di latenza: 750 ms
 ```
 
-Il modulo mantiene:
+Schema corrente:
 
-- scenari di valutazione versionati;
-- versione attiva di ogni scenario;
-- severità `critical`, `major` e `minor`;
-- peso e soglia minima;
-- scenari obbligatori e opzionali;
-- snapshot della suite usata da ogni esecuzione;
-- esecuzioni collegate a una versione prompt;
-- risultati separati per criterio;
-- punteggio ponderato;
-- numero di errori critici;
-- numero di scenari obbligatori falliti;
-- cronologia dei run;
-- gate calcolato dal server.
+```text
+2
+```
+
+Tabelle:
+
+- `evaluation_scenario_versions`;
+- `evaluation_runs`;
+- `evaluation_run_scenarios`;
+- `evaluation_results`;
+- `evaluation_run_artifacts`.
 
 ## Suite iniziale
 
-Sono creati otto scenari iniziali:
+Sono presenti otto scenari versionati:
 
 1. contesto didattico corretto;
 2. fonti verificabili;
@@ -178,26 +129,75 @@ Sono creati otto scenari iniziali:
 7. coerenza della lingua;
 8. budget di latenza.
 
-Il budget di latenza è opzionale. Un suo fallimento può non bloccare il gate quando punteggio, scenari obbligatori ed errori critici rispettano le regole.
+Ogni scenario conserva severità, peso, soglia minima, obbligatorietà, input strutturato e comportamenti attesi.
+
+## Runner automatico del Checkpoint 0.6
+
+Il runner usa il contratto comune `EveProvider` e, in questa fase, il provider deterministico `mock`.
+
+Flusso:
+
+```text
+scenario versionato
+    ↓
+ChatRequest tipizzata
+    ↓
+provider mock
+    ↓
+grader specifico
+    ↓
+risultato per criterio
+    ↓
+artefatto redatto
+    ↓
+completamento del run
+    ↓
+ricalcolo del gate
+```
+
+Grader disponibili:
+
+- correttezza degli identificativi di contesto;
+- presenza e coerenza delle fonti;
+- assenza di dati vietati di altre aule;
+- assenza di azioni oltre i permessi;
+- dichiarazione dell'incertezza;
+- struttura didattica minima;
+- coerenza della lingua italiana;
+- rispetto del budget di latenza;
+- fallback generico per scenari aggiuntivi.
+
+## Protezione dei contenuti
+
+Il runner non salva il testo completo della risposta del provider.
+
+Per ogni scenario conserva soltanto:
+
+- provider;
+- modello;
+- durata in millisecondi;
+- SHA-256 dell'output strutturato;
+- numero di caratteri;
+- numero di fonti;
+- numero di azioni proposte;
+- indicazione di redazione;
+- eventuale classe dell'errore.
+
+In caso di errore non viene conservato il messaggio completo dell'eccezione.
+
+Le evidenze dei grader sono limitate dalla configurazione server-side.
 
 ## Gate di pubblicazione
 
 Una versione prompt può diventare `publishable` soltanto quando l'ultima esecuzione completata:
 
 - usa le versioni attualmente attive degli scenari;
+- risulta `passed`;
 - non contiene errori critici;
-- non contiene fallimenti di scenari obbligatori;
-- raggiunge la soglia ponderata configurata;
-- risulta `passed`.
+- non contiene fallimenti obbligatori;
+- raggiunge la soglia ponderata configurata.
 
-Il vecchio campo `review_tests_passed` non può forzare la pubblicabilità quando il gate persistente è collegato.
-
-Quando uno scenario viene revisionato:
-
-- la versione precedente resta nello storico;
-- la nuova versione diventa attiva;
-- le esecuzioni basate sulla suite precedente diventano obsolete;
-- serve una nuova esecuzione.
+Quando uno scenario viene revisionato, i run precedenti restano nello storico ma non rendono più pubblicabile il prompt finché non viene eseguita la nuova suite.
 
 ## API
 
@@ -236,7 +236,13 @@ GET  /v1/evaluations/runs
 POST /v1/evaluations/runs
 GET  /v1/evaluations/runs/{run_id}
 POST /v1/evaluations/runs/{run_id}/complete
+
+GET  /v1/evaluations/runner/status
+POST /v1/evaluations/runs/execute
+GET  /v1/evaluations/runs/{run_id}/artifacts
 ```
+
+L'endpoint manuale `/complete` resta disponibile per compatibilità e per importare risultati prodotti da runner esterni controllati.
 
 ## Avvio locale
 
@@ -254,52 +260,48 @@ Copy-Item .env.example .env
 uvicorn app.main:app --reload --port 8100
 ```
 
-## Test del Checkpoint 0.5
+## Test del Checkpoint 0.6
 
-Eseguiti localmente sul nuovo modulo di valutazione, sulle API e sul collegamento con il gate prompt:
+Eseguiti localmente sul runner, sui grader, sulla migrazione degli artefatti, sull'orchestrazione e sulle API:
 
 ```text
-18 passed
+29 passed
 ```
 
 Coprono:
 
-- schema SQLite;
-- otto scenari iniziali;
-- revisione versionata degli scenari;
-- conflitti sulle chiavi;
-- snapshot della suite;
-- risultati per criterio;
-- punteggio ponderato;
-- errori critici;
-- scenari obbligatori;
-- fallimento opzionale non bloccante;
-- copertura completa dei risultati;
-- invalidazione quando cambia la suite;
-- persistenza dopo riapertura;
-- versione prompt inesistente;
-- baseline idempotente;
-- API di stato, scenari, run e gate;
-- blocco o autorizzazione del passaggio a `publishable` tramite risultati persistiti.
+- stato deterministico del runner;
+- costruzione degli input tipizzati;
+- override del payload scenario;
+- otto grader iniziali;
+- rilevazione di perdita tra aule;
+- rilevazione di azioni non autorizzate;
+- fallimento del budget di latenza;
+- grader generico;
+- redazione degli errori del provider;
+- limite delle evidenze;
+- assenza dell'output completo negli artefatti;
+- migrazione SQLite allo schema `2`;
+- persistenza degli artefatti;
+- copertura esatta dello snapshot;
+- migrazione idempotente degli input vuoti;
+- esecuzione automatica completa;
+- disponibilità degli artefatti;
+- API di stato, esecuzione e consultazione.
 
-La suite completa cumulativa dei checkpoint precedenti non è stata rilanciata in questo passaggio; il numero `18` non deve essere sommato automaticamente ai risultati precedenti.
+La suite completa cumulativa dei checkpoint precedenti non è stata rilanciata in questo passaggio; il numero `29` non deve essere sommato automaticamente ai risultati precedenti.
 
 ## Limiti attuali
 
-Non sono ancora implementati:
-
-- modello AI reale;
-- esecuzione automatica dei test contro un provider AI;
-- RAG e indicizzazione dei materiali;
-- Supabase;
-- autenticazione amministrativa;
-- memoria didattica;
-- voce;
-- strumenti che modificano l'app;
-- pubblicazione nell'app ufficiale.
+- il runner usa soltanto il provider deterministico mock;
+- i grader sono iniziali e basati su controlli testuali o strutturali;
+- non sono ancora presenti grader semantici basati su un modello indipendente;
+- non vengono ancora misurati token e costi;
+- non sono implementati retry, timeout distribuiti o fallback tra provider;
+- non sono presenti modello AI reale, RAG, Supabase, autenticazione, memoria didattica, voce o strumenti di scrittura nell'app ufficiale.
 
 L'avatar animato definitivo verrà integrato dopo la consegna e l'approvazione degli asset prodotti esternamente.
 
 ## Regola di sicurezza
 
-Il modello può proporre un risultato. Identità, contesto, permessi, transizioni, persistenza, valutazioni, memoria e azioni devono essere verificati da codice server indipendente dal modello.
+Il modello può produrre una risposta. Identità, contesto, permessi, transizioni, persistenza, valutazioni, redazione, memoria e azioni devono essere verificate da codice server indipendente dal modello.
