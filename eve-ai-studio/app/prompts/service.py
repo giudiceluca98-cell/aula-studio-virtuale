@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from collections.abc import Callable
+from typing import Protocol
+
 from .modes import DIDACTIC_MODES
 from .models import (
     DidacticModeDefinition,
@@ -13,7 +16,7 @@ from .models import (
     PromptVersionDiff,
     PromptVersionSummary,
 )
-from .storage import SqlitePromptStore
+from .storage import PromptTransitionError, SqlitePromptStore
 
 
 DEFAULT_SYSTEM_PROMPT = (
@@ -24,11 +27,30 @@ DEFAULT_SYSTEM_PROMPT = (
 )
 
 
+class EvaluationGateResult(Protocol):
+    eligible: bool
+    latest_run_id: int | None
+    reasons: list[str]
+
+
 class PromptService:
-    def __init__(self, store: SqlitePromptStore, *, seed_default: bool = True) -> None:
+    def __init__(
+        self,
+        store: SqlitePromptStore,
+        *,
+        seed_default: bool = True,
+        evaluation_gate: Callable[[int], EvaluationGateResult] | None = None,
+    ) -> None:
         self.store = store
+        self._evaluation_gate = evaluation_gate
         if seed_default and store.versions_count() == 0:
             self._seed_default()
+
+    def set_evaluation_gate(
+        self,
+        evaluation_gate: Callable[[int], EvaluationGateResult],
+    ) -> None:
+        self._evaluation_gate = evaluation_gate
 
     def _seed_default(self) -> None:
         version = self.store.create(
@@ -83,10 +105,21 @@ class PromptService:
         review_tests_passed: bool = False,
         note: str | None = None,
     ) -> PromptTransitionResult:
+        effective_tests_passed = review_tests_passed
+        if target_status is PromptStatus.PUBLISHABLE and self._evaluation_gate is not None:
+            gate = self._evaluation_gate(version_id)
+            if not gate.eligible:
+                reasons = "; ".join(gate.reasons) or "gate non superato"
+                raise PromptTransitionError(
+                    f"Gate di valutazione non superato: {reasons}"
+                )
+            effective_tests_passed = True
+            if note is None:
+                note = f"Gate persistente superato con run {gate.latest_run_id}"
         return self.store.transition(
             version_id,
             target_status,
-            review_tests_passed=review_tests_passed,
+            review_tests_passed=effective_tests_passed,
             note=note,
         )
 
