@@ -9,7 +9,11 @@ from .models import (
     EvaluationAutomaticRunResult,
     EvaluationRunnerStatus,
 )
-from .storage import EvaluationRunNotFoundError, EvaluationRunStateError
+from .storage import (
+    EvaluationConflictError,
+    EvaluationRunNotFoundError,
+    EvaluationRunStateError,
+)
 
 
 def create_automatic_evaluation_router(
@@ -47,7 +51,7 @@ def create_automatic_evaluation_router(
                 status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
                 detail=str(exc),
             ) from exc
-        except EvaluationRunStateError as exc:
+        except (EvaluationConflictError, EvaluationRunStateError) as exc:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
                 detail=str(exc),
