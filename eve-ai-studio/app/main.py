@@ -6,6 +6,9 @@ from .context.validation import ContextTooLargeError, validate_context_size
 from .core.audit import AuditLogger
 from .core.config import EveSettings
 from .models import ChatRequest, ChatResponse, HealthResponse
+from .prompts.router import create_prompt_router
+from .prompts.service import PromptService
+from .prompts.storage import SqlitePromptStore
 from .providers.registry import get_provider
 from .requirements.models import (
     PlanImportRequest,
@@ -25,22 +28,25 @@ from .requirements.parser import PlanParseError
 from .requirements.registry import RequirementNotFoundError, RequirementRegistry
 from .requirements.storage import RequirementVersionNotFoundError, SqliteRequirementStore
 
-SERVICE_VERSION = "0.3.0"
+SERVICE_VERSION = "0.4.0"
 
 settings = EveSettings()
 provider = get_provider(settings)
 audit = AuditLogger(enabled=settings.audit_enabled)
 requirement_store = SqliteRequirementStore(settings.requirements_db_path)
 requirements = RequirementRegistry(store=requirement_store)
+prompt_store = SqlitePromptStore(settings.prompts_db_path)
+prompts = PromptService(prompt_store, seed_default=True)
 
 app = FastAPI(
     title="Eve AI Studio",
     version=SERVICE_VERSION,
     description=(
-        "Fondazione modulare di Eve con catalogo requisiti persistente, versionato e reversibile. "
-        "Nessun modello esterno è collegato."
+        "Fondazione modulare di Eve con catalogo requisiti persistente e configurazioni prompt "
+        "versionate, revisionabili e pubblicabili. Nessun modello esterno è collegato."
     ),
 )
+app.include_router(create_prompt_router(prompts))
 
 
 @app.get("/health", response_model=HealthResponse)
