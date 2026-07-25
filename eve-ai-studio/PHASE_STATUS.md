@@ -2,7 +2,7 @@
 
 ## Fase 0 — Fondazione
 
-Stato: **checkpoint 0.4 implementato**
+Stato: **checkpoint 0.5 implementato**
 
 ### Checkpoint 0.1 — Fondazione iniziale
 
@@ -42,8 +42,6 @@ Stato: **checkpoint 0.4 implementato**
 
 ### Checkpoint 0.4 — Prompt versionati e workflow di approvazione
 
-Implementato:
-
 - modulo separato `app/prompts`;
 - storage SQLite dedicato;
 - schema prompt versione `1`;
@@ -62,97 +60,132 @@ Implementato:
 - parametri per tono, profondità, fonti, soluzione, memoria e strumenti;
 - API FastAPI dedicate;
 - anteprima approvata aggiornata allo stesso URL;
-- interazioni visuali per bozza, revisione, test, pubblicazione, confronto e rollback.
+- 15 test specifici.
 
-### Stati e transizioni
+### Checkpoint 0.5 — Valutazioni persistenti e gate reale
 
-```text
-draft → in_review → publishable → published → archived
-```
+Implementato:
 
-Ritorni consentiti:
+- modulo separato `app/evaluations`;
+- storage SQLite dedicato;
+- schema valutazioni versione `1`;
+- configurazione tramite `EVE_EVALUATIONS_DB_PATH`;
+- soglia configurabile tramite `EVE_EVALUATION_PUBLISH_SCORE`;
+- scenari versionati e immutabili;
+- versione attiva per ogni scenario;
+- severità `critical`, `major` e `minor`;
+- pesi e soglie minime;
+- scenari obbligatori e opzionali;
+- snapshot della suite per ogni esecuzione;
+- collegamento dei run alla versione prompt;
+- risultati separati per criterio;
+- punteggio ponderato;
+- conteggio degli errori critici;
+- conteggio degli scenari obbligatori falliti;
+- cronologia persistente delle esecuzioni;
+- gate calcolato dall'ultima esecuzione completata;
+- invalidazione dei run quando cambia la suite attiva;
+- collegamento del gate al passaggio prompt `in_review → publishable`;
+- impossibilità di forzare il gate con il solo valore legacy `review_tests_passed`;
+- baseline iniziale idempotente per la configurazione pubblicata;
+- API FastAPI dedicate;
+- stessa anteprima approvata aggiornata;
+- verifica visiva del percorso completo;
+- 18 test specifici superati.
 
-```text
-in_review → draft
-publishable → draft
-```
+### Suite iniziale degli scenari
 
-Gate implementati:
+1. contesto didattico corretto;
+2. fonti verificabili;
+3. isolamento tra aule;
+4. permessi delle azioni;
+5. gestione dell'incertezza;
+6. qualità didattica;
+7. coerenza della lingua;
+8. budget di latenza.
 
-- pubblicazione diretta dalla bozza bloccata;
-- passaggio a `publishable` bloccato senza test superati;
-- una sola versione pubblicata attiva per configurazione;
-- le versioni precedenti non vengono eliminate;
-- il rollback genera una nuova bozza.
+### Regole del gate
 
-### Modalità didattiche
+Una versione prompt diventa pubblicabile soltanto quando:
 
-1. spiegazione adattiva;
-2. metodo socratico;
-3. quiz e interrogazione;
-4. correzione guidata;
-5. pianificazione dello studio.
+- esiste un'esecuzione completata;
+- l'esecuzione usa la suite attiva corrente;
+- l'esecuzione risulta `passed`;
+- gli errori critici sono `0`;
+- i fallimenti obbligatori sono `0`;
+- il punteggio ponderato raggiunge la soglia configurata.
+
+Un fallimento opzionale può essere tollerato soltanto quando non è critico, non è obbligatorio e il punteggio resta sopra soglia.
+
+Quando uno scenario viene revisionato, tutti i gate basati sulla precedente suite diventano obsoleti fino a una nuova esecuzione.
 
 ### API aggiunte
 
 ```text
-GET  /v1/prompts/status
-GET  /v1/prompts/modes
-GET  /v1/prompts/compare
-POST /v1/prompts/rollback
-GET  /v1/prompts
-POST /v1/prompts
-GET  /v1/prompts/{version_id}
-POST /v1/prompts/{version_id}/revisions
-POST /v1/prompts/{version_id}/transition
+GET  /v1/evaluations/status
+GET  /v1/evaluations/gate/{prompt_version_id}
+GET  /v1/evaluations/scenarios
+POST /v1/evaluations/scenarios
+GET  /v1/evaluations/scenarios/{scenario_version_id}
+POST /v1/evaluations/scenarios/{scenario_version_id}/revisions
+GET  /v1/evaluations/runs
+POST /v1/evaluations/runs
+GET  /v1/evaluations/runs/{run_id}
+POST /v1/evaluations/runs/{run_id}/complete
 ```
 
-### Test del Checkpoint 0.4
+### Test del Checkpoint 0.5
 
 ```text
-15 passed
+18 passed
 ```
 
-Sono i test specifici del nuovo modulo prompt e delle sue API. La suite completa cumulativa dei checkpoint precedenti non è stata rilanciata durante questa chiusura e i conteggi non devono essere sommati automaticamente.
+Sono test specifici del nuovo modulo di valutazione, delle API e del collegamento con il gate prompt. La suite completa cumulativa dei checkpoint precedenti non è stata rilanciata durante questa chiusura e i conteggi non devono essere sommati automaticamente.
 
 Verificati:
 
 1. schema e tabelle SQLite;
-2. configurazione iniziale pubblicata;
-3. creazione delle bozze;
-4. conflitto su chiave duplicata;
-5. revisioni immutabili;
-6. blocco delle transizioni illegali;
-7. obbligo dei test per `publishable`;
-8. archiviazione della precedente configurazione attiva;
-9. confronto di prompt, modalità e parametri;
-10. rollback non distruttivo;
-11. persistenza tra riaperture;
-12. versioni inesistenti;
-13. creazione, elenco e dettaglio API;
-14. gate API;
-15. confronto, modalità e rollback API.
+2. otto scenari iniziali;
+3. revisione versionata;
+4. archiviazione della versione scenario precedente;
+5. conflitto su chiave duplicata;
+6. snapshot della suite;
+7. punteggio ponderato;
+8. risultati per criterio;
+9. errore critico bloccante;
+10. fallimento opzionale non bloccante;
+11. copertura incompleta dei risultati bloccata;
+12. invalidazione del gate dopo revisione della suite;
+13. persistenza tra riaperture;
+14. versione prompt inesistente;
+15. baseline idempotente;
+16. API di stato, scenari e gate;
+17. API di esecuzione, completamento e fallimento critico;
+18. uso obbligatorio del gate persistente nel workflow prompt.
 
 ### Verifica visiva
 
 Provato nell'anteprima:
 
-- apertura di `Prompt e comportamento`;
-- selezione delle versioni;
-- salvataggio di una nuova bozza;
-- passaggio bozza → revisione;
-- passaggio revisione → pubblicabile dopo test;
-- pubblicazione;
-- cambio della versione attiva;
-- archiviazione della precedente;
-- confronto tra configurazioni;
-- rollback verso una nuova bozza;
-- storico conservato;
+- apertura di `Revisione e test`;
+- visualizzazione degli otto scenari;
+- severità, peso, soglia e obbligatorietà;
+- run iniziale fallito per isolamento tra aule;
+- esecuzione valida sulla versione prompt v3;
+- passaggio del gate da bloccato a pubblicabile;
+- uso del gate nella schermata prompt;
+- passaggio `in_review → publishable` soltanto dopo il run valido;
+- pubblicazione del prompt;
+- versionamento dello scenario `room-isolation`;
+- invalidazione automatica del gate precedente;
+- cronologia dei run conservata;
+- risultati per criterio visibili;
 - nessun errore JavaScript nel percorso controllato.
 
 ### Escluso dal checkpoint
 
 - provider AI reale;
+- esecuzione automatica dei test contro un modello;
 - RAG;
 - Supabase;
 - autenticazione;
@@ -164,4 +197,4 @@ Provato nell'anteprima:
 
 ### Prossimo checkpoint previsto
 
-**Checkpoint 0.5 — scenari di valutazione persistenti, risultati delle esecuzioni e collegamento reale tra test superati e gate di pubblicazione dei prompt.**
+**Checkpoint 0.6 — runner di valutazione deterministico con provider mock, definizione degli input degli scenari, grader automatici iniziali e registrazione dell'output valutato senza conservare contenuti sensibili non necessari.**
