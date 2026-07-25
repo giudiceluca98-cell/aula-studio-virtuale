@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from threading import RLock
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 
 class EvaluationStorageError(RuntimeError):
@@ -132,6 +132,32 @@ class BaseEvaluationStore:
                     """
                 )
                 self._connection.execute("PRAGMA user_version = 1")
+                current = 1
+            if current < 2:
+                self._connection.executescript(
+                    """
+                    CREATE TABLE evaluation_run_artifacts (
+                        run_id INTEGER NOT NULL,
+                        scenario_version_id INTEGER NOT NULL,
+                        provider TEXT NOT NULL,
+                        model TEXT NOT NULL,
+                        duration_ms REAL NOT NULL,
+                        output_sha256 TEXT NOT NULL,
+                        output_chars INTEGER NOT NULL,
+                        sources_count INTEGER NOT NULL,
+                        proposed_actions_count INTEGER NOT NULL,
+                        redacted INTEGER NOT NULL DEFAULT 1,
+                        error_code TEXT,
+                        PRIMARY KEY(run_id, scenario_version_id),
+                        FOREIGN KEY(run_id) REFERENCES evaluation_runs(id) ON DELETE CASCADE,
+                        FOREIGN KEY(scenario_version_id) REFERENCES evaluation_scenario_versions(id)
+                    );
+
+                    CREATE INDEX idx_evaluation_artifacts_run
+                        ON evaluation_run_artifacts(run_id, scenario_version_id);
+                    """
+                )
+                self._connection.execute("PRAGMA user_version = 2")
 
     @property
     def schema_version(self) -> int:
