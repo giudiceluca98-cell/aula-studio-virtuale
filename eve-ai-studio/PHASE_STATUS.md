@@ -2,7 +2,7 @@
 
 ## Fase 0 — Fondazione
 
-Stato: **checkpoint 0.6 implementato**
+Stato: **checkpoint 0.7 implementato**
 
 ### Checkpoint 0.1 — Fondazione iniziale
 
@@ -20,44 +20,41 @@ Stato: **checkpoint 0.6 implementato**
 
 - separazione di core, contesto e provider;
 - parser delle 36 sezioni e 1.197 schede;
-- validazione dei campi obbligatori;
-- checksum sorgente;
+- validazione;
+- checksum;
 - routing dei requisiti;
 - API e CLI;
-- manifesto ufficiale;
-- anteprima interattiva aggiornata;
+- manifesto;
+- anteprima aggiornata;
 - 9 test.
 
-### Checkpoint 0.3 — Persistenza, versioni e rollback dei requisiti
+### Checkpoint 0.3 — Persistenza dei requisiti
 
-- storage SQLite;
-- cronologia delle importazioni;
+- SQLite;
+- cronologia importazioni;
 - snapshot immutabili;
-- versione attiva persistente;
-- modalità `replace` e `merge`;
+- versione attiva;
+- replace e merge;
 - deduplicazione;
-- confronto dettagliato;
+- confronto;
 - rollback non distruttivo;
 - 15 test specifici.
 
-### Checkpoint 0.4 — Prompt versionati e workflow di approvazione
+### Checkpoint 0.4 — Prompt versionati
 
-- modulo separato `app/prompts`;
-- storage SQLite dedicato;
-- prompt di sistema versionati;
+- storage dedicato;
 - revisioni immutabili;
-- modalità didattiche tipizzate;
+- modalità didattiche;
+- parametri tipizzati;
 - workflow `draft → in_review → publishable → published → archived`;
-- confronto e rollback;
+- confronto;
+- rollback;
 - gate server-side;
-- API dedicate;
-- anteprima aggiornata;
+- API e anteprima;
 - 15 test specifici.
 
-### Checkpoint 0.5 — Valutazioni persistenti e gate reale
+### Checkpoint 0.5 — Valutazioni persistenti
 
-- modulo separato `app/evaluations`;
-- storage SQLite dedicato;
 - scenari versionati;
 - severità, pesi e soglie;
 - scenari obbligatori e opzionali;
@@ -65,174 +62,257 @@ Stato: **checkpoint 0.6 implementato**
 - run collegati alla versione prompt;
 - risultati per criterio;
 - punteggio ponderato;
-- errori critici e fallimenti obbligatori;
-- invalidazione dei run quando cambia la suite;
-- gate collegato al workflow prompt;
-- baseline idempotente;
-- API dedicate;
-- anteprima aggiornata;
+- errori critici;
+- invalidazione dei run obsoleti;
+- gate reale dei prompt;
 - 18 test specifici.
 
-### Checkpoint 0.6 — Runner automatico e grader deterministici
+### Checkpoint 0.6 — Runner automatico
+
+- `ChatRequest` eseguibili;
+- provider mock deterministico;
+- otto grader iniziali;
+- durata per scenario;
+- completamento automatico dei run;
+- artefatti redatti;
+- SHA-256 dell'output;
+- nessuna risposta completa salvata;
+- schema valutazioni `2`;
+- API e anteprima;
+- 29 test specifici.
+
+### Checkpoint 0.7 — Provider, modelli e orchestrazione
 
 Implementato:
 
-- servizio versione `0.6.0`;
-- runner automatico separato;
-- uso del contratto comune `EveProvider`;
-- provider deterministico `mock`;
-- migrazione degli scenari privi di input verso nuove versioni eseguibili;
-- costruzione di `ChatRequest` tipizzate;
-- esecuzione sequenziale degli scenari;
-- misurazione della durata;
-- grader automatici iniziali;
-- fallback generico per scenari aggiuntivi;
-- completamento automatico dei run;
-- ricalcolo del gate;
-- artefatti redatti persistenti;
-- hash SHA-256 dell'output strutturato;
-- nessun output completo salvato;
-- codice della classe di errore senza corpo dell'eccezione;
-- limite configurabile delle evidenze;
-- schema valutazioni aggiornato alla versione `2`;
-- API dedicate;
+- servizio versione `0.7.0`;
+- catalogo server-side dei provider;
+- catalogo server-side dei modelli;
+- provider mock primario;
+- modello mock di fallback;
+- segnaposto esterno disattivato;
+- provider esterni disattivati per impostazione predefinita;
+- profili di esecuzione separati;
+- profilo chat;
+- profilo valutazioni;
+- profilo esterno disattivato;
+- timeout per target;
+- retry controllati;
+- backoff;
+- fallback ordinato;
+- controllo dello scopo del profilo;
+- controllo dei provider esterni;
+- limite token input;
+- limite token output;
+- limite token totale;
+- budget token giornaliero;
+- costo massimo per esecuzione;
+- budget costi giornaliero;
+- stima deterministica dei token;
+- stima del costo dai dati del modello;
+- telemetria persistente;
+- hash della richiesta;
+- hash della risposta;
+- numero di tentativi;
+- indicazione del fallback;
+- durata totale;
+- classe di errore redatta;
+- chat instradata tramite orchestratore;
+- runner delle valutazioni instradato tramite profilo dedicato;
+- API di gestione;
 - stessa anteprima approvata aggiornata;
-- verifica visuale del flusso automatico;
-- 29 test specifici superati.
+- 28 test specifici superati.
 
-### Grader automatici
+### Provider registrati
 
-1. `context-correctness`
-   - verifica gli identificativi del contesto corrente.
+1. `mock`
+   - attivo;
+   - deterministico;
+   - nessuna rete;
+   - nessuna chiave;
+   - costo zero.
 
-2. `source-grounding`
-   - verifica la presenza e la coerenza delle fonti.
+2. `external-template`
+   - esterno;
+   - disattivato;
+   - nessuna factory;
+   - nessuna credenziale;
+   - non utilizzabile.
 
-3. `room-isolation`
-   - cerca valori vietati appartenenti ad altri ambiti.
+### Modelli registrati
 
-4. `permission-enforcement`
-   - verifica l'assenza di azioni oltre il livello autorizzato.
+1. `eve-foundation-mock-v2`
+   - primario;
+   - attivo;
+   - contesto dichiarato 128.000 token;
+   - costo zero.
 
-5. `uncertainty-handling`
-   - verifica la dichiarazione dell'incertezza.
+2. `eve-foundation-mock-fallback-v1`
+   - fallback;
+   - attivo;
+   - contesto dichiarato 64.000 token;
+   - costo zero.
 
-6. `pedagogical-quality`
-   - verifica modalità e struttura didattica minima.
+3. `external-model-placeholder`
+   - disattivato;
+   - nessun provider reale collegato.
 
-7. `language-consistency`
-   - verifica la coerenza della lingua italiana.
+### Profili
 
-8. `latency-budget`
-   - confronta la durata col budget configurato.
+#### chat-development
 
-9. fallback generico
-   - verifica che il provider restituisca una risposta non vuota.
+- scopo `chat`;
+- mock v2;
+- timeout 2.000 ms;
+- massimo 2 tentativi;
+- massimo 12.000 token;
+- provider esterni vietati.
 
-### Protezione dei dati del runner
+#### evaluation-safe
 
-Per ogni scenario vengono conservati soltanto:
+- scopo `evaluation`;
+- mock v2 primario;
+- mock fallback v1 secondario;
+- timeout 1.500 ms;
+- massimo 2 tentativi per target;
+- massimo 16.000 token;
+- provider esterni vietati.
 
+#### external-review
+
+- disattivato;
+- non selezionabile;
+- richiederebbe implementazione e approvazione esplicite.
+
+### Telemetria
+
+Database:
+
+```text
+data/eve-provider-telemetry.sqlite3
+```
+
+Schema:
+
+```text
+1
+```
+
+Tabella:
+
+```text
+provider_execution_events
+```
+
+Dati registrati:
+
+- data;
+- scopo;
+- profilo;
 - provider;
 - modello;
+- stato;
+- tentativi;
+- fallback;
 - durata;
-- SHA-256;
-- numero di caratteri;
-- numero di fonti;
-- numero di azioni proposte;
-- indicazione di redazione;
-- eventuale classe di errore.
+- token input, output e totali;
+- costo stimato;
+- hash richiesta;
+- hash risposta;
+- classe errore.
 
-Non vengono conservati:
+Dati non registrati:
 
-- testo completo della richiesta;
-- testo completo della risposta;
-- contenuto completo dell'eccezione;
-- dati sensibili non necessari alla valutazione.
+- messaggio;
+- testo selezionato;
+- risposta completa;
+- corpo dell'eccezione;
+- chiavi API.
 
 ### API aggiunte
 
 ```text
-GET  /v1/evaluations/runner/status
-POST /v1/evaluations/runs/execute
-GET  /v1/evaluations/runs/{run_id}/artifacts
+GET /v1/providers/status
+GET /v1/providers/catalog
+GET /v1/providers/models
+GET /v1/providers/profiles
+GET /v1/providers/telemetry
 ```
 
-L'API manuale di completamento dei run resta disponibile per compatibilità e per risultati provenienti da runner esterni controllati.
-
-### Test del Checkpoint 0.6
+### Test del Checkpoint 0.7
 
 ```text
-29 passed
+28 passed in 0.43s
 ```
 
-Ultima esecuzione locale:
-
-```text
-29 passed in 0.31s
-```
-
-Sono test specifici del runner, dei grader, degli artefatti, dell'orchestrazione e delle API. La suite completa cumulativa dei checkpoint precedenti non è stata rilanciata e i conteggi non devono essere sommati automaticamente.
+Sono test specifici del nuovo modulo provider. La suite cumulativa completa dei checkpoint precedenti non è stata rilanciata e i conteggi non devono essere sommati automaticamente.
 
 Verificati:
 
-1. stato deterministico e privacy del runner;
-2. costruzione degli input predefiniti;
-3. override degli input;
-4. esito degli otto grader;
-5. rilevazione di una perdita tra aule;
-6. rilevazione di un'azione non autorizzata;
-7. fallimento del budget di latenza;
-8. grader generico;
-9. redazione degli errori provider;
-10. limite delle evidenze;
-11. assenza del testo completo negli artefatti;
-12. migrazione SQLite alla versione `2`;
-13. round trip degli artefatti;
-14. copertura esatta dello snapshot;
-15. errore per run inesistente;
-16. input eseguibili degli scenari;
-17. migrazione idempotente;
-18. esecuzione automatica completa;
-19. consultazione degli artefatti;
-20. API di stato runner;
-21. API di esecuzione;
-22. API degli artefatti;
-23. compatibilità con gate e run persistenti.
+1. catalogo provider predefinito;
+2. provider esterno disattivato;
+3. modelli mock attivi;
+4. creazione modello primario;
+5. appartenenza modello-provider;
+6. modello disattivato;
+7. tre profili;
+8. fallback del profilo valutazioni;
+9. retry e timeout della chat;
+10. profilo esterno disattivato;
+11. schema telemetria;
+12. scrittura e lettura;
+13. aggregazione giornaliera;
+14. persistenza dopo riapertura;
+15. stima token;
+16. esecuzione e telemetria;
+17. ManagedEveProvider;
+18. blocco budget input;
+19. blocco scopo profilo;
+20. retry e successo;
+21. timeout e fallback;
+22. fallimento di tutti i target;
+23. redazione dell'errore;
+24. budget token giornaliero;
+25. API stato;
+26. API catalogo e modelli;
+27. API profili;
+28. API telemetria.
 
 ### Verifica visiva
 
 Provato nell'anteprima:
 
-- apertura di `Revisione e test`;
-- visualizzazione del pannello runner;
-- provider e modello mock;
-- otto input eseguibili;
-- indicazione `Output grezzo salvato: No`;
-- avanzamento dei cinque stadi;
+- apertura `Provider e modelli`;
+- due provider;
+- tre modelli;
+- tre profili;
+- provider esterno disattivato;
 - esecuzione valida;
-- creazione di otto artefatti redatti;
-- durata, hash e conteggi visibili;
-- ricalcolo del gate;
-- simulazione di errore provider redatto;
-- simulazione di latenza oltre budget;
+- retry;
+- timeout e fallback;
+- blocco budget prima della chiamata;
+- blocco provider esterno prima della chiamata;
+- token giornalieri;
+- telemetria redatta;
+- azzeramento dati demo;
 - nessun errore JavaScript nel percorso controllato.
 
 ### Escluso dal checkpoint
 
 - provider AI reale;
-- grader semantico basato su un modello indipendente;
-- misurazione di token e costi;
-- retry e fallback tra provider;
+- chiavi API;
+- tokenizer ufficiale del modello;
+- circuit breaker distribuito;
+- code e concorrenza dei run;
 - RAG;
 - Supabase;
-- autenticazione;
+- autenticazione amministrativa;
 - memoria didattica;
 - voce;
 - strumenti che modificano Aula Studio Virtuale;
 - integrazione con la produzione;
-- avatar e animazioni definitive di Eve, in attesa di consegna e approvazione.
+- avatar e animazioni definitive in attesa di consegna e approvazione.
 
 ### Prossimo checkpoint previsto
 
-**Checkpoint 0.7 — registro dei provider e dei modelli, profili di esecuzione, timeout, retry controllati, fallback, telemetria di token e costi, mantenendo il provider esterno disattivato per impostazione predefinita.**
+**Checkpoint 0.8 — catalogo dei materiali, importazione documentale controllata, estrazione testuale, stato di elaborazione, checksum, deduplicazione e preparazione della pipeline RAG senza embeddings esterni.**
