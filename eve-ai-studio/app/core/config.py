@@ -16,3 +16,4 @@ class EveSettings(BaseSettings):
     max_plan_chars: int = 4_000_000
     audit_enabled: bool = True
     requirements_db_path: str = "data/eve-requirements.sqlite3"
+    prompts_db_path: str = "data/eve-prompts.sqlite3"
