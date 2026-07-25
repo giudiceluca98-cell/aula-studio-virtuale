@@ -2,7 +2,7 @@ window.__EVE_HTML_PARTS=window.__EVE_HTML_PARTS||[];window.__EVE_HTML_PARTS.push
           <div class="metric"><small>Requisiti</small><strong>1.197</strong><div class="progress"><span style="width:22%"></span></div></div>
           <div class="metric"><small>Materiali</small><strong id="materialCount">4</strong><div class="progress"><span style="width:36%"></span></div></div>
           <div class="metric"><small>Test superati</small><strong id="passedMetric">0/12</strong><div class="progress"><span id="testProgress" style="width:0%"></span></div></div>
-          <div class="metric"><small>Test backend</small><strong>15/15</strong><div class="progress"><span style="width:100%;background:var(--green)"></span></div></div>
+          <div class="metric"><small>Test Checkpoint 0.4</small><strong>15/15</strong><div class="progress"><span style="width:100%;background:var(--green)"></span></div></div>
         </div>
       </div>
     </section>
@@ -24,11 +24,11 @@ window.__EVE_HTML_PARTS=window.__EVE_HTML_PARTS||[];window.__EVE_HTML_PARTS.push
       </div>
     </section>
     <section class="panel span-5">
-      <div class="panel-head"><div><h3>Checkpoint 0.3 integrato</h3><p>Persistenza, versionamento e rollback verificati.</p></div><span class="tag">15 test superati</span></div>
+      <div class="panel-head"><div><h3>Checkpoint 0.4 integrato</h3><p>Prompt versionati e gate di pubblicazione verificati.</p></div><span class="tag">15 nuovi test</span></div>
       <div class="panel-body">
-        <h2 style="margin:2px 0 8px">SQLite · 3 versioni demo</h2>
-        <p style="color:var(--muted)">Ogni importazione resta tracciata; due versioni possono essere confrontate e una versione precedente può essere riattivata senza cancellare le successive.</p>
-        <button class="btn primary" data-go="versions">Verifica versioni</button>
+        <h2 style="margin:2px 0 8px">Prompt · 5 modalità didattiche</h2>
+        <p style="color:var(--muted)">Le configurazioni passano da bozza a revisione, diventano pubblicabili solo dopo i test e possono essere ripristinate come nuove bozze senza cancellare lo storico.</p>
+        <button class="btn primary" data-go="prompts">Verifica prompt</button>
       </div>
     </section>
   </div>
