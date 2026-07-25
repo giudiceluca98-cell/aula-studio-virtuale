@@ -2,7 +2,7 @@
 
 ## Fase 0 — Fondazione
 
-Stato: **checkpoint 0.5 implementato**
+Stato: **checkpoint 0.6 implementato**
 
 ### Checkpoint 0.1 — Fondazione iniziale
 
@@ -38,154 +38,192 @@ Stato: **checkpoint 0.5 implementato**
 - deduplicazione;
 - confronto dettagliato;
 - rollback non distruttivo;
-- 15 test automatici del checkpoint.
+- 15 test specifici.
 
 ### Checkpoint 0.4 — Prompt versionati e workflow di approvazione
 
 - modulo separato `app/prompts`;
 - storage SQLite dedicato;
-- schema prompt versione `1`;
-- configurazione database tramite `EVE_PROMPTS_DB_PATH`;
 - prompt di sistema versionati;
-- checksum delle configurazioni;
 - revisioni immutabili;
-- versione genitore;
-- storico delle transizioni;
-- configurazione attiva;
-- pubblicazione esclusiva per chiave;
-- archiviazione automatica della versione pubblicata precedente;
-- rollback non distruttivo in una nuova bozza;
-- confronto dei campi modificati;
-- cinque modalità didattiche tipizzate;
-- parametri per tono, profondità, fonti, soluzione, memoria e strumenti;
-- API FastAPI dedicate;
-- anteprima approvata aggiornata allo stesso URL;
+- modalità didattiche tipizzate;
+- workflow `draft → in_review → publishable → published → archived`;
+- confronto e rollback;
+- gate server-side;
+- API dedicate;
+- anteprima aggiornata;
 - 15 test specifici.
 
 ### Checkpoint 0.5 — Valutazioni persistenti e gate reale
 
-Implementato:
-
 - modulo separato `app/evaluations`;
 - storage SQLite dedicato;
-- schema valutazioni versione `1`;
-- configurazione tramite `EVE_EVALUATIONS_DB_PATH`;
-- soglia configurabile tramite `EVE_EVALUATION_PUBLISH_SCORE`;
-- scenari versionati e immutabili;
-- versione attiva per ogni scenario;
-- severità `critical`, `major` e `minor`;
-- pesi e soglie minime;
+- scenari versionati;
+- severità, pesi e soglie;
 - scenari obbligatori e opzionali;
-- snapshot della suite per ogni esecuzione;
-- collegamento dei run alla versione prompt;
-- risultati separati per criterio;
+- snapshot della suite;
+- run collegati alla versione prompt;
+- risultati per criterio;
 - punteggio ponderato;
-- conteggio degli errori critici;
-- conteggio degli scenari obbligatori falliti;
-- cronologia persistente delle esecuzioni;
-- gate calcolato dall'ultima esecuzione completata;
-- invalidazione dei run quando cambia la suite attiva;
-- collegamento del gate al passaggio prompt `in_review → publishable`;
-- impossibilità di forzare il gate con il solo valore legacy `review_tests_passed`;
-- baseline iniziale idempotente per la configurazione pubblicata;
-- API FastAPI dedicate;
+- errori critici e fallimenti obbligatori;
+- invalidazione dei run quando cambia la suite;
+- gate collegato al workflow prompt;
+- baseline idempotente;
+- API dedicate;
+- anteprima aggiornata;
+- 18 test specifici.
+
+### Checkpoint 0.6 — Runner automatico e grader deterministici
+
+Implementato:
+
+- servizio versione `0.6.0`;
+- runner automatico separato;
+- uso del contratto comune `EveProvider`;
+- provider deterministico `mock`;
+- migrazione degli scenari privi di input verso nuove versioni eseguibili;
+- costruzione di `ChatRequest` tipizzate;
+- esecuzione sequenziale degli scenari;
+- misurazione della durata;
+- grader automatici iniziali;
+- fallback generico per scenari aggiuntivi;
+- completamento automatico dei run;
+- ricalcolo del gate;
+- artefatti redatti persistenti;
+- hash SHA-256 dell'output strutturato;
+- nessun output completo salvato;
+- codice della classe di errore senza corpo dell'eccezione;
+- limite configurabile delle evidenze;
+- schema valutazioni aggiornato alla versione `2`;
+- API dedicate;
 - stessa anteprima approvata aggiornata;
-- verifica visiva del percorso completo;
-- 18 test specifici superati.
+- verifica visuale del flusso automatico;
+- 29 test specifici superati.
 
-### Suite iniziale degli scenari
+### Grader automatici
 
-1. contesto didattico corretto;
-2. fonti verificabili;
-3. isolamento tra aule;
-4. permessi delle azioni;
-5. gestione dell'incertezza;
-6. qualità didattica;
-7. coerenza della lingua;
-8. budget di latenza.
+1. `context-correctness`
+   - verifica gli identificativi del contesto corrente.
 
-### Regole del gate
+2. `source-grounding`
+   - verifica la presenza e la coerenza delle fonti.
 
-Una versione prompt diventa pubblicabile soltanto quando:
+3. `room-isolation`
+   - cerca valori vietati appartenenti ad altri ambiti.
 
-- esiste un'esecuzione completata;
-- l'esecuzione usa la suite attiva corrente;
-- l'esecuzione risulta `passed`;
-- gli errori critici sono `0`;
-- i fallimenti obbligatori sono `0`;
-- il punteggio ponderato raggiunge la soglia configurata.
+4. `permission-enforcement`
+   - verifica l'assenza di azioni oltre il livello autorizzato.
 
-Un fallimento opzionale può essere tollerato soltanto quando non è critico, non è obbligatorio e il punteggio resta sopra soglia.
+5. `uncertainty-handling`
+   - verifica la dichiarazione dell'incertezza.
 
-Quando uno scenario viene revisionato, tutti i gate basati sulla precedente suite diventano obsoleti fino a una nuova esecuzione.
+6. `pedagogical-quality`
+   - verifica modalità e struttura didattica minima.
+
+7. `language-consistency`
+   - verifica la coerenza della lingua italiana.
+
+8. `latency-budget`
+   - confronta la durata col budget configurato.
+
+9. fallback generico
+   - verifica che il provider restituisca una risposta non vuota.
+
+### Protezione dei dati del runner
+
+Per ogni scenario vengono conservati soltanto:
+
+- provider;
+- modello;
+- durata;
+- SHA-256;
+- numero di caratteri;
+- numero di fonti;
+- numero di azioni proposte;
+- indicazione di redazione;
+- eventuale classe di errore.
+
+Non vengono conservati:
+
+- testo completo della richiesta;
+- testo completo della risposta;
+- contenuto completo dell'eccezione;
+- dati sensibili non necessari alla valutazione.
 
 ### API aggiunte
 
 ```text
-GET  /v1/evaluations/status
-GET  /v1/evaluations/gate/{prompt_version_id}
-GET  /v1/evaluations/scenarios
-POST /v1/evaluations/scenarios
-GET  /v1/evaluations/scenarios/{scenario_version_id}
-POST /v1/evaluations/scenarios/{scenario_version_id}/revisions
-GET  /v1/evaluations/runs
-POST /v1/evaluations/runs
-GET  /v1/evaluations/runs/{run_id}
-POST /v1/evaluations/runs/{run_id}/complete
+GET  /v1/evaluations/runner/status
+POST /v1/evaluations/runs/execute
+GET  /v1/evaluations/runs/{run_id}/artifacts
 ```
 
-### Test del Checkpoint 0.5
+L'API manuale di completamento dei run resta disponibile per compatibilità e per risultati provenienti da runner esterni controllati.
+
+### Test del Checkpoint 0.6
 
 ```text
-18 passed
+29 passed
 ```
 
-Sono test specifici del nuovo modulo di valutazione, delle API e del collegamento con il gate prompt. La suite completa cumulativa dei checkpoint precedenti non è stata rilanciata durante questa chiusura e i conteggi non devono essere sommati automaticamente.
+Ultima esecuzione locale:
+
+```text
+29 passed in 0.31s
+```
+
+Sono test specifici del runner, dei grader, degli artefatti, dell'orchestrazione e delle API. La suite completa cumulativa dei checkpoint precedenti non è stata rilanciata e i conteggi non devono essere sommati automaticamente.
 
 Verificati:
 
-1. schema e tabelle SQLite;
-2. otto scenari iniziali;
-3. revisione versionata;
-4. archiviazione della versione scenario precedente;
-5. conflitto su chiave duplicata;
-6. snapshot della suite;
-7. punteggio ponderato;
-8. risultati per criterio;
-9. errore critico bloccante;
-10. fallimento opzionale non bloccante;
-11. copertura incompleta dei risultati bloccata;
-12. invalidazione del gate dopo revisione della suite;
-13. persistenza tra riaperture;
-14. versione prompt inesistente;
-15. baseline idempotente;
-16. API di stato, scenari e gate;
-17. API di esecuzione, completamento e fallimento critico;
-18. uso obbligatorio del gate persistente nel workflow prompt.
+1. stato deterministico e privacy del runner;
+2. costruzione degli input predefiniti;
+3. override degli input;
+4. esito degli otto grader;
+5. rilevazione di una perdita tra aule;
+6. rilevazione di un'azione non autorizzata;
+7. fallimento del budget di latenza;
+8. grader generico;
+9. redazione degli errori provider;
+10. limite delle evidenze;
+11. assenza del testo completo negli artefatti;
+12. migrazione SQLite alla versione `2`;
+13. round trip degli artefatti;
+14. copertura esatta dello snapshot;
+15. errore per run inesistente;
+16. input eseguibili degli scenari;
+17. migrazione idempotente;
+18. esecuzione automatica completa;
+19. consultazione degli artefatti;
+20. API di stato runner;
+21. API di esecuzione;
+22. API degli artefatti;
+23. compatibilità con gate e run persistenti.
 
 ### Verifica visiva
 
 Provato nell'anteprima:
 
 - apertura di `Revisione e test`;
-- visualizzazione degli otto scenari;
-- severità, peso, soglia e obbligatorietà;
-- run iniziale fallito per isolamento tra aule;
-- esecuzione valida sulla versione prompt v3;
-- passaggio del gate da bloccato a pubblicabile;
-- uso del gate nella schermata prompt;
-- passaggio `in_review → publishable` soltanto dopo il run valido;
-- pubblicazione del prompt;
-- versionamento dello scenario `room-isolation`;
-- invalidazione automatica del gate precedente;
-- cronologia dei run conservata;
-- risultati per criterio visibili;
+- visualizzazione del pannello runner;
+- provider e modello mock;
+- otto input eseguibili;
+- indicazione `Output grezzo salvato: No`;
+- avanzamento dei cinque stadi;
+- esecuzione valida;
+- creazione di otto artefatti redatti;
+- durata, hash e conteggi visibili;
+- ricalcolo del gate;
+- simulazione di errore provider redatto;
+- simulazione di latenza oltre budget;
 - nessun errore JavaScript nel percorso controllato.
 
 ### Escluso dal checkpoint
 
 - provider AI reale;
-- esecuzione automatica dei test contro un modello;
+- grader semantico basato su un modello indipendente;
+- misurazione di token e costi;
+- retry e fallback tra provider;
 - RAG;
 - Supabase;
 - autenticazione;
@@ -197,4 +235,4 @@ Provato nell'anteprima:
 
 ### Prossimo checkpoint previsto
 
-**Checkpoint 0.6 — runner di valutazione deterministico con provider mock, definizione degli input degli scenari, grader automatici iniziali e registrazione dell'output valutato senza conservare contenuti sensibili non necessari.**
+**Checkpoint 0.7 — registro dei provider e dei modelli, profili di esecuzione, timeout, retry controllati, fallback, telemetria di token e costi, mantenendo il provider esterno disattivato per impostazione predefinita.**
