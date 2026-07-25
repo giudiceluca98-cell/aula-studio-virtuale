@@ -32,6 +32,7 @@ function loadPreviewScript(source){
   const parts=window.__EVE_HTML_PARTS||[];
   if(parts.length!==5) throw new Error(`Markup incompleto: ${parts.length}/5 blocchi caricati.`);
   document.body.innerHTML=parts.join("");
+  await loadPreviewScript("checkpoint-04-patch.js");
   await loadPreviewScript("prompt-compat.js");
   await loadPreviewScript("app.js");
   await loadPreviewScript("prompt-workflow.js");
