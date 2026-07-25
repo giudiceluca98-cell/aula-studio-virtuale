@@ -1,0 +1,641 @@
+EVE AI STUDIO
+FILE DI AGGIORNAMENTO CHECKPOINT 0.4
+
+Data: 25 luglio 2026
+Repository: giudiceluca98-cell/aula-studio-virtuale
+Branch di lavoro: eve-ai-studio
+Base protetta: demo-canonica
+Commit iniziale del checkpoint: 6e10e94e98e3842c058fc256d74c2be77053c220
+
+Titolo:
+0.4 — Configurazioni prompt versionate, modalità didattiche e workflow
+bozza–revisione–pubblicazione
+
+======================================================================
+1. OBIETTIVO
+======================================================================
+
+Trasformare le istruzioni di Eve da testo modificabile senza storico in
+configurazioni persistenti, tipizzate, versionate e sottoposte a un ciclo di
+approvazione controllato dal server.
+
+Il checkpoint introduce:
+
+- versioni immutabili dei prompt;
+- modalità didattiche tipizzate;
+- parametri strutturati;
+- stato bozza;
+- stato revisione;
+- stato pubblicabile;
+- stato pubblicato;
+- archiviazione;
+- confronto;
+- rollback non distruttivo;
+- gate di pubblicazione verificato dal codice.
+
+======================================================================
+2. RISULTATO
+======================================================================
+
+Eve AI Studio dispone ora di un modulo separato:
+
+app/prompts/
+
+Il modulo comprende:
+
+- modelli Pydantic;
+- preset delle modalità didattiche;
+- persistenza SQLite;
+- servizio applicativo;
+- router FastAPI;
+- test di storage e dominio;
+- test delle API.
+
+Versione del servizio:
+
+0.4.0
+
+======================================================================
+3. STORAGE DEI PROMPT
+======================================================================
+
+File principale:
+
+app/prompts/storage.py
+
+Database predefinito:
+
+data/eve-prompts.sqlite3
+
+Variabile di configurazione:
+
+EVE_PROMPTS_DB_PATH
+
+Versione schema:
+
+1
+
+Tabelle:
+
+1. prompt_versions
+2. prompt_transition_events
+3. prompt_active_state
+
+Il database, i file WAL e SHM sono esclusi da Git tramite le regole già
+presenti nel file .gitignore.
+
+======================================================================
+4. VERSIONAMENTO IMMUTABILE
+======================================================================
+
+Ogni versione conserva:
+
+- identificativo numerico;
+- chiave stabile della configurazione;
+- numero progressivo;
+- data di creazione;
+- stato;
+- nome;
+- prompt di sistema;
+- modalità didattica;
+- parametri JSON tipizzati;
+- checksum;
+- versione genitore;
+- nota;
+- indicazione della versione attiva;
+- data di pubblicazione.
+
+Una revisione non modifica la versione sorgente.
+
+Ogni revisione genera una nuova versione con:
+
+- nuovo ID;
+- nuovo numero progressivo;
+- stato draft;
+- riferimento alla versione genitore.
+
+======================================================================
+5. STATI E TRANSIZIONI
+======================================================================
+
+Stati implementati:
+
+- draft;
+- in_review;
+- publishable;
+- published;
+- archived.
+
+Flusso principale:
+
+draft -> in_review -> publishable -> published -> archived
+
+Ritorni consentiti:
+
+in_review -> draft
+publishable -> draft
+
+Transizioni vietate:
+
+- draft -> published;
+- draft -> publishable;
+- in_review -> published;
+- archived -> qualsiasi altro stato;
+- passaggio allo stesso stato.
+
+======================================================================
+6. GATE DI PUBBLICAZIONE
+======================================================================
+
+Il passaggio da in_review a publishable richiede:
+
+review_tests_passed = true
+
+Senza questa condizione il backend restituisce un conflitto e non modifica lo
+stato.
+
+La pubblicazione è quindi controllata dal codice server e non dipende dalla
+decisione del modello AI.
+
+Quando una nuova versione viene pubblicata:
+
+- diventa attiva;
+- riceve la data di pubblicazione;
+- la precedente versione attiva della stessa configurazione viene archiviata;
+- lo storico resta disponibile.
+
+======================================================================
+7. MODALITÀ DIDATTICHE
+======================================================================
+
+Sono state definite cinque modalità:
+
+1. adaptive_explanation
+   Spiegazione adattiva.
+
+2. socratic
+   Metodo socratico con domande progressive e indizi.
+
+3. quiz
+   Quiz e interrogazione con attesa della risposta.
+
+4. correction
+   Correzione guidata dell’errore.
+
+5. planning
+   Pianificazione dello studio.
+
+Ogni modalità dispone di:
+
+- chiave tipizzata;
+- etichetta;
+- descrizione;
+- parametri predefiniti.
+
+======================================================================
+8. PARAMETRI TIPIZZATI
+======================================================================
+
+Parametri implementati:
+
+- tone:
+  - calm_direct;
+  - friendly;
+  - technical.
+
+- depth:
+  - valore da 1 a 4.
+
+- source_policy:
+  - required;
+  - when_available;
+  - disabled.
+
+- solution_policy:
+  - guided;
+  - direct;
+  - never_immediate.
+
+- ask_check_question:
+  - true o false.
+
+- memory_policy:
+  - off;
+  - consent;
+  - session_only.
+
+- tool_policy:
+  - read_only;
+  - propose;
+  - confirm.
+
+======================================================================
+9. CONFRONTO TRA VERSIONI
+======================================================================
+
+Il confronto restituisce:
+
+- ID della versione di partenza;
+- ID della versione di arrivo;
+- indicazione di presenza o assenza di differenze;
+- checksum delle due versioni;
+- elenco dei campi modificati.
+
+Campi confrontati:
+
+- name;
+- system_prompt;
+- didactic_mode;
+- status;
+- parameters.tone;
+- parameters.depth;
+- parameters.source_policy;
+- parameters.solution_policy;
+- parameters.ask_check_question;
+- parameters.memory_policy;
+- parameters.tool_policy.
+
+======================================================================
+10. ROLLBACK NON DISTRUTTIVO
+======================================================================
+
+Il rollback dei prompt non riattiva direttamente un vecchio record e non
+cancella le versioni successive.
+
+Il sistema:
+
+1. legge la versione storica scelta;
+2. copia contenuto, modalità e parametri;
+3. crea una nuova versione progressiva;
+4. assegna stato draft;
+5. mantiene tutte le versioni esistenti.
+
+La nuova bozza può quindi essere revisionata e pubblicata con lo stesso gate
+delle altre configurazioni.
+
+======================================================================
+11. CONFIGURAZIONE INIZIALE
+======================================================================
+
+Al primo avvio, quando il database dei prompt è vuoto, viene creata la
+configurazione:
+
+configuration_key: eve-system
+name: Eve Tutor Base
+mode: adaptive_explanation
+
+La configurazione iniziale viene fatta passare dal servizio attraverso:
+
+- draft;
+- in_review;
+- publishable con test superati;
+- published.
+
+In questo modo anche il seed rispetta il workflow ufficiale.
+
+======================================================================
+12. API AGGIUNTE
+======================================================================
+
+GET  /v1/prompts/status
+GET  /v1/prompts/modes
+GET  /v1/prompts/compare
+POST /v1/prompts/rollback
+GET  /v1/prompts
+POST /v1/prompts
+GET  /v1/prompts/{version_id}
+POST /v1/prompts/{version_id}/revisions
+POST /v1/prompts/{version_id}/transition
+
+Funzioni disponibili:
+
+- stato del catalogo prompt;
+- elenco modalità;
+- elenco versioni;
+- filtro per chiave e stato;
+- creazione configurazione;
+- dettaglio versione;
+- creazione revisione;
+- transizione di stato;
+- confronto;
+- rollback.
+
+======================================================================
+13. TEST
+======================================================================
+
+Risultato locale del modulo Checkpoint 0.4:
+
+15 passed
+
+Tempo dell’ultima esecuzione:
+
+5,39 secondi
+
+Verificati:
+
+1. schema e tabelle SQLite;
+2. seed iniziale pubblicato;
+3. creazione bozza;
+4. conflitto su chiave duplicata;
+5. revisione immutabile;
+6. incremento del numero versione;
+7. blocco transizioni illegali;
+8. obbligo dei test per publishable;
+9. archiviazione della precedente versione attiva;
+10. confronto di prompt, modalità e parametri;
+11. rollback in nuova bozza;
+12. persistenza dopo riapertura;
+13. errore per versione inesistente;
+14. creazione, elenco e dettaglio tramite API;
+15. gate, modalità, confronto e rollback tramite API.
+
+Precisazione:
+
+I 15 test appartengono al nuovo modulo prompt e alle sue API.
+La suite completa cumulativa dei checkpoint precedenti non è stata rilanciata
+in questa chiusura. I risultati non devono essere sommati automaticamente.
+
+Non è stato eseguito un workflow GitHub Actions.
+
+======================================================================
+14. ANTEPRIMA APPROVATA
+======================================================================
+
+Percorso invariato:
+
+reference/eve-ai-studio-preview/index.html
+
+Versione mostrata:
+
+Eve 0.4-preview
+
+Area aggiornata:
+
+Prompt e comportamento
+
+Elementi visuali aggiunti:
+
+- metriche delle versioni;
+- cinque modalità didattiche;
+- schema SQLite;
+- 15 test specifici;
+- flusso draft, in_review e publishable;
+- indicazione dello stato published;
+- editor della configurazione;
+- selezione della versione;
+- nome;
+- prompt di sistema;
+- modalità;
+- tono;
+- profondità;
+- politica delle fonti;
+- politica della soluzione;
+- memoria;
+- strumenti;
+- storico delle versioni;
+- confronto;
+- rollback.
+
+======================================================================
+15. INTERAZIONI DELL’ANTEPRIMA
+======================================================================
+
+Nell’anteprima sono simulabili:
+
+- apertura di una versione;
+- creazione di una nuova bozza;
+- invio in revisione;
+- approvazione dei test;
+- pubblicazione;
+- archiviazione della precedente versione attiva;
+- confronto tra due configurazioni;
+- rollback verso una nuova bozza.
+
+I dati mostrati nell’interfaccia sono dimostrativi.
+
+Persistenza, workflow, confronto e rollback sono implementazioni reali del
+backend.
+
+======================================================================
+16. COSA CONTROLLARE NELL’ANTEPRIMA
+======================================================================
+
+1. Aprire “Prompt e comportamento”.
+
+2. Verificare le metriche:
+
+- Versioni demo: 3;
+- Modalità didattiche: 5;
+- Schema SQLite: 1;
+- Test Checkpoint 0.4: 15/15.
+
+3. Controllare lo storico:
+
+- v1 pubblicata e attiva;
+- v2 in revisione;
+- v3 bozza.
+
+4. Selezionare v3.
+
+Lo stato iniziale deve essere:
+
+Bozza
+
+5. Premere “Invia in revisione”.
+
+Lo stato deve diventare:
+
+In revisione
+
+6. Premere “Test superati”.
+
+Lo stato deve diventare:
+
+Pubblicabile
+
+7. Premere “Pubblica prompt”.
+
+Risultato atteso:
+
+- v3 pubblicata;
+- badge attivo aggiornato a v3;
+- v1 archiviata;
+- storico conservato.
+
+8. Nel confronto selezionare v1 e v3.
+
+Devono essere mostrati campi come:
+
+- name;
+- system_prompt;
+- didactic_mode;
+- status;
+- parametri modificati.
+
+9. Selezionare la stessa versione nei due menu.
+
+Il risultato deve indicare nessuna differenza.
+
+10. Nel rollback selezionare v1 e premere “Crea bozza di rollback”.
+
+Risultato atteso:
+
+- creazione di v4;
+- stato bozza;
+- testo che conferma la conservazione dello storico;
+- versioni precedenti ancora disponibili.
+
+11. Modificare il prompt e premere “Salva nuova bozza”.
+
+Il numero delle versioni deve aumentare senza sovrascrivere la sorgente.
+
+======================================================================
+17. VERIFICA VISIVA E JAVASCRIPT
+======================================================================
+
+Percorso controllato localmente:
+
+- apertura dell’area Prompt;
+- selezione v3;
+- passaggio a revisione;
+- passaggio a pubblicabile;
+- pubblicazione;
+- aggiornamento della versione attiva;
+- confronto;
+- rollback v1 -> nuova bozza v4.
+
+Risultato:
+
+- nessun errore JavaScript nel percorso controllato;
+- controlli abilitati o disabilitati secondo lo stato;
+- storico mantenuto.
+
+L’avatar definitivo e le animazioni di Eve non fanno parte del Checkpoint 0.4.
+Gli asset restano in attesa della consegna e dell’approvazione del lavoro
+esterno in corso.
+
+======================================================================
+18. FILE CREATI
+======================================================================
+
+eve-ai-studio/app/prompts/__init__.py
+eve-ai-studio/app/prompts/models.py
+eve-ai-studio/app/prompts/modes.py
+eve-ai-studio/app/prompts/storage.py
+eve-ai-studio/app/prompts/service.py
+eve-ai-studio/app/prompts/router.py
+eve-ai-studio/tests/test_prompts.py
+eve-ai-studio/tests/test_prompt_api.py
+
+reference/eve-ai-studio-preview/checkpoint-04-patch.js
+reference/eve-ai-studio-preview/prompt-compat.js
+reference/eve-ai-studio-preview/prompt-workflow.js
+
+eve-ai-studio/checkpoints/CHECKPOINT_0.4_UPDATE.txt
+
+======================================================================
+19. FILE MODIFICATI
+======================================================================
+
+eve-ai-studio/.env.example
+eve-ai-studio/PHASE_STATUS.md
+eve-ai-studio/README.md
+eve-ai-studio/app/core/config.py
+eve-ai-studio/app/main.py
+eve-ai-studio/pyproject.toml
+eve-ai-studio/tests/conftest.py
+
+reference/eve-ai-studio-preview/index.html
+reference/eve-ai-studio-preview/markup-02.js
+reference/eve-ai-studio-preview/markup-03.js
+reference/eve-ai-studio-preview/markup-04.js
+
+======================================================================
+20. DIFFERENZA GITHUB
+======================================================================
+
+Rispetto al commit iniziale del Checkpoint 0.4:
+
+- stato: ahead;
+- commit: 23 prima della creazione del presente report;
+- file coinvolti: 22 prima della creazione del presente report;
+- commit indietro: 0.
+
+Il numero finale aumenta con il commit del report stesso.
+
+======================================================================
+21. ELEMENTI NON MODIFICATI
+======================================================================
+
+Non sono stati modificati:
+
+- branch main;
+- branch demo-canonica;
+- HTML canonico;
+- app ufficiale;
+- provider AI;
+- database Supabase;
+- avatar definitivo di Eve.
+
+Non sono state create pull request.
+Non sono stati eseguiti merge.
+
+======================================================================
+22. LIMITI ATTUALI
+======================================================================
+
+Il gate usa per ora il valore esplicito:
+
+review_tests_passed
+
+Non esiste ancora una tabella persistente degli scenari di valutazione e delle
+esecuzioni dei test collegata direttamente alle versioni prompt.
+
+Non sono ancora presenti:
+
+- modello AI reale;
+- RAG;
+- Supabase;
+- autenticazione;
+- memoria didattica;
+- voce;
+- strumenti di scrittura nell’app;
+- pubblicazione nell’app ufficiale;
+- animazioni definitive di Eve.
+
+======================================================================
+23. PROSSIMO CHECKPOINT
+======================================================================
+
+Checkpoint 0.5:
+
+- scenari di valutazione persistenti;
+- versioni degli scenari;
+- esecuzioni dei test;
+- risultati per criterio;
+- errori critici e non critici;
+- punteggi;
+- collegamento reale tra risultati e versione prompt;
+- gate di pubblicazione calcolato dai risultati persistiti;
+- anteprima aggiornata allo stesso URL;
+- file plaintext;
+- indicazioni di verifica.
+
+======================================================================
+24. REGOLA DI CHIUSURA
+======================================================================
+
+Il Checkpoint 0.4 è chiuso soltanto con:
+
+1. codice salvato sulla branch eve-ai-studio;
+2. test specifici eseguiti;
+3. documentazione aggiornata;
+4. plaintext del checkpoint;
+5. copia scaricabile;
+6. stessa anteprima approvata aggiornata;
+7. verifica interattiva;
+8. elenco di cosa controllare;
+9. verifica delle branch protette.
+
+FINE FILE
