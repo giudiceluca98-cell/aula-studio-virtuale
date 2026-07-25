@@ -1,0 +1,318 @@
+EVE AI STUDIO
+CHECKPOINT 0.6 — AGGIORNAMENTO UFFICIALE
+
+Data: 25 luglio 2026
+Repository: giudiceluca98-cell/aula-studio-virtuale
+Branch: eve-ai-studio
+Base protetta: demo-canonica
+Commit iniziale: bc8784c6f024b5b8757e86a1aa73f831029aa2da
+
+TITOLO
+
+Runner automatico deterministico, grader iniziali, misurazione della durata e
+artefatti redatti.
+
+======================================================================
+OBIETTIVO
+======================================================================
+
+Permettere a Eve AI Studio di eseguire gli scenari di valutazione senza
+richiedere l'inserimento manuale dei risultati.
+
+======================================================================
+RISULTATO
+======================================================================
+
+Versione servizio: 0.6.0
+
+Implementati:
+
+- runner automatico separato;
+- uso del contratto EveProvider;
+- provider mock deterministico;
+- input eseguibili per gli otto scenari;
+- migrazione versionata degli input vuoti;
+- costruzione di ChatRequest tipizzate;
+- misurazione della durata;
+- grader automatici;
+- fallback generico;
+- completamento automatico dei run;
+- ricalcolo del gate;
+- hash SHA-256;
+- artefatti redatti persistenti;
+- gestione sicura degli errori provider;
+- API dedicate;
+- stessa anteprima approvata aggiornata.
+
+======================================================================
+GRADER
+======================================================================
+
+- context-correctness;
+- source-grounding;
+- room-isolation;
+- permission-enforcement;
+- uncertainty-handling;
+- pedagogical-quality;
+- language-consistency;
+- latency-budget;
+- fallback generico per scenari aggiuntivi.
+
+======================================================================
+PRIVACY
+======================================================================
+
+Non vengono salvati:
+
+- testo completo della richiesta;
+- testo completo della risposta;
+- contenuto completo dell'eccezione;
+- dati sensibili non necessari.
+
+Vengono salvati soltanto:
+
+- provider;
+- modello;
+- durata;
+- SHA-256;
+- numero di caratteri;
+- numero di fonti;
+- numero di azioni proposte;
+- indicazione di redazione;
+- eventuale classe dell'errore.
+
+Le evidenze dei grader sono limitate a 500 caratteri per impostazione
+predefinita.
+
+======================================================================
+DATABASE
+======================================================================
+
+Database:
+
+data/eve-evaluations.sqlite3
+
+Schema: 2
+
+Nuova tabella:
+
+evaluation_run_artifacts
+
+Configurazioni:
+
+EVE_EVALUATION_EVIDENCE_MAX_CHARS=500
+EVE_EVALUATION_LATENCY_BUDGET_MS=750
+
+======================================================================
+API
+======================================================================
+
+GET  /v1/evaluations/runner/status
+POST /v1/evaluations/runs/execute
+GET  /v1/evaluations/runs/{run_id}/artifacts
+
+L'endpoint manuale di completamento resta disponibile per compatibilità e per
+runner esterni controllati.
+
+======================================================================
+TEST
+======================================================================
+
+Ultima esecuzione locale:
+
+29 passed in 0.31s
+
+Sono test specifici del Checkpoint 0.6.
+La suite cumulativa completa dei checkpoint precedenti non è stata rilanciata.
+I conteggi non devono essere sommati automaticamente.
+
+Verificati:
+
+- stato deterministico del runner;
+- input predefiniti e override;
+- otto grader;
+- rilevamento di perdita tra aule;
+- rilevamento di azioni non autorizzate;
+- fallimento della latenza;
+- grader generico;
+- redazione degli errori;
+- limite delle evidenze;
+- assenza del testo completo negli artefatti;
+- migrazione SQLite allo schema 2;
+- persistenza degli artefatti;
+- copertura esatta dello snapshot;
+- migrazione idempotente degli input;
+- esecuzione automatica completa;
+- API del runner e degli artefatti.
+
+GitHub Actions non eseguito.
+
+======================================================================
+ANTEPRIMA
+======================================================================
+
+Percorso invariato:
+
+reference/eve-ai-studio-preview/index.html
+
+Versione mostrata:
+
+Eve 0.6-preview
+
+Nuovo file:
+
+reference/eve-ai-studio-preview/runner-workflow.js
+
+Elementi mostrati:
+
+- provider mock;
+- modello eve-foundation-mock-v2;
+- otto input eseguibili;
+- output grezzo non salvato;
+- cinque fasi del runner;
+- console;
+- artefatti redatti;
+- durata;
+- fonti;
+- azioni;
+- hash;
+- codice errore.
+
+======================================================================
+COSA CONTROLLARE
+======================================================================
+
+Aprire Revisione e test.
+
+Metriche:
+
+- Scenari attivi: 8;
+- Esecuzioni demo: 3;
+- Soglia: 85/100;
+- Test Checkpoint 0.6: 29/29;
+- Schema SQLite: 2.
+
+Runner:
+
+- Provider: mock;
+- Modello: eve-foundation-mock-v2;
+- Input eseguibili: 8/8;
+- Output grezzo salvato: No.
+
+Esecuzione valida:
+
+1. selezionare v3;
+2. selezionare Esecuzione valida;
+3. premere Esegui runner automatico;
+4. verificare le cinque fasi completate;
+5. verificare otto artefatti;
+6. verificare durata, fonti, azioni e hash;
+7. verificare assenza del testo completo;
+8. verificare il ricalcolo del gate.
+
+Errore provider:
+
+- deve comparire RuntimeError;
+- il contenuto interno dell'eccezione non deve comparire;
+- il gate deve risultare bloccato.
+
+Latenza oltre budget:
+
+- latency-budget deve superare 750 ms;
+- il fallimento deve restare opzionale;
+- il gate può passare soltanto se punteggio e controlli obbligatori restano
+  validi.
+
+======================================================================
+FILE CREATI
+======================================================================
+
+eve-ai-studio/app/evaluations/automatic.py
+eve-ai-studio/app/evaluations/automatic_router.py
+eve-ai-studio/app/evaluations/graders.py
+eve-ai-studio/app/evaluations/runner.py
+eve-ai-studio/app/evaluations/storage_artifacts.py
+
+eve-ai-studio/tests/test_automatic_evaluation.py
+eve-ai-studio/tests/test_automatic_evaluation_api.py
+eve-ai-studio/tests/test_evaluation_artifacts.py
+eve-ai-studio/tests/test_evaluation_runner.py
+
+reference/eve-ai-studio-preview/runner-workflow.js
+
+eve-ai-studio/checkpoints/CHECKPOINT_0.6_UPDATE.txt
+
+======================================================================
+FILE MODIFICATI
+======================================================================
+
+eve-ai-studio/.env.example
+eve-ai-studio/PHASE_STATUS.md
+eve-ai-studio/README.md
+eve-ai-studio/app/core/config.py
+eve-ai-studio/app/evaluations/__init__.py
+eve-ai-studio/app/evaluations/models.py
+eve-ai-studio/app/evaluations/storage.py
+eve-ai-studio/app/evaluations/storage_base.py
+eve-ai-studio/app/main.py
+eve-ai-studio/pyproject.toml
+eve-ai-studio/tests/test_foundation.py
+
+reference/eve-ai-studio-preview/index.html
+
+======================================================================
+DIFFERENZA PRIMA DEL REPORT
+======================================================================
+
+Base: bc8784c6f024b5b8757e86a1aa73f831029aa2da
+Stato: ahead
+Commit avanti: 23
+Commit indietro: 0
+File coinvolti: 22
+
+Il commit del presente report aumenta il conteggio finale.
+
+======================================================================
+PROTEZIONI
+======================================================================
+
+Non modificati:
+
+- main;
+- demo-canonica;
+- HTML canonico;
+- app ufficiale;
+- Supabase;
+- avatar definitivo.
+
+Non eseguiti:
+
+- pull request;
+- merge;
+- provider esterni;
+- GitHub Actions.
+
+======================================================================
+LIMITI
+======================================================================
+
+- provider reale assente;
+- grader semantici assenti;
+- nessun conteggio token;
+- nessuna stima costi;
+- nessun retry;
+- nessun fallback;
+- nessuna coda o esecuzione parallela;
+- RAG e Supabase non collegati;
+- autenticazione, memoria, voce e strumenti non ancora implementati;
+- animazioni definitive in attesa di consegna.
+
+======================================================================
+PROSSIMO CHECKPOINT
+======================================================================
+
+0.7 — registro provider e modelli, profili di esecuzione, timeout, retry,
+fallback, telemetria token/costi e budget, con provider esterni disattivati per
+impostazione predefinita.
+
+FINE FILE
