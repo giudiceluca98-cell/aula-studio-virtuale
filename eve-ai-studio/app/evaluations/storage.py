@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from .storage_artifacts import ArtifactStorageMixin
 from .storage_base import (
     EvaluationConflictError,
     EvaluationRunNotFoundError,
@@ -13,8 +14,13 @@ from .storage_runs import RunStorageMixin
 from .storage_scenarios import ScenarioStorageMixin, scenario_checksum
 
 
-class SqliteEvaluationStore(RunStorageMixin, ScenarioStorageMixin, BaseEvaluationStore):
-    """Storage SQLite composto per scenari, esecuzioni, risultati e gate."""
+class SqliteEvaluationStore(
+    ArtifactStorageMixin,
+    RunStorageMixin,
+    ScenarioStorageMixin,
+    BaseEvaluationStore,
+):
+    """Storage SQLite composto per scenari, run, risultati, gate e artefatti redatti."""
 
 
 __all__ = [
