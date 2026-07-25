@@ -4,13 +4,14 @@ Questa directory contiene il servizio isolato di Eve AI Studio, sviluppato sulla
 
 ## Stato
 
-Versione del servizio: `0.3.0`
+Versione del servizio: `0.4.0`
 
 Checkpoint implementati:
 
 - `0.1` — fondazione FastAPI, provider mock, contesto, permessi, limiti e audit;
 - `0.2` — separazione dei moduli e importatore strutturato del piano approfondito;
-- `0.3` — persistenza SQLite, cronologia importazioni, versioni, confronto e rollback.
+- `0.3` — persistenza SQLite, cronologia importazioni, versioni, confronto e rollback;
+- `0.4` — prompt versionati, modalità didattiche e ciclo bozza–revisione–pubblicazione.
 
 ## Struttura
 
@@ -20,11 +21,11 @@ eve-ai-studio/
 │   ├── core/                 # configurazione, permessi e audit
 │   ├── context/              # validazione del contesto didattico
 │   ├── providers/            # astrazione e provider mock
-│   ├── requirements/         # parser, routing, storage, registro, CLI e modelli
+│   ├── requirements/         # piano, storage, versioni, confronto e rollback
+│   ├── prompts/              # prompt, modalità, workflow, storage e API
 │   ├── main.py               # API FastAPI
 │   └── models.py             # contratti chat condivisi
 ├── data/
-│   └── requirements-import-manifest.json
 ├── tests/
 ├── checkpoints/
 ├── .env.example
@@ -32,53 +33,98 @@ eve-ai-studio/
 └── pyproject.toml
 ```
 
-## Catalogo requisiti persistente
+## Catalogo requisiti
 
-Il catalogo non vive più soltanto in memoria. Il Checkpoint 0.3 usa SQLite e mantiene:
+Il Checkpoint 0.3 mantiene in SQLite:
 
-- tentativi di importazione riusciti, invariati o falliti;
-- snapshot immutabili delle versioni;
-- sezioni e schede associate a ogni versione;
+- cronologia delle importazioni;
+- snapshot immutabili;
 - versione attiva;
-- eventi di attivazione e rollback;
-- hash della sorgente e del catalogo strutturato.
+- confronto tra versioni;
+- rollback non distruttivo;
+- checksum della sorgente e del catalogo.
 
-Percorso predefinito:
+Database predefinito:
 
 ```text
 data/eve-requirements.sqlite3
 ```
 
-È configurabile tramite `EVE_REQUIREMENTS_DB_PATH`. Il database locale, i file WAL e SHM sono esclusi da Git.
+Configurazione:
 
-### Migrazioni
+```text
+EVE_REQUIREMENTS_DB_PATH
+```
 
-Lo storage applica automaticamente le migrazioni tramite `PRAGMA user_version`. La versione schema corrente è `1`. Il servizio rifiuta un database creato da una versione schema più nuova del software.
+## Configurazioni prompt
 
-## Versionamento
+Il Checkpoint 0.4 introduce un secondo archivio SQLite separato:
 
-Ogni importazione valida produce uno snapshot completo, salvo quando il catalogo risultante è identico a una versione già esistente.
+```text
+data/eve-prompts.sqlite3
+```
 
-In quel caso:
+Configurazione:
 
-- l'importazione viene registrata;
-- lo stato è `unchanged`;
-- non viene duplicata una versione;
-- la versione equivalente può essere riattivata.
+```text
+EVE_PROMPTS_DB_PATH
+```
 
-Sono supportate importazioni `replace` e `merge`.
+Ogni configurazione dispone di:
 
-## Confronto e rollback
+- chiave stabile;
+- numero progressivo di versione;
+- prompt di sistema;
+- modalità didattica;
+- parametri tipizzati;
+- checksum;
+- versione genitore;
+- stato;
+- indicazione della versione attiva;
+- data di pubblicazione;
+- storico delle transizioni.
 
-Il confronto tra due versioni restituisce:
+Le revisioni sono immutabili: una modifica crea una nuova versione e non sovrascrive la precedente.
 
-- schede aggiunte;
-- schede rimosse;
-- schede modificate;
-- schede invariate;
-- campi modificati per ogni scheda cambiata.
+## Stati dei prompt
 
-Il rollback cambia soltanto la versione attiva. Gli snapshot successivi non vengono eliminati e possono essere riattivati.
+```text
+draft → in_review → publishable → published → archived
+```
+
+Transizioni aggiuntive controllate:
+
+```text
+in_review → draft
+publishable → draft
+```
+
+Regole:
+
+- una bozza non può essere pubblicata direttamente;
+- `publishable` richiede `review_tests_passed=true`;
+- una sola versione pubblicata può essere attiva per configurazione;
+- pubblicando una nuova versione, la precedente attiva viene archiviata;
+- il rollback copia una versione storica in una nuova bozza;
+- il rollback non elimina né riscrive lo storico.
+
+## Modalità didattiche
+
+- `adaptive_explanation` — spiegazione adattiva;
+- `socratic` — metodo socratico;
+- `quiz` — quiz e interrogazione;
+- `correction` — correzione guidata;
+- `planning` — pianificazione dello studio.
+
+Parametri tipizzati:
+
+- tono;
+- profondità da 1 a 4;
+- politica delle fonti;
+- politica della soluzione;
+- domanda di controllo;
+- politica della memoria;
+- politica degli strumenti.
 
 ## API
 
@@ -96,47 +142,17 @@ POST /v1/requirements/rollback
 GET  /v1/requirements/sections
 GET  /v1/requirements
 GET  /v1/requirements/{requirement_id}
+
+GET  /v1/prompts/status
+GET  /v1/prompts/modes
+GET  /v1/prompts/compare
+POST /v1/prompts/rollback
+GET  /v1/prompts
+POST /v1/prompts
+GET  /v1/prompts/{version_id}
+POST /v1/prompts/{version_id}/revisions
+POST /v1/prompts/{version_id}/transition
 ```
-
-Esempio importazione:
-
-```json
-{
-  "text": "...plaintext completo...",
-  "expected_sections": 36,
-  "expected_cards": 1197,
-  "replace": true,
-  "label": "Piano ufficiale",
-  "note": "Importazione verificata"
-}
-```
-
-Esempio confronto:
-
-```http
-GET /v1/requirements/compare?from_version_id=1&to_version_id=2
-```
-
-Esempio rollback:
-
-```json
-{
-  "version_id": 1,
-  "note": "Ripristino dopo revisione"
-}
-```
-
-## Verifica del plaintext ufficiale
-
-```text
-36 sezioni
-1.197 schede
-0 avvisi
-SHA-256 sorgente: da527e3a5edb5ccc8b5a436d5eb5873d3fac26ecba10b8402c66414bd75b6313
-SHA-256 catalogo: 886e2cd4146431da68a0bb7c86975cc7900ca863370eea29d8bad9ec4555ed9f
-```
-
-Una seconda importazione identica è stata riconosciuta come `unchanged` e non ha creato una versione duplicata.
 
 ## Avvio locale
 
@@ -154,33 +170,47 @@ Copy-Item .env.example .env
 uvicorn app.main:app --reload --port 8100
 ```
 
-## Test
+## Test del Checkpoint 0.4
 
-```bash
-pytest
-```
-
-Risultato del Checkpoint 0.3:
+Eseguiti localmente sul nuovo modulo prompt e sulle sue API:
 
 ```text
 15 passed
 ```
 
-Sono verificati parser, provider mock, limiti, permessi, migrazione SQLite, persistenza tra riavvii, cronologia, confronto, riuso delle versioni identiche, errori e rollback.
+Coprono:
+
+- migrazione SQLite;
+- configurazione iniziale pubblicata;
+- creazione delle bozze;
+- conflitti sulle chiavi;
+- revisioni immutabili;
+- transizioni consentite e vietate;
+- obbligo dei test prima della pubblicabilità;
+- archiviazione automatica della versione attiva precedente;
+- confronto dei campi;
+- rollback non distruttivo;
+- persistenza dopo riapertura;
+- errori per versioni inesistenti;
+- API di creazione, elenco, dettaglio, confronto e rollback.
+
+La suite completa cumulativa dei checkpoint precedenti non è stata rilanciata in questo passaggio; il numero `15` non deve essere sommato automaticamente ai risultati precedenti.
 
 ## Limiti attuali
 
 Non sono ancora implementati:
 
 - modello AI reale;
-- RAG e indicizzazione dei materiali didattici;
+- RAG e indicizzazione dei materiali;
 - Supabase;
-- autenticazione dell'interfaccia amministrativa;
+- autenticazione amministrativa;
 - memoria didattica;
 - voce;
-- strumenti di scrittura nell'app;
-- integrazione con l'app ufficiale.
+- strumenti che modificano l'app;
+- pubblicazione nell'app ufficiale.
+
+L'avatar animato definitivo verrà integrato dopo la consegna e l'approvazione degli asset prodotti esternamente.
 
 ## Regola di sicurezza
 
-Il modello può proporre un risultato. Identità, contesto, permessi, persistenza, limiti, memoria e azioni devono essere verificati da codice server indipendente dal modello.
+Il modello può proporre un risultato. Identità, contesto, permessi, transizioni, persistenza, memoria e azioni devono essere verificati da codice server indipendente dal modello.
