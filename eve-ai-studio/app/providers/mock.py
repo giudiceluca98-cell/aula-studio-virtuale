@@ -1,25 +1,51 @@
 from __future__ import annotations
 
+import asyncio
+
 from ..models import ChatRequest, ChatResponse, SourceReference
 
 
 class MockEveProvider:
-    """Provider deterministico usato finché non viene collegato un modello reale."""
+    """Provider deterministico configurabile, senza chiavi o chiamate esterne."""
 
     name = "mock"
-    model = "eve-foundation-mock-v2"
+
+    def __init__(
+        self,
+        model: str = "eve-foundation-mock-v2",
+        *,
+        delay_ms: float = 0,
+        failures_before_success: int = 0,
+    ) -> None:
+        self.model = model
+        self.delay_ms = float(delay_ms)
+        self.failures_before_success = int(failures_before_success)
+        self.calls = 0
 
     async def generate(self, request: ChatRequest) -> ChatResponse:
+        self.calls += 1
+        if self.delay_ms:
+            await asyncio.sleep(self.delay_ms / 1_000)
+        if self.calls <= self.failures_before_success:
+            raise RuntimeError("mock transient failure")
+
         context = request.context
         available = [
             value
-            for value in (context.room_id, context.course_id, context.lesson_id, context.section_id)
+            for value in (
+                context.room_id,
+                context.course_id,
+                context.lesson_id,
+                context.section_id,
+            )
             if value
         ]
         context_label = " · ".join(available) if available else "nessun contesto didattico"
         sources = []
         if context.lesson_id:
-            sources.append(SourceReference(title="Lezione corrente", locator=context.lesson_id))
+            sources.append(
+                SourceReference(title="Lezione corrente", locator=context.lesson_id)
+            )
 
         return ChatResponse(
             message=(
