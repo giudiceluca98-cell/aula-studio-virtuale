@@ -5,6 +5,9 @@ from fastapi import FastAPI, HTTPException, Query, status
 from .context.validation import ContextTooLargeError, validate_context_size
 from .core.audit import AuditLogger
 from .core.config import EveSettings
+from .evaluations.router import create_evaluation_router
+from .evaluations.service import EvaluationService
+from .evaluations.storage import SqliteEvaluationStore
 from .models import ChatRequest, ChatResponse, HealthResponse
 from .prompts.router import create_prompt_router
 from .prompts.service import PromptService
@@ -28,7 +31,7 @@ from .requirements.parser import PlanParseError
 from .requirements.registry import RequirementNotFoundError, RequirementRegistry
 from .requirements.storage import RequirementVersionNotFoundError, SqliteRequirementStore
 
-SERVICE_VERSION = "0.4.0"
+SERVICE_VERSION = "0.5.0"
 
 settings = EveSettings()
 provider = get_provider(settings)
@@ -37,16 +40,32 @@ requirement_store = SqliteRequirementStore(settings.requirements_db_path)
 requirements = RequirementRegistry(store=requirement_store)
 prompt_store = SqlitePromptStore(settings.prompts_db_path)
 prompts = PromptService(prompt_store, seed_default=True)
+evaluation_store = SqliteEvaluationStore(
+    settings.evaluations_db_path,
+    publish_threshold=settings.evaluation_publish_score,
+)
+evaluations = EvaluationService(
+    evaluation_store,
+    prompt_version_getter=prompts.get,
+    seed_default=True,
+)
+active_prompt_version_id = prompts.status().active_version_id
+if active_prompt_version_id is not None and not evaluation_store.runs_count(
+    prompt_version_id=active_prompt_version_id
+):
+    evaluations.seed_baseline(active_prompt_version_id)
+prompts.set_evaluation_gate(evaluations.gate)
 
 app = FastAPI(
     title="Eve AI Studio",
     version=SERVICE_VERSION,
     description=(
-        "Fondazione modulare di Eve con catalogo requisiti persistente e configurazioni prompt "
-        "versionate, revisionabili e pubblicabili. Nessun modello esterno è collegato."
+        "Fondazione modulare di Eve con requisiti e prompt versionati, scenari di valutazione "
+        "persistenti e gate di pubblicazione calcolato dai risultati. Nessun modello esterno è collegato."
     ),
 )
 app.include_router(create_prompt_router(prompts))
+app.include_router(create_evaluation_router(evaluations))
 
 
 @app.get("/health", response_model=HealthResponse)
