@@ -14,7 +14,18 @@ from .models import ChatRequest, ChatResponse, HealthResponse
 from .prompts.router import create_prompt_router
 from .prompts.service import PromptService
 from .prompts.storage import SqlitePromptStore
-from .providers.registry import get_provider
+from .providers import (
+    ManagedEveProvider,
+    ProviderOrchestrator,
+    ProviderTelemetryStore,
+    build_default_catalog,
+    build_default_profiles,
+)
+from .providers.orchestrator import (
+    ProviderBudgetExceededError,
+    ProviderExecutionError,
+)
+from .providers.router import create_provider_router
 from .requirements.models import (
     PlanImportRequest,
     PlanImportResult,
@@ -33,11 +44,27 @@ from .requirements.parser import PlanParseError
 from .requirements.registry import RequirementNotFoundError, RequirementRegistry
 from .requirements.storage import RequirementVersionNotFoundError, SqliteRequirementStore
 
-SERVICE_VERSION = "0.6.0"
+SERVICE_VERSION = "0.7.0"
 
 settings = EveSettings()
-provider = get_provider(settings)
 audit = AuditLogger(enabled=settings.audit_enabled)
+
+provider_catalog = build_default_catalog(
+    external_providers_enabled=settings.external_providers_enabled
+)
+execution_profiles = build_default_profiles()
+provider_telemetry = ProviderTelemetryStore(settings.provider_telemetry_db_path)
+provider_orchestrator = ProviderOrchestrator(
+    provider_catalog,
+    execution_profiles,
+    provider_telemetry,
+)
+evaluation_provider = ManagedEveProvider(
+    provider_orchestrator,
+    profile_key=settings.evaluation_execution_profile,
+    purpose="evaluation",
+)
+
 requirement_store = SqliteRequirementStore(settings.requirements_db_path)
 requirements = RequirementRegistry(store=requirement_store)
 prompt_store = SqlitePromptStore(settings.prompts_db_path)
@@ -54,7 +81,7 @@ evaluations = EvaluationService(
 automatic_evaluations = AutomaticEvaluationService(
     evaluations,
     evaluation_store,
-    provider=provider,
+    provider=evaluation_provider,
     prompt_version_getter=prompts.get,
     evidence_max_chars=settings.evaluation_evidence_max_chars,
     latency_budget_ms=settings.evaluation_latency_budget_ms,
@@ -71,13 +98,15 @@ app = FastAPI(
     title="Eve AI Studio",
     version=SERVICE_VERSION,
     description=(
-        "Fondazione modulare di Eve con requisiti e prompt versionati, scenari persistenti, "
-        "gate di pubblicazione e runner automatico deterministico. Nessun modello esterno è collegato."
+        "Fondazione modulare di Eve con requisiti, prompt, valutazioni, runner automatico, "
+        "registro provider, profili controllati, retry, fallback e telemetria. "
+        "I provider esterni sono disattivati per impostazione predefinita."
     ),
 )
 app.include_router(create_prompt_router(prompts))
 app.include_router(create_evaluation_router(evaluations))
 app.include_router(create_automatic_evaluation_router(automatic_evaluations))
+app.include_router(create_provider_router(provider_orchestrator))
 
 
 @app.get("/health", response_model=HealthResponse)
@@ -94,19 +123,59 @@ async def health_check() -> HealthResponse:
 @app.post("/v1/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest) -> ChatResponse:
     if not settings.enabled:
-        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Eve è disattivata")
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Eve è disattivata",
+        )
 
     try:
         validate_context_size(request, settings.max_context_chars)
-        response = await provider.generate(request)
+        execution = await provider_orchestrator.execute(
+            request,
+            profile_key=settings.chat_execution_profile,
+            purpose="chat",
+        )
+        response = execution.response
     except ContextTooLargeError as exc:
-        audit.record(event_type="chat", request=request, provider=provider.name, outcome="rejected_context")
-        raise HTTPException(status_code=status.HTTP_413_CONTENT_TOO_LARGE, detail=str(exc)) from exc
-    except Exception as exc:
-        audit.record(event_type="chat", request=request, provider=provider.name, outcome="provider_error")
-        raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail="Provider Eve non disponibile") from exc
+        audit.record(
+            event_type="chat",
+            request=request,
+            provider=settings.provider,
+            outcome="rejected_context",
+        )
+        raise HTTPException(
+            status_code=status.HTTP_413_CONTENT_TOO_LARGE,
+            detail=str(exc),
+        ) from exc
+    except ProviderBudgetExceededError as exc:
+        audit.record(
+            event_type="chat",
+            request=request,
+            provider=settings.provider,
+            outcome="rejected_budget",
+        )
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail=str(exc),
+        ) from exc
+    except ProviderExecutionError as exc:
+        audit.record(
+            event_type="chat",
+            request=request,
+            provider=settings.provider,
+            outcome="provider_error",
+        )
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail="Provider Eve non disponibile",
+        ) from exc
 
-    audit.record(event_type="chat", request=request, provider=provider.name, outcome="success")
+    audit.record(
+        event_type="chat",
+        request=request,
+        provider=response.provider,
+        outcome="success",
+    )
     return response
 
 
@@ -132,7 +201,10 @@ async def import_requirements(request: PlanImportRequest) -> PlanImportResult:
             note=request.note,
         )
     except PlanParseError as exc:
-        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=str(exc)) from exc
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=str(exc),
+        ) from exc
 
 
 @app.get("/v1/requirements/imports", response_model=RequirementImportListResponse)
@@ -151,12 +223,18 @@ async def list_requirement_versions(
     return RequirementVersionListResponse(total=len(items), items=items)
 
 
-@app.get("/v1/requirements/versions/{version_id}", response_model=RequirementVersionSummary)
+@app.get(
+    "/v1/requirements/versions/{version_id}",
+    response_model=RequirementVersionSummary,
+)
 async def get_requirement_version(version_id: int) -> RequirementVersionSummary:
     try:
         return requirements.version(version_id)
     except RequirementVersionNotFoundError as exc:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Versione non trovata") from exc
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Versione non trovata",
+        ) from exc
 
 
 @app.get("/v1/requirements/compare", response_model=RequirementVersionDiff)
@@ -167,15 +245,23 @@ async def compare_requirement_versions(
     try:
         return requirements.compare(from_version_id, to_version_id)
     except RequirementVersionNotFoundError as exc:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Versione non trovata") from exc
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Versione non trovata",
+        ) from exc
 
 
 @app.post("/v1/requirements/rollback", response_model=RequirementRollbackResult)
-async def rollback_requirements(request: RequirementRollbackRequest) -> RequirementRollbackResult:
+async def rollback_requirements(
+    request: RequirementRollbackRequest,
+) -> RequirementRollbackResult:
     try:
         return requirements.rollback(request.version_id, note=request.note)
     except RequirementVersionNotFoundError as exc:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Versione non trovata") from exc
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Versione non trovata",
+        ) from exc
 
 
 @app.get("/v1/requirements/sections", response_model=list[PlanSection])
@@ -198,7 +284,12 @@ async def list_requirements(
         offset=offset,
         limit=limit,
     )
-    return RequirementListResponse(total=total, offset=offset, limit=limit, items=items)
+    return RequirementListResponse(
+        total=total,
+        offset=offset,
+        limit=limit,
+        items=items,
+    )
 
 
 @app.get("/v1/requirements/{requirement_id}", response_model=RequirementCard)
@@ -206,4 +297,7 @@ async def get_requirement(requirement_id: str) -> RequirementCard:
     try:
         return requirements.get(requirement_id)
     except RequirementNotFoundError as exc:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scheda non trovata") from exc
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Scheda non trovata",
+        ) from exc
