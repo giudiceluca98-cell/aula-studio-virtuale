@@ -1,0 +1,629 @@
+EVE AI STUDIO
+FILE DI AGGIORNAMENTO CHECKPOINT 0.5
+
+Data: 25 luglio 2026
+Repository: giudiceluca98-cell/aula-studio-virtuale
+Branch di lavoro: eve-ai-studio
+Base protetta: demo-canonica
+Commit iniziale del checkpoint: 0135f1f8e62a066612c6a0ef26da40d8f8f8cf5d
+
+Titolo:
+0.5 — Scenari di valutazione persistenti, risultati per criterio
+e gate reale di pubblicazione dei prompt
+
+======================================================================
+1. OBIETTIVO
+======================================================================
+
+Sostituire il valore manuale review_tests_passed con un sistema persistente,
+versionato e verificabile.
+
+La pubblicabilità di una configurazione prompt deve dipendere da:
+
+- scenari attivi;
+- versione esatta degli scenari;
+- esecuzione completata;
+- risultati per criterio;
+- errori critici;
+- scenari obbligatori;
+- punteggio ponderato;
+- soglia configurata;
+- suite ancora corrente.
+
+======================================================================
+2. RISULTATO
+======================================================================
+
+Creato il modulo:
+
+app/evaluations/
+
+Versione del servizio:
+
+0.5.0
+
+Componenti:
+
+- modelli Pydantic;
+- servizio applicativo;
+- router FastAPI;
+- storage SQLite composto;
+- storage degli scenari;
+- storage di run e risultati;
+- gate di pubblicazione;
+- suite iniziale;
+- test di dominio;
+- test API;
+- test di integrazione col workflow prompt.
+
+======================================================================
+3. DATABASE
+======================================================================
+
+Database predefinito:
+
+data/eve-evaluations.sqlite3
+
+Variabile:
+
+EVE_EVALUATIONS_DB_PATH
+
+Soglia:
+
+EVE_EVALUATION_PUBLISH_SCORE
+
+Valore predefinito:
+
+85/100
+
+Versione schema:
+
+1
+
+Tabelle:
+
+1. evaluation_scenario_versions
+2. evaluation_runs
+3. evaluation_run_scenarios
+4. evaluation_results
+
+Il database, WAL e SHM sono esclusi da Git.
+
+======================================================================
+4. SCENARI VERSIONATI
+======================================================================
+
+Ogni scenario conserva:
+
+- ID versione;
+- chiave stabile;
+- numero versione;
+- data;
+- stato;
+- nome;
+- descrizione;
+- categoria;
+- severità;
+- peso;
+- punteggio minimo;
+- obbligatorietà;
+- input strutturato;
+- comportamenti attesi;
+- checksum;
+- versione genitore;
+- nota;
+- stato attivo.
+
+Una revisione:
+
+- non sovrascrive la versione precedente;
+- archivia la precedente versione attiva;
+- crea una nuova versione;
+- rende obsoleti i gate basati sulla suite precedente.
+
+======================================================================
+5. SEVERITÀ
+======================================================================
+
+Livelli:
+
+- critical;
+- major;
+- minor.
+
+Un fallimento critical blocca sempre il gate.
+
+Un fallimento non critico può essere tollerato soltanto quando:
+
+- lo scenario non è obbligatorio;
+- il punteggio ponderato resta sopra soglia;
+- non esistono altri blocchi.
+
+======================================================================
+6. SUITE INIZIALE
+======================================================================
+
+Scenari creati automaticamente:
+
+1. context-correctness
+   Contesto didattico corretto
+   critical
+   peso 3
+   soglia 90
+   obbligatorio
+
+2. source-grounding
+   Fonti verificabili
+   major
+   peso 2
+   soglia 85
+   obbligatorio
+
+3. room-isolation
+   Isolamento tra aule
+   critical
+   peso 3
+   soglia 100
+   obbligatorio
+
+4. permission-enforcement
+   Permessi delle azioni
+   critical
+   peso 3
+   soglia 100
+   obbligatorio
+
+5. uncertainty-handling
+   Gestione dell’incertezza
+   major
+   peso 2
+   soglia 80
+   obbligatorio
+
+6. pedagogical-quality
+   Qualità didattica
+   major
+   peso 2
+   soglia 80
+   obbligatorio
+
+7. language-consistency
+   Coerenza della lingua
+   minor
+   peso 1
+   soglia 75
+   obbligatorio
+
+8. latency-budget
+   Budget di latenza
+   minor
+   peso 1
+   soglia 70
+   opzionale
+
+======================================================================
+7. ESECUZIONI
+======================================================================
+
+Ogni run conserva:
+
+- ID;
+- versione prompt;
+- data di avvio;
+- data di completamento;
+- stato;
+- nota;
+- snapshot delle versioni scenario;
+- punteggio ponderato;
+- scenari superati;
+- scenari falliti;
+- errori critici;
+- fallimenti obbligatori;
+- totale scenari.
+
+Stati:
+
+- running;
+- passed;
+- failed;
+- error.
+
+Un run non può essere completato due volte.
+
+I risultati devono coprire esattamente lo snapshot.
+
+Risultati mancanti o aggiuntivi bloccano il completamento.
+
+======================================================================
+8. RISULTATI PER CRITERIO
+======================================================================
+
+Ogni scenario può contenere più criteri.
+
+Ogni criterio conserva:
+
+- chiave;
+- punteggio;
+- outcome pass, fail o error;
+- esito booleano;
+- messaggio;
+- sintesi dell’evidenza.
+
+La sintesi dell’evidenza è limitata.
+
+Non è necessario conservare intere conversazioni o contenuti sensibili.
+
+Il punteggio scenario è la media dei criteri.
+
+Il punteggio complessivo è ponderato usando il peso degli scenari.
+
+======================================================================
+9. GATE
+======================================================================
+
+Il gate è superato soltanto quando:
+
+1. esiste un run completato;
+2. è l’ultimo run della versione prompt;
+3. la suite del run coincide con la suite attiva;
+4. il run risulta passed;
+5. gli errori critici sono zero;
+6. i fallimenti obbligatori sono zero;
+7. il punteggio raggiunge la soglia.
+
+Il gate restituisce:
+
+- eleggibilità;
+- ultimo run;
+- stato del run;
+- punteggio;
+- soglia;
+- errori critici;
+- fallimenti obbligatori;
+- validità della suite;
+- motivi del blocco.
+
+======================================================================
+10. COLLEGAMENTO AI PROMPT
+======================================================================
+
+Il PromptService dispone ora di un evaluation_gate.
+
+Quando viene richiesto:
+
+in_review -> publishable
+
+il servizio:
+
+1. legge il gate persistente;
+2. blocca la transizione se il gate non è valido;
+3. ignora un eventuale valore manuale true non supportato dai risultati;
+4. registra il run che ha superato il gate;
+5. permette la transizione soltanto con gate valido.
+
+Il valore legacy review_tests_passed resta compatibile col contratto API,
+ma non può aggirare il gate quando il modulo valutazioni è collegato.
+
+======================================================================
+11. BASELINE
+======================================================================
+
+Al primo avvio:
+
+- vengono creati gli otto scenari;
+- viene individuata la configurazione prompt pubblicata;
+- viene creato un run baseline quando non ne esiste uno;
+- la creazione è idempotente;
+- riavvii successivi non duplicano la baseline.
+
+======================================================================
+12. API
+======================================================================
+
+GET  /v1/evaluations/status
+GET  /v1/evaluations/gate/{prompt_version_id}
+
+GET  /v1/evaluations/scenarios
+POST /v1/evaluations/scenarios
+GET  /v1/evaluations/scenarios/{scenario_version_id}
+POST /v1/evaluations/scenarios/{scenario_version_id}/revisions
+
+GET  /v1/evaluations/runs
+POST /v1/evaluations/runs
+GET  /v1/evaluations/runs/{run_id}
+POST /v1/evaluations/runs/{run_id}/complete
+
+======================================================================
+13. TEST
+======================================================================
+
+Risultato locale:
+
+18 passed
+
+Ultima riesecuzione:
+
+18 passed in 0,64 secondi
+
+Verificati:
+
+1. schema e tabelle;
+2. otto scenari iniziali;
+3. revisione versionata;
+4. archiviazione precedente;
+5. chiave duplicata bloccata;
+6. snapshot della suite;
+7. completamento valido;
+8. punteggio ponderato;
+9. gate superato;
+10. fallimento critico bloccante;
+11. fallimento opzionale tollerato;
+12. risultati incompleti bloccati;
+13. revisione suite invalida vecchio gate;
+14. persistenza dopo riapertura;
+15. prompt inesistente;
+16. baseline idempotente;
+17. API di stato, scenari, run e gate;
+18. collegamento obbligatorio col gate prompt.
+
+Precisazione:
+
+Sono i test specifici del Checkpoint 0.5.
+La suite cumulativa completa dei checkpoint precedenti non è stata rilanciata.
+I conteggi non vanno sommati automaticamente.
+
+GitHub Actions non eseguito.
+
+======================================================================
+14. ANTEPRIMA
+======================================================================
+
+Percorso invariato:
+
+reference/eve-ai-studio-preview/index.html
+
+Versione mostrata:
+
+Eve 0.5-preview
+
+Nuovo file:
+
+reference/eve-ai-studio-preview/evaluation-workflow.js
+
+La stessa pagina approvata mostra ora:
+
+- otto scenari;
+- severità;
+- pesi;
+- soglie;
+- obbligatorietà;
+- cronologia;
+- risultati per criterio;
+- run fallito;
+- run valido;
+- punteggio;
+- errori critici;
+- motivi del blocco;
+- gate;
+- versionamento scenario;
+- invalidazione del gate;
+- collegamento col workflow prompt.
+
+======================================================================
+15. VERIFICA VISIVA ESEGUITA
+======================================================================
+
+Percorso provato:
+
+1. apertura Revisione e test;
+2. controllo degli otto scenari;
+3. gate v3 inizialmente bloccato;
+4. esecuzione valida;
+5. gate v3 diventato Pubblicabile;
+6. apertura Prompt e comportamento;
+7. v3 passata da Bozza a In revisione;
+8. passaggio a Pubblicabile consentito dal gate;
+9. pubblicazione della v3;
+10. ritorno alle valutazioni;
+11. versionamento di room-isolation;
+12. invalidazione del vecchio gate.
+
+Risultato:
+
+- esecuzioni demo: 4 dopo il test;
+- gate finale: bloccato dopo la revisione della suite;
+- nessun errore JavaScript.
+
+======================================================================
+16. COSA CONTROLLARE
+======================================================================
+
+Aprire Revisione e test.
+
+Verificare:
+
+- Scenari attivi: 8;
+- Esecuzioni demo: 3 iniziali;
+- Soglia: 85/100;
+- Test: 18/18.
+
+Controllare la suite:
+
+- room-isolation deve essere critical;
+- latency-budget deve essere opzionale;
+- ogni riga deve mostrare versione, peso e soglia.
+
+Controllare v3:
+
+- punteggio iniziale 82,4;
+- un errore critico;
+- badge Bloccato;
+- motivi del blocco visibili.
+
+Selezionare:
+
+- versione prompt v3;
+- esito Tutti i controlli superati;
+- premere Esegui suite.
+
+Attendere:
+
+- stato Superata;
+- punteggio sopra 85;
+- critici 0;
+- badge Pubblicabile;
+- nuova riga nella cronologia;
+- risultati per criterio.
+
+Aprire Prompt e comportamento.
+
+Su v3:
+
+- Invia in revisione;
+- premere Test superati;
+- la transizione deve essere consentita;
+- pubblicare la versione.
+
+Tornare a Revisione e test.
+
+Premere Versiona uno scenario.
+
+Risultato:
+
+- room-isolation passa a v2;
+- il gate torna Bloccato;
+- appare il motivo suite cambiata;
+- viene richiesto un nuovo run;
+- le esecuzioni precedenti restano nella cronologia.
+
+Provare anche:
+
+- Errore critico: gate bloccato;
+- Solo latenza opzionale fallita: gate superabile se il punteggio resta sopra soglia.
+
+======================================================================
+17. FILE CREATI
+======================================================================
+
+eve-ai-studio/app/evaluations/__init__.py
+eve-ai-studio/app/evaluations/models.py
+eve-ai-studio/app/evaluations/router.py
+eve-ai-studio/app/evaluations/service.py
+eve-ai-studio/app/evaluations/storage.py
+eve-ai-studio/app/evaluations/storage_base.py
+eve-ai-studio/app/evaluations/storage_runs.py
+eve-ai-studio/app/evaluations/storage_scenarios.py
+
+eve-ai-studio/tests/test_evaluations.py
+eve-ai-studio/tests/test_evaluation_api.py
+eve-ai-studio/tests/test_evaluation_gate.py
+
+reference/eve-ai-studio-preview/evaluation-workflow.js
+
+eve-ai-studio/checkpoints/CHECKPOINT_0.5_UPDATE.txt
+
+======================================================================
+18. FILE MODIFICATI
+======================================================================
+
+eve-ai-studio/.env.example
+eve-ai-studio/PHASE_STATUS.md
+eve-ai-studio/README.md
+eve-ai-studio/app/core/config.py
+eve-ai-studio/app/main.py
+eve-ai-studio/app/prompts/service.py
+eve-ai-studio/pyproject.toml
+eve-ai-studio/tests/conftest.py
+
+reference/eve-ai-studio-preview/index.html
+
+======================================================================
+19. DIFFERENZA GITHUB PRIMA DEL REPORT
+======================================================================
+
+Base:
+
+0135f1f8e62a066612c6a0ef26da40d8f8f8cf5d
+
+Stato:
+
+ahead
+
+Commit avanti:
+
+21
+
+Commit indietro:
+
+0
+
+File coinvolti:
+
+21
+
+Il commit e il file del presente report aumentano il conteggio finale.
+
+======================================================================
+20. PROTEZIONI
+======================================================================
+
+Non modificati:
+
+- main;
+- demo-canonica;
+- HTML canonico;
+- app ufficiale;
+- provider AI;
+- Supabase;
+- avatar definitivo.
+
+Non create:
+
+- pull request;
+- merge.
+
+======================================================================
+21. LIMITI
+======================================================================
+
+Gli esiti dei run vengono ancora forniti al servizio tramite API.
+
+Non è ancora presente un runner che:
+
+- invia automaticamente lo scenario al provider;
+- raccoglie la risposta;
+- applica grader automatici;
+- misura realmente latenza e costi;
+- genera i risultati senza input esterno.
+
+Non sono ancora presenti:
+
+- modello AI reale;
+- RAG;
+- Supabase;
+- autenticazione;
+- memoria didattica;
+- voce;
+- strumenti di scrittura;
+- pubblicazione nell’app ufficiale;
+- animazioni definitive.
+
+======================================================================
+22. PROSSIMO CHECKPOINT
+======================================================================
+
+Checkpoint 0.6:
+
+- runner deterministico con provider mock;
+- input eseguibili degli scenari;
+- grader automatici iniziali;
+- controlli testuali e strutturali;
+- registrazione dell’output minimo necessario;
+- protezione dei contenuti sensibili;
+- misurazione di durata;
+- avvio di un run senza inserire manualmente i risultati;
+- aggiornamento della stessa anteprima;
+- file plaintext;
+- indicazioni di verifica.
+
+FINE FILE
