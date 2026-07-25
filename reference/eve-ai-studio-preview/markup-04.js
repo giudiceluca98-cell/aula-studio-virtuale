@@ -1,13 +1,4 @@
-window.__EVE_HTML_PARTS=window.__EVE_HTML_PARTS||[];window.__EVE_HTML_PARTS.push(String.raw`    <section class="panel span-4"><div class="panel-head"><div><h3>Parametri didattici</h3><p>Preferenze globali della versione.</p></div></div><div class="panel-body">
-      <div class="control"><label>Tono</label><select><option>Calmo e diretto</option><option>Amichevole</option><option>Tecnico</option></select></div>
-      <div class="control"><label>Soluzione immediata <button class="switch" data-toggle="solution"></button></label></div>
-      <div class="control"><label>Domanda di controllo <button class="switch on" data-toggle="checkQuestion"></button></label></div>
-      <div class="control"><label>Livello predefinito</label><select><option>Adattivo</option><option>Principiante</option><option>Intermedio</option><option>Avanzato</option></select></div>
-    </div></section>
-  </div>
-</section>
-
-<section id="tests" class="view">
+window.__EVE_HTML_PARTS=window.__EVE_HTML_PARTS||[];window.__EVE_HTML_PARTS.push(String.raw`<section id="tests" class="view">
   <div class="test-grid">
     <section class="panel"><div class="panel-head"><div><h3>Suite di revisione</h3><p>12 prove critiche prima della pubblicazione.</p></div><button class="btn green" id="runTests">Esegui tutti i test</button></div><div class="panel-body list" id="testList"></div></section>
     <section class="panel"><div class="panel-head"><div><h3>Console</h3><p>Risultati della simulazione.</p></div><span class="pill" id="runState">In attesa</span></div><div class="panel-body"><div class="test-console" id="testConsole">Eve Evaluation Runner v0.1
