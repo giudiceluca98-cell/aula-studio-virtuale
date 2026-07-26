@@ -1,0 +1,98 @@
+EVE AI STUDIO
+STATO DELL’ANTEPRIMA UFFICIALE
+
+Data: 26 luglio 2026
+Branch: eve-ai-studio
+
+PERCORSO UFFICIALE
+
+reference/eve-ai-studio-preview/index.html
+
+Questo file è l’unica anteprima ufficiale di Eve AI Studio.
+Da questo momento gli aggiornamenti progressivi dell’anteprima devono essere
+applicati a questo percorso, senza creare demo parallele da considerare
+canoniche.
+
+VERSIONE INTEGRATA
+
+Eve Animation Library 1.2.2
+
+ASSET DISPONIBILI
+
+- P0 conversazione: 12
+- P1 studio: 21
+- P2 avanzate: 20
+- compact: 8
+- hero: 3
+- totale: 64
+
+FUNZIONI DELLA GALLERIA
+
+- selezione individuale degli asset;
+- ricerca per nome o ID;
+- filtro P0;
+- filtro P1;
+- filtro P2;
+- filtro compact;
+- filtro hero;
+- riproduzione di un’animazione alla volta;
+- visualizzazione dei metadati;
+- collegamenti dimostrativi tra sezioni dell’app e stati Eve;
+- sostituzione della vecchia Eve umana con Eve sferica reale.
+
+OTTIMIZZAZIONE DELLA PREVIEW GITHUB
+
+La libreria sorgente completa v1.2.2 rimane il riferimento autorevole.
+
+Per evitare di inserire nel repository l’intero archivio da circa 143 MB,
+l’anteprima GitHub utilizza copie animate ottimizzate esclusivamente per la
+galleria:
+
+- risoluzione runtime: 40 × 40;
+- massimo 2 fotogrammi campionati per asset;
+- formato WebP animato;
+- metadati originali mantenuti nella scheda informativa;
+- un solo asset visualizzato alla volta.
+
+Le copie ottimizzate non sostituiscono i file sorgente della libreria e non
+devono essere riutilizzate come master di produzione.
+
+STRUTTURA TECNICA
+
+Gli asset ottimizzati e i metadati sono compressi e suddivisi nei file:
+
+official-payload-*.js
+
+Il modulo della galleria è compresso e suddiviso nei file:
+
+official-library-workflow-payload-a.js
+official-library-workflow-payload-b.js
+
+Il caricamento viene completato da:
+
+official-library-loader.js
+
+DECISIONE EDITORIALE
+
+Le scritte inglesi incorporate in alcuni asset P1/P2 sono accettate per questa
+versione e non bloccano l’avanzamento.
+
+VINCOLI RISPETTATI
+
+- modificato soltanto il branch eve-ai-studio;
+- main non modificato;
+- demo-canonica non modificato;
+- HTML canonico non modificato;
+- nessuna pull request;
+- nessun merge.
+
+REGOLA PER I PROSSIMI AGGIORNAMENTI
+
+Ogni nuova funzione visiva o interattiva dell’anteprima deve aggiornare:
+
+reference/eve-ai-studio-preview/index.html
+
+oppure i moduli caricati da quel file.
+
+Non creare una nuova anteprima ufficiale con un percorso differente senza una
+decisione esplicita.
