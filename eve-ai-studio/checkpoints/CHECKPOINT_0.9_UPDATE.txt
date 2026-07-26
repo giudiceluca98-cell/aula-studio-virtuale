@@ -1,0 +1,468 @@
+EVE AI STUDIO
+FILE DI AGGIORNAMENTO CHECKPOINT 0.9
+
+Data: 26 luglio 2026
+Repository: giudiceluca98-cell/aula-studio-virtuale
+Branch di lavoro: eve-ai-studio
+Base protetta: demo-canonica
+
+Titolo:
+0.9 — Retrieval lessicale locale, ranking deterministico, controllo integrità
+e citazioni verificabili senza embedding o provider esterni
+
+======================================================================
+1. OBIETTIVO
+======================================================================
+
+Rendere ricercabili i chunk prodotti dal Checkpoint 0.8 senza introdurre ancora:
+
+- embedding;
+- database vettoriali;
+- provider AI reali;
+- chiamate di rete;
+- generazione RAG collegata alla chat.
+
+Il checkpoint deve impedire che:
+
+- la ricerca legga materiali di un'altra aula;
+- una versione precedente venga usata al posto della versione corrente pronta;
+- una revisione fallita sostituisca la fonte pronta;
+- un chunk alterato venga restituito come fonte integra;
+- il ranking cambi a parità di dati e query;
+- una citazione sia priva di materiale, versione, chunk, offset e hash;
+- istruzioni contenute nei documenti vengano interpretate come comandi;
+- l'assenza di risultati venga nascosta mediante fonti inventate;
+- embedding o provider esterni vengano attivati accidentalmente.
+
+======================================================================
+2. RISULTATO
+======================================================================
+
+Versione del servizio:
+
+0.9.0
+
+Implementati:
+
+- package retrieval separato;
+- query e risposte Pydantic tipizzate;
+- ricerca lessicale Unicode locale;
+- normalizzazione NFKC e casefold;
+- ranking deterministico eve-lexical-v1;
+- copertura dei termini;
+- frequenza limitata dei termini;
+- priorità per titolo e nome file;
+- bonus per frase esatta;
+- ordinamento stabile;
+- ricerca limitata alle versioni correnti ready;
+- isolamento SQL per room_id;
+- filtro facoltativo per material_id senza rivelazione tra aule;
+- verifica SHA-256 del testo di ogni chunk;
+- esclusione dei chunk con integrità non valida;
+- conteggio degli errori di integrità;
+- estratti limitati;
+- citazioni verificabili;
+- segnalazione di contenuti simili a prompt injection;
+- nessuna esecuzione delle istruzioni presenti nelle fonti;
+- API dedicate;
+- configurazione server-side;
+- anteprima ufficiale aggiornata;
+- nessun embedding;
+- nessun provider esterno;
+- nessuna chiamata di rete.
+
+======================================================================
+3. MODULO RETRIEVAL
+======================================================================
+
+Percorso:
+
+eve-ai-studio/app/retrieval/
+
+File:
+
+- __init__.py;
+- errors.py;
+- models.py;
+- ranking.py;
+- service.py;
+- router.py.
+
+Responsabilità:
+
+errors.py
+
+- errori controllati;
+- codice pubblico invalid_retrieval_query;
+- nessun dettaglio privato nel messaggio predefinito.
+
+models.py
+
+- richiesta di ricerca;
+- stato del retrieval;
+- hit ordinati;
+- citazioni;
+- risposta strutturata.
+
+ranking.py
+
+- normalizzazione Unicode;
+- tokenizzazione;
+- ranking deterministico;
+- estratti;
+- rilevamento di pattern sospetti.
+
+service.py
+
+- applicazione dei limiti;
+- selezione SQL delle sole fonti autorizzate;
+- verifica dell'integrità;
+- ranking;
+- ordinamento;
+- costruzione delle citazioni.
+
+router.py
+
+- API FastAPI;
+- stato;
+- ricerca;
+- errore 422 per query non utilizzabile.
+
+======================================================================
+4. PERIMETRO DELLE FONTI
+======================================================================
+
+La ricerca usa esclusivamente:
+
+- room_id richiesto;
+- materiali appartenenti alla stessa aula;
+- current_version_id del materiale;
+- versioni con stato ready;
+- chunk della versione corrente pronta;
+- filtri material_id applicati dopo il vincolo dell'aula.
+
+Non vengono ricercati:
+
+- materiali di altre aule;
+- versioni precedenti;
+- versioni processing;
+- versioni failed;
+- chunk con SHA-256 non corrispondente;
+- fonti esterne.
+
+Un material_id appartenente a un'altra aula produce semplicemente zero candidati e
+non conferma l'esistenza della risorsa.
+
+======================================================================
+5. RANKING
+======================================================================
+
+Algoritmo:
+
+eve-lexical-v1
+
+Segnali:
+
+- percentuale dei termini della query presenti;
+- frequenza limitata dei termini nel chunk;
+- corrispondenza nel titolo;
+- corrispondenza nel nome file;
+- frase esatta nel testo;
+- frase esatta nel titolo;
+- frase esatta nel nome file.
+
+Ordinamento finale:
+
+1. punteggio decrescente;
+2. presenza della frase esatta;
+3. material_id crescente;
+4. chunk_index crescente.
+
+Il risultato è ripetibile a parità di query, catalogo e configurazione.
+
+Il ranking non è semantico e non dichiara equivalenza concettuale tra parole diverse.
+
+======================================================================
+6. CITAZIONI
+======================================================================
+
+Ogni risultato contiene:
+
+- locator stabile;
+- material_id;
+- version_id;
+- version_number;
+- chunk_id;
+- chunk_index;
+- titolo;
+- filename;
+- media type;
+- start_char;
+- end_char;
+- SHA-256 del testo del chunk;
+- estratto;
+- offset dell'estratto;
+- termini corrispondenti;
+- indicazione della frase esatta;
+- eventuali flag di sicurezza.
+
+Formato locator:
+
+material:{material_id}:v{version_number}:chunk:{chunk_index}:{start_char}-{end_char}
+
+======================================================================
+7. INTEGRITÀ
+======================================================================
+
+Prima del ranking viene ricalcolato:
+
+SHA-256(text_content UTF-8)
+
+Se l'hash non coincide con text_sha256:
+
+- il chunk viene escluso;
+- non viene restituito come fonte;
+- integrity_failures viene incrementato;
+- la ricerca prosegue sugli altri chunk autorizzati.
+
+======================================================================
+8. CONTENUTI NON FIDATI
+======================================================================
+
+I documenti restano dati, non istruzioni.
+
+Pattern iniziali segnalati:
+
+- richiesta di ignorare istruzioni precedenti;
+- riferimento a system prompt o messaggi sviluppatore;
+- script o schema javascript:;
+- richiesta di chiamare strumenti o funzioni.
+
+La presenza di un pattern:
+
+- imposta suspicious_content=true;
+- aggiunge uno o più safety_flags;
+- non esegue alcuna azione;
+- non modifica permessi;
+- non attiva strumenti;
+- non blocca automaticamente la consultazione della fonte.
+
+======================================================================
+9. API
+======================================================================
+
+GET /v1/retrieval/status
+
+Restituisce:
+
+- stato attivo;
+- determinismo;
+- embedding disattivati;
+- provider embedding nullo;
+- fase retrieval;
+- algoritmo;
+- numero di chunk correnti pronti;
+- limiti;
+- ambito delle fonti.
+
+POST /v1/retrieval/search
+
+Riceve:
+
+- room_id;
+- query;
+- limit;
+- material_ids opzionali.
+
+Restituisce:
+
+- hash della query;
+- candidati esaminati;
+- errori di integrità;
+- risultati restituiti;
+- hit ordinati;
+- citazioni;
+- stato embedding false.
+
+======================================================================
+10. CONFIGURAZIONE
+======================================================================
+
+Nuove variabili:
+
+EVE_RETRIEVAL_MAX_QUERY_CHARS=500
+EVE_RETRIEVAL_MAX_RESULTS=10
+EVE_RETRIEVAL_MAX_EXCERPT_CHARS=600
+EVE_RETRIEVAL_MIN_SCORE=1
+
+Le configurazioni dei checkpoint precedenti restano conservate.
+
+======================================================================
+11. TEST
+======================================================================
+
+Test specifici del Checkpoint 0.9:
+
+14 passed in 0.57s
+
+Verificati:
+
+1. stato locale e deterministico;
+2. risultato ordinato con citazione verificabile;
+3. isolamento tra aule;
+4. filtro materiale senza divulgazione tra aule;
+5. uso della sola versione corrente pronta;
+6. revisione fallita senza sostituzione della fonte pronta;
+7. determinismo del ranking;
+8. priorità della corrispondenza nel titolo;
+9. esclusione di un chunk alterato;
+10. segnalazione di testo simile a prompt injection;
+11. risposta vuota senza fonti inventate;
+12. limite dei risultati;
+13. validazione e SHA-256 della query;
+14. API di stato, ricerca ed errore.
+
+Suite cumulativa Checkpoint 0.1–0.9:
+
+139 passed in 2.22s
+
+La suite è stata eseguita nel banco locale ricostruito dai contenuti del branch.
+
+======================================================================
+12. ANTEPRIMA
+======================================================================
+
+Percorso ufficiale invariato:
+
+reference/eve-ai-studio-preview/index.html
+
+Nuovo modulo:
+
+reference/eve-ai-studio-preview/retrieval-workflow.js
+
+Elementi mostrati:
+
+- algoritmo eve-lexical-v1;
+- 14 test specifici;
+- 139 test cumulativi;
+- embedding OFF;
+- aula autorizzata;
+- query;
+- risultati ordinati;
+- score;
+- estratto;
+- locator;
+- filename;
+- SHA-256;
+- termini corrispondenti;
+- fonte verificata o non fidata.
+
+Scenari browser verificati:
+
+1. risultati pertinenti;
+2. nessun risultato;
+3. fonte con istruzioni sospette;
+4. isolamento tra aule.
+
+Esito browser:
+
+4/4 scenari superati
+0 errori JavaScript
+0 eccezioni pagina
+nessun overflow orizzontale a 1440 x 1600
+
+Durante la prima esecuzione è stato rilevato che la query dello scenario normale
+includeva anche la fonte sospetta perché condivideva il termine funzione. La query
+dimostrativa è stata corretta in parametri valore e il controllo è stato rilanciato
+con esito positivo. Il backend non è stato modificato per adattarsi alla demo.
+
+======================================================================
+13. FILE CREATI
+======================================================================
+
+eve-ai-studio/app/retrieval/__init__.py
+eve-ai-studio/app/retrieval/errors.py
+eve-ai-studio/app/retrieval/models.py
+eve-ai-studio/app/retrieval/ranking.py
+eve-ai-studio/app/retrieval/router.py
+eve-ai-studio/app/retrieval/service.py
+
+eve-ai-studio/tests/test_retrieval.py
+
+reference/eve-ai-studio-preview/retrieval-workflow.js
+
+eve-ai-studio/checkpoints/CHECKPOINT_0.9_UPDATE.txt
+
+======================================================================
+14. FILE MODIFICATI
+======================================================================
+
+eve-ai-studio/.env.example
+eve-ai-studio/app/core/config.py
+eve-ai-studio/app/main.py
+eve-ai-studio/tests/test_foundation.py
+
+reference/eve-ai-studio-preview/index.html
+
+======================================================================
+15. PROTEZIONI
+======================================================================
+
+Non modificati:
+
+- main;
+- demo-canonica;
+- reference/demo-aula-studio-virtuale-canonica.html;
+- app ufficiale;
+- eve-canonical-integration-v2;
+- Supabase;
+- pacchetto master Eve Animation Library 1.2.2.
+
+Non eseguiti:
+
+- pull request;
+- merge;
+- provider AI reali;
+- embedding;
+- database vettoriali;
+- chiamate documentali esterne;
+- collegamento del retrieval alla chat.
+
+======================================================================
+16. LIMITI REALI
+======================================================================
+
+- ranking lessicale, non semantico;
+- nessuna espansione di sinonimi;
+- nessun stemming linguistico;
+- nessun embedding;
+- nessun indice vettoriale;
+- nessun reranker AI;
+- nessuna risposta generata dai chunk;
+- nessuna citazione automatica nella chat;
+- nessun PDF o formato Office aggiuntivo rispetto al Checkpoint 0.8;
+- nessuna autenticazione amministrativa di produzione;
+- nessun Supabase;
+- nessun object storage;
+- nessun collegamento all'app ufficiale.
+
+======================================================================
+17. STATO
+======================================================================
+
+Checkpoint 0.9 implementato e verificato tecnicamente sul branch eve-ai-studio.
+
+Stato di verifica:
+
+- backend specifico: 14/14;
+- suite cumulativa: 139/139;
+- JavaScript: sintassi verificata;
+- anteprima: 4/4 scenari browser;
+- embedding: disattivati;
+- provider esterni: disattivati;
+- approvazione utente conclusiva del checkpoint: da registrare.
+
+Il Checkpoint 0.9 non autorizza automaticamente embedding, database vettoriali,
+provider reali, RAG collegato alla chat o integrazione nella produzione.
+
+FINE FILE
