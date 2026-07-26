@@ -14,13 +14,13 @@ ai moduli caricati da esso, senza creare demo parallele da considerare ufficiali
 
 VERSIONI INTEGRATE
 
-- servizio Eve AI Studio: 0.8.0;
-- checkpoint tecnico: 0.8;
+- servizio Eve AI Studio: 0.9.0;
+- checkpoint tecnico: 0.9;
 - Eve Animation Library: 1.2.2.
 
 CHECKPOINT 0.8 — MATERIALI E PREPARAZIONE RAG
 
-Nuova vista:
+Vista:
 
 Materiali e RAG
 
@@ -44,7 +44,29 @@ Funzioni dimostrative:
 - cronologia con errori redatti;
 - assenza dichiarata di embedding e provider esterni.
 
-Stati Eve collegati nella simulazione:
+CHECKPOINT 0.9 — RETRIEVAL LOCALE E CITAZIONI
+
+Modulo:
+
+retrieval-workflow.js
+
+Funzioni dimostrative:
+
+- ricerca limitata all’aula selezionata;
+- ranking lessicale deterministico eve-lexical-v1;
+- uso delle versioni correnti ready;
+- risultati ordinati per punteggio;
+- score visibile;
+- citazione con materiale, versione, chunk e offset;
+- filename e SHA-256;
+- termini corrispondenti;
+- assenza esplicita di embedding;
+- scenario senza risultati e senza fonti inventate;
+- scenario di isolamento tra aule;
+- segnalazione di una fonte contenente istruzioni sospette;
+- nessuna esecuzione delle istruzioni contenute nel documento.
+
+Stati Eve collegati nelle simulazioni:
 
 - eve-uploading;
 - eve-searching;
@@ -114,11 +136,24 @@ versione e non bloccano l’avanzamento.
 
 VERIFICA DEL CHECKPOINT 0.8
 
-- JavaScript materials-workflow.js verificato sintatticamente con Node;
+- 20 test backend specifici superati;
+- suite cumulativa 0.1–0.8: 125 test superati;
+- cinque scenari materiali verificati in Chromium;
+- nessun errore JavaScript;
+- nessun overflow orizzontale;
+- checkpoint chiuso e approvato.
+
+VERIFICA DEL CHECKPOINT 0.9
+
+- JavaScript retrieval-workflow.js verificato sintatticamente con Node;
 - simulazione costruita senza fetch o chiamate di rete;
-- 20 test backend specifici superati nel banco di prova locale;
-- verifica visuale completa dell’anteprima nel browser ancora da eseguire;
-- suite cumulativa dei checkpoint precedenti non ancora rilanciata.
+- 14 test backend specifici superati;
+- suite cumulativa 0.1–0.9: 139 test superati;
+- quattro scenari retrieval verificati in Chromium;
+- nessun errore JavaScript o eccezione pagina;
+- nessun overflow orizzontale a 1440 × 1600;
+- difetto dello scenario normale individuato, corretto e nuovamente verificato;
+- approvazione utente conclusiva del checkpoint 0.9 da registrare.
 
 VINCOLI RISPETTATI
 
