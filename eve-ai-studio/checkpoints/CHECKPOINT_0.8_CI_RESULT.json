@@ -3,6 +3,10 @@
   "tested_sha": "ae62969d11659f0bc8539305363bf266d7178a2e",
   "generated_at": "2026-07-26T21:28:39.922885+00:00",
   "passed": false,
+  "failure_scope": "verification_workflow_infrastructure",
+  "superseded": true,
+  "superseded_by": "CHECKPOINT_0.9_CI_RESULT.json",
+  "note": "Il risultato conserva la prima esecuzione fallita della pipeline. Il codice del Checkpoint 0.8 è stato successivamente incluso nella suite cumulativa 0.1-0.9 e nei cinque scenari materiali superati da GitHub Actions.",
   "states": {
     "python_install": "failure",
     "python_compile": "success",
