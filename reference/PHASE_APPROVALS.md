@@ -39,6 +39,7 @@ Ogni rapporto di checkpoint deve contenere:
 - `DA_INIZIARE`
 - `IN_LAVORAZIONE`
 - `IN_ATTESA_APPROVAZIONE`
+- `IN_ATTESA_VERIFICA_UTENTE`
 - `APPROVATO`
 - `BLOCCATO`
 
@@ -70,6 +71,7 @@ Ogni rapporto di checkpoint deve contenere:
 | Fase 3 | Consolidamento Materiali | APPROVATO | 2026-07-23 | Le integrazioni previste per alpha.10 sono state assorbite nel file autonomo 1.4.0-alpha.1. |
 | Fase 4 | Checklist: elenco, filtri e gestione attività | APPROVATO | 2026-07-23 | L’utente ha verificato il file autonomo, ha confermato che funziona e ne ha autorizzato il caricamento. |
 | Fasi 5–10 | Passaggi successivi | DA_INIZIARE | — | Ogni passaggio avrà un checkpoint separato. |
+| Integrazione Eve | Eve Animation Library 1.2.2 nella demo canonica | IN_ATTESA_VERIFICA_UTENTE | 2026-07-26 | Branch dedicato `eve-canonical-integration-v2`; test automatici superati, doppio clic `file://` da verificare manualmente. |
 
 ## Come approvare
 

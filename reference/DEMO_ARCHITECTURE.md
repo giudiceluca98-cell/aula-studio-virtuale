@@ -684,3 +684,13 @@ Il tracking viene applicato solo dopo l’apertura effettiva di un viewer intern
 ## Fase 3 · 1.3.0-alpha.9
 
 Gli errori dei materiali sono rappresentati come stati separati dal tracking. Formati non supportati e contenuti rimossi non vengono eseguiti; il retry temporaneo modifica in modo idempotente lo stesso oggetto materiale, preservando progresso e dati locali. Le alternative proposte sono esclusivamente risorse interne con viewer sicuro.
+
+## Eve Animation Library 1.2.2
+
+La demo `1.4.0-alpha.1-eve.1` include un registro immutabile di 64 asset WebP ufficiali. Ogni record conserva identificatore, gruppo, categoria, FPS, frame, durata, loop, risoluzione e data URI. La distribuzione è P0 12, P1 21, P2 20, compact 8 e hero 3.
+
+Il runtime espone un solo confine applicativo, `window.setEveAppState(stateId, options)`. Gli hook già presenti nella demo traducono gli eventi reali dell'interfaccia in stati Eve; inspector, stage principale, avatar compact e avatar floating leggono lo stesso stato corrente. P0 viene preriscaldato dopo l'avvio; P1, P2, compact e hero sono decodificati al primo uso. Non sono presenti fetch, CDN, decompressione runtime o codice dinamico.
+
+Con `prefers-reduced-motion: reduce`, o attivando il controllo dedicato nell'inspector, tutte le superfici usano l'avatar statico ufficiale 256 × 256. Il dialog dell'inspector gestisce focus iniziale, focus trap, Escape e ritorno del focus. Il layout sotto 620 px limita i contenitori principali alla larghezza del viewport.
+
+La build è riproducibile con `scripts/build-eve-animation-library-1.2.2-runtime.py`; lo script valida il manifesto e i metadati sorgente, rimuove un'eventuale integrazione precedente e ricostruisce canonico, checkpoint e rapporto. `scripts/verify-eve-animation-library-1.2.2-runtime.mjs` controlla marker, conteggi, bilanciamento dei tag, sintassi JavaScript e assenza di dipendenze remote o costruttori dinamici.

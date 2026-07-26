@@ -4,7 +4,7 @@ Questa cartella contiene la fonte visiva e funzionale ufficiale usata per trasfe
 
 ## Stato
 
-**Demo 1.4.0-alpha.1 approvata: consolidamento dei Materiali e primo checkpoint della Checklist.**
+**Demo 1.4.0-alpha.1-eve.1: Eve Animation Library 1.2.2 integrata, in attesa di verifica dell'utente.**
 
 File canonico:
 
@@ -12,13 +12,20 @@ File canonico:
 
 Identificatori della versione corrente:
 
-- versione: `1.4.0-alpha.1`
-- dimensione: `763281` byte
-- righe: `20872`
-- SHA-256: `85ad819914cf85740b0013f0d3147adaa2ff7b233f99935ba67f4fb77fefe95c`
-- Git blob SHA: `1a4b68f4aa04bd5602afddb7a9feba867da33574`
+- versione: `1.4.0-alpha.1-eve.1`
+- dimensione: `18132481` byte
+- righe logiche: `21612`
+- SHA-256: `07ab2db5da4015bb085f3f4b16e31a6c85f4356ca688945b47b0c8029a145ced`
+- Git blob SHA: `ba94c24615b62d97a05455114e56a80b8afd0dbb`
 
-Il canonico e il checkpoint della Fase 4 coincidono byte per byte. Il file è autonomo: può essere aperto con doppio clic e non richiede Internet o checkpoint esterni.
+Il canonico e il checkpoint Eve coincidono byte per byte. Il file è autonomo: i 64 WebP ufficiali e il fallback statico sono incorporati come data URI, senza fetch, CDN o dipendenze remote. La verifica automatica `file://` non è stata eseguita perché la policy del browser integrato blocca la navigazione a URL locali; la struttura offline è stata verificata staticamente e il doppio clic resta da provare dall'utente.
+
+Checkpoint e rapporti:
+
+- `reference/checkpoints/eve/demo-aula-studio-virtuale-1.4.0-alpha.1-eve.1.html`
+- `reference/checkpoints/eve/STATUS_1.2.2.md`
+- `reference/checkpoints/eve/VERIFICA_1.2.2.md`
+- `reference/checkpoints/eve/build-report-1.2.2.json`
 
 ## Fonte di verità
 

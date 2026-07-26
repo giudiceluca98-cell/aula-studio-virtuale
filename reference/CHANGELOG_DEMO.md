@@ -39,6 +39,32 @@ Per ogni modifica futura:
 
 ---
 
+## [1.4.0-alpha.1-eve.1] — 2026-07-26
+
+### Eve Animation Library 1.2.2
+
+- Integrati esattamente 64 asset ufficiali: P0 `12`, P1 `21`, P2 `20`, compact `8`, hero `3`.
+- Aggiunto un unico adapter pubblico `window.setEveAppState` e collegati gli stati Eve a chat, materiali, esercizi, quiz, checklist, progressi, timer, catalogo e dashboard.
+- Aggiunti stage principale, avatar compact e floating, inspector accessibile con ricerca, filtri, replay e ritorno a idle.
+- Incorporati i WebP finali come data URI; P0 è preriscaldato, gli altri gruppi vengono decodificati su richiesta.
+- Aggiunto il fallback statico ufficiale per `prefers-reduced-motion` e per il controllo manuale dell'inspector.
+- Corretto il layout mobile a 390 px senza overflow orizzontale.
+- Conservata l'esecuzione autonoma senza fetch, CDN o dipendenze remote.
+
+### Identificatori
+
+- Dimensione: `18132481` byte
+- Righe logiche: `21612`
+- SHA-256: `07ab2db5da4015bb085f3f4b16e31a6c85f4356ca688945b47b0c8029a145ced`
+- Git blob SHA: `ba94c24615b62d97a05455114e56a80b8afd0dbb`
+- Checkpoint: `reference/checkpoints/eve/demo-aula-studio-virtuale-1.4.0-alpha.1-eve.1.html`
+
+### Stato
+
+`IN_ATTESA_VERIFICA_UTENTE`. Nessuna pull request o merge è stato creato.
+
+---
+
 ## [1.3.0-alpha.9] — 2026-07-23
 
 ### Materiali: errori e alternative

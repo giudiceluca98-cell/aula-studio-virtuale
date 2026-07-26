@@ -19,7 +19,7 @@ Legenda:
 
 # Stato generale
 
-Ultimo aggiornamento: 2026-07-22
+Ultimo aggiornamento: 2026-07-26
 
 Fonte riferimento:
 
@@ -29,6 +29,23 @@ Documentazione:
 
 - `CHANGELOG_DEMO.md`
 - `DEMO_ARCHITECTURE.md`
+
+---
+
+# Eve Animation Library 1.2.2
+
+Stato: 🟡 `IN_ATTESA_VERIFICA_UTENTE`
+
+- branch di lavoro: `eve-canonical-integration-v2`;
+- base: `demo-canonica` al commit `acb9029b682885a419771e864c051752e325bac2`;
+- demo finale: `1.4.0-alpha.1-eve.1`;
+- 64/64 asset ufficiali incorporati e verificati;
+- hook applicativi e inspector verificati sul browser locale;
+- nessuna modifica a `main`, `demo-canonica` o `eve-ai-studio`;
+- nessuna pull request e nessun merge;
+- verifica manuale con doppio clic ancora richiesta.
+
+Questa voce riguarda esclusivamente l'integrazione nella demo autonoma; non dichiara il trasferimento nell'app Next.js.
 
 ---
 

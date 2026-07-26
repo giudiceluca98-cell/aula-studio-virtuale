@@ -1,0 +1,23 @@
+{
+  "libraryVersion": "1.2.2",
+  "demoBaseVersion": "1.4.0-alpha.1",
+  "demoFinalVersion": "1.4.0-alpha.1-eve.1",
+  "baseSha256": "85ad819914cf85740b0013f0d3147adaa2ff7b233f99935ba67f4fb77fefe95c",
+  "finalSha256": "07ab2db5da4015bb085f3f4b16e31a6c85f4356ca688945b47b0c8029a145ced",
+  "baseBytes": 763281,
+  "finalBytes": 18132481,
+  "baseLines": 20871,
+  "finalLines": 21611,
+  "totalAssets": 64,
+  "uniqueIds": 64,
+  "groups": {
+    "P0": 12,
+    "P1": 21,
+    "P2": 20,
+    "compact": 8,
+    "hero": 3
+  },
+  "embeddedWebpBytes": 12974964,
+  "staticAvatarBytes": 10076,
+  "checkpoint": "C:/Users/mazzo/Documents/Codex/2026-07-26/files-mentioned-by-the-user-eve/work/aula-studio-virtuale-eve/reference/checkpoints/eve/demo-aula-studio-virtuale-1.4.0-alpha.1-eve.1.html"
+}
