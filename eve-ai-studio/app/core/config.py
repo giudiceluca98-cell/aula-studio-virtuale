@@ -40,3 +40,8 @@ class EveSettings(BaseSettings):
     material_chunk_chars: int = 1_200
     material_chunk_overlap_chars: int = 150
     material_max_versions: int = 50
+
+    retrieval_max_query_chars: int = 500
+    retrieval_max_results: int = 10
+    retrieval_max_excerpt_chars: int = 600
+    retrieval_min_score: float = 1.0
