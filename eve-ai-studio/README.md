@@ -1,12 +1,12 @@
 # Eve AI Studio — Fondazione modulare
 
-Questa directory contiene il servizio isolato di Eve AI Studio, sviluppato sul branch `eve-ai-studio` senza modificare `main`, `demo-canonica`, l'HTML canonico o l'app pubblica.
+Questa directory contiene il servizio isolato di Eve AI Studio, sviluppato sul branch `eve-ai-studio` senza modificare `main`, `demo-canonica`, l’HTML canonico o l’app pubblica.
 
 ## Stato
 
-Versione del servizio: `0.8.0`
+Versione del servizio: `0.9.0`
 
-Checkpoint implementati:
+Checkpoint:
 
 - `0.1` — FastAPI, provider mock, contesto, permessi, limiti e audit;
 - `0.2` — moduli separati e importatore delle 36 sezioni e 1.197 schede;
@@ -15,7 +15,10 @@ Checkpoint implementati:
 - `0.5` — scenari persistenti, risultati per criterio e gate reale dei prompt;
 - `0.6` — runner deterministico, grader automatici e artefatti redatti;
 - `0.7` — registro provider e modelli, profili, timeout, retry, fallback, token, costi e telemetria;
-- `0.8` — catalogo materiali, importazione controllata, estrazione testuale, versioni e preparazione RAG senza embedding esterni.
+- `0.8` — catalogo materiali, importazione controllata, estrazione testuale, versioni e chunk senza embedding;
+- `0.9` — retrieval lessicale locale, ranking deterministico, integrità e citazioni verificabili.
+
+Il Checkpoint `0.8` è chiuso e approvato. Il Checkpoint `0.9` è implementato e verificato tecnicamente; l’approvazione conclusiva dell’utente deve ancora essere registrata.
 
 ## Struttura
 
@@ -29,11 +32,12 @@ eve-ai-studio/
 │   ├── prompts/              # prompt, modalità, workflow, storage e API
 │   ├── evaluations/          # scenari, grader, runner, risultati, artefatti e gate
 │   ├── materials/            # catalogo, importazioni, estrazione, chunk e versioni
-│   ├── main.py               # API FastAPI
+│   ├── retrieval/            # ranking locale, integrità, citazioni e API
+│   ├── main.py               # applicazione FastAPI
 │   └── models.py             # contratti chat condivisi
+├── checkpoints/
 ├── data/
 ├── tests/
-├── checkpoints/
 ├── .env.example
 ├── PHASE_STATUS.md
 └── pyproject.toml
@@ -49,11 +53,11 @@ data/eve-provider-telemetry.sqlite3
 data/eve-materials.sqlite3
 ```
 
-I database SQLite, i file WAL e SHM sono esclusi dal repository.
+I database SQLite e i file WAL/SHM sono esclusi dal repository.
 
-## Catalogo requisiti
+## Requisiti e piano
 
-Il catalogo conserva:
+Il registro conserva:
 
 - 36 sezioni e 1.197 schede;
 - importazioni riuscite, invariate e fallite;
@@ -63,22 +67,9 @@ Il catalogo conserva:
 - rollback non distruttivo;
 - checksum della sorgente e del catalogo.
 
-## Configurazioni prompt
+## Prompt e valutazioni
 
-Ogni configurazione conserva:
-
-- chiave stabile;
-- numero versione;
-- prompt di sistema;
-- modalità didattica;
-- parametri tipizzati;
-- checksum;
-- versione genitore;
-- stato;
-- cronologia;
-- versione pubblicata attiva.
-
-Workflow:
+I prompt usano revisioni immutabili e il workflow:
 
 ```text
 draft → in_review → publishable → published → archived
@@ -86,127 +77,44 @@ draft → in_review → publishable → published → archived
 
 Il passaggio a `publishable` dipende dal gate delle valutazioni persistenti.
 
-## Valutazioni e runner
-
 Schema valutazioni: `2`
 
 Tabelle:
 
-- `evaluation_scenario_versions`;
-- `evaluation_runs`;
-- `evaluation_run_scenarios`;
-- `evaluation_results`;
-- `evaluation_run_artifacts`.
+```text
+evaluation_scenario_versions
+evaluation_runs
+evaluation_run_scenarios
+evaluation_results
+evaluation_run_artifacts
+```
 
-Sono presenti otto scenari iniziali:
+Il runner automatico usa richieste tipizzate, provider mock deterministico, grader, risultati per criterio e artefatti redatti. Non salva il testo completo delle richieste o delle risposte.
 
-1. contesto didattico corretto;
-2. fonti verificabili;
-3. isolamento tra aule;
-4. permessi delle azioni;
-5. gestione dell'incertezza;
-6. qualità didattica;
-7. coerenza della lingua;
-8. budget di latenza.
-
-Il runner automatico:
-
-1. legge lo scenario versionato;
-2. costruisce una `ChatRequest` tipizzata;
-3. esegue il provider tramite il profilo `evaluation-safe`;
-4. applica i grader;
-5. salva risultati per criterio;
-6. conserva artefatti redatti;
-7. completa il run;
-8. ricalcola il gate.
-
-Non vengono salvati testo completo della richiesta, testo selezionato, risposta completa o corpo completo delle eccezioni.
-
-## Provider e modelli
+## Provider
 
 Provider registrati:
 
 - `mock` — attivo, deterministico, senza rete e senza costo;
-- `external-template` — disattivato e privo di credenziali.
+- `external-template` — disattivato e senza credenziali.
 
-Modelli registrati:
+Profili principali:
 
-- `eve-foundation-mock-v2` — primario;
-- `eve-foundation-mock-fallback-v1` — fallback;
-- `external-model-placeholder` — disattivato.
+- `chat-development`;
+- `evaluation-safe`;
+- `external-review`, disattivato.
 
-Configurazione di sicurezza:
+Configurazione obbligatoria corrente:
 
 ```text
 EVE_EXTERNAL_PROVIDERS_ENABLED=false
 ```
 
-Il solo cambio di questa variabile non abilita il segnaposto esterno: provider, modello e factory devono essere implementati, registrati e abilitati esplicitamente.
+## Materiali — Checkpoint 0.8
 
-## Profili di esecuzione
+Il catalogo è isolato per `room_id` e conserva materiali, versioni, chunk e cronologia redatta.
 
-### chat-development
-
-- scopo: chat;
-- provider: mock v2;
-- timeout: 2.000 ms;
-- massimo 2 tentativi;
-- provider esterni vietati;
-- massimo 12.000 token per esecuzione;
-- costo massimo: 0 USD.
-
-### evaluation-safe
-
-- scopo: valutazione;
-- primario: mock v2;
-- fallback: mock fallback v1;
-- timeout: 1.500 ms;
-- massimo 2 tentativi per target;
-- provider esterni vietati;
-- massimo 16.000 token per esecuzione;
-- costo massimo: 0 USD.
-
-### external-review
-
-- disattivato;
-- provider esterno richiesto;
-- non utilizzabile finché non viene implementato e approvato.
-
-## Catalogo materiali — Checkpoint 0.8
-
-Il catalogo dei materiali è isolato per `room_id` e usa SQLite schema `1`.
-
-Tabelle:
-
-```text
-material_schema_metadata
-materials
-material_versions
-material_chunks
-material_import_events
-```
-
-Ogni importazione controllata conserva:
-
-- aula;
-- identificatore stabile del materiale;
-- versione immutabile;
-- titolo e nome file;
-- media type normalizzato;
-- tipo di sorgente;
-- metadati JSON limitati;
-- byte originali nel database locale;
-- dimensione;
-- checksum SHA-256;
-- stato `processing`, `ready` o `failed`;
-- testo estratto quando disponibile;
-- numero di caratteri;
-- numero di chunk;
-- codice e classe dell'eventuale errore.
-
-Il contenuto originale, il testo estratto e il corpo delle eccezioni non vengono restituiti nella cronologia delle importazioni.
-
-### Formati supportati nel 0.8
+Formati supportati:
 
 ```text
 text/plain
@@ -217,98 +125,77 @@ application/xhtml+xml
 application/json
 ```
 
-Regole:
+Regole principali:
 
-- testo UTF-8;
-- BOM UTF-8 accettato;
-- HTML convertito in testo senza `script`, `style`, `noscript` e `svg`;
-- JSON validato e serializzato in modo deterministico;
-- PDF, Office, immagini, audio e video non sono ancora estratti;
-- nessun OCR;
-- nessun parser documentale esterno;
+- UTF-8 obbligatorio;
+- SHA-256 sui byte originali;
+- deduplicazione nella stessa aula;
+- versioni immutabili;
+- versione corrente aggiornata solo dopo successo;
+- HTML senza script, stili, noscript e SVG;
+- JSON validato e serializzato deterministicamente;
+- chunk con indice, offset e SHA-256;
+- `embedding_status=not_requested`;
 - nessuna rete.
 
-### Checksum e deduplicazione
-
-Il checksum è calcolato sui byte originali con SHA-256.
-
-La deduplicazione è applicata alle versioni `ready` all'interno della stessa aula:
-
-- stesso checksum e stessa aula → evento `duplicate`, nessuna nuova versione;
-- stesso checksum in aule diverse → materiali distinti;
-- una versione fallita non blocca un nuovo tentativo.
-
-### Versioni
-
-- ogni revisione crea una riga immutabile;
-- il numero versione cresce per materiale;
-- la versione corrente cambia soltanto dopo un'elaborazione riuscita;
-- un errore in una nuova versione non sostituisce la precedente versione pronta;
-- limite predefinito: 50 versioni per materiale.
-
-### Preparazione RAG
-
-Il checkpoint prepara segmenti testuali deterministici:
-
-- dimensione predefinita: 1.200 caratteri;
-- sovrapposizione predefinita: 150 caratteri;
-- preferenza per confini di paragrafo, riga e frase;
-- indice progressivo;
-- offset iniziale e finale;
-- SHA-256 del testo del chunk;
-- `embedding_status=not_requested`.
-
-Stato della pipeline:
+Stato pipeline:
 
 ```text
 text_extracted_and_chunked_no_embeddings
 ```
 
-Gli embedding sono esplicitamente disattivati:
+## Retrieval — Checkpoint 0.9
+
+Il retrieval usa esclusivamente:
+
+- l’aula richiesta;
+- i materiali della stessa aula;
+- la versione corrente con stato `ready`;
+- chunk con SHA-256 valido.
+
+Algoritmo:
 
 ```text
-embeddings_enabled=false
-embedding_provider=null
+eve-lexical-v1
 ```
 
-Non esistono ancora ricerca semantica, indice vettoriale o generazione RAG collegata alla chat.
+Segnali del ranking:
 
-## Limiti predefiniti dei materiali
+- copertura dei termini;
+- frequenza limitata;
+- corrispondenze nel titolo e nel nome file;
+- frase esatta;
+- ordinamento stabile.
+
+Ogni risultato contiene:
+
+- score;
+- estratto;
+- termini corrispondenti;
+- material_id e version_id;
+- numero versione;
+- chunk_id e chunk_index;
+- offset iniziale e finale;
+- filename e media type;
+- SHA-256 del chunk;
+- locator verificabile;
+- eventuali flag di sicurezza.
+
+Formato locator:
 
 ```text
-EVE_MATERIAL_MAX_BYTES=2000000
-EVE_MATERIAL_MAX_TEXT_CHARS=2000000
-EVE_MATERIAL_MAX_METADATA_CHARS=16000
-EVE_MATERIAL_CHUNK_CHARS=1200
-EVE_MATERIAL_CHUNK_OVERLAP_CHARS=150
-EVE_MATERIAL_MAX_VERSIONS=50
+material:{material_id}:v{version_number}:chunk:{chunk_index}:{start_char}-{end_char}
 ```
 
-Database:
+I documenti sono trattati come dati non fidati. Frasi che tentano di ignorare istruzioni, richiamare system prompt, eseguire script o chiamare strumenti vengono segnalate ma non eseguite.
+
+Stato retrieval:
 
 ```text
-EVE_MATERIALS_DB_PATH=data/eve-materials.sqlite3
+lexical_ranked_citations_no_embeddings
 ```
 
-## Errori redatti
-
-Il catalogo usa codici stabili, tra cui:
-
-- `invalid_payload`;
-- `material_too_large`;
-- `extracted_text_too_large`;
-- `unsupported_media_type`;
-- `text_decoding_failed`;
-- `material_not_found`;
-- `material_version_not_found`;
-- `material_room_mismatch`;
-- `material_version_limit`;
-- `material_processing_failed`;
-- `duplicate_checksum`.
-
-Le API non espongono il contenuto del documento, il percorso interno o il corpo completo dell'eccezione. Un accesso da un'aula diversa restituisce `404 Materiale non trovato`.
-
-## API
+## API principali
 
 ```http
 GET  /health
@@ -339,14 +226,10 @@ GET  /v1/evaluations/status
 GET  /v1/evaluations/gate/{prompt_version_id}
 GET  /v1/evaluations/scenarios
 POST /v1/evaluations/scenarios
-GET  /v1/evaluations/scenarios/{scenario_version_id}
-POST /v1/evaluations/scenarios/{scenario_version_id}/revisions
 GET  /v1/evaluations/runs
 POST /v1/evaluations/runs
-GET  /v1/evaluations/runs/{run_id}
-POST /v1/evaluations/runs/{run_id}/complete
-GET  /v1/evaluations/runner/status
 POST /v1/evaluations/runs/execute
+GET  /v1/evaluations/runs/{run_id}
 GET  /v1/evaluations/runs/{run_id}/artifacts
 
 GET  /v1/providers/status
@@ -363,99 +246,98 @@ GET  /v1/materials/{material_id}
 GET  /v1/materials/{material_id}/versions
 GET  /v1/materials/{material_id}/versions/{version_number}
 GET  /v1/materials/{material_id}/versions/{version_number}/chunks
+
+GET  /v1/retrieval/status
+POST /v1/retrieval/search
 ```
 
-## Anteprima ufficiale
-
-Percorso:
+## Configurazione retrieval
 
 ```text
-reference/eve-ai-studio-preview/index.html
+EVE_RETRIEVAL_MAX_QUERY_CHARS=500
+EVE_RETRIEVAL_MAX_RESULTS=10
+EVE_RETRIEVAL_MAX_EXCERPT_CHARS=600
+EVE_RETRIEVAL_MIN_SCORE=1
 ```
 
-La vista `Materiali e RAG` mostra:
+## Test
 
-- catalogo per aula;
-- importazione valida;
-- duplicato checksum;
-- nuova versione;
-- formato non supportato;
-- limite superato;
-- pipeline RAG preparatoria;
-- chunk con offset e hash;
-- cronologia redatta;
-- embedding disattivati.
+Risultati verificati nel banco locale ricostruito dal branch:
 
-La simulazione richiama gli stati della Eve Animation Library 1.2.2 senza sostituire la galleria da 64 asset.
+```text
+Checkpoint 0.8 specifico: 20 passed
+Checkpoint 0.1–0.8 cumulativo: 125 passed
+Checkpoint 0.9 specifico: 14 passed
+Checkpoint 0.1–0.9 cumulativo: 139 passed
+```
+
+Anteprima controllata in Chromium:
+
+```text
+Checkpoint 0.8: 5 scenari materiali
+Checkpoint 0.9: 4 scenari retrieval
+Errori JavaScript: 0
+Overflow orizzontale: assente
+```
+
+Il workflow `.github/workflows/eve-ai-studio-checks.yml` esegue la suite cumulativa, i controlli sintattici e gli scenari browser e registra un rapporto nel branch.
 
 ## Avvio locale
 
 ```bash
 cd eve-ai-studio
-python -m venv .venv
+python -m pip install -e ".[dev]"
+uvicorn app.main:app --reload
 ```
 
-Windows PowerShell:
+## Anteprima ufficiale
 
-```powershell
-.venv\Scripts\Activate.ps1
-pip install -e ".[dev]"
-Copy-Item .env.example .env
-uvicorn app.main:app --reload --port 8100
-```
-
-## Test del Checkpoint 0.8
-
-Eseguiti nel banco di prova locale sul nuovo modulo materiali:
+Percorso unico:
 
 ```text
-20 passed in 0.95s
+reference/eve-ai-studio-preview/index.html
 ```
 
-Coprono:
+Moduli recenti:
 
-- schema e stato vuoto;
-- importazione plaintext;
-- checksum;
-- chunk e hash;
-- deduplicazione per aula;
-- versioni e versione corrente;
-- fallimento senza sostituzione della versione pronta;
-- isolamento tra aule;
-- base64 non valido;
-- limiti di byte e metadati;
-- limite versioni;
-- estrazione HTML;
-- JSON deterministico;
-- UTF-8;
-- chunking deterministico e sovrapposto;
-- ricerca, filtro e paginazione;
-- persistenza dopo riapertura;
-- API e redazione degli errori;
-- cronologia importazioni redatta;
-- precedenza dell'isolamento dell'aula sul limite versioni.
+```text
+materials-workflow.js
+retrieval-workflow.js
+```
 
-La suite cumulativa completa dei checkpoint precedenti non è stata rilanciata. GitHub Actions non è stato eseguito. Il JavaScript della nuova vista è stato verificato sintatticamente con Node, ma la verifica visuale completa nel browser resta da eseguire.
+Non creare anteprime ufficiali parallele senza una decisione esplicita.
 
-## Limiti attuali
+## Escluso dallo stato corrente
 
-- nessun provider AI esterno;
-- nessuna chiave API;
-- tokenizer ufficiale assente;
-- nessun circuit breaker o coda distribuita;
-- nessun PDF parser;
-- nessun parser Office;
-- nessun OCR;
-- nessuna trascrizione audio o video;
-- nessun embedding;
-- nessun indice vettoriale;
-- nessuna ricerca semantica;
-- nessuna generazione RAG collegata alla chat;
-- nessun Supabase;
-- nessuna autenticazione amministrativa;
-- nessuna memoria didattica persistente;
-- nessuna scrittura nell'app ufficiale.
+- provider AI reale;
+- chiavi API;
+- embedding;
+- indice vettoriale;
+- retrieval semantico;
+- reranker AI;
+- RAG collegato alla chat;
+- PDF e Office;
+- OCR e trascrizione;
+- Supabase;
+- autenticazione amministrativa di produzione;
+- object storage;
+- integrazione con l’app ufficiale.
 
-## Regola di sicurezza
+## Protezioni
 
-Il modello può produrre una risposta. Identità, contesto, permessi, profili, budget, retry, fallback, transizioni, persistenza, valutazioni, materiali, checksum, deduplicazione, limiti, redazione, memoria e azioni devono essere verificati da codice server indipendente dal modello.
+Non modificati:
+
+- `main`;
+- `demo-canonica`;
+- `reference/demo-aula-studio-virtuale-canonica.html`;
+- app ufficiale;
+- `eve-canonical-integration-v2`;
+- pacchetto master Eve Animation Library 1.2.2.
+
+Non eseguiti:
+
+- pull request;
+- merge;
+- provider esterni;
+- embedding esterni;
+- collegamenti alla produzione.
