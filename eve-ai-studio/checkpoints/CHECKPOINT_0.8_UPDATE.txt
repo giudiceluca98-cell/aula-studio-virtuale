@@ -1,0 +1,874 @@
+EVE AI STUDIO
+FILE DI AGGIORNAMENTO CHECKPOINT 0.8
+
+Data: 26 luglio 2026
+Repository: giudiceluca98-cell/aula-studio-virtuale
+Branch di lavoro: eve-ai-studio
+Base protetta: demo-canonica
+Commit iniziale del checkpoint: 4df3d995569f0174fa56c8b0cb9be7631f88954f
+
+Titolo:
+0.8 — Catalogo materiali, importazione documentale controllata,
+estrazione testuale iniziale, versioni e preparazione RAG senza embedding
+esterni
+
+======================================================================
+1. OBIETTIVO
+======================================================================
+
+Preparare Eve AI Studio a ricevere e organizzare materiali didattici senza
+collegare ancora provider di embedding, database vettoriali o servizi esterni.
+
+Il checkpoint deve impedire che:
+
+- un documento troppo grande venga elaborato senza limite;
+- un contenuto base64 non valido venga accettato;
+- lo stesso materiale venga duplicato nella stessa aula;
+- i materiali di un'aula siano visibili da un'altra;
+- una versione fallita sostituisca una versione pronta;
+- un formato non supportato venga trattato come testo;
+- codice script o stile HTML entri nel testo estratto;
+- errori e contenuti completi finiscano nella cronologia;
+- chunk e checksum cambino in modo non deterministico;
+- un embedding esterno venga attivato accidentalmente.
+
+======================================================================
+2. RISULTATO
+======================================================================
+
+Versione del servizio:
+
+0.8.0
+
+Implementati:
+
+- package materiali separato;
+- catalogo persistente SQLite;
+- importazione base64 controllata;
+- metadati tipizzati e limitati;
+- checksum SHA-256;
+- deduplicazione per aula;
+- stati di elaborazione;
+- versioni immutabili;
+- versione corrente aggiornata solo dopo successo;
+- estrazione testuale locale iniziale;
+- normalizzazione UTF-8;
+- estrazione HTML sicura;
+- serializzazione JSON deterministica;
+- chunk RAG deterministici;
+- offset dei chunk;
+- SHA-256 dei chunk;
+- errori redatti;
+- isolamento tra aule;
+- limiti configurabili;
+- API dedicate;
+- stessa anteprima ufficiale aggiornata;
+- collegamento dimostrativo con Eve Animation Library 1.2.2;
+- nessun embedding esterno;
+- nessuna chiamata di rete.
+
+======================================================================
+3. MODULO MATERIALI
+======================================================================
+
+Percorso:
+
+eve-ai-studio/app/materials/
+
+File:
+
+- __init__.py;
+- errors.py;
+- models.py;
+- extraction.py;
+- chunking.py;
+- storage.py;
+- service.py;
+- router.py.
+
+Responsabilità:
+
+errors.py
+
+- eccezioni controllate;
+- codici pubblici stabili;
+- nessun contenuto privato nel messaggio predefinito.
+
+models.py
+
+- richieste e risposte Pydantic;
+- stati;
+- sorgenti;
+- materiali;
+- versioni;
+- chunk;
+- cronologia;
+- stato del catalogo.
+
+extraction.py
+
+- normalizzazione media type;
+- decodifica UTF-8;
+- estrazione TXT, Markdown, CSV, HTML, XHTML e JSON;
+- esclusione di script, style, noscript e SVG;
+- normalizzazione del testo.
+
+chunking.py
+
+- segmentazione deterministica;
+- confini preferenziali;
+- sovrapposizione;
+- offset;
+- SHA-256 del testo.
+
+storage.py
+
+- schema SQLite;
+- transazioni;
+- materiali;
+- versioni;
+- chunk;
+- importazioni;
+- isolamento per aula;
+- stato corrente.
+
+service.py
+
+- limiti;
+- base64;
+- checksum;
+- deduplicazione;
+- versioni;
+- estrazione;
+- chunk;
+- gestione e redazione degli errori.
+
+router.py
+
+- API FastAPI;
+- codici HTTP;
+- 404 uniforme per materiale assente o aula errata.
+
+======================================================================
+4. DATABASE
+======================================================================
+
+Database:
+
+data/eve-materials.sqlite3
+
+Variabile:
+
+EVE_MATERIALS_DB_PATH
+
+Schema:
+
+1
+
+Tabelle:
+
+4.1 — material_schema_metadata
+
+Contiene:
+
+- versione schema.
+
+4.2 — materials
+
+Contiene:
+
+- material_id;
+- room_id;
+- titolo;
+- etichetta sorgente;
+- versione corrente;
+- data creazione;
+- data aggiornamento.
+
+4.3 — material_versions
+
+Contiene:
+
+- version_id;
+- material_id;
+- room_id;
+- version_number;
+- nome file;
+- media type;
+- source type;
+- checksum SHA-256;
+- dimensione;
+- stato;
+- metadati JSON;
+- contenuto originale BLOB;
+- testo estratto;
+- caratteri estratti;
+- numero chunk;
+- codice errore;
+- classe errore;
+- date.
+
+4.4 — material_chunks
+
+Contiene:
+
+- chunk_id;
+- version_id;
+- chunk_index;
+- start_char;
+- end_char;
+- testo;
+- SHA-256 del testo;
+- embedding_status.
+
+4.5 — material_import_events
+
+Contiene:
+
+- import_id;
+- aula;
+- materiale e versione quando disponibili;
+- stato;
+- checksum;
+- dimensione;
+- codice errore;
+- classe errore;
+- date.
+
+La cronologia non espone il contenuto originale, il testo estratto, il nome
+file fallito o il corpo dell'eccezione.
+
+======================================================================
+5. STATI DI ELABORAZIONE
+======================================================================
+
+Stati versioni:
+
+- processing;
+- ready;
+- failed.
+
+Stati aggiuntivi della cronologia:
+
+- rejected;
+- duplicate.
+
+Flusso valido:
+
+richiesta
+    ↓
+validazione metadati
+    ↓
+decodifica base64
+    ↓
+limite dimensione
+    ↓
+SHA-256
+    ↓
+deduplicazione per aula
+    ↓
+creazione materiale/versione processing
+    ↓
+estrazione testuale
+    ↓
+limite testo
+    ↓
+chunk
+    ↓
+versione ready
+    ↓
+aggiornamento versione corrente
+
+Flusso errore dopo creazione versione:
+
+versione processing
+    ↓
+errore controllato
+    ↓
+versione failed
+    ↓
+codice e classe redatti
+    ↓
+versione corrente precedente invariata
+
+======================================================================
+6. FORMATI DOCUMENTALI
+======================================================================
+
+Supportati:
+
+- text/plain;
+- text/markdown;
+- text/csv;
+- text/html;
+- application/xhtml+xml;
+- application/json.
+
+Estensioni riconosciute quando il media type è generico:
+
+- .txt;
+- .md;
+- .markdown;
+- .csv;
+- .html;
+- .htm;
+- .xhtml;
+- .json.
+
+Non supportati nel Checkpoint 0.8:
+
+- PDF;
+- DOC/DOCX;
+- ODT;
+- PPT/PPTX;
+- XLS/XLSX;
+- immagini;
+- audio;
+- video;
+- OCR;
+- trascrizione.
+
+Il formato non supportato produce:
+
+- HTTP 415;
+- stato failed quando la versione è stata aperta;
+- error_code=unsupported_media_type;
+- error_class=UnsupportedMediaTypeError.
+
+======================================================================
+7. ESTRAZIONE TESTUALE
+======================================================================
+
+Testo semplice, Markdown e CSV:
+
+- decodifica UTF-8 o UTF-8 con BOM;
+- normalizzazione CRLF/CR;
+- rimozione spazi finali di riga;
+- riduzione delle righe vuote eccessive.
+
+HTML e XHTML:
+
+- parser standard locale;
+- entità HTML convertite;
+- interruzioni semantiche principali;
+- script esclusi;
+- style esclusi;
+- noscript esclusi;
+- SVG esclusi.
+
+JSON:
+
+- parsing obbligatorio;
+- rifiuto JSON non valido;
+- chiavi ordinate;
+- indentazione deterministica;
+- Unicode conservato.
+
+Testo non UTF-8:
+
+- rifiutato;
+- error_code=text_decoding_failed;
+- nessun fallback permissivo.
+
+======================================================================
+8. CHECKSUM E DEDUPLICAZIONE
+======================================================================
+
+Algoritmo:
+
+SHA-256
+
+Input:
+
+byte originali del documento
+
+Perimetro:
+
+room_id
+
+Regole:
+
+- stesso checksum e stessa aula su versione ready: duplicato;
+- nessuna nuova versione per il duplicato;
+- evento duplicate registrato;
+- riferimento al materiale/versione già esistente;
+- stesso checksum in altra aula: nuovo materiale separato;
+- versioni failed escluse dalla deduplicazione;
+- checksum del documento distinto dagli hash dei chunk.
+
+======================================================================
+9. VERSIONI
+======================================================================
+
+Ogni materiale dispone di:
+
+- material_id stabile;
+- version_number crescente;
+- current_version_id.
+
+Regole:
+
+- una revisione genera una nuova versione;
+- le versioni precedenti non sono mutate;
+- la versione corrente cambia dopo complete_import;
+- una revisione fallita non sostituisce la versione pronta;
+- una prima versione fallita resta visibile come stato corrente fallito;
+- limite predefinito: 50 versioni.
+
+======================================================================
+10. LIMITI
+======================================================================
+
+Configurazione predefinita:
+
+EVE_MATERIAL_MAX_BYTES=2000000
+EVE_MATERIAL_MAX_TEXT_CHARS=2000000
+EVE_MATERIAL_MAX_METADATA_CHARS=16000
+EVE_MATERIAL_CHUNK_CHARS=1200
+EVE_MATERIAL_CHUNK_OVERLAP_CHARS=150
+EVE_MATERIAL_MAX_VERSIONS=50
+
+Controlli:
+
+- limite base64 stimato prima della decodifica;
+- limite byte dopo la decodifica;
+- contenuto vuoto rifiutato;
+- limite testo estratto;
+- metadati serializzabili;
+- metadati senza NaN o valori non JSON;
+- limite metadati;
+- overlap inferiore alla dimensione chunk;
+- limite versioni.
+
+======================================================================
+11. CHUNK RAG
+======================================================================
+
+Obiettivo:
+
+preparare segmenti verificabili senza eseguire ancora embedding o retrieval.
+
+Strategia:
+
+- dimensione massima configurabile;
+- overlap configurabile;
+- ricerca del miglior confine vicino alla fine;
+- priorità a doppia riga, riga, frase, punto e virgola, virgola e spazio;
+- avanzamento garantito;
+- indice progressivo;
+- offset riferiti al testo estratto;
+- trim controllato;
+- SHA-256 del testo finale del chunk.
+
+Campi:
+
+- chunk_id;
+- version_id;
+- chunk_index;
+- start_char;
+- end_char;
+- text;
+- text_sha256;
+- embedding_status.
+
+Stato embedding:
+
+not_requested
+
+Stato pipeline:
+
+text_extracted_and_chunked_no_embeddings
+
+======================================================================
+12. EMBEDDING E RETRIEVAL
+======================================================================
+
+Non implementati:
+
+- provider embedding;
+- modello embedding;
+- chiave API;
+- chiamata esterna;
+- vettori;
+- indice vettoriale;
+- similarità;
+- ranking semantico;
+- retrieval;
+- costruzione contesto RAG;
+- citazioni RAG nella risposta;
+- generazione collegata ai chunk.
+
+Stato API:
+
+embeddings_enabled=false
+embedding_provider=null
+
+======================================================================
+13. ERRORI REDATTI
+======================================================================
+
+Codici:
+
+- invalid_payload;
+- material_too_large;
+- extracted_text_too_large;
+- unsupported_media_type;
+- text_decoding_failed;
+- material_not_found;
+- material_version_not_found;
+- material_room_mismatch;
+- material_version_limit;
+- material_processing_failed;
+- duplicate_checksum.
+
+Non vengono esposti nella cronologia:
+
+- contenuto del documento;
+- testo estratto;
+- corpo completo dell'eccezione;
+- stack trace;
+- dettagli interni non necessari.
+
+L'accesso con aula errata e il materiale inesistente restituiscono entrambi:
+
+HTTP 404
+Materiale non trovato
+
+Questo evita di confermare l'esistenza di un materiale in un'altra aula.
+
+======================================================================
+14. API AGGIUNTE
+======================================================================
+
+GET /v1/materials/status
+
+Restituisce:
+
+- schema;
+- conteggi;
+- formati supportati;
+- limiti;
+- stato embedding;
+- fase RAG.
+
+GET /v1/materials/imports
+
+Parametri:
+
+- room_id;
+- limit.
+
+Restituisce cronologia redatta per aula.
+
+POST /v1/materials/import
+
+Riceve:
+
+- room_id;
+- titolo;
+- filename;
+- media_type;
+- content_base64;
+- source_type;
+- material_id opzionale;
+- source_label;
+- metadata.
+
+GET /v1/materials
+
+Parametri:
+
+- room_id;
+- status;
+- q;
+- offset;
+- limit.
+
+GET /v1/materials/{material_id}
+
+Richiede room_id.
+
+GET /v1/materials/{material_id}/versions
+
+Richiede room_id.
+
+GET /v1/materials/{material_id}/versions/{version_number}
+
+Richiede room_id.
+
+GET /v1/materials/{material_id}/versions/{version_number}/chunks
+
+Richiede room_id.
+
+======================================================================
+15. CONFIGURAZIONE
+======================================================================
+
+Nuove variabili:
+
+EVE_MATERIALS_DB_PATH=data/eve-materials.sqlite3
+EVE_MATERIAL_MAX_BYTES=2000000
+EVE_MATERIAL_MAX_TEXT_CHARS=2000000
+EVE_MATERIAL_MAX_METADATA_CHARS=16000
+EVE_MATERIAL_CHUNK_CHARS=1200
+EVE_MATERIAL_CHUNK_OVERLAP_CHARS=150
+EVE_MATERIAL_MAX_VERSIONS=50
+
+Variabili dei checkpoint precedenti conservate.
+
+======================================================================
+16. TEST
+======================================================================
+
+Ultima esecuzione nel banco di prova locale:
+
+20 passed in 0.95s
+
+Sono test specifici del Checkpoint 0.8.
+
+La suite cumulativa completa dei checkpoint precedenti non è stata rilanciata.
+I conteggi non devono essere sommati automaticamente.
+
+Verificati:
+
+1. schema e stato vuoto;
+2. importazione plaintext, checksum e chunk;
+3. deduplicazione per aula;
+4. nuova versione e versione corrente;
+5. versione fallita senza sostituzione della versione pronta;
+6. prima versione fallita visibile;
+7. isolamento tra aule;
+8. base64 non valido;
+9. limite dimensione;
+10. limite metadati;
+11. limite versioni;
+12. HTML senza script e style;
+13. JSON deterministico;
+14. rifiuto non UTF-8;
+15. chunking deterministico e sovrapposto;
+16. ricerca, filtro e paginazione;
+17. persistenza dopo riapertura;
+18. API e redazione;
+19. cronologia per aula;
+20. precedenza controllo aula sul limite versioni.
+
+Verifiche sintattiche locali:
+
+- py_compile del package materiali;
+- node --check di materials-workflow.js.
+
+Non eseguiti:
+
+- GitHub Actions;
+- suite cumulativa completa;
+- test browser visuale completo dell'anteprima;
+- provider esterni;
+- embedding.
+
+======================================================================
+17. ANTEPRIMA
+======================================================================
+
+Percorso ufficiale invariato:
+
+reference/eve-ai-studio-preview/index.html
+
+Nuovo file:
+
+reference/eve-ai-studio-preview/materials-workflow.js
+
+Versione mostrata:
+
+Eve 0.8-preview
+
+Nuova vista:
+
+Materiali e RAG
+
+Elementi mostrati:
+
+- metriche catalogo;
+- sei formati testuali;
+- SQLite schema 1;
+- importazione controllata;
+- selezione aula;
+- titolo;
+- filename;
+- media type;
+- testo dimostrativo;
+- cinque fasi pipeline;
+- catalogo;
+- versioni;
+- checksum;
+- chunk;
+- offset;
+- hash chunk;
+- embedding not_requested;
+- cronologia redatta;
+- reset demo.
+
+Scenari:
+
+- importazione valida;
+- duplicato checksum;
+- nuova versione;
+- PDF non supportato;
+- dimensione superata.
+
+Stati Eve Animation Library 1.2.2 collegati:
+
+- eve-uploading;
+- eve-searching;
+- eve-reading;
+- eve-indexing;
+- eve-success;
+- eve-error-supportive;
+- eve-confirmation-needed;
+- eve-idle-soft.
+
+Le 64 animazioni e la galleria precedente restano caricate.
+
+======================================================================
+18. FILE CREATI
+======================================================================
+
+eve-ai-studio/app/materials/__init__.py
+eve-ai-studio/app/materials/chunking.py
+eve-ai-studio/app/materials/errors.py
+eve-ai-studio/app/materials/extraction.py
+eve-ai-studio/app/materials/models.py
+eve-ai-studio/app/materials/router.py
+eve-ai-studio/app/materials/service.py
+eve-ai-studio/app/materials/storage.py
+
+eve-ai-studio/tests/test_materials.py
+
+reference/eve-ai-studio-preview/materials-workflow.js
+
+eve-ai-studio/checkpoints/CHECKPOINT_0.8_UPDATE.txt
+
+======================================================================
+19. FILE MODIFICATI
+======================================================================
+
+eve-ai-studio/.env.example
+eve-ai-studio/PHASE_STATUS.md
+eve-ai-studio/README.md
+eve-ai-studio/app/core/config.py
+eve-ai-studio/app/main.py
+eve-ai-studio/pyproject.toml
+eve-ai-studio/tests/conftest.py
+eve-ai-studio/tests/test_foundation.py
+
+reference/eve-ai-studio-preview/index.html
+reference/eve-ai-studio-preview/OFFICIAL_PREVIEW_STATUS.txt
+
+======================================================================
+20. DIFFERENZA GITHUB PRIMA DEL RAPPORTO
+======================================================================
+
+Base:
+
+4df3d995569f0174fa56c8b0cb9be7631f88954f
+
+Stato:
+
+ahead
+
+Commit avanti:
+
+20
+
+Commit indietro:
+
+0
+
+File coinvolti:
+
+20
+
+Il commit del presente rapporto aumenta il conteggio finale.
+
+======================================================================
+21. PROTEZIONI
+======================================================================
+
+Non modificati:
+
+- main;
+- demo-canonica;
+- reference/demo-aula-studio-virtuale-canonica.html;
+- app ufficiale;
+- eve-canonical-integration-v2;
+- Supabase;
+- pacchetto master Eve Animation Library 1.2.2.
+
+Non eseguiti:
+
+- pull request;
+- merge;
+- chiamate AI;
+- provider esterni;
+- embedding esterni;
+- fetch documentali;
+- GitHub Actions.
+
+======================================================================
+22. LIMITI REALI
+======================================================================
+
+- importazione API base64, non multipart;
+- limite predefinito 2 MB;
+- solo formati testuali iniziali;
+- nessun PDF;
+- nessun Office;
+- nessun OCR;
+- nessuna trascrizione;
+- nessun antivirus o sandbox file;
+- nessun object storage;
+- byte originali conservati nel BLOB SQLite locale;
+- nessun embedding;
+- nessun indice vettoriale;
+- nessun retrieval;
+- nessun RAG collegato alla chat;
+- nessun provider AI reale;
+- nessun Supabase;
+- nessuna autenticazione amministrativa;
+- anteprima non ancora verificata completamente in browser dopo il 0.8;
+- suite cumulativa non ancora rilanciata.
+
+======================================================================
+23. STATO
+======================================================================
+
+Checkpoint 0.8 implementato sul branch eve-ai-studio.
+
+Stato di verifica:
+
+- backend specifico: verificato localmente;
+- test specifici: 20/20;
+- JavaScript nuova vista: sintassi verificata;
+- anteprima visuale: da verificare;
+- suite cumulativa: da rilanciare;
+- approvazione utente: non ancora richiesta.
+
+Il checkpoint non modifica la numerazione o lo stato dell'integrazione separata
+della Eve Animation Library 1.2.2 nella demo canonica.
+
+======================================================================
+24. PROSSIMO CHECKPOINT
+======================================================================
+
+Il perimetro del checkpoint successivo deve essere definito e approvato prima
+dell'implementazione.
+
+Il Checkpoint 0.8 rende disponibili testo estratto e chunk, ma non autorizza
+automaticamente:
+
+- embedding esterni;
+- database vettoriali;
+- provider reali;
+- retrieval semantico;
+- collegamento alla produzione.
+
+FINE FILE
