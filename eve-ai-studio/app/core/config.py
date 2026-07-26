@@ -24,6 +24,7 @@ class EveSettings(BaseSettings):
     prompts_db_path: str = "data/eve-prompts.sqlite3"
     evaluations_db_path: str = "data/eve-evaluations.sqlite3"
     provider_telemetry_db_path: str = "data/eve-provider-telemetry.sqlite3"
+    materials_db_path: str = "data/eve-materials.sqlite3"
 
     evaluation_publish_score: float = 85.0
     evaluation_evidence_max_chars: int = 500
@@ -32,3 +33,10 @@ class EveSettings(BaseSettings):
     external_providers_enabled: bool = False
     chat_execution_profile: str = "chat-development"
     evaluation_execution_profile: str = "evaluation-safe"
+
+    material_max_bytes: int = 2_000_000
+    material_max_text_chars: int = 2_000_000
+    material_max_metadata_chars: int = 16_000
+    material_chunk_chars: int = 1_200
+    material_chunk_overlap_chars: int = 150
+    material_max_versions: int = 50
