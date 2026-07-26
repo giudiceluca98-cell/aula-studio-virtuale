@@ -1,0 +1,181 @@
+name: Eve AI Studio checks
+
+on:
+  push:
+    branches:
+      - eve-ai-studio
+    paths:
+      - "eve-ai-studio/**"
+      - "reference/eve-ai-studio-preview/**"
+      - ".github/workflows/eve-ai-studio-checks.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: eve-ai-studio-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cumulative-tests:
+    name: Suite cumulativa Python
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: eve-ai-studio
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: eve-ai-studio/pyproject.toml
+
+      - name: Installa servizio e dipendenze di sviluppo
+        run: python -m pip install --upgrade pip && python -m pip install -e ".[dev]"
+
+      - name: Verifica sintattica completa
+        run: python -m compileall -q app tests
+
+      - name: Esegui suite cumulativa
+        run: pytest -q --junitxml=pytest-results.xml
+
+      - name: Pubblica risultati pytest
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eve-ai-studio-pytest-results
+          path: eve-ai-studio/pytest-results.xml
+          if-no-files-found: error
+          retention-days: 14
+
+  preview-browser:
+    name: Anteprima browser Checkpoint 0.8
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Verifica sintattica JavaScript
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' file; do
+            node --check "$file"
+          done < <(find reference/eve-ai-studio-preview -maxdepth 1 -type f -name '*.js' -print0)
+
+      - name: Installa browser di verifica
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+
+      - name: Avvia anteprima statica
+        run: |
+          python3 -m http.server 4173 --directory reference/eve-ai-studio-preview > /tmp/eve-preview-server.log 2>&1 &
+          echo $! > /tmp/eve-preview-server.pid
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:4173/index.html >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/eve-preview-server.log
+          exit 1
+
+      - name: Verifica scenari 0.8 nel browser
+        shell: bash
+        run: |
+          cat > /tmp/eve-preview-check.mjs <<'EOF'
+          import { chromium } from "playwright";
+          import assert from "node:assert/strict";
+          import fs from "node:fs";
+
+          const browser = await chromium.launch({ headless: true });
+          const page = await browser.newPage({ viewport: { width: 1440, height: 1200 } });
+          const browserErrors = [];
+          page.on("console", message => {
+            if (message.type() === "error") browserErrors.push(`console: ${message.text()}`);
+          });
+          page.on("pageerror", error => browserErrors.push(`pageerror: ${error.message}`));
+
+          try {
+            await page.goto("http://127.0.0.1:4173/index.html", { waitUntil: "networkidle" });
+            await page.waitForSelector('[data-view="rag-materials"]', { timeout: 15000 });
+            assert.equal(await page.getByText("Anteprima non caricata").count(), 0);
+
+            await page.locator('[data-view="rag-materials"]').click();
+            await page.waitForSelector("#rag-materials.active, #rag-materials", { state: "visible" });
+            assert.equal(await page.locator("#materialCount").textContent(), "3");
+            assert.equal(await page.locator("#materialVersionCount").textContent(), "4");
+            assert.equal(await page.locator("#materialChunkCount").textContent(), "18");
+            assert.equal(await page.locator("#materialRagBadge").textContent(), "Nessun embedding");
+
+            async function reset() {
+              await page.locator("#resetMaterialDemo").click();
+              await page.waitForTimeout(100);
+            }
+
+            await page.locator("#materialScenario").selectOption("valid");
+            await page.locator("#materialTitle").fill("Materiale verifica browser");
+            await page.locator("#materialFilename").fill("verifica-browser.md");
+            await page.locator("#materialText").fill("Testo univoco per la verifica browser del checkpoint 0.8.");
+            await page.locator("#runMaterialImport").click();
+            await page.waitForFunction(() => !document.getElementById("runMaterialImport").disabled);
+            assert.equal(await page.locator("#materialCount").textContent(), "4");
+            assert.match(await page.locator("#materialImportHistory").textContent(), /ready/);
+
+            await reset();
+            await page.locator("#materialScenario").selectOption("duplicate");
+            await page.locator("#runMaterialImport").click();
+            await page.waitForFunction(() => !document.getElementById("runMaterialImport").disabled);
+            assert.match(await page.locator("#materialImportHistory").textContent(), /duplicate_checksum/);
+
+            await reset();
+            await page.locator("#materialScenario").selectOption("version");
+            await page.locator("#materialText").fill("Revisione univoca del materiale per il controllo versione.");
+            await page.locator("#runMaterialImport").click();
+            await page.waitForFunction(() => !document.getElementById("runMaterialImport").disabled);
+            assert.equal(await page.locator("#materialVersionCount").textContent(), "5");
+
+            await reset();
+            await page.locator("#materialScenario").selectOption("unsupported");
+            await page.locator("#runMaterialImport").click();
+            await page.waitForFunction(() => !document.getElementById("runMaterialImport").disabled);
+            assert.match(await page.locator("#materialImportHistory").textContent(), /unsupported_media_type/);
+
+            await reset();
+            await page.locator("#materialScenario").selectOption("oversize");
+            await page.locator("#runMaterialImport").click();
+            await page.waitForFunction(() => !document.getElementById("runMaterialImport").disabled);
+            assert.match(await page.locator("#materialImportHistory").textContent(), /material_too_large/);
+
+            await page.screenshot({ path: "eve-ai-studio-preview-0.8.png", fullPage: true });
+            fs.writeFileSync("eve-ai-studio-preview-browser-errors.json", JSON.stringify(browserErrors, null, 2));
+            assert.deepEqual(browserErrors, []);
+          } finally {
+            await browser.close();
+          }
+          EOF
+          node /tmp/eve-preview-check.mjs
+
+      - name: Pubblica prove anteprima
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eve-ai-studio-preview-0.8
+          path: |
+            eve-ai-studio-preview-0.8.png
+            eve-ai-studio-preview-browser-errors.json
+          if-no-files-found: warn
+          retention-days: 14
