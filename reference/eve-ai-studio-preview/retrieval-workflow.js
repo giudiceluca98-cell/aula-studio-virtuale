@@ -42,7 +42,7 @@
       <div class="form-grid" style="margin-top:14px">
         <div class="field"><label for="retrievalRoom">Aula autorizzata</label><select id="retrievalRoom"><option>room-python-zero</option><option>room-matematica</option><option>room-vuota</option></select></div>
         <div class="field"><label for="retrievalScenario">Scenario</label><select id="retrievalScenario"><option value="normal">Risultati pertinenti</option><option value="empty">Nessun risultato</option><option value="suspicious">Fonte con istruzioni sospette</option><option value="isolated">Isolamento tra aule</option></select></div>
-        <div class="field" style="grid-column:1/-1"><label for="retrievalQuery">Query</label><input id="retrievalQuery" value="funzione parametri"></div>
+        <div class="field" style="grid-column:1/-1"><label for="retrievalQuery">Query</label><input id="retrievalQuery" value="parametri valore"></div>
       </div>
       <button class="btn green" id="runRetrievalSearch" style="width:100%;margin-top:12px">Cerca nei chunk autorizzati</button>
       <div class="row" style="margin-top:12px"><div class="meta"><strong id="retrievalSummary">Ricerca pronta</strong><small id="retrievalDetails">Solo versioni correnti ready · hash verificato · nessuna rete</small></div><span class="tag" id="retrievalResultBadge">0 risultati</span></div>
@@ -144,7 +144,7 @@
     const scenario = event.target.value;
     const query = document.getElementById("retrievalQuery");
     const room = document.getElementById("retrievalRoom");
-    if (scenario === "normal") { room.value="room-python-zero"; query.value="funzione parametri"; }
+    if (scenario === "normal") { room.value="room-python-zero"; query.value="parametri valore"; }
     if (scenario === "empty") { room.value="room-python-zero"; query.value="botanica tropicale"; }
     if (scenario === "suspicious") { room.value="room-python-zero"; query.value="strumento segreto funzione"; }
     if (scenario === "isolated") { room.value="room-vuota"; query.value="equazione primo grado"; }
