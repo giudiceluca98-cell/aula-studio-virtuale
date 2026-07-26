@@ -1,0 +1,68 @@
+EVE AI STUDIO
+STATO INTEGRAZIONE LIBRERIA ANIMAZIONI 1.2.2
+
+Data: 26 luglio 2026
+Branch: eve-ai-studio
+
+SORGENTE ACCETTATA
+
+eve-animation-library-v1.2.2.zip
+
+La libreria è stata costruita usando:
+
+- eve-animation-library-v1.2.0.zip come base completa;
+- eve-animation-library-v1.2.1.zip come patch con il nuovo P0 approvato;
+- rigenerazione delle sequenze PNG direttamente dai WebP finali;
+- normalizzazione di manifesti, animation.json e versioni.
+
+VALIDAZIONE DEL PACCHETTO COMPLETO
+
+- 64 asset;
+- 64 ID unici;
+- 64 animation.json validi;
+- 583 PNG frame;
+- 0 file da zero byte;
+- 0 percorsi mancanti;
+- 0 frame mismatch;
+- 0 version mismatch;
+- 0 hash mismatch P0;
+- CRC ZIP valido.
+
+DECISIONE EDITORIALE
+
+Le scritte inglesi incorporate in alcuni asset P1/P2 sono accettate per questa
+versione e non bloccano l’avanzamento del progetto.
+
+INTEGRAZIONE NELL’ANTEPRIMA
+
+È stato sostituito il ritratto SVG temporaneo con un asset animato reale della
+libreria approvata:
+
+- stato: eve-idle-soft;
+- formato runtime: WebP animato;
+- variante: compatta ottimizzata per la scheda laterale;
+- versione sorgente: 1.2.2;
+- fallback prefers-reduced-motion: ritratto SVG statico esistente.
+
+Questa prima integrazione runtime non copia nel repository l’intero archivio da
+143 MB. Mantiene la preview leggera e verifica la sostituzione effettiva del
+segnaposto SVG con Eve reale.
+
+PROSSIMO PASSAGGIO
+
+Collegare progressivamente gli stati applicativi alle animazioni P0:
+
+- wake;
+- listening;
+- thinking-loop;
+- thinking-deep;
+- speaking-loop-a;
+- speaking-loop-b;
+- question;
+- confirmation-needed;
+- success;
+- error-supportive;
+- offline.
+
+Non sono stati modificati main, demo-canonica o il file HTML canonico.
+Non è stata creata alcuna pull request.
