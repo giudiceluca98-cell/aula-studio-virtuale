@@ -40,14 +40,15 @@ della libreria:
 
 - stato visivo: eve-idle-soft;
 - formato runtime: WebP statico con trasparenza;
-- variante: compact 256 × 256;
+- variante runtime ottimizzata: 192 × 192;
+- origine: asset compact 256 × 256 della libreria 1.2.2;
 - versione sorgente: 1.2.2;
-- risoluzione sufficiente per la scheda laterale;
 - ritratto SVG conservato nel markup come fallback di caricamento.
 
 Il primo asset animato sperimentale da 88 × 88 è stato sostituito perché
 risultava troppo morbido alla dimensione di visualizzazione della scheda.
-La variante compact 256 preserva meglio occhi, anelli e riflessi.
+La variante runtime da 192 × 192 preserva meglio occhi, anelli e riflessi,
+mantenendo contenuto il peso della preview.
 
 Questa prima integrazione runtime non copia nel repository l’intero archivio da
 143 MB. Mantiene la preview leggera e verifica la sostituzione effettiva del

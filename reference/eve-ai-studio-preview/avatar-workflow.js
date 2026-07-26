@@ -11,7 +11,7 @@
     version:RUNTIME_VERSION,
     sourceBundle:SOURCE_BUNDLE,
     integratedState:"eve-idle-soft",
-    integratedVariant:"compact-static-256",
+    integratedVariant:"compact-static-192",
     fullLibraryStates:64,
     acceptedLocalizationException:true,
     reducedMotion:reduceMotion
@@ -40,7 +40,7 @@
     stage.dataset.eveRuntime=RUNTIME_VERSION;
     if(pill) pill.lastChild.textContent=" Avatar approvato";
     if(description) description.textContent="Avatar reale della libreria Eve 1.2.2. Ritratto idle compatto; animazioni di stato pronte per il collegamento progressivo.";
-    console.info("Eve avatar runtime 1.2.2 attivo: ritratto idle compatto 256.");
+    console.info("Eve avatar runtime 1.2.2 attivo: ritratto idle compatto 192.");
   },{once:true});
 
   image.addEventListener("error",()=>{
