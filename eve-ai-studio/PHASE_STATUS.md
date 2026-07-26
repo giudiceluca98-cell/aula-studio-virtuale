@@ -2,11 +2,14 @@
 
 ## Fase 0 — Fondazione
 
-Stato: **checkpoint 0.8 implementato nel branch `eve-ai-studio`**
+Stato: **Checkpoint 0.9 implementato e verificato tecnicamente nel branch `eve-ai-studio`**
 
-La fase resta isolata da `main`, `demo-canonica`, dall'HTML canonico, dall'app ufficiale e dal branch `eve-canonical-integration-v2`.
+- Checkpoint `0.8`: chiuso e approvato;
+- Checkpoint `0.9`: implementato e verificato, approvazione conclusiva dell’utente da registrare.
 
-## Checkpoint completati
+La fase resta isolata da `main`, `demo-canonica`, dall’HTML canonico, dall’app ufficiale e dal branch `eve-canonical-integration-v2`.
+
+## Checkpoint realizzati
 
 ### 0.1 — Fondazione iniziale
 
@@ -77,9 +80,9 @@ La fase resta isolata da `main`, `demo-canonica`, dall'HTML canonico, dall'app u
 - provider mock deterministico;
 - otto grader iniziali;
 - durata per scenario;
-- completamento automatico dei run;
+- completamento automatico;
 - artefatti redatti;
-- SHA-256 dell'output;
+- SHA-256 dell’output;
 - nessuna risposta completa salvata;
 - schema valutazioni `2`;
 - API e anteprima;
@@ -87,332 +90,168 @@ La fase resta isolata da `main`, `demo-canonica`, dall'HTML canonico, dall'app u
 
 ### 0.7 — Provider, modelli e orchestrazione
 
-- servizio `0.7.0`;
-- catalogo server-side dei provider;
-- catalogo server-side dei modelli;
-- provider mock primario;
-- modello mock di fallback;
+- catalogo server-side dei provider e modelli;
+- provider mock primario e fallback;
 - segnaposto esterno disattivato;
-- profili di esecuzione separati;
-- timeout per target;
+- profili separati;
+- timeout;
 - retry e backoff;
 - fallback ordinato;
 - limiti token;
 - budget giornalieri;
 - stima dei costi;
 - telemetria persistente e redatta;
-- chat e valutazioni instradate tramite profili dedicati;
-- API e anteprima;
 - 28 test specifici.
 
 ### 0.8 — Catalogo materiali e preparazione RAG
 
-Stato: **implementato, in attesa di verifica visuale completa dell'anteprima**
+Stato: **chiuso e approvato**
+
+- servizio `0.8.0`;
+- catalogo materiali persistente SQLite;
+- isolamento per aula;
+- importazione base64 controllata;
+- limiti e metadati tipizzati;
+- SHA-256 e deduplicazione;
+- versioni immutabili;
+- versione corrente aggiornata solo dopo successo;
+- estrazione TXT, Markdown, CSV, HTML, XHTML e JSON;
+- HTML senza script e stili;
+- JSON deterministico;
+- chunk con offset e SHA-256;
+- cronologia redatta;
+- nessun embedding o chiamata esterna;
+- 20 test specifici;
+- 125 test cumulativi `0.1–0.8`;
+- 5 scenari browser verificati.
+
+Rapporti:
+
+```text
+checkpoints/CHECKPOINT_0.8_UPDATE.txt
+checkpoints/CHECKPOINT_0.8_VERIFICATION.md
+checkpoints/CHECKPOINT_0.8_CLOSURE.md
+```
+
+### 0.9 — Retrieval locale e citazioni verificabili
+
+Stato: **implementato e verificato tecnicamente**
 
 Versione servizio:
 
 ```text
-0.8.0
-```
-
-Base di sviluppo del checkpoint:
-
-```text
-4df3d995569f0174fa56c8b0cb9be7631f88954f
+0.9.0
 ```
 
 Implementato:
 
-- package `app/materials` separato;
-- catalogo materiali persistente;
-- SQLite schema `1`;
-- isolamento per aula;
-- importazione base64 controllata;
-- limiti applicati prima dell'elaborazione;
-- media type normalizzato;
-- metadati JSON limitati;
-- checksum SHA-256 dei byte originali;
-- deduplicazione per checksum nella stessa aula;
-- versioni immutabili;
-- versione corrente aggiornata soltanto dopo successo;
-- stati `processing`, `ready` e `failed`;
-- cronologia importazioni;
-- errori redatti tramite codice e classe;
-- estrazione testuale locale iniziale;
-- testo UTF-8;
-- normalizzazione del testo;
-- conversione HTML senza script e stili;
-- JSON validato e serializzato deterministicamente;
-- chunk testuali deterministici;
-- offset di inizio e fine;
-- checksum SHA-256 di ogni chunk;
-- stato embedding `not_requested`;
-- nessun embedding esterno;
-- nessuna chiamata di rete;
-- API dedicate;
-- stessa anteprima ufficiale aggiornata;
-- collegamento con Eve Animation Library 1.2.2;
-- 20 test specifici superati nel banco di prova locale.
+- package `app/retrieval` separato;
+- query e risposte tipizzate;
+- normalizzazione Unicode NFKC e casefold;
+- ranking deterministico `eve-lexical-v1`;
+- copertura e frequenza limitata dei termini;
+- priorità per titolo e filename;
+- bonus per frase esatta;
+- ordinamento stabile;
+- ricerca limitata alle versioni correnti `ready`;
+- isolamento SQL per `room_id`;
+- filtri material_id senza divulgazione tra aule;
+- verifica SHA-256 dei chunk;
+- esclusione dei chunk alterati;
+- estratti limitati;
+- locator e citazioni verificabili;
+- segnalazione di contenuti simili a prompt injection;
+- nessuna esecuzione delle istruzioni presenti nelle fonti;
+- API di stato e ricerca;
+- anteprima ufficiale aggiornata;
+- nessun embedding, provider esterno o chiamata di rete.
 
-## Database materiali
-
-Percorso predefinito:
+Stato retrieval:
 
 ```text
-data/eve-materials.sqlite3
+lexical_ranked_citations_no_embeddings
 ```
 
-Variabile:
+API:
 
 ```text
-EVE_MATERIALS_DB_PATH
+GET  /v1/retrieval/status
+POST /v1/retrieval/search
 ```
 
-Schema:
+Test:
 
 ```text
-1
+14 test specifici superati
+139 test cumulativi 0.1–0.9 superati
+4 scenari browser retrieval superati
+0 errori JavaScript
 ```
 
-Tabelle:
+Rapporto:
 
 ```text
-material_schema_metadata
-materials
-material_versions
-material_chunks
-material_import_events
+checkpoints/CHECKPOINT_0.9_UPDATE.txt
 ```
 
-## Formati supportati nel checkpoint 0.8
+## Verifica automatica
+
+Workflow:
 
 ```text
-text/plain
-text/markdown
-text/csv
-text/html
-application/xhtml+xml
-application/json
+.github/workflows/eve-ai-studio-checks.yml
 ```
 
-Esclusi:
+Il workflow esegue:
 
-- PDF;
-- Word e altri formati Office;
-- immagini;
-- audio;
-- video;
-- OCR;
-- trascrizione;
-- parser remoti.
+- installazione delle dipendenze di test;
+- compilazione Python;
+- suite cumulativa;
+- controllo sintattico dei moduli JavaScript eseguibili;
+- Chromium su un contenitore DOM controllato;
+- 5 scenari materiali;
+- 4 scenari retrieval;
+- produzione di rapporti e artefatti.
 
-Il formato escluso produce una versione `failed` con codice redatto `unsupported_media_type`.
-
-## Limiti materiali
-
-Valori predefiniti:
-
-```text
-materiale: 2.000.000 byte
-testo estratto: 2.000.000 caratteri
-metadati: 16.000 caratteri
-chunk: 1.200 caratteri
-overlap: 150 caratteri
-versioni per materiale: 50
-```
-
-Variabili:
-
-```text
-EVE_MATERIAL_MAX_BYTES
-EVE_MATERIAL_MAX_TEXT_CHARS
-EVE_MATERIAL_MAX_METADATA_CHARS
-EVE_MATERIAL_CHUNK_CHARS
-EVE_MATERIAL_CHUNK_OVERLAP_CHARS
-EVE_MATERIAL_MAX_VERSIONS
-```
-
-## Checksum e deduplicazione
-
-- SHA-256 calcolato sui byte originali;
-- deduplicazione applicata soltanto alle versioni `ready`;
-- il perimetro della deduplicazione è l'aula;
-- un duplicato genera un evento senza creare una nuova versione;
-- lo stesso file in aule diverse resta separato;
-- una versione fallita non impedisce un nuovo tentativo.
-
-## Versioni
-
-- `material_id` stabile;
-- `version_number` crescente;
-- record di versione immutabile;
-- byte originali conservati come BLOB locale;
-- una versione fallita conserva stato e codice errore;
-- una nuova versione fallita non sostituisce la versione pronta corrente;
-- la prima versione fallita resta visibile nel catalogo come materiale fallito.
-
-## Preparazione RAG
-
-Stato dichiarato:
-
-```text
-text_extracted_and_chunked_no_embeddings
-```
-
-Ogni chunk conserva:
-
-- ID;
-- versione;
-- indice;
-- offset iniziale;
-- offset finale;
-- testo;
-- SHA-256 del testo;
-- `embedding_status=not_requested`.
-
-Non implementato:
-
-- modello embedding;
-- provider embedding;
-- indice vettoriale;
-- similarità semantica;
-- retrieval;
-- citazioni RAG nella chat;
-- generazione basata sui chunk.
-
-## Privacy e redazione
-
-La cronologia importazioni non conserva o restituisce:
-
-- contenuto completo del documento;
-- testo estratto;
-- nome file dell'importazione fallita;
-- corpo completo dell'eccezione;
-- stack trace;
-- dati di un'altra aula.
-
-Vengono conservati soltanto i dati necessari, tra cui:
-
-- aula;
-- materiale e versione quando disponibili;
-- stato;
-- checksum;
-- dimensione;
-- codice errore;
-- classe errore;
-- date.
-
-Un accesso con `room_id` errato restituisce `404 Materiale non trovato`.
-
-## API aggiunte nel 0.8
-
-```text
-GET  /v1/materials/status
-GET  /v1/materials/imports
-POST /v1/materials/import
-GET  /v1/materials
-GET  /v1/materials/{material_id}
-GET  /v1/materials/{material_id}/versions
-GET  /v1/materials/{material_id}/versions/{version_number}
-GET  /v1/materials/{material_id}/versions/{version_number}/chunks
-```
-
-## Test del checkpoint 0.8
-
-Esecuzione locale del nuovo modulo:
-
-```text
-20 passed in 0.95s
-```
-
-Verificati:
-
-1. schema e stato vuoto;
-2. importazione plaintext, checksum e chunk;
-3. deduplicazione per aula;
-4. nuova versione e versione corrente;
-5. fallimento senza sostituzione della versione pronta;
-6. prima versione fallita visibile;
-7. isolamento tra aule;
-8. base64 non valido;
-9. limite dimensione;
-10. limite metadati;
-11. limite versioni;
-12. estrazione HTML sicura;
-13. JSON deterministico;
-14. rifiuto testo non UTF-8;
-15. chunking deterministico e sovrapposto;
-16. ricerca, filtro e paginazione;
-17. persistenza dopo riapertura;
-18. API e messaggi redatti;
-19. cronologia per aula e redazione;
-20. verifica aula precedente al limite versioni.
-
-La suite cumulativa completa dei checkpoint precedenti non è stata rilanciata. GitHub Actions non è stato eseguito.
-
-## Anteprima del checkpoint 0.8
-
-Percorso invariato:
-
-```text
-reference/eve-ai-studio-preview/index.html
-```
-
-Nuovo modulo:
-
-```text
-reference/eve-ai-studio-preview/materials-workflow.js
-```
-
-Nuova vista:
-
-```text
-Materiali e RAG
-```
-
-Mostra:
-
-- metriche del catalogo;
-- importazione controllata;
-- pipeline RAG preparatoria;
-- catalogo per aula;
-- versioni;
-- chunk con offset e hash;
-- cronologia redatta;
-- embedding disattivati;
-- scenari valido, duplicato, versione, PDF non supportato e limite.
-
-Stati Eve usati:
-
-- `eve-uploading`;
-- `eve-searching`;
-- `eve-reading`;
-- `eve-indexing`;
-- `eve-success`;
-- `eve-error-supportive`;
-- `eve-confirmation-needed`;
-- `eve-idle-soft`.
-
-Il JavaScript della nuova vista ha superato `node --check` nel banco di prova locale. La verifica visiva completa nel browser non è ancora stata eseguita.
-
-## Escluso dalla fase corrente
+## Escluso dallo stato corrente
 
 - provider AI reale;
 - chiavi API;
-- tokenizer ufficiale;
-- circuit breaker e code distribuite;
-- parsing PDF e Office;
-- OCR;
 - embedding;
 - indice vettoriale;
 - retrieval semantico;
-- RAG nella chat;
+- reranker AI;
+- generazione RAG collegata alla chat;
+- citazioni automatiche nella chat;
+- PDF e Office;
+- OCR e trascrizione;
 - Supabase;
-- autenticazione amministrativa;
+- autenticazione amministrativa di produzione;
 - memoria didattica persistente;
-- strumenti che modificano l'app ufficiale;
+- strumenti che modificano l’app ufficiale;
 - merge con la demo canonica.
 
-## Prossimo checkpoint
+## Protezioni rispettate
 
-Il perimetro successivo deve essere definito e approvato prima dell'implementazione. Il checkpoint 0.8 prepara i dati per un futuro retrieval, ma non autorizza automaticamente embedding esterni, database vettoriali, provider reali o collegamenti alla produzione.
+Non modificati:
+
+- `main`;
+- `demo-canonica`;
+- `reference/demo-aula-studio-virtuale-canonica.html`;
+- app ufficiale;
+- `eve-canonical-integration-v2`;
+- pacchetto master Eve Animation Library 1.2.2.
+
+Non eseguiti:
+
+- pull request;
+- merge;
+- provider esterni;
+- embedding esterni;
+- collegamenti alla produzione.
+
+## Passaggio successivo
+
+Il perimetro del checkpoint successivo deve essere definito e approvato dopo la registrazione dell’approvazione conclusiva del Checkpoint 0.9.
+
+Il Checkpoint 0.9 non autorizza automaticamente embedding, database vettoriali, provider reali, RAG collegato alla chat o integrazione nella produzione.
