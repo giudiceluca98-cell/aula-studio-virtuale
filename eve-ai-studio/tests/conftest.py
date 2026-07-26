@@ -11,4 +11,5 @@ os.environ["EVE_EVALUATIONS_DB_PATH"] = str(_TEST_DATA_DIR / "evaluations.sqlite
 os.environ["EVE_PROVIDER_TELEMETRY_DB_PATH"] = str(
     _TEST_DATA_DIR / "provider-telemetry.sqlite3"
 )
+os.environ["EVE_MATERIALS_DB_PATH"] = str(_TEST_DATA_DIR / "materials.sqlite3")
 os.environ["EVE_EXTERNAL_PROVIDERS_ENABLED"] = "false"
