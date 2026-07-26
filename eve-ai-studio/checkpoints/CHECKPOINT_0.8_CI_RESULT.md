@@ -1,7 +1,7 @@
 # Checkpoint 0.8 — Risultato verifica automatica
 
-- Commit verificato: `d5781807ab1cbdee24580b41dd683c139d468018`
-- Data UTC: `2026-07-26T20:33:38.811755+00:00`
+- Commit verificato: `07f9b6967eb019b7b24d80f20fd662d81a40687f`
+- Data UTC: `2026-07-26T21:02:16.772363+00:00`
 - Esito complessivo: **NON SUPERATO**
 
 ## Stati
@@ -20,7 +20,7 @@
 ## Coda pytest
 
 ```text
-/home/runner/work/_temp/7143daa8-63df-4622-924c-0af4dd47ec84.sh: line 2: pytest: command not found
+/home/runner/work/_temp/7a274dcf-37de-4f79-8b95-930e363ec49f.sh: line 2: pytest: command not found
 ```
 
 ## Coda verifica browser
