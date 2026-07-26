@@ -2,9 +2,13 @@
 
 ## Fase 0 — Fondazione
 
-Stato: **checkpoint 0.7 implementato**
+Stato: **checkpoint 0.8 implementato nel branch `eve-ai-studio`**
 
-### Checkpoint 0.1 — Fondazione iniziale
+La fase resta isolata da `main`, `demo-canonica`, dall'HTML canonico, dall'app ufficiale e dal branch `eve-canonical-integration-v2`.
+
+## Checkpoint completati
+
+### 0.1 — Fondazione iniziale
 
 - FastAPI;
 - provider `mock`;
@@ -14,9 +18,9 @@ Stato: **checkpoint 0.7 implementato**
 - limiti;
 - audit pseudonimizzato;
 - feature flag;
-- 4 test.
+- 4 test specifici.
 
-### Checkpoint 0.2 — Modularità e importatore
+### 0.2 — Modularità e importatore
 
 - separazione di core, contesto e provider;
 - parser delle 36 sezioni e 1.197 schede;
@@ -26,9 +30,9 @@ Stato: **checkpoint 0.7 implementato**
 - API e CLI;
 - manifesto;
 - anteprima aggiornata;
-- 9 test.
+- 9 test specifici.
 
-### Checkpoint 0.3 — Persistenza dei requisiti
+### 0.3 — Persistenza dei requisiti
 
 - SQLite;
 - cronologia importazioni;
@@ -40,7 +44,7 @@ Stato: **checkpoint 0.7 implementato**
 - rollback non distruttivo;
 - 15 test specifici.
 
-### Checkpoint 0.4 — Prompt versionati
+### 0.4 — Prompt versionati
 
 - storage dedicato;
 - revisioni immutabili;
@@ -53,7 +57,7 @@ Stato: **checkpoint 0.7 implementato**
 - API e anteprima;
 - 15 test specifici.
 
-### Checkpoint 0.5 — Valutazioni persistenti
+### 0.5 — Valutazioni persistenti
 
 - scenari versionati;
 - severità, pesi e soglie;
@@ -67,7 +71,7 @@ Stato: **checkpoint 0.7 implementato**
 - gate reale dei prompt;
 - 18 test specifici.
 
-### Checkpoint 0.6 — Runner automatico
+### 0.6 — Runner automatico
 
 - `ChatRequest` eseguibili;
 - provider mock deterministico;
@@ -81,115 +85,87 @@ Stato: **checkpoint 0.7 implementato**
 - API e anteprima;
 - 29 test specifici.
 
-### Checkpoint 0.7 — Provider, modelli e orchestrazione
+### 0.7 — Provider, modelli e orchestrazione
 
-Implementato:
-
-- servizio versione `0.7.0`;
+- servizio `0.7.0`;
 - catalogo server-side dei provider;
 - catalogo server-side dei modelli;
 - provider mock primario;
 - modello mock di fallback;
 - segnaposto esterno disattivato;
-- provider esterni disattivati per impostazione predefinita;
 - profili di esecuzione separati;
-- profilo chat;
-- profilo valutazioni;
-- profilo esterno disattivato;
 - timeout per target;
-- retry controllati;
-- backoff;
+- retry e backoff;
 - fallback ordinato;
-- controllo dello scopo del profilo;
-- controllo dei provider esterni;
-- limite token input;
-- limite token output;
-- limite token totale;
-- budget token giornaliero;
-- costo massimo per esecuzione;
-- budget costi giornaliero;
-- stima deterministica dei token;
-- stima del costo dai dati del modello;
-- telemetria persistente;
-- hash della richiesta;
-- hash della risposta;
-- numero di tentativi;
-- indicazione del fallback;
-- durata totale;
-- classe di errore redatta;
-- chat instradata tramite orchestratore;
-- runner delle valutazioni instradato tramite profilo dedicato;
-- API di gestione;
-- stessa anteprima approvata aggiornata;
-- 28 test specifici superati.
+- limiti token;
+- budget giornalieri;
+- stima dei costi;
+- telemetria persistente e redatta;
+- chat e valutazioni instradate tramite profili dedicati;
+- API e anteprima;
+- 28 test specifici.
 
-### Provider registrati
+### 0.8 — Catalogo materiali e preparazione RAG
 
-1. `mock`
-   - attivo;
-   - deterministico;
-   - nessuna rete;
-   - nessuna chiave;
-   - costo zero.
+Stato: **implementato, in attesa di verifica visuale completa dell'anteprima**
 
-2. `external-template`
-   - esterno;
-   - disattivato;
-   - nessuna factory;
-   - nessuna credenziale;
-   - non utilizzabile.
-
-### Modelli registrati
-
-1. `eve-foundation-mock-v2`
-   - primario;
-   - attivo;
-   - contesto dichiarato 128.000 token;
-   - costo zero.
-
-2. `eve-foundation-mock-fallback-v1`
-   - fallback;
-   - attivo;
-   - contesto dichiarato 64.000 token;
-   - costo zero.
-
-3. `external-model-placeholder`
-   - disattivato;
-   - nessun provider reale collegato.
-
-### Profili
-
-#### chat-development
-
-- scopo `chat`;
-- mock v2;
-- timeout 2.000 ms;
-- massimo 2 tentativi;
-- massimo 12.000 token;
-- provider esterni vietati.
-
-#### evaluation-safe
-
-- scopo `evaluation`;
-- mock v2 primario;
-- mock fallback v1 secondario;
-- timeout 1.500 ms;
-- massimo 2 tentativi per target;
-- massimo 16.000 token;
-- provider esterni vietati.
-
-#### external-review
-
-- disattivato;
-- non selezionabile;
-- richiederebbe implementazione e approvazione esplicite.
-
-### Telemetria
-
-Database:
+Versione servizio:
 
 ```text
-data/eve-provider-telemetry.sqlite3
+0.8.0
+```
+
+Base di sviluppo del checkpoint:
+
+```text
+4df3d995569f0174fa56c8b0cb9be7631f88954f
+```
+
+Implementato:
+
+- package `app/materials` separato;
+- catalogo materiali persistente;
+- SQLite schema `1`;
+- isolamento per aula;
+- importazione base64 controllata;
+- limiti applicati prima dell'elaborazione;
+- media type normalizzato;
+- metadati JSON limitati;
+- checksum SHA-256 dei byte originali;
+- deduplicazione per checksum nella stessa aula;
+- versioni immutabili;
+- versione corrente aggiornata soltanto dopo successo;
+- stati `processing`, `ready` e `failed`;
+- cronologia importazioni;
+- errori redatti tramite codice e classe;
+- estrazione testuale locale iniziale;
+- testo UTF-8;
+- normalizzazione del testo;
+- conversione HTML senza script e stili;
+- JSON validato e serializzato deterministicamente;
+- chunk testuali deterministici;
+- offset di inizio e fine;
+- checksum SHA-256 di ogni chunk;
+- stato embedding `not_requested`;
+- nessun embedding esterno;
+- nessuna chiamata di rete;
+- API dedicate;
+- stessa anteprima ufficiale aggiornata;
+- collegamento con Eve Animation Library 1.2.2;
+- 20 test specifici superati nel banco di prova locale.
+
+## Database materiali
+
+Percorso predefinito:
+
+```text
+data/eve-materials.sqlite3
+```
+
+Variabile:
+
+```text
+EVE_MATERIALS_DB_PATH
 ```
 
 Schema:
@@ -198,121 +174,245 @@ Schema:
 1
 ```
 
-Tabella:
+Tabelle:
 
 ```text
-provider_execution_events
+material_schema_metadata
+materials
+material_versions
+material_chunks
+material_import_events
 ```
 
-Dati registrati:
+## Formati supportati nel checkpoint 0.8
 
-- data;
-- scopo;
-- profilo;
-- provider;
-- modello;
+```text
+text/plain
+text/markdown
+text/csv
+text/html
+application/xhtml+xml
+application/json
+```
+
+Esclusi:
+
+- PDF;
+- Word e altri formati Office;
+- immagini;
+- audio;
+- video;
+- OCR;
+- trascrizione;
+- parser remoti.
+
+Il formato escluso produce una versione `failed` con codice redatto `unsupported_media_type`.
+
+## Limiti materiali
+
+Valori predefiniti:
+
+```text
+materiale: 2.000.000 byte
+testo estratto: 2.000.000 caratteri
+metadati: 16.000 caratteri
+chunk: 1.200 caratteri
+overlap: 150 caratteri
+versioni per materiale: 50
+```
+
+Variabili:
+
+```text
+EVE_MATERIAL_MAX_BYTES
+EVE_MATERIAL_MAX_TEXT_CHARS
+EVE_MATERIAL_MAX_METADATA_CHARS
+EVE_MATERIAL_CHUNK_CHARS
+EVE_MATERIAL_CHUNK_OVERLAP_CHARS
+EVE_MATERIAL_MAX_VERSIONS
+```
+
+## Checksum e deduplicazione
+
+- SHA-256 calcolato sui byte originali;
+- deduplicazione applicata soltanto alle versioni `ready`;
+- il perimetro della deduplicazione è l'aula;
+- un duplicato genera un evento senza creare una nuova versione;
+- lo stesso file in aule diverse resta separato;
+- una versione fallita non impedisce un nuovo tentativo.
+
+## Versioni
+
+- `material_id` stabile;
+- `version_number` crescente;
+- record di versione immutabile;
+- byte originali conservati come BLOB locale;
+- una versione fallita conserva stato e codice errore;
+- una nuova versione fallita non sostituisce la versione pronta corrente;
+- la prima versione fallita resta visibile nel catalogo come materiale fallito.
+
+## Preparazione RAG
+
+Stato dichiarato:
+
+```text
+text_extracted_and_chunked_no_embeddings
+```
+
+Ogni chunk conserva:
+
+- ID;
+- versione;
+- indice;
+- offset iniziale;
+- offset finale;
+- testo;
+- SHA-256 del testo;
+- `embedding_status=not_requested`.
+
+Non implementato:
+
+- modello embedding;
+- provider embedding;
+- indice vettoriale;
+- similarità semantica;
+- retrieval;
+- citazioni RAG nella chat;
+- generazione basata sui chunk.
+
+## Privacy e redazione
+
+La cronologia importazioni non conserva o restituisce:
+
+- contenuto completo del documento;
+- testo estratto;
+- nome file dell'importazione fallita;
+- corpo completo dell'eccezione;
+- stack trace;
+- dati di un'altra aula.
+
+Vengono conservati soltanto i dati necessari, tra cui:
+
+- aula;
+- materiale e versione quando disponibili;
 - stato;
-- tentativi;
-- fallback;
-- durata;
-- token input, output e totali;
-- costo stimato;
-- hash richiesta;
-- hash risposta;
-- classe errore.
+- checksum;
+- dimensione;
+- codice errore;
+- classe errore;
+- date.
 
-Dati non registrati:
+Un accesso con `room_id` errato restituisce `404 Materiale non trovato`.
 
-- messaggio;
-- testo selezionato;
-- risposta completa;
-- corpo dell'eccezione;
-- chiavi API.
-
-### API aggiunte
+## API aggiunte nel 0.8
 
 ```text
-GET /v1/providers/status
-GET /v1/providers/catalog
-GET /v1/providers/models
-GET /v1/providers/profiles
-GET /v1/providers/telemetry
+GET  /v1/materials/status
+GET  /v1/materials/imports
+POST /v1/materials/import
+GET  /v1/materials
+GET  /v1/materials/{material_id}
+GET  /v1/materials/{material_id}/versions
+GET  /v1/materials/{material_id}/versions/{version_number}
+GET  /v1/materials/{material_id}/versions/{version_number}/chunks
 ```
 
-### Test del Checkpoint 0.7
+## Test del checkpoint 0.8
+
+Esecuzione locale del nuovo modulo:
 
 ```text
-28 passed in 0.43s
+20 passed in 0.95s
 ```
-
-Sono test specifici del nuovo modulo provider. La suite cumulativa completa dei checkpoint precedenti non è stata rilanciata e i conteggi non devono essere sommati automaticamente.
 
 Verificati:
 
-1. catalogo provider predefinito;
-2. provider esterno disattivato;
-3. modelli mock attivi;
-4. creazione modello primario;
-5. appartenenza modello-provider;
-6. modello disattivato;
-7. tre profili;
-8. fallback del profilo valutazioni;
-9. retry e timeout della chat;
-10. profilo esterno disattivato;
-11. schema telemetria;
-12. scrittura e lettura;
-13. aggregazione giornaliera;
-14. persistenza dopo riapertura;
-15. stima token;
-16. esecuzione e telemetria;
-17. ManagedEveProvider;
-18. blocco budget input;
-19. blocco scopo profilo;
-20. retry e successo;
-21. timeout e fallback;
-22. fallimento di tutti i target;
-23. redazione dell'errore;
-24. budget token giornaliero;
-25. API stato;
-26. API catalogo e modelli;
-27. API profili;
-28. API telemetria.
+1. schema e stato vuoto;
+2. importazione plaintext, checksum e chunk;
+3. deduplicazione per aula;
+4. nuova versione e versione corrente;
+5. fallimento senza sostituzione della versione pronta;
+6. prima versione fallita visibile;
+7. isolamento tra aule;
+8. base64 non valido;
+9. limite dimensione;
+10. limite metadati;
+11. limite versioni;
+12. estrazione HTML sicura;
+13. JSON deterministico;
+14. rifiuto testo non UTF-8;
+15. chunking deterministico e sovrapposto;
+16. ricerca, filtro e paginazione;
+17. persistenza dopo riapertura;
+18. API e messaggi redatti;
+19. cronologia per aula e redazione;
+20. verifica aula precedente al limite versioni.
 
-### Verifica visiva
+La suite cumulativa completa dei checkpoint precedenti non è stata rilanciata. GitHub Actions non è stato eseguito.
 
-Provato nell'anteprima:
+## Anteprima del checkpoint 0.8
 
-- apertura `Provider e modelli`;
-- due provider;
-- tre modelli;
-- tre profili;
-- provider esterno disattivato;
-- esecuzione valida;
-- retry;
-- timeout e fallback;
-- blocco budget prima della chiamata;
-- blocco provider esterno prima della chiamata;
-- token giornalieri;
-- telemetria redatta;
-- azzeramento dati demo;
-- nessun errore JavaScript nel percorso controllato.
+Percorso invariato:
 
-### Escluso dal checkpoint
+```text
+reference/eve-ai-studio-preview/index.html
+```
+
+Nuovo modulo:
+
+```text
+reference/eve-ai-studio-preview/materials-workflow.js
+```
+
+Nuova vista:
+
+```text
+Materiali e RAG
+```
+
+Mostra:
+
+- metriche del catalogo;
+- importazione controllata;
+- pipeline RAG preparatoria;
+- catalogo per aula;
+- versioni;
+- chunk con offset e hash;
+- cronologia redatta;
+- embedding disattivati;
+- scenari valido, duplicato, versione, PDF non supportato e limite.
+
+Stati Eve usati:
+
+- `eve-uploading`;
+- `eve-searching`;
+- `eve-reading`;
+- `eve-indexing`;
+- `eve-success`;
+- `eve-error-supportive`;
+- `eve-confirmation-needed`;
+- `eve-idle-soft`.
+
+Il JavaScript della nuova vista ha superato `node --check` nel banco di prova locale. La verifica visiva completa nel browser non è ancora stata eseguita.
+
+## Escluso dalla fase corrente
 
 - provider AI reale;
 - chiavi API;
-- tokenizer ufficiale del modello;
-- circuit breaker distribuito;
-- code e concorrenza dei run;
-- RAG;
+- tokenizer ufficiale;
+- circuit breaker e code distribuite;
+- parsing PDF e Office;
+- OCR;
+- embedding;
+- indice vettoriale;
+- retrieval semantico;
+- RAG nella chat;
 - Supabase;
 - autenticazione amministrativa;
-- memoria didattica;
-- voce;
-- strumenti che modificano Aula Studio Virtuale;
-- integrazione con la produzione;
-- avatar e animazioni definitive in attesa di consegna e approvazione.
+- memoria didattica persistente;
+- strumenti che modificano l'app ufficiale;
+- merge con la demo canonica.
 
-### Prossimo checkpoint previsto
+## Prossimo checkpoint
 
-**Checkpoint 0.8 — catalogo dei materiali, importazione documentale controllata, estrazione testuale, stato di elaborazione, checksum, deduplicazione e preparazione della pipeline RAG senza embeddings esterni.**
+Il perimetro successivo deve essere definito e approvato prima dell'implementazione. Il checkpoint 0.8 prepara i dati per un futuro retrieval, ma non autorizza automaticamente embedding esterni, database vettoriali, provider reali o collegamenti alla produzione.
