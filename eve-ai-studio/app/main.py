@@ -10,6 +10,7 @@ from .evaluations.automatic_router import create_automatic_evaluation_router
 from .evaluations.router import create_evaluation_router
 from .evaluations.service import EvaluationService
 from .evaluations.storage import SqliteEvaluationStore
+from .materials import MaterialLimits, MaterialService, SqliteMaterialStore, create_material_router
 from .models import ChatRequest, ChatResponse, HealthResponse
 from .prompts.router import create_prompt_router
 from .prompts.service import PromptService
@@ -44,7 +45,7 @@ from .requirements.parser import PlanParseError
 from .requirements.registry import RequirementNotFoundError, RequirementRegistry
 from .requirements.storage import RequirementVersionNotFoundError, SqliteRequirementStore
 
-SERVICE_VERSION = "0.7.0"
+SERVICE_VERSION = "0.8.0"
 
 settings = EveSettings()
 audit = AuditLogger(enabled=settings.audit_enabled)
@@ -87,6 +88,18 @@ automatic_evaluations = AutomaticEvaluationService(
     latency_budget_ms=settings.evaluation_latency_budget_ms,
     migrate_empty_inputs=True,
 )
+material_store = SqliteMaterialStore(settings.materials_db_path)
+materials = MaterialService(
+    material_store,
+    limits=MaterialLimits(
+        max_material_bytes=settings.material_max_bytes,
+        max_extracted_chars=settings.material_max_text_chars,
+        max_metadata_chars=settings.material_max_metadata_chars,
+        chunk_chars=settings.material_chunk_chars,
+        chunk_overlap_chars=settings.material_chunk_overlap_chars,
+        max_versions_per_material=settings.material_max_versions,
+    ),
+)
 active_prompt_version_id = prompts.status().active_version_id
 if active_prompt_version_id is not None and not evaluation_store.runs_count(
     prompt_version_id=active_prompt_version_id
@@ -99,14 +112,15 @@ app = FastAPI(
     version=SERVICE_VERSION,
     description=(
         "Fondazione modulare di Eve con requisiti, prompt, valutazioni, runner automatico, "
-        "registro provider, profili controllati, retry, fallback e telemetria. "
-        "I provider esterni sono disattivati per impostazione predefinita."
+        "registro provider, profili controllati, catalogo materiali e preparazione RAG. "
+        "I provider esterni e gli embedding esterni sono disattivati."
     ),
 )
 app.include_router(create_prompt_router(prompts))
 app.include_router(create_evaluation_router(evaluations))
 app.include_router(create_automatic_evaluation_router(automatic_evaluations))
 app.include_router(create_provider_router(provider_orchestrator))
+app.include_router(create_material_router(materials))
 
 
 @app.get("/health", response_model=HealthResponse)
