@@ -11,23 +11,24 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: eve-ai-studio-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  cumulative-tests:
-    name: Suite cumulativa Python
+  verify:
+    name: Suite cumulativa e anteprima browser
+    if: ${{ github.event_name == 'workflow_dispatch' || !contains(github.event.head_commit.message, '[skip eve ci]') }}
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    defaults:
-      run:
-        working-directory: eve-ai-studio
+    timeout-minutes: 30
     steps:
-      - name: Checkout
+      - name: Checkout branch
         uses: actions/checkout@v4
+        with:
+          ref: eve-ai-studio
+          fetch-depth: 0
 
       - name: Python 3.11
         uses: actions/setup-python@v5
@@ -36,53 +37,62 @@ jobs:
           cache: pip
           cache-dependency-path: eve-ai-studio/pyproject.toml
 
-      - name: Installa servizio e dipendenze di sviluppo
-        run: python -m pip install --upgrade pip && python -m pip install -e ".[dev]"
-
-      - name: Verifica sintattica completa
-        run: python -m compileall -q app tests
-
-      - name: Esegui suite cumulativa
-        run: pytest -q --junitxml=pytest-results.xml
-
-      - name: Pubblica risultati pytest
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: eve-ai-studio-pytest-results
-          path: eve-ai-studio/pytest-results.xml
-          if-no-files-found: error
-          retention-days: 14
-
-  preview-browser:
-    name: Anteprima browser Checkpoint 0.8
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: Node 20
         uses: actions/setup-node@v4
         with:
           node-version: "20"
 
+      - name: Installa servizio e dipendenze di sviluppo
+        id: python_install
+        continue-on-error: true
+        working-directory: eve-ai-studio
+        run: |
+          set -o pipefail
+          python -m pip install --upgrade pip 2>&1 | tee ../checkpoint-0.8-python-install.log
+          python -m pip install -e ".[dev]" 2>&1 | tee -a ../checkpoint-0.8-python-install.log
+
+      - name: Compilazione sintattica Python
+        id: python_compile
+        continue-on-error: true
+        working-directory: eve-ai-studio
+        run: |
+          set -o pipefail
+          python -m compileall -q app tests 2>&1 | tee ../checkpoint-0.8-python-compile.log
+
+      - name: Suite cumulativa Python
+        id: pytest
+        continue-on-error: true
+        working-directory: eve-ai-studio
+        run: |
+          set -o pipefail
+          pytest -q --junitxml=pytest-results.xml 2>&1 | tee ../checkpoint-0.8-pytest.log
+
       - name: Verifica sintattica JavaScript
+        id: javascript
+        continue-on-error: true
         shell: bash
         run: |
-          set -euo pipefail
+          set -o pipefail
+          : > checkpoint-0.8-javascript.log
           while IFS= read -r -d '' file; do
-            node --check "$file"
+            echo "node --check $file" | tee -a checkpoint-0.8-javascript.log
+            node --check "$file" 2>&1 | tee -a checkpoint-0.8-javascript.log || exit 1
           done < <(find reference/eve-ai-studio-preview -maxdepth 1 -type f -name '*.js' -print0)
 
-      - name: Installa browser di verifica
+      - name: Installa Playwright e Chromium
+        id: browser_install
+        continue-on-error: true
         run: |
-          npm install --no-save playwright
-          npx playwright install --with-deps chromium
+          set -o pipefail
+          npm install --no-save playwright 2>&1 | tee checkpoint-0.8-browser-install.log
+          npx playwright install --with-deps chromium 2>&1 | tee -a checkpoint-0.8-browser-install.log
 
       - name: Avvia anteprima statica
+        id: preview_server
+        if: steps.browser_install.outcome == 'success'
+        continue-on-error: true
         run: |
-          python3 -m http.server 4173 --directory reference/eve-ai-studio-preview > /tmp/eve-preview-server.log 2>&1 &
+          python3 -m http.server 4173 --directory reference/eve-ai-studio-preview > checkpoint-0.8-preview-server.log 2>&1 &
           echo $! > /tmp/eve-preview-server.pid
           for attempt in {1..30}; do
             if curl --fail --silent http://127.0.0.1:4173/index.html >/dev/null; then
@@ -90,10 +100,13 @@ jobs:
             fi
             sleep 1
           done
-          cat /tmp/eve-preview-server.log
+          cat checkpoint-0.8-preview-server.log
           exit 1
 
       - name: Verifica scenari 0.8 nel browser
+        id: browser
+        if: steps.browser_install.outcome == 'success' && steps.preview_server.outcome == 'success'
+        continue-on-error: true
         shell: bash
         run: |
           cat > /tmp/eve-preview-check.mjs <<'EOF'
@@ -115,7 +128,7 @@ jobs:
             assert.equal(await page.getByText("Anteprima non caricata").count(), 0);
 
             await page.locator('[data-view="rag-materials"]').click();
-            await page.waitForSelector("#rag-materials.active, #rag-materials", { state: "visible" });
+            await page.waitForSelector("#rag-materials", { state: "visible" });
             assert.equal(await page.locator("#materialCount").textContent(), "3");
             assert.equal(await page.locator("#materialVersionCount").textContent(), "4");
             assert.equal(await page.locator("#materialChunkCount").textContent(), "18");
@@ -163,19 +176,137 @@ jobs:
             await page.screenshot({ path: "eve-ai-studio-preview-0.8.png", fullPage: true });
             fs.writeFileSync("eve-ai-studio-preview-browser-errors.json", JSON.stringify(browserErrors, null, 2));
             assert.deepEqual(browserErrors, []);
+            console.log("Anteprima 0.8 verificata: 5 scenari, nessun errore browser.");
           } finally {
             await browser.close();
           }
           EOF
-          node /tmp/eve-preview-check.mjs
+          set -o pipefail
+          node /tmp/eve-preview-check.mjs 2>&1 | tee checkpoint-0.8-browser.log
 
-      - name: Pubblica prove anteprima
+      - name: Registra rapporto verificabile nel branch
+        if: always()
+        env:
+          PYTHON_INSTALL: ${{ steps.python_install.outcome }}
+          PYTHON_COMPILE: ${{ steps.python_compile.outcome }}
+          PYTEST: ${{ steps.pytest.outcome }}
+          JAVASCRIPT: ${{ steps.javascript.outcome }}
+          BROWSER_INSTALL: ${{ steps.browser_install.outcome }}
+          PREVIEW_SERVER: ${{ steps.preview_server.outcome }}
+          BROWSER: ${{ steps.browser.outcome }}
+          TESTED_SHA: ${{ github.sha }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          states = {
+              "python_install": os.environ.get("PYTHON_INSTALL", "not_run"),
+              "python_compile": os.environ.get("PYTHON_COMPILE", "not_run"),
+              "pytest_cumulative": os.environ.get("PYTEST", "not_run"),
+              "javascript_syntax": os.environ.get("JAVASCRIPT", "not_run"),
+              "browser_install": os.environ.get("BROWSER_INSTALL", "not_run"),
+              "preview_server": os.environ.get("PREVIEW_SERVER", "not_run"),
+              "browser_scenarios": os.environ.get("BROWSER", "not_run"),
+          }
+          required = ["python_install", "python_compile", "pytest_cumulative", "javascript_syntax", "browser_install", "preview_server", "browser_scenarios"]
+          passed = all(states[name] == "success" for name in required)
+          timestamp = datetime.now(timezone.utc).isoformat()
+          result = {
+              "checkpoint": "0.8",
+              "tested_sha": os.environ.get("TESTED_SHA"),
+              "generated_at": timestamp,
+              "passed": passed,
+              "states": states,
+          }
+          base = Path("eve-ai-studio/checkpoints")
+          (base / "CHECKPOINT_0.8_CI_RESULT.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+
+          def tail(path, lines=35):
+              file = Path(path)
+              if not file.exists():
+                  return "File non prodotto."
+              content = file.read_text(encoding="utf-8", errors="replace").splitlines()
+              return "\n".join(content[-lines:]) or "Nessun output."
+
+          markdown = f"""# Checkpoint 0.8 — Risultato verifica automatica
+
+          - Commit verificato: `{result['tested_sha']}`
+          - Data UTC: `{timestamp}`
+          - Esito complessivo: **{'SUPERATO' if passed else 'NON SUPERATO'}**
+
+          ## Stati
+
+          | Controllo | Esito |
+          |---|---|
+          """
+          for name, state in states.items():
+              markdown += f"| `{name}` | `{state}` |\n"
+          markdown += f"""
+
+          ## Coda pytest
+
+          ```text
+          {tail('checkpoint-0.8-pytest.log')}
+          ```
+
+          ## Coda verifica browser
+
+          ```text
+          {tail('checkpoint-0.8-browser.log')}
+          ```
+
+          ## Coda JavaScript
+
+          ```text
+          {tail('checkpoint-0.8-javascript.log', 20)}
+          ```
+
+          Questo rapporto è generato dal workflow `.github/workflows/eve-ai-studio-checks.yml`. Un checkpoint non è chiuso quando l'esito complessivo è `NON SUPERATO`.
+          """
+          (base / "CHECKPOINT_0.8_CI_RESULT.md").write_text(markdown, encoding="utf-8")
+          PY
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add eve-ai-studio/checkpoints/CHECKPOINT_0.8_CI_RESULT.json eve-ai-studio/checkpoints/CHECKPOINT_0.8_CI_RESULT.md
+          if ! git diff --cached --quiet; then
+            git commit -m "ci: registra esito verifica Eve 0.8 [skip eve ci]"
+            git push origin HEAD:eve-ai-studio
+          fi
+
+      - name: Pubblica prove di esecuzione
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: eve-ai-studio-preview-0.8
+          name: eve-ai-studio-checkpoint-0.8-verification
           path: |
+            eve-ai-studio/pytest-results.xml
+            checkpoint-0.8-*.log
             eve-ai-studio-preview-0.8.png
             eve-ai-studio-preview-browser-errors.json
+            eve-ai-studio/checkpoints/CHECKPOINT_0.8_CI_RESULT.json
+            eve-ai-studio/checkpoints/CHECKPOINT_0.8_CI_RESULT.md
           if-no-files-found: warn
           retention-days: 14
+
+      - name: Applica gate finale
+        if: always()
+        env:
+          PYTHON_INSTALL: ${{ steps.python_install.outcome }}
+          PYTHON_COMPILE: ${{ steps.python_compile.outcome }}
+          PYTEST: ${{ steps.pytest.outcome }}
+          JAVASCRIPT: ${{ steps.javascript.outcome }}
+          BROWSER_INSTALL: ${{ steps.browser_install.outcome }}
+          PREVIEW_SERVER: ${{ steps.preview_server.outcome }}
+          BROWSER: ${{ steps.browser.outcome }}
+        run: |
+          test "$PYTHON_INSTALL" = success
+          test "$PYTHON_COMPILE" = success
+          test "$PYTEST" = success
+          test "$JAVASCRIPT" = success
+          test "$BROWSER_INSTALL" = success
+          test "$PREVIEW_SERVER" = success
+          test "$BROWSER" = success
