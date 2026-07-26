@@ -1,15 +1,15 @@
 {
   "checkpoint": "0.8",
-  "tested_sha": "79de2f93b97025ea28de2d54964b5753ee774e0d",
-  "generated_at": "2026-07-26T21:21:00.966433+00:00",
+  "tested_sha": "863f575cab7832b078209c7483050453d7df5105",
+  "generated_at": "2026-07-26T21:22:46.477203+00:00",
   "passed": false,
   "states": {
-    "python_install": "skipped",
-    "python_compile": "skipped",
-    "pytest_cumulative": "skipped",
-    "javascript_syntax": "skipped",
-    "browser_install": "skipped",
-    "preview_server": "skipped",
-    "browser_scenarios": "skipped"
+    "python_install": "failure",
+    "python_compile": "success",
+    "pytest_cumulative": "failure",
+    "javascript_syntax": "failure",
+    "browser_install": "success",
+    "preview_server": "success",
+    "browser_scenarios": "failure"
   }
 }
