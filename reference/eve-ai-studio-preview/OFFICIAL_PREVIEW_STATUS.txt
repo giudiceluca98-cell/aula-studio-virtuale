@@ -9,41 +9,76 @@ PERCORSO UFFICIALE
 reference/eve-ai-studio-preview/index.html
 
 Questo file è l’unica anteprima ufficiale di Eve AI Studio.
-Da questo momento gli aggiornamenti progressivi dell’anteprima devono essere
-applicati a questo percorso, senza creare demo parallele da considerare
-canoniche.
+Gli aggiornamenti progressivi devono essere applicati a questo percorso oppure
+ai moduli caricati da esso, senza creare demo parallele da considerare ufficiali.
 
-VERSIONE INTEGRATA
+VERSIONI INTEGRATE
 
-Eve Animation Library 1.2.2
+- servizio Eve AI Studio: 0.8.0;
+- checkpoint tecnico: 0.8;
+- Eve Animation Library: 1.2.2.
 
-ASSET DISPONIBILI
+CHECKPOINT 0.8 — MATERIALI E PREPARAZIONE RAG
 
-- P0 conversazione: 12
-- P1 studio: 21
-- P2 avanzate: 20
-- compact: 8
-- hero: 3
-- totale: 64
+Nuova vista:
 
-FUNZIONI DELLA GALLERIA
+Materiali e RAG
+
+Modulo:
+
+materials-workflow.js
+
+Funzioni dimostrative:
+
+- catalogo materiali separato per aula;
+- importazione documentale controllata;
+- scenari valido, duplicato, nuova versione, formato non supportato e limite;
+- metadati, media type e nome file;
+- checksum;
+- deduplicazione per aula;
+- versioni immutabili;
+- stato di elaborazione;
+- estrazione testuale iniziale;
+- preparazione dei chunk con offset e impronta;
+- stato embedding not_requested;
+- cronologia con errori redatti;
+- assenza dichiarata di embedding e provider esterni.
+
+Stati Eve collegati nella simulazione:
+
+- eve-uploading;
+- eve-searching;
+- eve-reading;
+- eve-indexing;
+- eve-success;
+- eve-error-supportive;
+- eve-confirmation-needed;
+- eve-idle-soft.
+
+EVE ANIMATION LIBRARY 1.2.2
+
+Asset disponibili:
+
+- P0 conversazione: 12;
+- P1 studio: 21;
+- P2 avanzate: 20;
+- compact: 8;
+- hero: 3;
+- totale: 64.
+
+Funzioni della galleria:
 
 - selezione individuale degli asset;
 - ricerca per nome o ID;
-- filtro P0;
-- filtro P1;
-- filtro P2;
-- filtro compact;
-- filtro hero;
+- filtri P0, P1, P2, compact e hero;
 - riproduzione di un’animazione alla volta;
 - visualizzazione dei metadati;
-- collegamenti dimostrativi tra sezioni dell’app e stati Eve;
-- sostituzione della vecchia Eve umana con Eve sferica reale.
+- collegamenti dimostrativi tra sezioni e stati Eve;
+- Eve sferica reale al posto della vecchia rappresentazione umana.
 
 OTTIMIZZAZIONE DELLA PREVIEW GITHUB
 
 La libreria sorgente completa v1.2.2 rimane il riferimento autorevole.
-
 Per evitare di inserire nel repository l’intero archivio da circa 143 MB,
 l’anteprima GitHub utilizza copie animate ottimizzate esclusivamente per la
 galleria:
@@ -51,19 +86,19 @@ galleria:
 - risoluzione runtime: 40 × 40;
 - massimo 2 fotogrammi campionati per asset;
 - formato WebP animato;
-- metadati originali mantenuti nella scheda informativa;
+- metadati originali mantenuti;
 - un solo asset visualizzato alla volta.
 
-Le copie ottimizzate non sostituiscono i file sorgente della libreria e non
-devono essere riutilizzate come master di produzione.
+Le copie ottimizzate non sostituiscono i file sorgente e non devono essere
+riutilizzate come master di produzione.
 
-STRUTTURA TECNICA
+STRUTTURA TECNICA DELLE ANIMAZIONI
 
-Gli asset ottimizzati e i metadati sono compressi e suddivisi nei file:
+Gli asset ottimizzati e i metadati sono suddivisi nei file:
 
 official-payload-*.js
 
-Il modulo della galleria è compresso e suddiviso nei file:
+Il modulo della galleria è suddiviso nei file:
 
 official-library-workflow-payload-a.js
 official-library-workflow-payload-b.js
@@ -77,14 +112,25 @@ DECISIONE EDITORIALE
 Le scritte inglesi incorporate in alcuni asset P1/P2 sono accettate per questa
 versione e non bloccano l’avanzamento.
 
+VERIFICA DEL CHECKPOINT 0.8
+
+- JavaScript materials-workflow.js verificato sintatticamente con Node;
+- simulazione costruita senza fetch o chiamate di rete;
+- 20 test backend specifici superati nel banco di prova locale;
+- verifica visuale completa dell’anteprima nel browser ancora da eseguire;
+- suite cumulativa dei checkpoint precedenti non ancora rilanciata.
+
 VINCOLI RISPETTATI
 
 - modificato soltanto il branch eve-ai-studio;
 - main non modificato;
 - demo-canonica non modificato;
+- eve-canonical-integration-v2 non modificato;
 - HTML canonico non modificato;
 - nessuna pull request;
-- nessun merge.
+- nessun merge;
+- nessun provider AI esterno;
+- nessun embedding esterno.
 
 REGOLA PER I PROSSIMI AGGIORNAMENTI
 
