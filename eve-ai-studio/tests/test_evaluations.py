@@ -74,12 +74,13 @@ def complete_all(
 
 def test_schema_and_default_scenarios(tmp_path: Path) -> None:
     service = make_service(tmp_path)
-    assert service.store.schema_version == 1
+    assert service.store.schema_version == 2
     assert service.store.table_names() == {
         "evaluation_scenario_versions",
         "evaluation_runs",
         "evaluation_run_scenarios",
         "evaluation_results",
+        "evaluation_run_artifacts",
     }
     assert service.status().active_scenarios_count == 8
     assert service.status().scenarios_count == 8
