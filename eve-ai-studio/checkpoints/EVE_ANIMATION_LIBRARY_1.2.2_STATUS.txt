@@ -35,14 +35,19 @@ versione e non bloccano l’avanzamento del progetto.
 
 INTEGRAZIONE NELL’ANTEPRIMA
 
-È stato sostituito il ritratto SVG temporaneo con un asset animato reale della
-libreria approvata:
+È stato sostituito il ritratto SVG temporaneo con un asset reale approvato
+della libreria:
 
-- stato: eve-idle-soft;
-- formato runtime: WebP animato;
-- variante: compatta ottimizzata per la scheda laterale;
+- stato visivo: eve-idle-soft;
+- formato runtime: WebP statico con trasparenza;
+- variante: compact 256 × 256;
 - versione sorgente: 1.2.2;
-- fallback prefers-reduced-motion: ritratto SVG statico esistente.
+- risoluzione sufficiente per la scheda laterale;
+- ritratto SVG conservato nel markup come fallback di caricamento.
+
+Il primo asset animato sperimentale da 88 × 88 è stato sostituito perché
+risultava troppo morbido alla dimensione di visualizzazione della scheda.
+La variante compact 256 preserva meglio occhi, anelli e riflessi.
 
 Questa prima integrazione runtime non copia nel repository l’intero archivio da
 143 MB. Mantiene la preview leggera e verifica la sostituzione effettiva del
