@@ -1,8 +1,6 @@
 {
   "consoleErrors": [],
-  "pageErrors": [
-    "TypeError: Cannot read properties of undefined (reading '0')\n    at showView (http://127.0.0.1:4173/app.js:22:81)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:4173/app.js:24:84)"
-  ],
+  "pageErrors": [],
   "scenarios": {
     "navigation": {
       "passed": true
@@ -30,5 +28,5 @@
     "scrollWidth": 1440,
     "clientWidth": 1440
   },
-  "passed": false
+  "passed": true
 }
