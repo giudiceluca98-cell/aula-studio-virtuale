@@ -1,7 +1,7 @@
 [project]
 name = "eve-ai-studio"
-version = "1.0.0"
-description = "Fondazione modulare di Eve con provider, valutazioni, materiali, retrieval locale e chat RAG citata"
+version = "1.1.0"
+description = "Fondazione modulare di Eve con materiali, retrieval, chat RAG citata e apertura verificabile delle fonti"
 requires-python = ">=3.11"
 dependencies = [
   "fastapi>=0.115,<1",
