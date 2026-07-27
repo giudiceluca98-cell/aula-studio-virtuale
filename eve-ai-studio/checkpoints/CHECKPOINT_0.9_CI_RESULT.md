@@ -1,7 +1,7 @@
 # Checkpoint 0.9 — Risultato verifica automatica
 
-- Commit verificato: `36b3b84099e6f493dac8b48e9c900faf80d3556a`
-- Data UTC: `2026-07-27T16:17:14.019063+00:00`
+- Commit verificato: `cf32f09001d16ac7ffdc8e5493bd3963ef8c93a7`
+- Data UTC: `2026-07-27T16:20:54.796901+00:00`
 - Esito complessivo: **NON SUPERATO**
 
 ## Stati
