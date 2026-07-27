@@ -43,8 +43,9 @@ from .requirements.models import (
 from .requirements.parser import PlanParseError
 from .requirements.registry import RequirementNotFoundError, RequirementRegistry
 from .requirements.storage import RequirementVersionNotFoundError, SqliteRequirementStore
+from .sources import SourceOpeningLimits, SourceOpeningService, create_source_router
 
-SERVICE_VERSION = "1.0.0"
+SERVICE_VERSION = "1.1.0"
 
 settings = EveSettings()
 audit = AuditLogger(enabled=settings.audit_enabled)
@@ -115,6 +116,12 @@ rag = RagChatService(
         max_answer_chars=settings.rag_max_answer_chars,
     ),
 )
+source_opening = SourceOpeningService(
+    material_store,
+    limits=SourceOpeningLimits(
+        max_context_chars=settings.source_max_context_chars,
+    ),
+)
 
 active_prompt_version_id = prompts.status().active_version_id
 if active_prompt_version_id is not None and not evaluation_store.runs_count(
@@ -128,8 +135,9 @@ app = FastAPI(
     version=SERVICE_VERSION,
     description=(
         "Fondazione modulare di Eve con requisiti, prompt, valutazioni, runner, "
-        "provider controllati, materiali, retrieval locale e chat RAG citata. "
-        "Provider esterni, embedding e database vettoriali restano disattivati."
+        "provider controllati, materiali, retrieval locale, chat RAG citata e "
+        "apertura verificabile delle fonti. Provider esterni, embedding e database "
+        "vettoriali restano disattivati."
     ),
 )
 app.include_router(create_prompt_router(prompts))
@@ -139,6 +147,7 @@ app.include_router(create_provider_router(provider_orchestrator))
 app.include_router(create_material_router(materials))
 app.include_router(create_retrieval_router(retrieval))
 app.include_router(create_rag_router(rag))
+app.include_router(create_source_router(source_opening))
 
 
 @app.get("/health", response_model=HealthResponse)
