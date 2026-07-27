@@ -57,54 +57,84 @@ jobs:
           cat > verify-eve-standalone.mjs <<'EOF'
           import { chromium } from "playwright";
           import assert from "node:assert/strict";
-          import {pathToFileURL} from "node:url";
-          import {resolve} from "node:path";
+          import { pathToFileURL } from "node:url";
+          import { resolve } from "node:path";
           import fs from "node:fs";
-          const browser=await chromium.launch({headless:true});
-          const page=await browser.newPage({viewport:{width:1440,height:2200},deviceScaleFactor:2});
-          const errors=[];
-          page.on("console",m=>{if(m.type()==="error")errors.push(m.text())});
-          page.on("pageerror",e=>errors.push(e.message));
-          let quality="unknown",assets=0;
-          try{
-            const file=resolve("reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html");
-            await page.goto(pathToFileURL(file).href,{waitUntil:"load"});
-            await page.waitForFunction(()=>window.EveAnimationLibrary?.setState&&document.getElementById("sourceOpeningPanel"),null,{timeout:30000});
-            assert.equal(await page.locator('meta[name="eve-preview-format"]').get_attribute('content'),"standalone");
-            quality=await page.evaluate(()=>window.EveAnimationLibrary.quality||"legacy-preview");
-            if(quality==="original-final-webp"){
-              assert.equal(await page.locator('meta[name="eve-animation-quality"]').get_attribute('content'),"original-hq");
-              const states=await page.evaluate(()=>window.EveAnimationLibrary.listStates());
-              assets=states.length; assert.equal(assets,64);
-              for(const asset of states){
-                const result=await page.evaluate(async asset=>{
-                  await window.EveAnimationLibrary.setState(asset.id,{restart:true});
-                  const img=document.getElementById("eveHqPortrait"); await img.decode().catch(()=>{});
-                  return {w:img.naturalWidth,h:img.naturalHeight,sha:img.dataset.eveSha256,q:img.dataset.eveQuality};
-                },asset);
-                assert.equal(result.w,asset.width); assert.equal(result.h,asset.height);
-                assert.equal(result.sha,asset.sha256); assert.equal(result.q,"original");
+
+          const browser = await chromium.launch({ headless: true });
+          const page = await browser.newPage({ viewport: { width: 1440, height: 2200 }, deviceScaleFactor: 2 });
+          const errors = [];
+          page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
+          page.on("pageerror", error => errors.push(error.message));
+          let quality = "unknown";
+          let assets = 0;
+          let galleryCards = 0;
+
+          try {
+            const file = resolve("reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html");
+            await page.goto(pathToFileURL(file).href, { waitUntil: "load" });
+            await page.waitForFunction(
+              () => window.EveAnimationLibrary?.setState && document.getElementById("sourceOpeningPanel") && document.getElementById("openAnimationLibraryBtn"),
+              null,
+              { timeout: 30000 }
+            );
+
+            assert.equal(await page.locator('meta[name="eve-preview-format"]').getAttribute("content"), "standalone");
+            quality = await page.evaluate(() => window.EveAnimationLibrary.quality || "legacy-preview");
+
+            if (quality === "original-final-webp") {
+              assert.equal(await page.locator('meta[name="eve-animation-quality"]').getAttribute("content"), "original-hq");
+              const states = await page.evaluate(() => window.EveAnimationLibrary.listStates());
+              assets = states.length;
+              assert.equal(assets, 64);
+              for (const asset of states) {
+                const result = await page.evaluate(async selected => {
+                  await window.EveAnimationLibrary.setState(selected.id, { restart: true });
+                  const image = document.getElementById("eveHqPortrait");
+                  await image.decode().catch(() => {});
+                  return { width: image.naturalWidth, height: image.naturalHeight, sha: image.dataset.eveSha256, quality: image.dataset.eveQuality };
+                }, asset);
+                assert.equal(result.width, asset.width);
+                assert.equal(result.height, asset.height);
+                assert.equal(result.sha, asset.sha256);
+                assert.equal(result.quality, "original");
               }
-            }else{
-              const legacy=await page.evaluate(()=>({a:window.__EVE_OFFICIAL_GZIP_B64?.length||0,w:window.__EVE_OFFICIAL_WORKFLOW_GZIP_B64?.length||0}));
-              assert.ok(legacy.a>100000); assert.ok(legacy.w>8000); assets=64;
-              for(const state of ["eve-idle","eve-thinking","eve-processing","eve-reading-indexing","eve-success","eve-error-supportive","eve-confirmation-needed"]){await page.evaluate(s=>window.EveAnimationLibrary.setState(s),state)}
+            } else {
+              throw new Error(`Qualità animazioni inattesa: ${quality}`);
             }
+
+            await page.locator("#openAnimationLibraryBtn").click();
+            await page.waitForFunction(() => document.querySelectorAll("#animationLibraryGrid .animation-card").length === 64);
+            galleryCards = await page.locator("#animationLibraryGrid .animation-card").count();
+            assert.equal(galleryCards, 64);
+            assert.match(await page.locator("#animationLibraryCount").textContent(), /^64 animazioni$/);
+            await page.locator('#animationLibraryGrid .animation-card[data-asset-id="eve-thinking-deep"]').click();
+            await page.waitForFunction(() => document.getElementById("eveHqPortrait")?.dataset.eveState === "eve-thinking-deep");
+
             await page.locator('[data-view="rag-materials"]').click();
-            await page.locator("#materialScenario").selectOption("valid"); await page.locator("#runMaterialImport").click();
-            await page.waitForFunction(()=>!document.getElementById("runMaterialImport").disabled);
-            assert.match(await page.locator("#materialImportHistory").textContent(),/ready/);
-            await page.locator("#retrievalScenario").selectOption("normal"); await page.locator("#retrievalScenario").dispatchEvent("change"); await page.locator("#runRetrievalSearch").click();
-            assert.match(await page.locator("#retrievalResults").textContent(),/Citazione verificata/);
-            await page.locator("#ragChatScenario").selectOption("grounded"); await page.locator("#ragChatScenario").dispatchEvent("change"); await page.locator("#runRagChat").click();
-            assert.match(await page.locator("#ragChatAnswer").textContent(),/\[1\]/);
-            await page.locator("#sourceOpeningScenario").selectOption("verified"); await page.locator("#sourceOpeningScenario").dispatchEvent("change"); await page.locator("#openVerifiedSource").click();
-            assert.match(await page.locator("#sourceOpeningResult").textContent(),/Integrità verificata/);
-            assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth),true);
-            assert.deepEqual(errors,[]);
-            await page.screenshot({path:"eve-ai-studio-standalone.png",fullPage:true});
-            fs.writeFileSync("eve-standalone-result.json",JSON.stringify({passed:true,quality,assets},null,2));
-          }finally{await browser.close()}
+            await page.locator("#materialScenario").selectOption("valid");
+            await page.locator("#runMaterialImport").click();
+            await page.waitForFunction(() => !document.getElementById("runMaterialImport").disabled);
+            assert.match(await page.locator("#materialImportHistory").textContent(), /ready/);
+            await page.locator("#retrievalScenario").selectOption("normal");
+            await page.locator("#retrievalScenario").dispatchEvent("change");
+            await page.locator("#runRetrievalSearch").click();
+            assert.match(await page.locator("#retrievalResults").textContent(), /Citazione verificata/);
+            await page.locator("#ragChatScenario").selectOption("grounded");
+            await page.locator("#ragChatScenario").dispatchEvent("change");
+            await page.locator("#runRagChat").click();
+            assert.match(await page.locator("#ragChatAnswer").textContent(), /\[1\]/);
+            await page.locator("#sourceOpeningScenario").selectOption("verified");
+            await page.locator("#sourceOpeningScenario").dispatchEvent("change");
+            await page.locator("#openVerifiedSource").click();
+            assert.match(await page.locator("#sourceOpeningResult").textContent(), /Integrità verificata/);
+            assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), true);
+            assert.deepEqual(errors, []);
+            await page.screenshot({ path: "eve-ai-studio-standalone.png", fullPage: true });
+            fs.writeFileSync("eve-standalone-result.json", JSON.stringify({ passed: true, quality, assets, galleryCards }, null, 2));
+          } finally {
+            await browser.close();
+          }
           EOF
           set -o pipefail
           node verify-eve-standalone.mjs 2>&1 | tee eve-standalone-browser.txt
@@ -117,9 +147,10 @@ jobs:
           passed=false; [ "$outcome" = success ] && passed=true
           quality=$(python3 -c 'import json,pathlib; p=pathlib.Path("eve-standalone-result.json"); print(json.loads(p.read_text()).get("quality","unknown") if p.exists() else "unknown")')
           assets=$(python3 -c 'import json,pathlib; p=pathlib.Path("eve-standalone-result.json"); print(json.loads(p.read_text()).get("assets",0) if p.exists() else 0)')
+          gallery=$(python3 -c 'import json,pathlib; p=pathlib.Path("eve-standalone-result.json"); print(json.loads(p.read_text()).get("galleryCards",0) if p.exists() else 0)')
           size=$(wc -c < reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html 2>/dev/null || echo 0)
           cat > eve-ai-studio/checkpoints/EVE_STANDALONE_PREVIEW_RESULT.json <<EOF
-          {"tested_sha":"${{ github.sha }}","passed":$passed,"browser_outcome":"$outcome","opened_as":"file://","file":"reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html","size_bytes":$size,"animation_library":"1.2.2","animation_quality":"$quality","animation_assets":$assets,"external_scripts":0,"external_stylesheets":0,"navigation_entry_count":1}
+          {"tested_sha":"${{ github.sha }}","passed":$passed,"browser_outcome":"$outcome","opened_as":"file://","file":"reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html","size_bytes":$size,"animation_library":"1.2.2","animation_quality":"$quality","animation_assets":$assets,"animation_gallery_cards":$gallery,"external_scripts":0,"external_stylesheets":0,"navigation_entry_count":1}
           EOF
           cp eve-standalone-build.txt eve-ai-studio/checkpoints/EVE_STANDALONE_BUILD_LOG.txt 2>/dev/null || true
           cp eve-standalone-browser.txt eve-ai-studio/checkpoints/EVE_STANDALONE_BROWSER_LOG.txt 2>/dev/null || true
