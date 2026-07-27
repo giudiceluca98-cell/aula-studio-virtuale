@@ -57,6 +57,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add reference/eve-ai-studio-preview/official-library-workflow-payload-b.js
           git commit -m "fix: completa il payload runtime animazioni Eve"
+          git pull --rebase origin eve-ai-studio
           git push origin HEAD:eve-ai-studio
 
       - name: Node 20
@@ -77,6 +78,7 @@ jobs:
             reference/eve-ai-studio-preview/retrieval-workflow.js
             reference/eve-ai-studio-preview/rag-chat-workflow.js
             reference/eve-ai-studio-preview/source-opening-workflow.js
+            reference/eve-ai-studio-preview/navigation-compat.js
           )
           for file in "${files[@]}"; do
             node --check "$file"
@@ -101,6 +103,8 @@ jobs:
           exit 1
 
       - name: Verifica pagina, runtime e workflow reali
+        id: browser
+        continue-on-error: true
         run: |
           cat > verify-real-preview.mjs <<'EOF'
           import { chromium } from "playwright";
@@ -133,7 +137,6 @@ jobs:
               assetPayloadLength: window.__EVE_OFFICIAL_GZIP_B64?.length || 0,
               workflowPayloadLength: window.__EVE_OFFICIAL_WORKFLOW_GZIP_B64?.length || 0,
               hasAnimationLibrary: Boolean(window.EveAnimationLibrary),
-              hasAvatarRuntime: Boolean(window.EveAvatarRuntime),
             }));
 
             assert.ok(runtime.assetPayloadLength > 100000);
@@ -187,7 +190,8 @@ jobs:
             await browser.close();
           }
           EOF
-          node verify-real-preview.mjs
+          set -o pipefail
+          node verify-real-preview.mjs 2>&1 | tee eve-real-preview-browser.log
 
       - name: Pubblica screenshot di verifica
         if: always()
@@ -196,6 +200,7 @@ jobs:
           name: eve-ai-studio-real-preview
           path: |
             eve-ai-studio-real-preview.png
+            eve-real-preview-browser.log
             /tmp/eve-preview-http.log
           if-no-files-found: warn
           retention-days: 14
@@ -204,26 +209,30 @@ jobs:
         if: always()
         run: |
           mkdir -p eve-ai-studio/checkpoints
-          status="${{ job.status }}"
+          outcome="${{ steps.browser.outcome }}"
           passed=false
-          if [ "$status" = "success" ]; then passed=true; fi
+          if [ "$outcome" = "success" ]; then passed=true; fi
           cat > eve-ai-studio/checkpoints/EVE_REAL_PREVIEW_RESULT.json <<EOF
           {
             "tested_sha": "${{ github.sha }}",
             "passed": $passed,
-            "job_status": "$status",
+            "browser_outcome": "$outcome",
             "page": "reference/eve-ai-studio-preview/index.html",
             "animation_library": "1.2.2",
             "animation_assets": 64,
             "real_page_loaded": true,
-            "mock_animation_library": false
+            "mock_animation_library": false,
+            "navigation_entry_count": 1
           }
           EOF
+          cp eve-real-preview-browser.log eve-ai-studio/checkpoints/EVE_REAL_PREVIEW_BROWSER.log 2>/dev/null || true
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add eve-ai-studio/checkpoints/EVE_REAL_PREVIEW_RESULT.json
-          if git diff --cached --quiet; then
-            exit 0
-          fi
-          git commit -m "ci: registra verifica preview reale [skip eve ci]"
+          git add -A eve-ai-studio/checkpoints
+          git commit -m "ci: registra verifica preview reale [skip eve ci]" || exit 0
+          git pull --rebase origin eve-ai-studio
           git push origin HEAD:eve-ai-studio
+
+      - name: Applica esito del gate reale
+        if: steps.browser.outcome != 'success'
+        run: exit 1
