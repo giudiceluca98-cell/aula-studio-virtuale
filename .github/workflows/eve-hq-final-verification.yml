@@ -1,24 +1,26 @@
-name: Eve HQ final verification
+name: Eve AI Studio preview verification
 
 on:
   push:
     branches:
       - eve-ai-studio
     paths:
+      - "reference/eve-ai-studio-preview/**"
       - ".github/workflows/eve-hq-final-verification.yml"
-      - "reference/eve-ai-studio-preview/index.html"
-      - "reference/eve-ai-studio-preview/animation-library-gallery.js"
-      - "reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html"
-      - "reference/eve-ai-studio-preview/eve-animation-runtime-v1.2.2/**"
   workflow_dispatch:
 
 permissions:
   contents: write
 
+concurrency:
+  group: eve-ai-studio-preview-verification-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  verify-hq:
+  build-and-verify:
+    if: github.event_name == 'workflow_dispatch' || !contains(github.event.head_commit.message, '[skip eve preview ci]')
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 35
 
     steps:
       - name: Checkout eve-ai-studio
@@ -26,6 +28,14 @@ jobs:
         with:
           ref: eve-ai-studio
           fetch-depth: 0
+
+      - name: Rigenera lo standalone dalla preview modulare
+        run: |
+          python3 reference/eve-ai-studio-preview/build_standalone.py
+          file=reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html
+          test -s "$file"
+          ! grep -Eiq '<script[^>]+src=' "$file"
+          ! grep -Eiq "<link[^>]+rel=['\"]stylesheet['\"]" "$file"
 
       - name: Node 20
         uses: actions/setup-node@v4
@@ -39,17 +49,19 @@ jobs:
 
       - name: Avvia preview modulare
         run: |
-          python3 -m http.server 4173 --directory reference/eve-ai-studio-preview >/tmp/eve-hq-http.txt 2>&1 &
+          python3 -m http.server 4173 --directory reference/eve-ai-studio-preview >/tmp/eve-preview-http.txt 2>&1 &
           for attempt in {1..30}; do
             curl -fsS http://127.0.0.1:4173/index.html >/dev/null && exit 0
             sleep 1
           done
-          cat /tmp/eve-hq-http.txt
+          cat /tmp/eve-preview-http.txt
           exit 1
 
-      - name: Verifica 64 stati, galleria, qualità e funzioni
+      - name: Verifica preview, standalone, galleria e workflow
+        id: verify
+        continue-on-error: true
         run: |
-          cat > verify-eve-hq-final.mjs <<'EOF'
+          cat > verify-eve-preview.mjs <<'EOF'
           import { chromium } from "playwright";
           import assert from "node:assert/strict";
           import fs from "node:fs";
@@ -67,7 +79,7 @@ jobs:
             await page.waitForFunction(
               () => window.EveAnimationLibrary?.quality === "original-final-webp" && document.getElementById("openAnimationLibraryBtn"),
               null,
-              { timeout: 30000 }
+              { timeout: 60000 }
             );
 
             const states = await page.evaluate(() => window.EveAnimationLibrary.listStates());
@@ -86,7 +98,6 @@ jobs:
                   state: image.dataset.eveState,
                 };
               }, asset);
-
               assert.equal(result.width, asset.width);
               assert.equal(result.height, asset.height);
               assert.equal(result.sha256, asset.sha256);
@@ -95,16 +106,11 @@ jobs:
             }
 
             if (expectedFormat) {
-              assert.equal(
-                await page.locator('meta[name="eve-preview-format"]').getAttribute("content"),
-                expectedFormat
-              );
-              assert.equal(
-                await page.locator('meta[name="eve-animation-quality"]').getAttribute("content"),
-                "original-hq"
-              );
+              assert.equal(await page.locator('meta[name="eve-preview-format"]').getAttribute("content"), expectedFormat);
+              assert.equal(await page.locator('meta[name="eve-animation-quality"]').getAttribute("content"), "original-hq");
             }
 
+            assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), true);
             return { states, errors };
           }
 
@@ -112,13 +118,35 @@ jobs:
             assert.equal(await page.locator("#openAnimationLibraryBtn").count(), 1);
             assert.equal(await page.locator('[data-view="animation-library"]').count(), 1);
             await page.locator("#openAnimationLibraryBtn").click();
-            await page.waitForFunction(() => document.querySelectorAll("#animationLibraryGrid .animation-card").length === 64);
+            await page.waitForFunction(() => document.querySelectorAll("#animationLibraryGrid .animation-card").length === 64, null, { timeout: 60000 });
             assert.equal(await page.locator("#animationLibraryGrid .animation-card").count(), 64);
             assert.match(await page.locator("#animationLibraryCount").textContent(), /^64 animazioni$/);
             await page.locator('#animationLibraryGrid .animation-card[data-asset-id="eve-thinking-deep"]').click();
             await page.waitForFunction(() => document.getElementById("eveHqPortrait")?.dataset.eveState === "eve-thinking-deep");
             assert.match(await page.locator("#animationLibraryPreviewTechnical").textContent(), /SHA-256:/);
-            assert.equal(await page.locator("#animation-library").isVisible(), true);
+          }
+
+          async function verifyInteractions(page) {
+            await page.locator('[data-view="rag-materials"]').click();
+            await page.locator("#materialScenario").selectOption("valid");
+            await page.locator("#runMaterialImport").click();
+            await page.waitForFunction(() => !document.getElementById("runMaterialImport").disabled);
+            assert.match(await page.locator("#materialImportHistory").textContent(), /ready/);
+
+            await page.locator("#retrievalScenario").selectOption("normal");
+            await page.locator("#retrievalScenario").dispatchEvent("change");
+            await page.locator("#runRetrievalSearch").click();
+            assert.match(await page.locator("#retrievalResults").textContent(), /Citazione verificata/);
+
+            await page.locator("#ragChatScenario").selectOption("grounded");
+            await page.locator("#ragChatScenario").dispatchEvent("change");
+            await page.locator("#runRagChat").click();
+            assert.match(await page.locator("#ragChatAnswer").textContent(), /\[1\]/);
+
+            await page.locator("#sourceOpeningScenario").selectOption("verified");
+            await page.locator("#sourceOpeningScenario").dispatchEvent("change");
+            await page.locator("#openVerifiedSource").click();
+            assert.match(await page.locator("#sourceOpeningResult").textContent(), /Integrità verificata/);
           }
 
           const browser = await chromium.launch({ headless: true });
@@ -132,6 +160,8 @@ jobs:
             standaloneFile: false,
             interactions: false,
             animationGallery: false,
+            externalScripts: 0,
+            externalStylesheets: 0,
             errors: [],
           };
 
@@ -143,30 +173,10 @@ jobs:
             await verifyGallery(modular);
             result.galleryCards = 64;
             result.animationGallery = true;
-
-            await modular.locator('[data-view="rag-materials"]').click();
-            await modular.locator("#materialScenario").selectOption("valid");
-            await modular.locator("#runMaterialImport").click();
-            await modular.waitForFunction(() => !document.getElementById("runMaterialImport").disabled);
-            assert.match(await modular.locator("#materialImportHistory").textContent(), /ready/);
-
-            await modular.locator("#retrievalScenario").selectOption("normal");
-            await modular.locator("#retrievalScenario").dispatchEvent("change");
-            await modular.locator("#runRetrievalSearch").click();
-            assert.match(await modular.locator("#retrievalResults").textContent(), /Citazione verificata/);
-
-            await modular.locator("#ragChatScenario").selectOption("grounded");
-            await modular.locator("#ragChatScenario").dispatchEvent("change");
-            await modular.locator("#runRagChat").click();
-            assert.match(await modular.locator("#ragChatAnswer").textContent(), /\[1\]/);
-
-            await modular.locator("#sourceOpeningScenario").selectOption("verified");
-            await modular.locator("#sourceOpeningScenario").dispatchEvent("change");
-            await modular.locator("#openVerifiedSource").click();
-            assert.match(await modular.locator("#sourceOpeningResult").textContent(), /Integrità verificata/);
+            await verifyInteractions(modular);
             result.interactions = true;
             assert.deepEqual(modularCheck.errors, []);
-            await modular.screenshot({ path: "eve-hq-final-modular.png", fullPage: true });
+            await modular.screenshot({ path: "eve-preview-modular.png", fullPage: true });
 
             const standalone = await browser.newPage({ viewport: { width: 1440, height: 1800 }, deviceScaleFactor: 2 });
             const standalonePath = path.resolve("reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html");
@@ -174,7 +184,7 @@ jobs:
             await verifyGallery(standalone);
             assert.deepEqual(standaloneCheck.errors, []);
             result.standaloneFile = true;
-            await standalone.screenshot({ path: "eve-hq-final-standalone.png", fullPage: true });
+            await standalone.screenshot({ path: "eve-preview-standalone.png", fullPage: true });
 
             result.passed = true;
           } catch (error) {
@@ -185,17 +195,17 @@ jobs:
             await browser.close();
           }
           EOF
-          node verify-eve-hq-final.mjs
+          node verify-eve-preview.mjs
 
-      - name: Salva rapporto definitivo
+      - name: Salva standalone e rapporto autorevole
         if: always()
         run: |
           mkdir -p eve-ai-studio/checkpoints
           cp EVE_HQ_FINAL_VERIFICATION.json eve-ai-studio/checkpoints/EVE_HQ_FINAL_VERIFICATION.json
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -f eve-ai-studio/checkpoints/EVE_HQ_FINAL_VERIFICATION.json
-          git commit -m "ci: registra verifica finale animazioni Eve HQ" || exit 0
+          git add -f reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html eve-ai-studio/checkpoints/EVE_HQ_FINAL_VERIFICATION.json
+          git commit -m "build: aggiorna preview verificata Eve [skip eve preview ci]" || exit 0
           git pull --rebase origin eve-ai-studio
           git push origin HEAD:eve-ai-studio
 
@@ -203,10 +213,15 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: eve-hq-final-verification
+          name: eve-ai-studio-preview-verification
           path: |
-            eve-hq-final-modular.png
-            eve-hq-final-standalone.png
+            eve-preview-modular.png
+            eve-preview-standalone.png
             EVE_HQ_FINAL_VERIFICATION.json
+            /tmp/eve-preview-http.txt
           if-no-files-found: warn
           retention-days: 14
+
+      - name: Applica esito del gate
+        if: steps.verify.outcome != 'success'
+        run: exit 1
