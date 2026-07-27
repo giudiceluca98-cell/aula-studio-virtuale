@@ -5,6 +5,9 @@ on:
     branches: [eve-ai-studio]
     paths:
       - "reference/eve-ai-studio-preview/vendor/EVE_ANIMATION_RUNTIME_V1.2.2_ORIGINAL.tar.xz"
+      - "reference/eve-ai-studio-preview/install_hq_animation_runtime.py"
+      - "reference/eve-ai-studio-preview/build_standalone.py"
+      - ".github/workflows/eve-ai-studio-install-hq-animations.yml"
   workflow_dispatch:
 
 permissions:
@@ -16,8 +19,9 @@ concurrency:
 
 jobs:
   install-and-verify:
+    if: github.event_name == 'workflow_dispatch' || !contains(github.event.head_commit.message, '[skip eve hq install]')
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
         with:
@@ -28,27 +32,43 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Installa validatore immagini
+      - name: Installa dipendenze di verifica
         run: python -m pip install --disable-pip-version-check pillow
 
-      - name: Installa i 64 asset originali
+      - name: Verifica presenza archivio
         run: |
-          python reference/eve-ai-studio-preview/install_hq_animation_runtime.py
-          python reference/eve-ai-studio-preview/build_standalone.py
+          test -f reference/eve-ai-studio-preview/vendor/EVE_ANIMATION_RUNTIME_V1.2.2_ORIGINAL.tar.xz
+          sha256sum reference/eve-ai-studio-preview/vendor/EVE_ANIMATION_RUNTIME_V1.2.2_ORIGINAL.tar.xz | tee eve-hq-archive-sha256.txt
+
+      - name: Installa i 64 asset originali e genera standalone
+        id: install
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          python reference/eve-ai-studio-preview/install_hq_animation_runtime.py 2>&1 | tee eve-hq-install.txt
+          python reference/eve-ai-studio-preview/build_standalone.py 2>&1 | tee -a eve-hq-install.txt
 
       - uses: actions/setup-node@v4
+        if: steps.install.outcome == 'success'
         with:
           node-version: "20"
 
       - name: Installa Chromium
+        if: steps.install.outcome == 'success'
         run: |
           npm install --no-save playwright
           npx playwright install --with-deps chromium
 
       - name: Verifica preview modulare e standalone HQ
+        id: browser
+        if: steps.install.outcome == 'success'
+        continue-on-error: true
         run: |
-          python -m http.server 4173 --directory reference/eve-ai-studio-preview >/tmp/eve-hq-http.log 2>&1 &
-          for attempt in {1..30}; do curl -fsS http://127.0.0.1:4173/index.html >/dev/null && break; sleep 1; done
+          python -m http.server 4173 --directory reference/eve-ai-studio-preview >/tmp/eve-hq-http.txt 2>&1 &
+          for attempt in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/index.html >/dev/null && break
+            sleep 1
+          done
           cat > verify-eve-hq.mjs <<'EOF'
           import { chromium } from "playwright";
           import assert from "node:assert/strict";
@@ -60,7 +80,7 @@ jobs:
             page.on("pageerror", e => errors.push(e.message));
             page.on("console", m => { if(m.type()==="error") errors.push(m.text()); });
             await page.goto(url, {waitUntil:"load"});
-            await page.waitForFunction(() => window.EveAnimationLibrary?.quality === "original-final-webp");
+            await page.waitForFunction(() => window.EveAnimationLibrary?.quality === "original-final-webp", null, {timeout:30000});
             const states=await page.evaluate(() => window.EveAnimationLibrary.listStates());
             assert.equal(states.length,64);
             for(const asset of states){
@@ -70,8 +90,10 @@ jobs:
                 await img.decode().catch(()=>{});
                 return {w:img.naturalWidth,h:img.naturalHeight,sha:img.dataset.eveSha256,q:img.dataset.eveQuality};
               },asset);
-              assert.equal(result.w,asset.width); assert.equal(result.h,asset.height);
-              assert.equal(result.sha,asset.sha256); assert.equal(result.q,"original");
+              assert.equal(result.w,asset.width);
+              assert.equal(result.h,asset.height);
+              assert.equal(result.sha,asset.sha256);
+              assert.equal(result.q,"original");
             }
             assert.deepEqual(errors,[]);
             if(expectedFormat){
@@ -81,31 +103,74 @@ jobs:
           }
 
           const browser=await chromium.launch({headless:true});
-          const modular=await browser.newPage({viewport:{width:1440,height:1600},deviceScaleFactor:2});
-          await verify(modular,"http://127.0.0.1:4173/index.html",null);
-          await modular.screenshot({path:"eve-hq-modular.png",fullPage:true});
-          const standalone=await browser.newPage({viewport:{width:1440,height:1600},deviceScaleFactor:2});
-          const file=path.resolve("reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html");
-          await verify(standalone,pathToFileURL(file).href,"standalone");
-          await standalone.screenshot({path:"eve-hq-standalone.png",fullPage:true});
-          await browser.close();
+          try {
+            const modular=await browser.newPage({viewport:{width:1440,height:1600},deviceScaleFactor:2});
+            await verify(modular,"http://127.0.0.1:4173/index.html",null);
+            await modular.screenshot({path:"eve-hq-modular.png",fullPage:true});
+            const standalone=await browser.newPage({viewport:{width:1440,height:1600},deviceScaleFactor:2});
+            const file=path.resolve("reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html");
+            await verify(standalone,pathToFileURL(file).href,"standalone");
+            await standalone.screenshot({path:"eve-hq-standalone.png",fullPage:true});
+          } finally {
+            await browser.close();
+          }
           EOF
-          node verify-eve-hq.mjs
+          set -o pipefail
+          node verify-eve-hq.mjs 2>&1 | tee eve-hq-browser.txt
 
-      - name: Salva integrazione sul branch
+      - name: Registra sempre l'esito
+        if: always()
         run: |
+          mkdir -p eve-ai-studio/checkpoints
+          install_outcome="${{ steps.install.outcome }}"
+          browser_outcome="${{ steps.browser.outcome }}"
+          passed=false
+          if [ "$install_outcome" = "success" ] && [ "$browser_outcome" = "success" ]; then passed=true; fi
+          cat > eve-ai-studio/checkpoints/EVE_HQ_INSTALL_WORKFLOW_RESULT.json <<EOF
+          {
+            "tested_sha": "${{ github.sha }}",
+            "passed": $passed,
+            "install_outcome": "$install_outcome",
+            "browser_outcome": "$browser_outcome",
+            "archive": "reference/eve-ai-studio-preview/vendor/EVE_ANIMATION_RUNTIME_V1.2.2_ORIGINAL.tar.xz",
+            "expected_archive_sha256": "c48e41300fea7ce835bb8f7ba3e46531f370d9f56668854861f90e0c01c1583e",
+            "animation_library": "1.2.2",
+            "expected_assets": 64,
+            "quality_policy": "original-final-webp-no-recompression"
+          }
+          EOF
+          cp eve-hq-install.txt eve-ai-studio/checkpoints/EVE_HQ_INSTALL_LOG.txt 2>/dev/null || true
+          cp eve-hq-browser.txt eve-ai-studio/checkpoints/EVE_HQ_BROWSER_LOG.txt 2>/dev/null || true
+          cp eve-hq-archive-sha256.txt eve-ai-studio/checkpoints/EVE_HQ_ARCHIVE_SHA256.txt 2>/dev/null || true
+
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A reference/eve-ai-studio-preview
-          git commit -m "feat: installa Eve Animation Library 1.2.2 originale HQ [skip eve standalone]" || exit 0
+
+          if [ "$passed" = true ]; then
+            git add -A reference/eve-ai-studio-preview
+          fi
+          git add -f eve-ai-studio/checkpoints/EVE_HQ_INSTALL_WORKFLOW_RESULT.json
+          git add -f eve-ai-studio/checkpoints/EVE_HQ_INSTALL_LOG.txt 2>/dev/null || true
+          git add -f eve-ai-studio/checkpoints/EVE_HQ_BROWSER_LOG.txt 2>/dev/null || true
+          git add -f eve-ai-studio/checkpoints/EVE_HQ_ARCHIVE_SHA256.txt 2>/dev/null || true
+          git commit -m "ci: registra installazione Eve Animation Library HQ [skip eve hq install] [skip eve standalone]" || exit 0
           git pull --rebase origin eve-ai-studio
           git push origin HEAD:eve-ai-studio
 
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: eve-animation-library-hq-verification
           path: |
             eve-hq-modular.png
             eve-hq-standalone.png
+            eve-hq-install.txt
+            eve-hq-browser.txt
+            eve-hq-archive-sha256.txt
             reference/eve-ai-studio-preview/EVE_HQ_INSTALLATION_RESULT.json
+          if-no-files-found: warn
           retention-days: 14
+
+      - name: Applica esito del gate HQ
+        if: steps.install.outcome != 'success' || steps.browser.outcome != 'success'
+        run: exit 1
