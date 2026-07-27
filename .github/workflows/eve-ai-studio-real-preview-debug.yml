@@ -54,12 +54,21 @@ jobs:
           import { chromium } from "playwright";
           import fs from "node:fs";
 
-          const report = { console: [], pageErrors: [], requestsFailed: [], states: {} };
+          const report = { console: [], pageErrors: [], requestsFailed: [], states: {}, scenarios: {} };
           const browser = await chromium.launch({ headless: true });
           const page = await browser.newPage({ viewport: { width: 1440, height: 2200 } });
           page.on("console", message => report.console.push(`${message.type()}: ${message.text()}`));
           page.on("pageerror", error => report.pageErrors.push(error.stack || error.message));
           page.on("requestfailed", request => report.requestsFailed.push(`${request.url()} :: ${request.failure()?.errorText}`));
+
+          async function scenario(name, action) {
+            try {
+              await action();
+              report.scenarios[name] = { passed: true };
+            } catch (error) {
+              report.scenarios[name] = { passed: false, error: error.stack || error.message };
+            }
+          }
 
           try {
             const response = await page.goto("http://127.0.0.1:4173/index.html", { waitUntil: "networkidle" });
@@ -71,9 +80,49 @@ jobs:
               report.states.animationLibraryReady = false;
               report.waitError = error.message;
             }
+
+            await scenario("animation_states", async () => {
+              for (const state of ["eve-idle","eve-thinking","eve-processing","eve-reading-indexing","eve-success","eve-error-supportive","eve-confirmation-needed"]) {
+                await page.evaluate(value => window.EveAnimationLibrary.setState(value), state);
+                await page.waitForTimeout(80);
+              }
+            });
+
+            await scenario("materials", async () => {
+              await page.locator('[data-view="rag-materials"]').click();
+              await page.locator("#materialScenario").selectOption("valid");
+              await page.locator("#runMaterialImport").click();
+              await page.waitForFunction(() => !document.getElementById("runMaterialImport").disabled);
+              const text = await page.locator("#materialImportHistory").textContent();
+              if (!/ready/.test(text || "")) throw new Error(`Cronologia materiali inattesa: ${text}`);
+            });
+
+            await scenario("retrieval", async () => {
+              await page.locator("#retrievalScenario").selectOption("normal");
+              await page.locator("#retrievalScenario").dispatchEvent("change");
+              await page.locator("#runRetrievalSearch").click();
+              const text = await page.locator("#retrievalResults").textContent();
+              if (!/Citazione verificata/.test(text || "")) throw new Error(`Retrieval inatteso: ${text}`);
+            });
+
+            await scenario("rag", async () => {
+              await page.locator("#ragChatScenario").selectOption("grounded");
+              await page.locator("#ragChatScenario").dispatchEvent("change");
+              await page.locator("#runRagChat").click();
+              const text = await page.locator("#ragChatAnswer").textContent();
+              if (!/\[1\]/.test(text || "")) throw new Error(`Risposta RAG inattesa: ${text}`);
+            });
+
+            await scenario("source_opening", async () => {
+              await page.locator("#sourceOpeningScenario").selectOption("verified");
+              await page.locator("#sourceOpeningScenario").dispatchEvent("change");
+              await page.locator("#openVerifiedSource").click();
+              const text = await page.locator("#sourceOpeningResult").textContent();
+              if (!/Integrità verificata/.test(text || "")) throw new Error(`Apertura fonte inattesa: ${text}`);
+            });
+
             report.states = {
               ...report.states,
-              bodyText: (await page.locator("body").textContent())?.slice(0, 6000),
               title: await page.title(),
               assetPayloadLength: await page.evaluate(() => window.__EVE_OFFICIAL_GZIP_B64?.length || 0),
               workflowPayloadLength: await page.evaluate(() => window.__EVE_OFFICIAL_WORKFLOW_GZIP_B64?.length || 0),
@@ -82,6 +131,9 @@ jobs:
               hasRetrieval: await page.locator("#retrievalSearchPanel").count(),
               hasRag: await page.locator("#ragChatPanel").count(),
               hasSources: await page.locator("#sourceOpeningPanel").count(),
+              scrollWidth: await page.evaluate(() => document.documentElement.scrollWidth),
+              clientWidth: await page.evaluate(() => document.documentElement.clientWidth),
+              horizontalOverflow: await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth),
             };
             await page.screenshot({ path: "eve-real-preview-debug.png", fullPage: true });
           } finally {
@@ -90,7 +142,8 @@ jobs:
 
           fs.writeFileSync("eve-real-preview-debug.json", JSON.stringify(report, null, 2));
           console.log(JSON.stringify(report, null, 2));
-          if (!report.states.animationLibraryReady || report.pageErrors.length || report.requestsFailed.length) process.exitCode = 1;
+          const scenarioFailures = Object.values(report.scenarios).filter(item => !item.passed);
+          if (!report.states.animationLibraryReady || report.pageErrors.length || report.requestsFailed.length || scenarioFailures.length || report.states.horizontalOverflow) process.exitCode = 1;
           EOF
           set -o pipefail
           node debug-preview.mjs 2>&1 | tee eve-real-preview-debug.log
