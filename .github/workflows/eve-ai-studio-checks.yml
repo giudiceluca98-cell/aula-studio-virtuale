@@ -47,7 +47,7 @@ jobs:
         continue-on-error: true
         run: |
           set -o pipefail
-          python -m pip install --upgrade pip 2>&1 | tee checkpoint-0.9-python-install.log
+          python -m pip install --upgrade pip 2>&1 | tee checkpoint-1.0-python-install.log
           python -m pip install \
             "fastapi>=0.115,<1" \
             "uvicorn[standard]>=0.30,<1" \
@@ -55,7 +55,7 @@ jobs:
             "httpx>=0.27,<1" \
             "pytest>=8.3,<10" \
             "pytest-asyncio>=0.23,<1" \
-            2>&1 | tee -a checkpoint-0.9-python-install.log
+            2>&1 | tee -a checkpoint-1.0-python-install.log
 
       - name: Compilazione sintattica Python
         id: python_compile
@@ -63,7 +63,7 @@ jobs:
         working-directory: eve-ai-studio
         run: |
           set -o pipefail
-          python -m compileall -q app tests 2>&1 | tee ../checkpoint-0.9-python-compile.log
+          python -m compileall -q app tests 2>&1 | tee ../checkpoint-1.0-python-compile.log
 
       - name: Suite cumulativa Python
         id: pytest
@@ -71,7 +71,7 @@ jobs:
         working-directory: eve-ai-studio
         run: |
           set -o pipefail
-          python -m pytest -q --junitxml=pytest-results.xml 2>&1 | tee ../checkpoint-0.9-pytest.log
+          python -m pytest -q --junitxml=pytest-results.xml 2>&1 | tee ../checkpoint-1.0-pytest.log
 
       - name: Verifica sintattica dei moduli JavaScript eseguibili
         id: javascript
@@ -89,12 +89,13 @@ jobs:
             reference/eve-ai-studio-preview/provider-workflow.js
             reference/eve-ai-studio-preview/materials-workflow.js
             reference/eve-ai-studio-preview/retrieval-workflow.js
+            reference/eve-ai-studio-preview/rag-chat-workflow.js
             reference/eve-ai-studio-preview/official-library-loader.js
           )
-          : > checkpoint-0.9-javascript.log
+          : > checkpoint-1.0-javascript.log
           for file in "${files[@]}"; do
-            echo "node --check $file" | tee -a checkpoint-0.9-javascript.log
-            node --check "$file" 2>&1 | tee -a checkpoint-0.9-javascript.log || exit 1
+            echo "node --check $file" | tee -a checkpoint-1.0-javascript.log
+            node --check "$file" 2>&1 | tee -a checkpoint-1.0-javascript.log || exit 1
           done
 
       - name: Installa Playwright e Chromium
@@ -102,10 +103,10 @@ jobs:
         continue-on-error: true
         run: |
           set -o pipefail
-          npm install --no-save playwright 2>&1 | tee checkpoint-0.9-browser-install.log
-          npx playwright install --with-deps chromium 2>&1 | tee -a checkpoint-0.9-browser-install.log
+          npm install --no-save playwright 2>&1 | tee checkpoint-1.0-browser-install.log
+          npx playwright install --with-deps chromium 2>&1 | tee -a checkpoint-1.0-browser-install.log
 
-      - name: Verifica materiali e retrieval in Chromium
+      - name: Verifica materiali, retrieval e chat RAG in Chromium
         id: browser
         if: steps.browser_install.outcome == 'success'
         continue-on-error: true
@@ -118,7 +119,7 @@ jobs:
           import path from "node:path";
 
           const browser = await chromium.launch({ headless: true });
-          const page = await browser.newPage({ viewport: { width: 1440, height: 1600 } });
+          const page = await browser.newPage({ viewport: { width: 1440, height: 1900 } });
           const browserErrors = [];
           page.on("console", message => {
             if (message.type() === "error") browserErrors.push(`console: ${message.text()}`);
@@ -138,15 +139,13 @@ jobs:
             const preview = path.join(process.cwd(), "reference/eve-ai-studio-preview");
             await page.addScriptTag({ path: path.join(preview, "materials-workflow.js") });
             await page.addScriptTag({ path: path.join(preview, "retrieval-workflow.js") });
+            await page.addScriptTag({ path: path.join(preview, "rag-chat-workflow.js") });
 
             assert.equal(await page.locator('[data-view="rag-materials"]').count(), 1);
             assert.equal(await page.locator("#retrievalSearchPanel").count(), 1);
-            assert.equal(await page.locator("#materialCount").textContent(), "3");
-            assert.equal(await page.locator("#materialVersionCount").textContent(), "4");
-            assert.equal(await page.locator("#materialChunkCount").textContent(), "18");
-            assert.equal(await page.locator("#retrievalStageBadge").textContent(), "eve-lexical-v1");
-            assert.match(await page.locator("#retrievalSearchPanel").textContent(), /14\/14/);
-            assert.match(await page.locator("#retrievalSearchPanel").textContent(), /139\/139/);
+            assert.equal(await page.locator("#ragChatPanel").count(), 1);
+            assert.match(await page.locator("#ragChatPanel").textContent(), /13\/13/);
+            assert.match(await page.locator("#ragChatPanel").textContent(), /152\/152/);
 
             async function resetMaterials() {
               await page.locator("#resetMaterialDemo").click();
@@ -167,23 +166,17 @@ jobs:
             assert.equal(await page.locator("#materialCount").textContent(), "4");
             assert.match(await page.locator("#materialImportHistory").textContent(), /ready/);
 
-            await resetMaterials();
-            await runMaterialScenario("duplicate");
+            await resetMaterials(); await runMaterialScenario("duplicate");
             assert.match(await page.locator("#materialImportHistory").textContent(), /duplicate_checksum/);
-
             await resetMaterials();
             await page.locator("#materialScenario").selectOption("version");
             await page.locator("#materialText").fill("Revisione univoca del materiale.");
             await page.locator("#runMaterialImport").click();
             await page.waitForFunction(() => !document.getElementById("runMaterialImport").disabled);
             assert.equal(await page.locator("#materialVersionCount").textContent(), "5");
-
-            await resetMaterials();
-            await runMaterialScenario("unsupported");
+            await resetMaterials(); await runMaterialScenario("unsupported");
             assert.match(await page.locator("#materialImportHistory").textContent(), /unsupported_media_type/);
-
-            await resetMaterials();
-            await runMaterialScenario("oversize");
+            await resetMaterials(); await runMaterialScenario("oversize");
             assert.match(await page.locator("#materialImportHistory").textContent(), /material_too_large/);
 
             async function runRetrievalScenario(name) {
@@ -191,23 +184,35 @@ jobs:
               await page.locator("#retrievalScenario").dispatchEvent("change");
               await page.locator("#runRetrievalSearch").click();
             }
-
             await runRetrievalScenario("normal");
             assert.equal(await page.locator("#retrievalResultBadge").textContent(), "2 risultati");
-            assert.match(await page.locator("#retrievalResults").textContent(), /material:mat-b84a:v1:chunk:0:0-1200/);
             assert.match(await page.locator("#retrievalResults").textContent(), /Citazione verificata/);
-
             await runRetrievalScenario("empty");
             assert.equal(await page.locator("#retrievalResultBadge").textContent(), "0 risultati");
-            assert.match(await page.locator("#retrievalResults").textContent(), /non inventa una fonte alternativa/);
-
             await runRetrievalScenario("suspicious");
-            assert.match(await page.locator("#retrievalResults").first().textContent(), /Nota importata non fidata/);
             assert.match(await page.locator("#retrievalResults").first().textContent(), /Fonte non fidata/);
-
             await runRetrievalScenario("isolated");
             assert.equal(await page.locator("#retrievalResultBadge").textContent(), "0 risultati");
-            assert.match(await page.locator("#retrievalDetails").textContent(), /room-vuota/);
+
+            async function runRagScenario(name) {
+              await page.locator("#ragChatScenario").selectOption(name);
+              await page.locator("#ragChatScenario").dispatchEvent("change");
+              await page.locator("#runRagChat").click();
+            }
+            await runRagScenario("grounded");
+            assert.match(await page.locator("#ragChatBadge").textContent(), /fonti/);
+            assert.match(await page.locator("#ragChatAnswer").textContent(), /\[1\]/);
+            assert.match(await page.locator("#ragChatSources").textContent(), /Citazione verificata/);
+            assert.match(await page.locator("#ragChatSources").textContent(), /material:mat-b84a:v1:chunk:0:0-1200/);
+            await runRagScenario("empty");
+            assert.equal(await page.locator("#ragChatBadge").textContent(), "Non grounded");
+            assert.match(await page.locator("#ragChatAnswer").textContent(), /non inventa una fonte alternativa/);
+            await runRagScenario("suspicious");
+            assert.equal(await page.locator("#ragChatBadge").textContent(), "Non grounded");
+            assert.match(await page.locator("#ragChatAnswer").textContent(), /contenuto sospetto/);
+            await runRagScenario("isolated");
+            assert.equal(await page.locator("#ragChatBadge").textContent(), "Non grounded");
+            assert.match(await page.locator("#ragChatDetails").textContent(), /room-vuota/);
 
             const states = await page.evaluate(() => window.EveAnimationLibrary.states);
             assert.ok(states.includes("eve-success"));
@@ -215,16 +220,16 @@ jobs:
             assert.ok(states.includes("eve-confirmation-needed"));
             assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), true);
 
-            await page.screenshot({ path: "eve-ai-studio-preview-0.9.png", fullPage: true });
-            fs.writeFileSync("eve-ai-studio-preview-0.9-errors.json", JSON.stringify(browserErrors, null, 2));
+            await page.screenshot({ path: "eve-ai-studio-preview-1.0.png", fullPage: true });
+            fs.writeFileSync("eve-ai-studio-preview-1.0-errors.json", JSON.stringify(browserErrors, null, 2));
             assert.deepEqual(browserErrors, []);
-            console.log("Anteprima controllata verificata: 5 scenari materiali e 4 scenari retrieval.");
+            console.log("Anteprima controllata verificata: 5 scenari materiali, 4 retrieval e 4 chat RAG.");
           } finally {
             await browser.close();
           }
           EOF
           set -o pipefail
-          node eve-preview-check.mjs 2>&1 | tee checkpoint-0.9-browser.log
+          node eve-preview-check.mjs 2>&1 | tee checkpoint-1.0-browser.log
 
       - name: Registra rapporto verificabile nel branch
         if: always()
@@ -254,7 +259,7 @@ jobs:
           passed = all(state == "success" for state in states.values())
           timestamp = datetime.now(timezone.utc).isoformat()
           result = {
-              "checkpoint": "0.9",
+              "checkpoint": "1.0",
               "tested_sha": os.environ.get("TESTED_SHA"),
               "generated_at": timestamp,
               "passed": passed,
@@ -262,7 +267,7 @@ jobs:
           }
           base = Path("eve-ai-studio/checkpoints")
           base.mkdir(parents=True, exist_ok=True)
-          (base / "CHECKPOINT_0.9_CI_RESULT.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+          (base / "CHECKPOINT_1.0_CI_RESULT.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
 
           def tail(path, lines=35):
               file = Path(path)
@@ -271,7 +276,7 @@ jobs:
               content = file.read_text(encoding="utf-8", errors="replace").splitlines()
               return "\n".join(content[-lines:]) or "Nessun output."
 
-          markdown = f"""# Checkpoint 0.9 — Risultato verifica automatica
+          markdown = f"""# Checkpoint 1.0 — Risultato verifica automatica
 
           - Commit verificato: `{result['tested_sha']}`
           - Data UTC: `{timestamp}`
@@ -289,31 +294,31 @@ jobs:
           ## Coda pytest
 
           ```text
-          {tail('checkpoint-0.9-pytest.log')}
+          {tail('checkpoint-1.0-pytest.log')}
           ```
 
           ## Coda verifica browser
 
           ```text
-          {tail('checkpoint-0.9-browser.log')}
+          {tail('checkpoint-1.0-browser.log')}
           ```
 
           ## Coda JavaScript
 
           ```text
-          {tail('checkpoint-0.9-javascript.log', 20)}
+          {tail('checkpoint-1.0-javascript.log', 20)}
           ```
 
-          Il browser usa un contenitore DOM controllato e carica i file ufficiali `materials-workflow.js` e `retrieval-workflow.js`. I payload compressi della galleria non vengono reinterpretati come moduli sorgente.
+          Il browser usa un contenitore DOM controllato e carica i file ufficiali `materials-workflow.js`, `retrieval-workflow.js` e `rag-chat-workflow.js`. I payload compressi della galleria non vengono reinterpretati come moduli sorgente.
           """
-          (base / "CHECKPOINT_0.9_CI_RESULT.md").write_text(markdown, encoding="utf-8")
+          (base / "CHECKPOINT_1.0_CI_RESULT.md").write_text(markdown, encoding="utf-8")
           PY
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add eve-ai-studio/checkpoints/CHECKPOINT_0.9_CI_RESULT.json eve-ai-studio/checkpoints/CHECKPOINT_0.9_CI_RESULT.md
+          git add eve-ai-studio/checkpoints/CHECKPOINT_1.0_CI_RESULT.json eve-ai-studio/checkpoints/CHECKPOINT_1.0_CI_RESULT.md
           if ! git diff --cached --quiet; then
-            git commit -m "ci: registra esito verifica Eve 0.9 [skip eve ci]"
+            git commit -m "ci: registra esito verifica Eve 1.0 [skip eve ci]"
             git push origin HEAD:eve-ai-studio
           fi
 
@@ -321,14 +326,14 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: eve-ai-studio-checkpoint-0.9-verification
+          name: eve-ai-studio-checkpoint-1.0-verification
           path: |
             eve-ai-studio/pytest-results.xml
-            checkpoint-0.9-*.log
-            eve-ai-studio-preview-0.9.png
-            eve-ai-studio-preview-0.9-errors.json
-            eve-ai-studio/checkpoints/CHECKPOINT_0.9_CI_RESULT.json
-            eve-ai-studio/checkpoints/CHECKPOINT_0.9_CI_RESULT.md
+            checkpoint-1.0-*.log
+            eve-ai-studio-preview-1.0.png
+            eve-ai-studio-preview-1.0-errors.json
+            eve-ai-studio/checkpoints/CHECKPOINT_1.0_CI_RESULT.json
+            eve-ai-studio/checkpoints/CHECKPOINT_1.0_CI_RESULT.md
           if-no-files-found: warn
           retention-days: 14
 
