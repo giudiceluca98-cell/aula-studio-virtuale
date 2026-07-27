@@ -1,0 +1,180 @@
+name: Eve AI Studio standalone preview
+
+on:
+  push:
+    branches:
+      - eve-ai-studio
+    paths:
+      - "reference/eve-ai-studio-preview/**"
+      - ".github/workflows/eve-ai-studio-standalone-preview.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: eve-ai-studio-standalone-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-verify:
+    if: github.event_name == 'workflow_dispatch' || !contains(github.event.head_commit.message, '[skip eve standalone]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout eve-ai-studio
+        uses: actions/checkout@v4
+        with:
+          ref: eve-ai-studio
+          fetch-depth: 0
+
+      - name: Genera il file HTML autonomo
+        run: |
+          python3 reference/eve-ai-studio-preview/build_standalone.py
+          test -s reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html
+          if grep -Eiq '<script[^>]+src=' reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html; then
+            echo "Sono rimasti script esterni nello standalone."
+            exit 1
+          fi
+          if grep -Eiq '<link[^>]+rel=["'"']stylesheet["'"']' reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html; then
+            echo "Sono rimasti fogli di stile esterni nello standalone."
+            exit 1
+          fi
+
+      - name: Installa Chromium
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Installa Playwright
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+
+      - name: Verifica il file come download locale
+        run: |
+          cat > verify-eve-standalone.mjs <<'EOF'
+          import { chromium } from "playwright";
+          import assert from "node:assert/strict";
+          import { pathToFileURL } from "node:url";
+          import { resolve } from "node:path";
+          import { writeFileSync } from "node:fs";
+
+          const filePath = resolve("reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html");
+          const fileUrl = pathToFileURL(filePath).href;
+          const browser = await chromium.launch({ headless: true });
+          const page = await browser.newPage({ viewport: { width: 1440, height: 2200 } });
+          const consoleErrors = [];
+          const pageErrors = [];
+
+          page.on("console", message => {
+            if (message.type() === "error") consoleErrors.push(message.text());
+          });
+          page.on("pageerror", error => pageErrors.push(error.stack || error.message));
+
+          try {
+            await page.goto(fileUrl, { waitUntil: "load" });
+            await page.waitForFunction(() =>
+              window.EveAnimationLibrary?.setState &&
+              document.getElementById("rag-materials") &&
+              document.getElementById("retrievalSearchPanel") &&
+              document.getElementById("ragChatPanel") &&
+              document.getElementById("sourceOpeningPanel")
+            , null, { timeout: 25000 });
+
+            assert.match(await page.title(), /Eve AI Studio/);
+            assert.doesNotMatch(await page.locator("body").textContent(), /Anteprima non caricata/);
+            assert.equal(await page.locator('[data-view="rag-materials"]').count(), 1);
+
+            const runtime = await page.evaluate(() => ({
+              assetPayloadLength: window.__EVE_OFFICIAL_GZIP_B64?.length || 0,
+              workflowPayloadLength: window.__EVE_OFFICIAL_WORKFLOW_GZIP_B64?.length || 0,
+              standalone: document.querySelector('meta[name="eve-preview-format"]')?.content,
+            }));
+            assert.ok(runtime.assetPayloadLength > 100000);
+            assert.ok(runtime.workflowPayloadLength > 8000);
+            assert.equal(runtime.standalone, "standalone");
+
+            for (const state of [
+              "eve-idle",
+              "eve-thinking",
+              "eve-processing",
+              "eve-reading-indexing",
+              "eve-success",
+              "eve-error-supportive",
+              "eve-confirmation-needed"
+            ]) {
+              await page.evaluate(value => window.EveAnimationLibrary.setState(value), state);
+            }
+
+            await page.locator('[data-view="rag-materials"]').click();
+            assert.equal(await page.locator("#rag-materials").isVisible(), true);
+
+            await page.locator("#materialScenario").selectOption("valid");
+            await page.locator("#runMaterialImport").click();
+            await page.waitForFunction(() => !document.getElementById("runMaterialImport").disabled);
+            assert.match(await page.locator("#materialImportHistory").textContent(), /ready/);
+
+            await page.locator("#retrievalScenario").selectOption("normal");
+            await page.locator("#retrievalScenario").dispatchEvent("change");
+            await page.locator("#runRetrievalSearch").click();
+            assert.match(await page.locator("#retrievalResults").textContent(), /Citazione verificata/);
+
+            await page.locator("#ragChatScenario").selectOption("grounded");
+            await page.locator("#ragChatScenario").dispatchEvent("change");
+            await page.locator("#runRagChat").click();
+            assert.match(await page.locator("#ragChatAnswer").textContent(), /\[1\]/);
+
+            await page.locator("#sourceOpeningScenario").selectOption("verified");
+            await page.locator("#sourceOpeningScenario").dispatchEvent("change");
+            await page.locator("#openVerifiedSource").click();
+            assert.match(await page.locator("#sourceOpeningResult").textContent(), /Integrità verificata/);
+
+            assert.equal(
+              await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth),
+              true
+            );
+            assert.deepEqual(consoleErrors, []);
+            assert.deepEqual(pageErrors, []);
+
+            await page.screenshot({ path: "eve-ai-studio-standalone.png", fullPage: true });
+            writeFileSync("EVE_STANDALONE_PREVIEW_RESULT.json", JSON.stringify({
+              tested_sha: process.env.GITHUB_SHA,
+              passed: true,
+              opened_as: "file://",
+              file: "reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html",
+              animation_library: "1.2.2",
+              animation_assets: 64,
+              external_scripts: 0,
+              external_stylesheets: 0,
+              navigation_entry_count: 1
+            }, null, 2));
+          } finally {
+            await browser.close();
+          }
+          EOF
+          node verify-eve-standalone.mjs
+
+      - name: Pubblica screenshot di controllo
+        uses: actions/upload-artifact@v4
+        with:
+          name: eve-ai-studio-standalone-preview
+          path: eve-ai-studio-standalone.png
+          retention-days: 14
+
+      - name: Salva standalone e rapporto nel branch
+        run: |
+          mkdir -p eve-ai-studio/checkpoints
+          cp EVE_STANDALONE_PREVIEW_RESULT.json eve-ai-studio/checkpoints/EVE_STANDALONE_PREVIEW_RESULT.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html
+          git add eve-ai-studio/checkpoints/EVE_STANDALONE_PREVIEW_RESULT.json
+          if git diff --cached --quiet; then
+            echo "Standalone già aggiornato."
+            exit 0
+          fi
+          git commit -m "build: aggiorna preview standalone Eve [skip eve standalone]"
+          git pull --rebase origin eve-ai-studio
+          git push origin HEAD:eve-ai-studio
