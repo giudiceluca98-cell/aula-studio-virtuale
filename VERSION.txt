@@ -1,15 +1,15 @@
 Aula Studio Virtuale
-Versione: 1.4.0-alpha.2
+Versione: 1.4.0-alpha.3
 Fonte: demo canonica ufficiale con ottimizzazione grafica fase 1 e build modulare per rotta
 Commit base: c33a369aeafe897c097a1051b97e8b43d5dc09a9
-Git blob HTML: 554aad2f7520ccf0d02fa1941aff9562851e447a
-SHA-256 HTML: 820100434f4a6cdf1ac9057cbf446fb4bd13bfa5bd946558aaf900e852dc2d6c
+Git blob HTML: 7cae84d79f08017ccb98016fbb2eba3b88063d35
+SHA-256 HTML: d33f226720bbcc5c01d7c49e83934e3efaeb55e0768d3afb551f3a9145c323cd
 Build: modular-routes-1
-SHA-256 portale: 9e672c9ffa77bb615e67309e07002bf4423181c6d325c471471301accffe1f4f
-SHA-256 dashboard: 0183edcae4fbd1c8ae14c6230ff5572a669d51cb0b368fef190eec0421a9a8d8
-SHA-256 catalogo: 29fa6f6adc2af332e5abfb4bb7388165eae131fcc742ee4afbdec429159f1f15
-SHA-256 download: 526b18665006aa6173071ee8a3db04f384da87ed5bd2b90022bc677a9d78449f
-SHA-256 aula: 30c7919ca4c760d26c18bfee745cb41dccdb597e86c68dcbb892ae456eebdf26
+SHA-256 portale: be569594d79440a40308515d27bbfdf3348c160e97b0de10e67a0588e9d75209
+SHA-256 dashboard: dc2aa477d9ea852f282632059c3c79cfc2690d142da5df996d32c88456637793
+SHA-256 catalogo: 69b6ae3ebf0d259ed9f157444f6bf605bdcccd8dc7db3a30d6c842f4abb034ba
+SHA-256 download: 00549ab63bfde97aa150352a541b0ebeb495246a1842038aea8f650e23f15b47
+SHA-256 aula: b7e81364647bd73ea6c1624ec513f82a4a4864b4f926133a7f76c28d52d5fe65
 SHA-256 cursore: bccdef94c94c583b3a2efba12668f6ec508ebb6b9064a046912048c8dc405211
 SHA-256 puntatore: a33a6ee72e25c4882b6d46150ef53b56deedd7b73e83319bf5f552ecdcf967e8
 Desktop: Tauri 2, installer Windows NSIS per utente corrente

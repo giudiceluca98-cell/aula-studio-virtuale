@@ -65,6 +65,15 @@ await writeFile(
   updaterSource,
   "utf8"
 );
+const windowControllerSource = await readFile(
+  join(root, "desktop", "desktop-window.js"),
+  "utf8"
+);
+await writeFile(
+  join(desktopDist, "assets", "js", "desktop-window.js"),
+  windowControllerSource,
+  "utf8"
+);
 
 for (const relativePath of [
   "index.html",
@@ -77,7 +86,8 @@ for (const relativePath of [
   html = html.replace(/<a\b[^>]*data-web-install[^>]*>[\s\S]*?<\/a>/g, "");
   html = html.replace(
     "</body>",
-    '  <script src="/assets/js/desktop-updater.js"></script>\n</body>'
+    '  <script src="/assets/js/desktop-window.js"></script>\n' +
+      '  <script src="/assets/js/desktop-updater.js"></script>\n</body>'
   );
   await writeFile(htmlPath, html, "utf8");
 }
