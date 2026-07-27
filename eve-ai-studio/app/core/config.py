@@ -45,3 +45,6 @@ class EveSettings(BaseSettings):
     retrieval_max_results: int = 10
     retrieval_max_excerpt_chars: int = 600
     retrieval_min_score: float = 1.0
+
+    rag_max_sources: int = 4
+    rag_max_answer_chars: int = 4_000
