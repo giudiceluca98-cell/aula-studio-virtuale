@@ -1,4 +1,5 @@
 name: Eve AI Studio current preview diagnostic
+# Rilancio sul listener di navigazione isolato.
 
 on:
   push:
