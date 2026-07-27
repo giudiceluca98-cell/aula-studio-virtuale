@@ -1,0 +1,145 @@
+name: Eve AI Studio standalone bootstrap
+
+on:
+  push:
+    branches:
+      - eve-ai-studio
+    paths:
+      - ".github/workflows/eve-ai-studio-standalone-bootstrap.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  generate-once:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: eve-ai-studio
+          fetch-depth: 0
+
+      - name: Genera standalone
+        id: build
+        continue-on-error: true
+        run: |
+          mkdir -p eve-ai-studio/checkpoints
+          set -o pipefail
+          python3 reference/eve-ai-studio-preview/build_standalone.py 2>&1 | tee eve-ai-studio/checkpoints/EVE_STANDALONE_BOOTSTRAP_LOG.txt
+          test -s reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html
+
+      - name: Registra e pubblica la costruzione
+        if: always()
+        run: |
+          outcome="${{ steps.build.outcome }}"
+          passed=false
+          if [ "$outcome" = "success" ]; then passed=true; fi
+          size=0
+          test ! -f reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html || size=$(wc -c < reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html)
+          cat > eve-ai-studio/checkpoints/EVE_STANDALONE_BOOTSTRAP_RESULT.json <<EOF
+          {
+            "tested_sha": "${{ github.sha }}",
+            "passed": $passed,
+            "build_outcome": "$outcome",
+            "size_bytes": $size,
+            "file": "reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html"
+          }
+          EOF
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f eve-ai-studio/checkpoints/EVE_STANDALONE_BOOTSTRAP_RESULT.json
+          git add -f eve-ai-studio/checkpoints/EVE_STANDALONE_BOOTSTRAP_LOG.txt
+          if [ -f reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html ]; then
+            git add -f reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html
+          fi
+          git commit -m "build: crea preview standalone Eve [skip eve standalone]"
+          git pull --rebase origin eve-ai-studio
+          git push origin HEAD:eve-ai-studio
+
+      - name: Interrompi se la build non è riuscita
+        if: steps.build.outcome != 'success'
+        run: exit 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Installa Playwright e Chromium
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+
+      - name: Prova il download locale
+        id: browser
+        continue-on-error: true
+        run: |
+          cat > verify-standalone.mjs <<'EOF'
+          import { chromium } from "playwright";
+          import assert from "node:assert/strict";
+          import { pathToFileURL } from "node:url";
+          import { resolve } from "node:path";
+
+          const browser = await chromium.launch({headless:true});
+          const page = await browser.newPage({viewport:{width:1440,height:2200}});
+          const errors=[];
+          page.on("pageerror", error => errors.push(error.message));
+          page.on("console", message => { if(message.type()==="error") errors.push(message.text()); });
+          try {
+            await page.goto(pathToFileURL(resolve("reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html")).href,{waitUntil:"load"});
+            await page.waitForFunction(() => window.EveAnimationLibrary?.setState && document.getElementById("sourceOpeningPanel"),null,{timeout:25000});
+            assert.doesNotMatch(await page.locator("body").textContent(),/Anteprima non caricata/);
+            assert.equal(await page.locator('[data-view="rag-materials"]').count(),1);
+            await page.locator('[data-view="rag-materials"]').click();
+            assert.equal(await page.locator("#rag-materials").isVisible(),true);
+            for(const state of ["eve-idle","eve-thinking","eve-processing","eve-reading-indexing","eve-success","eve-error-supportive","eve-confirmation-needed"]){
+              await page.evaluate(value=>window.EveAnimationLibrary.setState(value),state);
+            }
+            await page.locator("#materialScenario").selectOption("valid");
+            await page.locator("#runMaterialImport").click();
+            await page.waitForFunction(()=>!document.getElementById("runMaterialImport").disabled);
+            assert.match(await page.locator("#materialImportHistory").textContent(),/ready/);
+            await page.locator("#runRetrievalSearch").click();
+            assert.match(await page.locator("#retrievalResults").textContent(),/Citazione verificata/);
+            await page.locator("#runRagChat").click();
+            assert.match(await page.locator("#ragChatAnswer").textContent(),/\[1\]/);
+            await page.locator("#openVerifiedSource").click();
+            assert.match(await page.locator("#sourceOpeningResult").textContent(),/Integrità verificata/);
+            assert.deepEqual(errors,[]);
+            await page.screenshot({path:"eve-ai-studio-standalone.png",fullPage:true});
+          } finally {
+            await browser.close();
+          }
+          EOF
+          node verify-standalone.mjs
+
+      - name: Registra il test locale
+        if: always()
+        run: |
+          outcome="${{ steps.browser.outcome }}"
+          passed=false
+          if [ "$outcome" = "success" ]; then passed=true; fi
+          cat > eve-ai-studio/checkpoints/EVE_STANDALONE_PREVIEW_RESULT.json <<EOF
+          {
+            "tested_sha": "${{ github.sha }}",
+            "passed": $passed,
+            "browser_outcome": "$outcome",
+            "opened_as": "file://",
+            "file": "reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html",
+            "animation_library": "1.2.2",
+            "animation_assets": 64,
+            "external_scripts": 0,
+            "external_stylesheets": 0,
+            "navigation_entry_count": 1
+          }
+          EOF
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f eve-ai-studio/checkpoints/EVE_STANDALONE_PREVIEW_RESULT.json
+          git commit -m "ci: verifica preview standalone locale [skip eve standalone]"
+          git pull --rebase origin eve-ai-studio
+          git push origin HEAD:eve-ai-studio
+
+      - name: Applica esito test
+        if: steps.browser.outcome != 'success'
+        run: exit 1
