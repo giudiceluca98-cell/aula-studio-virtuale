@@ -92,11 +92,11 @@ jobs:
 
             if (expectedFormat) {
               assert.equal(
-                await page.locator('meta[name="eve-preview-format"]').get_attribute("content"),
+                await page.locator('meta[name="eve-preview-format"]').getAttribute("content"),
                 expectedFormat
               );
               assert.equal(
-                await page.locator('meta[name="eve-animation-quality"]').get_attribute("content"),
+                await page.locator('meta[name="eve-animation-quality"]').getAttribute("content"),
                 "original-hq"
               );
             }
