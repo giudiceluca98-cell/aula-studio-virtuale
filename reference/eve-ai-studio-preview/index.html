@@ -67,6 +67,7 @@ function loadPreviewScript(source){
   await loadPreviewScript("retrieval-workflow.js");
   await loadPreviewScript("rag-chat-workflow.js");
   await loadPreviewScript("source-opening-workflow.js");
+  await loadPreviewScript("navigation-compat.js");
   try{await loadPreviewScript("particles.js")}catch(error){console.warn(error.message)}
 })().catch(error=>{
   document.body.innerHTML=`<main id="loader"><h1>Anteprima non caricata</h1><p>${error.message}</p></main>`;
