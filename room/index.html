@@ -1,0 +1,710 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="aula-demo-version" content="1.4.0-alpha.2" />
+  <meta name="aula-build" content="modular-routes-1" />
+  <title>Aula Studio Virtuale — Programmazione in Python</title>
+  <link rel="stylesheet" href="/assets/css/aula.css" />
+</head>
+<body data-portal-route="aula">
+<section class="portal-view portal-aula-view" id="portalAula">
+  <div class="app">
+    <header class="primary-header">
+      <div class="room-heading">
+        <button class="back-button" type="button" title="Torna alle aule" onclick="navigatePortal('dashboard')">←</button>
+        <div>
+          <div class="eyebrow">Aula condivisa · 98133618C9E8D6CE37</div>
+          <h1 class="room-title">Programmazione in Python</h1>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button
+          class="action-button sync"
+          type="button"
+          title="Stato connessione: in sincronia"
+          aria-label="Stato connessione: in sincronia"
+          onclick="showToast('Sincronizzazione attiva')"
+        >
+          <svg class="sync-transmission-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4.9 9.8a10 10 0 0 1 14.2 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M7.8 12.7a6 6 0 0 1 8.4 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M10.7 15.6a2 2 0 0 1 2.6 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <circle cx="12" cy="18.5" r="1.2" fill="currentColor"/>
+          </svg>
+          <span class="label">In sincronia</span>
+        </button>
+        <button class="action-button" type="button" onclick="portalDashboardOpenCatalogForRoom('python-room')">
+          <span>▤</span><span class="label">Catalogo</span>
+        </button>
+        <button class="action-button" type="button" onclick="openModal('chiamata')">
+          <span>⌕</span><span class="label">Chiamata</span>
+        </button>
+        <button class="action-button summary" type="button" onclick="openModal('riepilogo')">
+          <span>✦</span><span class="label">Riepilogo per Tatiana</span>
+        </button>
+        <button class="icon-button" type="button" title="Impostazioni" onclick="openModal('impostazioni')">⚙</button>
+      </div>
+    </header>
+
+    <nav class="secondary-nav" aria-label="Strumenti dell'aula">
+      <button class="nav-button" type="button" onclick="openDrawer('corsi')"><span class="nav-icon">▣</span>Corsi</button>
+      <button class="nav-button" type="button" onclick="openDrawer('materiali')"><span class="nav-icon">▧</span>Materiali</button>
+      <button class="nav-button" type="button" onclick="openDrawer('checklist')"><span class="nav-icon">☷</span>Checklist</button>
+      <button class="nav-button" type="button" onclick="openDrawer('progressi')"><span class="nav-icon">◎</span>Progressi</button>
+      <button class="nav-button" type="button" onclick="openDrawer('appunti')"><span class="nav-icon">▱</span>Appunti</button>
+      <button class="nav-button" type="button" onclick="openDrawer('partecipanti')"><span class="nav-icon">♧</span>Partecipanti</button>
+      <button class="nav-button" type="button" onclick="openDrawer('attivita')"><span class="nav-icon">⌁</span>Attività recente</button>
+      <button class="nav-button" type="button" onclick="toggleFloating('timerPanel')"><span class="nav-icon">◷</span>Timer</button>
+      <button class="nav-button" type="button" onclick="toggleFloating('chatPanel')"><span class="nav-icon">◯</span>Chat <span class="chat-nav-badge" id="chatNavBadge" hidden></span></button>
+    </nav>
+
+    <main class="page-scroll">
+      <section class="material-shell">
+        <div class="selected-material">
+          <div class="eyebrow">Materiale selezionato</div>
+          <h2 id="selectedMaterialTitle">Che cosa significa programmare?</h2>
+          <p id="selectedMaterialDescription">
+            Lezione nativa completa del percorso Programmazione da zero: teoria, glossario, esercizi,
+            quiz, progetto, avanzamento ed Eve.
+          </p>
+        </div>
+
+        <div class="course-overview">
+          <div>
+            <div class="course-kicker">Programmazione da Zero · Modulo 0 · Lezione 0.1</div>
+            <h3 class="course-name" id="courseLessonTitle">Che cosa significa programmare?</h3>
+            <div class="course-meta">Lettore senza conoscenze pregresse · circa 990 minuti per il corso · Italiano</div>
+
+            <div class="content-tabs" role="tablist" aria-label="Contenuti della lezione">
+              <button class="content-tab active" type="button" data-view="lesson" onclick="switchView('lesson', this)">
+                <span class="tab-icon">▣</span>Lezione
+              </button>
+              <button class="content-tab" type="button" data-view="exercises" onclick="switchView('exercises', this)">
+                <span class="tab-icon">▤</span>Esercizi
+              </button>
+              <button class="content-tab" type="button" data-view="quiz" onclick="switchView('quiz', this)">
+                <span class="tab-icon">?</span>Quiz
+              </button>
+              <button class="content-tab" type="button" data-view="project" onclick="switchView('project', this)">
+                <span class="tab-icon">&gt;_</span>Python Project
+              </button>
+              <button class="content-tab" type="button" data-view="glossary" onclick="switchView('glossary', this)">
+                <span class="tab-icon">▥</span>Glossario
+              </button>
+            </div>
+          </div>
+
+          <div class="progress-box progress-dashboard" id="progressDashboard">
+            <div class="progress-heading">
+              <div class="progress-heading-copy">
+                <span class="progress-title">Avanzamento reale</span>
+                <span class="progress-objective-count" id="progressObjectiveCount">0 di 14 obiettivi raggiunti</span>
+              </div>
+              <div class="progress-heading-actions">
+                <strong class="progress-percent-value" id="progressPercent">0%</strong>
+                <button class="progress-missions-toggle" id="progressMissionsToggle" type="button" aria-expanded="false" aria-controls="progressMissionDetails" aria-label="Mostra missioni" onclick="toggleProgressMissions()" title="Mostra missioni">
+                  <svg class="mission-toggle-icon" viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="M3.5 5.5h8M3.5 10h8M3.5 14.5h8"></path>
+                    <path d="M14.5 7.5l2 2 2-2" class="mission-toggle-chevron"></path>
+                    <circle cx="2" cy="5.5" r=".7"></circle>
+                    <circle cx="2" cy="10" r=".7"></circle>
+                    <circle cx="2" cy="14.5" r=".7"></circle>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="progress-track-wrap">
+              <div class="progress-track progress-detailed" aria-label="Avanzamento complessivo della lezione" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" role="progressbar" id="progressTrackDetailed">
+                <span id="progressBar"></span>
+              </div>
+              <i class="progress-marker" style="left:70%" data-label="Lettura"></i>
+              <i class="progress-marker" style="left:80%" data-label="Esercizio"></i>
+              <i class="progress-marker" style="left:90%" data-label="Quiz"></i>
+            </div>
+
+            <div class="progress-mission-details" id="progressMissionDetails">
+            <div class="progress-objectives" aria-label="Obiettivi della lezione">
+              <button class="progress-objective" id="progressGoalReading" type="button" onclick="goToProgressGoal('reading')">
+                <span class="progress-goal-icon" aria-hidden="true">▣</span>
+                <span class="progress-goal-copy">
+                  <strong>Comprendi tutte le sezioni</strong>
+                  <small>Vale il 70% dell'avanzamento</small>
+                  <span class="progress-mini-track"><span id="progressReadingBar"></span></span>
+                </span>
+                <span class="progress-goal-status" id="progressReadingStatus">0/11</span>
+              </button>
+
+              <button class="progress-objective" id="progressGoalExercise" type="button" onclick="goToProgressGoal('exercise')">
+                <span class="progress-goal-icon" aria-hidden="true">▤</span>
+                <span class="progress-goal-copy">
+                  <strong>Salva l'esercizio</strong>
+                  <small>Obiettivo pratico · 10%</small>
+                </span>
+                <span class="progress-goal-status" id="progressExerciseStatus">Da fare</span>
+              </button>
+
+              <button class="progress-objective" id="progressGoalQuiz" type="button" onclick="goToProgressGoal('quiz')">
+                <span class="progress-goal-icon" aria-hidden="true">?</span>
+                <span class="progress-goal-copy">
+                  <strong>Supera il quiz</strong>
+                  <small>Verifica della comprensione · 10%</small>
+                </span>
+                <span class="progress-goal-status" id="progressQuizStatus">Da fare</span>
+              </button>
+
+              <button class="progress-objective" id="progressGoalProject" type="button" onclick="goToProgressGoal('project')">
+                <span class="progress-goal-icon" aria-hidden="true">&gt;_</span>
+                <span class="progress-goal-copy">
+                  <strong>Consegna il progetto</strong>
+                  <small>Applicazione finale · 10%</small>
+                </span>
+                <span class="progress-goal-status" id="progressProjectStatus">Da fare</span>
+              </button>
+            </div>
+
+            <div class="progress-next-goal" aria-live="polite">
+              <span>Prossimo obiettivo</span>
+              <strong id="progressNextGoal">Comprendi la prima sezione della lezione.</strong>
+            </div>
+
+            <div class="progress-weight-note">Calcolo reale: sezioni 70% · esercizio 10% · quiz 10% · progetto 10%.</div>
+            </div>
+            <div class="autosave" id="autosaveLabel">Salvato automaticamente</div>
+          </div>
+        </div>
+
+        <div class="learning-layout">
+          <aside class="lesson-sidebar" id="lessonSidebar">
+            <div class="sidebar-heading">
+              <div class="sidebar-title">Moduli e lezioni</div>
+              <button
+                class="modules-panel-toggle"
+                id="modulesPanelToggle"
+                type="button"
+                aria-expanded="true"
+                aria-controls="lessonSidebarContent"
+                aria-label="Riduci Moduli e lezioni"
+                title="Riduci Moduli e lezioni"
+                onclick="toggleModulesPanel()"
+              >
+                <svg class="modules-toggle-icon" viewBox="0 0 20 20" aria-hidden="true">
+                  <path d="M4 3.5h8.5a2 2 0 0 1 2 2v11H6a2 2 0 0 1-2-2z"></path>
+                  <path d="M6 7h6M6 10h6M6 13h4"></path>
+                  <path d="M17 7l-2 3 2 3" class="modules-toggle-chevron"></path>
+                </svg>
+              </button>
+            </div>
+
+            <div class="lesson-sidebar-content" id="lessonSidebarContent">
+            <div class="module-title">Modulo 0</div>
+            <button class="lesson-item active" type="button" onclick="selectLesson('0.1', this)">
+              <span class="lesson-number">Lezione 0.1</span>
+              <strong>Che cosa significa programmare?</strong>
+              <span class="lesson-status">0/11 sezioni comprese</span>
+            </button>
+            <button class="lesson-item" type="button" onclick="selectLesson('0.2', this)">
+              <span class="lesson-number">Lezione 0.2</span>
+              <strong>Che cos'è un computer e come funziona</strong>
+              <span class="lesson-status">Bozza del percorso</span>
+            </button>
+            <button class="lesson-item" type="button" onclick="selectLesson('0.3', this)">
+              <span class="lesson-number">Lezione 0.3</span>
+              <strong>Hardware, software e sistema operativo</strong>
+              <span class="lesson-status">Bozza del percorso</span>
+            </button>
+            <button class="lesson-item" type="button" onclick="selectLesson('0.4', this)">
+              <span class="lesson-number">Lezione 0.4</span>
+              <strong>Algoritmi e pseudocodice</strong>
+              <span class="lesson-status">Bozza del percorso</span>
+            </button>
+
+            <div class="module-title">Modulo 1</div>
+            <button class="lesson-item" type="button" onclick="selectLesson('1.1', this)">
+              <span class="lesson-number">Lezione 1.1</span>
+              <strong>Preparazione dell'ambiente</strong>
+              <span class="lesson-status">Non iniziata</span>
+            </button>
+            </div>
+          </aside>
+
+          <section class="reader-area">
+            <article class="document" id="documentContent"></article>
+
+            <div class="reader-footer">
+              <button type="button" onclick="previousSection()">← Sezione precedente</button>
+              <button
+                class="primary-small comprehension-action"
+                id="comprehensionButton"
+                type="button"
+                aria-pressed="false"
+                onclick="completeCurrentSection()"
+              >
+                <span class="comprehension-icon" aria-hidden="true">✓</span>
+                <span class="comprehension-copy">
+                  <strong id="comprehensionLabel">Ho compreso questo contenuto</strong>
+                  <small id="comprehensionHint">Conferma quando riesci a spiegarlo con parole tue</small>
+                </span>
+              </button>
+              <button type="button" onclick="nextSection()">Sezione successiva →</button>
+            </div>
+          </section>
+
+          <aside class="tutor-column">
+            <div class="tutor-card eve-assistant-card" id="eveAssistantCard">
+              <button
+                class="eve-panel-minimize"
+                id="evePanelMinimize"
+                type="button"
+                aria-label="Minimizza il pannello di Eve"
+                title="Minimizza"
+                onclick="toggleEvePanel()"
+              >−</button>
+              <div class="eve-identity">
+                <button
+                  class="eve-panel-toggle"
+                  id="evePanelToggle"
+                  type="button"
+                  aria-expanded="true"
+                  aria-controls="eveAssistantCard"
+                  aria-label="Eve a riposo"
+                  onclick="openEvePanelFromMascot()"
+                >
+                  <span class="eve-rest-mascot" id="eveRestMascot" aria-hidden="true">
+                    <span class="eve-rest-ring"></span>
+                    <span class="eve-rest-orb"></span>
+                    <span class="eve-rest-face" id="eveRestFace">
+                      <span class="eve-rest-eyes">
+                        <span class="eve-rest-eye"><span class="eve-rest-pupil"></span></span>
+                        <span class="eve-rest-eye"><span class="eve-rest-pupil"></span></span>
+                      </span>
+                      <span class="eve-rest-mouth"></span>
+                    </span>
+                  </span>
+                </button>
+                <div class="eve-identity-copy">
+                  <div class="tutor-label">Eve · Tutor e assistente vocale</div>
+                  <div class="eve-presence-row">
+                    <div class="eve-presence"><span></span> Disponibile</div>
+                    <button
+                      class="eve-detach-toggle"
+                      id="eveDetachToggle"
+                      type="button"
+                      aria-pressed="false"
+                      title="Quando il pannello è minimizzato, Eve segue il testo letto sul lato destro"
+                      onclick="toggleEveDetach()"
+                    >Sgancia durante audio</button>
+                  </div>
+                </div>
+              </div>
+
+              <section class="eve-guidance" aria-labelledby="eveGuidanceTitle">
+                <h3 id="eveGuidanceTitle">Prossimo passo</h3>
+                <p id="eveSuggestion">
+                  Continua da “Lezione 0.1 · Che cosa significa programmare?” e segnala la sezione come
+                  compresa quando riesci a spiegarla con parole tue.
+                </p>
+                <button type="button" onclick="handleEveSuggestion()">
+                  Chiedi un suggerimento
+                </button>
+              </section>
+
+              <section class="eve-voice-console" id="eveVoiceConsole" aria-labelledby="eveVoiceTitle">
+                <div class="eve-voice-heading">
+                  <div>
+                    <div class="tutor-label">Voce di Eve</div>
+                    <h3 id="eveVoiceTitle">Audio-lezione</h3>
+                  </div>
+                  <div class="eve-voice-heading-actions">
+                    <span class="eve-audio-badge">AI VOICE</span>
+                  </div>
+                </div>
+
+                <div class="audio-lesson-status" id="audioLessonStatus" aria-live="polite">
+                  Eve è pronta a leggere e spiegare la sezione corrente.
+                </div>
+
+                <div class="eve-attention-visualizer" id="eveAttentionVisualizer" data-focus="standard" aria-live="polite">
+                  <div class="eve-frequency-header">
+                    <div>
+                      <div class="eve-frequency-kicker">Guida visiva dell'attenzione</div>
+                      <div class="eve-frequency-title">Frequenza didattica di Eve</div>
+                    </div>
+                    <span class="eve-frequency-level" id="eveFrequencyLevel">Pronta</span>
+                  </div>
+                  <div class="eve-frequency-screen" aria-hidden="true">
+                    <div class="eve-frequency-bars" id="eveFrequencyBars"></div>
+                  </div>
+                  <div class="eve-frequency-topic" id="eveFrequencyTopic">
+                    <strong>Ciano</strong> · Eve mostrerà qui il livello di attenzione suggerito durante la lettura.
+                  </div>
+                  <div class="eve-frequency-legend" aria-label="Legenda dei colori dell'attenzione">
+                    <span><i class="normal"></i>Spiegazione</span>
+                    <span><i class="key"></i>Concetto chiave</span>
+                    <span><i class="critical"></i>Massima attenzione</span>
+                    <span><i class="application"></i>Esempio o pratica</span>
+                  </div>
+                </div>
+
+
+                <section class="exercise-voice-mode" id="exerciseVoiceMode" hidden aria-label="Assistente vocale per gli esercizi">
+                  <div class="exercise-voice-current">
+                    <div>
+                      <span id="exerciseVoiceCounter">Esercizio 1 di 4</span>
+                      <strong id="exerciseVoiceCurrentTitle">Progetta un distributore di bevande</strong>
+                    </div>
+                    <div class="exercise-voice-current-status" id="exerciseVoiceCurrentStatus">Da svolgere</div>
+                  </div>
+
+                  <div class="exercise-selection-reader">
+                    <div class="exercise-selection-reader-head">
+                      <strong>Testo selezionato</strong>
+                      <button class="exercise-voice-icon-button" id="exerciseReadSelectionButton" type="button" disabled onclick="speakExerciseSelection()" aria-label="Leggi il testo selezionato" title="Leggi selezione">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9h4l5-4v14l-5-4H5z"></path><path d="M17 9.5c1.1 1.2 1.1 3.8 0 5M19.5 7c2.5 2.6 2.5 7.4 0 10"></path></svg>
+                      </button>
+                    </div>
+                    <p class="exercise-selection-preview" id="exerciseSelectionPreview">Seleziona una frase nella consegna o nella tua risposta: Eve la leggerà senza cambiare esercizio.</p>
+                  </div>
+
+                  <div class="exercise-voice-primary-actions">
+                    <button class="exercise-voice-action" type="button" onclick="speakActiveExercisePrompt()">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9h4l5-4v14l-5-4H5z"></path><path d="M17 9.5c1.1 1.2 1.1 3.8 0 5"></path></svg>
+                      <span>Leggi consegna</span>
+                    </button>
+                    <button class="exercise-voice-action" type="button" onclick="giveActiveExerciseHint()">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4"></path><path d="M8.2 14.5A6 6 0 1 1 15.8 14.5c-1 .7-1.8 1.5-1.8 2.5h-4c0-1-.8-1.8-1.8-2.5Z"></path></svg>
+                      <span>Suggerimento</span>
+                    </button>
+                    <button class="exercise-voice-action primary" id="exerciseFinishVoiceButton" type="button" onclick="finishActiveExercise()">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+                      <span id="exerciseFinishVoiceLabel">Concludi</span>
+                    </button>
+                  </div>
+
+                  <div class="exercise-voice-settings">
+                    <label>Velocità
+                      <select id="exerciseAudioRate" onchange="syncExerciseVoicePreferences()">
+                        <option value="0.75">0,75×</option>
+                        <option value="0.9">0,90×</option>
+                        <option value="1">1×</option>
+                        <option value="1.1">1,10×</option>
+                        <option value="1.25">1,25×</option>
+                        <option value="1.5">1,5×</option>
+                      </select>
+                    </label>
+                    <label>Voce
+                      <select id="exerciseAudioVoice" onchange="syncExerciseVoicePreferences()">
+                        <option value="">Eve · voce italiana automatica</option>
+                      </select>
+                    </label>
+                  </div>
+
+                  <div class="exercise-voice-transport" role="group" aria-label="Controlli vocali degli esercizi">
+                    <button class="exercise-voice-icon-button" type="button" onclick="goToAdjacentExercise(-1)" aria-label="Esercizio precedente" title="Esercizio precedente">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 6-6 6 6 6"></path></svg>
+                    </button>
+                    <button class="exercise-voice-play" id="exerciseVoicePlayButton" data-state="play" type="button" onclick="toggleExerciseSpeech()">
+                      <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>
+                      <svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 5.5h3.5v13H7.5zM13 5.5h3.5v13H13z"></path></svg>
+                      <span id="exerciseVoicePlayLabel">Leggi selezione o consegna</span>
+                    </button>
+                    <button class="exercise-voice-icon-button" type="button" onclick="stopExerciseSpeech()" aria-label="Interrompi lettura" title="Stop">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="6.5" width="11" height="11" rx="1.4"></rect></svg>
+                    </button>
+                    <button class="exercise-voice-icon-button" type="button" onclick="goToAdjacentExercise(1)" aria-label="Esercizio successivo" title="Esercizio successivo">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"></path></svg>
+                    </button>
+                  </div>
+
+                  <button class="exercise-next-suggestion" id="exerciseNextSuggestion" type="button" onclick="goToNextIncompleteExercise()">
+                    Prosegui con il prossimo esercizio →
+                  </button>
+                </section>
+
+                <div class="audio-lesson-controls eve-audio-controls">
+                  <div class="audio-control audio-scope-control">
+                    <div class="audio-scope-topline">
+                      <label for="audioScope">Contenuto</label>
+                      <select id="audioScope" aria-describedby="audioScopeNote">
+                        <option value="section">Pagina corrente</option>
+                        <option value="custom">Pagine scelte</option>
+                        <option value="lesson">Lezione completa</option>
+                      </select>
+                    </div>
+                    <div class="audio-scope-note" id="audioScopeNote">
+                      Legge soltanto la pagina visualizzata e si ferma alla fine.
+                    </div>
+                    <section class="audio-page-selector hidden" id="audioPageSelector" aria-labelledby="audioPageSelectorTitle">
+                      <div class="audio-page-selector-header">
+                        <div>
+                          <strong id="audioPageSelectorTitle">Pagine da leggere automaticamente</strong>
+                          <span id="audioPageSelectionSummary">Seleziona almeno una pagina</span>
+                        </div>
+                        <div class="audio-page-selector-tools" aria-label="Selezione rapida delle pagine">
+                          <button type="button" onclick="selectAudioPagesFromCurrent()">Da qui</button>
+                          <button type="button" onclick="setAllAudioPages(true)">Tutte</button>
+                          <button type="button" onclick="setAllAudioPages(false)">Azzera</button>
+                        </div>
+                      </div>
+                      <div class="audio-page-checklist" id="audioPageChecklist"></div>
+                    </section>
+                  </div>
+                  <div class="audio-control">
+                    <label for="audioMode">Modalità</label>
+                    <select id="audioMode">
+                      <option value="faithful">Lettura fedele</option>
+                      <option value="lesson">Spiegazione di Eve</option>
+                    </select>
+                  </div>
+                  <div class="audio-control">
+                    <label for="audioRate">Velocità</label>
+                    <select id="audioRate">
+                      <option value="0.75">0,75×</option>
+                      <option value="0.9">0,90×</option>
+                      <option value="1" selected>1×</option>
+                      <option value="1.1">1,10×</option>
+                      <option value="1.25">1,25×</option>
+                      <option value="1.5">1,5×</option>
+                      <option value="1.75">1,75×</option>
+                      <option value="2">2×</option>
+                    </select>
+                  </div>
+                  <div class="audio-control eve-voice-select-control">
+                    <label for="audioVoice">Voce</label>
+                    <select id="audioVoice">
+                      <option value="">Eve · voce italiana automatica</option>
+                    </select>
+                    <div class="eve-voice-meta" id="audioVoiceCount">Ricerca delle voci disponibili…</div>
+                  </div>
+                </div>
+
+                <div class="eve-voice-tools">
+                  <button type="button" onclick="previewSelectedVoice()">Ascolta voce</button>
+                  <button type="button" onclick="reloadAudioVoices()">Aggiorna voci</button>
+                </div>
+
+                <div class="audio-lesson-actions eve-audio-actions audio-transport" role="group" aria-label="Controlli Audio-lezione">
+                  <button class="audio-icon-button" type="button" onclick="skipAudioBlock(-1)" aria-label="Passaggio precedente" title="Passaggio precedente">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M6 5v14M19 6.5 9.5 12l9.5 5.5z"></path>
+                    </svg>
+                  </button>
+                  <button class="audio-primary audio-icon-button audio-play-toggle" type="button" id="audioPlayButton" data-audio-state="play" onclick="toggleAudioLesson()" aria-label="Riproduci Audio-lezione" title="Riproduci">
+                    <svg class="audio-icon-play" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M8 5.5v13l10-6.5z"></path>
+                    </svg>
+                    <svg class="audio-icon-pause" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M7.5 5.5h3.5v13H7.5zM13 5.5h3.5v13H13z"></path>
+                    </svg>
+                    <span class="audio-button-label" id="audioPlayButtonLabel">Riproduci</span>
+                  </button>
+                  <button class="audio-icon-button audio-stop-button" type="button" onclick="stopAudioLesson()" aria-label="Interrompi Audio-lezione" title="Stop">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <rect x="6.5" y="6.5" width="11" height="11" rx="1.4"></rect>
+                    </svg>
+                  </button>
+                  <button class="audio-icon-button" type="button" onclick="skipAudioBlock(1)" aria-label="Passaggio successivo" title="Passaggio successivo">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M18 5v14M5 6.5l9.5 5.5L5 17.5z"></path>
+                    </svg>
+                  </button>
+                </div>
+                <div class="audio-lesson-progress" aria-label="Avanzamento audio-lezione">
+                  <span id="audioLessonProgress"></span>
+                </div>
+              </section>
+            </div>
+          </aside>
+
+          <div class="eve-assistant eve-zone-lesson" id="eveAssistant" aria-live="polite">
+                      <button class="eve-core-button" type="button" aria-label="Apri o chiudi Eve" onclick="toggleEveAssistant()">
+                        <span class="eve-ring eve-ring-a"></span>
+                        <span class="eve-ring eve-ring-b"></span>
+                        <span class="eve-ring eve-ring-c"></span>
+                        <span class="eve-orb"></span>
+                        <span class="eve-sparkle one"></span>
+                        <span class="eve-sparkle two"></span>
+                        <span class="eve-face">
+                          <span class="eve-eyes">
+                            <span class="eve-eye left"></span>
+                            <span class="eve-eye right"></span>
+                          </span>
+                          <span class="eve-mouth"></span>
+                        </span>
+                      </button>
+
+                      <div class="eve-helper-card" id="eveHelperCard">
+                        <div class="eve-helper-label">Eve</div>
+                        <strong id="eveHelperTitle">Ti seguo nella lettura</strong>
+                        <p id="eveHelperText">
+                          Posso aiutarti a capire i concetti chiave, ricordarti dove ti sei fermato e suggerirti il prossimo passo.
+                        </p>
+                        <div class="eve-helper-actions">
+                          <button class="primary" type="button" onclick="askEveContextualHelp()">Aiutami</button>
+                          <button type="button" onclick="toggleFloating('chatPanel')">Apri chat</button>
+                        </div>
+                      </div>
+                    </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  </section>
+
+  <div class="modal-backdrop hidden" id="modalBackdrop" onclick="closeModalFromBackdrop(event)">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <h2 id="modalTitle">Finestra</h2>
+        <button class="close-button" type="button" onclick="closeModal()">×</button>
+      </div>
+      <div id="modalContent"></div>
+    </section>
+  </div>
+
+  <div class="drawer-backdrop hidden" id="drawerBackdrop" onclick="closeDrawerFromBackdrop(event)">
+    <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+      <div class="drawer-header">
+        <h2 id="drawerTitle">Pannello</h2>
+        <button class="close-button" type="button" onclick="closeDrawer()">×</button>
+      </div>
+      <div id="drawerContent"></div>
+    </aside>
+  </div>
+
+  <section class="floating-panel hidden" id="timerPanel">
+    <div class="floating-header" data-drag-handle>
+      <strong>Timer studio</strong>
+      <button class="close-button" type="button" onclick="toggleFloating('timerPanel')">×</button>
+    </div>
+    <div class="floating-content">
+      <div class="timer-display" id="timerDisplay">00:00:00</div>
+      <div class="course-meta" id="timerMode">Modalità libera</div>
+      <div class="timer-actions">
+        <button type="button" onclick="toggleTimer()" id="timerToggle">Avvia</button>
+        <button type="button" onclick="switchTimerMode()">Pomodoro</button>
+        <button type="button" onclick="resetTimer()">Reset</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="floating-panel hidden" id="chatPanel" aria-label="Centro messaggi">
+    <div class="floating-header" data-drag-handle>
+      <div class="chat-window-title">
+        <span class="chat-window-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M5 17.5 3.5 21l4.2-1.4A9 9 0 1 0 5 17.5Z"></path>
+            <path d="M8 10h8M8 14h5"></path>
+          </svg>
+        </span>
+        <span>
+          <strong>Messaggi</strong>
+          <small>Lobby generale, chat private e gruppi</small>
+        </span>
+      </div>
+      <div class="chat-window-actions">
+        <button class="chat-icon-button primary" type="button" aria-label="Nuova conversazione" title="Nuova conversazione" onclick="toggleChatCreateSheet(true)">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 5v14M5 12h14"></path>
+          </svg>
+        </button>
+        <button class="chat-icon-button chat-minimize-button" type="button" aria-label="Riduci la chat" title="Riduci la conversazione attiva" onclick="minimizeActiveChat()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M5 12h14"></path>
+          </svg>
+        </button>
+        <button class="close-button" type="button" aria-label="Chiudi messaggi" onclick="toggleFloating('chatPanel')">×</button>
+      </div>
+    </div>
+
+    <div class="chat-shell">
+      <aside class="chat-sidebar" aria-label="Conversazioni">
+        <div class="chat-sidebar-top">
+          <div class="chat-search-row">
+            <input class="chat-search" id="chatSearch" type="search" placeholder="Cerca chat o messaggi" oninput="setChatSearch(this.value)" />
+            <button class="chat-icon-button" type="button" aria-label="Nuova chat" title="Nuova chat" onclick="toggleChatCreateSheet(true)">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.9">
+                <path d="M12 5v14M5 12h14"></path>
+              </svg>
+            </button>
+          </div>
+          <div class="chat-filter-tabs" aria-label="Filtra conversazioni">
+            <button class="chat-filter active" type="button" data-chat-filter="all" onclick="setChatFilter('all')">Tutte</button>
+            <button class="chat-filter" type="button" data-chat-filter="unread" onclick="setChatFilter('unread')">Non lette</button>
+            <button class="chat-filter" type="button" data-chat-filter="private" onclick="setChatFilter('private')">Private</button>
+            <button class="chat-filter" type="button" data-chat-filter="group" onclick="setChatFilter('group')">Gruppi</button>
+          </div>
+        </div>
+
+        <div class="chat-lobby-zone">
+          <div class="chat-zone-label"><span>Canale permanente</span><span>sempre disponibile</span></div>
+          <div id="chatLobbyShortcut"></div>
+        </div>
+
+        <div class="chat-conversation-list" id="chatConversationList"></div>
+      </aside>
+
+      <main class="chat-main" aria-label="Conversazione attiva">
+        <header class="chat-conversation-header" id="chatConversationHeader"></header>
+        <div class="chat-messages" id="chatMessages" aria-live="polite"></div>
+        <div class="chat-typing" id="chatTypingStatus" aria-live="polite"></div>
+        <div class="chat-composer">
+          <input id="chatFileInput" type="file" hidden multiple onchange="sendChatAttachments(event)" />
+          <button class="chat-icon-button" type="button" aria-label="Allega file" title="Allega file" onclick="document.getElementById('chatFileInput').click()">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9">
+              <path d="m20.5 11.5-8.2 8.2a5 5 0 0 1-7.1-7.1l9-9a3.5 3.5 0 0 1 5 5l-9 9a2 2 0 1 1-2.8-2.8l8.3-8.3"></path>
+            </svg>
+          </button>
+          <button class="chat-icon-button chat-emoji-button" type="button" aria-label="Inserisci emoji" title="Inserisci emoji" onclick="insertChatEmoji()">☺</button>
+          <textarea id="chatInput" rows="1" placeholder="Scrivi un messaggio" oninput="autoSizeChatInput(this)" onkeydown="handleChatKey(event)"></textarea>
+          <button class="chat-send-button" type="button" aria-label="Invia messaggio" onclick="sendChatMessage()">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path>
+            </svg>
+          </button>
+        </div>
+      </main>
+
+      <aside class="chat-create-sheet" id="chatCreateSheet" hidden aria-label="Nuova conversazione">
+        <div class="chat-create-head">
+          <strong>Nuova conversazione</strong>
+          <button class="chat-icon-button" type="button" aria-label="Chiudi" onclick="toggleChatCreateSheet(false)">×</button>
+        </div>
+        <div class="chat-create-body">
+          <section class="chat-create-section">
+            <h4>Messaggio privato</h4>
+            <p>Apri una conversazione diretta con un partecipante dell’aula.</p>
+            <div class="chat-contact-list" id="chatPrivateContacts"></div>
+          </section>
+          <section class="chat-create-section">
+            <h4>Nuovo gruppo</h4>
+            <p>Scegli un nome e almeno due partecipanti. La Lobby generale rimarrà sempre separata.</p>
+            <input class="chat-group-name" id="chatGroupName" type="text" maxlength="48" placeholder="Nome del gruppo" />
+            <div class="chat-contact-list" id="chatGroupMembers"></div>
+            <button class="chat-create-group-button" type="button" onclick="createChatGroup()">Crea gruppo</button>
+          </section>
+        </div>
+      </aside>
+
+      <aside class="chat-info-sheet" id="chatInfoSheet" hidden aria-label="Informazioni conversazione"></aside>
+    </div>
+  </section>
+
+  <div class="chat-minimized-dock" id="chatMinimizedDock" hidden aria-label="Conversazioni ridotte"></div>
+
+
+  <div class="exercise-selection-toolbar hidden" id="exerciseSelectionToolbar" role="toolbar" aria-label="Lettura del testo selezionato">
+    <button type="button" onpointerdown="event.preventDefault()" onclick="speakExerciseSelection()">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9h4l5-4v14l-5-4H5z"></path><path d="M17 9.5c1.1 1.2 1.1 3.8 0 5M19.5 7c2.5 2.6 2.5 7.4 0 10"></path></svg>
+      Leggi selezione
+    </button>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  
+  <script type="module" src="/assets/js/aula.js"></script>
+</body>
+</html>

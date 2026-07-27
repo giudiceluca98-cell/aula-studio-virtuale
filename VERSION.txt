@@ -1,6 +1,19 @@
 Aula Studio Virtuale
-Versione: 1.4.0-alpha.1
-Fonte: demo-canonica
-Commit sorgente: acb9029b682885a419771e864c051752e325bac2
-Git blob HTML: 1a4b68f4aa04bd5602afddb7a9feba867da33574
-SHA-256 HTML: 85ad819914cf85740b0013f0d3147adaa2ff7b233f99935ba67f4fb77fefe95c
+Versione: 1.4.0-alpha.2
+Fonte: demo canonica ufficiale con ottimizzazione grafica fase 1 e build modulare per rotta
+Commit base: c33a369aeafe897c097a1051b97e8b43d5dc09a9
+Git blob HTML: 554aad2f7520ccf0d02fa1941aff9562851e447a
+SHA-256 HTML: 820100434f4a6cdf1ac9057cbf446fb4bd13bfa5bd946558aaf900e852dc2d6c
+Build: modular-routes-1
+SHA-256 portale: 9e672c9ffa77bb615e67309e07002bf4423181c6d325c471471301accffe1f4f
+SHA-256 dashboard: 0183edcae4fbd1c8ae14c6230ff5572a669d51cb0b368fef190eec0421a9a8d8
+SHA-256 catalogo: 29fa6f6adc2af332e5abfb4bb7388165eae131fcc742ee4afbdec429159f1f15
+SHA-256 download: 526b18665006aa6173071ee8a3db04f384da87ed5bd2b90022bc677a9d78449f
+SHA-256 aula: 30c7919ca4c760d26c18bfee745cb41dccdb597e86c68dcbb892ae456eebdf26
+SHA-256 cursore: bccdef94c94c583b3a2efba12668f6ec508ebb6b9064a046912048c8dc405211
+SHA-256 puntatore: a33a6ee72e25c4882b6d46150ef53b56deedd7b73e83319bf5f552ecdcf967e8
+Desktop: Tauri 2, installer Windows NSIS per utente corrente
+Desktop build: tools/build-desktop.mjs -> desktop-dist (generato, non versionato)
+Aggiornamenti: release firmate, controllo ogni 6 ore e conferma manuale prima dell'installazione
+Workflow desktop: .github/workflows/release-desktop.yml
+Download web: /download, risoluzione automatica dell'installer dalla release GitHub pubblica

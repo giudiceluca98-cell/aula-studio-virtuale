@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="aula-demo-version" content="1.4.0-alpha.2" />
+  <meta name="aula-build" content="modular-routes-1" />
+  <title>Aula Studio Virtuale — Le tue stanze</title>
+  <link rel="stylesheet" href="/assets/css/dashboard.css" />
+</head>
+<body data-portal-route="dashboard">
+<section class="portal-view portal-dashboard" id="portalDashboard">
+    <header class="portal-header">
+      <div class="portal-container portal-navbar">
+        <button class="portal-brand" type="button" onclick="navigatePortal('presentation')">
+          <span class="portal-brand-mark" aria-hidden="true"></span>
+          <span>Aula</span>
+        </button>
+
+        <nav class="portal-nav" aria-label="Navigazione dashboard">
+          <button class="portal-nav-link optional" type="button" onclick="navigatePortal('presentation')">Presentazione</button>
+          <button class="portal-nav-link optional" type="button" onclick="navigatePortal('aula')">Apri aula</button>
+          <a class="portal-button" data-web-install href="/download">Installa app</a>
+          <button class="portal-button" type="button" onclick="toggleDarkMode()">Tema</button>
+          <button class="portal-button" type="button" onclick="navigatePortal('presentation')">Esci</button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="portal-dashboard-main">
+      <div class="portal-container">
+        <div class="portal-dashboard-top">
+          <div>
+            <div class="portal-eyebrow">La tua scrivania</div>
+            <h1>Ciao, Luca.</h1>
+            <p class="portal-section-copy">Scegli una stanza, riprendi lo studio oppure aprine una nuova.</p>
+          </div>
+
+          <div class="portal-status" id="portalDashboardConnection">Demo locale · presenza simulata</div>
+        </div>
+
+        <section class="portal-study-banner">
+          <div class="portal-feature-icon">✦</div>
+          <div class="portal-study-banner-copy">
+            <div class="portal-eyebrow">Nuovo percorso</div>
+            <h2>Cosa vuoi studiare?</h2>
+            <p>
+              Esplora i materiali e crea con Eve una sequenza ordinata. Scegli la stanza
+              di destinazione prima di entrare nel Catalogo.
+            </p>
+          </div>
+          <div class="portal-study-banner-actions">
+            <select class="portal-catalog-room-picker" id="portalDashboardCatalogRoom" aria-label="Stanza di destinazione del Catalogo" onchange="portalDashboardCatalogSelectionChanged(this.value)"></select>
+            <button class="portal-button primary large" id="portalDashboardCatalogButton" type="button" onclick="portalDashboardOpenCatalogFromBanner()">
+              Apri il Catalogo →
+            </button>
+            <span class="portal-study-banner-note" id="portalDashboardCatalogNote">Il Catalogo userà questa stanza come destinazione preferita.</span>
+          </div>
+        </section>
+
+
+        <div class="portal-room-section-title">
+          <h2>Le tue stanze</h2>
+          <span class="portal-status" id="portalRoomCount">0 attive</span>
+        </div>
+
+        <div class="portal-room-grid" id="portalRoomGrid" aria-live="polite"></div>
+
+        <div class="portal-dashboard-feedback" id="portalDashboardFeedback" role="status" aria-live="polite"></div>
+
+        <section class="portal-dashboard-state" id="portalDashboardStatePanel" data-state="" role="alert" aria-live="assertive" hidden>
+          <span class="portal-dashboard-state-icon" id="portalDashboardStateIcon" aria-hidden="true">!</span>
+          <div class="portal-dashboard-state-copy">
+            <strong id="portalDashboardStateTitle">Operazione non completata</strong>
+            <span id="portalDashboardStateText"></span>
+            <small id="portalDashboardStateCode"></small>
+          </div>
+          <div class="portal-dashboard-state-actions">
+            <button class="primary" id="portalDashboardRetryButton" type="button" onclick="portalDashboardRetryLastAction()" hidden>Riprova</button>
+            <button id="portalDashboardDismissButton" type="button" onclick="portalDashboardDismissState()">Chiudi</button>
+          </div>
+        </section>
+
+
+        <div class="portal-create-grid">
+          <form class="portal-dashboard-panel" id="portalCreateRoomForm" onsubmit="portalDashboardCreateRoom(event)" novalidate>
+            <div class="portal-room-icon">＋</div>
+            <h3>Crea una stanza</h3>
+            <p>
+              Assegna un nome al nuovo spazio. La demo genera un codice privato
+              e salva la stanza soltanto in questo browser.
+            </p>
+            <div class="portal-input-row">
+              <input class="portal-input" id="portalRoomName" name="roomName" type="text" minlength="3" maxlength="60" autocomplete="off" placeholder="Es. Preparazione esame" aria-describedby="portalCreateRoomHelp">
+              <button class="portal-button primary" id="portalCreateRoomButton" type="submit">Crea</button>
+            </div>
+            <p class="portal-form-help" id="portalCreateRoomHelp">Da 3 a 60 caratteri. Gli spazi iniziali e finali vengono rimossi.</p>
+          </form>
+
+          <form class="portal-dashboard-panel" id="portalJoinRoomForm" onsubmit="portalDashboardJoinRoom(event)" novalidate>
+            <div class="portal-room-icon">⌑</div>
+            <h3>Entra con un invito</h3>
+            <p>
+              Inserisci il codice ricevuto da chi ha creato la stanza. Per provare il flusso
+              usa <strong>STUDY2026</strong> oppure <strong>MATEMATICA24</strong>.
+            </p>
+            <div class="portal-input-row">
+              <input class="portal-input" id="portalInviteCode" name="inviteCode" type="text" minlength="8" maxlength="64" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="CODICE INVITO" aria-describedby="portalJoinRoomHelp">
+              <button class="portal-button" id="portalJoinRoomButton" type="submit">Entra</button>
+            </div>
+            <p class="portal-form-help" id="portalJoinRoomHelp">Il codice non distingue maiuscole e minuscole.</p>
+            <p class="portal-dashboard-test-codes">Stati demo: <code>ARCHIVIATA26</code> <code>NEGATO2026</code> <code>OFFLINE2026</code></p>
+          </form>
+        </div>
+
+        <div class="portal-dashboard-columns">
+          <section class="portal-dashboard-panel">
+            <div class="portal-room-section-title" style="margin:0">
+              <h3 style="margin:0">Attività recente</h3>
+              <button class="portal-nav-link" type="button" onclick="navigatePortal('aula')">Apri aula →</button>
+            </div>
+
+            <div class="portal-activity-list">
+              <div class="portal-activity">
+                <span class="portal-room-icon">▣</span>
+                <div>
+                  <strong>Lezione 0.1 aperta</strong><br>
+                  <small class="portal-muted">Che cosa significa programmare?</small>
+                </div>
+                <time>Oggi</time>
+              </div>
+
+              <div class="portal-activity">
+                <span class="portal-room-icon">◷</span>
+                <div>
+                  <strong>Sessione focus completata</strong><br>
+                  <small class="portal-muted">25 minuti · Programmazione in Python</small>
+                </div>
+                <time>Ieri</time>
+              </div>
+
+              <div class="portal-activity">
+                <span class="portal-room-icon">✓</span>
+                <div>
+                  <strong>Checklist aggiornata</strong><br>
+                  <small class="portal-muted">2 attività contrassegnate</small>
+                </div>
+                <time>2 giorni</time>
+              </div>
+            </div>
+          </section>
+
+          <section class="portal-dashboard-panel">
+            <h3 style="margin-top:0">Obiettivi della settimana</h3>
+            <p>Una vista rapida per scegliere il prossimo passo senza entrare subito nella stanza.</p>
+
+            <div class="portal-goal-list">
+              <div class="portal-goal">
+                <span class="portal-room-icon">01</span>
+                <div>
+                  <strong>Fondamenti Python</strong>
+                  <div class="portal-goal-progress" style="--goal:68%"><span></span></div>
+                </div>
+                <small>68%</small>
+              </div>
+
+              <div class="portal-goal">
+                <span class="portal-room-icon">02</span>
+                <div>
+                  <strong>Esercizi completati</strong>
+                  <div class="portal-goal-progress" style="--goal:42%"><span></span></div>
+                </div>
+                <small>42%</small>
+              </div>
+
+              <div class="portal-goal">
+                <span class="portal-room-icon">03</span>
+                <div>
+                  <strong>Tempo focus</strong>
+                  <div class="portal-goal-progress" style="--goal:74%"><span></span></div>
+                </div>
+                <small>3h 42m</small>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="portal-quick-grid">
+          <article class="portal-quick-card">
+            <div class="portal-feature-icon">◷</div>
+            <h4>Riprendi rapidamente</h4>
+            <p>Torna all’ultima sezione letta e continua dal punto esatto in cui avevi interrotto.</p>
+          </article>
+
+          <article class="portal-quick-card">
+            <div class="portal-feature-icon">◎</div>
+            <h4>Progressi personali</h4>
+            <p>Controlla tempo, attività completate e obiettivi senza confonderli con quelli degli altri.</p>
+          </article>
+
+          <article class="portal-quick-card">
+            <div class="portal-feature-icon">✦</div>
+            <h4>Suggerimenti di Eve</h4>
+            <p>Individua cosa ripassare e quale esercizio affrontare dopo in base al percorso corrente.</p>
+          </article>
+        </div>
+      </div>
+    </main>
+  </section>
+
+
+
+
+
+
+
+
+
+
+
+  <div class="material-add-dialog" id="materialAddDialog" hidden onclick="aulaMaterialAddBackdrop(event)">
+    <section class="material-add-card" role="dialog" aria-modal="true" aria-labelledby="materialAddTitle">
+      <header class="material-add-head">
+        <div><div class="portal-eyebrow">Materiali della stanza</div><h2 id="materialAddTitle">Aggiungi materiale</h2><p>La demo conserva soltanto metadati locali; nessun file viene caricato su un server.</p></div>
+        <button class="material-add-close" type="button" onclick="aulaMaterialAddClose()" aria-label="Chiudi aggiunta materiale">×</button>
+      </header>
+      <div class="material-add-body">
+        <div class="material-add-tabs" role="tablist" aria-label="Tipo di materiale">
+          <button id="materialAddLinkTab" class="active" type="button" role="tab" aria-selected="true" onclick="aulaMaterialAddSetMode('link')">Collegamento HTTPS</button>
+          <button id="materialAddFileTab" type="button" role="tab" aria-selected="false" onclick="aulaMaterialAddSetMode('file')">File locale</button>
+        </div>
+        <div class="material-add-fields" id="materialAddCommonFields">
+          <label>Titolo<input id="materialAddName" type="text" maxlength="90" placeholder="Es. Dispensa sulle funzioni" oninput="aulaMaterialUpdateClassificationPreview()"></label>
+          <label>Corso<select id="materialAddCourse" onchange="aulaMaterialUpdateClassificationPreview()"><option>Programmazione da Zero</option><option>Risorse libere</option></select></label>
+        </div>
+        <div class="material-add-fields" id="materialAddLinkFields">
+          <label>URL pubblico HTTPS<input id="materialAddUrl" type="url" placeholder="https://..." oninput="aulaMaterialUpdateClassificationPreview()"></label>
+        </div>
+        <div class="material-add-fields" id="materialAddFileFields" hidden>
+          <div class="material-add-file-box"><label>Seleziona file<input id="materialAddFile" type="file" accept=".pdf,.txt,.md,.doc,.docx,.ppt,.pptx,application/pdf,text/plain,text/markdown,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation" onchange="aulaMaterialUpdateClassificationPreview()"></label><small>Massimo 10 MB. Formati demo ammessi: PDF, TXT, Markdown, DOC/DOCX e PPT/PPTX.</small></div>
+        </div>
+        <div class="material-add-classification" id="materialAddClassification"><strong>Classificazione preliminare</strong><br>Inserisci un URL oppure seleziona un file.</div>
+        <div class="material-add-status" id="materialAddStatus" role="status" aria-live="polite"></div>
+        <div class="material-add-actions"><button type="button" onclick="aulaMaterialAddClose()">Annulla</button><button class="primary" id="materialAddSubmit" type="button" onclick="aulaMaterialAddSubmit()">Aggiungi materiale</button></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="portal-room-manage-dialog" id="portalRoomManageDialog" hidden onclick="portalDashboardRoomManageBackdrop(event)">
+    <section class="portal-room-manage-card" role="dialog" aria-modal="true" aria-labelledby="portalRoomManageTitle">
+      <header class="portal-room-manage-head">
+        <div>
+          <div class="portal-eyebrow">Gestione della stanza</div>
+          <h2 id="portalRoomManageTitle">Stanza</h2>
+          <p id="portalRoomManageSubtitle">Uscita e cancellazione seguono regole diverse.</p>
+        </div>
+        <button class="portal-room-manage-close" type="button" onclick="portalDashboardCloseRoomManage()" aria-label="Chiudi gestione stanza">×</button>
+      </header>
+
+      <div class="portal-room-manage-body">
+        <div class="portal-room-manage-summary" id="portalRoomManageSummary"></div>
+
+        <section class="portal-room-manage-action" data-kind="leave">
+          <h3>Lascia la stanza</h3>
+          <p id="portalRoomLeaveDescription">La stanza verrà rimossa dalla tua Scrivania. I dati personali non vengono cancellati da questa azione.</p>
+          <button class="portal-room-leave-button" id="portalRoomLeaveButton" type="button" onclick="portalDashboardShowLeaveConfirmation()">Lascia la stanza</button>
+          <div class="portal-room-manage-confirmation" id="portalRoomLeaveConfirmation" hidden>
+            <strong id="portalRoomLeaveConfirmationTitle">Confermi l’uscita?</strong>
+            <span id="portalRoomLeaveConfirmationCopy">La tua presenza verrà chiusa e la membership non sarà più attiva.</span>
+            <div class="portal-room-manage-button-row" style="margin-top:12px">
+              <button class="portal-room-leave-button" id="portalRoomLeaveConfirmButton" type="button" onclick="portalDashboardLeaveRoom()">Sì, lascia la stanza</button>
+              <button class="portal-room-cancel-button" type="button" onclick="portalDashboardHideLeaveConfirmation()">Annulla</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="portal-room-manage-action" id="portalRoomDeleteSection" data-kind="delete" hidden>
+          <h3>Elimina definitivamente la stanza</h3>
+          <p>Solo il proprietario può farlo. Inviti, dati condivisi e file della stanza vengono rimossi per tutti.</p>
+          <button class="portal-room-delete-button" id="portalRoomDeleteStartButton" type="button" onclick="portalDashboardShowDeleteConfirmation()">Elimina stanza</button>
+          <div class="portal-room-manage-delete" id="portalRoomDeleteConfirmation" hidden>
+            <strong>Scrivi ELIMINA STANZA per confermare</strong>
+            <span>L’eliminazione completa non equivale a lasciare la stanza e non può essere annullata.</span>
+            <input class="portal-room-delete-input" id="portalRoomDeletePhrase" type="text" autocomplete="off" spellcheck="false" placeholder="ELIMINA STANZA" aria-describedby="portalRoomDeleteHelp">
+            <span id="portalRoomDeleteHelp">La frase deve corrispondere esattamente.</span>
+            <div class="portal-room-manage-button-row" style="margin-top:12px">
+              <button class="portal-room-delete-button" id="portalRoomDeleteConfirmButton" type="button" onclick="portalDashboardDeleteRoom()">Conferma eliminazione</button>
+              <button class="portal-room-cancel-button" type="button" onclick="portalDashboardHideDeleteConfirmation()">Annulla</button>
+            </div>
+          </div>
+          <div class="portal-room-manage-progress" id="portalRoomDeleteProgress" hidden>
+            <div id="portalRoomDeleteStepAccess">Blocco nuovi accessi e revoca inviti</div>
+            <div id="portalRoomDeleteStepFiles">Pulizia sicura dei file</div>
+            <div id="portalRoomDeleteStepData">Eliminazione dei dati condivisi</div>
+          </div>
+        </section>
+
+        <div class="portal-room-manage-status" id="portalRoomManageStatus" role="status" aria-live="polite"></div>
+
+        <div class="portal-room-manage-privacy">
+          <strong>Demo locale.</strong> La stanza viene rimossa solo dal salvataggio di questo browser. Nell’app ufficiale l’uscita usa `leave_study_room`; la cancellazione usa un flusso server owner-only che blocca prima gli accessi, pulisce Storage e poi elimina il database.
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="portal-invite-dialog" id="portalInviteDialog" hidden onclick="portalDashboardInviteBackdrop(event)">
+    <section class="portal-invite-card" role="dialog" aria-modal="true" aria-labelledby="portalInviteTitle">
+      <header class="portal-invite-head">
+        <div>
+          <div class="portal-eyebrow">Accesso alla stanza</div>
+          <h2 id="portalInviteTitle">Codice invito</h2>
+          <p id="portalInviteSubtitle">Condividi il codice soltanto con le persone che vuoi ammettere nella stanza.</p>
+        </div>
+        <button class="portal-invite-close" type="button" onclick="portalDashboardCloseInvite()" aria-label="Chiudi gestione invito">×</button>
+      </header>
+
+      <div class="portal-invite-body">
+        <div class="portal-invite-code-box">
+          <div class="portal-invite-code-copy">
+            <span>Codice attivo</span>
+            <strong id="portalInviteCodeValue">••••••••</strong>
+          </div>
+          <button class="portal-invite-copy-button" id="portalInviteCopyButton" type="button" onclick="portalDashboardCopyInvite()">Copia codice</button>
+        </div>
+
+        <div class="portal-invite-meta">
+          <div><span>Il tuo ruolo</span><strong id="portalInviteRole">Partecipante</strong></div>
+          <div><span>Ultima rigenerazione</span><strong id="portalInviteRotatedAt">Mai</strong></div>
+        </div>
+
+        <div class="portal-invite-owner-actions" id="portalInviteOwnerActions" hidden>
+          <h3>Revoca il codice attuale</h3>
+          <p>Il vecchio codice smetterà immediatamente di funzionare. Le persone già presenti nella stanza non verranno espulse.</p>
+          <button class="portal-invite-rotate-button" id="portalInviteRotateButton" type="button" onclick="portalDashboardShowInviteConfirmation()">Revoca e rigenera</button>
+
+          <div class="portal-invite-confirmation" id="portalInviteConfirmation" hidden>
+            <strong>Confermi la revoca?</strong>
+            <span>Questa azione non può ripristinare il codice precedente.</span>
+            <div class="portal-invite-confirm-actions">
+              <button class="portal-invite-confirm-button" id="portalInviteConfirmButton" type="button" onclick="portalDashboardRotateInvite()">Sì, genera un nuovo codice</button>
+              <button class="portal-invite-cancel-button" type="button" onclick="portalDashboardHideInviteConfirmation()">Annulla</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="portal-invite-status" id="portalInviteStatus" role="status" aria-live="polite"></div>
+
+        <div class="portal-invite-privacy">
+          <strong>Demo locale.</strong> Copia, revoca e rigenerazione sono salvate soltanto in questo browser. Nell’app ufficiale la rotazione passa dalla RPC protetta `rotate_room_invite` e il permesso viene verificato dal server.
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="portal-presence-dialog" id="portalPresenceDialog" hidden onclick="portalDashboardPresenceBackdrop(event)">
+    <section class="portal-presence-card" role="dialog" aria-modal="true" aria-labelledby="portalPresenceTitle">
+      <header class="portal-presence-head">
+        <div>
+          <div class="portal-eyebrow">Ruoli e presenza della stanza</div>
+          <h2 id="portalPresenceTitle">Partecipanti</h2>
+          <p id="portalPresenceSubtitle">Snapshot locale della demo. Nell’app reale questi dati arrivano da membership, Postgres e Realtime autenticati.</p>
+        </div>
+        <button class="portal-presence-close" type="button" onclick="portalDashboardClosePresence()" aria-label="Chiudi dettagli partecipanti">×</button>
+      </header>
+
+      <div class="portal-presence-summary" id="portalPresenceSummary"></div>
+      <ul class="portal-presence-list" id="portalPresenceList"></ul>
+      <div class="portal-presence-privacy">
+        <strong>Privacy.</strong> La demo usa dati locali deterministici e non comunica una presenza reale. Nell’app ufficiale l’identità e lo stato sono riconciliati da record server autenticati; i payload Realtime non vengono considerati fonte affidabile dell’identità.
+      </div>
+    </section>
+  </div>
+
+  
+  <div class="portal-toast" id="portalToast" aria-live="polite"></div>
+  <script type="module" src="/assets/js/dashboard.js"></script>
+</body>
+</html>
