@@ -12,7 +12,7 @@
 </style>
 </head>
 <body>
-<main id="loader"><div class="spinner"></div><strong>Caricamento di Eve AI Studio…</strong><br><small>Checkpoint 1.0 · Eve Animation Library 1.2.2 · 64 asset</small></main>
+<main id="loader"><div class="spinner"></div><strong>Caricamento di Eve AI Studio…</strong><br><small>Checkpoint 1.1 · Eve Animation Library 1.2.2 · 64 asset</small></main>
 <script src="markup-01.js"></script>
 <script src="markup-02.js"></script>
 <script src="markup-03.js"></script>
@@ -66,6 +66,7 @@ function loadPreviewScript(source){
   await loadPreviewScript("materials-workflow.js");
   await loadPreviewScript("retrieval-workflow.js");
   await loadPreviewScript("rag-chat-workflow.js");
+  await loadPreviewScript("source-opening-workflow.js");
   try{await loadPreviewScript("particles.js")}catch(error){console.warn(error.message)}
 })().catch(error=>{
   document.body.innerHTML=`<main id="loader"><h1>Anteprima non caricata</h1><p>${error.message}</p></main>`;
