@@ -1,10 +1,14 @@
 {
-  "passed": true,
+  "passed": false,
   "libraryVersion": "1.2.2",
   "quality": "original-final-webp",
   "assets": 64,
+  "galleryCards": 64,
   "modular": true,
-  "standaloneFile": true,
+  "standaloneFile": false,
   "interactions": true,
-  "errors": []
+  "animationGallery": true,
+  "errors": [
+    "page.waitForFunction: Timeout 30000ms exceeded.\n    at verifyAnimations (/home/runner/work/aula-studio-virtuale/aula-studio-virtuale/verify-eve-hq-final.mjs:15:14)\n    at async file:///home/runner/work/aula-studio-virtuale/aula-studio-virtuale/verify-eve-hq-final.mjs:121:27"
+  ]
 }
