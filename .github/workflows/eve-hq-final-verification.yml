@@ -6,6 +6,10 @@ on:
       - eve-ai-studio
     paths:
       - ".github/workflows/eve-hq-final-verification.yml"
+      - "reference/eve-ai-studio-preview/index.html"
+      - "reference/eve-ai-studio-preview/animation-library-gallery.js"
+      - "reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html"
+      - "reference/eve-ai-studio-preview/eve-animation-runtime-v1.2.2/**"
   workflow_dispatch:
 
 permissions:
@@ -43,7 +47,7 @@ jobs:
           cat /tmp/eve-hq-http.txt
           exit 1
 
-      - name: Verifica 64 stati, qualità e funzioni
+      - name: Verifica 64 stati, galleria, qualità e funzioni
         run: |
           cat > verify-eve-hq-final.mjs <<'EOF'
           import { chromium } from "playwright";
@@ -61,7 +65,7 @@ jobs:
 
             await page.goto(url, { waitUntil: "load" });
             await page.waitForFunction(
-              () => window.EveAnimationLibrary?.quality === "original-final-webp",
+              () => window.EveAnimationLibrary?.quality === "original-final-webp" && document.getElementById("openAnimationLibraryBtn"),
               null,
               { timeout: 30000 }
             );
@@ -101,8 +105,20 @@ jobs:
               );
             }
 
-            assert.deepEqual(errors, []);
-            return states;
+            return { states, errors };
+          }
+
+          async function verifyGallery(page) {
+            assert.equal(await page.locator("#openAnimationLibraryBtn").count(), 1);
+            assert.equal(await page.locator('[data-view="animation-library"]').count(), 1);
+            await page.locator("#openAnimationLibraryBtn").click();
+            await page.waitForFunction(() => document.querySelectorAll("#animationLibraryGrid .animation-card").length === 64);
+            assert.equal(await page.locator("#animationLibraryGrid .animation-card").count(), 64);
+            assert.match(await page.locator("#animationLibraryCount").textContent(), /^64 animazioni$/);
+            await page.locator('#animationLibraryGrid .animation-card[data-asset-id="eve-thinking-deep"]').click();
+            await page.waitForFunction(() => document.getElementById("eveHqPortrait")?.dataset.eveState === "eve-thinking-deep");
+            assert.match(await page.locator("#animationLibraryPreviewTechnical").textContent(), /SHA-256:/);
+            assert.equal(await page.locator("#animation-library").isVisible(), true);
           }
 
           const browser = await chromium.launch({ headless: true });
@@ -111,17 +127,22 @@ jobs:
             libraryVersion: "1.2.2",
             quality: "original-final-webp",
             assets: 0,
+            galleryCards: 0,
             modular: false,
             standaloneFile: false,
             interactions: false,
+            animationGallery: false,
             errors: [],
           };
 
           try {
             const modular = await browser.newPage({ viewport: { width: 1440, height: 1800 }, deviceScaleFactor: 2 });
-            const modularStates = await verifyAnimations(modular, "http://127.0.0.1:4173/index.html", null);
-            result.assets = modularStates.length;
+            const modularCheck = await verifyAnimations(modular, "http://127.0.0.1:4173/index.html", null);
+            result.assets = modularCheck.states.length;
             result.modular = true;
+            await verifyGallery(modular);
+            result.galleryCards = 64;
+            result.animationGallery = true;
 
             await modular.locator('[data-view="rag-materials"]').click();
             await modular.locator("#materialScenario").selectOption("valid");
@@ -144,11 +165,14 @@ jobs:
             await modular.locator("#openVerifiedSource").click();
             assert.match(await modular.locator("#sourceOpeningResult").textContent(), /Integrità verificata/);
             result.interactions = true;
+            assert.deepEqual(modularCheck.errors, []);
             await modular.screenshot({ path: "eve-hq-final-modular.png", fullPage: true });
 
             const standalone = await browser.newPage({ viewport: { width: 1440, height: 1800 }, deviceScaleFactor: 2 });
             const standalonePath = path.resolve("reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html");
-            await verifyAnimations(standalone, pathToFileURL(standalonePath).href, "standalone");
+            const standaloneCheck = await verifyAnimations(standalone, pathToFileURL(standalonePath).href, "standalone");
+            await verifyGallery(standalone);
+            assert.deepEqual(standaloneCheck.errors, []);
             result.standaloneFile = true;
             await standalone.screenshot({ path: "eve-hq-final-standalone.png", fullPage: true });
 
