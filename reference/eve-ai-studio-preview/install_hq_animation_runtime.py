@@ -12,7 +12,7 @@ from PIL import Image
 
 BASE = Path(__file__).resolve().parent
 ARCHIVE = BASE / "vendor" / "EVE_ANIMATION_RUNTIME_V1.2.2_ORIGINAL.tar.xz"
-EXPECTED_ARCHIVE_SHA256 = "b1bc4fd866a4d754445977579874f9d8dee0cc17db95d39f48c485008fc3cd32"
+EXPECTED_ARCHIVE_SHA256 = "c48e41300fea7ce835bb8f7ba3e46531f370d9f56668854861f90e0c01c1583e"
 RUNTIME = BASE / "eve-animation-runtime-v1.2.2"
 INDEX = BASE / "index.html"
 MARKUP = BASE / "markup-01.js"
