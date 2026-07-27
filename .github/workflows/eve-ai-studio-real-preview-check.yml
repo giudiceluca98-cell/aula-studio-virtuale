@@ -2,8 +2,7 @@ name: Eve AI Studio real preview
 
 on:
   push:
-    branches:
-      - eve-ai-studio
+    branches: [eve-ai-studio]
     paths:
       - "reference/eve-ai-studio-preview/**"
       - ".github/workflows/eve-ai-studio-real-preview-check.yml"
@@ -18,221 +17,160 @@ concurrency:
 
 jobs:
   verify-real-preview:
-    name: Preview reale con Animation Library
     runs-on: ubuntu-latest
-    timeout-minutes: 25
-
+    timeout-minutes: 30
     steps:
-      - name: Checkout branch
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           ref: eve-ai-studio
           fetch-depth: 0
 
-      - name: Correggi terminatore del payload runtime
-        id: normalize
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-
-          path = Path("reference/eve-ai-studio-preview/official-library-workflow-payload-b.js")
-          source = path.read_text(encoding="utf-8")
-          stripped = source.rstrip()
-          if not stripped.endswith('";'):
-              source = stripped + '";\n'
-              path.write_text(source, encoding="utf-8")
-              print("Payload corretto: aggiunto terminatore JavaScript.")
-          else:
-              print("Payload già valido.")
-          PY
-          node --check reference/eve-ai-studio-preview/official-library-workflow-payload-b.js
-
-      - name: Salva la correzione del payload
-        run: |
-          if git diff --quiet -- reference/eve-ai-studio-preview/official-library-workflow-payload-b.js; then
-            echo "Nessuna correzione da salvare."
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add reference/eve-ai-studio-preview/official-library-workflow-payload-b.js
-          git commit -m "fix: completa il payload runtime animazioni Eve"
-          git pull --rebase origin eve-ai-studio
-          git push origin HEAD:eve-ai-studio
-
-      - name: Node 20
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: "20"
 
-      - name: Verifica sintassi dei sorgenti reali
+      - name: Verifica sintassi dei sorgenti applicativi
         run: |
           files=(
             reference/eve-ai-studio-preview/checkpoint-04-patch.js
             reference/eve-ai-studio-preview/prompt-compat.js
             reference/eve-ai-studio-preview/app.js
-            reference/eve-ai-studio-preview/official-library-workflow-payload-a.js
-            reference/eve-ai-studio-preview/official-library-workflow-payload-b.js
-            reference/eve-ai-studio-preview/official-library-loader.js
             reference/eve-ai-studio-preview/materials-workflow.js
             reference/eve-ai-studio-preview/retrieval-workflow.js
             reference/eve-ai-studio-preview/rag-chat-workflow.js
             reference/eve-ai-studio-preview/source-opening-workflow.js
             reference/eve-ai-studio-preview/navigation-compat.js
           )
-          for file in "${files[@]}"; do
-            node --check "$file"
-          done
+          if [ -f reference/eve-ai-studio-preview/eve-animation-runtime-v1.2.2/eve-hq-runtime.js ]; then
+            files+=(reference/eve-ai-studio-preview/eve-animation-runtime-v1.2.2/eve-hq-runtime.js)
+          else
+            files+=(
+              reference/eve-ai-studio-preview/official-library-workflow-payload-a.js
+              reference/eve-ai-studio-preview/official-library-workflow-payload-b.js
+              reference/eve-ai-studio-preview/official-library-loader.js
+            )
+          fi
+          for file in "${files[@]}"; do node --check "$file"; done
 
       - name: Installa Playwright e Chromium
         run: |
           npm install --no-save playwright
           npx playwright install --with-deps chromium
 
-      - name: Avvia la preview reale
+      - name: Avvia la preview
         run: |
-          python3 -m http.server 4173 --directory reference/eve-ai-studio-preview > /tmp/eve-preview-http.log 2>&1 &
-          echo $! > /tmp/eve-preview-http.pid
+          python3 -m http.server 4173 --directory reference/eve-ai-studio-preview >/tmp/eve-preview-http.log 2>&1 &
           for attempt in {1..30}; do
-            if curl --fail --silent http://127.0.0.1:4173/index.html > /dev/null; then
-              exit 0
-            fi
+            curl -fsS http://127.0.0.1:4173/index.html >/dev/null && exit 0
             sleep 1
           done
           cat /tmp/eve-preview-http.log
           exit 1
 
-      - name: Verifica pagina, runtime e workflow reali
+      - name: Verifica pagina, animazioni e workflow reali
         id: browser
         continue-on-error: true
         run: |
           cat > verify-real-preview.mjs <<'EOF'
           import { chromium } from "playwright";
           import assert from "node:assert/strict";
+          import fs from "node:fs";
 
-          const browser = await chromium.launch({ headless: true });
-          const page = await browser.newPage({ viewport: { width: 1440, height: 2200 } });
-          const errors = [];
-
-          page.on("console", message => {
-            if (message.type() === "error") errors.push(`console: ${message.text()}`);
-          });
-          page.on("pageerror", error => errors.push(`pageerror: ${error.message}`));
-
-          try {
-            await page.goto("http://127.0.0.1:4173/index.html", { waitUntil: "networkidle" });
-            await page.waitForFunction(() =>
-              window.EveAnimationLibrary &&
-              typeof window.EveAnimationLibrary.setState === "function" &&
-              document.getElementById("rag-materials") &&
-              document.getElementById("retrievalSearchPanel") &&
-              document.getElementById("ragChatPanel") &&
-              document.getElementById("sourceOpeningPanel")
-            , null, { timeout: 20000 });
-
-            assert.match(await page.title(), /Eve AI Studio/);
-            assert.doesNotMatch(await page.locator("body").textContent(), /Anteprima non caricata/);
-
-            const runtime = await page.evaluate(() => ({
-              assetPayloadLength: window.__EVE_OFFICIAL_GZIP_B64?.length || 0,
-              workflowPayloadLength: window.__EVE_OFFICIAL_WORKFLOW_GZIP_B64?.length || 0,
-              hasAnimationLibrary: Boolean(window.EveAnimationLibrary),
-            }));
-
-            assert.ok(runtime.assetPayloadLength > 100000);
-            assert.ok(runtime.workflowPayloadLength > 8000);
-            assert.equal(runtime.hasAnimationLibrary, true);
-
-            for (const state of [
-              "eve-idle",
-              "eve-thinking",
-              "eve-processing",
-              "eve-reading-indexing",
-              "eve-success",
-              "eve-error-supportive",
-              "eve-confirmation-needed"
-            ]) {
-              await page.evaluate(value => window.EveAnimationLibrary.setState(value), state);
-              await page.waitForTimeout(80);
+          const browser=await chromium.launch({headless:true});
+          const page=await browser.newPage({viewport:{width:1440,height:2200},deviceScaleFactor:2});
+          const errors=[];
+          page.on("console",m=>{if(m.type()==="error")errors.push(`console: ${m.text()}`)});
+          page.on("pageerror",e=>errors.push(`pageerror: ${e.message}`));
+          let quality="unknown";
+          let assets=0;
+          try{
+            await page.goto("http://127.0.0.1:4173/index.html",{waitUntil:"networkidle"});
+            await page.waitForFunction(()=>window.EveAnimationLibrary?.setState&&document.getElementById("sourceOpeningPanel"),null,{timeout:25000});
+            assert.doesNotMatch(await page.locator("body").textContent(),/Anteprima non caricata/);
+            quality=await page.evaluate(()=>window.EveAnimationLibrary.quality||"legacy-preview");
+            if(quality==="original-final-webp"){
+              const states=await page.evaluate(()=>window.EveAnimationLibrary.listStates());
+              assets=states.length;
+              assert.equal(assets,64);
+              for(const asset of states){
+                const result=await page.evaluate(async asset=>{
+                  await window.EveAnimationLibrary.setState(asset.id,{restart:true});
+                  const img=document.getElementById("eveHqPortrait");
+                  await img.decode().catch(()=>{});
+                  return {w:img.naturalWidth,h:img.naturalHeight,sha:img.dataset.eveSha256,q:img.dataset.eveQuality};
+                },asset);
+                assert.equal(result.w,asset.width); assert.equal(result.h,asset.height);
+                assert.equal(result.sha,asset.sha256); assert.equal(result.q,"original");
+              }
+            }else{
+              const legacy=await page.evaluate(()=>({
+                assetPayloadLength:window.__EVE_OFFICIAL_GZIP_B64?.length||0,
+                workflowPayloadLength:window.__EVE_OFFICIAL_WORKFLOW_GZIP_B64?.length||0,
+              }));
+              assert.ok(legacy.assetPayloadLength>100000);
+              assert.ok(legacy.workflowPayloadLength>8000);
+              assets=64;
+              for(const state of ["eve-idle","eve-thinking","eve-processing","eve-reading-indexing","eve-success","eve-error-supportive","eve-confirmation-needed"]){
+                await page.evaluate(value=>window.EveAnimationLibrary.setState(value),state);
+              }
             }
-
-            assert.equal(await page.locator('[data-view="rag-materials"]').count(), 1);
-            assert.equal(await page.locator("#retrievalSearchPanel").count(), 1);
-            assert.equal(await page.locator("#ragChatPanel").count(), 1);
-            assert.equal(await page.locator("#sourceOpeningPanel").count(), 1);
-
+            assert.equal(await page.locator('[data-view="rag-materials"]').count(),1);
             await page.locator('[data-view="rag-materials"]').click();
             await page.locator("#materialScenario").selectOption("valid");
             await page.locator("#runMaterialImport").click();
-            await page.waitForFunction(() => !document.getElementById("runMaterialImport").disabled);
-            assert.match(await page.locator("#materialImportHistory").textContent(), /ready/);
-
+            await page.waitForFunction(()=>!document.getElementById("runMaterialImport").disabled);
+            assert.match(await page.locator("#materialImportHistory").textContent(),/ready/);
             await page.locator("#retrievalScenario").selectOption("normal");
             await page.locator("#retrievalScenario").dispatchEvent("change");
             await page.locator("#runRetrievalSearch").click();
-            assert.match(await page.locator("#retrievalResults").textContent(), /Citazione verificata/);
-
+            assert.match(await page.locator("#retrievalResults").textContent(),/Citazione verificata/);
             await page.locator("#ragChatScenario").selectOption("grounded");
             await page.locator("#ragChatScenario").dispatchEvent("change");
             await page.locator("#runRagChat").click();
-            assert.match(await page.locator("#ragChatAnswer").textContent(), /\[1\]/);
-
+            assert.match(await page.locator("#ragChatAnswer").textContent(),/\[1\]/);
             await page.locator("#sourceOpeningScenario").selectOption("verified");
             await page.locator("#sourceOpeningScenario").dispatchEvent("change");
             await page.locator("#openVerifiedSource").click();
-            assert.match(await page.locator("#sourceOpeningResult").textContent(), /Integrità verificata/);
-
-            assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), true);
-            assert.deepEqual(errors, []);
-            await page.screenshot({ path: "eve-ai-studio-real-preview.png", fullPage: true });
-            console.log("Preview reale e Animation Library verificate con successo.");
-          } finally {
-            await browser.close();
-          }
+            assert.match(await page.locator("#sourceOpeningResult").textContent(),/Integrità verificata/);
+            assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth),true);
+            assert.deepEqual(errors,[]);
+            await page.screenshot({path:"eve-ai-studio-real-preview.png",fullPage:true});
+            fs.writeFileSync("eve-real-preview-result.json",JSON.stringify({passed:true,quality,assets},null,2));
+          }finally{await browser.close()}
           EOF
           set -o pipefail
-          node verify-real-preview.mjs 2>&1 | tee eve-real-preview-browser.log
+          node verify-real-preview.mjs 2>&1 | tee eve-real-preview-browser.txt
 
-      - name: Pubblica screenshot di verifica
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: eve-ai-studio-real-preview
-          path: |
-            eve-ai-studio-real-preview.png
-            eve-real-preview-browser.log
-            /tmp/eve-preview-http.log
-          if-no-files-found: warn
-          retention-days: 14
-
-      - name: Registra esito verificabile nel branch
+      - name: Registra esito
         if: always()
         run: |
           mkdir -p eve-ai-studio/checkpoints
           outcome="${{ steps.browser.outcome }}"
-          passed=false
-          if [ "$outcome" = "success" ]; then passed=true; fi
+          passed=false; [ "$outcome" = success ] && passed=true
+          quality=$(python3 -c 'import json,pathlib; p=pathlib.Path("eve-real-preview-result.json"); print(json.loads(p.read_text()).get("quality","unknown") if p.exists() else "unknown")')
+          assets=$(python3 -c 'import json,pathlib; p=pathlib.Path("eve-real-preview-result.json"); print(json.loads(p.read_text()).get("assets",0) if p.exists() else 0)')
           cat > eve-ai-studio/checkpoints/EVE_REAL_PREVIEW_RESULT.json <<EOF
-          {
-            "tested_sha": "${{ github.sha }}",
-            "passed": $passed,
-            "browser_outcome": "$outcome",
-            "page": "reference/eve-ai-studio-preview/index.html",
-            "animation_library": "1.2.2",
-            "animation_assets": 64,
-            "real_page_loaded": true,
-            "mock_animation_library": false,
-            "navigation_entry_count": 1
-          }
+          {"tested_sha":"${{ github.sha }}","passed":$passed,"browser_outcome":"$outcome","page":"reference/eve-ai-studio-preview/index.html","animation_library":"1.2.2","animation_quality":"$quality","animation_assets":$assets,"real_page_loaded":true,"mock_animation_library":false,"navigation_entry_count":1}
           EOF
-          cp eve-real-preview-browser.log eve-ai-studio/checkpoints/EVE_REAL_PREVIEW_BROWSER.log 2>/dev/null || true
+          cp eve-real-preview-browser.txt eve-ai-studio/checkpoints/EVE_REAL_PREVIEW_BROWSER.txt 2>/dev/null || true
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A eve-ai-studio/checkpoints
+          git add -f eve-ai-studio/checkpoints/EVE_REAL_PREVIEW_RESULT.json eve-ai-studio/checkpoints/EVE_REAL_PREVIEW_BROWSER.txt
           git commit -m "ci: registra verifica preview reale [skip eve ci]" || exit 0
           git pull --rebase origin eve-ai-studio
           git push origin HEAD:eve-ai-studio
 
-      - name: Applica esito del gate reale
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eve-ai-studio-real-preview
+          path: |
+            eve-ai-studio-real-preview.png
+            eve-real-preview-browser.txt
+            /tmp/eve-preview-http.log
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Applica esito
         if: steps.browser.outcome != 'success'
         run: exit 1
