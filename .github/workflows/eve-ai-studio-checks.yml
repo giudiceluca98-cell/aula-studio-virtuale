@@ -6,7 +6,7 @@ on:
       - eve-ai-studio
     paths:
       - "eve-ai-studio/**"
-      - "reference/eve-ai-studio-preview/**"
+      - "reference/eve-ai-studio-preview/**/*.js"
       - ".github/workflows/eve-ai-studio-checks.yml"
   workflow_dispatch:
 
@@ -14,17 +14,17 @@ permissions:
   contents: write
 
 concurrency:
-  group: eve-ai-studio-${{ github.ref }}
+  group: eve-ai-studio-core-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  verify:
-    name: Suite cumulativa e anteprima controllata
-    if: ${{ github.event_name == 'workflow_dispatch' || !contains(github.event.head_commit.message, '[skip eve ci]') }}
+  verify-core:
+    if: github.event_name == 'workflow_dispatch' || !contains(github.event.head_commit.message, '[skip eve core ci]')
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
+
     steps:
-      - name: Checkout branch
+      - name: Checkout eve-ai-studio
         uses: actions/checkout@v4
         with:
           ref: eve-ai-studio
@@ -42,41 +42,33 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Installa dipendenze Python di esecuzione e test
-        id: python_install
+      - name: Installa progetto e dipendenze di test
+        id: install
         continue-on-error: true
         run: |
           set -o pipefail
-          python -m pip install --upgrade pip 2>&1 | tee checkpoint-1.1-python-install.log
-          python -m pip install \
-            "fastapi>=0.115,<1" \
-            "uvicorn[standard]>=0.30,<1" \
-            "pydantic-settings>=2.6,<3" \
-            "httpx>=0.27,<1" \
-            "pytest>=8.3,<10" \
-            "pytest-asyncio>=0.23,<1" \
-            2>&1 | tee -a checkpoint-1.1-python-install.log
+          python -m pip install --upgrade pip 2>&1 | tee eve-core-install.txt
+          python -m pip install -e "eve-ai-studio[dev]" 2>&1 | tee -a eve-core-install.txt
 
-      - name: Compilazione sintattica Python
-        id: python_compile
+      - name: Compila Python
+        id: compile
         continue-on-error: true
         working-directory: eve-ai-studio
         run: |
           set -o pipefail
-          python -m compileall -q app tests 2>&1 | tee ../checkpoint-1.1-python-compile.log
+          python -m compileall -q app tests 2>&1 | tee ../eve-core-compile.txt
 
-      - name: Suite cumulativa Python
+      - name: Esegue suite cumulativa
         id: pytest
         continue-on-error: true
         working-directory: eve-ai-studio
         run: |
           set -o pipefail
-          python -m pytest -q --junitxml=pytest-results.xml 2>&1 | tee ../checkpoint-1.1-pytest.log
+          python -m pytest -q --junitxml=pytest-results.xml 2>&1 | tee ../eve-core-pytest.txt
 
-      - name: Verifica sintattica dei moduli JavaScript eseguibili
+      - name: Verifica sintassi JavaScript reale
         id: javascript
         continue-on-error: true
-        shell: bash
         run: |
           set -o pipefail
           files=(
@@ -91,287 +83,93 @@ jobs:
             reference/eve-ai-studio-preview/retrieval-workflow.js
             reference/eve-ai-studio-preview/rag-chat-workflow.js
             reference/eve-ai-studio-preview/source-opening-workflow.js
-            reference/eve-ai-studio-preview/official-library-loader.js
+            reference/eve-ai-studio-preview/navigation-compat.js
+            reference/eve-ai-studio-preview/animation-library-gallery.js
+            reference/eve-ai-studio-preview/eve-animation-runtime-v1.2.2/eve-hq-runtime.js
           )
-          : > checkpoint-1.1-javascript.log
+          : > eve-core-javascript.txt
           for file in "${files[@]}"; do
-            echo "node --check $file" | tee -a checkpoint-1.1-javascript.log
-            node --check "$file" 2>&1 | tee -a checkpoint-1.1-javascript.log || exit 1
+            test -f "$file"
+            echo "node --check $file" | tee -a eve-core-javascript.txt
+            node --check "$file" 2>&1 | tee -a eve-core-javascript.txt
           done
 
-      - name: Installa Playwright e Chromium
-        id: browser_install
-        continue-on-error: true
-        run: |
-          set -o pipefail
-          npm install --no-save playwright 2>&1 | tee checkpoint-1.1-browser-install.log
-          npx playwright install --with-deps chromium 2>&1 | tee -a checkpoint-1.1-browser-install.log
-
-      - name: Verifica materiali, retrieval, RAG e apertura fonti in Chromium
-        id: browser
-        if: steps.browser_install.outcome == 'success'
-        continue-on-error: true
-        shell: bash
-        run: |
-          cat > eve-preview-check.mjs <<'EOF'
-          import { chromium } from "playwright";
-          import assert from "node:assert/strict";
-          import fs from "node:fs";
-          import path from "node:path";
-
-          const browser = await chromium.launch({ headless: true });
-          const page = await browser.newPage({ viewport: { width: 1440, height: 2300 } });
-          const browserErrors = [];
-          page.on("console", message => {
-            if (message.type() === "error") browserErrors.push(`console: ${message.text()}`);
-          });
-          page.on("pageerror", error => browserErrors.push(`pageerror: ${error.message}`));
-
-          const html = `<!doctype html><html lang="it"><head><meta charset="utf-8"><style>
-          :root{--green:#52e5a1;--violet:#a987ff;--red:#ff7b8a;--warn:#f2c66d;background:#07111d;color:#eaf8ff;font-family:Arial,sans-serif}.shell{display:grid;grid-template-columns:250px 1fr;min-height:100vh}.nav{padding:24px;background:#0b1826;display:flex;flex-direction:column;gap:8px}.nav button,.btn{background:#142538;color:#eaf8ff;border:1px solid #2c465e;border-radius:10px;padding:12px;text-align:left}.main{padding:24px}.view{display:block}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.panel{background:#0d1b29;border:1px solid #294157;border-radius:16px;overflow:hidden}.span-12{grid-column:span 12}.span-7{grid-column:span 7}.span-5{grid-column:span 5}.panel-head{display:flex;justify-content:space-between;gap:16px;padding:18px;border-bottom:1px solid #243c51}.panel-head h3{margin:0 0 6px}.panel-head p{margin:0;color:#9db5c7}.panel-body{padding:18px}.metric-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.metric,.row{background:#102336;border:1px solid #29445b;border-radius:12px;padding:12px}.metric small,.meta small{display:block;color:#9db5c7}.metric strong{font-size:24px}.list{display:grid;gap:10px}.row{display:flex;justify-content:space-between;gap:12px}.tag,.pill{padding:5px 9px;border-radius:999px;background:#143e34;color:#85efbf;white-space:nowrap}.tag.violet{background:#332659;color:#cbb9ff}.tag.red{background:#52232a;color:#ffabb4}.tag.warn{background:#493d23;color:#f6d88b}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:grid;gap:6px}input,select,textarea{background:#07131f;color:#eaf8ff;border:1px solid #31506a;border-radius:8px;padding:10px}.green{background:#174a3b}.progress{height:5px;background:#162f43;margin-top:8px}.progress span{display:block;height:100%;background:#46c7e4}@media(max-width:900px){.shell{grid-template-columns:1fr}.span-7,.span-5{grid-column:span 12}.metric-row{grid-template-columns:1fr 1fr}}
-          </style></head><body><div class="shell"><nav class="nav"><button data-view="dashboard">Dashboard</button><button data-view="tests">Test</button><button data-view="providers">Provider</button></nav><main class="main"><section class="view"><section class="panel"><div class="panel-head"><div><h3>Checkpoint 0.7 integrato</h3><p>Stato precedente</p></div><span class="tag">test</span></div><div class="panel-body"><h2>Versione precedente</h2><p>Descrizione precedente</p><button data-go="tests">Apri</button></div></section></section></main></div></body></html>`;
-
-          try {
-            await page.setContent(html, { waitUntil: "domcontentloaded" });
-            await page.evaluate(() => {
-              window.EveAnimationLibrary = { states: [], setState(state) { this.states.push(state); } };
-              window.EveAvatarRuntime = { states: [], setState(state) { this.states.push(state); } };
-            });
-            const preview = path.join(process.cwd(), "reference/eve-ai-studio-preview");
-            await page.addScriptTag({ path: path.join(preview, "materials-workflow.js") });
-            await page.addScriptTag({ path: path.join(preview, "retrieval-workflow.js") });
-            await page.addScriptTag({ path: path.join(preview, "rag-chat-workflow.js") });
-            await page.addScriptTag({ path: path.join(preview, "source-opening-workflow.js") });
-
-            assert.equal(await page.locator('[data-view="rag-materials"]').count(), 1);
-            assert.equal(await page.locator("#retrievalSearchPanel").count(), 1);
-            assert.equal(await page.locator("#ragChatPanel").count(), 1);
-            assert.equal(await page.locator("#sourceOpeningPanel").count(), 1);
-            assert.match(await page.locator("#sourceOpeningPanel").textContent(), /13\/13/);
-            assert.match(await page.locator("#sourceOpeningPanel").textContent(), /165\/165/);
-
-            async function resetMaterials() {
-              await page.locator("#resetMaterialDemo").click();
-              await page.waitForTimeout(50);
-            }
-            async function runMaterialScenario(name) {
-              await page.locator("#materialScenario").selectOption(name);
-              await page.locator("#runMaterialImport").click();
-              await page.waitForFunction(() => !document.getElementById("runMaterialImport").disabled);
-            }
-
-            await page.locator("#materialScenario").selectOption("valid");
-            await page.locator("#materialTitle").fill("Materiale verifica CI");
-            await page.locator("#materialFilename").fill("verifica-ci.md");
-            await page.locator("#materialText").fill("Testo univoco per la verifica automatica.");
-            await page.locator("#runMaterialImport").click();
-            await page.waitForFunction(() => !document.getElementById("runMaterialImport").disabled);
-            assert.equal(await page.locator("#materialCount").textContent(), "4");
-            assert.match(await page.locator("#materialImportHistory").textContent(), /ready/);
-
-            await resetMaterials(); await runMaterialScenario("duplicate");
-            assert.match(await page.locator("#materialImportHistory").textContent(), /duplicate_checksum/);
-            await resetMaterials();
-            await page.locator("#materialScenario").selectOption("version");
-            await page.locator("#materialText").fill("Revisione univoca del materiale.");
-            await page.locator("#runMaterialImport").click();
-            await page.waitForFunction(() => !document.getElementById("runMaterialImport").disabled);
-            assert.equal(await page.locator("#materialVersionCount").textContent(), "5");
-            await resetMaterials(); await runMaterialScenario("unsupported");
-            assert.match(await page.locator("#materialImportHistory").textContent(), /unsupported_media_type/);
-            await resetMaterials(); await runMaterialScenario("oversize");
-            assert.match(await page.locator("#materialImportHistory").textContent(), /material_too_large/);
-
-            async function runRetrievalScenario(name) {
-              await page.locator("#retrievalScenario").selectOption(name);
-              await page.locator("#retrievalScenario").dispatchEvent("change");
-              await page.locator("#runRetrievalSearch").click();
-            }
-            await runRetrievalScenario("normal");
-            assert.equal(await page.locator("#retrievalResultBadge").textContent(), "2 risultati");
-            assert.match(await page.locator("#retrievalResults").textContent(), /Citazione verificata/);
-            await runRetrievalScenario("empty");
-            assert.equal(await page.locator("#retrievalResultBadge").textContent(), "0 risultati");
-            await runRetrievalScenario("suspicious");
-            assert.match(await page.locator("#retrievalResults").first().textContent(), /Fonte non fidata/);
-            await runRetrievalScenario("isolated");
-            assert.equal(await page.locator("#retrievalResultBadge").textContent(), "0 risultati");
-
-            async function runRagScenario(name) {
-              await page.locator("#ragChatScenario").selectOption(name);
-              await page.locator("#ragChatScenario").dispatchEvent("change");
-              await page.locator("#runRagChat").click();
-            }
-            await runRagScenario("grounded");
-            assert.match(await page.locator("#ragChatBadge").textContent(), /fonti/);
-            assert.match(await page.locator("#ragChatAnswer").textContent(), /\[1\]/);
-            assert.match(await page.locator("#ragChatSources").textContent(), /Citazione verificata/);
-            await runRagScenario("empty");
-            assert.equal(await page.locator("#ragChatBadge").textContent(), "Non grounded");
-            await runRagScenario("suspicious");
-            assert.match(await page.locator("#ragChatAnswer").textContent(), /contenuto sospetto/);
-            await runRagScenario("isolated");
-            assert.match(await page.locator("#ragChatDetails").textContent(), /room-vuota/);
-
-            async function runSourceScenario(name) {
-              await page.locator("#sourceOpeningScenario").selectOption(name);
-              await page.locator("#sourceOpeningScenario").dispatchEvent("change");
-              await page.locator("#openVerifiedSource").click();
-            }
-            await runSourceScenario("verified");
-            assert.equal(await page.locator("#sourceOpeningBadge").textContent(), "Aperta");
-            assert.match(await page.locator("#sourceOpeningResult").textContent(), /Integrità verificata/);
-            assert.match(await page.locator("#sourceOpeningResult").textContent(), /chunk-0-chars-0-151/);
-            await runSourceScenario("historical");
-            assert.equal(await page.locator("#sourceOpeningBadge").textContent(), "Storica");
-            assert.match(await page.locator("#sourceOpeningDetails").textContent(), /Versione storica/);
-            await runSourceScenario("hash");
-            assert.equal(await page.locator("#sourceOpeningBadge").textContent(), "409");
-            assert.match(await page.locator("#sourceOpeningDetails").textContent(), /source_hash_mismatch/);
-            await runSourceScenario("isolated");
-            assert.equal(await page.locator("#sourceOpeningBadge").textContent(), "404");
-            assert.match(await page.locator("#sourceOpeningDetails").textContent(), /source_not_found/);
-            await runSourceScenario("suspicious");
-            assert.equal(await page.locator("#sourceOpeningBadge").textContent(), "Avviso");
-            assert.match(await page.locator("#sourceOpeningResult").textContent(), /Fonte non fidata/);
-            assert.match(await page.locator("#sourceOpeningDetails").textContent(), /instructions_executable=false/);
-
-            const states = await page.evaluate(() => window.EveAnimationLibrary.states);
-            assert.ok(states.includes("eve-success"));
-            assert.ok(states.includes("eve-error-supportive"));
-            assert.ok(states.includes("eve-confirmation-needed"));
-            assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), true);
-
-            await page.screenshot({ path: "eve-ai-studio-preview-1.1.png", fullPage: true });
-            fs.writeFileSync("eve-ai-studio-preview-1.1-errors.json", JSON.stringify(browserErrors, null, 2));
-            assert.deepEqual(browserErrors, []);
-            console.log("Anteprima controllata verificata: 5 materiali, 4 retrieval, 4 chat RAG e 5 aperture fonte.");
-          } finally {
-            await browser.close();
-          }
-          EOF
-          set -o pipefail
-          node eve-preview-check.mjs 2>&1 | tee checkpoint-1.1-browser.log
-
-      - name: Registra rapporto verificabile nel branch
+      - name: Registra rapporto core autorevole
         if: always()
         env:
-          PYTHON_INSTALL: ${{ steps.python_install.outcome }}
-          PYTHON_COMPILE: ${{ steps.python_compile.outcome }}
+          INSTALL: ${{ steps.install.outcome }}
+          COMPILE: ${{ steps.compile.outcome }}
           PYTEST: ${{ steps.pytest.outcome }}
           JAVASCRIPT: ${{ steps.javascript.outcome }}
-          BROWSER_INSTALL: ${{ steps.browser_install.outcome }}
-          BROWSER: ${{ steps.browser.outcome }}
           TESTED_SHA: ${{ github.sha }}
         run: |
           python3 - <<'PY'
-          import json
-          import os
+          import json, os
           from datetime import datetime, timezone
           from pathlib import Path
+          import xml.etree.ElementTree as ET
 
           states = {
-              "python_install": os.environ.get("PYTHON_INSTALL", "not_run"),
-              "python_compile": os.environ.get("PYTHON_COMPILE", "not_run"),
-              "pytest_cumulative": os.environ.get("PYTEST", "not_run"),
-              "javascript_syntax": os.environ.get("JAVASCRIPT", "not_run"),
-              "browser_install": os.environ.get("BROWSER_INSTALL", "not_run"),
-              "browser_scenarios": os.environ.get("BROWSER", "not_run"),
+              'install': os.environ.get('INSTALL', 'not_run'),
+              'python_compile': os.environ.get('COMPILE', 'not_run'),
+              'pytest_cumulative': os.environ.get('PYTEST', 'not_run'),
+              'javascript_syntax': os.environ.get('JAVASCRIPT', 'not_run'),
           }
-          passed = all(state == "success" for state in states.values())
-          timestamp = datetime.now(timezone.utc).isoformat()
+          passed = all(value == 'success' for value in states.values())
+          counts = {'tests': 0, 'failures': 0, 'errors': 0, 'skipped': 0}
+          junit = Path('eve-ai-studio/pytest-results.xml')
+          if junit.exists():
+              root = ET.parse(junit).getroot()
+              counts = {key: int(float(root.attrib.get(key, 0))) for key in counts}
+
           result = {
-              "checkpoint": "1.1",
-              "tested_sha": os.environ.get("TESTED_SHA"),
-              "generated_at": timestamp,
-              "passed": passed,
-              "states": states,
+              'checkpoint': '1.1',
+              'tested_sha': os.environ.get('TESTED_SHA'),
+              'generated_at': datetime.now(timezone.utc).isoformat(),
+              'passed': passed,
+              'states': states,
+              'pytest': counts,
+              'browser_verification': 'eve-ai-studio/checkpoints/EVE_HQ_FINAL_VERIFICATION.json',
           }
-          base = Path("eve-ai-studio/checkpoints")
+          base = Path('eve-ai-studio/checkpoints')
           base.mkdir(parents=True, exist_ok=True)
-          (base / "CHECKPOINT_1.1_CI_RESULT.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+          (base / 'CHECKPOINT_1.1_CI_RESULT.json').write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
 
-          def tail(path, lines=35):
-              file = Path(path)
-              if not file.exists():
-                  return "File non prodotto."
-              content = file.read_text(encoding="utf-8", errors="replace").splitlines()
-              return "\n".join(content[-lines:]) or "Nessun output."
+          markdown = f"""# Checkpoint 1.1 — Verifica core automatica
 
-          markdown = f"""# Checkpoint 1.1 — Risultato verifica automatica
+- Commit verificato: `{result['tested_sha']}`
+- Data UTC: `{result['generated_at']}`
+- Esito: **{'SUPERATO' if passed else 'NON SUPERATO'}**
 
-          - Commit verificato: `{result['tested_sha']}`
-          - Data UTC: `{timestamp}`
-          - Esito complessivo: **{'SUPERATO' if passed else 'NON SUPERATO'}**
+## Controlli
 
-          ## Stati
-
-          | Controllo | Esito |
-          |---|---|
-          """
+| Controllo | Esito |
+|---|---|
+"""
           for name, state in states.items():
               markdown += f"| `{name}` | `{state}` |\n"
           markdown += f"""
 
-          ## Coda pytest
+## Pytest
 
-          ```text
-          {tail('checkpoint-1.1-pytest.log')}
-          ```
+- test: {counts['tests']}
+- fallimenti: {counts['failures']}
+- errori: {counts['errors']}
+- ignorati: {counts['skipped']}
 
-          ## Coda verifica browser
-
-          ```text
-          {tail('checkpoint-1.1-browser.log')}
-          ```
-
-          ## Coda JavaScript
-
-          ```text
-          {tail('checkpoint-1.1-javascript.log', 20)}
-          ```
-
-          Il browser usa un contenitore DOM controllato e carica i file ufficiali `materials-workflow.js`, `retrieval-workflow.js`, `rag-chat-workflow.js` e `source-opening-workflow.js`. I payload compressi della galleria non vengono reinterpretati come moduli sorgente.
-          """
-          (base / "CHECKPOINT_1.1_CI_RESULT.md").write_text(markdown, encoding="utf-8")
+La verifica browser, le 64 animazioni HQ, la galleria e lo standalone `file://`
+sono controllati separatamente dal workflow `eve-hq-final-verification.yml`.
+"""
+          (base / 'CHECKPOINT_1.1_CI_RESULT.md').write_text(markdown, encoding='utf-8')
           PY
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add eve-ai-studio/checkpoints/CHECKPOINT_1.1_CI_RESULT.json eve-ai-studio/checkpoints/CHECKPOINT_1.1_CI_RESULT.md
-          if ! git diff --cached --quiet; then
-            git commit -m "ci: registra esito verifica Eve 1.1 [skip eve ci]"
-            git push origin HEAD:eve-ai-studio
-          fi
+          git commit -m "ci: aggiorna verifica core Eve 1.1 [skip eve core ci]" || exit 0
+          git pull --rebase origin eve-ai-studio
+          git push origin HEAD:eve-ai-studio
 
-      - name: Pubblica prove di esecuzione
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: eve-ai-studio-checkpoint-1.1-verification
-          path: |
-            eve-ai-studio/pytest-results.xml
-            checkpoint-1.1-*.log
-            eve-ai-studio-preview-1.1.png
-            eve-ai-studio-preview-1.1-errors.json
-            eve-ai-studio/checkpoints/CHECKPOINT_1.1_CI_RESULT.json
-            eve-ai-studio/checkpoints/CHECKPOINT_1.1_CI_RESULT.md
-          if-no-files-found: warn
-          retention-days: 14
-
-      - name: Applica gate finale
-        if: always()
-        env:
-          PYTHON_INSTALL: ${{ steps.python_install.outcome }}
-          PYTHON_COMPILE: ${{ steps.python_compile.outcome }}
-          PYTEST: ${{ steps.pytest.outcome }}
-          JAVASCRIPT: ${{ steps.javascript.outcome }}
-          BROWSER_INSTALL: ${{ steps.browser_install.outcome }}
-          BROWSER: ${{ steps.browser.outcome }}
-        run: |
-          test "$PYTHON_INSTALL" = success
-          test "$PYTHON_COMPILE" = success
-          test "$PYTEST" = success
-          test "$JAVASCRIPT" = success
-          test "$BROWSER_INSTALL" = success
-          test "$BROWSER" = success
+      - name: Applica esito del gate core
+        if: steps.install.outcome != 'success' || steps.compile.outcome != 'success' || steps.pytest.outcome != 'success' || steps.javascript.outcome != 'success'
+        run: exit 1
