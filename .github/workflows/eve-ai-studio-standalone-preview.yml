@@ -37,17 +37,17 @@ jobs:
             echo "Sono rimasti script esterni nello standalone."
             exit 1
           fi
-          if grep -Eiq '<link[^>]+rel=["'"']stylesheet["'"']' reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html; then
+          if grep -Eiq "<link[^>]+rel=['\"]stylesheet['\"]" reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html; then
             echo "Sono rimasti fogli di stile esterni nello standalone."
             exit 1
           fi
 
-      - name: Installa Chromium
+      - name: Installa Node 20
         uses: actions/setup-node@v4
         with:
           node-version: "20"
 
-      - name: Installa Playwright
+      - name: Installa Playwright e Chromium
         run: |
           npm install --no-save playwright
           npx playwright install --with-deps chromium
