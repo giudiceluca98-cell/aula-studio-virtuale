@@ -18,7 +18,13 @@ reference/eve-ai-studio-preview/vendor/EVE_ANIMATION_RUNTIME_V1.2.2_ORIGINAL.tar
 SHA-256:
 
 ```text
-b1bc4fd866a4d754445977579874f9d8dee0cc17db95d39f48c485008fc3cd32
+c48e41300fea7ce835bb8f7ba3e46531f370d9f56668854861f90e0c01c1583e
+```
+
+Dimensione:
+
+```text
+7.227.656 byte
 ```
 
 L'archivio contiene un solo WebP finale originale per ciascuno dei 64 stati:
