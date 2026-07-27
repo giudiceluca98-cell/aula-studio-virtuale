@@ -1,7 +1,7 @@
 # Checkpoint 1.1 — Risultato verifica automatica
 
-- Commit verificato: `19fcd0e4ac55df862eb0131e6546f37a69746959`
-- Data UTC: `2026-07-27T16:50:45.973312+00:00`
+- Commit verificato: `8a3230adfc1ab37217ba006a7b93f3e572616598`
+- Data UTC: `2026-07-27T18:59:01.303267+00:00`
 - Esito complessivo: **SUPERATO**
 
 ## Stati
@@ -29,7 +29,7 @@
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
 - generated xml file: /home/runner/work/aula-studio-virtuale/aula-studio-virtuale/eve-ai-studio/pytest-results.xml -
-165 passed, 1 warning in 2.59s
+165 passed, 1 warning in 2.72s
 ```
 
 ## Coda verifica browser
