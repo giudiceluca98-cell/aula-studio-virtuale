@@ -1,6 +1,7 @@
 {
-  "tested_sha": "2eb1362bd7f9e67b057a6602f420d388f1f940e6",
+  "tested_sha": "d8de207c1d3edf7a3441f784ca075f1cbafbf04c",
   "passed": true,
+  "browser_outcome": "success",
   "opened_as": "file://",
   "file": "reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html",
   "animation_library": "1.2.2",
