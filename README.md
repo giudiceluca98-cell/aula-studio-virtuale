@@ -4,7 +4,7 @@ Questo repository pubblica come sito ufficiale la **demo canonica** di Aula Stud
 
 ## Versione pubblicata
 
-- versione: `1.4.0-alpha.3`
+- versione: `1.4.0-alpha.4`
 - branch sorgente: `demo-canonica`
 - file canonico: `demo-aula-studio-virtuale-canonica.html`
 
@@ -72,9 +72,9 @@ pnpm desktop:build
 La build locale non include un canale di aggiornamento reale. Le release
 ufficiali vengono invece firmate e configurate dal workflow GitHub
 `.github/workflows/release-desktop.yml`. Nell'app installata il controllo è
-disponibile dal pulsante **Aggiornamenti** e, dentro l'aula, anche da
-**Impostazioni > Applicazione desktop**. L'utente deve confermare il download e
-l'installazione.
+disponibile dal pulsante con icona di trasmissione **Aggiornamenti** nell'aula
+e da **Impostazioni > Applicazione desktop**. Non viene aggiunto un secondo
+pulsante flottante. L'utente deve confermare il download e l'installazione.
 
 La procedura completa, inclusa la configurazione sicura delle chiavi, è in
 [`docs/DESKTOP_RELEASE.md`](docs/DESKTOP_RELEASE.md).

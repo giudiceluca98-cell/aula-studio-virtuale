@@ -8,8 +8,8 @@
   const previewInvoke = async (command) => {
     if (command === "check_for_update") {
       return {
-        version: "1.4.0-alpha.4",
-        currentVersion: "1.4.0-alpha.3",
+        version: "1.4.0-alpha.5",
+        currentVersion: "1.4.0-alpha.4",
         body: "Simulazione locale: pannello aggiornamenti funzionante."
       };
     }
@@ -37,22 +37,7 @@
 
   const style = document.createElement("style");
   style.textContent = `
-    .aula-desktop-update-launcher {
-      position: fixed;
-      right: 18px;
-      bottom: 18px;
-      z-index: 99990;
-      min-height: 38px;
-      padding: 9px 13px;
-      border: 1px solid rgba(90, 220, 255, .48);
-      border-radius: 999px;
-      color: #dffaff;
-      background: rgba(5, 15, 28, .94);
-      box-shadow: 0 10px 35px rgba(0, 0, 0, .34), 0 0 18px rgba(42, 201, 255, .14);
-      font: 700 12px/1.2 Inter, system-ui, sans-serif;
-      cursor: pointer;
-    }
-    .aula-desktop-update-launcher[data-update="true"] {
+    .action-button.sync[data-update="true"] {
       border-color: #55f1c0;
       color: #8fffdc;
       animation: aula-update-pulse 2.4s ease-in-out infinite;
@@ -60,7 +45,7 @@
     .aula-desktop-update-panel {
       position: fixed;
       right: 18px;
-      bottom: 66px;
+      top: 76px;
       z-index: 99991;
       width: min(390px, calc(100vw - 36px));
       padding: 18px;
@@ -122,17 +107,13 @@
       50% { box-shadow: 0 0 0 5px rgba(85, 241, 192, .10), 0 0 24px rgba(85, 241, 192, .22); }
     }
     @media (prefers-reduced-motion: reduce) {
-      .aula-desktop-update-launcher,
+      .action-button.sync[data-update="true"],
       .aula-update-progress::after { animation: none; }
     }
   `;
   document.head.append(style);
 
-  const launcher = document.createElement("button");
-  launcher.type = "button";
-  launcher.className = "aula-desktop-update-launcher";
-  launcher.textContent = "Aggiornamenti";
-  launcher.title = `Aula Studio Virtuale ${appVersion}`;
+  const syncButtons = [...document.querySelectorAll("button.action-button.sync")];
 
   const panel = document.createElement("section");
   panel.className = "aula-desktop-update-panel";
@@ -151,7 +132,7 @@
     </div>
   `;
 
-  document.body.append(panel, launcher);
+  document.body.append(panel);
 
   const versionElement = panel.querySelector("[data-update-version]");
   const messageElement = panel.querySelector("[data-update-message]");
@@ -164,8 +145,16 @@
       ? `Nuova versione: ${state.update.version} · installata: ${state.update.currentVersion || appVersion}`
       : `Versione installata: ${appVersion}`;
     messageElement.textContent = state.message;
-    launcher.dataset.update = String(Boolean(state.update));
-    launcher.textContent = state.update ? `Aggiorna a ${state.update.version}` : "Aggiornamenti";
+    for (const button of syncButtons) {
+      const hasUpdate = Boolean(state.update);
+      const label = button.querySelector(".label");
+      button.dataset.update = String(hasUpdate);
+      button.title = hasUpdate
+        ? `Aggiornamento ${state.update.version} disponibile`
+        : `Controlla aggiornamenti · versione ${appVersion}`;
+      button.setAttribute("aria-label", button.title);
+      if (label) label.textContent = hasUpdate ? "Aggiorna" : "Aggiornamenti";
+    }
     installButton.hidden = !state.update;
     progressElement.hidden = !state.checking && !state.installing;
     checkButton.disabled = state.checking || state.installing;
@@ -222,7 +211,10 @@
     }
   }
 
-  launcher.addEventListener("click", openPanel);
+  for (const button of syncButtons) {
+    button.removeAttribute("onclick");
+    button.addEventListener("click", openPanel);
+  }
   panel.querySelector("[data-update-close]").addEventListener("click", closePanel);
   checkButton.addEventListener("click", () => checkForUpdates());
   installButton.addEventListener("click", installUpdate);

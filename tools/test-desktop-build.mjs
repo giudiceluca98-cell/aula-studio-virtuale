@@ -81,6 +81,17 @@ for (const route of ["presentation", "dashboard", "catalog", "aula"]) {
   }
 }
 
+const desktopUpdater = await readFile(
+  join(dist, "assets", "js", "desktop-updater.js"),
+  "utf8"
+);
+if (!desktopUpdater.includes('querySelectorAll("button.action-button.sync")')) {
+  throw new Error("Il pulsante Sincronizza non è collegato agli aggiornamenti desktop.");
+}
+if (desktopUpdater.includes('className = "aula-desktop-update-launcher"')) {
+  throw new Error("Il vecchio pulsante aggiornamenti flottante è ancora presente.");
+}
+
 const packageJson = JSON.parse(await readFile(join(root, "package.json"), "utf8"));
 const desktopBuild = JSON.parse(await readFile(join(dist, "desktop-build.json"), "utf8"));
 if (desktopBuild.version !== packageJson.version) {

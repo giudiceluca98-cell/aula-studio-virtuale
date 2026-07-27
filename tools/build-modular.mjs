@@ -465,7 +465,7 @@ function htmlDocument({ title, route, markup }) {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="aula-demo-version" content="1.4.0-alpha.3" />
+  <meta name="aula-demo-version" content="1.4.0-alpha.4" />
   <meta name="aula-build" content="modular-routes-1" />
   <title>${title}</title>
   <link rel="stylesheet" href="/assets/css/${route}.css" />

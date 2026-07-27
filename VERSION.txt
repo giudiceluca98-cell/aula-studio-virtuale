@@ -1,19 +1,19 @@
 Aula Studio Virtuale
-Versione: 1.4.0-alpha.3
+Versione: 1.4.0-alpha.4
 Fonte: demo canonica ufficiale con ottimizzazione grafica fase 1 e build modulare per rotta
-Commit base: c33a369aeafe897c097a1051b97e8b43d5dc09a9
-Git blob HTML: 7cae84d79f08017ccb98016fbb2eba3b88063d35
-SHA-256 HTML: d33f226720bbcc5c01d7c49e83934e3efaeb55e0768d3afb551f3a9145c323cd
+Commit base: 26144ca281d78c1668f64251fb836b67ee3b68cd
+Git blob HTML: 62c3d3fd9716000bd8066aae6a6b7dd392e44f26
+SHA-256 HTML: f6867c6484c826fb37daf30e83955017fcd62540819eecd005ea91f2850b2c8a
 Build: modular-routes-1
-SHA-256 portale: be569594d79440a40308515d27bbfdf3348c160e97b0de10e67a0588e9d75209
-SHA-256 dashboard: dc2aa477d9ea852f282632059c3c79cfc2690d142da5df996d32c88456637793
-SHA-256 catalogo: 69b6ae3ebf0d259ed9f157444f6bf605bdcccd8dc7db3a30d6c842f4abb034ba
-SHA-256 download: 00549ab63bfde97aa150352a541b0ebeb495246a1842038aea8f650e23f15b47
-SHA-256 aula: b7e81364647bd73ea6c1624ec513f82a4a4864b4f926133a7f76c28d52d5fe65
+SHA-256 portale: a4def6633663226e8d77b6553d67774e1c81630258f20be3d80021bd09440e50
+SHA-256 dashboard: de982b16f103b779d4a91b63980402b8becb1c11b23868fdebb848c43742569c
+SHA-256 catalogo: 04443fb167a6b8830b89dc2b79043f71bbb006e21544db797c1f44fd41d79070
+SHA-256 download: 9a33a12377007ecc7f621fb8f379e231f96d3699876045480073214051b44225
+SHA-256 aula: e414648b36dd48864d9463a7d4e876c76cd457583fc476302a72831ab2af7bdc
 SHA-256 cursore: bccdef94c94c583b3a2efba12668f6ec508ebb6b9064a046912048c8dc405211
 SHA-256 puntatore: a33a6ee72e25c4882b6d46150ef53b56deedd7b73e83319bf5f552ecdcf967e8
 Desktop: Tauri 2, installer Windows NSIS per utente corrente
 Desktop build: tools/build-desktop.mjs -> desktop-dist (generato, non versionato)
-Aggiornamenti: release firmate, controllo ogni 6 ore e conferma manuale prima dell'installazione
+Aggiornamenti: pulsante Sincronizza riutilizzato nell'app desktop, release firmate, controllo ogni 6 ore e conferma manuale prima dell'installazione
 Workflow desktop: .github/workflows/release-desktop.yml
 Download web: /download, risoluzione automatica dell'installer dalla release GitHub pubblica
