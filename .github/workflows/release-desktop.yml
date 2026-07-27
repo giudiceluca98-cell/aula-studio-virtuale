@@ -1,0 +1,86 @@
+name: Pubblica applicazione desktop
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Versione SemVer senza v (es. 1.4.0-alpha.2)"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    name: Installer Windows e aggiornamento
+    runs-on: windows-latest
+    env:
+      RELEASE_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.ref_name }}
+      RELEASE_OWNER: ${{ vars.AULA_RELEASE_OWNER }}
+      RELEASE_REPOSITORY: ${{ vars.AULA_RELEASE_REPOSITORY }}
+
+    steps:
+      - name: Scarica il sorgente
+        uses: actions/checkout@v4
+
+      - name: Installa pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Installa Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Installa Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Installa dipendenze
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Controlla configurazione pubblica
+        shell: pwsh
+        env:
+          RELEASE_TOKEN: ${{ secrets.AULA_RELEASE_TOKEN }}
+          SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          UPDATER_PUBLIC_KEY: ${{ secrets.TAURI_UPDATER_PUBLIC_KEY }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:RELEASE_OWNER)) { throw "Configura la variabile AULA_RELEASE_OWNER." }
+          if ([string]::IsNullOrWhiteSpace($env:RELEASE_REPOSITORY)) { throw "Configura la variabile AULA_RELEASE_REPOSITORY." }
+          if ([string]::IsNullOrWhiteSpace($env:RELEASE_TOKEN)) { throw "Configura il secret AULA_RELEASE_TOKEN." }
+          if ([string]::IsNullOrWhiteSpace($env:SIGNING_PRIVATE_KEY)) { throw "Configura TAURI_SIGNING_PRIVATE_KEY." }
+          if ([string]::IsNullOrWhiteSpace($env:UPDATER_PUBLIC_KEY)) { throw "Configura TAURI_UPDATER_PUBLIC_KEY." }
+
+      - name: Verifica versione
+        run: node tools/check-release-version.mjs "$env:RELEASE_VERSION"
+
+      - name: Genera configurazione updater
+        env:
+          TAURI_UPDATER_PUBLIC_KEY: ${{ secrets.TAURI_UPDATER_PUBLIC_KEY }}
+          TAURI_UPDATER_ENDPOINT: https://github.com/${{ vars.AULA_RELEASE_OWNER }}/${{ vars.AULA_RELEASE_REPOSITORY }}/releases/latest/download/latest.json
+        run: node tools/create-tauri-release-config.mjs
+
+      - name: Crea installer e release
+        uses: tauri-apps/tauri-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.AULA_RELEASE_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        with:
+          owner: ${{ vars.AULA_RELEASE_OWNER }}
+          repo: ${{ vars.AULA_RELEASE_REPOSITORY }}
+          releaseCommitish: main
+          tagName: v__VERSION__
+          releaseName: "Aula Studio Virtuale v__VERSION__"
+          releaseBody: "Installer ufficiale di Aula Studio Virtuale. L'applicazione controlla questa release per gli aggiornamenti."
+          releaseDraft: false
+          prerelease: false
+          updaterJsonPreferNsis: true
+          uploadUpdaterJson: true
+          uploadUpdaterSignatures: true
+          args: --config src-tauri/tauri.release.conf.json

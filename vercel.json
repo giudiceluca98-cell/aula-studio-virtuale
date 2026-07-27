@@ -4,19 +4,27 @@
   "rewrites": [
     {
       "source": "/",
-      "destination": "/demo-aula-studio-virtuale-canonica.html"
+      "destination": "/index.html"
     },
     {
       "source": "/dashboard",
-      "destination": "/demo-aula-studio-virtuale-canonica.html"
+      "destination": "/dashboard/index.html"
     },
     {
       "source": "/catalog",
-      "destination": "/demo-aula-studio-virtuale-canonica.html"
+      "destination": "/catalog/index.html"
+    },
+    {
+      "source": "/download",
+      "destination": "/download/index.html"
+    },
+    {
+      "source": "/room",
+      "destination": "/room/index.html"
     },
     {
       "source": "/room/:path*",
-      "destination": "/demo-aula-studio-virtuale-canonica.html"
+      "destination": "/room/index.html"
     }
   ],
   "headers": [

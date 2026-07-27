@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="aula-demo-version" content="1.4.0-alpha.1" />
+  <meta name="aula-demo-version" content="1.4.0-alpha.2" />
   <title>Aula Studio Virtuale — Presentazione</title>
   <style>
     :root {
@@ -797,6 +797,13 @@
       color: #fff;
       border-color: var(--green);
       background: var(--green);
+    }
+
+    a.primary-small.desktop-install-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
     }
 
     .tutor-column {
@@ -3870,222 +3877,33 @@
     }
 
     /* ==========================================================
-       TASTO SINCRONIA — SIMBOLO PULITO E COERENTE COL TEMA
+       STATO SINCRONIA — ICONA DI TRASMISSIONE ESSENZIALE
        ========================================================== */
 
     .action-button.sync {
-      min-width: 172px;
-      gap: 12px;
-      padding: 0 16px 0 12px;
-      color: #e9fdff;
-      border: 1px solid rgba(83, 231, 243, 0.18);
-      border-radius: 14px;
-      background:
-        linear-gradient(180deg, rgba(10, 24, 34, 0.90), rgba(7, 18, 27, 0.92));
-      box-shadow:
-        0 10px 22px rgba(2, 16, 24, 0.20),
-        inset 0 1px 0 rgba(255,255,255,0.03);
-      overflow: hidden;
-      isolation: isolate;
+      min-width: 158px;
+      gap: 9px;
+      padding-inline: 14px;
+      color: var(--accent);
     }
 
-    .action-button.sync::before,
-    .sync-radar-field,
-    .sync-radar-grid,
-    .sync-radar-sweep,
-    .sync-radar-ping,
-    .sync-radar-noise,
-    .sync-orb,
-    .sync-orb-core,
-    .sync-orb-grid,
-    .sync-stream,
-    .sync-data-dot {
-      display: none !important;
-      content: none !important;
-    }
-
-    .action-button.sync .label,
-    .action-button.sync .sync-symbol {
-      position: relative;
-      z-index: 1;
-    }
-
-    .sync-symbol {
-      position: relative;
-      width: 34px;
-      height: 34px;
+    .sync-transmission-icon {
+      width: 21px;
+      height: 21px;
       flex: 0 0 auto;
-      display: inline-block;
-      border-radius: 12px;
-      border: 1px solid rgba(123, 235, 255, 0.20);
-      background:
-        radial-gradient(circle at 30% 24%, rgba(255,255,255,0.42), transparent 22%),
-        linear-gradient(180deg, rgba(13, 38, 52, 0.82), rgba(8, 24, 35, 0.92));
-      box-shadow:
-        0 0 18px rgba(0, 223, 242, 0.12),
-        inset 0 1px 0 rgba(255,255,255,0.05),
-        inset 0 -1px 0 rgba(0, 223, 242, 0.06);
-      overflow: hidden;
+      color: currentColor;
+      filter: drop-shadow(0 0 5px color-mix(in srgb, currentColor 30%, transparent));
     }
 
-    .sync-symbol::before {
-      content: "";
-      position: absolute;
-      inset: 5px;
-      border-radius: 50%;
-      border: 1.5px solid rgba(123, 235, 255, 0.14);
-      box-shadow: inset 0 0 12px rgba(0, 223, 242, 0.05);
+    .sync-transmission-icon path,
+    .sync-transmission-icon circle {
+      vector-effect: non-scaling-stroke;
     }
-
-    .sync-arcs,
-    .sync-arcs::before,
-    .sync-arcs::after {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      content: "";
-    }
-
-    .sync-arcs {
-      inset: 6px;
-      border-radius: 50%;
-      border-top: 2px solid rgba(124, 240, 255, 0.92);
-      border-right: 2px solid transparent;
-      border-bottom: 2px solid transparent;
-      border-left: 2px solid rgba(124, 240, 255, 0.18);
-      transform: rotate(22deg);
-      animation: sync-symbol-rotate-a 4.6s linear infinite;
-      filter: drop-shadow(0 0 5px rgba(124, 240, 255, 0.24));
-    }
-
-    .sync-arcs::before {
-      inset: 3px;
-      border-radius: 50%;
-      border-right: 2px solid rgba(162, 149, 255, 0.85);
-      border-top: 2px solid transparent;
-      border-bottom: 2px solid rgba(162, 149, 255, 0.18);
-      border-left: 2px solid transparent;
-      transform: rotate(-18deg);
-      animation: sync-symbol-rotate-b 3.9s linear infinite;
-      filter: drop-shadow(0 0 4px rgba(162, 149, 255, 0.18));
-    }
-
-    .sync-arcs::after {
-      inset: 11px;
-      border-radius: 50%;
-      background:
-        radial-gradient(circle, rgba(255,255,255,0.92) 0 18%, rgba(124, 240, 255, 0.92) 22%, rgba(26, 86, 180, 0.92) 60%, rgba(12, 29, 45, 0.30) 100%);
-      box-shadow: 0 0 10px rgba(124, 240, 255, 0.24);
-      animation: sync-symbol-core-pulse 2.2s ease-in-out infinite;
-    }
-
-    .sync-node {
-      position: absolute;
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255,255,255,1), rgba(124, 240, 255, 0.92) 52%, transparent 75%);
-      box-shadow: 0 0 8px rgba(124, 240, 255, 0.30);
-      z-index: 2;
-    }
-
-    .sync-node.n1 {
-      top: 6px;
-      right: 7px;
-      animation: sync-node-drift-1 3.8s ease-in-out infinite;
-    }
-
-    .sync-node.n2 {
-      bottom: 7px;
-      left: 7px;
-      animation: sync-node-drift-2 4.2s ease-in-out infinite;
-    }
-
-    .sync-node.n3 {
-      top: 14px;
-      left: 4px;
-      animation: sync-node-drift-3 3.5s ease-in-out infinite;
-    }
-
-    .sync-link {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 15px;
-      height: 1px;
-      background: linear-gradient(90deg, rgba(124,240,255,0), rgba(124,240,255,0.44), rgba(124,240,255,0));
-      transform-origin: left center;
-      opacity: 0.7;
-      z-index: 1;
-    }
-
-    .sync-link.l1 { transform: translate(-50%, -50%) rotate(16deg); }
-    .sync-link.l2 { transform: translate(-50%, -50%) rotate(138deg); width: 13px; }
-    .sync-link.l3 { transform: translate(-50%, -50%) rotate(-110deg); width: 12px; }
 
     .action-button.sync .label {
-      font-weight: 760;
+      color: var(--text);
+      font-weight: 720;
       letter-spacing: 0.01em;
-      text-shadow: 0 0 8px rgba(50, 208, 224, 0.10);
-    }
-
-    body.dark .action-button.sync {
-      color: #17323b;
-      border-color: rgba(10, 143, 166, 0.14);
-      background:
-        linear-gradient(180deg, rgba(248, 253, 254, 0.98), rgba(236, 248, 251, 0.98));
-      box-shadow:
-        0 10px 18px rgba(24, 74, 90, 0.08),
-        inset 0 1px 0 rgba(255,255,255,0.90);
-    }
-
-    body.dark .sync-symbol {
-      border-color: rgba(10, 143, 166, 0.14);
-      background:
-        radial-gradient(circle at 30% 24%, rgba(255,255,255,0.56), transparent 22%),
-        linear-gradient(180deg, rgba(232, 245, 248, 0.95), rgba(222, 239, 243, 0.96));
-      box-shadow:
-        0 0 16px rgba(10, 143, 166, 0.08),
-        inset 0 1px 0 rgba(255,255,255,0.80);
-    }
-
-    @keyframes sync-symbol-rotate-a {
-      from { transform: rotate(22deg); }
-      to { transform: rotate(382deg); }
-    }
-
-    @keyframes sync-symbol-rotate-b {
-      from { transform: rotate(-18deg); }
-      to { transform: rotate(-378deg); }
-    }
-
-    @keyframes sync-symbol-core-pulse {
-      0%, 100% { transform: scale(0.94); opacity: 0.88; }
-      50% { transform: scale(1.10); opacity: 1; }
-    }
-
-    @keyframes sync-node-drift-1 {
-      0%, 100% { transform: translate(0, 0) scale(0.88); opacity: 0.70; }
-      50% { transform: translate(-2px, 2px) scale(1.18); opacity: 1; }
-    }
-
-    @keyframes sync-node-drift-2 {
-      0%, 100% { transform: translate(0, 0) scale(0.92); opacity: 0.74; }
-      50% { transform: translate(2px, -1px) scale(1.16); opacity: 1; }
-    }
-
-    @keyframes sync-node-drift-3 {
-      0%, 100% { transform: translate(0, 0) scale(0.80); opacity: 0.66; }
-      50% { transform: translate(2px, 1px) scale(1.12); opacity: 0.98; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .sync-arcs,
-      .sync-arcs::before,
-      .sync-arcs::after,
-      .sync-node {
-        animation: none !important;
-      }
     }
 
     /* ==========================================================
@@ -4907,6 +4725,73 @@
 
     .theme-cursor.hidden {
       opacity: 0;
+    }
+
+    @media (pointer: fine) and (hover: hover) {
+      body.graphics-full,
+      body.graphics-optimized {
+        cursor: url("assets/aula-cursor.svg") 16 16, auto;
+      }
+
+      body.graphics-full :is(a, button, summary, label, [role="button"], .toolbar-btn, .tab-chip, .side-item, .modal-pill, .chat-toggle, .timer-toggle, .voice-btn, .sticky-chip),
+      body.graphics-optimized :is(a, button, summary, label, [role="button"], .toolbar-btn, .tab-chip, .side-item, .modal-pill, .chat-toggle, .timer-toggle, .voice-btn, .sticky-chip) {
+        cursor: url("assets/aula-pointer.svg") 16 16, pointer !important;
+      }
+    }
+
+    .graphics-animation-paused {
+      animation-play-state: paused !important;
+    }
+
+    body.graphics-page-hidden *,
+    body.graphics-reduced * {
+      animation-play-state: paused !important;
+    }
+
+    body.graphics-optimized .portal-frequency span:nth-child(odd) {
+      animation-play-state: paused;
+    }
+
+    body.graphics-reduced .theme-cursor {
+      display: none !important;
+    }
+
+    body.graphics-reduced * {
+      backdrop-filter: none !important;
+    }
+
+    .graphics-mode-grid {
+      display: grid;
+      gap: 9px;
+    }
+
+    .graphics-mode-option {
+      width: 100%;
+      display: grid;
+      gap: 4px;
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--ink);
+      background: var(--surface);
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .graphics-mode-option strong,
+    .graphics-mode-option small {
+      display: block;
+    }
+
+    .graphics-mode-option small {
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .graphics-mode-option[aria-pressed="true"] {
+      border-color: color-mix(in srgb, var(--green) 58%, var(--line));
+      background: color-mix(in srgb, var(--green) 9%, var(--surface));
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--green) 8%, transparent);
     }
 
     .theme-cursor-ring,
@@ -10824,6 +10709,10 @@ display: none !important;
 }
 }
 
+.catalog-demo-view .portal-nav .catalog-demo-aula-button[hidden] {
+display: none !important;
+}
+
     @media (prefers-reduced-motion: reduce) {
       .catalog-demo-card,
       .catalog-demo-shortcut {
@@ -10833,10 +10722,10 @@ display: none !important;
 
   </style>
 
-  <style data-aula-version="1.4.0-alpha.1">
+  <style data-aula-version="1.4.0-alpha.2">
 
     /* ==========================================================
-       CONSOLIDAMENTO MATERIALI + CHECKLIST — 1.4.0-alpha.1
+       CONSOLIDAMENTO MATERIALI + CHECKLIST — 1.4.0-alpha.2
        File autonomo: nessun fetch e nessuna dipendenza esterna.
        ========================================================== */
 
@@ -11231,6 +11120,7 @@ display: none !important;
           <button class="portal-nav-link optional" type="button" onclick="portalScrollTo('portalHow')">Come funziona</button>
           <button class="portal-nav-link optional" type="button" onclick="portalScrollTo('portalEve')">Eve</button>
           <button class="portal-button" type="button" onclick="toggleDarkMode()">Tema</button>
+          <a class="portal-button" data-web-install href="/download">Installa app</a>
           <button class="portal-button" type="button" onclick="navigatePortal('dashboard')">Accedi</button>
           <button class="portal-button primary" type="button" onclick="navigatePortal('dashboard')">Crea la tua aula →</button>
         </nav>
@@ -11260,6 +11150,9 @@ display: none !important;
               <button class="portal-button large" type="button" onclick="portalScrollTo('portalHow')">
                 Scopri come funziona
               </button>
+              <a class="portal-button large" data-web-install href="/download">
+                Scarica per Windows
+              </a>
             </div>
 
             <div class="portal-trust">
@@ -11639,6 +11532,7 @@ display: none !important;
         <nav class="portal-nav" aria-label="Navigazione dashboard">
           <button class="portal-nav-link optional" type="button" onclick="navigatePortal('presentation')">Presentazione</button>
           <button class="portal-nav-link optional" type="button" onclick="navigatePortal('aula')">Apri aula</button>
+          <a class="portal-button" data-web-install href="/download">Installa app</a>
           <button class="portal-button" type="button" onclick="toggleDarkMode()">Tema</button>
           <button class="portal-button" type="button" onclick="navigatePortal('presentation')">Esci</button>
         </nav>
@@ -11998,6 +11892,7 @@ display: none !important;
           <span>Catalogo</span>
         </button>
         <nav class="portal-nav" aria-label="Navigazione Catalogo">
+          <button class="portal-button catalog-demo-back-button catalog-demo-aula-button" id="catalogDemoBackToAula" type="button" onclick="navigatePortal('aula')" hidden>← Aula condivisa</button>
           <button class="portal-button catalog-demo-back-button" type="button" onclick="navigatePortal('dashboard')">← Scrivania</button>
           <button class="portal-button catalog-demo-theme-button" type="button" onclick="toggleDarkMode()">Tema</button>
           <span class="portal-status">✦ Eve · percorso locale</span>
@@ -12230,29 +12125,21 @@ display: none !important;
       </div>
 
       <div class="header-actions">
-        <button class="action-button sync" type="button" onclick="showToast('Sincronizzazione attiva')">
-
-                  <span class="sync-symbol" aria-hidden="true">
-
-                    <span class="sync-arcs"></span>
-
-                    <span class="sync-link l1"></span>
-
-                    <span class="sync-link l2"></span>
-
-                    <span class="sync-link l3"></span>
-
-                    <span class="sync-node n1"></span>
-
-                    <span class="sync-node n2"></span>
-
-                    <span class="sync-node n3"></span>
-
-                  </span>
-
-                  <span class="label">In sincronia</span>
-
-                </button>
+        <button
+          class="action-button sync"
+          type="button"
+          title="Stato connessione: in sincronia"
+          aria-label="Stato connessione: in sincronia"
+          onclick="showToast('Sincronizzazione attiva')"
+        >
+          <svg class="sync-transmission-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4.9 9.8a10 10 0 0 1 14.2 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M7.8 12.7a6 6 0 0 1 8.4 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M10.7 15.6a2 2 0 0 1 2.6 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <circle cx="12" cy="18.5" r="1.2" fill="currentColor"/>
+          </svg>
+          <span class="label">In sincronia</span>
+        </button>
         <button class="action-button" type="button" onclick="portalDashboardOpenCatalogForRoom('python-room')">
           <span>▤</span><span class="label">Catalogo</span>
         </button>
@@ -12923,12 +12810,6 @@ display: none !important;
 
   <div class="portal-toast" id="portalToast" aria-live="polite"></div>
 
-<div class="theme-cursor hidden" id="themeCursor" aria-hidden="true">
-    <div class="theme-cursor-ring"></div>
-    <div class="theme-cursor-core"></div>
-    <div class="theme-cursor-burst"></div>
-  </div>
-
   <script>
     const lessonSections = [
       {
@@ -13298,8 +13179,31 @@ print(nome)</div>
             <button class="primary-small" type="button" onclick="toggleDarkMode()">Attiva/disattiva modalità chiara</button>
           </div>
           <div class="drawer-section">
+            <h3>Prestazioni grafiche</h3>
+            <p>Scegli il livello di movimento e di effetti. La preferenza viene ricordata su questo dispositivo.</p>
+            <div class="graphics-mode-grid" role="group" aria-label="Prestazioni grafiche">
+              <button class="graphics-mode-option" type="button" data-graphics-mode="full" aria-pressed="false" onclick="setGraphicsMode('full')">
+                <strong>Grafica completa</strong>
+                <small>Tutti gli effetti visibili e cursore grafico nativo; le animazioni fuori schermo restano in pausa.</small>
+              </button>
+              <button class="graphics-mode-option" type="button" data-graphics-mode="optimized" aria-pressed="false" onclick="setGraphicsMode('optimized')">
+                <strong>Grafica ottimizzata</strong>
+                <small>Meno animazioni decorative e cursore grafico nativo.</small>
+              </button>
+              <button class="graphics-mode-option" type="button" data-graphics-mode="reduced" aria-pressed="false" onclick="setGraphicsMode('reduced')">
+                <strong>Riduci animazioni</strong>
+                <small>Movimenti essenziali, cursore di sistema e nessuna sfocatura dinamica.</small>
+              </button>
+            </div>
+          </div>
+          <div class="drawer-section">
             <h3>Layout</h3>
             <button type="button" onclick="resetDemo()">Ripristina stato iniziale</button>
+          </div>
+          <div class="drawer-section" data-web-install>
+            <h3>Applicazione per Windows</h3>
+            <p>Scarica e installa Aula Studio Virtuale sul computer. Gli aggiornamenti successivi saranno disponibili direttamente nell'app.</p>
+            <a class="primary-small desktop-install-link" data-web-install href="/download">Installa app per Windows</a>
           </div>
         `
       }
@@ -13328,6 +13232,7 @@ print(nome)</div>
       eveDetachEnabled: false,
       progressMissionsExpanded: false,
       modulesPanelCollapsed: false,
+      graphicsMode: "optimized",
       chat: null
     };
 
@@ -13681,35 +13586,6 @@ print(nome)</div>
       );
     }
 
-    let eveGazeFrame = null;
-    let evePointerX = 0;
-    let evePointerY = 0;
-
-    function renderRestingEveGaze() {
-      eveGazeFrame = null;
-      if (!eveRestFace || !evePanelToggle || evePanelToggle.classList.contains("is-reading")) return;
-      const rect = evePanelToggle.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      const dx = evePointerX - centerX;
-      const dy = evePointerY - centerY;
-      const distance = Math.max(1, Math.hypot(dx, dy));
-      const strength = Math.min(1, distance / 150);
-      const x = (dx / distance) * 3.2 * strength;
-      const y = (dy / distance) * 2.6 * strength;
-      eveRestFace.style.setProperty("--eve-gaze-x", `${x.toFixed(2)}px`);
-      eveRestFace.style.setProperty("--eve-gaze-y", `${y.toFixed(2)}px`);
-      eveRestFace.querySelectorAll(".eve-rest-pupil").forEach((pupil) => {
-        pupil.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px)`;
-      });
-    }
-
-    function trackRestingEvePointer(event) {
-      evePointerX = event.clientX;
-      evePointerY = event.clientY;
-      if (!eveGazeFrame) eveGazeFrame = window.requestAnimationFrame(renderRestingEveGaze);
-    }
-
     function resetRestingEveGaze() {
       if (!eveRestFace) return;
       eveRestFace.style.setProperty("--eve-gaze-x", "0px");
@@ -13960,116 +13836,17 @@ print(nome)</div>
 
 
 
-    const themeCursor = document.getElementById("themeCursor");
-    let isPointerDown = false;
-    let themeCursorBurstTimer = null;
-    let usingNativeCursor = false;
-
-    const coarsePointerQuery = window.matchMedia("(pointer: coarse)");
-    const noHoverQuery = window.matchMedia("(hover: none)");
-
-    function shouldUseNativeCursor() {
-      return coarsePointerQuery.matches || noHoverQuery.matches;
-    }
-
-    function applyNativeCursorState(forceNative) {
-      usingNativeCursor = forceNative;
-
-      if (themeCursor) {
-        themeCursor.classList.toggle("hidden", forceNative);
-      }
-
-      document.body.classList.toggle("native-cursor-enabled", forceNative);
-
-      const cursorValue = forceNative ? "" : "none";
-      document.documentElement.style.cursor = cursorValue;
-      document.body.style.cursor = cursorValue;
-
-      document.querySelectorAll("a, button, input, textarea, select, summary, label, [role='button'], .toolbar-btn, .tab-chip, .side-item, .modal-pill, .chat-toggle, .timer-toggle, .voice-btn, .sticky-chip").forEach((element) => {
-        element.style.cursor = cursorValue;
-      });
-    }
-
     function updateThemeCursorMode() {
-      applyNativeCursorState(shouldUseNativeCursor());
+      document.body.classList.add("native-cursor-enabled");
+      document.documentElement.style.cursor = "";
+      document.body.style.cursor = "";
     }
 
     updateThemeCursorMode();
 
-    if (typeof coarsePointerQuery.addEventListener === "function") {
-      coarsePointerQuery.addEventListener("change", updateThemeCursorMode);
-      noHoverQuery.addEventListener("change", updateThemeCursorMode);
-    } else if (typeof coarsePointerQuery.addListener === "function") {
-      coarsePointerQuery.addListener(updateThemeCursorMode);
-      noHoverQuery.addListener(updateThemeCursorMode);
-    }
-
-    function revealThemeCursor() {
-      if (!themeCursor || usingNativeCursor) return;
-      themeCursor.classList.remove("hidden");
-    }
-
     function hideThemeCursor() {
-      if (!themeCursor) return;
-      themeCursor.classList.add("hidden");
-      themeCursor.classList.remove("pressed", "burst");
-      isPointerDown = false;
+      /* Il cursore personalizzato è disattivato in tutte le modalità. */
     }
-
-    window.addEventListener("pointermove", (event) => {
-      if (!themeCursor || usingNativeCursor) return;
-
-      revealThemeCursor();
-
-      const x = event.clientX - 11;
-      const y = event.clientY - 11;
-
-      themeCursor.style.setProperty("--cursor-x", `${x}px`);
-      themeCursor.style.setProperty("--cursor-y", `${y}px`);
-    });
-
-    window.addEventListener("pointerdown", () => {
-      if (!themeCursor || usingNativeCursor) return;
-
-      revealThemeCursor();
-      isPointerDown = true;
-      themeCursor.classList.remove("burst");
-      themeCursor.classList.add("pressed");
-
-      if (themeCursorBurstTimer) {
-        clearTimeout(themeCursorBurstTimer);
-        themeCursorBurstTimer = null;
-      }
-    });
-
-    window.addEventListener("pointerup", () => {
-      if (!themeCursor || usingNativeCursor) return;
-
-      if (!isPointerDown) return;
-      isPointerDown = false;
-
-      themeCursor.classList.remove("pressed");
-      themeCursor.classList.remove("burst");
-      void themeCursor.offsetWidth;
-      themeCursor.classList.add("burst");
-
-      if (themeCursorBurstTimer) {
-        clearTimeout(themeCursorBurstTimer);
-      }
-
-      themeCursorBurstTimer = setTimeout(() => {
-        themeCursor.classList.remove("burst");
-      }, 380);
-    });
-
-    window.addEventListener("pointercancel", () => {
-      if (!themeCursor || usingNativeCursor) return;
-      isPointerDown = false;
-      themeCursor.classList.remove("pressed");
-    });
-
-    window.addEventListener("blur", hideThemeCursor);
-    document.addEventListener("mouseleave", hideThemeCursor);
 
 
 
@@ -17509,6 +17286,10 @@ print(nome)</div>
 
     function catalogDemoInit() {
       if (!document.getElementById("portalCatalog")) return;
+      const backToAula = document.getElementById("catalogDemoBackToAula");
+      if (backToAula) {
+        backToAula.hidden = new URLSearchParams(location.search).get("from") !== "aula";
+      }
       if (!catalogDemoState.initialized) {
         catalogDemoState.initialized = true;
         catalogDemoLoadManualMaterials();
@@ -19303,6 +19084,7 @@ print(nome)</div>
       document.getElementById("modalTitle").textContent = template.title;
       document.getElementById("modalContent").innerHTML = template.html;
       document.getElementById("modalBackdrop").classList.remove("hidden");
+      if (type === "impostazioni") syncGraphicsSettingsControls();
       updateProgress();
     }
 
@@ -20035,6 +19817,73 @@ print(nome)</div>
       saveState();
     }
 
+    const graphicsModes = new Set(["full", "optimized", "reduced"]);
+    let graphicsAnimationObserver = null;
+
+    function syncGraphicsSettingsControls() {
+      document.querySelectorAll(".graphics-mode-option[data-graphics-mode]").forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.graphicsMode === state.graphicsMode));
+      });
+    }
+
+    function applyGraphicsMode(options = {}) {
+      const mode = graphicsModes.has(state.graphicsMode) ? state.graphicsMode : "optimized";
+      state.graphicsMode = mode;
+      document.body.dataset.graphicsMode = mode;
+      document.body.classList.toggle("graphics-full", mode === "full");
+      document.body.classList.toggle("graphics-optimized", mode === "optimized");
+      document.body.classList.toggle("graphics-reduced", mode === "reduced");
+
+      updateThemeCursorMode();
+      syncGraphicsSettingsControls();
+
+      if (mode === "reduced") {
+        hideThemeCursor();
+        resetRestingEveGaze();
+      }
+
+      if (options.persist) saveState();
+      if (options.notify) {
+        const labels = {
+          full: "Grafica completa attivata",
+          optimized: "Grafica ottimizzata attivata",
+          reduced: "Animazioni ridotte"
+        };
+        showToast(labels[mode]);
+      }
+    }
+
+    function setGraphicsMode(mode) {
+      if (!graphicsModes.has(mode)) return;
+      state.graphicsMode = mode;
+      applyGraphicsMode({ persist: true, notify: true });
+    }
+
+    function initializeGraphicsAnimationObserver() {
+      if (typeof IntersectionObserver !== "function") return;
+
+      graphicsAnimationObserver?.disconnect();
+      graphicsAnimationObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          entry.target.classList.toggle("graphics-animation-paused", !entry.isIntersecting);
+        });
+      }, { rootMargin: "80px", threshold: 0.01 });
+
+      document.querySelectorAll("*").forEach((element) => {
+        if (window.getComputedStyle(element).animationName !== "none") {
+          graphicsAnimationObserver.observe(element);
+        }
+      });
+    }
+
+    function syncGraphicsPageVisibility() {
+      document.body.classList.toggle("graphics-page-hidden", document.hidden);
+      if (document.hidden) {
+        hideThemeCursor();
+        resetRestingEveGaze();
+      }
+    }
+
     function resetDemo() {
       try {
         localStorage.removeItem("aula-demo-layout-reale");
@@ -20102,6 +19951,7 @@ print(nome)</div>
         state.eveDetachEnabled = Boolean(saved.eveDetachEnabled);
         state.progressMissionsExpanded = Boolean(saved.progressMissionsExpanded);
         state.modulesPanelCollapsed = Boolean(saved.modulesPanelCollapsed);
+        state.graphicsMode = graphicsModes.has(saved.graphicsMode) ? saved.graphicsMode : "optimized";
         state.chat = normalizeChatState(saved.chat);
         if (saved.dark) document.body.classList.add("dark");
       } catch (error) {
@@ -20132,6 +19982,9 @@ print(nome)</div>
         if (!dragging) return;
         if (event?.pointerId != null && pointerId != null && event.pointerId !== pointerId) return;
         dragging = false;
+        window.removeEventListener("pointermove", movePanel);
+        window.removeEventListener("pointerup", stopDragging);
+        window.removeEventListener("pointercancel", stopDragging);
         panel.classList.remove("is-dragging");
         document.documentElement.classList.remove("chat-dragging");
         try {
@@ -20179,11 +20032,11 @@ print(nome)</div>
         } catch (error) {
           /* Il trascinamento continua tramite gli eventi globali. */
         }
+        window.addEventListener("pointermove", movePanel, { passive: false });
+        window.addEventListener("pointerup", stopDragging, { passive: true });
+        window.addEventListener("pointercancel", stopDragging, { passive: true });
       });
 
-      window.addEventListener("pointermove", movePanel, { passive: false });
-      window.addEventListener("pointerup", stopDragging, { passive: true });
-      window.addEventListener("pointercancel", stopDragging, { passive: true });
       handle.addEventListener("lostpointercapture", stopDragging);
       window.addEventListener("blur", stopDragging);
       document.addEventListener("visibilitychange", () => {
@@ -20192,6 +20045,8 @@ print(nome)</div>
     }
 
     loadState();
+    applyGraphicsMode();
+    syncGraphicsPageVisibility();
     state.chat = normalizeChatState(state.chat);
     renderChatCenter();
     applyProgressMissionsState();
@@ -20224,18 +20079,17 @@ print(nome)</div>
     populateAudioVoices();
     syncExerciseVoiceSelectors();
     updateEveVoiceActivity(state.currentView);
+    initializeGraphicsAnimationObserver();
+    document.addEventListener("visibilitychange", syncGraphicsPageVisibility, { passive: true });
     if (speechIsSupported()) window.speechSynthesis.onvoiceschanged = populateAudioVoices;
     pageScroll.addEventListener("scroll", refreshReadingMascotPosition, { passive: true });
     window.addEventListener("resize", refreshReadingMascotPosition, { passive: true });
-    document.addEventListener("pointermove", trackRestingEvePointer, { passive: true });
-    document.addEventListener("mousemove", trackRestingEvePointer, { passive: true });
     document.addEventListener("selectionchange", captureExerciseSelection);
     documentContent.addEventListener("mouseup", captureExerciseSelection, { passive: true });
     documentContent.addEventListener("keyup", captureExerciseSelection, { passive: true });
     documentContent.addEventListener("select", captureExerciseSelection, { passive: true });
     pageScroll.addEventListener("scroll", () => exerciseSelectionToolbar?.classList.add("hidden"), { passive: true });
     window.addEventListener("resize", () => exerciseSelectionToolbar?.classList.add("hidden"), { passive: true });
-    document.documentElement.addEventListener("pointerleave", resetRestingEveGaze, { passive: true });
     if (eveAssistant && evePanelToggle) {
       const evePresenceObserver = new MutationObserver(syncRestingEvePresence);
       evePresenceObserver.observe(eveAssistant, { attributes: true, attributeFilter: ["class"] });
@@ -20246,15 +20100,15 @@ print(nome)</div>
     makeFloatingPanelDraggable(document.getElementById("chatPanel"));
   </script>
 
-  <script data-aula-version="1.4.0-alpha.1">
+  <script data-aula-version="1.4.0-alpha.2">
 
   /* ==========================================================
-     CONSOLIDAMENTO MATERIALI + CHECKLIST — 1.4.0-alpha.1
+     CONSOLIDAMENTO MATERIALI + CHECKLIST — 1.4.0-alpha.2
      ========================================================== */
   (() => {
     "use strict";
 
-    const VERSION = "1.4.0-alpha.1";
+    const VERSION = "1.4.0-alpha.2";
     window.AULA_DEMO_VERSION = VERSION;
     window.AULA_PHASE3_CONSOLIDATION = {
       version: "1.3.0-alpha.10",
@@ -20866,6 +20720,6 @@ print(nome)</div>
   })();
 
   </script>
-  <!-- AULA STUDIO VIRTUALE — CHECKPOINT AUTONOMO 1.4.0-alpha.1 -->
+  <!-- AULA STUDIO VIRTUALE — CHECKPOINT AUTONOMO 1.4.0-alpha.2 -->
 </body>
 </html>

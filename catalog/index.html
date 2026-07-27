@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="aula-demo-version" content="1.4.0-alpha.2" />
+  <meta name="aula-build" content="modular-routes-1" />
+  <title>Aula Studio Virtuale — Catalogo intelligente</title>
+  <link rel="stylesheet" href="/assets/css/catalog.css" />
+</head>
+<body data-portal-route="catalog">
+<section class="portal-view catalog-demo-view" id="portalCatalog" data-catalog-demo-version="1.1.0-alpha.1">
+    <header class="portal-header">
+      <div class="portal-container portal-navbar">
+        <button class="portal-brand" type="button" onclick="navigatePortal('dashboard')" aria-label="Torna alla scrivania">
+          <span class="portal-brand-mark" aria-hidden="true"></span>
+          <span>Catalogo</span>
+        </button>
+        <nav class="portal-nav" aria-label="Navigazione Catalogo">
+          <button class="portal-button catalog-demo-back-button catalog-demo-aula-button" id="catalogDemoBackToAula" type="button" onclick="navigatePortal('aula')" hidden>← Aula condivisa</button>
+          <button class="portal-button catalog-demo-back-button" type="button" onclick="navigatePortal('dashboard')">← Scrivania</button>
+          <button class="portal-button catalog-demo-theme-button" type="button" onclick="toggleDarkMode()">Tema</button>
+          <span class="portal-status">✦ Eve · percorso locale</span>
+        </nav>
+      </div>
+    </header>
+
+    <main class="catalog-demo-main">
+      <div class="portal-container">
+        <section class="catalog-demo-hero">
+          <div class="portal-eyebrow">Catalogo intelligente · gratuito</div>
+          <h1>Cosa vuoi studiare?</h1>
+          <p>
+            Cerca materiali già presenti nella demo. Eve li ordina con regole locali,
+            senza chiamare OpenAI e senza consumare credito.
+          </p>
+
+          <div class="catalog-demo-search" role="search">
+            <span class="catalog-demo-search-icon" aria-hidden="true">⌕</span>
+            <input id="catalogDemoSearch" type="search" maxlength="180" placeholder="Es. imparare Python partendo da zero" aria-label="Cerca nel Catalogo" oninput="catalogDemoRender()" onkeydown="if(event.key === 'Enter'){ event.preventDefault(); catalogDemoRender(true); }">
+            <button class="portal-button primary" type="button" onclick="catalogDemoRender(true)">Cerca nel catalogo →</button>
+          </div>
+
+          <div class="catalog-demo-shortcuts" aria-label="Ricerche rapide">
+            <button class="catalog-demo-shortcut" type="button" onclick="catalogDemoUseQuery('Programmazione da zero')">Programmazione</button>
+            <button class="catalog-demo-shortcut" type="button" onclick="catalogDemoUseQuery('Matematica dalle basi')">Matematica</button>
+            <button class="catalog-demo-shortcut" type="button" onclick="catalogDemoUseQuery('Inglese per il lavoro')">Lingue</button>
+            <button class="catalog-demo-shortcut" type="button" onclick="catalogDemoUseQuery('Non so da dove iniziare')">✦ Non so da dove iniziare</button>
+
+            <button class="catalog-demo-shortcut catalog-demo-add-material" type="button" onclick="catalogDemoOpenManualMaterial()">＋ Aggiungi materiale</button>
+          </div>
+        </section>
+
+
+        <section class="catalog-room-context" id="catalogRoomContext" aria-live="polite">
+          <div class="catalog-room-context-icon" aria-hidden="true">⌂</div>
+          <div class="catalog-room-context-copy">
+            <span>Destinazione del percorso</span>
+            <strong id="catalogRoomContextName">Esplorazione senza stanza</strong>
+            <small id="catalogRoomContextMeta">Puoi cercare e salvare materiali; scegli una stanza prima dell’importazione.</small>
+          </div>
+          <div class="catalog-room-context-controls">
+            <label for="catalogRoomContextSelect">Cambia stanza</label>
+            <select id="catalogRoomContextSelect" onchange="portalCatalogSetRoomContext(this.value, { announce: true })"></select>
+          </div>
+        </section>
+
+        <div class="catalog-demo-layout">
+          <aside class="catalog-demo-panel catalog-demo-sidebar" aria-label="Filtri del Catalogo">
+            <div class="catalog-demo-panel-title">
+              <h2>Filtri</h2>
+              <button class="catalog-demo-remove" type="button" onclick="catalogDemoResetFilters()" title="Azzera filtri" aria-label="Azzera filtri">↺</button>
+            </div>
+
+            <div class="catalog-demo-filter-grid">
+              <label>
+                Livello
+                <select id="catalogDemoLevel" onchange="catalogDemoRender()">
+                  <option value="all">Tutti i livelli</option>
+                  <option value="zero">Da zero</option>
+                  <option value="base">Base</option>
+                  <option value="intermedio">Intermedio</option>
+                </select>
+              </label>
+
+              <label>
+                Formato
+                <select id="catalogDemoFormat" onchange="catalogDemoRender()">
+                  <option value="all">Tutti i formati</option>
+                  <option value="corso">Corso</option>
+                  <option value="documentazione">Documentazione</option>
+                  <option value="video">Video</option>
+                  <option value="esercizi">Esercizi</option>
+                  <option value="pdf">PDF</option>
+                </select>
+              </label>
+
+              <label>
+                Lingua
+                <select id="catalogDemoLanguage" onchange="catalogDemoRender()">
+                  <option value="all">Tutte le lingue</option>
+                  <option value="it">Italiano</option>
+                  <option value="en">Inglese</option>
+                  <option value="und">Altra / non specificata</option>
+                </select>
+              </label>
+
+              <label class="catalog-demo-check" for="catalogDemoVerified">
+                <input id="catalogDemoVerified" type="checkbox" onchange="catalogDemoRender()">
+                Solo fonti verificate
+              </label>
+            </div>
+
+            <div class="catalog-demo-topic-list" aria-label="Argomenti">
+              <button class="catalog-demo-topic" type="button" data-catalog-topic="programmazione" onclick="catalogDemoUseQuery('programmazione')"><span>Programmazione</span><span>8</span></button>
+              <button class="catalog-demo-topic" type="button" data-catalog-topic="matematica" onclick="catalogDemoUseQuery('matematica')"><span>Matematica</span><span>3</span></button>
+              <button class="catalog-demo-topic" type="button" data-catalog-topic="lingue" onclick="catalogDemoUseQuery('lingue')"><span>Lingue</span><span>2</span></button>
+              <button class="catalog-demo-topic" type="button" data-catalog-topic="metodo" onclick="catalogDemoUseQuery('metodo di studio')"><span>Metodo di studio</span><span>2</span></button>
+            </div>
+          </aside>
+
+          <section class="catalog-demo-center" aria-label="Risultati del Catalogo">
+            <div class="catalog-demo-feedback" aria-live="polite">
+              <span class="catalog-demo-eve" aria-hidden="true">E</span>
+              <div>
+                <strong id="catalogDemoEveTitle">Eve ha preparato una selezione iniziale</strong>
+                <span id="catalogDemoEveText">Parti dal corso editoriale, aggiungi una fonte di consultazione e completa con esercizi verificabili.</span>
+              </div>
+            </div>
+
+            <div class="catalog-demo-results-head">
+              <h2>Materiali disponibili</h2>
+              <span class="catalog-demo-count" id="catalogDemoCount">0 risultati</span>
+            </div>
+
+            <div class="catalog-demo-grid" id="catalogDemoResults"></div>
+          </section>
+
+          <aside class="catalog-demo-panel catalog-demo-path" aria-label="Percorso selezionato">
+            <div class="catalog-demo-panel-title">
+              <div>
+                <div class="portal-mini-label">Percorso personale</div>
+                <h3>La selezione di Eve</h3>
+              </div>
+              <span class="catalog-demo-path-count" id="catalogDemoPathCount">0</span>
+            </div>
+
+            <p class="catalog-demo-path-copy">
+              I materiali scelti restano privati finché non importi esplicitamente il percorso nell’aula.
+            </p>
+
+            <ol class="catalog-demo-path-list" id="catalogDemoPathList"></ol>
+
+            <button class="catalog-demo-import" id="catalogDemoImportButton" type="button" onclick="catalogDemoImportPath()" disabled>
+              Importa nella stanza Python
+            </button>
+            <div class="catalog-demo-status" id="catalogDemoStatus" aria-live="polite"></div>
+
+            <div class="catalog-demo-privacy">
+              <strong>Privacy.</strong> Ricerca, filtri e selezione sono simulati localmente. La demo non invia dati e non contatta provider esterni.
+            </div>
+          </aside>
+        </div>
+      </div>
+    </main>
+
+
+    <div class="catalog-demo-manual-dialog" id="catalogDemoManualDialog" hidden onclick="catalogDemoManualBackdrop(event)">
+      <section class="catalog-demo-manual-card" role="dialog" aria-modal="true" aria-labelledby="catalogDemoManualTitle">
+        <header class="catalog-demo-manual-head">
+          <div>
+            <div class="portal-eyebrow">Amplia il catalogo personale</div>
+            <h2 id="catalogDemoManualTitle">Aggiungi un materiale</h2>
+            <p>Incolla un collegamento HTTPS. La risorsa resta privata nella demo finché non la inserisci esplicitamente nel percorso o nella stanza.</p>
+          </div>
+          <button class="catalog-demo-manual-close" type="button" onclick="catalogDemoCloseManualMaterial()" aria-label="Chiudi aggiunta materiale">×</button>
+        </header>
+
+        <form class="catalog-demo-manual-form" id="catalogDemoManualForm" onsubmit="catalogDemoAddManualMaterial(event)" novalidate>
+          <label class="wide">
+            Titolo *
+            <input id="catalogDemoManualTitleInput" name="title" type="text" maxlength="240" required placeholder="Es. Introduzione alla biologia cellulare">
+          </label>
+
+          <label class="wide">
+            Link HTTPS *
+            <input id="catalogDemoManualUrl" name="url" type="url" maxlength="4096" inputmode="url" required placeholder="https://...">
+          </label>
+
+          <label>
+            Tipo
+            <select id="catalogDemoManualType" name="resourceType">
+              <option value="page">Pagina web</option>
+              <option value="pdf">PDF</option>
+              <option value="document">Documento</option>
+              <option value="dataset">Dataset</option>
+              <option value="notebook">Notebook</option>
+              <option value="archive">Archivio</option>
+              <option value="file">File</option>
+              <option value="video">Video</option>
+              <option value="course">Corso</option>
+              <option value="book">Libro</option>
+              <option value="podcast">Podcast</option>
+            </select>
+          </label>
+
+          <label>
+            Lingua
+            <select id="catalogDemoManualLanguage" name="language">
+              <option value="it">Italiano</option>
+              <option value="en">Inglese</option>
+              <option value="und">Altra / non specificata</option>
+            </select>
+          </label>
+
+          <label class="wide">
+            Fonte o autore
+            <input id="catalogDemoManualProvider" name="provider" type="text" maxlength="160" placeholder="Facoltativo: useremo il nome del sito">
+          </label>
+
+          <label class="wide">
+            Descrizione
+            <textarea id="catalogDemoManualDescription" name="description" maxlength="4000" placeholder="Cosa contiene e per quale argomento è utile"></textarea>
+          </label>
+
+          <div class="catalog-demo-manual-note">
+            Sono accettati soltanto URL pubblici <strong>https://</strong>. La demo rifiuta reti locali, indirizzi privati e comuni formati eseguibili. Il collegamento non viene scaricato né analizzato automaticamente.
+          </div>
+
+          <div class="catalog-demo-manual-error" id="catalogDemoManualError" role="alert" aria-live="assertive"></div>
+
+          <div class="catalog-demo-manual-actions">
+            <button type="button" onclick="catalogDemoCloseManualMaterial()">Annulla</button>
+            <button class="primary" type="submit">＋ Aggiungi al catalogo</button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </section>
+
+  
+  <div class="portal-toast" id="portalToast" aria-live="polite"></div>
+  <script type="module" src="/assets/js/catalog.js"></script>
+</body>
+</html>

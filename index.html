@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="aula-demo-version" content="1.4.0-alpha.2" />
+  <meta name="aula-build" content="modular-routes-1" />
+  <title>Aula Studio Virtuale — Presentazione</title>
+  <link rel="stylesheet" href="/assets/css/presentation.css" />
+</head>
+<body data-portal-route="presentation">
+<section class="portal-view portal-presentation" id="portalPresentation">
+    <header class="portal-header">
+      <div class="portal-container portal-navbar">
+        <button class="portal-brand" type="button" onclick="navigatePortal('presentation')">
+          <span class="portal-brand-mark" aria-hidden="true"></span>
+          <span>Aula</span>
+        </button>
+
+        <nav class="portal-nav" aria-label="Navigazione presentazione">
+          <button class="portal-nav-link optional" type="button" onclick="portalScrollTo('portalFeatures')">Funzioni</button>
+          <button class="portal-nav-link optional" type="button" onclick="portalScrollTo('portalHow')">Come funziona</button>
+          <button class="portal-nav-link optional" type="button" onclick="portalScrollTo('portalEve')">Eve</button>
+          <button class="portal-button" type="button" onclick="toggleDarkMode()">Tema</button>
+          <a class="portal-button" data-web-install href="/download">Installa app</a>
+          <button class="portal-button" type="button" onclick="navigatePortal('dashboard')">Accedi</button>
+          <button class="portal-button primary" type="button" onclick="navigatePortal('dashboard')">Crea la tua aula →</button>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="portal-hero">
+        <div class="portal-container portal-hero-grid">
+          <div>
+            <div class="portal-eyebrow">Il posto tranquillo dove restare in rotta</div>
+            <h1>
+              Studiare insieme,
+              <em>anche da lontano.</em>
+            </h1>
+            <p class="portal-hero-copy">
+              Aula è uno spazio di studio condiviso in cui materiali, progressi, timer,
+              appunti, messaggi e presenza dei partecipanti restano nello stesso ambiente.
+              Ognuno può mantenere il proprio ritmo, mentre il gruppo conserva una direzione
+              comune e una cronologia ordinata del lavoro svolto.
+            </p>
+
+            <div class="portal-actions">
+              <button class="portal-button primary large" type="button" onclick="navigatePortal('dashboard')">
+                Inizia gratuitamente →
+              </button>
+              <button class="portal-button large" type="button" onclick="portalScrollTo('portalHow')">
+                Scopri come funziona
+              </button>
+              <a class="portal-button large" data-web-install href="/download">
+                Scarica per Windows
+              </a>
+            </div>
+
+            <div class="portal-trust">
+              <span>Nessuna carta richiesta</span>
+              <span>Dati separati per stanza</span>
+              <span>Progettata per il tempo reale</span>
+            </div>
+          </div>
+
+          <div class="portal-room-preview" aria-label="Anteprima di una stanza di studio">
+            <div class="portal-preview-inner">
+              <div class="portal-preview-head">
+                <div>
+                  <div class="portal-mini-label">Stanza</div>
+                  <strong>Esame di Programmazione</strong>
+                </div>
+                <span class="portal-sync-badge">● In sincronia</span>
+              </div>
+
+              <div class="portal-preview-grid">
+                <div class="portal-preview-column">
+                  <div class="portal-mini-label">Il tuo percorso</div>
+
+                  <div class="portal-lesson-chip active">
+                    Fondamenti Python
+                    <div class="portal-progress-line"><span></span></div>
+                  </div>
+
+                  <div class="portal-lesson-chip">
+                    Strutture dati
+                    <div class="portal-progress-line"><span style="width:42%"></span></div>
+                  </div>
+
+                  <div class="portal-lesson-chip">
+                    Progetto finale
+                    <div class="portal-progress-line"><span style="width:18%"></span></div>
+                  </div>
+                </div>
+
+                <div class="portal-preview-column portal-preview-main">
+                  <div class="portal-mini-label" style="color:var(--plasma)">Lezione corrente</div>
+                  <h3>Perché programmare?</h3>
+                  <p>
+                    Obiettivi, esercizi, quiz, progetto e appunti rimangono nello stesso
+                    spazio, pronti per la prossima sessione.
+                  </p>
+
+                  <div class="portal-preview-actions">
+                    <button class="portal-button primary" type="button" onclick="navigatePortal('aula')">
+                      Apri materiale
+                    </button>
+                    <button class="portal-button" type="button" onclick="portalNotify('Nota aggiunta alla demo')">
+                      Aggiungi nota
+                    </button>
+                  </div>
+
+                  <div class="portal-metrics">
+                    <div class="portal-metric">
+                      <div class="portal-mini-label">Progresso</div>
+                      <strong>68%</strong>
+                    </div>
+                    <div class="portal-metric">
+                      <div class="portal-mini-label">Focus oggi</div>
+                      <strong>52m</strong>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="portal-preview-column">
+                  <div class="portal-mini-label">In aula</div>
+
+                  <div class="portal-person">
+                    <span class="portal-avatar">M</span>
+                    <div><strong>Marco</strong><br><small>Sta studiando</small></div>
+                  </div>
+
+                  <div class="portal-person">
+                    <span class="portal-avatar">T</span>
+                    <div><strong>Tatiana</strong><br><small>Online ora</small></div>
+                  </div>
+
+                  <div class="portal-focus-card">
+                    <div class="portal-mini-label">Sessione focus</div>
+                    <strong>24:18</strong>
+                    <small class="portal-muted">Marco studia con te</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="portal-section" id="portalFeatures">
+        <div class="portal-container">
+          <div class="portal-section-heading">
+            <div class="portal-eyebrow">Uno spazio unico</div>
+            <h2>Tutto ciò che serve per studiare senza disperdersi.</h2>
+            <p class="portal-section-copy">
+              Aula riunisce attività che normalmente finiscono in applicazioni separate.
+              Il materiale rimane accanto alla chat, il timer rimane collegato alla stanza,
+              gli appunti seguono la lezione e ogni avanzamento conserva il proprio contesto.
+            </p>
+          </div>
+
+          <div class="portal-feature-grid">
+            <article class="portal-feature-card">
+              <div class="portal-feature-icon">◎</div>
+              <h3>Presenza discreta</h3>
+              <p>
+                Vedi chi è online, chi sta leggendo e chi ha avviato una sessione focus,
+                senza notifiche invasive o pressioni continue.
+              </p>
+            </article>
+
+            <article class="portal-feature-card">
+              <div class="portal-feature-icon">◷</div>
+              <h3>Tempo realmente tracciato</h3>
+              <p>
+                Sessioni libere e Pomodoro vengono associate alla stanza, alla persona e
+                all’attività, creando una cronologia utile invece di un semplice conto alla rovescia.
+              </p>
+            </article>
+
+            <article class="portal-feature-card">
+              <div class="portal-feature-icon">◯</div>
+              <h3>Comunicazione nel contesto</h3>
+              <p>
+                Chat e aggiornamenti rimangono vicino al materiale. Non serve cercare in
+                conversazioni esterne per ricordare cosa stavate studiando.
+              </p>
+            </article>
+
+            <article class="portal-feature-card">
+              <div class="portal-feature-icon">▣</div>
+              <h3>Percorsi ordinati</h3>
+              <p>
+                Lezioni, esercizi, quiz, glossario e progetti sono organizzati in una
+                sequenza leggibile anche da chi parte da zero.
+              </p>
+            </article>
+
+            <article class="portal-feature-card">
+              <div class="portal-feature-icon">⌁</div>
+              <h3>Progressi sincronizzati</h3>
+              <p>
+                Ogni persona conserva i propri risultati, mentre il gruppo può vedere
+                l’avanzamento generale e scegliere insieme il prossimo obiettivo.
+              </p>
+            </article>
+
+            <article class="portal-feature-card">
+              <div class="portal-feature-icon">✦</div>
+              <h3>Eve accompagna lo studio</h3>
+              <p>
+                Eve legge la lezione, evidenzia i passaggi, distingue esempi e concetti
+                critici e mantiene una presenza contestuale nel workspace.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="portal-section" id="portalHow">
+        <div class="portal-container">
+          <div class="portal-section-heading center">
+            <div class="portal-eyebrow">Quattro passaggi</div>
+            <h2>Dalla creazione della stanza alla prima sessione focus.</h2>
+            <p class="portal-section-copy">
+              Il flusso è progettato per ridurre configurazioni e passaggi inutili:
+              si crea uno spazio, si sceglie il materiale e si comincia.
+            </p>
+          </div>
+
+          <div class="portal-steps">
+            <article class="portal-step-card">
+              <div class="portal-step-number">01</div>
+              <h3>Crea una stanza</h3>
+              <p>
+                Scegli un nome e ricevi un codice privato. La stanza diventa il contenitore
+                stabile di persone, materiali e attività.
+              </p>
+            </article>
+
+            <article class="portal-step-card">
+              <div class="portal-step-number">02</div>
+              <h3>Costruisci il percorso</h3>
+              <p>
+                Apri il catalogo, seleziona corso e modulo oppure chiedi a Eve di ordinare
+                il materiale da affrontare.
+              </p>
+            </article>
+
+            <article class="portal-step-card">
+              <div class="portal-step-number">03</div>
+              <h3>Invita gli altri</h3>
+              <p>
+                Condividi il codice. Quando un partecipante entra, la presenza viene
+                mostrata nella stanza senza interrompere chi sta già studiando.
+              </p>
+            </article>
+
+            <article class="portal-step-card">
+              <div class="portal-step-number">04</div>
+              <h3>Studia in sincronia</h3>
+              <p>
+                Apri la lezione, avvia il timer e continua dal punto corretto. Appunti,
+                messaggi e progressi rimangono disponibili nella sessione successiva.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="portal-section" id="portalEve">
+        <div class="portal-container portal-split">
+          <div>
+            <div class="portal-eyebrow">Eve Voice e attenzione guidata</div>
+            <h2>Una guida che resta accanto al materiale.</h2>
+            <p class="portal-section-copy">
+              Eve non sostituisce il percorso: lo rende più leggibile. Durante l’audio-lezione
+              il testo viene suddiviso in blocchi e classificato in base alla funzione didattica.
+              Il visualizzatore cambia comportamento per concetti normali, passaggi chiave,
+              avvisi critici, esempi e codice.
+            </p>
+
+            <div class="portal-detail-stack" style="margin-top:24px">
+              <article class="portal-detail-card">
+                <h3>Lettura sincronizzata</h3>
+                <p>
+                  La voce selezionata legge la sezione corrente mentre il blocco corrispondente
+                  viene evidenziato con lo stesso colore mostrato nella frequenza didattica.
+                </p>
+              </article>
+
+              <article class="portal-detail-card">
+                <h3>Controlli completi</h3>
+                <p>
+                  Velocità, pausa, ripresa, blocco precedente e successivo restano disponibili
+                  nel pannello Eve Voice, che rimane visibile durante lo scorrimento su desktop.
+                </p>
+              </article>
+
+              <article class="portal-detail-card">
+                <h3>Presenza non invasiva</h3>
+                <p>
+                  La mascotte vive in un dock dedicato in fondo al workspace. Il testo compare
+                  soltanto quando viene richiesto e lo sguardo segue il puntatore senza coprire la lezione.
+                </p>
+              </article>
+            </div>
+          </div>
+
+          <div class="portal-visual-console">
+            <div class="portal-eve-row">
+              <div class="portal-eve-orb" aria-hidden="true"></div>
+              <div>
+                <div class="portal-mini-label">Tutor contestuale</div>
+                <strong style="font-size:24px">Eve Voice</strong>
+                <p class="portal-muted" style="margin:6px 0 0">
+                  Concetto chiave rilevato nella sezione corrente.
+                </p>
+              </div>
+            </div>
+
+            <div class="portal-frequency" aria-label="Anteprima frequenza didattica">
+              <span style="height:28%"></span><span style="height:54%"></span>
+              <span style="height:36%"></span><span style="height:78%"></span>
+              <span style="height:48%"></span><span style="height:91%"></span>
+              <span style="height:42%"></span><span style="height:70%"></span>
+              <span style="height:33%"></span><span style="height:84%"></span>
+              <span style="height:58%"></span><span style="height:96%"></span>
+              <span style="height:45%"></span><span style="height:72%"></span>
+              <span style="height:38%"></span><span style="height:87%"></span>
+              <span style="height:52%"></span><span style="height:76%"></span>
+              <span style="height:30%"></span><span style="height:64%"></span>
+              <span style="height:40%"></span><span style="height:89%"></span>
+              <span style="height:56%"></span><span style="height:80%"></span>
+              <span style="height:35%"></span>
+            </div>
+
+            <div class="portal-console-copy">
+              <strong style="color:var(--green-2)">Passaggio chiave</strong><br>
+              Il programma non “capisce” l’obiettivo umano: esegue istruzioni precise.
+              Eve rallenta leggermente, evidenzia il blocco e aumenta l’intensità del visualizzatore.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="portal-section">
+        <div class="portal-container portal-security-grid">
+          <div class="portal-security-main">
+            <div class="portal-eyebrow">Spazi privati e continuità</div>
+            <h3>Ogni stanza conserva il proprio contesto.</h3>
+            <p class="portal-section-copy">
+              Il progetto è pensato per Supabase Auth, Postgres, Realtime, Presence,
+              Storage e regole RLS. Materiali e attività possono essere separati per stanza
+              e per utente, mantenendo una base tecnica adatta alla collaborazione reale.
+            </p>
+
+            <div class="portal-security-list">
+              <div class="portal-security-item">
+                Accesso tramite account e codice stanza controllato.
+              </div>
+              <div class="portal-security-item">
+                Presenza e aggiornamenti in tempo reale senza ricaricare la pagina.
+              </div>
+              <div class="portal-security-item">
+                Progressi personali separati dal progresso generale del gruppo.
+              </div>
+              <div class="portal-security-item">
+                Materiali aperti nel workspace interno per mantenere il tracciamento.
+              </div>
+            </div>
+          </div>
+
+          <div class="portal-security-side">
+            <div class="portal-stat">
+              <span class="portal-mini-label">Workspace</span>
+              <strong>1</strong>
+              <span class="portal-muted">spazio coerente</span>
+            </div>
+            <div class="portal-stat">
+              <span class="portal-mini-label">Strumenti</span>
+              <strong>9</strong>
+              <span class="portal-muted">nella stessa aula</span>
+            </div>
+            <div class="portal-stat">
+              <span class="portal-mini-label">Modalità</span>
+              <strong>Live</strong>
+              <span class="portal-muted">presenza e sync</span>
+            </div>
+            <div class="portal-stat">
+              <span class="portal-mini-label">Percorso</span>
+              <strong>Continuo</strong>
+              <span class="portal-muted">tra le sessioni</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="portal-section">
+        <div class="portal-container">
+          <div class="portal-cta">
+            <div>
+              <div class="portal-eyebrow">Pronta per la prossima sessione</div>
+              <h2>Il tuo spazio di studio, senza rumore.</h2>
+              <p class="portal-section-copy" style="color:rgba(232,252,255,0.76)">
+                Crea la stanza, scegli il materiale e invita le persone che vuoi avere accanto.
+              </p>
+            </div>
+            <button class="portal-button primary large" type="button" onclick="navigatePortal('dashboard')">
+              Crea la tua aula →
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="portal-footer">
+      <div class="portal-container portal-footer-row">
+        <span>© 2026 Aula Studio Virtuale</span>
+        <span>Privacy · Sicurezza · Supporto · Stato del servizio</span>
+      </div>
+    </footer>
+  </section>
+
+  
+  <div class="portal-toast" id="portalToast" aria-live="polite"></div>
+  <script type="module" src="/assets/js/presentation.js"></script>
+</body>
+</html>
