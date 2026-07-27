@@ -1,0 +1,12 @@
+{
+  "passed": false,
+  "libraryVersion": "1.2.2",
+  "quality": "original-final-webp",
+  "assets": 64,
+  "modular": true,
+  "standaloneFile": false,
+  "interactions": true,
+  "errors": [
+    "TypeError: page.locator(...).get_attribute is not a function\n    at verifyAnimations (file:///home/runner/work/aula-studio-virtuale/aula-studio-virtuale/verify-eve-hq-final.mjs:47:61)\n    at async file:///home/runner/work/aula-studio-virtuale/aula-studio-virtuale/verify-eve-hq-final.mjs:103:3"
+  ]
+}
