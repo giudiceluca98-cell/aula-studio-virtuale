@@ -30,17 +30,63 @@ jobs:
           fetch-depth: 0
 
       - name: Genera il file HTML autonomo
+        id: build
+        continue-on-error: true
         run: |
-          python3 reference/eve-ai-studio-preview/build_standalone.py
+          set -o pipefail
+          python3 reference/eve-ai-studio-preview/build_standalone.py 2>&1 | tee eve-standalone-build.txt
           test -s reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html
           if grep -Eiq '<script[^>]+src=' reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html; then
-            echo "Sono rimasti script esterni nello standalone."
+            echo "Sono rimasti script esterni nello standalone." | tee -a eve-standalone-build.txt
             exit 1
           fi
           if grep -Eiq "<link[^>]+rel=['\"]stylesheet['\"]" reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html; then
-            echo "Sono rimasti fogli di stile esterni nello standalone."
+            echo "Sono rimasti fogli di stile esterni nello standalone." | tee -a eve-standalone-build.txt
             exit 1
           fi
+
+      - name: Salva immediatamente file e risultato build
+        if: always()
+        run: |
+          mkdir -p eve-ai-studio/checkpoints
+          outcome="${{ steps.build.outcome }}"
+          passed=false
+          if [ "$outcome" = "success" ]; then passed=true; fi
+          size=0
+          if [ -f reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html ]; then
+            size=$(wc -c < reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html)
+          fi
+          python3 - <<PY
+          import json
+          from pathlib import Path
+          Path("eve-ai-studio/checkpoints/EVE_STANDALONE_BUILD_RESULT.json").write_text(json.dumps({
+              "tested_sha": "${{ github.sha }}",
+              "passed": $passed,
+              "build_outcome": "$outcome",
+              "file": "reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html",
+              "size_bytes": int("$size"),
+              "external_scripts": 0 if $passed else None,
+              "external_stylesheets": 0 if $passed else None,
+          }, indent=2), encoding="utf-8")
+          PY
+          cp eve-standalone-build.txt eve-ai-studio/checkpoints/EVE_STANDALONE_BUILD_LOG.txt 2>/dev/null || true
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f eve-ai-studio/checkpoints/EVE_STANDALONE_BUILD_RESULT.json
+          git add -f eve-ai-studio/checkpoints/EVE_STANDALONE_BUILD_LOG.txt 2>/dev/null || true
+          if [ -f reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html ]; then
+            git add -f reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html
+          fi
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "build: pubblica preview standalone Eve [skip eve standalone]"
+          git pull --rebase origin eve-ai-studio
+          git push origin HEAD:eve-ai-studio
+
+      - name: Interrompi se la costruzione non è riuscita
+        if: steps.build.outcome != 'success'
+        run: exit 1
 
       - name: Installa Node 20
         uses: actions/setup-node@v4
@@ -53,13 +99,14 @@ jobs:
           npx playwright install --with-deps chromium
 
       - name: Verifica il file come download locale
+        id: browser
+        continue-on-error: true
         run: |
           cat > verify-eve-standalone.mjs <<'EOF'
           import { chromium } from "playwright";
           import assert from "node:assert/strict";
           import { pathToFileURL } from "node:url";
           import { resolve } from "node:path";
-          import { writeFileSync } from "node:fs";
 
           const filePath = resolve("reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html");
           const fileUrl = pathToFileURL(filePath).href;
@@ -137,44 +184,53 @@ jobs:
             );
             assert.deepEqual(consoleErrors, []);
             assert.deepEqual(pageErrors, []);
-
             await page.screenshot({ path: "eve-ai-studio-standalone.png", fullPage: true });
-            writeFileSync("EVE_STANDALONE_PREVIEW_RESULT.json", JSON.stringify({
-              tested_sha: process.env.GITHUB_SHA,
-              passed: true,
-              opened_as: "file://",
-              file: "reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html",
-              animation_library: "1.2.2",
-              animation_assets: 64,
-              external_scripts: 0,
-              external_stylesheets: 0,
-              navigation_entry_count: 1
-            }, null, 2));
           } finally {
             await browser.close();
           }
           EOF
-          node verify-eve-standalone.mjs
+          node verify-eve-standalone.mjs 2>&1 | tee eve-standalone-browser.txt
+
+      - name: Salva risultato della prova locale
+        if: always() && steps.build.outcome == 'success'
+        run: |
+          mkdir -p eve-ai-studio/checkpoints
+          outcome="${{ steps.browser.outcome }}"
+          passed=false
+          if [ "$outcome" = "success" ]; then passed=true; fi
+          python3 - <<PY
+          import json
+          from pathlib import Path
+          Path("eve-ai-studio/checkpoints/EVE_STANDALONE_PREVIEW_RESULT.json").write_text(json.dumps({
+              "tested_sha": "${{ github.sha }}",
+              "passed": $passed,
+              "browser_outcome": "$outcome",
+              "opened_as": "file://",
+              "file": "reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html",
+              "animation_library": "1.2.2",
+              "animation_assets": 64,
+              "external_scripts": 0,
+              "external_stylesheets": 0,
+              "navigation_entry_count": 1,
+          }, indent=2), encoding="utf-8")
+          PY
+          cp eve-standalone-browser.txt eve-ai-studio/checkpoints/EVE_STANDALONE_BROWSER_LOG.txt 2>/dev/null || true
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f eve-ai-studio/checkpoints/EVE_STANDALONE_PREVIEW_RESULT.json
+          git add -f eve-ai-studio/checkpoints/EVE_STANDALONE_BROWSER_LOG.txt 2>/dev/null || true
+          git commit -m "ci: registra test locale preview standalone [skip eve standalone]" || exit 0
+          git pull --rebase origin eve-ai-studio
+          git push origin HEAD:eve-ai-studio
 
       - name: Pubblica screenshot di controllo
+        if: steps.browser.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: eve-ai-studio-standalone-preview
           path: eve-ai-studio-standalone.png
           retention-days: 14
 
-      - name: Salva standalone e rapporto nel branch
-        run: |
-          mkdir -p eve-ai-studio/checkpoints
-          cp EVE_STANDALONE_PREVIEW_RESULT.json eve-ai-studio/checkpoints/EVE_STANDALONE_PREVIEW_RESULT.json
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html
-          git add eve-ai-studio/checkpoints/EVE_STANDALONE_PREVIEW_RESULT.json
-          if git diff --cached --quiet; then
-            echo "Standalone già aggiornato."
-            exit 0
-          fi
-          git commit -m "build: aggiorna preview standalone Eve [skip eve standalone]"
-          git pull --rebase origin eve-ai-studio
-          git push origin HEAD:eve-ai-studio
+      - name: Applica esito del test locale
+        if: steps.browser.outcome != 'success'
+        run: exit 1
