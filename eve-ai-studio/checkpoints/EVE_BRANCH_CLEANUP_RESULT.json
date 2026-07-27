@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "deleted_branches": [
+    "eve-canonical-integration",
+    "integration/eve-1.2.2-canonical",
+    "eve-ai-studio-cleanup-audit"
+  ],
+  "protected_branches_preserved": [
+    "main",
+    "demo-canonica",
+    "eve-ai-studio",
+    "eve-canonical-integration-v2"
+  ],
+  "completed_at": "2026-07-27T23:41:17.444258+00:00"
+}
