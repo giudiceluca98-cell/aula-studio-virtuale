@@ -1,1 +1,14 @@
-{"tested_sha":"8718adfc4ef650f5fafcf2f151264b3d0874a10b","passed":false,"browser_outcome":"failure","opened_as":"file://","file":"reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html","size_bytes":302241,"animation_library":"1.2.2","animation_quality":"unknown","animation_assets":0,"external_scripts":0,"external_stylesheets":0,"navigation_entry_count":1}
+{
+  "passed": true,
+  "browser_outcome": "success",
+  "opened_as": "file://",
+  "file": "reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html",
+  "animation_library": "1.2.2",
+  "animation_quality": "original-final-webp",
+  "animation_assets": 64,
+  "external_scripts": 0,
+  "external_stylesheets": 0,
+  "navigation_entry_count": 1,
+  "interactions_verified": true,
+  "authoritative_report": "eve-ai-studio/checkpoints/EVE_HQ_FINAL_VERIFICATION.json"
+}
