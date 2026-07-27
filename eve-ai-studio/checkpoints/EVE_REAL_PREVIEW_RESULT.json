@@ -1,10 +1,11 @@
 {
-  "tested_sha": "b0fc0a3fe37a4cd0cb8784cc92e6e2249a6630dc",
+  "tested_sha": "18e9663516973608c055d849b694901016b9438f",
   "passed": false,
-  "job_status": "failure",
+  "browser_outcome": "failure",
   "page": "reference/eve-ai-studio-preview/index.html",
   "animation_library": "1.2.2",
   "animation_assets": 64,
   "real_page_loaded": true,
-  "mock_animation_library": false
+  "mock_animation_library": false,
+  "navigation_entry_count": 1
 }
