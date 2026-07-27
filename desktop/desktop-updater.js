@@ -8,8 +8,8 @@
   const previewInvoke = async (command) => {
     if (command === "check_for_update") {
       return {
-        version: "1.4.0-alpha.3",
-        currentVersion: "1.4.0-alpha.2",
+        version: "1.4.0-alpha.4",
+        currentVersion: "1.4.0-alpha.3",
         body: "Simulazione locale: pannello aggiornamenti funzionante."
       };
     }

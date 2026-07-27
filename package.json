@@ -1,7 +1,7 @@
 {
   "name": "aula-studio-virtuale",
   "private": true,
-  "version": "1.4.0-alpha.2",
+  "version": "1.4.0-alpha.3",
   "type": "module",
   "scripts": {
     "build:web": "node tools/build-modular.mjs",

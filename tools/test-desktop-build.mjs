@@ -18,6 +18,7 @@ const requiredFiles = [
   "assets/js/dashboard.js",
   "assets/js/catalog.js",
   "assets/js/aula.js",
+  "assets/js/desktop-window.js",
   "assets/js/desktop-updater.js",
   "desktop-build.json"
 ];
@@ -38,6 +39,9 @@ for (const relativePath of desktopPages) {
   const html = await readFile(join(dist, relativePath), "utf8");
   if (!html.includes('/assets/js/desktop-updater.js')) {
     throw new Error(`Updater non collegato in ${relativePath}.`);
+  }
+  if (!html.includes('/assets/js/desktop-window.js')) {
+    throw new Error(`Controlli finestra non collegati in ${relativePath}.`);
   }
 }
 
@@ -81,6 +85,22 @@ const packageJson = JSON.parse(await readFile(join(root, "package.json"), "utf8"
 const desktopBuild = JSON.parse(await readFile(join(dist, "desktop-build.json"), "utf8"));
 if (desktopBuild.version !== packageJson.version) {
   throw new Error("La versione della build desktop non coincide con package.json.");
+}
+
+const tauriConfig = JSON.parse(
+  await readFile(join(root, "src-tauri", "tauri.conf.json"), "utf8")
+);
+const mainWindow = tauriConfig.app?.windows?.find((window) => window.label === "main");
+if (!mainWindow?.resizable || !mainWindow?.center) {
+  throw new Error("La finestra principale deve essere ridimensionabile e centrata.");
+}
+if (mainWindow.minWidth > 760 || mainWindow.minHeight > 520) {
+  throw new Error("La finestra minima non attiva correttamente il layout responsive.");
+}
+
+const rustMain = await readFile(join(root, "src-tauri", "src", "main.rs"), "utf8");
+if (!rustMain.includes('windows_subsystem = "windows"')) {
+  throw new Error("La build Windows aprirebbe anche la console nera.");
 }
 
 console.log(`Build desktop verificata: ${desktopBuild.version}`);
