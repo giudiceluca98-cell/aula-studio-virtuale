@@ -1,11 +1,1 @@
-{
-  "tested_sha": "18d06d9434df52e5dfd65b2bc0707cdc516e0c7b",
-  "passed": true,
-  "browser_outcome": "success",
-  "page": "reference/eve-ai-studio-preview/index.html",
-  "animation_library": "1.2.2",
-  "animation_assets": 64,
-  "real_page_loaded": true,
-  "mock_animation_library": false,
-  "navigation_entry_count": 1
-}
+{"tested_sha":"4d29ed18887e7e9c127d6db0dca6636fe2d1d7cf","passed":true,"browser_outcome":"success","page":"reference/eve-ai-studio-preview/index.html","animation_library":"1.2.2","animation_quality":"legacy-preview","animation_assets":64,"real_page_loaded":true,"mock_animation_library":false,"navigation_entry_count":1}
