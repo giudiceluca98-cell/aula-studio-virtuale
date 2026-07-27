@@ -1,0 +1,297 @@
+EVE AI STUDIO
+CHECKPOINT 1.1 — APERTURA VERIFICABILE DELLA FONTE
+
+Data: 27 luglio 2026
+Repository: giudiceluca98-cell/aula-studio-virtuale
+Branch: eve-ai-studio
+Versione servizio: 1.1.0
+
+======================================================================
+1. STATO
+======================================================================
+
+Il Checkpoint 1.0 è stato chiuso e approvato dall'utente.
+
+Il Checkpoint 1.1 è stato implementato e verificato tecnicamente.
+Resta in attesa dell'approvazione conclusiva dell'utente prima del checkpoint
+successivo.
+
+======================================================================
+2. BASE DEL PIANO
+======================================================================
+
+La roadmap della Fase 2 elenca, nell'ordine:
+
+- indicizzazione dei materiali;
+- ricerca;
+- risposte con citazioni;
+- apertura della fonte;
+- difesa contro prompt injection;
+- separazione degli accessi.
+
+I checkpoint 0.8, 0.9 e 1.0 hanno coperto i primi tre punti. Il Checkpoint 1.1
+implementa il quarto punto: apertura della fonte citata.
+
+======================================================================
+3. IMPLEMENTAZIONE
+======================================================================
+
+Nuovo package:
+
+eve-ai-studio/app/sources/
+
+Componenti:
+
+- errors.py;
+- models.py;
+- service.py;
+- router.py;
+- __init__.py.
+
+Servizio:
+
+SourceOpeningService
+
+Stato tecnico:
+
+verified_source_opening_v1
+
+Formato locator:
+
+material:{material_id}:v{version_number}:chunk:{chunk_index}:{start_char}-{end_char}
+
+======================================================================
+4. CONTROLLI ESEGUITI ALL'APERTURA
+======================================================================
+
+1. validazione rigida del locator;
+2. ricerca limitata alla stessa aula;
+3. risoluzione di materiale, versione e chunk;
+4. verifica delle coordinate iniziali e finali;
+5. calcolo SHA-256 del testo del chunk;
+6. confronto con lo SHA-256 salvato;
+7. confronto tra chunk e porzione corrispondente del testo estratto;
+8. confronto opzionale con lo SHA-256 ricevuto dalla citazione;
+9. rilevamento di versione corrente o storica;
+10. costruzione del contesto limitato e della destinazione navigabile.
+
+======================================================================
+5. VERSIONI STORICHE
+======================================================================
+
+Le versioni storiche con stato ready restano apribili per mantenere tracciabili
+le citazioni prodotte in passato.
+
+La risposta indica:
+
+- is_current;
+- stale;
+- version_number;
+- current_version_number.
+
+Con require_current=true, una versione storica viene bloccata con:
+
+source_outdated
+
+======================================================================
+6. ISOLAMENTO E SICUREZZA
+======================================================================
+
+Una fonte assente e una fonte appartenente a un'altra aula restituiscono lo
+stesso contratto:
+
+404 source_not_found
+
+Il testo della fonte viene restituito come:
+
+content_trust=untrusted_document_content
+instructions_executable=false
+
+Una fonte sospetta può essere mostrata all'utente con avviso, ma non viene
+interpretata come istruzione e non attiva strumenti.
+
+======================================================================
+7. NAVIGAZIONE
+======================================================================
+
+La risposta include:
+
+- resource_path;
+- anchor basato su chunk e offset;
+- page_number quando disponibile nei metadati;
+- context_start_char;
+- context_end_char;
+- context_text.
+
+Per i formati testuali attuali la navigazione usa coordinate di carattere.
+PDF e coordinate di pagina reali non sono ancora implementati.
+
+======================================================================
+8. API
+======================================================================
+
+GET /v1/sources/status
+POST /v1/sources/open
+
+Errori tipizzati:
+
+- invalid_source_locator;
+- source_not_found;
+- source_integrity_failed;
+- source_hash_mismatch;
+- source_coordinates_mismatch;
+- source_outdated.
+
+======================================================================
+9. CONFIGURAZIONE
+======================================================================
+
+EVE_SOURCE_MAX_CONTEXT_CHARS=2000
+
+======================================================================
+10. TEST E VERIFICA
+======================================================================
+
+Test specifici Checkpoint 1.1:
+
+13 passed
+
+Suite cumulativa Checkpoint 0.1–1.1:
+
+165 passed, 1 warning in 2.59s
+
+Commit verificato da GitHub Actions:
+
+19fcd0e4ac55df862eb0131e6546f37a69746959
+
+Stati:
+
+- python_install: success;
+- python_compile: success;
+- pytest_cumulative: success;
+- javascript_syntax: success;
+- browser_install: success;
+- browser_scenarios: success.
+
+Il warning è una StarletteDeprecationWarning di fastapi.testclient e non è un
+fallimento del checkpoint.
+
+======================================================================
+11. VERIFICA BROWSER
+======================================================================
+
+Scenari apertura fonte:
+
+1. fonte corrente verificata;
+2. versione storica;
+3. SHA-256 non corrispondente;
+4. fonte appartenente a un'altra aula;
+5. fonte con contenuto sospetto.
+
+Scenari complessivi:
+
+- 5 materiali;
+- 4 retrieval;
+- 4 chat RAG;
+- 5 aperture fonte;
+- totale 18.
+
+Esito:
+
+- 18/18 scenari superati;
+- nessun errore JavaScript;
+- nessuna eccezione pagina;
+- nessun overflow orizzontale nel contenitore controllato.
+
+======================================================================
+12. ANTEPRIMA UFFICIALE
+======================================================================
+
+Percorso:
+
+reference/eve-ai-studio-preview/index.html
+
+Nuovo modulo:
+
+reference/eve-ai-studio-preview/source-opening-workflow.js
+
+======================================================================
+13. FILE CREATI
+======================================================================
+
+eve-ai-studio/app/sources/__init__.py
+eve-ai-studio/app/sources/errors.py
+eve-ai-studio/app/sources/models.py
+eve-ai-studio/app/sources/router.py
+eve-ai-studio/app/sources/service.py
+eve-ai-studio/tests/test_sources.py
+eve-ai-studio/checkpoints/CHECKPOINT_1.0_CLOSURE.md
+eve-ai-studio/checkpoints/CHECKPOINT_1.1_CI_RESULT.json
+eve-ai-studio/checkpoints/CHECKPOINT_1.1_CI_RESULT.md
+eve-ai-studio/checkpoints/CHECKPOINT_1.1_UPDATE.txt
+eve-ai-studio/checkpoints/CHECKPOINT_1.1_VERIFICATION.md
+reference/eve-ai-studio-preview/source-opening-workflow.js
+
+======================================================================
+14. FILE MODIFICATI
+======================================================================
+
+.github/workflows/eve-ai-studio-checks.yml
+eve-ai-studio/.env.example
+eve-ai-studio/PHASE_STATUS.md
+eve-ai-studio/README.md
+eve-ai-studio/app/core/config.py
+eve-ai-studio/app/main.py
+eve-ai-studio/pyproject.toml
+eve-ai-studio/tests/test_foundation.py
+reference/eve-ai-studio-preview/index.html
+
+======================================================================
+15. PROTEZIONI
+======================================================================
+
+Non modificati:
+
+- main;
+- demo-canonica;
+- reference/demo-aula-studio-virtuale-canonica.html;
+- app ufficiale;
+- eve-canonical-integration-v2;
+- pacchetto master Eve Animation Library 1.2.2.
+
+Non eseguiti:
+
+- pull request;
+- merge;
+- provider esterni;
+- embedding;
+- database vettoriali;
+- collegamenti alla produzione.
+
+======================================================================
+16. LIMITI
+======================================================================
+
+Non sono ancora presenti:
+
+- PDF e coordinate pagina estratte da PDF;
+- DOCX, PPTX o altri formati Office;
+- OCR;
+- embedding;
+- retrieval semantico o ibrido;
+- provider AI reale;
+- difesa documentale avanzata oltre ai flag esistenti;
+- autenticazione e policy RLS di produzione;
+- apertura dentro l'app ufficiale.
+
+======================================================================
+17. STATO FINALE
+======================================================================
+
+Il Checkpoint 1.1 dispone di codice, API, test specifici, suite cumulativa,
+verifica browser, GitHub Actions verde, documentazione e anteprima aggiornata.
+
+Il Checkpoint 1.1 è tecnicamente pronto per l'approvazione conclusiva
+dell'utente.
+
+FINE FILE
