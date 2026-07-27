@@ -1,25 +1,26 @@
 # Eve AI Studio — Fondazione modulare
 
-Questa directory contiene il servizio isolato di Eve AI Studio, sviluppato sul branch `eve-ai-studio` senza modificare `main`, `demo-canonica`, l’HTML canonico o l’app pubblica.
+Servizio isolato di Eve sviluppato sul branch `eve-ai-studio`, senza modificare `main`, `demo-canonica`, l’HTML canonico o l’app pubblica.
 
 ## Stato
 
-Versione del servizio: `1.0.0`
+Versione del servizio: `1.1.0`
 
 Checkpoint:
 
-- `0.1` — FastAPI, provider mock, contesto, permessi, limiti e audit;
-- `0.2` — moduli separati e importatore delle 36 sezioni e 1.197 schede;
-- `0.3` — persistenza, cronologia, versioni, confronto e rollback dei requisiti;
-- `0.4` — prompt versionati, modalità didattiche e workflow di approvazione;
-- `0.5` — scenari persistenti, risultati per criterio e gate reale dei prompt;
-- `0.6` — runner deterministico, grader automatici e artefatti redatti;
-- `0.7` — provider, modelli, profili, timeout, retry, fallback, token, costi e telemetria;
-- `0.8` — catalogo materiali, estrazione testuale, versioni e chunk;
-- `0.9` — retrieval lessicale locale, integrità e citazioni verificabili;
-- `1.0` — chat RAG locale con risposta estrattiva e fonti autorizzate.
+- `0.1` — fondazione FastAPI, provider mock, contesto, permessi, limiti e audit;
+- `0.2` — modularità e importatore delle 36 sezioni e 1.197 schede;
+- `0.3` — persistenza, versioni, confronto e rollback dei requisiti;
+- `0.4` — prompt versionati e workflow di approvazione;
+- `0.5` — valutazioni persistenti e gate reale;
+- `0.6` — runner deterministico e artefatti redatti;
+- `0.7` — provider, profili, retry, fallback, budget e telemetria;
+- `0.8` — catalogo materiali, estrazione e chunk;
+- `0.9` — retrieval lessicale locale e citazioni verificabili;
+- `1.0` — chat RAG estrattiva con fonti autorizzate;
+- `1.1` — apertura verificabile della fonte citata.
 
-I Checkpoint `0.8` e `0.9` sono chiusi e approvati. Il Checkpoint `1.0` è implementato e verificato tecnicamente; resta da registrare l’approvazione conclusiva dell’utente.
+I Checkpoint `0.8`, `0.9` e `1.0` sono chiusi e approvati. Il Checkpoint `1.1` è implementato e verificato tecnicamente; resta da registrare l’approvazione conclusiva dell’utente.
 
 ## Struttura
 
@@ -29,12 +30,13 @@ eve-ai-studio/
 │   ├── core/                 # configurazione, permessi e audit
 │   ├── context/              # validazione del contesto didattico
 │   ├── providers/            # catalogo, profili, orchestrazione e telemetria
-│   ├── requirements/         # piano, storage, versioni, confronto e rollback
-│   ├── prompts/              # prompt, modalità, workflow, storage e API
+│   ├── requirements/         # piano, storage, versioni e rollback
+│   ├── prompts/              # prompt, modalità, workflow e API
 │   ├── evaluations/          # scenari, grader, runner, artefatti e gate
 │   ├── materials/            # catalogo, importazioni, estrazione e chunk
 │   ├── retrieval/            # ranking locale, integrità e citazioni
 │   ├── rag/                  # chat RAG estrattiva e policy delle fonti
+│   ├── sources/              # apertura, integrità e navigazione delle fonti
 │   ├── main.py               # applicazione FastAPI
 │   └── models.py             # contratti chat condivisi
 ├── checkpoints/
@@ -57,46 +59,20 @@ data/eve-materials.sqlite3
 
 I database SQLite e i file WAL/SHM sono esclusi dal repository.
 
-## Requisiti e piano
-
-Il registro conserva:
-
-- 36 sezioni e 1.197 schede;
-- importazioni riuscite, invariate e fallite;
-- snapshot immutabili;
-- versione attiva;
-- confronto dettagliato;
-- rollback non distruttivo;
-- checksum della sorgente e del catalogo.
-
-## Prompt, valutazioni e provider
-
-I prompt usano revisioni immutabili e il workflow:
-
-```text
-draft → in_review → publishable → published → archived
-```
-
-Il passaggio a `publishable` dipende dal gate persistente delle valutazioni.
-
-Schema valutazioni: `2`
-
-Il runner usa richieste tipizzate, provider mock deterministico, grader, risultati per criterio e artefatti redatti. Non salva il testo completo delle richieste o delle risposte.
+## Provider e sicurezza corrente
 
 Provider registrati:
 
 - `mock` — attivo, deterministico, senza rete e senza costo;
 - `external-template` — disattivato e senza credenziali.
 
-Configurazione obbligatoria corrente:
-
 ```text
 EVE_EXTERNAL_PROVIDERS_ENABLED=false
 ```
 
-## Materiali — Checkpoint 0.8
+I documenti sono sempre trattati come dati non fidati. Il contenuto documentale non può sostituire istruzioni di sistema, attivare strumenti o modificare permessi.
 
-Il catalogo è isolato per `room_id` e conserva materiali, versioni, chunk e cronologia redatta.
+## Materiali — Checkpoint 0.8
 
 Formati supportati:
 
@@ -111,7 +87,7 @@ application/json
 
 Regole principali:
 
-- UTF-8 obbligatorio;
+- isolamento per `room_id`;
 - SHA-256 sui byte originali;
 - deduplicazione nella stessa aula;
 - versioni immutabili;
@@ -122,7 +98,7 @@ Regole principali:
 - `embedding_status=not_requested`;
 - nessuna rete.
 
-Stato pipeline:
+Stato:
 
 ```text
 text_extracted_and_chunked_no_embeddings
@@ -130,28 +106,13 @@ text_extracted_and_chunked_no_embeddings
 
 ## Retrieval — Checkpoint 0.9
 
-Il retrieval usa esclusivamente:
-
-- l’aula richiesta;
-- i materiali della stessa aula;
-- la versione corrente `ready`;
-- chunk con SHA-256 valido.
-
 Algoritmo:
 
 ```text
 eve-lexical-v1
 ```
 
-Segnali del ranking:
-
-- copertura dei termini;
-- frequenza limitata;
-- corrispondenze nel titolo e nel nome file;
-- frase esatta;
-- ordinamento stabile.
-
-Ogni risultato contiene score, estratto, termini corrispondenti, identificatori del materiale e della versione, chunk, offset, filename, media type, SHA-256, locator e flag di sicurezza.
+Il retrieval usa soltanto materiali della stessa aula, versioni correnti `ready` e chunk con SHA-256 valido. Ogni risultato contiene score, estratto, identificatori, versione, chunk, offset, file, media type, hash, locator e flag di sicurezza.
 
 Formato locator:
 
@@ -159,17 +120,13 @@ Formato locator:
 material:{material_id}:v{version_number}:chunk:{chunk_index}:{start_char}-{end_char}
 ```
 
-I documenti sono dati non fidati. I tentativi di ignorare istruzioni, richiamare system prompt, eseguire script o chiamare strumenti sono segnalati ma non eseguiti.
-
-Stato retrieval:
+Stato:
 
 ```text
 lexical_ranked_citations_no_embeddings
 ```
 
 ## Chat RAG — Checkpoint 1.0
-
-Il servizio `RagChatService` usa il retrieval del Checkpoint `0.9` per costruire una risposta locale e deterministica.
 
 Identità tecnica:
 
@@ -184,23 +141,65 @@ Flusso:
 
 1. richiede un `room_id` autorizzato;
 2. cerca nei chunk correnti `ready` della stessa aula;
-3. verifica l’integrità SHA-256;
+3. verifica SHA-256;
 4. esclude le fonti sospette;
-5. seleziona fino al limite configurato;
-6. costruisce una risposta estrattiva con marcatori `[n]`;
-7. restituisce citazioni strutturate;
-8. calcola SHA-256 della risposta;
-9. non propone azioni.
+5. costruisce una risposta estrattiva con marcatori `[n]`;
+6. restituisce citazioni strutturate;
+7. calcola SHA-256 della risposta;
+8. non propone azioni.
 
-Policy delle fonti sospette:
+Quando mancano fonti sufficienti, Eve restituisce `non trovato` e non aggiunge conoscenza generale.
+
+## Apertura fonte — Checkpoint 1.1
+
+Servizio:
 
 ```text
-exclude_from_answer_and_citations
+SourceOpeningService
+stage: verified_source_opening_v1
 ```
 
-Quando non esistono passaggi sufficienti, Eve restituisce esplicitamente “non trovato” e non aggiunge conoscenza generale. Quando esistono soltanto fonti sospette o chunk alterati, produce un rifiuto sicuro senza citazioni.
+L’apertura riceve un locator prodotto dal retrieval o dalla chat RAG e verifica:
 
-La risposta del Checkpoint `1.0` non è ancora generata da un modello linguistico reale: combina estratti verificati in modo deterministico e dichiara questa limitazione nel campo `uncertainty`.
+- formato del locator;
+- appartenenza alla stessa aula;
+- materiale, versione e chunk;
+- coordinate iniziali e finali;
+- SHA-256 salvato del chunk;
+- corrispondenza tra chunk e porzione del testo estratto;
+- SHA-256 atteso, quando fornito dalla citazione.
+
+Una versione storica `ready` può essere aperta ed è marcata `stale`. Con `require_current=true`, una citazione storica viene bloccata con `source_outdated`.
+
+La risposta contiene:
+
+- testo esatto del chunk;
+- contesto precedente e successivo limitato;
+- versione citata e versione corrente;
+- stato corrente/storico;
+- hash verificato;
+- flag di sicurezza;
+- resource path e anchor navigabile;
+- numero pagina, quando presente nei metadati;
+- `content_trust=untrusted_document_content`;
+- `instructions_executable=false`.
+
+Una fonte assente e una fonte appartenente a un’altra aula restituiscono lo stesso contratto:
+
+```text
+404 source_not_found
+```
+
+Errori:
+
+```text
+invalid_source_locator
+source_not_found
+source_integrity_failed
+source_hash_mismatch
+source_coordinates_mismatch
+source_outdated
+```
 
 ## API principali
 
@@ -259,11 +258,14 @@ POST /v1/retrieval/search
 
 GET  /v1/rag/status
 POST /v1/rag/chat
+
+GET  /v1/sources/status
+POST /v1/sources/open
 ```
 
-La rotta storica `/v1/chat` resta separata e invariata. Il RAG viene esposto soltanto sotto `/v1/rag`.
+La rotta storica `/v1/chat` resta separata e invariata.
 
-## Configurazione
+## Configurazione recente
 
 ```text
 EVE_RETRIEVAL_MAX_QUERY_CHARS=500
@@ -272,14 +274,15 @@ EVE_RETRIEVAL_MAX_EXCERPT_CHARS=600
 EVE_RETRIEVAL_MIN_SCORE=1
 EVE_RAG_MAX_SOURCES=4
 EVE_RAG_MAX_ANSWER_CHARS=4000
+EVE_SOURCE_MAX_CONTEXT_CHARS=2000
 ```
 
 ## Test e verifica
 
-GitHub Actions ha verificato il commit:
+GitHub Actions ha verificato il commit funzionale:
 
 ```text
-a8ded290eef8983fce87a31a6ef67b02efa4728c
+19fcd0e4ac55df862eb0131e6546f37a69746959
 ```
 
 Risultati:
@@ -288,21 +291,22 @@ Risultati:
 Checkpoint 0.8 specifico: 20 passed
 Checkpoint 0.9 specifico: 14 passed
 Checkpoint 1.0 specifico: 13 passed
-Suite cumulativa 0.1–1.0: 152 passed
+Checkpoint 1.1 specifico: 13 passed
+Suite cumulativa 0.1–1.1: 165 passed
 ```
 
-Anteprima controllata in Chromium:
+Anteprima Chromium:
 
 ```text
 5 scenari materiali
 4 scenari retrieval
 4 scenari chat RAG
-13 scenari complessivi
+5 scenari apertura fonte
+18 scenari complessivi
 Errori JavaScript: 0
-Overflow orizzontale: assente
 ```
 
-Il workflow `.github/workflows/eve-ai-studio-checks.yml` esegue installazione, compilazione, pytest, sintassi JavaScript e Chromium e registra i rapporti nel branch.
+Il warning `StarletteDeprecationWarning` di `fastapi.testclient` non è un fallimento del checkpoint.
 
 ## Avvio locale
 
@@ -314,8 +318,6 @@ uvicorn app.main:app --reload
 
 ## Anteprima ufficiale
 
-Percorso unico:
-
 ```text
 reference/eve-ai-studio-preview/index.html
 ```
@@ -326,6 +328,7 @@ Moduli recenti:
 materials-workflow.js
 retrieval-workflow.js
 rag-chat-workflow.js
+source-opening-workflow.js
 ```
 
 Non creare anteprime ufficiali parallele senza una decisione esplicita.
@@ -338,12 +341,11 @@ Non creare anteprime ufficiali parallele senza una decisione esplicita.
 - retrieval semantico o ibrido;
 - reranker AI;
 - generazione libera con modello linguistico;
-- conoscenza generale aggiunta alla risposta RAG;
 - PDF e Office;
 - OCR e trascrizione;
 - Supabase, autenticazione di produzione e object storage;
 - memoria didattica persistente;
-- strumenti di scrittura;
+- strumenti che modificano l’app ufficiale;
 - integrazione con l’app ufficiale o la demo canonica.
 
 ## Protezioni
