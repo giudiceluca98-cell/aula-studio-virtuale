@@ -1,163 +1,108 @@
 EVE AI STUDIO
 STATO DELL’ANTEPRIMA UFFICIALE
 
-Data: 26 luglio 2026
+Data: 28 luglio 2026
 Branch: eve-ai-studio
 
-PERCORSO UFFICIALE
+PERCORSI UFFICIALI
+
+Preview modulare:
 
 reference/eve-ai-studio-preview/index.html
 
-Questo file è l’unica anteprima ufficiale di Eve AI Studio.
-Gli aggiornamenti progressivi devono essere applicati a questo percorso oppure
-ai moduli caricati da esso, senza creare demo parallele da considerare ufficiali.
+File autonomo distribuibile:
+
+reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html
+
+La preview modulare è la sorgente modificabile. Lo standalone viene rigenerato
+automaticamente dalla stessa sorgente e non deve essere modificato a mano.
 
 VERSIONI INTEGRATE
 
-- servizio Eve AI Studio: 0.9.0;
-- checkpoint tecnico: 0.9;
-- Eve Animation Library: 1.2.2.
+- servizio Eve AI Studio: 1.1.0;
+- checkpoint tecnico: 1.1;
+- Eve Animation Library: 1.2.2;
+- qualità animazioni: original-final-webp;
+- totale asset: 64.
 
-CHECKPOINT 0.8 — MATERIALI E PREPARAZIONE RAG
+FUNZIONI PRESENTI
 
-Vista:
+- fondazione FastAPI e provider mock;
+- requisiti versionati;
+- prompt e workflow di approvazione;
+- valutazioni, runner e gate;
+- profili provider e telemetria;
+- catalogo materiali, estrazione e chunk;
+- retrieval lessicale locale;
+- chat RAG estrattiva con citazioni;
+- apertura verificabile della fonte;
+- galleria completa delle 64 animazioni originali.
 
-Materiali e RAG
+MODULI VISIVI PRINCIPALI
 
-Modulo:
-
-materials-workflow.js
-
-Funzioni dimostrative:
-
-- catalogo materiali separato per aula;
-- importazione documentale controllata;
-- scenari valido, duplicato, nuova versione, formato non supportato e limite;
-- metadati, media type e nome file;
-- checksum;
-- deduplicazione per aula;
-- versioni immutabili;
-- stato di elaborazione;
-- estrazione testuale iniziale;
-- preparazione dei chunk con offset e impronta;
-- stato embedding not_requested;
-- cronologia con errori redatti;
-- assenza dichiarata di embedding e provider esterni.
-
-CHECKPOINT 0.9 — RETRIEVAL LOCALE E CITAZIONI
-
-Modulo:
-
-retrieval-workflow.js
-
-Funzioni dimostrative:
-
-- ricerca limitata all’aula selezionata;
-- ranking lessicale deterministico eve-lexical-v1;
-- uso delle versioni correnti ready;
-- risultati ordinati per punteggio;
-- score visibile;
-- citazione con materiale, versione, chunk e offset;
-- filename e SHA-256;
-- termini corrispondenti;
-- assenza esplicita di embedding;
-- scenario senza risultati e senza fonti inventate;
-- scenario di isolamento tra aule;
-- segnalazione di una fonte contenente istruzioni sospette;
-- nessuna esecuzione delle istruzioni contenute nel documento.
-
-Stati Eve collegati nelle simulazioni:
-
-- eve-uploading;
-- eve-searching;
-- eve-reading;
-- eve-indexing;
-- eve-success;
-- eve-error-supportive;
-- eve-confirmation-needed;
-- eve-idle-soft.
+- app.js;
+- materials-workflow.js;
+- retrieval-workflow.js;
+- rag-chat-workflow.js;
+- source-opening-workflow.js;
+- animation-library-gallery.js;
+- eve-animation-runtime-v1.2.2/eve-hq-runtime.js.
 
 EVE ANIMATION LIBRARY 1.2.2
 
-Asset disponibili:
+La preview usa i WebP finali originali:
 
-- P0 conversazione: 12;
-- P1 studio: 21;
-- P2 avanzate: 20;
-- compact: 8;
-- hero: 3;
-- totale: 64.
+- P0 standard: 1024 px;
+- P1 e P2: 512 px;
+- hero: 1536 px;
+- compact: 256 px;
+- nessuna miniatura sostitutiva;
+- nessuna interpolazione;
+- nessuna ricompressione.
 
-Funzioni della galleria:
+La libreria completa è accessibile dal pulsante:
 
-- selezione individuale degli asset;
-- ricerca per nome o ID;
-- filtri P0, P1, P2, compact e hero;
-- riproduzione di un’animazione alla volta;
-- visualizzazione dei metadati;
-- collegamenti dimostrativi tra sezioni e stati Eve;
-- Eve sferica reale al posto della vecchia rappresentazione umana.
+Vedi tutte le 64 animazioni
 
-OTTIMIZZAZIONE DELLA PREVIEW GITHUB
+oppure dalla voce laterale:
 
-La libreria sorgente completa v1.2.2 rimane il riferimento autorevole.
-Per evitare di inserire nel repository l’intero archivio da circa 143 MB,
-l’anteprima GitHub utilizza copie animate ottimizzate esclusivamente per la
-galleria:
+Libreria animazioni
 
-- risoluzione runtime: 40 × 40;
-- massimo 2 fotogrammi campionati per asset;
-- formato WebP animato;
-- metadati originali mantenuti;
-- un solo asset visualizzato alla volta.
+La galleria permette ricerca, filtri, anteprima tecnica e riproduzione dello
+stato selezionato su Eve.
 
-Le copie ottimizzate non sostituiscono i file sorgente e non devono essere
-riutilizzate come master di produzione.
+BUILD E VERIFICA
 
-STRUTTURA TECNICA DELLE ANIMAZIONI
+Workflow autorevole:
 
-Gli asset ottimizzati e i metadati sono suddivisi nei file:
+.github/workflows/eve-hq-final-verification.yml
 
-official-payload-*.js
+Il workflow:
 
-Il modulo della galleria è suddiviso nei file:
+1. rigenera lo standalone dalla preview modulare;
+2. impedisce dipendenze CSS o JavaScript esterne nello standalone;
+3. apre la preview modulare tramite server locale;
+4. apre lo standalone tramite file://;
+5. verifica tutti i 64 asset, dimensioni e SHA-256;
+6. verifica la galleria con 64 schede;
+7. prova materiali, retrieval, chat RAG e apertura fonte;
+8. salva il rapporto autorevole in:
 
-official-library-workflow-payload-a.js
-official-library-workflow-payload-b.js
+   eve-ai-studio/checkpoints/EVE_HQ_FINAL_VERIFICATION.json
 
-Il caricamento viene completato da:
+PULIZIA APPLICATA
 
-official-library-loader.js
+Sono stati rimossi:
 
-DECISIONE EDITORIALE
+- payload e loader alleggeriti precedenti;
+- runtime avatar statico precedente alla libreria HQ;
+- asset runtime singolo da 192 px;
+- file temporanei di trasferimento;
+- workflow duplicati di preview e standalone;
+- log vuoti e rapporti sostituiti dal rapporto consolidato.
 
-Le scritte inglesi incorporate in alcuni asset P1/P2 sono accettate per questa
-versione e non bloccano l’avanzamento.
+VINCOLI
 
-VERIFICA DEL CHECKPOINT 0.8
-
-- 20 test backend specifici superati;
-- suite cumulativa 0.1–0.8: 125 test superati;
-- cinque scenari materiali verificati in Chromium;
-- nessun errore JavaScript;
-- nessun overflow orizzontale;
-- checkpoint chiuso e approvato.
-
-VERIFICA DEL CHECKPOINT 0.9
-
-- JavaScript retrieval-workflow.js verificato sintatticamente con Node;
-- simulazione costruita senza fetch o chiamate di rete;
-- 14 test backend specifici superati;
-- suite cumulativa 0.1–0.9: 139 test superati;
-- quattro scenari retrieval verificati in Chromium;
-- nessun errore JavaScript o eccezione pagina;
-- nessun overflow orizzontale a 1440 × 1600;
-- difetto dello scenario normale individuato, corretto e nuovamente verificato;
-- approvazione utente conclusiva del checkpoint 0.9 da registrare.
-
-VINCOLI RISPETTATI
-
-- modificato soltanto il branch eve-ai-studio;
 - main non modificato;
 - demo-canonica non modificato;
 - eve-canonical-integration-v2 non modificato;
@@ -169,11 +114,6 @@ VINCOLI RISPETTATI
 
 REGOLA PER I PROSSIMI AGGIORNAMENTI
 
-Ogni nuova funzione visiva o interattiva dell’anteprima deve aggiornare:
-
-reference/eve-ai-studio-preview/index.html
-
-oppure i moduli caricati da quel file.
-
-Non creare una nuova anteprima ufficiale con un percorso differente senza una
-decisione esplicita.
+Le modifiche devono essere applicate alla preview modulare e ai suoi moduli.
+Lo standalone viene sempre rigenerato dal workflow; i 64 asset originali restano
+immutati e verificati.
