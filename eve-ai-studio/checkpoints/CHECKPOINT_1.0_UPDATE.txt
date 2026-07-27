@@ -1,0 +1,469 @@
+EVE AI STUDIO
+CHECKPOINT 1.0 — CHAT RAG LOCALE E DETERMINISTICA
+
+Data: 27 luglio 2026
+Repository: giudiceluca98-cell/aula-studio-virtuale
+Branch: eve-ai-studio
+Versione servizio: 1.0.0
+
+======================================================================
+1. STATO
+======================================================================
+
+Il Checkpoint 0.9 è stato approvato esplicitamente dall'utente.
+
+Il Checkpoint 1.0 è stato implementato e verificato tecnicamente.
+Resta in attesa dell'approvazione conclusiva dell'utente prima di definire o
+implementare il checkpoint successivo.
+
+======================================================================
+2. BASE PROGETTUALE
+======================================================================
+
+Il piano ufficiale definisce il livello "AI CON FONTI E RAG" come capacità di:
+
+- cercare nei materiali autorizzati;
+- recuperare i passaggi pertinenti;
+- rispondere usando tali passaggi;
+- mostrare citazioni verificabili;
+- trattare le istruzioni presenti nei documenti come contenuto non fidato.
+
+Il Checkpoint 1.0 applica questo passaggio senza introdurre ancora:
+
+- provider AI reali;
+- embedding;
+- indice vettoriale;
+- database vettoriale;
+- retrieval semantico;
+- generazione libera con modello linguistico.
+
+======================================================================
+3. OBIETTIVO
+======================================================================
+
+Collegare il retrieval locale e verificabile del Checkpoint 0.9 a un percorso di
+chat RAG separato, capace di costruire una risposta soltanto dai passaggi
+integri e autorizzati della stessa aula.
+
+La rotta generica /v1/chat deve rimanere invariata.
+
+======================================================================
+4. ARCHITETTURA IMPLEMENTATA
+======================================================================
+
+Nuovo package:
+
+app/rag/
+
+File:
+
+- errors.py;
+- models.py;
+- service.py;
+- router.py;
+- __init__.py.
+
+Servizio principale:
+
+RagChatService
+
+Identità tecnica:
+
+provider = local-rag
+model = eve-grounded-extractive-v1
+stage = grounded_extractive_chat_no_embeddings
+knowledge_scope = authorized_room_current_ready_materials_only
+
+======================================================================
+5. CONTRATTI
+======================================================================
+
+RagChatRequest contiene:
+
+- message;
+- context tipizzato;
+- mode;
+- limit;
+- material_ids opzionali.
+
+RagChatResponse contiene:
+
+- message;
+- provider;
+- model;
+- uncertainty;
+- grounded;
+- knowledge_scope;
+- retrieval_stage;
+- query_sha256;
+- answer_sha256;
+- total_candidates;
+- integrity_failures;
+- excluded_suspicious_hits;
+- sources;
+- proposed_actions.
+
+Ogni RagSource contiene:
+
+- rank;
+- score;
+- excerpt;
+- matched_terms;
+- exact_phrase;
+- suspicious_content;
+- safety_flags;
+- citazione completa del retrieval.
+
+======================================================================
+6. FLUSSO DELLA RISPOSTA
+======================================================================
+
+1. Il servizio richiede un room_id.
+2. Costruisce una RetrievalSearchRequest.
+3. Il retrieval filtra per aula.
+4. Vengono usate soltanto le versioni correnti ready.
+5. Ogni chunk deve superare il controllo SHA-256.
+6. Le fonti sospette vengono escluse.
+7. Vengono selezionate al massimo le fonti configurate.
+8. La risposta viene costruita in modo estrattivo e deterministico.
+9. Ogni passaggio usato riceve un marcatore [n].
+10. Le citazioni strutturate vengono restituite separatamente.
+11. Viene calcolato SHA-256 della risposta.
+12. proposed_actions resta vuoto.
+
+======================================================================
+7. RISPOSTA GROUNDED
+======================================================================
+
+Quando esistono fonti sicure e pertinenti:
+
+- grounded = true;
+- la risposta dichiara di basarsi soltanto sui materiali autorizzati;
+- i passaggi sono numerati;
+- ogni passaggio ha un marcatore [n];
+- le fonti contengono locator, materiale, versione, chunk, offset, file e hash;
+- uncertainty dichiara che si tratta ancora di una risposta estrattiva e non di
+  una generazione AI reale.
+
+======================================================================
+8. NESSUNA FONTE
+======================================================================
+
+Quando non esistono passaggi sufficientemente pertinenti:
+
+- grounded = false;
+- sources è vuoto;
+- Eve dichiara "non trovato";
+- non viene aggiunta conoscenza generale;
+- non vengono inventate citazioni.
+
+======================================================================
+9. FONTI SOSPETTE
+======================================================================
+
+Policy:
+
+exclude_from_answer_and_citations
+
+Le fonti simili a prompt injection:
+
+- possono essere rilevate dal retrieval;
+- non vengono inserite nella risposta;
+- non vengono citate;
+- aumentano excluded_suspicious_hits;
+- non possono autorizzare strumenti o azioni.
+
+Se esistono soltanto fonti sospette:
+
+- grounded = false;
+- sources è vuoto;
+- viene prodotto un rifiuto sicuro.
+
+======================================================================
+10. INTEGRITÀ
+======================================================================
+
+Se il testo del chunk non corrisponde al suo SHA-256:
+
+- il chunk viene escluso;
+- integrity_failures aumenta;
+- non viene usato nella risposta;
+- se non restano fonti valide, grounded = false.
+
+======================================================================
+11. ISOLAMENTO
+======================================================================
+
+Il perimetro è sempre l'aula presente nel contesto.
+
+Verificato:
+
+- nessun risultato da un'altra aula;
+- material_ids di un'altra aula non rivelano l'esistenza del materiale;
+- una revisione fallita non sostituisce la versione pronta;
+- una nuova versione pronta sostituisce la vecchia nel retrieval.
+
+======================================================================
+12. API
+======================================================================
+
+GET /v1/rag/status
+
+Restituisce:
+
+- enabled;
+- deterministic;
+- provider;
+- model;
+- retrieval_stage;
+- embeddings_enabled;
+- external_provider_enabled;
+- source_scope;
+- suspicious_source_policy;
+- max_sources;
+- max_answer_chars.
+
+POST /v1/rag/chat
+
+Errori tipizzati:
+
+- rag_room_required;
+- invalid_retrieval_query.
+
+La rotta storica:
+
+POST /v1/chat
+
+resta separata e invariata.
+
+======================================================================
+13. CONFIGURAZIONE
+======================================================================
+
+EVE_RAG_MAX_SOURCES=4
+EVE_RAG_MAX_ANSWER_CHARS=4000
+
+Restano inoltre attive le configurazioni del retrieval:
+
+EVE_RETRIEVAL_MAX_QUERY_CHARS=500
+EVE_RETRIEVAL_MAX_RESULTS=10
+EVE_RETRIEVAL_MAX_EXCERPT_CHARS=600
+EVE_RETRIEVAL_MIN_SCORE=1
+
+======================================================================
+14. TEST SPECIFICI
+======================================================================
+
+File:
+
+tests/test_rag.py
+
+Test: 13
+
+Copertura:
+
+1. stato locale e deterministico;
+2. risposta grounded con citazioni verificate;
+3. risposta esplicita senza risultati;
+4. isolamento tra aule;
+5. filtro material_ids senza divulgazione;
+6. esclusione della fonte sospetta quando esiste una fonte sicura;
+7. rifiuto con sole fonti sospette;
+8. limite delle fonti;
+9. determinismo della risposta;
+10. esclusione del chunk alterato;
+11. uso della versione corrente ready;
+12. API status, chat e room validation;
+13. query non valida via API.
+
+======================================================================
+15. VERIFICA AUTOMATICA
+======================================================================
+
+Workflow:
+
+.github/workflows/eve-ai-studio-checks.yml
+
+Commit verificato:
+
+a8ded290eef8983fce87a31a6ef67b02efa4728c
+
+Esito:
+
+SUPERATO
+
+Stati:
+
+- python_install: success;
+- python_compile: success;
+- pytest_cumulative: success;
+- javascript_syntax: success;
+- browser_install: success;
+- browser_scenarios: success.
+
+Risultato pytest:
+
+152 passed, 1 warning in 2.96s
+
+Il warning è una StarletteDeprecationWarning di fastapi.testclient e non è un
+fallimento del checkpoint.
+
+======================================================================
+16. VERIFICA BROWSER
+======================================================================
+
+Scenari complessivi: 13
+
+Materiali:
+
+1. importazione valida;
+2. duplicato;
+3. nuova versione;
+4. formato non supportato;
+5. limite dimensione.
+
+Retrieval:
+
+1. risultati pertinenti;
+2. nessun risultato;
+3. fonte sospetta;
+4. isolamento tra aule.
+
+Chat RAG:
+
+1. risposta con fonti;
+2. nessuna fonte;
+3. solo fonte sospetta;
+4. isolamento tra aule.
+
+Esito:
+
+- 13/13 scenari superati;
+- nessun errore JavaScript;
+- sintassi rag-chat-workflow.js valida;
+- nessun overflow orizzontale nel contenitore controllato.
+
+======================================================================
+17. ANTEPRIMA UFFICIALE
+======================================================================
+
+Percorso invariato:
+
+reference/eve-ai-studio-preview/index.html
+
+Nuovo modulo:
+
+reference/eve-ai-studio-preview/rag-chat-workflow.js
+
+La vista mostra:
+
+- versione Eve 1.0-preview;
+- 13 test specifici;
+- 152 test cumulativi;
+- provider esterno OFF;
+- fonti sospette escluse;
+- risposta grounded;
+- marcatori [n];
+- locator e hash;
+- scenario senza fonte;
+- scenario con sola fonte sospetta;
+- isolamento tra aule.
+
+======================================================================
+18. FILE CREATI
+======================================================================
+
+eve-ai-studio/app/rag/__init__.py
+eve-ai-studio/app/rag/errors.py
+eve-ai-studio/app/rag/models.py
+eve-ai-studio/app/rag/router.py
+eve-ai-studio/app/rag/service.py
+eve-ai-studio/tests/test_rag.py
+eve-ai-studio/checkpoints/CHECKPOINT_0.9_CLOSURE.md
+eve-ai-studio/checkpoints/CHECKPOINT_1.0_CI_RESULT.json
+eve-ai-studio/checkpoints/CHECKPOINT_1.0_CI_RESULT.md
+eve-ai-studio/checkpoints/CHECKPOINT_1.0_UPDATE.txt
+eve-ai-studio/checkpoints/CHECKPOINT_1.0_VERIFICATION.md
+reference/eve-ai-studio-preview/rag-chat-workflow.js
+
+======================================================================
+19. FILE MODIFICATI
+======================================================================
+
+.github/workflows/eve-ai-studio-checks.yml
+eve-ai-studio/.env.example
+eve-ai-studio/PHASE_STATUS.md
+eve-ai-studio/README.md
+eve-ai-studio/app/core/config.py
+eve-ai-studio/app/main.py
+eve-ai-studio/pyproject.toml
+eve-ai-studio/tests/test_foundation.py
+reference/eve-ai-studio-preview/index.html
+
+======================================================================
+20. PROTEZIONI
+======================================================================
+
+Non modificati:
+
+- main;
+- demo-canonica;
+- reference/demo-aula-studio-virtuale-canonica.html;
+- app ufficiale;
+- eve-canonical-integration-v2;
+- pacchetto master Eve Animation Library 1.2.2.
+
+Non eseguiti:
+
+- pull request;
+- merge;
+- provider esterni;
+- embedding;
+- database vettoriali;
+- collegamenti alla produzione.
+
+======================================================================
+21. LIMITI ATTUALI
+======================================================================
+
+Il Checkpoint 1.0 non è ancora una generazione RAG completa con modello
+linguistico.
+
+La risposta è estrattiva e deterministica.
+
+Non sono presenti:
+
+- parafrasi generativa;
+- sintesi semantica;
+- risposta con conoscenza generale;
+- provider AI reale;
+- embedding;
+- ricerca semantica o ibrida;
+- indice vettoriale;
+- database vettoriale;
+- reranker AI;
+- memoria didattica;
+- strumenti di scrittura;
+- integrazione nella produzione.
+
+======================================================================
+22. STATO FINALE
+======================================================================
+
+Il Checkpoint 1.0 dispone di:
+
+- codice salvato sul branch eve-ai-studio;
+- API reali;
+- 13 test specifici;
+- 152 test cumulativi;
+- 13 scenari browser;
+- GitHub Actions verde;
+- documentazione aggiornata;
+- anteprima ufficiale aggiornata;
+- rapporto CI;
+- plaintext trasferibile.
+
+Il Checkpoint 1.0 è tecnicamente pronto per l'approvazione conclusiva
+dell'utente.
+
+FINE FILE
