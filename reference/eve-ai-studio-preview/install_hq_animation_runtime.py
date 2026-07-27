@@ -33,7 +33,7 @@ def safe_extract(archive: tarfile.TarFile, target: Path) -> None:
         resolved = (target / member.name).resolve()
         if root not in resolved.parents and resolved != root:
             raise RuntimeError(f"Percorso non sicuro nell'archivio: {member.name}")
-    archive.extractall(target)
+    archive.extractall(target, filter="data")
 
 
 def validate_runtime(root: Path) -> dict:
