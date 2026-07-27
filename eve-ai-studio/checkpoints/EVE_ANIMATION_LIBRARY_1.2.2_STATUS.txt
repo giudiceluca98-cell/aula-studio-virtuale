@@ -1,74 +1,99 @@
 EVE AI STUDIO
 STATO INTEGRAZIONE LIBRERIA ANIMAZIONI 1.2.2
 
-Data: 26 luglio 2026
+Data: 28 luglio 2026
 Branch: eve-ai-studio
 
-SORGENTE ACCETTATA
+SORGENTE APPROVATA
 
 eve-animation-library-v1.2.2.zip
 
-La libreria è stata costruita usando:
+SHA-256:
 
-- eve-animation-library-v1.2.0.zip come base completa;
-- eve-animation-library-v1.2.1.zip come patch con il nuovo P0 approvato;
-- rigenerazione delle sequenze PNG direttamente dai WebP finali;
-- normalizzazione di manifesti, animation.json e versioni.
+b3a83204315c87909895a9f7bc61d69c07771a0bf04571a10baece135d2ee3bf
 
-VALIDAZIONE DEL PACCHETTO COMPLETO
+RUNTIME DI PROVENIENZA
 
-- 64 asset;
-- 64 ID unici;
-- 64 animation.json validi;
-- 583 PNG frame;
-- 0 file da zero byte;
-- 0 percorsi mancanti;
-- 0 frame mismatch;
-- 0 version mismatch;
-- 0 hash mismatch P0;
-- CRC ZIP valido.
+reference/eve-ai-studio-preview/vendor/EVE_ANIMATION_RUNTIME_V1.2.2_ORIGINAL.tar.xz
 
-DECISIONE EDITORIALE
+SHA-256:
 
-Le scritte inglesi incorporate in alcuni asset P1/P2 sono accettate per questa
-versione e non bloccano l’avanzamento del progetto.
+c48e41300fea7ce835bb8f7ba3e46531f370d9f56668854861f90e0c01c1583e
 
-INTEGRAZIONE NELL’ANTEPRIMA
+VALIDAZIONE
 
-È stato sostituito il ritratto SVG temporaneo con un asset reale approvato
-della libreria:
+- versione: 1.2.2;
+- asset: 64;
+- ID unici: 64;
+- WebP finali originali: 64;
+- hash verificati: 64;
+- dimensioni verificate: 64;
+- conteggio frame verificato: 64;
+- file mancanti: 0;
+- file da zero byte: 0;
+- ricompressioni applicate: 0;
+- interpolazioni applicate: 0.
 
-- stato visivo: eve-idle-soft;
-- formato runtime: WebP statico con trasparenza;
-- variante runtime ottimizzata: 192 × 192;
-- origine: asset compact 256 × 256 della libreria 1.2.2;
-- versione sorgente: 1.2.2;
-- ritratto SVG conservato nel markup come fallback di caricamento.
+QUALITÀ INSTALLATA
 
-Il primo asset animato sperimentale da 88 × 88 è stato sostituito perché
-risultava troppo morbido alla dimensione di visualizzazione della scheda.
-La variante runtime da 192 × 192 preserva meglio occhi, anelli e riflessi,
-mantenendo contenuto il peso della preview.
+- P0 standard: 1024 × 1024 px;
+- P1/P2: 512 × 512 px;
+- hero: 1536 × 1536 px;
+- compact: 256 × 256 px;
+- politica: original-final-webp-no-recompression.
 
-Questa prima integrazione runtime non copia nel repository l’intero archivio da
-143 MB. Mantiene la preview leggera e verifica la sostituzione effettiva del
-segnaposto SVG con Eve reale.
+INTEGRAZIONE NELLA PREVIEW
 
-PROSSIMO PASSAGGIO
+Runtime:
 
-Collegare progressivamente gli stati applicativi alle animazioni P0:
+reference/eve-ai-studio-preview/eve-animation-runtime-v1.2.2/eve-hq-runtime.js
 
-- wake;
-- listening;
-- thinking-loop;
-- thinking-deep;
-- speaking-loop-a;
-- speaking-loop-b;
-- question;
-- confirmation-needed;
-- success;
-- error-supportive;
-- offline.
+Manifesto:
 
-Non sono stati modificati main, demo-canonica o il file HTML canonico.
-Non è stata creata alcuna pull request.
+reference/eve-ai-studio-preview/eve-animation-runtime-v1.2.2/eve-hq-runtime-manifest.json
+
+Galleria:
+
+reference/eve-ai-studio-preview/animation-library-gallery.js
+
+La preview usa un elemento immagine animato collegato al manifesto dei 64 stati.
+Ogni cambio di stato applica il WebP originale, registra ID, risoluzione e
+SHA-256 e mantiene image-rendering:auto.
+
+ACCESSO ALLA LIBRERIA
+
+- pulsante sotto Eve: Vedi tutte le 64 animazioni;
+- voce laterale: Libreria animazioni;
+- ricerca testuale;
+- filtri per priorità, categoria e variante;
+- metadati tecnici;
+- riproduzione dello stato selezionato su Eve.
+
+STANDALONE
+
+reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html
+
+Lo standalone incorpora gli stessi 64 WebP originali come data URL, senza
+ricomprimerli. Non contiene script o fogli di stile esterni ed è verificato
+tramite apertura file://.
+
+RAPPORTO AUTOREVOLE
+
+eve-ai-studio/checkpoints/EVE_HQ_FINAL_VERIFICATION.json
+
+Il rapporto viene rigenerato dal workflow:
+
+.github/workflows/eve-hq-final-verification.yml
+
+PULIZIA LEGACY COMPLETATA
+
+Sono stati rimossi:
+
+- avatar-workflow.js;
+- assets/eve/eve-idle-soft-runtime.webp;
+- payload official-payload-*;
+- loader e payload workflow alleggeriti;
+- file temporanei di trasferimento;
+- workflow e rapporti duplicati.
+
+I 64 asset originali costituiscono ora la base permanente dei checkpoint futuri.
