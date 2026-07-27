@@ -127,7 +127,7 @@
     const room = document.getElementById("ragChatRoom");
     const query = document.getElementById("ragChatQuery");
     if (scenario === "grounded") { room.value="room-python-zero"; query.value="Come funzionano parametri e valore restituito?"; }
-    if (scenario === "empty") { room.value="room-python-zero"; query.value="Come cresce una pianta tropicale?"; }
+    if (scenario === "empty") { room.value="room-python-zero"; query.value="botanica tropicale fotosintesi clorofilla"; }
     if (scenario === "suspicious") { room.value="room-python-zero"; query.value="teorema strumento segreto"; }
     if (scenario === "isolated") { room.value="room-vuota"; query.value="equazione primo grado"; }
   });
