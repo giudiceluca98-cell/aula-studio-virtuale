@@ -1,0 +1,111 @@
+name: Install Eve Animation Library HQ
+
+on:
+  push:
+    branches: [eve-ai-studio]
+    paths:
+      - "reference/eve-ai-studio-preview/vendor/EVE_ANIMATION_RUNTIME_V1.2.2_ORIGINAL.tar.xz"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: eve-hq-animation-install-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  install-and-verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: eve-ai-studio
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Installa validatore immagini
+        run: python -m pip install --disable-pip-version-check pillow
+
+      - name: Installa i 64 asset originali
+        run: |
+          python reference/eve-ai-studio-preview/install_hq_animation_runtime.py
+          python reference/eve-ai-studio-preview/build_standalone.py
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Installa Chromium
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+
+      - name: Verifica preview modulare e standalone HQ
+        run: |
+          python -m http.server 4173 --directory reference/eve-ai-studio-preview >/tmp/eve-hq-http.log 2>&1 &
+          for attempt in {1..30}; do curl -fsS http://127.0.0.1:4173/index.html >/dev/null && break; sleep 1; done
+          cat > verify-eve-hq.mjs <<'EOF'
+          import { chromium } from "playwright";
+          import assert from "node:assert/strict";
+          import path from "node:path";
+          import { pathToFileURL } from "node:url";
+
+          async function verify(page, url, expectedFormat) {
+            const errors=[];
+            page.on("pageerror", e => errors.push(e.message));
+            page.on("console", m => { if(m.type()==="error") errors.push(m.text()); });
+            await page.goto(url, {waitUntil:"load"});
+            await page.waitForFunction(() => window.EveAnimationLibrary?.quality === "original-final-webp");
+            const states=await page.evaluate(() => window.EveAnimationLibrary.listStates());
+            assert.equal(states.length,64);
+            for(const asset of states){
+              const result=await page.evaluate(async asset => {
+                await window.EveAnimationLibrary.setState(asset.id,{restart:true});
+                const img=document.getElementById("eveHqPortrait");
+                await img.decode().catch(()=>{});
+                return {w:img.naturalWidth,h:img.naturalHeight,sha:img.dataset.eveSha256,q:img.dataset.eveQuality};
+              },asset);
+              assert.equal(result.w,asset.width); assert.equal(result.h,asset.height);
+              assert.equal(result.sha,asset.sha256); assert.equal(result.q,"original");
+            }
+            assert.deepEqual(errors,[]);
+            if(expectedFormat){
+              assert.equal(await page.locator('meta[name="eve-preview-format"]').get_attribute('content'),expectedFormat);
+              assert.equal(await page.locator('meta[name="eve-animation-quality"]').get_attribute('content'),"original-hq");
+            }
+          }
+
+          const browser=await chromium.launch({headless:true});
+          const modular=await browser.newPage({viewport:{width:1440,height:1600},deviceScaleFactor:2});
+          await verify(modular,"http://127.0.0.1:4173/index.html",null);
+          await modular.screenshot({path:"eve-hq-modular.png",fullPage:true});
+          const standalone=await browser.newPage({viewport:{width:1440,height:1600},deviceScaleFactor:2});
+          const file=path.resolve("reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html");
+          await verify(standalone,pathToFileURL(file).href,"standalone");
+          await standalone.screenshot({path:"eve-hq-standalone.png",fullPage:true});
+          await browser.close();
+          EOF
+          node verify-eve-hq.mjs
+
+      - name: Salva integrazione sul branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A reference/eve-ai-studio-preview
+          git commit -m "feat: installa Eve Animation Library 1.2.2 originale HQ [skip eve standalone]" || exit 0
+          git pull --rebase origin eve-ai-studio
+          git push origin HEAD:eve-ai-studio
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eve-animation-library-hq-verification
+          path: |
+            eve-hq-modular.png
+            eve-hq-standalone.png
+            reference/eve-ai-studio-preview/EVE_HQ_INSTALLATION_RESULT.json
+          retention-days: 14
