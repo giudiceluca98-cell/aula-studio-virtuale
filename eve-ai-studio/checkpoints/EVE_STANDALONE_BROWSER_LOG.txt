@@ -1,0 +1,8 @@
+file:///home/runner/work/aula-studio-virtuale/aula-studio-virtuale/verify-eve-standalone.mjs:16
+  assert.equal(await page.locator('meta[name="eve-preview-format"]').get_attribute('content'),"standalone");
+                                                                     ^
+
+TypeError: page.locator(...).get_attribute is not a function
+    at file:///home/runner/work/aula-studio-virtuale/aula-studio-virtuale/verify-eve-standalone.mjs:16:70
+
+Node.js v20.20.2
