@@ -1,0 +1,122 @@
+name: Eve AI Studio core cleanup verification
+
+on:
+  push:
+    branches:
+      - eve-ai-studio
+    paths:
+      - ".github/workflows/eve-ai-studio-core-cleanup-verification.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: eve-ai-studio
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Installa e verifica core
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e "eve-ai-studio[dev]"
+          cd eve-ai-studio
+          python -m compileall -q app tests
+          python -m pytest -q --junitxml=pytest-results.xml
+          cd ..
+          files=(
+            reference/eve-ai-studio-preview/checkpoint-04-patch.js
+            reference/eve-ai-studio-preview/prompt-compat.js
+            reference/eve-ai-studio-preview/app.js
+            reference/eve-ai-studio-preview/prompt-workflow.js
+            reference/eve-ai-studio-preview/evaluation-workflow.js
+            reference/eve-ai-studio-preview/runner-workflow.js
+            reference/eve-ai-studio-preview/provider-workflow.js
+            reference/eve-ai-studio-preview/materials-workflow.js
+            reference/eve-ai-studio-preview/retrieval-workflow.js
+            reference/eve-ai-studio-preview/rag-chat-workflow.js
+            reference/eve-ai-studio-preview/source-opening-workflow.js
+            reference/eve-ai-studio-preview/navigation-compat.js
+            reference/eve-ai-studio-preview/animation-library-gallery.js
+            reference/eve-ai-studio-preview/eve-animation-runtime-v1.2.2/eve-hq-runtime.js
+          )
+          for file in "${files[@]}"; do
+            test -f "$file"
+            node --check "$file"
+          done
+
+      - name: Scrive rapporto e si rimuove
+        run: |
+          python3 - <<'PY'
+          import json
+          import xml.etree.ElementTree as ET
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          root = ET.parse('eve-ai-studio/pytest-results.xml').getroot()
+          if root.tag == 'testsuites':
+              suites = list(root)
+              tests = sum(int(float(s.attrib.get('tests', 0))) for s in suites)
+              failures = sum(int(float(s.attrib.get('failures', 0))) for s in suites)
+              errors = sum(int(float(s.attrib.get('errors', 0))) for s in suites)
+              skipped = sum(int(float(s.attrib.get('skipped', 0))) for s in suites)
+          else:
+              tests = int(float(root.attrib.get('tests', 0)))
+              failures = int(float(root.attrib.get('failures', 0)))
+              errors = int(float(root.attrib.get('errors', 0)))
+              skipped = int(float(root.attrib.get('skipped', 0)))
+
+          result = {
+              'checkpoint': '1.1',
+              'tested_sha': '${{ github.sha }}',
+              'generated_at': datetime.now(timezone.utc).isoformat(),
+              'passed': failures == 0 and errors == 0,
+              'states': {
+                  'install': 'success',
+                  'python_compile': 'success',
+                  'pytest_cumulative': 'success',
+                  'javascript_syntax': 'success',
+              },
+              'pytest': {
+                  'tests': tests,
+                  'failures': failures,
+                  'errors': errors,
+                  'skipped': skipped,
+              },
+              'browser_verification': 'eve-ai-studio/checkpoints/EVE_HQ_FINAL_VERIFICATION.json',
+          }
+          base = Path('eve-ai-studio/checkpoints')
+          (base / 'CHECKPOINT_1.1_CI_RESULT.json').write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
+          (base / 'CHECKPOINT_1.1_CI_RESULT.md').write_text(
+              '# Checkpoint 1.1 — Verifica core automatica\n\n'
+              f"- Commit verificato: `{result['tested_sha']}`\n"
+              f"- Data UTC: `{result['generated_at']}`\n"
+              '- Esito: **SUPERATO**\n\n'
+              f"- pytest: {tests} test, {failures} fallimenti, {errors} errori, {skipped} ignorati\n"
+              '- compilazione Python: superata\n'
+              '- sintassi JavaScript reale: superata\n'
+              '- verifica browser separata: `EVE_HQ_FINAL_VERIFICATION.json`\n',
+              encoding='utf-8'
+          )
+          PY
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/eve-ai-studio-core-cleanup-verification.yml
+          git add eve-ai-studio/checkpoints/CHECKPOINT_1.1_CI_RESULT.json eve-ai-studio/checkpoints/CHECKPOINT_1.1_CI_RESULT.md
+          git commit -m "ci: registra verifica core conclusiva Eve 1.1 [skip eve core ci]"
+          git pull --rebase origin eve-ai-studio
+          git push origin HEAD:eve-ai-studio
