@@ -26,21 +26,28 @@ jobs:
           node-version: "20"
 
       - name: Installa browser
+        id: browser_install
+        continue-on-error: true
         run: |
-          npm install --no-save playwright
-          npx playwright install --with-deps chromium
+          set -o pipefail
+          npm install --no-save playwright 2>&1 | tee eve-real-preview-install.log
+          npx playwright install --with-deps chromium 2>&1 | tee -a eve-real-preview-install.log
 
       - name: Avvia server
+        id: server
+        continue-on-error: true
         run: |
-          python3 -m http.server 4173 --directory reference/eve-ai-studio-preview > /tmp/eve-preview-http.log 2>&1 &
+          python3 -m http.server 4173 --directory reference/eve-ai-studio-preview > eve-real-preview-http.log 2>&1 &
           for attempt in {1..30}; do
             curl --fail --silent http://127.0.0.1:4173/index.html > /dev/null && exit 0
             sleep 1
           done
+          cat eve-real-preview-http.log
           exit 1
 
       - name: Raccogli diagnostica browser
         id: browser
+        if: steps.browser_install.outcome == 'success' && steps.server.outcome == 'success'
         continue-on-error: true
         run: |
           cat > debug-preview.mjs <<'EOF'
@@ -92,11 +99,16 @@ jobs:
         if: always()
         run: |
           mkdir -p eve-ai-studio/checkpoints
-          cp eve-real-preview-debug.json eve-ai-studio/checkpoints/EVE_REAL_PREVIEW_DEBUG.json 2>/dev/null || true
-          cp eve-real-preview-debug.log eve-ai-studio/checkpoints/EVE_REAL_PREVIEW_DEBUG.log 2>/dev/null || true
-          cp /tmp/eve-preview-http.log eve-ai-studio/checkpoints/EVE_REAL_PREVIEW_HTTP.log 2>/dev/null || true
+          [ -f eve-real-preview-debug.json ] || printf '{"diagnostic":"browser_not_executed"}\n' > eve-real-preview-debug.json
+          [ -f eve-real-preview-debug.log ] || printf 'browser step outcome: %s\n' "${{ steps.browser.outcome }}" > eve-real-preview-debug.log
+          [ -f eve-real-preview-http.log ] || printf 'server step outcome: %s\n' "${{ steps.server.outcome }}" > eve-real-preview-http.log
+          [ -f eve-real-preview-install.log ] || printf 'browser install outcome: %s\n' "${{ steps.browser_install.outcome }}" > eve-real-preview-install.log
+          cp eve-real-preview-debug.json eve-ai-studio/checkpoints/EVE_REAL_PREVIEW_DEBUG.json
+          cp eve-real-preview-debug.log eve-ai-studio/checkpoints/EVE_REAL_PREVIEW_DEBUG.log
+          cp eve-real-preview-http.log eve-ai-studio/checkpoints/EVE_REAL_PREVIEW_HTTP.log
+          cp eve-real-preview-install.log eve-ai-studio/checkpoints/EVE_REAL_PREVIEW_INSTALL.log
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add eve-ai-studio/checkpoints/EVE_REAL_PREVIEW_DEBUG.json eve-ai-studio/checkpoints/EVE_REAL_PREVIEW_DEBUG.log eve-ai-studio/checkpoints/EVE_REAL_PREVIEW_HTTP.log
+          git add -A eve-ai-studio/checkpoints
           git commit -m "ci: salva diagnostica preview reale [skip eve ci]" || exit 0
           git push origin HEAD:eve-ai-studio
