@@ -1,7 +1,7 @@
 {
-  "tested_sha": "5736e5fc6f5491977897978fdebb2b89aa891254",
-  "passed": true,
-  "browser_outcome": "success",
+  "tested_sha": "7202f8f889676aac03f1a984987483ca079e05fb",
+  "passed": false,
+  "browser_outcome": "skipped",
   "page": "reference/eve-ai-studio-preview/index.html",
   "animation_library": "1.2.2",
   "animation_assets": 64,
