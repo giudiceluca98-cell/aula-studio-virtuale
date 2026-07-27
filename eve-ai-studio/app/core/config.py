@@ -48,3 +48,5 @@ class EveSettings(BaseSettings):
 
     rag_max_sources: int = 4
     rag_max_answer_chars: int = 4_000
+
+    source_max_context_chars: int = 2_000
