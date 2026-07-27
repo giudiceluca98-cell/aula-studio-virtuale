@@ -1,13 +1,1 @@
-{
-  "passed": true,
-  "browser_outcome": "success",
-  "page": "reference/eve-ai-studio-preview/index.html",
-  "animation_library": "1.2.2",
-  "animation_quality": "original-final-webp",
-  "animation_assets": 64,
-  "real_page_loaded": true,
-  "mock_animation_library": false,
-  "navigation_entry_count": 1,
-  "interactions_verified": true,
-  "authoritative_report": "eve-ai-studio/checkpoints/EVE_HQ_FINAL_VERIFICATION.json"
-}
+{"tested_sha":"a7b314f79d67e4089c6f8e18ee6cb6c15d649755","passed":true,"browser_outcome":"success","page":"reference/eve-ai-studio-preview/index.html","animation_library":"1.2.2","animation_quality":"original-final-webp","animation_assets":64,"real_page_loaded":true,"mock_animation_library":false,"navigation_entry_count":1}
