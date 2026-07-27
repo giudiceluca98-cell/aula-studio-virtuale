@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "libraryVersion": "1.2.2",
+  "assets": 64,
+  "archiveSha256": "c48e41300fea7ce835bb8f7ba3e46531f370d9f56668854861f90e0c01c1583e",
+  "sourceZipSha256": "b3a83204315c87909895a9f7bc61d69c07771a0bf04571a10baece135d2ee3bf",
+  "qualityPolicy": "original-final-webp-no-recompression",
+  "legacyPayloadFilesRemoved": 21
+}

@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Eve AI Studio — Anteprima ufficiale</title>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="eve-animation-runtime-v1.2.2/eve-hq-runtime.css">
 <style>
 #loader{max-width:620px;margin:20vh auto;padding:32px;text-align:center;color:#ecfbff}
 .spinner{width:42px;height:42px;margin:0 auto 18px;border:4px solid rgba(125,235,255,.16);border-top-color:#00dff2;border-radius:50%;box-shadow:0 0 24px rgba(0,223,242,.16);animation:spin .8s linear infinite}
@@ -35,29 +36,7 @@ function loadPreviewScript(source){
   await loadPreviewScript("checkpoint-04-patch.js");
   await loadPreviewScript("prompt-compat.js");
   await loadPreviewScript("app.js");
-
-  const libraryPayloads=[
-    "official-payload-01a.js",
-    "official-payload-01b.js",
-    "official-payload-02.js",
-    "official-payload-03.js",
-    "official-payload-04a.js",
-    "official-payload-04b.js",
-    "official-payload-05.js",
-    "official-payload-06.js",
-    "official-payload-07.js",
-    "official-payload-08a.js",
-    "official-payload-08b.js",
-    "official-payload-09.js",
-    "official-payload-10.js",
-    "official-payload-11.js",
-    "official-payload-12.js"
-  ];
-  for(const file of libraryPayloads) await loadPreviewScript(file);
-
-  await loadPreviewScript("official-library-workflow-payload-a.js");
-  await loadPreviewScript("official-library-workflow-payload-b.js");
-  await loadPreviewScript("official-library-loader.js");
+  await loadPreviewScript("eve-animation-runtime-v1.2.2/eve-hq-runtime.js");
 
   await loadPreviewScript("prompt-workflow.js");
   await loadPreviewScript("evaluation-workflow.js");
