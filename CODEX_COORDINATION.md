@@ -97,7 +97,7 @@ RESPONSABILE:
 Codex grafico/desktop
 
 STATO:
-FUNCTIONAL_TESTING
+RELEASE_READY
 
 BRANCH DI PARTENZA:
 codex/eve-ai-studio-coordination-policy @ 238f721
@@ -158,7 +158,7 @@ RESPONSABILE:
 Codex grafico/desktop
 
 STATO:
-FUNCTIONAL_TESTING
+RELEASE_READY
 
 BRANCH DI PARTENZA:
 origin/eve-ai-studio @ 11acd27
@@ -202,7 +202,7 @@ RESPONSABILE:
 Codex grafico/desktop
 
 STATO:
-IN_PROGRESS
+RELEASE_READY
 
 BRANCH DI PARTENZA:
 origin/eve-ai-studio @ 890a8fe
@@ -231,6 +231,8 @@ SÌ, esclusi i file prenotati sopra fino alla verifica della release.
 NOTE:
 Il valore del segreto non è presente nel repository o nei log. Non vengono
 modificati la sorgente canonica, main, demo-canonica, Aula Studio o produzione.
+Release verificata dal workflow 30373628931. Pubblicati installer NSIS,
+firma e latest.json per la versione 1.2.0-alpha.1 nel repository dedicato.
 ```
 
 ## Attività storiche di Aula Studio
