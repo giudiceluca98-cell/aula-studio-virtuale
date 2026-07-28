@@ -1,6 +1,6 @@
 # INTELLIGENCE-0.1 — Verifica centro ricerca e progetti di apprendimento
 
-- Commit: `00aa9a04dd8d369c49a5451b7da1af3407ac3ea6`
+- Commit: `000177193f4d64dc6b7afb47109079b306d6c2b8`
 - Esito: **SUPERATO**
 - Test specifici: 15
 - Fallimenti: 0
