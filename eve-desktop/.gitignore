@@ -1,0 +1,7 @@
+/frontend-dist/
+/node_modules/
+/src-tauri/target/
+/src-tauri/gen/
+/src-tauri/tauri.release.conf.json
+/.rust-toolchain-bin/
+*.log

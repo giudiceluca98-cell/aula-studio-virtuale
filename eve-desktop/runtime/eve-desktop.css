@@ -1,0 +1,135 @@
+.eve-desktop-update-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.eve-desktop-update-button[data-update="true"] {
+  border-color: rgba(99, 240, 196, 0.74);
+  color: #9dffe2;
+  box-shadow: 0 0 20px rgba(56, 227, 185, 0.18);
+}
+
+.eve-desktop-update-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 12px currentColor;
+}
+
+.eve-desktop-update-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(1, 6, 14, 0.76);
+  backdrop-filter: blur(8px);
+}
+
+.eve-desktop-update-backdrop[hidden] {
+  display: none;
+}
+
+.eve-desktop-update-dialog {
+  width: min(480px, 100%);
+  border: 1px solid rgba(100, 220, 255, 0.42);
+  border-radius: 22px;
+  color: #effcff;
+  background:
+    linear-gradient(145deg, rgba(34, 64, 88, 0.98), rgba(7, 17, 31, 0.99) 52%),
+    #07111f;
+  box-shadow:
+    0 30px 90px rgba(0, 0, 0, 0.62),
+    inset 0 1px 0 rgba(255, 255, 255, 0.11);
+  overflow: hidden;
+}
+
+.eve-desktop-update-head,
+.eve-desktop-update-body {
+  padding: 20px 22px;
+}
+
+.eve-desktop-update-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  border-bottom: 1px solid rgba(128, 218, 255, 0.16);
+  background: linear-gradient(90deg, rgba(77, 193, 235, 0.14), rgba(152, 113, 255, 0.1));
+}
+
+.eve-desktop-update-head h2,
+.eve-desktop-update-head p,
+.eve-desktop-update-body p {
+  margin: 0;
+}
+
+.eve-desktop-update-head h2 {
+  font-size: 19px;
+}
+
+.eve-desktop-update-head p,
+.eve-desktop-update-body p {
+  margin-top: 6px;
+  color: #b5d0dc;
+  line-height: 1.55;
+}
+
+.eve-desktop-update-close {
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(137, 221, 255, 0.28);
+  border-radius: 10px;
+  color: #dff9ff;
+  background: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+}
+
+.eve-desktop-update-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.eve-desktop-update-actions .btn {
+  min-height: 40px;
+}
+
+.eve-desktop-update-progress {
+  height: 6px;
+  margin-top: 16px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.eve-desktop-update-progress[hidden] {
+  display: none;
+}
+
+.eve-desktop-update-progress::after {
+  content: "";
+  display: block;
+  width: 42%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #23d8ee, #73f3bd);
+  animation: eve-desktop-progress 1.1s ease-in-out infinite alternate;
+}
+
+@keyframes eve-desktop-progress {
+  from { transform: translateX(-20%); }
+  to { transform: translateX(160%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eve-desktop-update-progress::after {
+    animation: none;
+  }
+}
+

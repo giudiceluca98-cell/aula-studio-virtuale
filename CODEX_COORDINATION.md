@@ -87,6 +87,63 @@ Il codice funzionale di `INTELLIGENCE-0.2 — Acquisizione web controllata e qua
 
 I documenti storici che richiedono una preview standalone sono superati: la verifica deve usare esclusivamente la sorgente modulare canonica.
 
+### DESKTOP-0.1 — Applicazione installabile e aggiornamenti
+
+```text
+CHECKPOINT:
+DESKTOP-0.1 — Applicazione installabile e aggiornamenti
+
+RESPONSABILE:
+Codex grafico/desktop
+
+STATO:
+IN_PROGRESS
+
+BRANCH DI PARTENZA:
+codex/eve-ai-studio-coordination-policy @ 238f721
+(contenuti applicativi allineati a origin/eve-ai-studio @ 13b8822)
+
+BRANCH DI LAVORO:
+codex/eve-ai-studio-desktop-installable
+
+OBIETTIVO:
+Generare l'app Windows installabile direttamente dalla sorgente canonica,
+con finestra nativa, aggiornamenti firmati via GitHub Release e preservazione
+dei dati locali compatibili.
+
+FILE PRENOTATI:
+- .github/workflows/release-eve-ai-studio-desktop.yml
+- eve-desktop/**
+- .codex/tasks/active/eve-ai-studio-desktop-installable.md
+- CODEX_COORDINATION.md, limitatamente a questa scheda
+
+FILE CONDIVISI PRENOTATI:
+- nessuno dei file condivisi della sorgente canonica
+
+MODULI CANONICI MODIFICATI:
+- nessuno
+
+ULTIMO COMMIT:
+non ancora disponibile
+
+DISPONIBILE PER L'ALTRO CODEX:
+NO, fino al completamento dei test desktop.
+
+ATTIVITÀ CONSENTITE ALL'ALTRO CODEX:
+- continuare il checkpoint funzionale sui file già dichiarati;
+- non intervenire sull'infrastruttura desktop prenotata.
+
+ATTIVITÀ VIETATE ALL'ALTRO CODEX:
+- creare una seconda sorgente desktop;
+- creare standalone o copie HTML committate;
+- modificare i file prenotati da DESKTOP-0.1.
+
+NOTE:
+La directory frontend generata durante la build è ignorata da Git e deriva
+ogni volta da reference/eve-ai-studio-preview/. Non è una fonte modificabile.
+Il checkpoint non modifica main, demo-canonica, Aula Studio o produzione.
+```
+
 ## Attività storiche di Aula Studio
 
 La tabella seguente è conservata come cronologia del precedente flusso di Aula Studio. Non assegna né prenota file di Eve AI Studio e non prevale sulle regole attive sopra.
