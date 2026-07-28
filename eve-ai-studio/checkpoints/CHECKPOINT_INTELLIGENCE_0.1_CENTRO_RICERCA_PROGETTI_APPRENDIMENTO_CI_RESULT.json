@@ -6,8 +6,8 @@
     "query-pianificate",
     "quarantena-fonti"
   ],
-  "tested_sha": "a9c1afe86b9c0153c8492448a712e657a0986633",
-  "generated_at": "2026-07-28T02:35:20.459342+00:00",
+  "tested_sha": "00aa9a04dd8d369c49a5451b7da1af3407ac3ea6",
+  "generated_at": "2026-07-28T02:37:47.024624+00:00",
   "passed": true,
   "states": {
     "install": "success",
