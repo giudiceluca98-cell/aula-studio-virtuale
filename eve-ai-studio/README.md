@@ -2,27 +2,88 @@
 
 Servizio isolato di Eve sviluppato sul branch `eve-ai-studio`, senza modificare `main`, `demo-canonica`, l’HTML canonico o l’app pubblica.
 
-## Stato
+## Due roadmap indipendenti
 
-Versione del servizio: `1.1.0`
+Eve AI Studio è organizzato in due linee che non devono essere confuse:
 
-Checkpoint:
+- **`CORE`** — piattaforma tecnica già sviluppata: sicurezza, requisiti, prompt, valutazioni, provider, materiali, retrieval, RAG e apertura delle fonti;
+- **`INTELLIGENCE`** — nuova evoluzione: ricerca online, memoria, apprendimento, scrittura e capacità AI.
 
-- `0.1` — fondazione FastAPI, provider mock, contesto, permessi, limiti e audit;
-- `0.2` — modularità e importatore delle 36 sezioni e 1.197 schede;
-- `0.3` — persistenza, versioni, confronto e rollback dei requisiti;
-- `0.4` — prompt versionati e workflow di approvazione;
-- `0.5` — valutazioni persistenti e gate reale;
-- `0.6` — runner deterministico e artefatti redatti;
-- `0.7` — provider, profili, retry, fallback, budget e telemetria;
-- `0.8` — catalogo materiali, estrazione e chunk;
-- `0.9` — retrieval lessicale locale e citazioni verificabili;
-- `1.0` — chat RAG estrattiva con fonti autorizzate;
-- `1.1` — apertura verificabile della fonte citata.
+Indice ufficiale, convenzione dei nomi e stato di ogni checkpoint:
 
-I Checkpoint `0.8`, `0.9` e `1.0` sono chiusi e approvati. Il Checkpoint `1.1` è implementato e verificato tecnicamente; resta da registrare l’approvazione conclusiva dell’utente.
+```text
+eve-ai-studio/CHECKPOINT_INDEX.md
+```
 
-## Struttura
+La linea `CORE` è attualmente **in pausa dopo CORE-1.1**. La linea `INTELLIGENCE` è **pianificata ma non ancora iniziata**.
+
+## Stato del servizio
+
+```text
+Versione: 1.1.0
+Branch: eve-ai-studio
+Suite cumulativa: 165 test superati
+Eve Animation Library: 1.2.2
+Asset originali HQ: 64
+```
+
+## Checkpoint CORE
+
+| ID | Parole chiave | Stato |
+|---|---|---|
+| `CORE-0.1` | Fondazione FastAPI, sicurezza, permessi, limiti, audit | completato |
+| `CORE-0.2` | Modularità, importazione requisiti | completato |
+| `CORE-0.3` | Persistenza, versioni, rollback requisiti | completato |
+| `CORE-0.4` | Prompt versionati, approvazione | completato |
+| `CORE-0.5` | Valutazioni, grader, gate qualità | completato |
+| `CORE-0.6` | Runner automatico, artefatti | completato |
+| `CORE-0.7` | Provider, orchestrazione, telemetria | completato |
+| `CORE-0.8` | Materiali, estrazione, chunking | chiuso e approvato |
+| `CORE-0.9` | Retrieval locale, citazioni | chiuso e approvato |
+| `CORE-1.0` | Chat RAG grounded, fonti | chiuso e approvato |
+| `CORE-1.1` | Apertura fonti, verifica integrità | tecnicamente completo; chiusura utente da registrare |
+
+Un eventuale checkpoint successivo della piattaforma dovrà chiamarsi:
+
+```text
+CORE-1.2_<PAROLE_CHIAVE_DA_DEFINIRE>
+```
+
+Non esiste ancora un `CORE-1.2` approvato o avviato.
+
+## Roadmap INTELLIGENCE
+
+| ID | Parole chiave | Stato |
+|---|---|---|
+| `INTELLIGENCE-0.1` | Centro ricerca, progetti apprendimento | pianificato |
+| `INTELLIGENCE-0.2` | Acquisizione web controllata, quarantena fonti | pianificato |
+| `INTELLIGENCE-0.3` | Affidabilità fonti, conflitti, revisione | pianificato |
+| `INTELLIGENCE-0.4` | Memoria semantica, embedding, retrieval ibrido | pianificato |
+| `INTELLIGENCE-0.5` | Provider AI reale, generazione citata | pianificato |
+| `INTELLIGENCE-0.6` | Apprendimento didattico, scrittura, personalizzazione | pianificato |
+| `INTELLIGENCE-0.7` | Aggiornamento continuo, manutenzione conoscenza | pianificato |
+
+Il primo file da creare prima di qualsiasi codice sarà:
+
+```text
+CHECKPOINT_INTELLIGENCE_0.1_CENTRO_RICERCA_PROGETTI_APPRENDIMENTO_PLAN.md
+```
+
+## Convenzione dei documenti
+
+```text
+CHECKPOINT_<LINEA>_<VERSIONE>_<PAROLE_CHIAVE>_<TIPO_FILE>.<estensione>
+```
+
+Tipi previsti:
+
+- `PLAN` — obiettivo, perimetro e criteri prima dello sviluppo;
+- `UPDATE` — riepilogo trasferibile del lavoro;
+- `VERIFICATION` — verifiche tecniche e browser;
+- `CI_RESULT` — risultato automatico;
+- `CLOSURE` — approvazione e chiusura.
+
+## Struttura del progetto
 
 ```text
 eve-ai-studio/
@@ -30,176 +91,65 @@ eve-ai-studio/
 │   ├── core/                 # configurazione, permessi e audit
 │   ├── context/              # validazione del contesto didattico
 │   ├── providers/            # catalogo, profili, orchestrazione e telemetria
-│   ├── requirements/         # piano, storage, versioni e rollback
-│   ├── prompts/              # prompt, modalità, workflow e API
+│   ├── requirements/         # importazione, versioni e rollback
+│   ├── prompts/              # prompt, modalità e workflow
 │   ├── evaluations/          # scenari, grader, runner, artefatti e gate
-│   ├── materials/            # catalogo, importazioni, estrazione e chunk
+│   ├── materials/            # catalogo, estrazione e chunking
 │   ├── retrieval/            # ranking locale, integrità e citazioni
-│   ├── rag/                  # chat RAG estrattiva e policy delle fonti
-│   ├── sources/              # apertura, integrità e navigazione delle fonti
-│   ├── main.py               # applicazione FastAPI
-│   └── models.py             # contratti chat condivisi
-├── checkpoints/
+│   ├── rag/                  # chat RAG grounded
+│   ├── sources/              # apertura e verifica delle fonti
+│   ├── main.py
+│   └── models.py
+├── checkpoints/              # documenti con nomi ricercabili
 ├── data/
 ├── tests/
-├── .env.example
+├── CHECKPOINT_INDEX.md
 ├── PHASE_STATUS.md
 └── pyproject.toml
 ```
 
-## Database locali
+## Capacità CORE disponibili
 
-```text
-data/eve-requirements.sqlite3
-data/eve-prompts.sqlite3
-data/eve-evaluations.sqlite3
-data/eve-provider-telemetry.sqlite3
-data/eve-materials.sqlite3
-```
-
-I database SQLite e i file WAL/SHM sono esclusi dal repository.
-
-## Provider e sicurezza corrente
-
-Provider registrati:
-
-- `mock` — attivo, deterministico, senza rete e senza costo;
-- `external-template` — disattivato e senza credenziali.
-
-```text
-EVE_EXTERNAL_PROVIDERS_ENABLED=false
-```
-
-I documenti sono sempre trattati come dati non fidati. Il contenuto documentale non può sostituire istruzioni di sistema, attivare strumenti o modificare permessi.
-
-## Materiali — Checkpoint 0.8
-
-Formati supportati:
-
-```text
-text/plain
-text/markdown
-text/csv
-text/html
-application/xhtml+xml
-application/json
-```
-
-Regole principali:
+### Materiali — `CORE-0.8`
 
 - isolamento per `room_id`;
 - SHA-256 sui byte originali;
-- deduplicazione nella stessa aula;
+- deduplicazione per aula;
 - versioni immutabili;
-- versione corrente aggiornata soltanto dopo successo;
-- HTML senza script, stili, noscript e SVG;
-- JSON deterministico;
-- chunk con indice, offset e SHA-256;
-- `embedding_status=not_requested`;
-- nessuna rete.
+- estrazione TXT, Markdown, CSV, HTML, XHTML e JSON;
+- chunk con indice, offset e hash;
+- nessun embedding e nessuna rete.
 
-Stato:
+### Retrieval — `CORE-0.9`
 
-```text
-text_extracted_and_chunked_no_embeddings
-```
+- algoritmo deterministico `eve-lexical-v1`;
+- uso delle sole versioni correnti `ready`;
+- controllo di integrità dei chunk;
+- citazioni con materiale, versione, chunk, offset e SHA-256;
+- esclusione delle fonti sospette.
 
-## Retrieval — Checkpoint 0.9
-
-Algoritmo:
-
-```text
-eve-lexical-v1
-```
-
-Il retrieval usa soltanto materiali della stessa aula, versioni correnti `ready` e chunk con SHA-256 valido. Ogni risultato contiene score, estratto, identificatori, versione, chunk, offset, file, media type, hash, locator e flag di sicurezza.
-
-Formato locator:
-
-```text
-material:{material_id}:v{version_number}:chunk:{chunk_index}:{start_char}-{end_char}
-```
-
-Stato:
-
-```text
-lexical_ranked_citations_no_embeddings
-```
-
-## Chat RAG — Checkpoint 1.0
-
-Identità tecnica:
+### Chat RAG — `CORE-1.0`
 
 ```text
 provider: local-rag
 model: eve-grounded-extractive-v1
 stage: grounded_extractive_chat_no_embeddings
-scope: authorized_room_current_ready_materials_only
 ```
 
-Flusso:
+La risposta usa esclusivamente fonti autorizzate e marcatori `[n]`. Quando non trova supporto sufficiente restituisce `non trovato` senza aggiungere conoscenza generale.
 
-1. richiede un `room_id` autorizzato;
-2. cerca nei chunk correnti `ready` della stessa aula;
-3. verifica SHA-256;
-4. esclude le fonti sospette;
-5. costruisce una risposta estrattiva con marcatori `[n]`;
-6. restituisce citazioni strutturate;
-7. calcola SHA-256 della risposta;
-8. non propone azioni.
+### Apertura fonti — `CORE-1.1`
 
-Quando mancano fonti sufficienti, Eve restituisce `non trovato` e non aggiunge conoscenza generale.
+Il servizio verifica:
 
-## Apertura fonte — Checkpoint 1.1
-
-Servizio:
-
-```text
-SourceOpeningService
-stage: verified_source_opening_v1
-```
-
-L’apertura riceve un locator prodotto dal retrieval o dalla chat RAG e verifica:
-
-- formato del locator;
-- appartenenza alla stessa aula;
+- locator;
+- aula autorizzata;
 - materiale, versione e chunk;
-- coordinate iniziali e finali;
-- SHA-256 salvato del chunk;
-- corrispondenza tra chunk e porzione del testo estratto;
-- SHA-256 atteso, quando fornito dalla citazione.
-
-Una versione storica `ready` può essere aperta ed è marcata `stale`. Con `require_current=true`, una citazione storica viene bloccata con `source_outdated`.
-
-La risposta contiene:
-
-- testo esatto del chunk;
-- contesto precedente e successivo limitato;
-- versione citata e versione corrente;
-- stato corrente/storico;
-- hash verificato;
-- flag di sicurezza;
-- resource path e anchor navigabile;
-- numero pagina, quando presente nei metadati;
-- `content_trust=untrusted_document_content`;
-- `instructions_executable=false`.
-
-Una fonte assente e una fonte appartenente a un’altra aula restituiscono lo stesso contratto:
-
-```text
-404 source_not_found
-```
-
-Errori:
-
-```text
-invalid_source_locator
-source_not_found
-source_integrity_failed
-source_hash_mismatch
-source_coordinates_mismatch
-source_outdated
-```
+- coordinate;
+- SHA-256;
+- corrispondenza con il testo estratto;
+- versione corrente o storica;
+- contenuto sospetto come dato non fidato.
 
 ## API principali
 
@@ -209,49 +159,25 @@ POST /v1/chat
 
 GET  /v1/requirements/status
 POST /v1/requirements/import
-GET  /v1/requirements/imports
 GET  /v1/requirements/versions
-GET  /v1/requirements/versions/{version_id}
-GET  /v1/requirements/compare
 POST /v1/requirements/rollback
-GET  /v1/requirements/sections
-GET  /v1/requirements
-GET  /v1/requirements/{requirement_id}
 
 GET  /v1/prompts/status
-GET  /v1/prompts/modes
-GET  /v1/prompts/compare
-POST /v1/prompts/rollback
 GET  /v1/prompts
 POST /v1/prompts
-GET  /v1/prompts/{version_id}
-POST /v1/prompts/{version_id}/revisions
 POST /v1/prompts/{version_id}/transition
 
 GET  /v1/evaluations/status
-GET  /v1/evaluations/gate/{prompt_version_id}
 GET  /v1/evaluations/scenarios
-POST /v1/evaluations/scenarios
-GET  /v1/evaluations/runs
-POST /v1/evaluations/runs
 POST /v1/evaluations/runs/execute
-GET  /v1/evaluations/runs/{run_id}
-GET  /v1/evaluations/runs/{run_id}/artifacts
 
 GET  /v1/providers/status
 GET  /v1/providers/catalog
-GET  /v1/providers/models
-GET  /v1/providers/profiles
 GET  /v1/providers/telemetry
 
 GET  /v1/materials/status
-GET  /v1/materials/imports
 POST /v1/materials/import
 GET  /v1/materials
-GET  /v1/materials/{material_id}
-GET  /v1/materials/{material_id}/versions
-GET  /v1/materials/{material_id}/versions/{version_number}
-GET  /v1/materials/{material_id}/versions/{version_number}/chunks
 
 GET  /v1/retrieval/status
 POST /v1/retrieval/search
@@ -263,57 +189,39 @@ GET  /v1/sources/status
 POST /v1/sources/open
 ```
 
-La rotta storica `/v1/chat` resta separata e invariata.
+## Verifica automatica
 
-## Configurazione recente
-
-```text
-EVE_RETRIEVAL_MAX_QUERY_CHARS=500
-EVE_RETRIEVAL_MAX_RESULTS=10
-EVE_RETRIEVAL_MAX_EXCERPT_CHARS=600
-EVE_RETRIEVAL_MIN_SCORE=1
-EVE_RAG_MAX_SOURCES=4
-EVE_RAG_MAX_ANSWER_CHARS=4000
-EVE_SOURCE_MAX_CONTEXT_CHARS=2000
-```
-
-## Test e verifica
-
-GitHub Actions ha verificato il commit funzionale:
+Workflow core:
 
 ```text
-19fcd0e4ac55df862eb0131e6546f37a69746959
+.github/workflows/eve-ai-studio-checks.yml
 ```
 
-Risultati:
+Rapporto autorevole:
 
 ```text
-Checkpoint 0.8 specifico: 20 passed
-Checkpoint 0.9 specifico: 14 passed
-Checkpoint 1.0 specifico: 13 passed
-Checkpoint 1.1 specifico: 13 passed
-Suite cumulativa 0.1–1.1: 165 passed
+eve-ai-studio/checkpoints/CHECKPOINT_CORE_1.1_APERTURA_FONTI_VERIFICA_INTEGRITA_CI_RESULT.json
 ```
 
-Anteprima Chromium:
+Risultato atteso:
 
 ```text
-5 scenari materiali
-4 scenari retrieval
-4 scenari chat RAG
-5 scenari apertura fonte
-18 scenari complessivi
-Errori JavaScript: 0
+Installazione editable: success
+Compilazione Python: success
+Pytest: 165 passed
+Sintassi JavaScript: success
 ```
 
-Il warning `StarletteDeprecationWarning` di `fastapi.testclient` non è un fallimento del checkpoint.
+Workflow preview e animazioni:
 
-## Avvio locale
+```text
+.github/workflows/eve-hq-final-verification.yml
+```
 
-```bash
-cd eve-ai-studio
-python -m pip install -e ".[dev]"
-uvicorn app.main:app --reload
+Rapporto autorevole:
+
+```text
+eve-ai-studio/checkpoints/EVE_HQ_FINAL_VERIFICATION.json
 ```
 
 ## Anteprima ufficiale
@@ -322,31 +230,35 @@ uvicorn app.main:app --reload
 reference/eve-ai-studio-preview/index.html
 ```
 
-Moduli recenti:
+Standalone:
 
 ```text
-materials-workflow.js
-retrieval-workflow.js
-rag-chat-workflow.js
-source-opening-workflow.js
+reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html
 ```
 
-Non creare anteprime ufficiali parallele senza una decisione esplicita.
+La preview usa 64 WebP originali HQ e non deve essere sostituita con demo parallele, miniature o payload ricompressi.
 
-## Escluso dallo stato corrente
+## Escluso dallo stato CORE corrente
 
+Questi elementi appartengono alla futura linea `INTELLIGENCE` e non sono ancora implementati:
+
+- ricerca online;
+- acquisizione web;
 - provider AI reale e chiavi API;
 - embedding;
-- indice o database vettoriale;
+- database vettoriale;
 - retrieval semantico o ibrido;
-- reranker AI;
 - generazione libera con modello linguistico;
-- PDF e Office;
-- OCR e trascrizione;
-- Supabase, autenticazione di produzione e object storage;
 - memoria didattica persistente;
-- strumenti che modificano l’app ufficiale;
-- integrazione con l’app ufficiale o la demo canonica.
+- aggiornamento autonomo della conoscenza.
+
+## Avvio locale
+
+```bash
+cd eve-ai-studio
+python -m pip install -e ".[dev]"
+uvicorn app.main:app --reload
+```
 
 ## Protezioni
 
@@ -363,6 +275,4 @@ Non eseguiti:
 
 - pull request;
 - merge;
-- provider esterni;
-- embedding;
 - collegamenti alla produzione.
