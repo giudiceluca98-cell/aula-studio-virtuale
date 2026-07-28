@@ -71,9 +71,9 @@
         <div class="panel-body">
           <div class="field"><label for="evaluationGatePrompt">Versione prompt</label>
             <select id="evaluationGatePrompt">
-              <option value="1">v1 · Eve Tutor Base</option>
-              <option value="2">v2 · Eve Tutor Socratico</option>
-              <option value="3" selected>v3 · Eve Quiz Guidato</option>
+              <option value="1">Versione 1 · Spiegazione adattiva</option>
+              <option value="2">Versione 2 · Metodo socratico</option>
+              <option value="3" selected>Versione 3 · Quiz e interrogazione</option>
             </select>
           </div>
           <div class="metric-row" style="grid-template-columns:repeat(2,1fr);margin-top:12px">

@@ -44,9 +44,8 @@ Il workflow `Install Eve Animation Library HQ`:
 4. elimina i vecchi payload alleggeriti;
 5. sostituisce il ritratto SVG con l'immagine animata originale;
 6. collega il runtime modulare;
-7. rigenera lo standalone incorporando gli stessi WebP;
-8. prova tutti i 64 stati nella pagina modulare e nello standalone `file://`;
-9. salva tutto esclusivamente sul branch `eve-ai-studio`.
+7. prova tutti i 64 stati nella pagina modulare canonica;
+8. salva tutto esclusivamente sul branch `eve-ai-studio`.
 
 ## Regola permanente
 

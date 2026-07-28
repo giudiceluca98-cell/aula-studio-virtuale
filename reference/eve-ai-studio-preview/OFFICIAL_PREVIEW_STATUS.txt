@@ -1,26 +1,21 @@
 EVE AI STUDIO
-STATO DELL’ANTEPRIMA UFFICIALE
+STATO DELLA SORGENTE CANONICA
 
 Data: 28 luglio 2026
-Branch: eve-ai-studio
+Branch ufficiale: eve-ai-studio
 
-PERCORSI UFFICIALI
-
-Preview modulare:
+FONTE DI VERITÀ
 
 reference/eve-ai-studio-preview/index.html
 
-File autonomo distribuibile:
-
-reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html
-
-La preview modulare è la sorgente modificabile. Lo standalone viene rigenerato
-automaticamente dalla stessa sorgente e non deve essere modificato a mano.
+La preview modulare è la sorgente canonica modificabile di Eve AI Studio.
+Non viene mantenuta una seconda copia standalone: interfaccia, moduli, runtime,
+animazioni e workflow vengono verificati direttamente dalla sorgente modulare.
 
 VERSIONI INTEGRATE
 
-- servizio Eve AI Studio: 1.1.0;
-- checkpoint tecnico: 1.1;
+- servizio Eve AI Studio: 1.2.0;
+- checkpoint tecnico: INTELLIGENCE-0.1;
 - Eve Animation Library: 1.2.2;
 - qualità animazioni: original-final-webp;
 - totale asset: 64.
@@ -28,25 +23,34 @@ VERSIONI INTEGRATE
 FUNZIONI PRESENTI
 
 - fondazione FastAPI e provider mock;
-- requisiti versionati;
-- prompt e workflow di approvazione;
-- valutazioni, runner e gate;
-- profili provider e telemetria;
-- catalogo materiali, estrazione e chunk;
-- retrieval lessicale locale;
-- chat RAG estrattiva con citazioni;
-- apertura verificabile della fonte;
-- galleria completa delle 64 animazioni originali.
+- catalogo materiali, estrazione, chunk e retrieval locale;
+- chat RAG estrattiva con citazioni e apertura verificabile delle fonti;
+- centro ricerca e progetti di apprendimento;
+- libreria completa delle 64 animazioni originali;
+- navigazione semplificata di Eve AI Studio;
+- costruzione dei modelli didattici con tratti e regole riutilizzabili;
+- creazione di nuovi modelli nello stesso pannello di configurazione;
+- salvataggio e prova del modello nella chat di Configura e prova;
+- preparazione della pubblicazione verso Aula Studio con conferma;
+- linguaggio visivo coerente con Aula Studio;
+- ottimizzazione grafica senza modifiche visive.
 
-MODULI VISIVI PRINCIPALI
+FLUSSO UFFICIALE
 
-- app.js;
-- materials-workflow.js;
-- retrieval-workflow.js;
-- rag-chat-workflow.js;
-- source-opening-workflow.js;
-- animation-library-gallery.js;
-- eve-animation-runtime-v1.2.2/eve-hq-runtime.js.
+1. Le modifiche vengono applicate alla sorgente modulare.
+2. L’anteprima locale viene verificata prima del caricamento.
+3. Il branch eve-ai-studio conserva la versione canonica condivisa.
+4. Gli altri Codex lavorano partendo da questo branch.
+5. La pubblicazione verso Aula Studio resta un passaggio distinto e approvato.
+
+OTTIMIZZAZIONI GRAFICHE
+
+- un solo ciclo gestito per le particelle;
+- animazioni sospese quando la pagina non è visibile;
+- ritratto animato di Eve caricato soltanto quando visibile;
+- galleria animazioni caricata progressivamente;
+- animazioni CSS fuori schermo messe in pausa;
+- nessuna modifica all’aspetto approvato.
 
 EVE ANIMATION LIBRARY 1.2.2
 
@@ -60,60 +64,31 @@ La preview usa i WebP finali originali:
 - nessuna interpolazione;
 - nessuna ricompressione.
 
-La libreria completa è accessibile dal pulsante:
+La libreria completa è accessibile da “Vedi tutte le 64 animazioni” e dalla
+voce laterale “Libreria animazioni”.
 
-Vedi tutte le 64 animazioni
+VERIFICHE
 
-oppure dalla voce laterale:
+Workflow autorevoli:
 
-Libreria animazioni
+- .github/workflows/eve-ai-studio-checks.yml
+- .github/workflows/eve-hq-final-verification.yml
+- .github/workflows/eve-intelligence-0.1-checks.yml
 
-La galleria permette ricerca, filtri, anteprima tecnica e riproduzione dello
-stato selezionato su Eve.
-
-BUILD E VERIFICA
-
-Workflow autorevole:
-
-.github/workflows/eve-hq-final-verification.yml
-
-Il workflow:
-
-1. rigenera lo standalone dalla preview modulare;
-2. impedisce dipendenze CSS o JavaScript esterne nello standalone;
-3. apre la preview modulare tramite server locale;
-4. apre lo standalone tramite file://;
-5. verifica tutti i 64 asset, dimensioni e SHA-256;
-6. verifica la galleria con 64 schede;
-7. prova materiali, retrieval, chat RAG e apertura fonte;
-8. salva il rapporto autorevole in:
-
-   eve-ai-studio/checkpoints/EVE_HQ_FINAL_VERIFICATION.json
-
-PULIZIA APPLICATA
-
-Sono stati rimossi:
-
-- payload e loader alleggeriti precedenti;
-- runtime avatar statico precedente alla libreria HQ;
-- asset runtime singolo da 192 px;
-- file temporanei di trasferimento;
-- workflow duplicati di preview e standalone;
-- log vuoti e rapporti sostituiti dal rapporto consolidato.
+I workflow verificano servizio, sintassi JavaScript, preview modulare, galleria,
+64 asset originali, materiali, retrieval, chat RAG, fonti e centro ricerca.
 
 VINCOLI
 
-- main non modificato;
-- demo-canonica non modificato;
-- eve-canonical-integration-v2 non modificato;
-- HTML canonico non modificato;
-- nessuna pull request;
-- nessun merge;
-- nessun provider AI esterno;
-- nessun embedding esterno.
+- main non viene modificato da questo flusso;
+- demo-canonica non viene modificato;
+- il branch eve-ai-studio è l’analogo canonico dedicato a Eve AI Studio;
+- nessun provider AI esterno è attivato automaticamente;
+- nessun embedding esterno è attivato automaticamente;
+- nessuna pubblicazione verso Aula Studio avviene senza approvazione.
 
 REGOLA PER I PROSSIMI AGGIORNAMENTI
 
-Le modifiche devono essere applicate alla preview modulare e ai suoi moduli.
-Lo standalone viene sempre rigenerato dal workflow; i 64 asset originali restano
-immutati e verificati.
+Ogni aggiornamento di Eve AI Studio deve partire da eve-ai-studio, modificare
+la preview modulare e i relativi moduli, mantenere invariati gli asset originali
+verificati e superare i controlli prima di essere proposto ad Aula Studio.

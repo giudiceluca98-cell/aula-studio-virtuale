@@ -6,6 +6,9 @@
   let manifest = null;
   let portrait = null;
   let currentState = null;
+  let currentSource = "";
+  let portraitIsVisible = true;
+  let portraitObserver = null;
   const aliases = Object.create(null);
 
   async function ensureManifest() {
@@ -29,9 +32,33 @@
     portrait.className = "eve-portrait eve-hq-portrait";
     portrait.alt = "Eve, assistente AI animata";
     portrait.decoding = "async";
+    portrait.loading = "eager";
     portrait.draggable = false;
     if (old) old.replaceWith(portrait); else stage.prepend(portrait);
+    if (typeof IntersectionObserver === "function") {
+      portraitObserver?.disconnect();
+      portraitObserver = new IntersectionObserver(entries => {
+        const entry = entries[0];
+        portraitIsVisible = Boolean(entry?.isIntersecting);
+        syncPortraitPlayback();
+      }, { rootMargin: "140px", threshold: 0.01 });
+      portraitObserver.observe(portrait);
+    }
     return portrait;
+  }
+
+  function syncPortraitPlayback() {
+    if (!portrait?.isConnected || !currentSource) return;
+    const shouldPlay = !document.hidden && portraitIsVisible;
+    if (shouldPlay) {
+      if (portrait.getAttribute("src") !== currentSource) portrait.src = currentSource;
+      portrait.dataset.graphicsPlayback = "running";
+    } else if (portrait.hasAttribute("src")) {
+      portrait.removeAttribute("src");
+      portrait.dataset.graphicsPlayback = "paused";
+    } else {
+      portrait.dataset.graphicsPlayback = "paused";
+    }
   }
 
   async function setState(requestedState, options = {}) {
@@ -41,11 +68,12 @@
     if (!asset) throw new Error(`Stato Eve sconosciuto: ${requestedState}`);
     const image = ensurePortrait();
     const assetUrl = asset.dataUrl || new URL(asset.file, manifestUrl).href;
-    if (currentState === id && options.restart !== false) {
+    currentSource = assetUrl;
+    if (currentState === id && options.restart !== false && !document.hidden && portraitIsVisible) {
       image.removeAttribute("src");
       await new Promise(resolve => requestAnimationFrame(resolve));
     }
-    image.src = assetUrl;
+    syncPortraitPlayback();
     image.width = asset.width;
     image.height = asset.height;
     image.dataset.eveState = id;
@@ -55,7 +83,7 @@
     image.dataset.eveSourceHeight = String(asset.height);
     image.style.height = asset.variant === "compact" ? "128px" : "232px";
     image.style.maxWidth = asset.variant === "compact" ? "128px" : "100%";
-    await image.decode().catch(() => undefined);
+    if (image.hasAttribute("src")) await image.decode().catch(() => undefined);
     currentState = id;
     document.dispatchEvent(new CustomEvent("eve:animation-state", { detail: { id, asset } }));
     return { id, asset };
@@ -75,5 +103,6 @@
     getManifest: ensureManifest,
   });
 
+  document.addEventListener("visibilitychange", syncPortraitPlayback, { passive: true });
   ensureManifest().then(data => setState(data.defaultState, { restart: false })).catch(console.error);
 })();

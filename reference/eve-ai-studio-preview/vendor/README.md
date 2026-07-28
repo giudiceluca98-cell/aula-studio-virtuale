@@ -37,8 +37,7 @@ Quando il file viene caricato sul branch `eve-ai-studio`, il workflow `Install E
 - installa i 64 WebP originali;
 - elimina i payload alleggeriti;
 - collega il runtime HQ;
-- rigenera lo standalone;
-- prova tutti i 64 stati sia via HTTP sia tramite `file://`;
+- prova tutti i 64 stati nella preview modulare canonica;
 - salva il risultato sullo stesso branch.
 
 Non rinominare, ricomprimere o modificare l'archivio.

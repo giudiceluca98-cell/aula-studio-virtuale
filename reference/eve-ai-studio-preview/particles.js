@@ -10,6 +10,9 @@ function startParticleField(){
   let height=0;
   let dpr=1;
   let particles=[];
+  let frameId=0;
+  let resizeFrameId=0;
+  let running=false;
 
   function resize(){
     dpr=Math.min(window.devicePixelRatio||1,2);
@@ -34,12 +37,14 @@ function startParticleField(){
     }));
   }
 
-  function draw(){
+  function paint(updateParticles){
     ctx.clearRect(0,0,width,height);
+    const connectionDistance=105;
+    const connectionDistanceSquared=connectionDistance*connectionDistance;
 
     for(let index=0;index<particles.length;index+=1){
       const particle=particles[index];
-      if(!reduceMotion){
+      if(updateParticles){
         particle.x+=particle.vx;
         particle.y+=particle.vy;
         particle.pulse+=.008;
@@ -61,10 +66,13 @@ function startParticleField(){
 
       for(let targetIndex=index+1;targetIndex<particles.length;targetIndex+=1){
         const target=particles[targetIndex];
-        const distance=Math.hypot(particle.x-target.x,particle.y-target.y);
-        if(distance<105){
+        const deltaX=particle.x-target.x;
+        const deltaY=particle.y-target.y;
+        const distanceSquared=deltaX*deltaX+deltaY*deltaY;
+        if(distanceSquared<connectionDistanceSquared){
+          const distance=Math.sqrt(distanceSquared);
           ctx.beginPath();
-          ctx.strokeStyle=`rgba(0,223,242,${(1-distance/105)*.045})`;
+          ctx.strokeStyle=`rgba(0,223,242,${(1-distance/connectionDistance)*.045})`;
           ctx.lineWidth=.6;
           ctx.moveTo(particle.x,particle.y);
           ctx.lineTo(target.x,target.y);
@@ -72,13 +80,59 @@ function startParticleField(){
         }
       }
     }
+  }
 
-    if(!reduceMotion)requestAnimationFrame(draw);
+  function draw(){
+    frameId=0;
+    if(!running||document.hidden)return;
+    paint(true);
+    frameId=requestAnimationFrame(draw);
+  }
+
+  function start(){
+    if(reduceMotion||running||document.hidden)return;
+    running=true;
+    canvas.dataset.graphicsRunning="true";
+    if(!frameId)frameId=requestAnimationFrame(draw);
+  }
+
+  function stop(){
+    running=false;
+    canvas.dataset.graphicsRunning="false";
+    if(frameId){
+      cancelAnimationFrame(frameId);
+      frameId=0;
+    }
+  }
+
+  function scheduleResize(){
+    if(resizeFrameId)return;
+    resizeFrameId=requestAnimationFrame(()=>{
+      resizeFrameId=0;
+      resize();
+      if(reduceMotion||!running)paint(false);
+    });
+  }
+
+  function syncVisibility(){
+    document.body.classList.toggle("graphics-page-hidden",document.hidden);
+    if(document.hidden)stop();
+    else start();
   }
 
   resize();
-  window.addEventListener("resize",resize,{passive:true});
-  draw();
+  paint(false);
+  canvas.dataset.graphicsRunning="false";
+  start();
+  window.addEventListener("resize",scheduleResize,{passive:true});
+  document.addEventListener("visibilitychange",syncVisibility,{passive:true});
+
+  window.EveGraphicsPerformance=Object.assign(window.EveGraphicsPerformance||{},{
+    particleField:{
+      isRunning:()=>running,
+      particleCount:()=>particles.length
+    }
+  });
 }
 
 startParticleField();

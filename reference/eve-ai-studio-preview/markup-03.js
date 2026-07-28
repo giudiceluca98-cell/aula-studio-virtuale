@@ -82,8 +82,6 @@ window.__EVE_HTML_PARTS=window.__EVE_HTML_PARTS||[];window.__EVE_HTML_PARTS.push
       <div class="panel-head"><div><h3>Editor della configurazione</h3><p>Ogni salvataggio produce una nuova versione immutabile.</p></div><span class="tag" id="promptStatusBadge">Draft</span></div>
       <div class="panel-body">
         <div class="form-grid">
-          <div class="field"><label for="promptVersionSelect">Versione selezionata</label><select id="promptVersionSelect"></select></div>
-          <div class="field"><label for="promptName">Nome</label><input id="promptName"></div>
           <div class="field full"><label for="systemPrompt">Prompt di sistema</label><textarea id="systemPrompt"></textarea></div>
           <div class="field"><label for="promptMode">Modalità didattica</label><select id="promptMode"><option value="adaptive_explanation">Spiegazione adattiva</option><option value="socratic">Metodo socratico</option><option value="quiz">Quiz e interrogazione</option><option value="correction">Correzione guidata</option><option value="planning">Pianificazione</option></select></div>
           <div class="field"><label for="promptTone">Tono</label><select id="promptTone"><option value="calm_direct">Calmo e diretto</option><option value="friendly">Amichevole</option><option value="technical">Tecnico</option></select></div>
@@ -93,13 +91,6 @@ window.__EVE_HTML_PARTS=window.__EVE_HTML_PARTS||[];window.__EVE_HTML_PARTS.push
           <div class="field"><label for="promptMemory">Memoria</label><select id="promptMemory"><option value="consent">Con consenso</option><option value="session_only">Solo sessione</option><option value="off">Disattivata</option></select></div>
           <div class="field"><label for="promptTools">Strumenti</label><select id="promptTools"><option value="propose">Solo proposta</option><option value="read_only">Sola lettura</option><option value="confirm">Con conferma</option></select></div>
         </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
-          <button class="btn primary" id="savePromptDraft">Salva nuova bozza</button>
-          <button class="btn" id="submitPromptReview">Invia in revisione</button>
-          <button class="btn green" id="approvePromptTests">Test superati</button>
-          <button class="btn primary" id="publishPromptVersion">Pubblica prompt</button>
-        </div>
-        <p id="promptWorkflowMessage" style="color:var(--muted);margin:12px 0 0" aria-live="polite">Seleziona una versione per verificarne contenuto e stato.</p>
       </div>
     </section>
 

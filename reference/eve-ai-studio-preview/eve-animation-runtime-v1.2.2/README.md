@@ -23,4 +23,6 @@ Questa cartella è stata generata dal pacchetto originale verificato:
 - `eve-hq-runtime.js`: API `window.EveAnimationLibrary`.
 - `eve-hq-runtime.css`: dimensionamento senza degradazione.
 - `assets/`: un WebP originale per ciascuno dei 64 stati.
-- `../EVE_AI_STUDIO_STANDALONE_HQ.html`: HTML unico, offline.
+
+La sorgente canonica è la preview modulare in `../index.html`; non viene
+mantenuta una seconda copia standalone.

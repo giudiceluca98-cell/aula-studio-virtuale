@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Eve AI Studio — Anteprima ufficiale</title>
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v=graphics-performance-2">
 <link rel="stylesheet" href="eve-animation-runtime-v1.2.2/eve-hq-runtime.css">
 <style>
 #loader{max-width:620px;margin:20vh auto;padding:32px;text-align:center;color:#ecfbff}
@@ -23,7 +23,8 @@
 function loadPreviewScript(source){
   return new Promise((resolve,reject)=>{
     const script=document.createElement("script");
-    script.src=source;
+    const previewRevision=new URLSearchParams(location.search).get("preview");
+    script.src=previewRevision?`${source}?v=${encodeURIComponent(previewRevision)}`:source;
     script.onload=resolve;
     script.onerror=()=>reject(new Error(`Il file ${source} non è disponibile.`));
     document.body.appendChild(script);
@@ -39,7 +40,6 @@ function loadPreviewScript(source){
   await loadPreviewScript("eve-animation-runtime-v1.2.2/eve-hq-runtime.js");
   await loadPreviewScript("animation-library-gallery.js");
 
-  await loadPreviewScript("prompt-workflow.js");
   await loadPreviewScript("evaluation-workflow.js");
   await loadPreviewScript("runner-workflow.js");
   await loadPreviewScript("provider-workflow.js");
@@ -49,7 +49,12 @@ function loadPreviewScript(source){
   await loadPreviewScript("source-opening-workflow.js");
   await loadPreviewScript("research-center-workflow.js");
   await loadPreviewScript("navigation-compat.js");
+  await loadPreviewScript("model-test-workflow.js");
+  await loadPreviewScript("model-rules-workflow.js");
+  await loadPreviewScript("eve-release-workflow.js");
+  await loadPreviewScript("simple-studio-navigation.js");
   try{await loadPreviewScript("particles.js")}catch(error){console.warn(error.message)}
+  try{await loadPreviewScript("graphics-performance.js")}catch(error){console.warn(error.message)}
 })().catch(error=>{
   document.body.innerHTML=`<main id="loader"><h1>Anteprima non caricata</h1><p>${error.message}</p></main>`;
 });

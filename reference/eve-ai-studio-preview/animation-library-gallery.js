@@ -111,6 +111,27 @@
 
   let assets = [];
   let selected = null;
+  let cardImageObserver = null;
+
+  function observeCardImages() {
+    const images = grid.querySelectorAll(".animation-card-media img[data-animation-src]");
+    cardImageObserver?.disconnect();
+    if (typeof IntersectionObserver !== "function") {
+      images.forEach(image => { image.src = image.dataset.animationSrc; });
+      return;
+    }
+    cardImageObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        const image = entry.target;
+        if (entry.isIntersecting) {
+          if (!image.hasAttribute("src")) image.src = image.dataset.animationSrc;
+        } else if (image.hasAttribute("src")) {
+          image.removeAttribute("src");
+        }
+      });
+    }, { rootMargin: "320px 0px", threshold: 0.01 });
+    images.forEach(image => cardImageObserver.observe(image));
+  }
 
   function openLibrary() {
     document.querySelectorAll(".view").forEach(view => view.classList.toggle("active", view === section));
@@ -120,6 +141,7 @@
     if (title) title.textContent = "Libreria animazioni";
     if (subtitle) subtitle.textContent = "Esplora e prova tutti i 64 stati originali di Eve.";
     window.scrollTo({ top: 0, behavior: "smooth" });
+    requestAnimationFrame(observeCardImages);
   }
 
   function selectAsset(asset, applyToEve = false) {
@@ -151,7 +173,7 @@
     count.textContent = `${visible.length} ${visible.length === 1 ? "animazione" : "animazioni"}`;
     grid.innerHTML = visible.length ? visible.map(asset => `
       <button type="button" class="animation-card${selected?.id === asset.id ? " active" : ""}" data-asset-id="${escapeHtml(asset.id)}">
-        <span class="animation-card-media"><img src="${assetUrl(asset)}" loading="lazy" decoding="async" alt="${escapeHtml(humanize(asset.id))}"></span>
+        <span class="animation-card-media"><img data-animation-src="${assetUrl(asset)}" loading="lazy" decoding="async" alt="${escapeHtml(humanize(asset.id))}"></span>
         <strong>${escapeHtml(humanize(asset.id))}</strong>
         <small>${escapeHtml(asset.priority)} · ${escapeHtml(asset.variant)} · ${asset.width}px</small>
       </button>`).join("") : '<div class="animation-library-empty">Nessuna animazione corrisponde ai filtri.</div>';
@@ -159,6 +181,7 @@
       const asset = assets.find(item => item.id === card.dataset.assetId);
       if (asset) selectAsset(asset, true);
     }));
+    observeCardImages();
   }
 
   function fillFilter(select, values) {

@@ -71,9 +71,9 @@
           <div class="form-grid">
             <div class="field"><label for="automaticRunnerPrompt">Versione prompt</label>
               <select id="automaticRunnerPrompt">
-                <option value="1">v1 · Eve Tutor Base</option>
-                <option value="2">v2 · Eve Tutor Socratico</option>
-                <option value="3" selected>v3 · Eve Quiz Guidato</option>
+                <option value="1">Versione 1 · Spiegazione adattiva</option>
+                <option value="2">Versione 2 · Metodo socratico</option>
+                <option value="3" selected>Versione 3 · Quiz e interrogazione</option>
               </select>
             </div>
             <div class="field"><label for="automaticRunnerMode">Simulazione provider</label>
