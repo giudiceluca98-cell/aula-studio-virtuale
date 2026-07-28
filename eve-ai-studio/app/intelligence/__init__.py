@@ -1,11 +1,18 @@
+from .acquisition_storage import SqliteAcquisitionStore
 from .errors import (
     ResearchConflictError,
+    ResearchDocumentNotFoundError,
     ResearchError,
     ResearchLimitError,
     ResearchProjectNotFoundError,
+    ResearchSourceNotFoundError,
     ResearchTransitionError,
 )
 from .models import (
+    ResearchAcquisitionEvent,
+    ResearchAcquisitionEventListResponse,
+    ResearchAcquisitionRequest,
+    ResearchAcquisitionStatus,
     ResearchCenterStatus,
     ResearchProjectCreateRequest,
     ResearchProjectDetail,
@@ -13,6 +20,7 @@ from .models import (
     ResearchProjectStatus,
     ResearchProjectSummary,
     ResearchProjectTransitionRequest,
+    ResearchQuarantinedDocument,
     ResearchQuery,
     ResearchQueryCreateRequest,
     ResearchQueryListResponse,
@@ -26,11 +34,24 @@ from .models import (
 from .router import create_research_router
 from .service import ResearchCenterService, ResearchLimits
 from .storage import SqliteResearchStore
+from .web_acquisition import (
+    ControlledWebAcquirer,
+    PinnedHttpTransport,
+    UrlGuard,
+    WebAcquisitionPolicy,
+)
 
 __all__ = [
+    "ControlledWebAcquirer",
+    "PinnedHttpTransport",
+    "ResearchAcquisitionEvent",
+    "ResearchAcquisitionEventListResponse",
+    "ResearchAcquisitionRequest",
+    "ResearchAcquisitionStatus",
     "ResearchCenterService",
     "ResearchCenterStatus",
     "ResearchConflictError",
+    "ResearchDocumentNotFoundError",
     "ResearchError",
     "ResearchLimitError",
     "ResearchLimits",
@@ -41,6 +62,7 @@ __all__ = [
     "ResearchProjectStatus",
     "ResearchProjectSummary",
     "ResearchProjectTransitionRequest",
+    "ResearchQuarantinedDocument",
     "ResearchQuery",
     "ResearchQueryCreateRequest",
     "ResearchQueryListResponse",
@@ -48,9 +70,13 @@ __all__ = [
     "ResearchSourceCandidate",
     "ResearchSourceCandidateCreateRequest",
     "ResearchSourceCandidateListResponse",
+    "ResearchSourceNotFoundError",
     "ResearchSourceStatus",
     "ResearchTransitionError",
     "ResearchTransitionEvent",
+    "SqliteAcquisitionStore",
     "SqliteResearchStore",
+    "UrlGuard",
+    "WebAcquisitionPolicy",
     "create_research_router",
 ]
