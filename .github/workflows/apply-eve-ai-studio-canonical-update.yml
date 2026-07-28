@@ -1,6 +1,11 @@
 name: Apply Eve AI Studio canonical update
 
 on:
+  push:
+    branches:
+      - eve-ai-studio
+    paths:
+      - ".github/workflows/apply-eve-ai-studio-canonical-update.yml"
   workflow_dispatch:
 
 permissions:
