@@ -188,7 +188,11 @@ jobs:
           junit = Path("eve-ai-studio/intelligence-0.1-results.xml")
           if junit.exists():
               root = ET.parse(junit).getroot()
-              counts = {key: int(float(root.attrib.get(key, 0))) for key in counts}
+              suites = [root] if root.tag == "testsuite" else list(root.findall(".//testsuite"))
+              counts = {
+                  key: sum(int(float(suite.attrib.get(key, 0))) for suite in suites)
+                  for key in counts
+              }
           passed = all(value == "success" for value in states.values()) and counts["tests"] == 15 and counts["failures"] == 0 and counts["errors"] == 0
           result = {
               "checkpoint": "INTELLIGENCE-0.1",
