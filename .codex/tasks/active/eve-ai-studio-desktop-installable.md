@@ -53,6 +53,14 @@ Nessuno. La sorgente canonica viene letta durante la build e non viene modificat
 - Verifiche locali: build frontend superata; versione coerente; `cargo metadata --offline` superato; `git diff --check` superato.
 - Limite locale: `cargo check` non può avviare `rustc` per il vincolo dell'ambiente Windows; verifica completa demandata a GitHub Actions.
 
+## Pubblicazione nel repository release
+
+- Branch: `codex/eve-ai-studio-desktop-release-token`
+- Base: `origin/eve-ai-studio` @ `890a8fe`
+- Causa verificata: il token condiviso precedente non poteva creare Release in `eve-ai-studio-releases`.
+- Modifica prevista: usare esclusivamente il segreto cifrato `EVE_RELEASE_TOKEN` nel workflow desktop.
+- Nessun valore segreto viene scritto nel repository o mostrato nei log.
+
 ## Risultati locali
 
 - build frontend dalla sorgente canonica: superata;

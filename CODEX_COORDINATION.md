@@ -192,6 +192,47 @@ Build frontend, coerenza versione, metadata Cargo e diff verificati localmente.
 La compilazione completa resta affidata al runner Windows di GitHub Actions.
 ```
 
+### DESKTOP-0.1-RELEASE — Token dedicato repository installer
+
+```text
+CHECKPOINT:
+DESKTOP-0.1-RELEASE — Token dedicato repository installer
+
+RESPONSABILE:
+Codex grafico/desktop
+
+STATO:
+IN_PROGRESS
+
+BRANCH DI PARTENZA:
+origin/eve-ai-studio @ 890a8fe
+
+BRANCH DI LAVORO:
+codex/eve-ai-studio-desktop-release-token
+
+OBIETTIVO:
+Collegare il workflow desktop al segreto separato EVE_RELEASE_TOKEN per
+pubblicare gli installer nel repository eve-ai-studio-releases.
+
+FILE PRENOTATI:
+- .github/workflows/release-eve-ai-studio-desktop.yml
+- .codex/tasks/active/eve-ai-studio-desktop-installable.md
+- CODEX_COORDINATION.md, limitatamente a questa scheda
+
+FILE CONDIVISI PRENOTATI:
+- nessuno
+
+MODULI CANONICI MODIFICATI:
+- nessuno
+
+DISPONIBILE PER L'ALTRO CODEX:
+SÌ, esclusi i file prenotati sopra fino alla verifica della release.
+
+NOTE:
+Il valore del segreto non è presente nel repository o nei log. Non vengono
+modificati la sorgente canonica, main, demo-canonica, Aula Studio o produzione.
+```
+
 ## Attività storiche di Aula Studio
 
 La tabella seguente è conservata come cronologia del precedente flusso di Aula Studio. Non assegna né prenota file di Eve AI Studio e non prevale sulle regole attive sopra.
