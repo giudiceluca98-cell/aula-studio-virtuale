@@ -1,7 +1,7 @@
 # DESKTOP-0.2 — Fluidità, caricamento progressivo e updater
 
 - Responsabile: Codex grafico/desktop
-- Stato: `IN_PROGRESS`
+- Stato: `COMPLETED`
 - Branch di partenza: `origin/eve-ai-studio` @ `b8ec526`
 - Branch di lavoro: `codex/eve-ai-studio-desktop-performance`
 
@@ -57,3 +57,12 @@ senza rimuovere funzioni o modificare il comportamento didattico di Eve.
   `/releases/latest/download/latest.json`;
 - sintassi JavaScript, coerenza versione e build desktop: superate;
 - prova browser: avvio, caricamento progressivo del laboratorio e console senza errori.
+
+## Pubblicazione
+
+- Pull Request: `#82`, unita in `eve-ai-studio`;
+- commit canonico: `b61d364`;
+- release: `eve-ai-studio-v1.2.0-alpha.2`;
+- workflow: `30380270017`, completato con successo;
+- endpoint `latest.json`: HTTP 200 e versione `1.2.0-alpha.2`;
+- asset: installer NSIS, firma e metadata updater pubblicati.
