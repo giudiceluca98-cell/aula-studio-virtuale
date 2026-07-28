@@ -1,0 +1,35 @@
+name: Apply Eve AI Studio canonical update
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: eve-ai-studio-canonical-update
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout latest canonical branch
+        uses: actions/checkout@v4
+        with:
+          ref: eve-ai-studio
+          fetch-depth: 0
+
+      - name: Apply verified modular update
+        run: |
+          set -euxo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git apply --3way --index .codex/updates/eve-ai-studio-canonical-update.patch
+          rm -f reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html
+          rm -f .codex/updates/eve-ai-studio-canonical-update.patch
+          rm -f .github/workflows/apply-eve-ai-studio-canonical-update.yml
+          git add -A
+          git commit -m "feat(eve-studio): aggiorna la sorgente canonica modulare"
+          git push origin HEAD:eve-ai-studio
