@@ -1,0 +1,213 @@
+name: Eve checkpoint taxonomy migration
+
+on:
+  push:
+    branches: [eve-ai-studio]
+    paths:
+      - ".github/workflows/eve-checkpoint-taxonomy-migration.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: eve-ai-studio
+          fetch-depth: 0
+
+      - name: Rinomina checkpoint e crea indice delle due roadmap
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          import re
+
+          root = Path("eve-ai-studio/checkpoints")
+          mapping = {
+              "CHECKPOINT_0.2_UPDATE.txt": "CHECKPOINT_CORE_0.2_MODULARITA_IMPORTAZIONE_REQUISITI_UPDATE.txt",
+              "CHECKPOINT_0.3_UPDATE.txt": "CHECKPOINT_CORE_0.3_PERSISTENZA_VERSIONI_ROLLBACK_REQUISITI_UPDATE.txt",
+              "CHECKPOINT_0.4_UPDATE.txt": "CHECKPOINT_CORE_0.4_PROMPT_VERSIONATI_APPROVAZIONE_UPDATE.txt",
+              "CHECKPOINT_0.5_UPDATE.txt": "CHECKPOINT_CORE_0.5_VALUTAZIONI_GRADER_GATE_QUALITA_UPDATE.txt",
+              "CHECKPOINT_0.6_UPDATE.txt": "CHECKPOINT_CORE_0.6_RUNNER_AUTOMATICO_ARTEFATTI_UPDATE.txt",
+              "CHECKPOINT_0.7_UPDATE.txt": "CHECKPOINT_CORE_0.7_PROVIDER_ORCHESTRAZIONE_TELEMETRIA_UPDATE.txt",
+              "CHECKPOINT_0.8_CI_RESULT.json": "CHECKPOINT_CORE_0.8_MATERIALI_ESTRAZIONE_CHUNKING_CI_RESULT.json",
+              "CHECKPOINT_0.8_CI_RESULT.md": "CHECKPOINT_CORE_0.8_MATERIALI_ESTRAZIONE_CHUNKING_CI_RESULT.md",
+              "CHECKPOINT_0.8_CLOSURE.md": "CHECKPOINT_CORE_0.8_MATERIALI_ESTRAZIONE_CHUNKING_CLOSURE.md",
+              "CHECKPOINT_0.8_UPDATE.txt": "CHECKPOINT_CORE_0.8_MATERIALI_ESTRAZIONE_CHUNKING_UPDATE.txt",
+              "CHECKPOINT_0.8_VERIFICATION.md": "CHECKPOINT_CORE_0.8_MATERIALI_ESTRAZIONE_CHUNKING_VERIFICATION.md",
+              "CHECKPOINT_0.9_CI_RESULT.json": "CHECKPOINT_CORE_0.9_RETRIEVAL_LOCALE_CITAZIONI_CI_RESULT.json",
+              "CHECKPOINT_0.9_CI_RESULT.md": "CHECKPOINT_CORE_0.9_RETRIEVAL_LOCALE_CITAZIONI_CI_RESULT.md",
+              "CHECKPOINT_0.9_CLOSURE.md": "CHECKPOINT_CORE_0.9_RETRIEVAL_LOCALE_CITAZIONI_CLOSURE.md",
+              "CHECKPOINT_0.9_UPDATE.txt": "CHECKPOINT_CORE_0.9_RETRIEVAL_LOCALE_CITAZIONI_UPDATE.txt",
+              "CHECKPOINT_0.9_VERIFICATION.md": "CHECKPOINT_CORE_0.9_RETRIEVAL_LOCALE_CITAZIONI_VERIFICATION.md",
+              "CHECKPOINT_1.0_CI_RESULT.json": "CHECKPOINT_CORE_1.0_CHAT_RAG_GROUNDED_FONTI_CI_RESULT.json",
+              "CHECKPOINT_1.0_CI_RESULT.md": "CHECKPOINT_CORE_1.0_CHAT_RAG_GROUNDED_FONTI_CI_RESULT.md",
+              "CHECKPOINT_1.0_CLOSURE.md": "CHECKPOINT_CORE_1.0_CHAT_RAG_GROUNDED_FONTI_CLOSURE.md",
+              "CHECKPOINT_1.0_UPDATE.txt": "CHECKPOINT_CORE_1.0_CHAT_RAG_GROUNDED_FONTI_UPDATE.txt",
+              "CHECKPOINT_1.0_VERIFICATION.md": "CHECKPOINT_CORE_1.0_CHAT_RAG_GROUNDED_FONTI_VERIFICATION.md",
+              "CHECKPOINT_1.1_CI_RESULT.json": "CHECKPOINT_CORE_1.1_APERTURA_FONTI_VERIFICA_INTEGRITA_CI_RESULT.json",
+              "CHECKPOINT_1.1_CI_RESULT.md": "CHECKPOINT_CORE_1.1_APERTURA_FONTI_VERIFICA_INTEGRITA_CI_RESULT.md",
+              "CHECKPOINT_1.1_UPDATE.txt": "CHECKPOINT_CORE_1.1_APERTURA_FONTI_VERIFICA_INTEGRITA_UPDATE.txt",
+              "CHECKPOINT_1.1_VERIFICATION.md": "CHECKPOINT_CORE_1.1_APERTURA_FONTI_VERIFICA_INTEGRITA_VERIFICATION.md",
+              "CHECKPOINT_VISUAL_WORKFLOW.txt": "SUPPORT_WORKFLOW_VISIVO_CHECKPOINT_ANIMAZIONI.txt",
+              "VISUAL_ALIGNMENT_CANONICAL_STYLE_UPDATE.txt": "SUPPORT_ALLINEAMENTO_VISIVO_STILE_CANONICO_UPDATE.txt",
+          }
+
+          renamed = []
+          for old_name, new_name in mapping.items():
+              old = root / old_name
+              new = root / new_name
+              if old.exists():
+                  if new.exists():
+                      raise RuntimeError(f"Destinazione già esistente: {new}")
+                  old.rename(new)
+                  renamed.append({"from": old_name, "to": new_name})
+
+          text_extensions = {".md", ".txt", ".json", ".yml", ".yaml", ".py", ".js"}
+          excluded = {"EVE_AI_STUDIO_STANDALONE.html"}
+          repo = Path(".")
+          for path in repo.rglob("*"):
+              if not path.is_file() or path.name in excluded or path.suffix.lower() not in text_extensions:
+                  continue
+              try:
+                  source = path.read_text(encoding="utf-8")
+              except UnicodeDecodeError:
+                  continue
+              updated = source
+              for old_name, new_name in mapping.items():
+                  updated = updated.replace(old_name, new_name)
+              for version in ["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0", "1.1"]:
+                  updated = re.sub(rf"\bCheckpoint\s+{re.escape(version)}\b", f"Checkpoint CORE-{version}", updated)
+                  updated = re.sub(rf"\bcheckpoint\s+{re.escape(version)}\b", f"checkpoint CORE-{version}", updated)
+                  updated = updated.replace(f"### {version} —", f"### CORE-{version} —")
+                  updated = updated.replace(f"- `{version}` —", f"- `CORE-{version}` —")
+                  updated = updated.replace(f'"checkpoint": "{version}"', f'"checkpoint": "CORE-{version}"')
+              if updated != source:
+                  path.write_text(updated, encoding="utf-8")
+
+          index = """# Eve AI Studio — Indice ufficiale dei checkpoint
+
+## Convenzione obbligatoria
+
+Ogni checkpoint usa il formato:
+
+```text
+CHECKPOINT_<LINEA>_<VERSIONE>_<PAROLE_CHIAVE>_<TIPO_FILE>.<estensione>
+```
+
+Linee ammesse:
+
+- `CORE` — piattaforma tecnica, sicurezza, materiali, retrieval, RAG e fonti;
+- `INTELLIGENCE` — ricerca online, memoria, apprendimento e capacità AI.
+
+Tipi di file ammessi:
+
+- `PLAN` — obiettivo e criteri prima dello sviluppo;
+- `UPDATE` — riepilogo trasferibile del lavoro svolto;
+- `VERIFICATION` — verifiche tecniche e browser;
+- `CI_RESULT` — esito automatico;
+- `CLOSURE` — approvazione e chiusura definitiva.
+
+Le due linee hanno numerazione indipendente. Non si usa più `1.2` senza prefisso.
+
+## Linea CORE — piattaforma già sviluppata
+
+Stato della linea: **in pausa dopo CORE-1.1**.
+
+| ID | Nome ricercabile | Stato |
+|---|---|---|
+| `CORE-0.1` | Fondazione FastAPI, sicurezza, permessi e audit | completato |
+| `CORE-0.2` | Modularità e importazione requisiti | completato |
+| `CORE-0.3` | Persistenza, versioni e rollback requisiti | completato |
+| `CORE-0.4` | Prompt versionati e approvazione | completato |
+| `CORE-0.5` | Valutazioni, grader e gate qualità | completato |
+| `CORE-0.6` | Runner automatico e artefatti | completato |
+| `CORE-0.7` | Provider, orchestrazione e telemetria | completato |
+| `CORE-0.8` | Materiali, estrazione e chunking | chiuso e approvato |
+| `CORE-0.9` | Retrieval locale e citazioni | chiuso e approvato |
+| `CORE-1.0` | Chat RAG grounded e fonti | chiuso e approvato |
+| `CORE-1.1` | Apertura fonti e verifica integrità | tecnicamente completo; chiusura utente da registrare |
+
+Un eventuale prossimo lavoro di questa linea si chiamerà `CORE-1.2_<PAROLE_CHIAVE>`, ma non è ancora definito.
+
+## Linea INTELLIGENCE — nuova AI di Aula Studio
+
+Stato della linea: **pianificata, non ancora implementata**.
+
+| ID | Nome ricercabile | Obiettivo |
+|---|---|---|
+| `INTELLIGENCE-0.1` | Centro ricerca e progetti di apprendimento | creare ricerche, obiettivi, query, stato e catalogo fonti |
+| `INTELLIGENCE-0.2` | Acquisizione web controllata e quarantena fonti | cercare online, acquisire contenuti e isolarli prima dell'apprendimento |
+| `INTELLIGENCE-0.3` | Affidabilità fonti, conflitti e revisione | valutare qualità, confrontare affermazioni e richiedere approvazione |
+| `INTELLIGENCE-0.4` | Memoria semantica, embedding e retrieval ibrido | costruire conoscenza persistente e ricerca per significato |
+| `INTELLIGENCE-0.5` | Provider AI reale e generazione citata | collegare modelli reali mantenendo fonti, limiti e tracciabilità |
+| `INTELLIGENCE-0.6` | Apprendimento didattico, scrittura e personalizzazione | imparare come spiegare, scrivere, esercitare e adattarsi al livello |
+| `INTELLIGENCE-0.7` | Aggiornamento continuo e manutenzione conoscenza | ricontrollare fonti, versionare e ritirare informazioni superate |
+
+Il primo file di pianificazione della nuova linea dovrà chiamarsi:
+
+```text
+CHECKPOINT_INTELLIGENCE_0.1_CENTRO_RICERCA_APPRENDIMENTO_PLAN.md
+```
+
+## Regola di separazione
+
+- Un checkpoint `CORE` non può includere funzionalità di ricerca autonoma o apprendimento web.
+- Un checkpoint `INTELLIGENCE` può riutilizzare servizi CORE già approvati, ma non deve rinominarli o riscriverne la cronologia.
+- Ogni commit, rapporto e documento deve riportare sempre linea, versione e parole chiave.
+- Nessun checkpoint futuro viene dichiarato iniziato senza un file `PLAN` dedicato.
+"""
+          Path("eve-ai-studio/CHECKPOINT_INDEX.md").write_text(index, encoding="utf-8")
+
+          def insert_managed_block(path_str: str, marker: str, block: str):
+              path = Path(path_str)
+              source = path.read_text(encoding="utf-8")
+              start = f"<!-- {marker}:START -->"
+              end = f"<!-- {marker}:END -->"
+              managed = f"{start}\n{block.strip()}\n{end}"
+              if start in source and end in source:
+                  source = re.sub(re.escape(start) + r".*?" + re.escape(end), managed, source, flags=re.DOTALL)
+              else:
+                  lines = source.splitlines()
+                  insert_at = 1 if lines else 0
+                  lines[insert_at:insert_at] = ["", managed, ""]
+                  source = "\n".join(lines) + "\n"
+              path.write_text(source, encoding="utf-8")
+
+          block = """
+## Due linee di sviluppo separate
+
+- **CORE** — roadmap tecnica storica, attualmente in pausa dopo `CORE-1.1`.
+- **INTELLIGENCE** — nuova roadmap per ricerca web, memoria e apprendimento AI; non ancora iniziata.
+
+Indice e convenzione ufficiale: [`CHECKPOINT_INDEX.md`](CHECKPOINT_INDEX.md).
+"""
+          insert_managed_block("eve-ai-studio/README.md", "CHECKPOINT-TAXONOMY", block)
+          insert_managed_block("eve-ai-studio/PHASE_STATUS.md", "CHECKPOINT-TAXONOMY", block)
+
+          report = {
+              "passed": True,
+              "branch": "eve-ai-studio",
+              "renamed_files": renamed,
+              "core_track": {"status": "paused_after_CORE-1.1", "next_defined": False},
+              "intelligence_track": {"status": "planned_not_started", "first": "INTELLIGENCE-0.1"},
+              "index": "eve-ai-studio/CHECKPOINT_INDEX.md",
+          }
+          (root / "CHECKPOINT_TAXONOMY_MIGRATION_RESULT.json").write_text(
+              json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+          )
+          PY
+
+          rm -f .github/workflows/eve-checkpoint-taxonomy-migration.yml
+
+      - name: Salva migrazione
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "docs: separa checkpoint CORE e INTELLIGENCE con nomi ricercabili"
+          git pull --rebase origin eve-ai-studio
+          git push origin HEAD:eve-ai-studio
