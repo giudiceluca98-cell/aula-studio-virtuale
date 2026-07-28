@@ -13,7 +13,7 @@ Indice ufficiale:
 eve-ai-studio/CHECKPOINT_INDEX.md
 ```
 
-La linea `CORE` è chiusa e in pausa dopo `CORE-1.1`. La linea `INTELLIGENCE` è attiva su `INTELLIGENCE-0.1`.
+La linea `CORE` è chiusa e in pausa dopo `CORE-1.1`. La linea `INTELLIGENCE` ha chiuso `INTELLIGENCE-0.1` e prosegue con `INTELLIGENCE-0.2`.
 
 ## Stato del servizio
 
@@ -21,9 +21,11 @@ La linea `CORE` è chiusa e in pausa dopo `CORE-1.1`. La linea `INTELLIGENCE` è
 Versione: 1.2.0
 Branch: eve-ai-studio
 CORE: CORE-1.1 chiuso e approvato
-INTELLIGENCE: INTELLIGENCE-0.1 implementato, verifica in corso
+INTELLIGENCE: INTELLIGENCE-0.1 chiuso e approvato
 Suite CORE precedente: 165 test superati
-Test specifici INTELLIGENCE-0.1: 15
+Test specifici INTELLIGENCE-0.1: 15/15
+Preview modulare INTELLIGENCE-0.1: superata
+Standalone file:// INTELLIGENCE-0.1: superato
 Eve Animation Library: 1.2.2
 Asset originali HQ: 64
 ```
@@ -46,7 +48,9 @@ Asset originali HQ: 64
 
 ## INTELLIGENCE-0.1 — Centro ricerca e progetti di apprendimento
 
-Il checkpoint aggiunge:
+Stato: **chiuso e approvato**.
+
+Il checkpoint ha aggiunto:
 
 - package `app/intelligence` separato;
 - database `data/eve-research.sqlite3`;
@@ -58,9 +62,19 @@ Il checkpoint aggiunge:
 - fonti in quarantena con `content_acquired=false`;
 - revisione umana predefinita;
 - API `/v1/intelligence/research`;
-- sezione “Ricerca e apprendimento” nella preview.
+- sezione “Ricerca e apprendimento” nella preview e nello standalone.
 
-In questo checkpoint sono esplicitamente disattivati:
+Verifica:
+
+```text
+15 test specifici
+0 fallimenti
+0 errori
+preview modulare: success
+standalone file://: success
+```
+
+In questo checkpoint sono rimasti disattivati:
 
 ```text
 web_search_enabled=false
@@ -68,7 +82,11 @@ content_acquisition_enabled=false
 model_training_enabled=false
 ```
 
-La ricerca online reale appartiene a `INTELLIGENCE-0.2`.
+## Prossimo checkpoint
+
+```text
+INTELLIGENCE-0.2 — Acquisizione web controllata e quarantena fonti
+```
 
 ## Avvio locale
 
@@ -96,7 +114,7 @@ Non modificati:
 - `eve-canonical-integration-v2`;
 - pacchetto master Eve Animation Library 1.2.2.
 
-Non eseguiti nel checkpoint `INTELLIGENCE-0.1`:
+Non eseguiti fino alla chiusura di `INTELLIGENCE-0.1`:
 
 - ricerca web reale;
 - provider AI esterni;
