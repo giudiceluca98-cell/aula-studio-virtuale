@@ -1,5 +1,8 @@
 # DESKTOP-0.1 — Applicazione installabile e aggiornamenti
 
+Handoff per il Codex successivo:
+`docs/CHECKPOINT_DESKTOP_0.1_INSTALLER_RELEASE_HANDOFF.md`
+
 - Responsabile: Codex grafico/desktop
 - Stato: `RELEASE_READY`
 - Branch di partenza: `codex/eve-ai-studio-coordination-policy` @ `238f721`
