@@ -6,7 +6,7 @@
 Branch operativo: eve-ai-studio
 Versione servizio: 1.2.0
 Linea CORE: chiusa e in pausa dopo CORE-1.1
-Linea INTELLIGENCE: INTELLIGENCE-0.1 implementato, verifica automatica in corso
+Linea INTELLIGENCE: INTELLIGENCE-0.1 chiuso; INTELLIGENCE-0.2 prossimo checkpoint
 ```
 
 Indice ufficiale:
@@ -38,21 +38,15 @@ eve-ai-studio/CHECKPOINT_INDEX.md
 | `CORE-1.0` | Chat RAG grounded e fonti | chiuso e approvato |
 | `CORE-1.1` | Apertura fonti e verifica integrità | chiuso e approvato |
 
-Chiusura:
-
-```text
-eve-ai-studio/checkpoints/CHECKPOINT_CORE_1.1_APERTURA_FONTI_VERIFICA_INTEGRITA_CLOSURE.md
-```
-
 Non esiste un piano `CORE-1.2`.
 
 ## Roadmap INTELLIGENCE
 
 ### `INTELLIGENCE-0.1` — Centro ricerca e progetti di apprendimento
 
-Stato: **implementato; verifica automatica in corso**
+Stato: **chiuso e approvato**
 
-Implementato:
+Verificato:
 
 - package `app/intelligence`;
 - database SQLite separato;
@@ -66,29 +60,32 @@ Implementato:
 - limiti per progetto, query e fonti;
 - API dedicate;
 - sezione della preview ufficiale;
-- 15 test specifici.
+- 15 test specifici, zero fallimenti ed errori;
+- preview modulare e standalone `file://` superati.
 
-Confini obbligatori:
-
-```text
-web_search_enabled=false
-content_acquisition_enabled=false
-model_training_enabled=false
-human_review_required_by_default=true
-```
-
-Documenti:
+Documenti autorevoli:
 
 ```text
 eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.1_CENTRO_RICERCA_PROGETTI_APPRENDIMENTO_PLAN.md
-eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.1_CENTRO_RICERCA_PROGETTI_APPRENDIMENTO_UPDATE.txt
+eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.1_CENTRO_RICERCA_PROGETTI_APPRENDIMENTO_CI_RESULT.json
+eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.1_CENTRO_RICERCA_PROGETTI_APPRENDIMENTO_VERIFICATION.md
+eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.1_CENTRO_RICERCA_PROGETTI_APPRENDIMENTO_CLOSURE.md
 ```
 
 ### `INTELLIGENCE-0.2` — Acquisizione web controllata e quarantena fonti
 
-Stato: **pianificato, non iniziato**
+Stato: **prossimo checkpoint; piano da registrare**
 
-Introdurrà ricerca e acquisizione web soltanto dopo la chiusura tecnica di `INTELLIGENCE-0.1`.
+Obiettivo previsto:
+
+- ricerca online tramite connettore esplicito;
+- acquisizione HTTP/HTTPS controllata;
+- protezione SSRF e blocco delle reti private;
+- limiti di dimensione, tempo, redirect e MIME;
+- metadati, checksum e cronologia delle acquisizioni;
+- rispetto delle regole di accesso delle fonti;
+- contenuti sempre in quarantena dopo il download;
+- nessun apprendimento o approvazione automatica.
 
 ### `INTELLIGENCE-0.3` — Affidabilità fonti, conflitti e revisione
 
@@ -110,21 +107,6 @@ Stato: **pianificato**
 
 Stato: **pianificato**
 
-## API INTELLIGENCE-0.1
-
-```http
-GET  /v1/intelligence/research/status
-POST /v1/intelligence/research/projects
-GET  /v1/intelligence/research/projects
-GET  /v1/intelligence/research/projects/{project_id}
-POST /v1/intelligence/research/projects/{project_id}/transition
-POST /v1/intelligence/research/projects/{project_id}/queries
-GET  /v1/intelligence/research/projects/{project_id}/queries
-POST /v1/intelligence/research/projects/{project_id}/sources
-GET  /v1/intelligence/research/projects/{project_id}/sources
-GET  /v1/intelligence/research/projects/{project_id}/events
-```
-
 ## Protezioni rispettate
 
 Non modificati:
@@ -136,12 +118,12 @@ Non modificati:
 - `eve-canonical-integration-v2`;
 - pacchetto master Eve Animation Library 1.2.2.
 
-Non eseguiti:
+Non eseguiti durante `INTELLIGENCE-0.1`:
 
-- pull request;
-- merge;
-- integrazione nella produzione;
 - ricerca web reale;
 - provider AI reale;
 - embedding;
-- addestramento del modello.
+- addestramento del modello;
+- pull request;
+- merge;
+- integrazione nella produzione.
