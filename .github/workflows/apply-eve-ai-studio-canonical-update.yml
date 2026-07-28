@@ -31,7 +31,7 @@ jobs:
           set -euxo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git apply --3way --index .codex/updates/eve-ai-studio-canonical-update.patch
+          git apply --3way --index --exclude=.github/workflows/eve-intelligence-0.1-finalize.yml .codex/updates/eve-ai-studio-canonical-update.patch
           rm -f reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html
           rm -f .codex/updates/eve-ai-studio-canonical-update.patch
           rm -f .github/workflows/apply-eve-ai-studio-canonical-update.yml
