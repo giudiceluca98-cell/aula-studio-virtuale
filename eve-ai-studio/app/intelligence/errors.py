@@ -9,6 +9,14 @@ class ResearchProjectNotFoundError(KeyError):
     pass
 
 
+class ResearchSourceNotFoundError(KeyError):
+    pass
+
+
+class ResearchDocumentNotFoundError(KeyError):
+    pass
+
+
 class ResearchConflictError(ResearchError):
     pass
 
