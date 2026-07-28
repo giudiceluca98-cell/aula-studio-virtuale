@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "branch": "eve-ai-studio",
+  "taxonomy": {
+    "core": {
+      "status": "paused_after_CORE-1.1",
+      "next_defined": false
+    },
+    "intelligence": {
+      "status": "planned_not_started",
+      "first_checkpoint": "INTELLIGENCE-0.1",
+      "first_plan": "CHECKPOINT_INTELLIGENCE_0.1_CENTRO_RICERCA_PROGETTI_APPRENDIMENTO_PLAN.md"
+    }
+  },
+  "renamed_checkpoint_artifacts": 25,
+  "support_artifacts_renamed": 2,
+  "total_files_renamed": 27,
+  "index": "eve-ai-studio/CHECKPOINT_INDEX.md",
+  "naming_pattern": "CHECKPOINT_<LINEA>_<VERSIONE>_<PAROLE_CHIAVE>_<TIPO_FILE>.<estensione>",
+  "protected_targets_untouched": [
+    "main",
+    "demo-canonica",
+    "reference/demo-aula-studio-virtuale-canonica.html",
+    "eve-canonical-integration-v2"
+  ]
+}

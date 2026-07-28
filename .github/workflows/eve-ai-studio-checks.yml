@@ -123,7 +123,8 @@ jobs:
               counts = {key: int(float(root.attrib.get(key, 0))) for key in counts}
 
           result = {
-              'checkpoint': '1.1',
+              'checkpoint': 'CORE-1.1',
+              'keywords': ['apertura-fonti', 'verifica-integrita'],
               'tested_sha': os.environ.get('TESTED_SHA'),
               'generated_at': datetime.now(timezone.utc).isoformat(),
               'passed': passed,
@@ -133,9 +134,11 @@ jobs:
           }
           base = Path('eve-ai-studio/checkpoints')
           base.mkdir(parents=True, exist_ok=True)
-          (base / 'CHECKPOINT_1.1_CI_RESULT.json').write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
+          json_path = base / 'CHECKPOINT_CORE_1.1_APERTURA_FONTI_VERIFICA_INTEGRITA_CI_RESULT.json'
+          md_path = base / 'CHECKPOINT_CORE_1.1_APERTURA_FONTI_VERIFICA_INTEGRITA_CI_RESULT.md'
+          json_path.write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
 
-          markdown = f"""# Checkpoint 1.1 — Verifica core automatica
+          markdown = f"""# Checkpoint CORE-1.1 — Apertura fonti e verifica integrità — Verifica core automatica
 
 - Commit verificato: `{result['tested_sha']}`
 - Data UTC: `{result['generated_at']}`
@@ -160,13 +163,13 @@ jobs:
 La verifica browser, le 64 animazioni HQ, la galleria e lo standalone `file://`
 sono controllati separatamente dal workflow `eve-hq-final-verification.yml`.
 """
-          (base / 'CHECKPOINT_1.1_CI_RESULT.md').write_text(markdown, encoding='utf-8')
+          md_path.write_text(markdown, encoding='utf-8')
           PY
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add eve-ai-studio/checkpoints/CHECKPOINT_1.1_CI_RESULT.json eve-ai-studio/checkpoints/CHECKPOINT_1.1_CI_RESULT.md
-          git commit -m "ci: aggiorna verifica core Eve 1.1 [skip eve core ci]" || exit 0
+          git add eve-ai-studio/checkpoints/CHECKPOINT_CORE_1.1_APERTURA_FONTI_VERIFICA_INTEGRITA_CI_RESULT.json eve-ai-studio/checkpoints/CHECKPOINT_CORE_1.1_APERTURA_FONTI_VERIFICA_INTEGRITA_CI_RESULT.md
+          git commit -m "ci: aggiorna verifica core Eve CORE-1.1 [skip eve core ci]" || exit 0
           git pull --rebase origin eve-ai-studio
           git push origin HEAD:eve-ai-studio
 
