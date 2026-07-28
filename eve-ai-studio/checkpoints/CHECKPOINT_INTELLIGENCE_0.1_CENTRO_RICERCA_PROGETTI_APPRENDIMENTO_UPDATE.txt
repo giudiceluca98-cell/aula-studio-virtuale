@@ -1,0 +1,36 @@
+EVE AI STUDIO — INTELLIGENCE-0.1
+CENTRO RICERCA E PROGETTI DI APPRENDIMENTO
+
+STATO
+Implementazione collegata al servizio 1.2.0; verifica automatica da completare.
+
+COMPONENTI
+- app/intelligence/models.py
+- app/intelligence/errors.py
+- app/intelligence/storage.py
+- app/intelligence/service.py
+- app/intelligence/router.py
+- app/intelligence/__init__.py
+- tests/test_intelligence_research.py
+- reference/eve-ai-studio-preview/research-center-workflow.js
+
+SICUREZZA
+- web_search_enabled=false
+- content_acquisition_enabled=false
+- model_training_enabled=false
+- human_review_required=true
+- fonti candidate in quarantena
+- isolamento per room_id
+
+API
+- GET /v1/intelligence/research/status
+- POST /v1/intelligence/research/projects
+- GET /v1/intelligence/research/projects
+- GET /v1/intelligence/research/projects/{project_id}
+- POST /v1/intelligence/research/projects/{project_id}/transition
+- POST/GET /v1/intelligence/research/projects/{project_id}/queries
+- POST/GET /v1/intelligence/research/projects/{project_id}/sources
+- GET /v1/intelligence/research/projects/{project_id}/events
+
+PROSSIMO CHECKPOINT
+INTELLIGENCE-0.2_ACQUISIZIONE_WEB_CONTROLLATA_QUARANTENA_FONTI
