@@ -4,12 +4,12 @@
 
 ```text
 Branch operativo: eve-ai-studio
-Versione servizio CORE: 1.1.0
-Linea CORE: in pausa dopo CORE-1.1
-Linea INTELLIGENCE: pianificata, non ancora iniziata
+Versione servizio: 1.2.0
+Linea CORE: chiusa e in pausa dopo CORE-1.1
+Linea INTELLIGENCE: INTELLIGENCE-0.1 implementato, verifica automatica in corso
 ```
 
-Indice ufficiale e convenzione dei nomi:
+Indice ufficiale:
 
 ```text
 eve-ai-studio/CHECKPOINT_INDEX.md
@@ -17,201 +17,112 @@ eve-ai-studio/CHECKPOINT_INDEX.md
 
 ## Regola fondamentale
 
-Le due roadmap sono indipendenti:
-
 - `CORE` continua la piattaforma tecnica esistente;
-- `INTELLIGENCE` sviluppa ricerca online, memoria, apprendimento e capacità AI.
+- `INTELLIGENCE` sviluppa ricerca online, memoria, apprendimento e capacità AI;
+- le due numerazioni sono indipendenti;
+- ogni checkpoint usa linea, versione e parole chiave.
 
-Non si usa più una numerazione generica come `Checkpoint 1.2`. Ogni checkpoint deve riportare linea e parole chiave.
+## Roadmap CORE
 
-## Roadmap CORE — piattaforma tecnica
+| ID | Parole chiave | Stato |
+|---|---|---|
+| `CORE-0.1` | Fondazione FastAPI, sicurezza, permessi e audit | completato |
+| `CORE-0.2` | Modularità e importazione requisiti | completato |
+| `CORE-0.3` | Persistenza, versioni e rollback requisiti | completato |
+| `CORE-0.4` | Prompt versionati e approvazione | completato |
+| `CORE-0.5` | Valutazioni, grader e gate qualità | completato |
+| `CORE-0.6` | Runner automatico e artefatti | completato |
+| `CORE-0.7` | Provider, orchestrazione e telemetria | completato |
+| `CORE-0.8` | Materiali, estrazione e chunking | chiuso e approvato |
+| `CORE-0.9` | Retrieval locale e citazioni | chiuso e approvato |
+| `CORE-1.0` | Chat RAG grounded e fonti | chiuso e approvato |
+| `CORE-1.1` | Apertura fonti e verifica integrità | chiuso e approvato |
 
-### `CORE-0.1` — Fondazione FastAPI, sicurezza, permessi e audit
-
-Stato: **completato**
-
-FastAPI, provider mock, contesto, permessi, limiti, audit e feature flag.
-
-### `CORE-0.2` — Modularità e importazione requisiti
-
-Stato: **completato**
-
-Moduli separati, parser delle 36 sezioni e 1.197 schede, validazione, checksum, routing, API, CLI e manifesto.
-
-### `CORE-0.3` — Persistenza, versioni e rollback requisiti
-
-Stato: **completato**
-
-SQLite, cronologia, snapshot immutabili, versione attiva, confronto e rollback non distruttivo.
-
-### `CORE-0.4` — Prompt versionati e approvazione
-
-Stato: **completato**
-
-Revisioni immutabili, modalità didattiche, parametri tipizzati, confronto, rollback e gate server-side.
-
-### `CORE-0.5` — Valutazioni, grader e gate qualità
-
-Stato: **completato**
-
-Scenari versionati, severità, pesi, soglie, risultati per criterio, punteggio e invalidazione.
-
-### `CORE-0.6` — Runner automatico e artefatti
-
-Stato: **completato**
-
-Richieste eseguibili, provider mock deterministico, grader, durata, artefatti redatti e SHA-256 dell’output.
-
-### `CORE-0.7` — Provider, orchestrazione e telemetria
-
-Stato: **completato**
-
-Catalogo server-side, profili, timeout, retry, fallback, budget, stima costi e telemetria redatta.
-
-### `CORE-0.8` — Materiali, estrazione e chunking
-
-Stato: **chiuso e approvato**
-
-- catalogo SQLite isolato per aula;
-- importazione controllata;
-- checksum, deduplicazione e versioni immutabili;
-- estrazione TXT, Markdown, CSV, HTML, XHTML e JSON;
-- chunk con offset e SHA-256;
-- nessun embedding o servizio esterno.
-
-### `CORE-0.9` — Retrieval locale e citazioni
-
-Stato: **chiuso e approvato**
-
-- ranking deterministico `eve-lexical-v1`;
-- sole versioni correnti `ready`;
-- isolamento per `room_id`;
-- controllo SHA-256;
-- locator e citazioni verificabili;
-- esclusione dei contenuti sospetti.
-
-### `CORE-1.0` — Chat RAG grounded e fonti
-
-Stato: **chiuso e approvato**
-
-- provider `local-rag`;
-- modello `eve-grounded-extractive-v1`;
-- risposta estrattiva con marcatori `[n]`;
-- fonti autorizzate;
-- risposta `non trovato` senza conoscenza generale aggiunta.
-
-### `CORE-1.1` — Apertura fonti e verifica integrità
-
-Stato: **tecnicamente completo; chiusura utente da registrare**
-
-- parser rigido dei locator;
-- risoluzione limitata alla stessa aula;
-- verifica di coordinate e SHA-256;
-- confronto con il testo estratto;
-- gestione delle versioni storiche;
-- contesto precedente e successivo limitato;
-- contenuti sospetti mostrati come dati non fidati;
-- `instructions_executable=false`.
-
-## Stato di sospensione CORE
-
-La linea CORE si ferma qui finché non viene presa una decisione esplicita.
-
-Un eventuale prossimo checkpoint dovrà essere nominato:
+Chiusura:
 
 ```text
-CORE-1.2_<PAROLE_CHIAVE_DA_DEFINIRE>
+eve-ai-studio/checkpoints/CHECKPOINT_CORE_1.1_APERTURA_FONTI_VERIFICA_INTEGRITA_CLOSURE.md
 ```
 
-Attualmente non esiste un piano `CORE-1.2`.
+Non esiste un piano `CORE-1.2`.
 
-## Roadmap INTELLIGENCE — nuova AI di Aula Studio
-
-Questa linea è distinta dal CORE e non modifica la cronologia dei checkpoint esistenti.
+## Roadmap INTELLIGENCE
 
 ### `INTELLIGENCE-0.1` — Centro ricerca e progetti di apprendimento
 
-Stato: **pianificato**
+Stato: **implementato; verifica automatica in corso**
 
-Creazione di progetti di ricerca, obiettivi, query, avanzamento e catalogo delle fonti.
+Implementato:
+
+- package `app/intelligence`;
+- database SQLite separato;
+- progetti isolati per aula;
+- obiettivi, domini, lingue, livelli e argomenti;
+- stati `draft`, `active`, `paused`, `completed`, `archived`;
+- cronologia delle transizioni;
+- query pianificate;
+- fonti candidate in quarantena;
+- URL limitati a HTTP/HTTPS senza credenziali incorporate;
+- limiti per progetto, query e fonti;
+- API dedicate;
+- sezione della preview ufficiale;
+- 15 test specifici.
+
+Confini obbligatori:
+
+```text
+web_search_enabled=false
+content_acquisition_enabled=false
+model_training_enabled=false
+human_review_required_by_default=true
+```
+
+Documenti:
+
+```text
+eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.1_CENTRO_RICERCA_PROGETTI_APPRENDIMENTO_PLAN.md
+eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.1_CENTRO_RICERCA_PROGETTI_APPRENDIMENTO_UPDATE.txt
+```
 
 ### `INTELLIGENCE-0.2` — Acquisizione web controllata e quarantena fonti
 
-Stato: **pianificato**
+Stato: **pianificato, non iniziato**
 
-Ricerca online, acquisizione tracciata, estrazione, metadati, hash e isolamento prima dell’apprendimento.
+Introdurrà ricerca e acquisizione web soltanto dopo la chiusura tecnica di `INTELLIGENCE-0.1`.
 
 ### `INTELLIGENCE-0.3` — Affidabilità fonti, conflitti e revisione
 
 Stato: **pianificato**
 
-Valutazione della qualità, confronto tra affermazioni, rilevamento dei conflitti e approvazione umana.
-
 ### `INTELLIGENCE-0.4` — Memoria semantica, embedding e retrieval ibrido
 
 Stato: **pianificato**
-
-Conoscenza persistente, collegamenti tra concetti, deduplicazione semantica e ricerca lessicale-semantica.
 
 ### `INTELLIGENCE-0.5` — Provider AI reale e generazione citata
 
 Stato: **pianificato**
 
-Collegamento a modelli reali, orchestrazione, limiti, budget e risposte con fonti obbligatorie.
-
 ### `INTELLIGENCE-0.6` — Apprendimento didattico, scrittura e personalizzazione
 
 Stato: **pianificato**
-
-Spiegazioni per livello, scrittura, esempi, esercizi, errori comuni e adattamento allo studente.
 
 ### `INTELLIGENCE-0.7` — Aggiornamento continuo e manutenzione conoscenza
 
 Stato: **pianificato**
 
-Ricontrollo periodico delle fonti, nuove versioni, ritiro delle informazioni superate e cronologia.
+## API INTELLIGENCE-0.1
 
-## Primo passaggio consentito della linea INTELLIGENCE
-
-Prima di scrivere codice deve essere creato e approvato:
-
-```text
-eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.1_CENTRO_RICERCA_PROGETTI_APPRENDIMENTO_PLAN.md
-```
-
-Il file dovrà definire:
-
-- obiettivi;
-- dati e contratti;
-- interfaccia della nuova sezione;
-- limiti di rete;
-- sicurezza e quarantena;
-- criteri di verifica;
-- ciò che resta escluso.
-
-## Verifiche correnti
-
-Core:
-
-```text
-eve-ai-studio/checkpoints/CHECKPOINT_CORE_1.1_APERTURA_FONTI_VERIFICA_INTEGRITA_CI_RESULT.json
-```
-
-Preview e animazioni:
-
-```text
-eve-ai-studio/checkpoints/EVE_HQ_FINAL_VERIFICATION.json
-```
-
-Risultati consolidati:
-
-```text
-Suite Python: 165 test superati
-Sintassi JavaScript: superata
-Preview modulare: superata
-Standalone file://: superato
-Animazioni originali HQ: 64/64
-Galleria: 64/64
+```http
+GET  /v1/intelligence/research/status
+POST /v1/intelligence/research/projects
+GET  /v1/intelligence/research/projects
+GET  /v1/intelligence/research/projects/{project_id}
+POST /v1/intelligence/research/projects/{project_id}/transition
+POST /v1/intelligence/research/projects/{project_id}/queries
+GET  /v1/intelligence/research/projects/{project_id}/queries
+POST /v1/intelligence/research/projects/{project_id}/sources
+GET  /v1/intelligence/research/projects/{project_id}/sources
+GET  /v1/intelligence/research/projects/{project_id}/events
 ```
 
 ## Protezioni rispettate
@@ -232,4 +143,5 @@ Non eseguiti:
 - integrazione nella produzione;
 - ricerca web reale;
 - provider AI reale;
-- embedding.
+- embedding;
+- addestramento del modello.
