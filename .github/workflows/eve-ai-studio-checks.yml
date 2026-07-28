@@ -83,6 +83,7 @@ jobs:
             reference/eve-ai-studio-preview/retrieval-workflow.js
             reference/eve-ai-studio-preview/rag-chat-workflow.js
             reference/eve-ai-studio-preview/source-opening-workflow.js
+            reference/eve-ai-studio-preview/research-center-workflow.js
             reference/eve-ai-studio-preview/navigation-compat.js
             reference/eve-ai-studio-preview/animation-library-gallery.js
             reference/eve-ai-studio-preview/eve-animation-runtime-v1.2.2/eve-hq-runtime.js
