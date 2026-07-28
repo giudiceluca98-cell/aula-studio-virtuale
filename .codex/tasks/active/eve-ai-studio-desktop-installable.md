@@ -43,6 +43,16 @@ Nessuno. La sorgente canonica viene letta durante la build e non viene modificat
 - configurazione dell'updater separata dai segreti;
 - assenza di artefatti generati nel commit.
 
+## Correzione CI in corso
+
+- Branch: `codex/eve-ai-studio-desktop-serde-fix`
+- Base: `origin/eve-ai-studio` @ `11acd27`
+- Causa verificata: la build Windows non trova `serde_json`, richiesto da `tauri::generate_context!`.
+- File prenotati: `eve-desktop/src-tauri/Cargo.toml`, relativo lockfile e i soli documenti di coordinamento.
+- Perimetro: dipendenza Rust e rigenerazione del lockfile; nessuna modifica alla sorgente canonica o alla logica di Eve.
+- Verifiche locali: build frontend superata; versione coerente; `cargo metadata --offline` superato; `git diff --check` superato.
+- Limite locale: `cargo check` non può avviare `rustc` per il vincolo dell'ambiente Windows; verifica completa demandata a GitHub Actions.
+
 ## Risultati locali
 
 - build frontend dalla sorgente canonica: superata;
