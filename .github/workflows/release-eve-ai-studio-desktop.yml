@@ -43,7 +43,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Installa dipendenze desktop
-        run: pnpm --dir eve-desktop install --no-frozen-lockfile
+        run: pnpm --dir eve-desktop install --no-frozen-lockfile --ignore-workspace
 
       - name: Verifica configurazione della release
         shell: pwsh
