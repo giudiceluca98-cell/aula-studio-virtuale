@@ -148,6 +148,50 @@ completata dal workflow Windows perché l'ambiente locale non dispone dei
 Build Tools MSVC e non consente l'esecuzione di rustc.
 ```
 
+### DESKTOP-0.1-CI — Correzione compilazione installer
+
+```text
+CHECKPOINT:
+DESKTOP-0.1-CI — Correzione compilazione installer
+
+RESPONSABILE:
+Codex grafico/desktop
+
+STATO:
+FUNCTIONAL_TESTING
+
+BRANCH DI PARTENZA:
+origin/eve-ai-studio @ 11acd27
+
+BRANCH DI LAVORO:
+codex/eve-ai-studio-desktop-serde-fix
+
+OBIETTIVO:
+Correggere esclusivamente l'errore E0433 della build Windows aggiungendo
+la dipendenza Rust richiesta dal macro tauri::generate_context!.
+
+FILE PRENOTATI:
+- eve-desktop/src-tauri/Cargo.toml
+- eve-desktop/src-tauri/Cargo.lock
+- .codex/tasks/active/eve-ai-studio-desktop-installable.md
+- CODEX_COORDINATION.md, limitatamente a questa scheda
+
+FILE CONDIVISI PRENOTATI:
+- nessuno
+
+MODULI CANONICI MODIFICATI:
+- nessuno
+
+DISPONIBILE PER L'ALTRO CODEX:
+SÌ, esclusi i file prenotati sopra fino alla conclusione della build.
+
+NOTE:
+Non vengono modificati la sorgente canonica, main, demo-canonica, Aula Studio
+o produzione. Non vengono create demo, standalone o sorgenti duplicate.
+Build frontend, coerenza versione, metadata Cargo e diff verificati localmente.
+La compilazione completa resta affidata al runner Windows di GitHub Actions.
+```
+
 ## Attività storiche di Aula Studio
 
 La tabella seguente è conservata come cronologia del precedente flusso di Aula Studio. Non assegna né prenota file di Eve AI Studio e non prevale sulle regole attive sopra.
