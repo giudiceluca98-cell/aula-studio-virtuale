@@ -89,6 +89,9 @@ I documenti storici che richiedono una preview standalone sono superati: la veri
 
 ### DESKTOP-0.1 — Applicazione installabile e aggiornamenti
 
+Handoff operativo completo:
+`docs/CHECKPOINT_DESKTOP_0.1_INSTALLER_RELEASE_HANDOFF.md`
+
 ```text
 CHECKPOINT:
 DESKTOP-0.1 — Applicazione installabile e aggiornamenti
