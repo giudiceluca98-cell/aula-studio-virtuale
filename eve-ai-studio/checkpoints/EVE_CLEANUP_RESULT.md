@@ -47,8 +47,23 @@ Eliminati perché duplicati:
 Workflow autorevoli rimasti:
 
 - `.github/workflows/eve-ai-studio-checks.yml` — installazione, compilazione Python, pytest cumulativo e sintassi JavaScript reale;
-- `.github/workflows/eve-hq-final-verification.yml` — build standalone, preview modulare, apertura `file://`, 64 animazioni, galleria e interazioni;
+- `.github/workflows/eve-hq-final-verification.yml` — rigenerazione standalone, preview modulare, apertura `file://`, 64 animazioni, galleria e interazioni;
 - `.github/workflows/eve-ai-studio-install-hq-animations.yml` — ripristino verificato della libreria HQ dal pacchetto originale.
+
+I workflow temporanei usati per audit, cancellazione branch e diagnostica core si sono auto-rimossi.
+
+## Correzione packaging Python
+
+Il controllo completo ha individuato una configurazione incompleta di `pyproject.toml`: setuptools interpretava `app`, `data` e `checkpoints` come pacchetti di primo livello e rifiutava l’installazione editable.
+
+È stato aggiunto:
+
+- backend `setuptools.build_meta`;
+- dipendenza di build `setuptools` e `wheel`;
+- package discovery limitata ad `app*`;
+- esclusione esplicita di `tests*`, `data*` e `checkpoints*`.
+
+Dopo la correzione, `pip install -e "eve-ai-studio[dev]"` viene completato correttamente.
 
 ## Documentazione aggiornata
 
@@ -68,18 +83,43 @@ Sono stati rimossi i riferimenti obsoleti al checkpoint 0.9, alle miniature 40×
 - archivio runtime originale verificato;
 - build e installatore riproducibili.
 
-## Verifiche
+## Verifiche finali
 
-Preview e animazioni:
+### Core
+
+Rapporto:
+
+```text
+eve-ai-studio/checkpoints/CHECKPOINT_1.1_CI_RESULT.json
+```
+
+Esito:
+
+- installazione editable: superata;
+- compilazione Python: superata;
+- pytest: 165 test;
+- fallimenti: 0;
+- errori: 0;
+- sintassi JavaScript reale: superata.
+
+### Preview e animazioni
+
+Rapporto:
 
 ```text
 eve-ai-studio/checkpoints/EVE_HQ_FINAL_VERIFICATION.json
 ```
 
-Core Python e JavaScript:
+Esito:
 
-```text
-eve-ai-studio/checkpoints/CHECKPOINT_1.1_CI_RESULT.json
-```
+- qualità: `original-final-webp`;
+- asset: 64;
+- schede galleria: 64;
+- preview modulare: superata;
+- standalone `file://`: superato;
+- materiali, retrieval, RAG e apertura fonte: superati;
+- script esterni nello standalone: 0;
+- fogli di stile esterni nello standalone: 0;
+- errori: 0.
 
 La pulizia non ha modificato `main`, `demo-canonica`, il file HTML canonico o `eve-canonical-integration-v2`.
