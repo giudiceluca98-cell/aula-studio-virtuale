@@ -92,3 +92,11 @@ button,input,textarea,select{font:inherit}button{color:inherit;cursor:pointer}
 @media(max-width:760px){.app{display:block}.sidebar{height:auto;position:relative;border-right:0;border-bottom:1px solid var(--line)}.eve-card{display:grid;grid-template-columns:130px 1fr}.eve-orb-stage{min-height:150px}.eve-portrait{height:150px}.nav{grid-template-columns:repeat(2,1fr)}.main{padding:18px 14px 60px}.topbar{position:relative;margin:-18px -14px 18px;padding:15px 14px;align-items:flex-start;flex-direction:column}.grid,.test-grid{display:block}.panel,.stage{margin-bottom:12px}.span-8,.span-7,.span-6,.span-5,.span-4{margin-bottom:12px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.workflow{display:block}.metric-row{grid-template-columns:1fr 1fr}.build-eve-grid{display:block}.build-eve-step{margin-bottom:10px}.build-eve-step:first-child{grid-column:auto}.build-eve-actions__advanced{width:100%;margin-left:0}.build-eve-actions .btn{flex:1}.prompt-guide__top{display:block}.prompt-guide__top .tag{margin-top:10px}.prompt-guide__steps{grid-template-columns:1fr 1fr}.prompt-parameter-details__body{display:block}.prompt-parameter-details__body .field+.field{margin-top:10px}.prompt-advanced-sections{display:block}.model-config-layout{grid-template-columns:1fr}.rule-library-list{grid-template-columns:1fr}.rule-library-panel__head{display:block}.rule-library-panel__head .tag{display:inline-block;margin-top:10px}.new-rule-actions .btn{width:100%}.model-test-layout{grid-template-columns:1fr}.model-test-layout .btn{grid-column:auto;width:100%}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation-duration:.001ms!important;transition-duration:.001ms!important}#particleField{opacity:.38}}
 .graphics-animation-paused,body.graphics-page-hidden *{animation-play-state:paused!important}
+body[data-graphics-performance="optimized"] .sidebar,
+body[data-graphics-performance="optimized"] .eve-card,
+body[data-graphics-performance="optimized"] .topbar,
+body[data-graphics-performance="optimized"] .stage,
+body[data-graphics-performance="optimized"] .panel,
+body[data-graphics-performance="optimized"] .modal-wrap{backdrop-filter:none}
+body[data-graphics-performance="optimized"] #particleField{opacity:.62}
+[aria-busy="true"]{cursor:progress!important}

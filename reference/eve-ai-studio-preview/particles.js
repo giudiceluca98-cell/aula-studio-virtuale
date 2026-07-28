@@ -13,9 +13,18 @@ function startParticleField(){
   let frameId=0;
   let resizeFrameId=0;
   let running=false;
+  let lastPaintAt=0;
+  let mode=localStorage.getItem("eve-graphics-performance")==="complete"?"complete":"optimized";
+
+  function settings(){
+    return mode==="complete"
+      ? {maxDpr:2,maxParticles:92,minParticles:34,frameInterval:0,connections:true,shadowBlur:10}
+      : {maxDpr:1.25,maxParticles:52,minParticles:26,frameInterval:1000/30,connections:false,shadowBlur:5};
+  }
 
   function resize(){
-    dpr=Math.min(window.devicePixelRatio||1,2);
+    const config=settings();
+    dpr=Math.min(window.devicePixelRatio||1,config.maxDpr);
     width=window.innerWidth;
     height=window.innerHeight;
     canvas.width=Math.floor(width*dpr);
@@ -24,7 +33,7 @@ function startParticleField(){
     canvas.style.height=`${height}px`;
     ctx.setTransform(dpr,0,0,dpr,0,0);
 
-    const count=Math.max(34,Math.min(92,Math.round(width*height/18000)));
+    const count=Math.max(config.minParticles,Math.min(config.maxParticles,Math.round(width*height/22000)));
     particles=Array.from({length:count},(_,index)=>({
       x:Math.random()*width,
       y:Math.random()*height,
@@ -39,6 +48,7 @@ function startParticleField(){
 
   function paint(updateParticles){
     ctx.clearRect(0,0,width,height);
+    const config=settings();
     const connectionDistance=105;
     const connectionDistanceSquared=connectionDistance*connectionDistance;
 
@@ -59,12 +69,12 @@ function startParticleField(){
       ctx.beginPath();
       ctx.fillStyle=`rgba(${red},${green},${blue},${alpha})`;
       ctx.shadowColor=`rgba(${red},${green},${blue},.75)`;
-      ctx.shadowBlur=10;
+      ctx.shadowBlur=config.shadowBlur;
       ctx.arc(particle.x,particle.y,particle.radius,0,Math.PI*2);
       ctx.fill();
       ctx.shadowBlur=0;
 
-      for(let targetIndex=index+1;targetIndex<particles.length;targetIndex+=1){
+      for(let targetIndex=index+1;config.connections&&targetIndex<particles.length;targetIndex+=1){
         const target=particles[targetIndex];
         const deltaX=particle.x-target.x;
         const deltaY=particle.y-target.y;
@@ -82,15 +92,21 @@ function startParticleField(){
     }
   }
 
-  function draw(){
+  function draw(timestamp){
     frameId=0;
-    if(!running||document.hidden)return;
+    if(!running||document.hidden||!document.hasFocus())return;
+    const interval=settings().frameInterval;
+    if(interval&&timestamp-lastPaintAt<interval){
+      frameId=requestAnimationFrame(draw);
+      return;
+    }
+    lastPaintAt=timestamp;
     paint(true);
     frameId=requestAnimationFrame(draw);
   }
 
   function start(){
-    if(reduceMotion||running||document.hidden)return;
+    if(reduceMotion||running||document.hidden||!document.hasFocus())return;
     running=true;
     canvas.dataset.graphicsRunning="true";
     if(!frameId)frameId=requestAnimationFrame(draw);
@@ -120,12 +136,26 @@ function startParticleField(){
     else start();
   }
 
+  function syncFocus(){
+    if(document.hasFocus())start();
+    else stop();
+  }
+
+  function syncMode(event){
+    mode=event.detail?.mode==="complete"?"complete":"optimized";
+    resize();
+    paint(false);
+  }
+
   resize();
   paint(false);
   canvas.dataset.graphicsRunning="false";
   start();
   window.addEventListener("resize",scheduleResize,{passive:true});
   document.addEventListener("visibilitychange",syncVisibility,{passive:true});
+  window.addEventListener("focus",syncFocus,{passive:true});
+  window.addEventListener("blur",syncFocus,{passive:true});
+  window.addEventListener("eve:graphics-performance-change",syncMode);
 
   window.EveGraphicsPerformance=Object.assign(window.EveGraphicsPerformance||{},{
     particleField:{

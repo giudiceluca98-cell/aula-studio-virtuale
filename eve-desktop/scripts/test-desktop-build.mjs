@@ -54,6 +54,25 @@ const canonicalHtml = await readFile(
   join(repositoryRoot, "reference", "eve-ai-studio-preview", "index.html"),
   "utf8"
 );
+for (const expected of [
+  'loadPreviewScript("section-module-loader.js")',
+  'loadPreviewScript("provider-workflow.js")',
+  'loadPreviewScript("materials-workflow.js")'
+]) {
+  if (!canonicalHtml.includes(expected)) {
+    throw new Error(`L'ingresso canonico non contiene ${expected}.`);
+  }
+}
+for (const deferred of [
+  'await loadPreviewScript("evaluation-workflow.js")',
+  'await loadPreviewScript("retrieval-workflow.js")',
+  'await loadPreviewScript("model-test-workflow.js")',
+  'await loadPreviewScript("eve-release-workflow.js")'
+]) {
+  if (canonicalHtml.includes(deferred)) {
+    throw new Error(`Il modulo progressivo viene ancora caricato all'avvio: ${deferred}.`);
+  }
+}
 if (
   canonicalHtml.includes("eve-desktop-updater.js") ||
   canonicalHtml.includes("eve-desktop-window.js")

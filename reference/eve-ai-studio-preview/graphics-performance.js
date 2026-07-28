@@ -5,16 +5,19 @@
   let mutationObserver = null;
   const observedElements = new WeakSet();
 
+  let mode = localStorage.getItem("eve-graphics-performance") === "complete"
+    ? "complete"
+    : "optimized";
+
   function observeAnimatedElement(element) {
     if (!(element instanceof Element) || observedElements.has(element)) return;
-    if (getComputedStyle(element).animationName === "none") return;
     observedElements.add(element);
     animationObserver?.observe(element);
   }
 
   function scanAnimatedElements(root = document) {
-    if (root instanceof Element) observeAnimatedElement(root);
-    root.querySelectorAll?.("*").forEach(observeAnimatedElement);
+    const animations = document.getAnimations?.() || [];
+    animations.forEach(animation => observeAnimatedElement(animation.effect?.target));
   }
 
   function initializeAnimationObserver() {
@@ -32,11 +35,23 @@
     mutationObserver = new MutationObserver(records => {
       records.forEach(record => {
         record.addedNodes.forEach(node => {
-          if (node instanceof Element) scanAnimatedElements(node);
+          if (node instanceof Element) scheduleScan();
         });
       });
     });
     mutationObserver.observe(document.body, { childList: true, subtree: true });
+  }
+
+  let scanPending = false;
+  function scheduleScan() {
+    if (scanPending) return;
+    scanPending = true;
+    const run = () => {
+      scanPending = false;
+      scanAnimatedElements(document);
+    };
+    if (typeof requestIdleCallback === "function") requestIdleCallback(run, { timeout: 500 });
+    else setTimeout(run, 0);
   }
 
   function syncPageVisibility() {
@@ -44,12 +59,24 @@
   }
 
   syncPageVisibility();
-  document.body.dataset.graphicsPerformance = "optimized";
+  function setMode(nextMode) {
+    mode = nextMode === "complete" ? "complete" : "optimized";
+    document.body.dataset.graphicsPerformance = mode;
+    localStorage.setItem("eve-graphics-performance", mode);
+    window.dispatchEvent(new CustomEvent("eve:graphics-performance-change", {
+      detail: { mode }
+    }));
+    return mode;
+  }
+
+  document.body.dataset.graphicsPerformance = mode;
   initializeAnimationObserver();
   document.addEventListener("visibilitychange", syncPageVisibility, { passive: true });
 
   window.EveGraphicsPerformance = Object.assign(window.EveGraphicsPerformance || {}, {
     version: "1.0.0",
+    getMode: () => mode,
+    setMode,
     pausesHiddenPage: true,
     pausesOffscreenCssAnimations: Boolean(animationObserver),
     disconnect() {

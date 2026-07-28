@@ -88,7 +88,7 @@ jobs:
           releaseName: "Eve AI Studio v__VERSION__"
           releaseBody: "Installer ufficiale di Eve AI Studio con aggiornamenti firmati."
           releaseDraft: false
-          prerelease: true
+          prerelease: false
           updaterJsonPreferNsis: true
           uploadUpdaterJson: true
           uploadUpdaterSignatures: true
