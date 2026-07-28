@@ -26,6 +26,13 @@ class ResearchSourceStatus(str, Enum):
     REJECTED = "rejected"
 
 
+class ResearchAcquisitionStatus(str, Enum):
+    RUNNING = "running"
+    SUCCEEDED = "succeeded"
+    BLOCKED = "blocked"
+    FAILED = "failed"
+
+
 def _clean_unique(values: list[str], *, max_items: int) -> list[str]:
     cleaned: list[str] = []
     seen: set[str] = set()
@@ -136,6 +143,10 @@ class ResearchSourceCandidateCreateRequest(BaseModel):
         return value or None
 
 
+class ResearchAcquisitionRequest(BaseModel):
+    refresh: bool = False
+
+
 class ResearchProjectSummary(BaseModel):
     project_id: str
     room_id: str
@@ -200,6 +211,48 @@ class ResearchSourceCandidateListResponse(BaseModel):
     items: list[ResearchSourceCandidate]
 
 
+class ResearchAcquisitionEvent(BaseModel):
+    acquisition_id: int
+    source_id: int
+    project_id: str
+    status: ResearchAcquisitionStatus
+    requested_url: str
+    final_url: str | None = None
+    http_status: int | None = None
+    media_type: str | None = None
+    size_bytes: int | None = None
+    sha256: str | None = None
+    extracted_chars: int | None = None
+    robots_allowed: bool | None = None
+    resolved_ips: list[str] = Field(default_factory=list)
+    redirect_chain: list[str] = Field(default_factory=list)
+    error_code: str | None = None
+    created_at: str
+    completed_at: str | None = None
+
+
+class ResearchAcquisitionEventListResponse(BaseModel):
+    total: int
+    items: list[ResearchAcquisitionEvent]
+
+
+class ResearchQuarantinedDocument(BaseModel):
+    source_id: int
+    project_id: str
+    acquisition_id: int
+    requested_url: str
+    final_url: str
+    media_type: str
+    size_bytes: int
+    sha256: str
+    extracted_text: str
+    extracted_chars: int
+    status: ResearchSourceStatus
+    content_trust: str
+    instructions_executable: bool
+    created_at: str
+
+
 class ResearchTransitionEvent(BaseModel):
     event_id: int
     project_id: str
@@ -218,10 +271,15 @@ class ResearchCenterStatus(BaseModel):
     active_projects: int
     total_queries: int
     quarantined_sources: int
+    successful_acquisitions: int = 0
     web_search_enabled: bool
+    content_acquisition_available: bool = False
     content_acquisition_enabled: bool
     model_training_enabled: bool
     human_review_required_by_default: bool
     max_projects_per_room: int
     max_queries_per_project: int
     max_sources_per_project: int
+    max_acquisition_bytes: int = 0
+    max_redirects: int = 0
+    robots_required: bool = True
