@@ -35,4 +35,3 @@ const releaseConfig = {
 
 await writeFile(outputPath, `${JSON.stringify(releaseConfig, null, 2)}\n`, "utf8");
 console.log(`Configurazione release generata: ${outputPath}`);
-

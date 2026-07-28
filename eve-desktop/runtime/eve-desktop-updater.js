@@ -175,4 +175,3 @@
     window.setTimeout(() => checkForUpdates({ automatic: true }), 2500);
   }
 })();
-

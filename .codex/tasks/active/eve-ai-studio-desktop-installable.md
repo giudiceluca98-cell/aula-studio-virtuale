@@ -1,10 +1,11 @@
 # DESKTOP-0.1 — Applicazione installabile e aggiornamenti
 
 - Responsabile: Codex grafico/desktop
-- Stato: `IN_PROGRESS`
+- Stato: `FUNCTIONAL_TESTING`
 - Branch di partenza: `codex/eve-ai-studio-coordination-policy` @ `238f721`
 - Sorgente applicativa: `origin/eve-ai-studio` @ `13b8822`
 - Branch di lavoro: `codex/eve-ai-studio-desktop-installable`
+- Commit di implementazione: `0a1527d`
 - Pull Request: da aprire verso `eve-ai-studio`
 
 ## Obiettivo
@@ -42,3 +43,12 @@ Nessuno. La sorgente canonica viene letta durante la build e non viene modificat
 - configurazione dell'updater separata dai segreti;
 - assenza di artefatti generati nel commit.
 
+## Risultati locali
+
+- build frontend dalla sorgente canonica: superata;
+- 64 asset Eve nella build: verificati;
+- sintassi JavaScript canonica e desktop: superata;
+- coerenza versione `1.2.0-alpha.1`: superata;
+- `cargo metadata --offline`: superato;
+- `git diff --check`: superato dopo la normalizzazione;
+- compilazione NSIS: demandata al workflow Windows perché l'ambiente locale non dispone dei Build Tools MSVC e blocca l'esecuzione di `rustc`.

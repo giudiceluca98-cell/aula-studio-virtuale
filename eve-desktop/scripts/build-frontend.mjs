@@ -85,4 +85,3 @@ await writeFile(
 );
 
 console.log(`Build frontend generata dalla sorgente canonica in ${frontendDist}`);
-

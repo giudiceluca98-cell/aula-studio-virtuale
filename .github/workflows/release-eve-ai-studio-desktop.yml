@@ -102,4 +102,3 @@ jobs:
           name: eve-ai-studio-${{ env.RELEASE_VERSION }}
           path: eve-desktop/src-tauri/target/release/bundle/**
           if-no-files-found: error
-

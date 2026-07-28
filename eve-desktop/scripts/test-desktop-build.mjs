@@ -107,4 +107,3 @@ if (runtimeAssets.filter((item) => item.endsWith(".webp")).length !== 64) {
 }
 
 console.log(`Build desktop verificata: ${desktopBuild.version}`);
-

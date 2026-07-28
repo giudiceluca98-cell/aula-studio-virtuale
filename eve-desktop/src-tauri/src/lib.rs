@@ -77,4 +77,3 @@ pub fn run() {
         .run(tauri::generate_context!())
         .expect("errore durante l'avvio di Eve AI Studio");
 }
-

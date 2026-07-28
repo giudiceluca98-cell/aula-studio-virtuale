@@ -37,4 +37,3 @@ for (const [source, version] of [
 }
 
 console.log(`Versione desktop coerente: ${requested}`);
-

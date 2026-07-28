@@ -97,7 +97,7 @@ RESPONSABILE:
 Codex grafico/desktop
 
 STATO:
-IN_PROGRESS
+FUNCTIONAL_TESTING
 
 BRANCH DI PARTENZA:
 codex/eve-ai-studio-coordination-policy @ 238f721
@@ -124,7 +124,7 @@ MODULI CANONICI MODIFICATI:
 - nessuno
 
 ULTIMO COMMIT:
-non ancora disponibile
+0a1527d
 
 DISPONIBILE PER L'ALTRO CODEX:
 NO, fino al completamento dei test desktop.
@@ -142,6 +142,10 @@ NOTE:
 La directory frontend generata durante la build è ignorata da Git e deriva
 ogni volta da reference/eve-ai-studio-preview/. Non è una fonte modificabile.
 Il checkpoint non modifica main, demo-canonica, Aula Studio o produzione.
+Build frontend, provenienza canonica, 64 asset, sintassi JavaScript, versioni
+e manifest Cargo verificati localmente. La compilazione NSIS deve essere
+completata dal workflow Windows perché l'ambiente locale non dispone dei
+Build Tools MSVC e non consente l'esecuzione di rustc.
 ```
 
 ## Attività storiche di Aula Studio

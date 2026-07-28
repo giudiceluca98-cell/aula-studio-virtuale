@@ -53,4 +53,3 @@
     toggleFullscreen
   };
 })();
-
