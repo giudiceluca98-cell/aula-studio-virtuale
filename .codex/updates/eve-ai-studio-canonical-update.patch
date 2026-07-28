@@ -1,0 +1,3316 @@
+diff --git a/.github/workflows/eve-ai-studio-checks.yml b/.github/workflows/eve-ai-studio-checks.yml
+index 9d9557abe44565ae4ad946a4341f732472308c77..81ea160e2b6dacf3aea270cb9a460406951e3d55 100644
+--- a/.github/workflows/eve-ai-studio-checks.yml
++++ b/.github/workflows/eve-ai-studio-checks.yml
+@@ -75,7 +75,6 @@ jobs:
+             reference/eve-ai-studio-preview/checkpoint-04-patch.js
+             reference/eve-ai-studio-preview/prompt-compat.js
+             reference/eve-ai-studio-preview/app.js
+-            reference/eve-ai-studio-preview/prompt-workflow.js
+             reference/eve-ai-studio-preview/evaluation-workflow.js
+             reference/eve-ai-studio-preview/runner-workflow.js
+             reference/eve-ai-studio-preview/provider-workflow.js
+@@ -86,6 +85,11 @@ jobs:
+             reference/eve-ai-studio-preview/research-center-workflow.js
+             reference/eve-ai-studio-preview/navigation-compat.js
+             reference/eve-ai-studio-preview/animation-library-gallery.js
++            reference/eve-ai-studio-preview/eve-release-workflow.js
++            reference/eve-ai-studio-preview/graphics-performance.js
++            reference/eve-ai-studio-preview/model-rules-workflow.js
++            reference/eve-ai-studio-preview/model-test-workflow.js
++            reference/eve-ai-studio-preview/simple-studio-navigation.js
+             reference/eve-ai-studio-preview/eve-animation-runtime-v1.2.2/eve-hq-runtime.js
+           )
+           : > eve-core-javascript.txt
+@@ -161,8 +165,8 @@ jobs:
+ - errori: {counts['errors']}
+ - ignorati: {counts['skipped']}
+ 
+-La verifica browser, le 64 animazioni HQ, la galleria e lo standalone `file://`
+-sono controllati separatamente dal workflow `eve-hq-final-verification.yml`.
++La verifica browser, le 64 animazioni HQ e la galleria della sorgente modulare
++sono controllate separatamente dal workflow `eve-hq-final-verification.yml`.
+ """
+           md_path.write_text(markdown, encoding='utf-8')
+           PY
+diff --git a/.github/workflows/eve-ai-studio-install-hq-animations.yml b/.github/workflows/eve-ai-studio-install-hq-animations.yml
+index 20ba99777f1b583ce8e4ebb682a04a2c13a83f19..129a703f0e56afcf91a88bd3ff906c1112c88b6f 100644
+--- a/.github/workflows/eve-ai-studio-install-hq-animations.yml
++++ b/.github/workflows/eve-ai-studio-install-hq-animations.yml
+@@ -7,7 +7,6 @@ on:
+     paths:
+       - "reference/eve-ai-studio-preview/vendor/EVE_ANIMATION_RUNTIME_V1.2.2_ORIGINAL.tar.xz"
+       - "reference/eve-ai-studio-preview/install_hq_animation_runtime.py"
+-      - "reference/eve-ai-studio-preview/build_standalone.py"
+       - ".github/workflows/eve-ai-studio-install-hq-animations.yml"
+   workflow_dispatch:
+ 
+@@ -40,13 +39,11 @@ jobs:
+           test -f reference/eve-ai-studio-preview/vendor/EVE_ANIMATION_RUNTIME_V1.2.2_ORIGINAL.tar.xz
+           echo "c48e41300fea7ce835bb8f7ba3e46531f370d9f56668854861f90e0c01c1583e  reference/eve-ai-studio-preview/vendor/EVE_ANIMATION_RUNTIME_V1.2.2_ORIGINAL.tar.xz" | sha256sum --check
+ 
+-      - name: Installa runtime e genera standalone HQ
++      - name: Installa e verifica runtime HQ
+         run: |
+           set -euxo pipefail
+           python reference/eve-ai-studio-preview/install_hq_animation_runtime.py
+-          python reference/eve-ai-studio-preview/build_standalone.py
+           test -f reference/eve-ai-studio-preview/eve-animation-runtime-v1.2.2/eve-hq-runtime-manifest.json
+-          test -f reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html
+ 
+       - name: Salva integrazione HQ sul branch
+         run: |
+@@ -54,6 +51,6 @@ jobs:
+           git config user.name "github-actions[bot]"
+           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+           git add -A reference/eve-ai-studio-preview
+-          git commit -m "feat: installa Eve Animation Library 1.2.2 originale HQ [skip eve standalone]" || exit 0
++          git commit -m "feat: installa Eve Animation Library 1.2.2 originale HQ" || exit 0
+           git pull --rebase origin eve-ai-studio
+           git push origin HEAD:eve-ai-studio
+diff --git a/.github/workflows/eve-hq-final-verification.yml b/.github/workflows/eve-hq-final-verification.yml
+index b3473f45e62e131e8948f7f1603f92a28d0ed555..3e9c74f3e3afbfe059d9bc6fec258380276d9117 100644
+--- a/.github/workflows/eve-hq-final-verification.yml
++++ b/.github/workflows/eve-hq-final-verification.yml
+@@ -29,14 +29,6 @@ jobs:
+           ref: eve-ai-studio
+           fetch-depth: 0
+ 
+-      - name: Rigenera lo standalone dalla preview modulare
+-        run: |
+-          python3 reference/eve-ai-studio-preview/build_standalone.py
+-          file=reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html
+-          test -s "$file"
+-          ! grep -Eiq '<script[^>]+src=' "$file"
+-          ! grep -Eiq "<link[^>]+rel=['\"]stylesheet['\"]" "$file"
+-
+       - name: Node 20
+         uses: actions/setup-node@v4
+         with:
+@@ -57,7 +49,7 @@ jobs:
+           cat /tmp/eve-preview-http.txt
+           exit 1
+ 
+-      - name: Verifica preview, standalone, galleria e workflow
++      - name: Verifica preview modulare, galleria e workflow
+         id: verify
+         continue-on-error: true
+         run: |
+@@ -65,8 +57,6 @@ jobs:
+           import { chromium } from "playwright";
+           import assert from "node:assert/strict";
+           import fs from "node:fs";
+-          import path from "node:path";
+-          import { pathToFileURL } from "node:url";
+ 
+           async function verifyAnimations(page, url, expectedFormat) {
+             const errors = [];
+@@ -157,7 +147,6 @@ jobs:
+             assets: 0,
+             galleryCards: 0,
+             modular: false,
+-            standaloneFile: false,
+             interactions: false,
+             animationGallery: false,
+             externalScripts: 0,
+@@ -178,14 +167,6 @@ jobs:
+             assert.deepEqual(modularCheck.errors, []);
+             await modular.screenshot({ path: "eve-preview-modular.png", fullPage: true });
+ 
+-            const standalone = await browser.newPage({ viewport: { width: 1440, height: 1800 }, deviceScaleFactor: 2 });
+-            const standalonePath = path.resolve("reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html");
+-            const standaloneCheck = await verifyAnimations(standalone, pathToFileURL(standalonePath).href, "standalone");
+-            await verifyGallery(standalone);
+-            assert.deepEqual(standaloneCheck.errors, []);
+-            result.standaloneFile = true;
+-            await standalone.screenshot({ path: "eve-preview-standalone.png", fullPage: true });
+-
+             result.passed = true;
+           } catch (error) {
+             result.errors.push(error.stack || error.message);
+@@ -197,14 +178,14 @@ jobs:
+           EOF
+           node verify-eve-preview.mjs
+ 
+-      - name: Salva standalone e rapporto autorevole
++      - name: Salva rapporto autorevole
+         if: always()
+         run: |
+           mkdir -p eve-ai-studio/checkpoints
+           cp EVE_HQ_FINAL_VERIFICATION.json eve-ai-studio/checkpoints/EVE_HQ_FINAL_VERIFICATION.json
+           git config user.name "github-actions[bot]"
+           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+-          git add -f reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html eve-ai-studio/checkpoints/EVE_HQ_FINAL_VERIFICATION.json
++          git add -f eve-ai-studio/checkpoints/EVE_HQ_FINAL_VERIFICATION.json
+           git commit -m "build: aggiorna preview verificata Eve [skip eve preview ci]" || exit 0
+           git pull --rebase origin eve-ai-studio
+           git push origin HEAD:eve-ai-studio
+@@ -216,7 +197,6 @@ jobs:
+           name: eve-ai-studio-preview-verification
+           path: |
+             eve-preview-modular.png
+-            eve-preview-standalone.png
+             EVE_HQ_FINAL_VERIFICATION.json
+             /tmp/eve-preview-http.txt
+           if-no-files-found: warn
+diff --git a/.github/workflows/eve-intelligence-0.1-checks.yml b/.github/workflows/eve-intelligence-0.1-checks.yml
+index 26366c933eb3d24dda19373ed4e059183c7565ba..76de67700f58a0e2fd81df8ca039923f41bacab1 100644
+--- a/.github/workflows/eve-intelligence-0.1-checks.yml
++++ b/.github/workflows/eve-intelligence-0.1-checks.yml
+@@ -63,16 +63,14 @@ jobs:
+           set -o pipefail
+           python -m pytest -q tests/test_intelligence_research.py --junitxml=intelligence-0.1-results.xml 2>&1 | tee ../intelligence-0.1-pytest.txt
+ 
+-      - name: Rigenera standalone
++      - name: Verifica sorgente modulare
+         id: build
+         continue-on-error: true
+         run: |
+           set -o pipefail
+           node --check reference/eve-ai-studio-preview/research-center-workflow.js
+-          python3 reference/eve-ai-studio-preview/build_standalone.py 2>&1 | tee intelligence-0.1-build.txt
+-          test -s reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html
+-          grep -q "intelligence-research" reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html
+-          ! grep -Eiq '<script[^>]+src=' reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html
++          test -s reference/eve-ai-studio-preview/index.html
++          grep -q "intelligence-research" reference/eve-ai-studio-preview/index.html
+ 
+       - uses: actions/setup-node@v4
+         with:
+@@ -96,7 +94,7 @@ jobs:
+           cat /tmp/intelligence-0.1-http.txt
+           exit 1
+ 
+-      - name: Verifica preview e standalone reali
++      - name: Verifica preview modulare reale
+         id: browser
+         if: steps.browser_install.outcome == 'success' && steps.build.outcome == 'success'
+         continue-on-error: true
+@@ -104,8 +102,6 @@ jobs:
+           cat > verify-intelligence-0.1.mjs <<'EOF'
+           import { chromium } from "playwright";
+           import assert from "node:assert/strict";
+-          import path from "node:path";
+-          import { pathToFileURL } from "node:url";
+ 
+           async function verify(page, url, expectedFormat) {
+             const errors = [];
+@@ -149,10 +145,6 @@ jobs:
+             await verify(modular, "http://127.0.0.1:4173/index.html", null);
+             await modular.screenshot({ path: "intelligence-0.1-modular.png", fullPage: true });
+ 
+-            const standalone = await browser.newPage({ viewport: { width: 1440, height: 1800 }, deviceScaleFactor: 2 });
+-            const file = path.resolve("reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html");
+-            await verify(standalone, pathToFileURL(file).href, "standalone");
+-            await standalone.screenshot({ path: "intelligence-0.1-standalone.png", fullPage: true });
+           } finally {
+             await browser.close();
+           }
+@@ -180,9 +172,9 @@ jobs:
+               "install": os.environ.get("INSTALL", "not_run"),
+               "python_compile": os.environ.get("COMPILE", "not_run"),
+               "pytest_specific": os.environ.get("PYTEST", "not_run"),
+-              "standalone_build": os.environ.get("BUILD", "not_run"),
++              "modular_source": os.environ.get("BUILD", "not_run"),
+               "browser_install": os.environ.get("BROWSER_INSTALL", "not_run"),
+-              "browser_modular_and_file": os.environ.get("BROWSER", "not_run"),
++              "browser_modular": os.environ.get("BROWSER", "not_run"),
+           }
+           counts = {"tests": 0, "failures": 0, "errors": 0, "skipped": 0}
+           junit = Path("eve-ai-studio/intelligence-0.1-results.xml")
+@@ -206,8 +198,7 @@ jobs:
+               "web_search_enabled": False,
+               "content_acquisition_enabled": False,
+               "model_training_enabled": False,
+-              "modular_preview": states["browser_modular_and_file"] == "success",
+-              "standalone_file": states["browser_modular_and_file"] == "success",
++              "modular_preview": states["browser_modular"] == "success",
+           }
+           base = Path("eve-ai-studio/checkpoints")
+           base.mkdir(parents=True, exist_ok=True)
+@@ -221,8 +212,7 @@ jobs:
+               f"- Test specifici: {counts['tests']}\n"
+               f"- Fallimenti: {counts['failures']}\n"
+               f"- Errori: {counts['errors']}\n"
+-              f"- Preview modulare: {states['browser_modular_and_file']}\n"
+-              f"- Standalone file://: {states['browser_modular_and_file']}\n"
++              f"- Preview modulare: {states['browser_modular']}\n"
+               "- Ricerca web: disattivata\n"
+               "- Acquisizione contenuti: disattivata\n"
+               "- Addestramento modello: disattivato\n",
+@@ -232,8 +222,7 @@ jobs:
+ 
+           git config user.name "github-actions[bot]"
+           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+-          git add -f reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html \
+-            eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.1_CENTRO_RICERCA_PROGETTI_APPRENDIMENTO_CI_RESULT.json \
++          git add -f eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.1_CENTRO_RICERCA_PROGETTI_APPRENDIMENTO_CI_RESULT.json \
+             eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.1_CENTRO_RICERCA_PROGETTI_APPRENDIMENTO_VERIFICATION.md
+           git commit -m "ci(intelligence-0.1): registra gate centro ricerca [skip intelligence 0.1 ci] [skip eve preview ci]" || exit 0
+           git pull --rebase origin eve-ai-studio
+@@ -246,7 +235,6 @@ jobs:
+           path: |
+             intelligence-0.1-*.txt
+             intelligence-0.1-modular.png
+-            intelligence-0.1-standalone.png
+             /tmp/intelligence-0.1-http.txt
+           if-no-files-found: warn
+           retention-days: 14
+diff --git a/.github/workflows/eve-intelligence-0.1-finalize.yml b/.github/workflows/eve-intelligence-0.1-finalize.yml
+deleted file mode 100644
+index 1b27a2996f76dc5c8949b12d9e04a8a8334fe21a..0000000000000000000000000000000000000000
+--- a/.github/workflows/eve-intelligence-0.1-finalize.yml
++++ /dev/null
+@@ -1,199 +0,0 @@
+-name: Eve INTELLIGENCE 0.1 finalize
+-
+-on:
+-  push:
+-    branches: [eve-ai-studio]
+-    paths:
+-      - ".github/workflows/eve-intelligence-0.1-finalize.yml"
+-
+-permissions:
+-  contents: write
+-
+-jobs:
+-  finalize:
+-    runs-on: ubuntu-latest
+-    timeout-minutes: 35
+-    steps:
+-      - uses: actions/checkout@v4
+-        with:
+-          ref: eve-ai-studio
+-          fetch-depth: 0
+-
+-      - name: Corregge il parser JUnit permanente
+-        run: |
+-          python3 - <<'PY'
+-          from pathlib import Path
+-          path = Path('.github/workflows/eve-intelligence-0.1-checks.yml')
+-          source = path.read_text(encoding='utf-8')
+-          old = '''          if junit.exists():
+-              root = ET.parse(junit).getroot()
+-              counts = {key: int(float(root.attrib.get(key, 0))) for key in counts}
+-'''
+-          new = '''          if junit.exists():
+-              root = ET.parse(junit).getroot()
+-              suites = [root] if root.tag == "testsuite" else list(root.findall(".//testsuite"))
+-              counts = {
+-                  key: sum(int(float(suite.attrib.get(key, 0))) for suite in suites)
+-                  for key in counts
+-              }
+-'''
+-          if old not in source:
+-              raise RuntimeError('Blocco parser JUnit non trovato')
+-          path.write_text(source.replace(old, new), encoding='utf-8')
+-          PY
+-
+-      - uses: actions/setup-python@v5
+-        with:
+-          python-version: "3.11"
+-          cache: pip
+-          cache-dependency-path: eve-ai-studio/pyproject.toml
+-
+-      - name: Installa e prova INTELLIGENCE-0.1
+-        run: |
+-          python -m pip install --upgrade pip
+-          python -m pip install -e "eve-ai-studio[dev]"
+-          cd eve-ai-studio
+-          python -m compileall -q app/intelligence tests/test_intelligence_research.py
+-          python -m pytest -q tests/test_intelligence_research.py --junitxml=intelligence-0.1-results.xml
+-          cd ..
+-          node --check reference/eve-ai-studio-preview/research-center-workflow.js
+-          python3 reference/eve-ai-studio-preview/build_standalone.py
+-          grep -q "intelligence-research" reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html
+-
+-      - uses: actions/setup-node@v4
+-        with:
+-          node-version: "20"
+-
+-      - name: Installa Chromium
+-        run: |
+-          npm install --no-save playwright
+-          npx playwright install --with-deps chromium
+-
+-      - name: Verifica modulare e standalone
+-        run: |
+-          python3 -m http.server 4173 --directory reference/eve-ai-studio-preview >/tmp/intelligence-final-http.txt 2>&1 &
+-          for attempt in {1..30}; do curl -fsS http://127.0.0.1:4173/index.html >/dev/null && break; sleep 1; done
+-          cat > verify-intelligence-final.mjs <<'EOF'
+-          import { chromium } from "playwright";
+-          import assert from "node:assert/strict";
+-          import path from "node:path";
+-          import { pathToFileURL } from "node:url";
+-
+-          async function verify(page, url, expectedFormat) {
+-            const errors=[];
+-            page.on("pageerror",e=>errors.push(e.message));
+-            page.on("console",m=>{if(m.type()==="error")errors.push(m.text())});
+-            await page.goto(url,{waitUntil:"load"});
+-            await page.waitForFunction(()=>document.getElementById("intelligence-research")&&window.EveAnimationLibrary?.quality==="original-final-webp",null,{timeout:60000});
+-            assert.equal(await page.locator('[data-view="intelligence-research"]').count(),1);
+-            await page.locator('[data-view="intelligence-research"]').click();
+-            assert.equal((await page.locator("#researchProjectCount").textContent()).trim(),"2");
+-            await page.locator("#createResearchProject").click();
+-            await page.waitForFunction(()=>!document.getElementById("createResearchProject").disabled,null,{timeout:15000});
+-            assert.equal((await page.locator("#researchProjectCount").textContent()).trim(),"3");
+-            assert.equal(await page.locator('#researchCreationStages .tag').filter({hasText:"Completato"}).count(),5);
+-            await page.locator("#addResearchQuery").click();
+-            assert.equal((await page.locator("#researchQueryCount").textContent()).trim(),"10");
+-            await page.locator("#addResearchSource").click();
+-            assert.equal((await page.locator("#researchSourceCount").textContent()).trim(),"4");
+-            assert.match(await page.locator("#researchSourceList").textContent(),/content_acquired=false/);
+-            assert.match(await page.locator("#researchProjectList").textContent(),/web_access=false/);
+-            assert.match(await page.locator("#intelligence-research").textContent(),/Ricerca online/);
+-            assert.match(await page.locator("#intelligence-research").textContent(),/Disattivata/);
+-            if(expectedFormat){
+-              assert.equal(await page.locator('meta[name="eve-preview-format"]').getAttribute("content"),expectedFormat);
+-              assert.equal(await page.locator('meta[name="eve-animation-quality"]').getAttribute("content"),"original-hq");
+-            }
+-            assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth),true);
+-            assert.deepEqual(errors,[]);
+-          }
+-
+-          const browser=await chromium.launch({headless:true});
+-          try{
+-            const modular=await browser.newPage({viewport:{width:1440,height:1800},deviceScaleFactor:2});
+-            await verify(modular,"http://127.0.0.1:4173/index.html",null);
+-            await modular.screenshot({path:"intelligence-final-modular.png",fullPage:true});
+-            const standalone=await browser.newPage({viewport:{width:1440,height:1800},deviceScaleFactor:2});
+-            await verify(standalone,pathToFileURL(path.resolve("reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html")).href,"standalone");
+-            await standalone.screenshot({path:"intelligence-final-standalone.png",fullPage:true});
+-          }finally{await browser.close()}
+-          EOF
+-          node verify-intelligence-final.mjs
+-
+-      - name: Registra chiusura verde
+-        run: |
+-          python3 - <<'PY'
+-          import json
+-          import xml.etree.ElementTree as ET
+-          from datetime import datetime, timezone
+-          from pathlib import Path
+-
+-          root=ET.parse('eve-ai-studio/intelligence-0.1-results.xml').getroot()
+-          suites=[root] if root.tag=='testsuite' else list(root.findall('.//testsuite'))
+-          counts={key:sum(int(float(s.attrib.get(key,0))) for s in suites) for key in ('tests','failures','errors','skipped')}
+-          if counts != {'tests':15,'failures':0,'errors':0,'skipped':0}:
+-              raise RuntimeError(f'Conteggi inattesi: {counts}')
+-          result={
+-              'checkpoint':'INTELLIGENCE-0.1',
+-              'keywords':['centro-ricerca','progetti-apprendimento','query-pianificate','quarantena-fonti'],
+-              'tested_sha':'${{ github.sha }}',
+-              'generated_at':datetime.now(timezone.utc).isoformat(),
+-              'passed':True,
+-              'states':{
+-                  'install':'success','python_compile':'success','pytest_specific':'success',
+-                  'standalone_build':'success','browser_install':'success','browser_modular_and_file':'success'
+-              },
+-              'pytest':counts,
+-              'service_version':'1.2.0',
+-              'web_search_enabled':False,
+-              'content_acquisition_enabled':False,
+-              'model_training_enabled':False,
+-              'modular_preview':True,
+-              'standalone_file':True
+-          }
+-          base=Path('eve-ai-studio/checkpoints')
+-          (base/'CHECKPOINT_INTELLIGENCE_0.1_CENTRO_RICERCA_PROGETTI_APPRENDIMENTO_CI_RESULT.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+-          (base/'CHECKPOINT_INTELLIGENCE_0.1_CENTRO_RICERCA_PROGETTI_APPRENDIMENTO_VERIFICATION.md').write_text(
+-              '# INTELLIGENCE-0.1 — Verifica centro ricerca e progetti di apprendimento\n\n'
+-              '- Esito: **SUPERATO**\n'
+-              '- Test specifici: 15\n'
+-              '- Fallimenti: 0\n'
+-              '- Errori: 0\n'
+-              '- Preview modulare: success\n'
+-              '- Standalone file://: success\n'
+-              '- Ricerca web: disattivata\n'
+-              '- Acquisizione contenuti: disattivata\n'
+-              '- Addestramento modello: disattivato\n',encoding='utf-8')
+-          (base/'CHECKPOINT_INTELLIGENCE_0.1_CENTRO_RICERCA_PROGETTI_APPRENDIMENTO_CLOSURE.md').write_text(
+-              '# INTELLIGENCE-0.1 — Chiusura: centro ricerca e progetti di apprendimento\n\n'
+-              'Data: 28 luglio 2026  \nBranch: `eve-ai-studio`\n\n'
+-              'Il checkpoint è **chiuso e approvato**. Sono verificati persistenza, isolamento per aula, stati, query pianificate, fonti in quarantena, API, preview modulare e standalone `file://`.\n\n'
+-              'La rete, l’acquisizione dei contenuti, gli embedding, i provider AI reali e l’addestramento del modello restano disattivati. Il prossimo checkpoint è `INTELLIGENCE-0.2 — Acquisizione web controllata e quarantena fonti`.\n',encoding='utf-8')
+-
+-          for file_name in ('eve-ai-studio/CHECKPOINT_INDEX.md','eve-ai-studio/README.md','eve-ai-studio/PHASE_STATUS.md'):
+-              path=Path(file_name); text=path.read_text(encoding='utf-8')
+-              text=text.replace('implementato; verifica automatica in corso','chiuso e approvato')
+-              text=text.replace('implementato, verifica in corso','chiuso e approvato')
+-              path.write_text(text,encoding='utf-8')
+-          PY
+-          rm -f .github/workflows/eve-intelligence-0.1-finalize.yml
+-
+-      - name: Salva risultato definitivo
+-        run: |
+-          git config user.name "github-actions[bot]"
+-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+-          git add -A
+-          git commit -m "feat(intelligence-0.1): chiude centro ricerca con gate verde [skip intelligence 0.1 ci] [skip eve preview ci] [skip eve core ci]"
+-          git pull --rebase origin eve-ai-studio
+-          git push origin HEAD:eve-ai-studio
+-
+-      - uses: actions/upload-artifact@v4
+-        if: always()
+-        with:
+-          name: eve-intelligence-0.1-final
+-          path: |
+-            intelligence-final-modular.png
+-            intelligence-final-standalone.png
+-            /tmp/intelligence-final-http.txt
+-          if-no-files-found: warn
+-          retention-days: 14
+diff --git a/reference/eve-ai-studio-preview/HQ_ANIMATION_INTEGRATION.md b/reference/eve-ai-studio-preview/HQ_ANIMATION_INTEGRATION.md
+index b5a22e657695988d4dec3956d096fc6eda1b13a7..c7390023231ee0c83e810d0ac556314370c70a75 100644
+--- a/reference/eve-ai-studio-preview/HQ_ANIMATION_INTEGRATION.md
++++ b/reference/eve-ai-studio-preview/HQ_ANIMATION_INTEGRATION.md
+@@ -44,9 +44,8 @@ Il workflow `Install Eve Animation Library HQ`:
+ 4. elimina i vecchi payload alleggeriti;
+ 5. sostituisce il ritratto SVG con l'immagine animata originale;
+ 6. collega il runtime modulare;
+-7. rigenera lo standalone incorporando gli stessi WebP;
+-8. prova tutti i 64 stati nella pagina modulare e nello standalone `file://`;
+-9. salva tutto esclusivamente sul branch `eve-ai-studio`.
++7. prova tutti i 64 stati nella pagina modulare canonica;
++8. salva tutto esclusivamente sul branch `eve-ai-studio`.
+ 
+ ## Regola permanente
+ 
+diff --git a/reference/eve-ai-studio-preview/OFFICIAL_PREVIEW_STATUS.txt b/reference/eve-ai-studio-preview/OFFICIAL_PREVIEW_STATUS.txt
+index d35844f00ca6e05ae2a210702b9ff18970c7f4fc..a1ca93e87bff486ffb41006ef37f9e688cf9ec3a 100644
+--- a/reference/eve-ai-studio-preview/OFFICIAL_PREVIEW_STATUS.txt
++++ b/reference/eve-ai-studio-preview/OFFICIAL_PREVIEW_STATUS.txt
+@@ -1,26 +1,21 @@
+ EVE AI STUDIO
+-STATO DELL’ANTEPRIMA UFFICIALE
++STATO DELLA SORGENTE CANONICA
+ 
+ Data: 28 luglio 2026
+-Branch: eve-ai-studio
++Branch ufficiale: eve-ai-studio
+ 
+-PERCORSI UFFICIALI
+-
+-Preview modulare:
++FONTE DI VERITÀ
+ 
+ reference/eve-ai-studio-preview/index.html
+ 
+-File autonomo distribuibile:
+-
+-reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html
+-
+-La preview modulare è la sorgente modificabile. Lo standalone viene rigenerato
+-automaticamente dalla stessa sorgente e non deve essere modificato a mano.
++La preview modulare è la sorgente canonica modificabile di Eve AI Studio.
++Non viene mantenuta una seconda copia standalone: interfaccia, moduli, runtime,
++animazioni e workflow vengono verificati direttamente dalla sorgente modulare.
+ 
+ VERSIONI INTEGRATE
+ 
+-- servizio Eve AI Studio: 1.1.0;
+-- checkpoint tecnico: 1.1;
++- servizio Eve AI Studio: 1.2.0;
++- checkpoint tecnico: INTELLIGENCE-0.1;
+ - Eve Animation Library: 1.2.2;
+ - qualità animazioni: original-final-webp;
+ - totale asset: 64.
+@@ -28,25 +23,34 @@ VERSIONI INTEGRATE
+ FUNZIONI PRESENTI
+ 
+ - fondazione FastAPI e provider mock;
+-- requisiti versionati;
+-- prompt e workflow di approvazione;
+-- valutazioni, runner e gate;
+-- profili provider e telemetria;
+-- catalogo materiali, estrazione e chunk;
+-- retrieval lessicale locale;
+-- chat RAG estrattiva con citazioni;
+-- apertura verificabile della fonte;
+-- galleria completa delle 64 animazioni originali.
+-
+-MODULI VISIVI PRINCIPALI
+-
+-- app.js;
+-- materials-workflow.js;
+-- retrieval-workflow.js;
+-- rag-chat-workflow.js;
+-- source-opening-workflow.js;
+-- animation-library-gallery.js;
+-- eve-animation-runtime-v1.2.2/eve-hq-runtime.js.
++- catalogo materiali, estrazione, chunk e retrieval locale;
++- chat RAG estrattiva con citazioni e apertura verificabile delle fonti;
++- centro ricerca e progetti di apprendimento;
++- libreria completa delle 64 animazioni originali;
++- navigazione semplificata di Eve AI Studio;
++- costruzione dei modelli didattici con tratti e regole riutilizzabili;
++- creazione di nuovi modelli nello stesso pannello di configurazione;
++- salvataggio e prova del modello nella chat di Configura e prova;
++- preparazione della pubblicazione verso Aula Studio con conferma;
++- linguaggio visivo coerente con Aula Studio;
++- ottimizzazione grafica senza modifiche visive.
++
++FLUSSO UFFICIALE
++
++1. Le modifiche vengono applicate alla sorgente modulare.
++2. L’anteprima locale viene verificata prima del caricamento.
++3. Il branch eve-ai-studio conserva la versione canonica condivisa.
++4. Gli altri Codex lavorano partendo da questo branch.
++5. La pubblicazione verso Aula Studio resta un passaggio distinto e approvato.
++
++OTTIMIZZAZIONI GRAFICHE
++
++- un solo ciclo gestito per le particelle;
++- animazioni sospese quando la pagina non è visibile;
++- ritratto animato di Eve caricato soltanto quando visibile;
++- galleria animazioni caricata progressivamente;
++- animazioni CSS fuori schermo messe in pausa;
++- nessuna modifica all’aspetto approvato.
+ 
+ EVE ANIMATION LIBRARY 1.2.2
+ 
+@@ -60,60 +64,31 @@ La preview usa i WebP finali originali:
+ - nessuna interpolazione;
+ - nessuna ricompressione.
+ 
+-La libreria completa è accessibile dal pulsante:
+-
+-Vedi tutte le 64 animazioni
+-
+-oppure dalla voce laterale:
+-
+-Libreria animazioni
+-
+-La galleria permette ricerca, filtri, anteprima tecnica e riproduzione dello
+-stato selezionato su Eve.
+-
+-BUILD E VERIFICA
+-
+-Workflow autorevole:
+-
+-.github/workflows/eve-hq-final-verification.yml
+-
+-Il workflow:
+-
+-1. rigenera lo standalone dalla preview modulare;
+-2. impedisce dipendenze CSS o JavaScript esterne nello standalone;
+-3. apre la preview modulare tramite server locale;
+-4. apre lo standalone tramite file://;
+-5. verifica tutti i 64 asset, dimensioni e SHA-256;
+-6. verifica la galleria con 64 schede;
+-7. prova materiali, retrieval, chat RAG e apertura fonte;
+-8. salva il rapporto autorevole in:
++La libreria completa è accessibile da “Vedi tutte le 64 animazioni” e dalla
++voce laterale “Libreria animazioni”.
+ 
+-   eve-ai-studio/checkpoints/EVE_HQ_FINAL_VERIFICATION.json
++VERIFICHE
+ 
+-PULIZIA APPLICATA
++Workflow autorevoli:
+ 
+-Sono stati rimossi:
++- .github/workflows/eve-ai-studio-checks.yml
++- .github/workflows/eve-hq-final-verification.yml
++- .github/workflows/eve-intelligence-0.1-checks.yml
+ 
+-- payload e loader alleggeriti precedenti;
+-- runtime avatar statico precedente alla libreria HQ;
+-- asset runtime singolo da 192 px;
+-- file temporanei di trasferimento;
+-- workflow duplicati di preview e standalone;
+-- log vuoti e rapporti sostituiti dal rapporto consolidato.
++I workflow verificano servizio, sintassi JavaScript, preview modulare, galleria,
++64 asset originali, materiali, retrieval, chat RAG, fonti e centro ricerca.
+ 
+ VINCOLI
+ 
+-- main non modificato;
+-- demo-canonica non modificato;
+-- eve-canonical-integration-v2 non modificato;
+-- HTML canonico non modificato;
+-- nessuna pull request;
+-- nessun merge;
+-- nessun provider AI esterno;
+-- nessun embedding esterno.
++- main non viene modificato da questo flusso;
++- demo-canonica non viene modificato;
++- il branch eve-ai-studio è l’analogo canonico dedicato a Eve AI Studio;
++- nessun provider AI esterno è attivato automaticamente;
++- nessun embedding esterno è attivato automaticamente;
++- nessuna pubblicazione verso Aula Studio avviene senza approvazione.
+ 
+ REGOLA PER I PROSSIMI AGGIORNAMENTI
+ 
+-Le modifiche devono essere applicate alla preview modulare e ai suoi moduli.
+-Lo standalone viene sempre rigenerato dal workflow; i 64 asset originali restano
+-immutati e verificati.
++Ogni aggiornamento di Eve AI Studio deve partire da eve-ai-studio, modificare
++la preview modulare e i relativi moduli, mantenere invariati gli asset originali
++verificati e superare i controlli prima di essere proposto ad Aula Studio.
+diff --git a/reference/eve-ai-studio-preview/animation-library-gallery.js b/reference/eve-ai-studio-preview/animation-library-gallery.js
+index e2ad3eede417467af2241d1de980fbd8df4b76fb..d3345c497810bb90c78fa09aa85ec237d1277ed4 100644
+--- a/reference/eve-ai-studio-preview/animation-library-gallery.js
++++ b/reference/eve-ai-studio-preview/animation-library-gallery.js
+@@ -111,6 +111,27 @@
+ 
+   let assets = [];
+   let selected = null;
++  let cardImageObserver = null;
++
++  function observeCardImages() {
++    const images = grid.querySelectorAll(".animation-card-media img[data-animation-src]");
++    cardImageObserver?.disconnect();
++    if (typeof IntersectionObserver !== "function") {
++      images.forEach(image => { image.src = image.dataset.animationSrc; });
++      return;
++    }
++    cardImageObserver = new IntersectionObserver(entries => {
++      entries.forEach(entry => {
++        const image = entry.target;
++        if (entry.isIntersecting) {
++          if (!image.hasAttribute("src")) image.src = image.dataset.animationSrc;
++        } else if (image.hasAttribute("src")) {
++          image.removeAttribute("src");
++        }
++      });
++    }, { rootMargin: "320px 0px", threshold: 0.01 });
++    images.forEach(image => cardImageObserver.observe(image));
++  }
+ 
+   function openLibrary() {
+     document.querySelectorAll(".view").forEach(view => view.classList.toggle("active", view === section));
+@@ -120,6 +141,7 @@
+     if (title) title.textContent = "Libreria animazioni";
+     if (subtitle) subtitle.textContent = "Esplora e prova tutti i 64 stati originali di Eve.";
+     window.scrollTo({ top: 0, behavior: "smooth" });
++    requestAnimationFrame(observeCardImages);
+   }
+ 
+   function selectAsset(asset, applyToEve = false) {
+@@ -151,7 +173,7 @@
+     count.textContent = `${visible.length} ${visible.length === 1 ? "animazione" : "animazioni"}`;
+     grid.innerHTML = visible.length ? visible.map(asset => `
+       <button type="button" class="animation-card${selected?.id === asset.id ? " active" : ""}" data-asset-id="${escapeHtml(asset.id)}">
+-        <span class="animation-card-media"><img src="${assetUrl(asset)}" loading="lazy" decoding="async" alt="${escapeHtml(humanize(asset.id))}"></span>
++        <span class="animation-card-media"><img data-animation-src="${assetUrl(asset)}" loading="lazy" decoding="async" alt="${escapeHtml(humanize(asset.id))}"></span>
+         <strong>${escapeHtml(humanize(asset.id))}</strong>
+         <small>${escapeHtml(asset.priority)} · ${escapeHtml(asset.variant)} · ${asset.width}px</small>
+       </button>`).join("") : '<div class="animation-library-empty">Nessuna animazione corrisponde ai filtri.</div>';
+@@ -159,6 +181,7 @@
+       const asset = assets.find(item => item.id === card.dataset.assetId);
+       if (asset) selectAsset(asset, true);
+     }));
++    observeCardImages();
+   }
+ 
+   function fillFilter(select, values) {
+diff --git a/reference/eve-ai-studio-preview/build_standalone.py b/reference/eve-ai-studio-preview/build_standalone.py
+deleted file mode 100644
+index f77093b76feb6cf5eed721271ab5b0011d787cf9..0000000000000000000000000000000000000000
+--- a/reference/eve-ai-studio-preview/build_standalone.py
++++ /dev/null
+@@ -1,138 +0,0 @@
+-from __future__ import annotations
+-
+-import base64
+-import hashlib
+-import json
+-import re
+-from pathlib import Path
+-
+-BASE_DIR = Path(__file__).resolve().parent
+-INDEX_FILE = BASE_DIR / "index.html"
+-OUTPUT_FILE = BASE_DIR / "EVE_AI_STUDIO_STANDALONE.html"
+-HQ_ROOT = BASE_DIR / "eve-animation-runtime-v1.2.2"
+-HQ_MANIFEST = HQ_ROOT / "eve-hq-runtime-manifest.json"
+-
+-
+-def read_text(relative_path: str) -> str:
+-    path = BASE_DIR / relative_path
+-    if not path.is_file():
+-        raise FileNotFoundError(f"File richiesto dalla preview non trovato: {relative_path}")
+-    return path.read_text(encoding="utf-8")
+-
+-
+-def escape_inline_script(source: str) -> str:
+-    return re.sub(r"</script", r"<\\/script", source, flags=re.IGNORECASE)
+-
+-
+-def ordered_runtime_files(index_source: str) -> list[str]:
+-    entries: list[tuple[int, list[str]]] = []
+-    for match in re.finditer(r'await\s+loadPreviewScript\("([^"]+)"\)', index_source):
+-        entries.append((match.start(), [match.group(1)]))
+-    payload_block = re.search(r"const\s+libraryPayloads\s*=\s*\[(.*?)\];", index_source, flags=re.DOTALL)
+-    if payload_block:
+-        entries.append((payload_block.start(), re.findall(r'"([^"]+\.js)"', payload_block.group(1))))
+-    entries.sort(key=lambda item: item[0])
+-    ordered: list[str] = []
+-    for _, files in entries:
+-        for file_name in files:
+-            if file_name not in ordered:
+-                ordered.append(file_name)
+-    if not ordered:
+-        raise RuntimeError("Nessun file runtime individuato in index.html")
+-    return ordered
+-
+-
+-def sha256(path: Path) -> str:
+-    h = hashlib.sha256()
+-    with path.open("rb") as handle:
+-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+-            h.update(chunk)
+-    return h.hexdigest()
+-
+-
+-def build_hq_embedded_manifest() -> dict | None:
+-    if not HQ_MANIFEST.is_file():
+-        return None
+-    manifest = json.loads(HQ_MANIFEST.read_text(encoding="utf-8"))
+-    assets = manifest.get("assets") or {}
+-    if manifest.get("version") != "1.2.2" or len(assets) != 64:
+-        raise RuntimeError("Manifest Eve HQ non valido")
+-    for asset_id, asset in assets.items():
+-        path = HQ_ROOT / asset["file"]
+-        if not path.is_file():
+-            raise FileNotFoundError(f"Asset Eve HQ mancante: {asset_id}")
+-        actual = sha256(path)
+-        if actual != asset["sha256"]:
+-            raise RuntimeError(f"SHA-256 non corrispondente per {asset_id}")
+-        asset["dataUrl"] = "data:image/webp;base64," + base64.b64encode(path.read_bytes()).decode("ascii")
+-    return manifest
+-
+-
+-def build() -> None:
+-    index_source = INDEX_FILE.read_text(encoding="utf-8")
+-    stylesheet = read_text("styles.css")
+-    if (HQ_ROOT / "eve-hq-runtime.css").is_file():
+-        stylesheet += "\n" + (HQ_ROOT / "eve-hq-runtime.css").read_text(encoding="utf-8")
+-
+-    direct_scripts = re.findall(r'<script\s+src="([^"]+)"\s*></script>', index_source)
+-    runtime_scripts = ordered_runtime_files(index_source)
+-    checkpoint_match = re.search(r"Checkpoint\s+([^·<]+)", index_source)
+-    checkpoint = checkpoint_match.group(1).strip() if checkpoint_match else "corrente"
+-
+-    script_blocks: list[str] = []
+-    for file_name in direct_scripts:
+-        script_blocks.append(f'<script data-eve-source="{file_name}">\n{escape_inline_script(read_text(file_name))}\n</script>')
+-    script_blocks.append("""<script data-eve-source="standalone-bootstrap">
+-(() => {
+-  const parts = window.__EVE_HTML_PARTS || [];
+-  if (parts.length !== 5) throw new Error(`Markup incompleto: ${parts.length}/5 blocchi incorporati.`);
+-  document.body.innerHTML = parts.join("");
+-})();
+-</script>""")
+-
+-    hq_manifest = build_hq_embedded_manifest()
+-    if hq_manifest is not None:
+-        encoded = json.dumps(hq_manifest, ensure_ascii=False, separators=(",", ":"))
+-        script_blocks.append(
+-            '<script data-eve-source="hq-animation-assets">\n'
+-            f'window.__EVE_HQ_STANDALONE_MANIFEST={escape_inline_script(encoded)};\n'
+-            '</script>'
+-        )
+-
+-    for file_name in runtime_scripts:
+-        script_blocks.append(f'<script data-eve-source="{file_name}">\n{escape_inline_script(read_text(file_name))}\n</script>')
+-
+-    quality = "original-hq" if hq_manifest is not None else "legacy-preview"
+-    generated = f"""<!doctype html>
+-<html lang="it">
+-<head>
+-<meta charset="utf-8">
+-<meta name="viewport" content="width=device-width,initial-scale=1">
+-<meta name="eve-preview-format" content="standalone">
+-<meta name="eve-preview-checkpoint" content="{checkpoint}">
+-<meta name="eve-animation-quality" content="{quality}">
+-<title>Eve AI Studio — Anteprima standalone</title>
+-<!-- File autonomo generato automaticamente. Nessuna dipendenza esterna. -->
+-<style>
+-{stylesheet}
+-#loader{{max-width:620px;margin:20vh auto;padding:32px;text-align:center;color:#ecfbff}}
+-.spinner{{width:42px;height:42px;margin:0 auto 18px;border:4px solid rgba(125,235,255,.16);border-top-color:#00dff2;border-radius:50%;animation:spin .8s linear infinite}}
+-#loader small{{color:#8aa9b7}}@keyframes spin{{to{{transform:rotate(360deg)}}}}
+-</style>
+-</head>
+-<body>
+-<main id="loader"><div class="spinner"></div><strong>Caricamento di Eve AI Studio…</strong><br><small>Checkpoint {checkpoint} · Animation Library 1.2.2 · {quality}</small></main>
+-{chr(10).join(script_blocks)}
+-</body>
+-</html>
+-"""
+-    if re.search(r"<script\s+[^>]*src=", generated, flags=re.IGNORECASE):
+-        raise RuntimeError("Lo standalone contiene ancora script esterni")
+-    if re.search(r"<link\s+[^>]*rel=[\"']stylesheet[\"']", generated, flags=re.IGNORECASE):
+-        raise RuntimeError("Lo standalone contiene ancora fogli di stile esterni")
+-    OUTPUT_FILE.write_text(generated, encoding="utf-8", newline="\n")
+-    print(f"Creato {OUTPUT_FILE.name}: {OUTPUT_FILE.stat().st_size:,} byte · qualità {quality}")
+-
+-
+-if __name__ == "__main__":
+-    build()
+diff --git a/reference/eve-ai-studio-preview/evaluation-workflow.js b/reference/eve-ai-studio-preview/evaluation-workflow.js
+index 06c0d6cfc63c961501fcf1c3c835039043466c7c..0e120fc6b221eac8868ffb894fc556cd22b8c42c 100644
+--- a/reference/eve-ai-studio-preview/evaluation-workflow.js
++++ b/reference/eve-ai-studio-preview/evaluation-workflow.js
+@@ -71,9 +71,9 @@
+         <div class="panel-body">
+           <div class="field"><label for="evaluationGatePrompt">Versione prompt</label>
+             <select id="evaluationGatePrompt">
+-              <option value="1">v1 · Eve Tutor Base</option>
+-              <option value="2">v2 · Eve Tutor Socratico</option>
+-              <option value="3" selected>v3 · Eve Quiz Guidato</option>
++              <option value="1">Versione 1 · Spiegazione adattiva</option>
++              <option value="2">Versione 2 · Metodo socratico</option>
++              <option value="3" selected>Versione 3 · Quiz e interrogazione</option>
+             </select>
+           </div>
+           <div class="metric-row" style="grid-template-columns:repeat(2,1fr);margin-top:12px">
+diff --git a/reference/eve-ai-studio-preview/eve-animation-runtime-v1.2.2/README.md b/reference/eve-ai-studio-preview/eve-animation-runtime-v1.2.2/README.md
+index 1e823edfec7a17c6a8054550bf46efa647f28d5b..0e3727f2e1161b091dcce6fb713bf70c400cf0bb 100644
+--- a/reference/eve-ai-studio-preview/eve-animation-runtime-v1.2.2/README.md
++++ b/reference/eve-ai-studio-preview/eve-animation-runtime-v1.2.2/README.md
+@@ -23,4 +23,6 @@ Questa cartella è stata generata dal pacchetto originale verificato:
+ - `eve-hq-runtime.js`: API `window.EveAnimationLibrary`.
+ - `eve-hq-runtime.css`: dimensionamento senza degradazione.
+ - `assets/`: un WebP originale per ciascuno dei 64 stati.
+-- `../EVE_AI_STUDIO_STANDALONE_HQ.html`: HTML unico, offline.
++
++La sorgente canonica è la preview modulare in `../index.html`; non viene
++mantenuta una seconda copia standalone.
+diff --git a/reference/eve-ai-studio-preview/eve-animation-runtime-v1.2.2/eve-hq-runtime.js b/reference/eve-ai-studio-preview/eve-animation-runtime-v1.2.2/eve-hq-runtime.js
+index 5b1b59c4be622932dcd7df50a8ad82199ae089f7..ec40816f68c697da24c32fd3f7d3a4ccb7b4f299 100644
+--- a/reference/eve-ai-studio-preview/eve-animation-runtime-v1.2.2/eve-hq-runtime.js
++++ b/reference/eve-ai-studio-preview/eve-animation-runtime-v1.2.2/eve-hq-runtime.js
+@@ -6,6 +6,9 @@
+   let manifest = null;
+   let portrait = null;
+   let currentState = null;
++  let currentSource = "";
++  let portraitIsVisible = true;
++  let portraitObserver = null;
+   const aliases = Object.create(null);
+ 
+   async function ensureManifest() {
+@@ -29,11 +32,35 @@
+     portrait.className = "eve-portrait eve-hq-portrait";
+     portrait.alt = "Eve, assistente AI animata";
+     portrait.decoding = "async";
++    portrait.loading = "eager";
+     portrait.draggable = false;
+     if (old) old.replaceWith(portrait); else stage.prepend(portrait);
++    if (typeof IntersectionObserver === "function") {
++      portraitObserver?.disconnect();
++      portraitObserver = new IntersectionObserver(entries => {
++        const entry = entries[0];
++        portraitIsVisible = Boolean(entry?.isIntersecting);
++        syncPortraitPlayback();
++      }, { rootMargin: "140px", threshold: 0.01 });
++      portraitObserver.observe(portrait);
++    }
+     return portrait;
+   }
+ 
++  function syncPortraitPlayback() {
++    if (!portrait?.isConnected || !currentSource) return;
++    const shouldPlay = !document.hidden && portraitIsVisible;
++    if (shouldPlay) {
++      if (portrait.getAttribute("src") !== currentSource) portrait.src = currentSource;
++      portrait.dataset.graphicsPlayback = "running";
++    } else if (portrait.hasAttribute("src")) {
++      portrait.removeAttribute("src");
++      portrait.dataset.graphicsPlayback = "paused";
++    } else {
++      portrait.dataset.graphicsPlayback = "paused";
++    }
++  }
++
+   async function setState(requestedState, options = {}) {
+     const data = await ensureManifest();
+     const id = aliases[requestedState] || requestedState;
+@@ -41,11 +68,12 @@
+     if (!asset) throw new Error(`Stato Eve sconosciuto: ${requestedState}`);
+     const image = ensurePortrait();
+     const assetUrl = asset.dataUrl || new URL(asset.file, manifestUrl).href;
+-    if (currentState === id && options.restart !== false) {
++    currentSource = assetUrl;
++    if (currentState === id && options.restart !== false && !document.hidden && portraitIsVisible) {
+       image.removeAttribute("src");
+       await new Promise(resolve => requestAnimationFrame(resolve));
+     }
+-    image.src = assetUrl;
++    syncPortraitPlayback();
+     image.width = asset.width;
+     image.height = asset.height;
+     image.dataset.eveState = id;
+@@ -55,7 +83,7 @@
+     image.dataset.eveSourceHeight = String(asset.height);
+     image.style.height = asset.variant === "compact" ? "128px" : "232px";
+     image.style.maxWidth = asset.variant === "compact" ? "128px" : "100%";
+-    await image.decode().catch(() => undefined);
++    if (image.hasAttribute("src")) await image.decode().catch(() => undefined);
+     currentState = id;
+     document.dispatchEvent(new CustomEvent("eve:animation-state", { detail: { id, asset } }));
+     return { id, asset };
+@@ -75,5 +103,6 @@
+     getManifest: ensureManifest,
+   });
+ 
++  document.addEventListener("visibilitychange", syncPortraitPlayback, { passive: true });
+   ensureManifest().then(data => setState(data.defaultState, { restart: false })).catch(console.error);
+ })();
+diff --git a/reference/eve-ai-studio-preview/eve-release-workflow.js b/reference/eve-ai-studio-preview/eve-release-workflow.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..8d89a7770597e830f371eb9421f2a7b2d5bbb4eb
+--- /dev/null
++++ b/reference/eve-ai-studio-preview/eve-release-workflow.js
+@@ -0,0 +1,218 @@
++(() => {
++  const publishView = document.getElementById("publish");
++  const versionsView = document.getElementById("versions");
++  if (!publishView || !versionsView || document.getElementById("eveReleaseCandidate")) return;
++
++  const candidateKey = "eve-studio-release-candidate-v1";
++  const historyKey = "eve-studio-release-history-v1";
++  const modeLabels = {
++    adaptive_explanation: "Spiegazione adattiva",
++    socratic: "Metodo socratico",
++    quiz: "Quiz e interrogazione",
++    correction: "Correzione guidata",
++    planning: "Pianificazione",
++  };
++
++  const readJson = (key, fallback) => {
++    try {
++      return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback));
++    } catch {
++      return fallback;
++    }
++  };
++
++  const releaseHistory = () => {
++    const history = readJson(historyKey, []);
++    return Array.isArray(history) ? history : [];
++  };
++
++  const nextVersionNumber = () => {
++    const history = releaseHistory();
++    return history.length ? Math.max(...history.map((item) => Number(item.version) || 0)) + 1 : 1;
++  };
++
++  publishView.innerHTML = `
++    <div class="grid">
++      <section class="panel span-7" id="eveReleaseCandidate">
++        <div class="panel-head">
++          <div><h3>Configurazione pronta per Pubblica</h3><p>Qui la configurazione di lavoro diventa una Versione N candidata al rilascio.</p></div>
++          <span class="tag warn" id="releaseCandidateBadge">Nessuna configurazione</span>
++        </div>
++        <div class="panel-body">
++          <div class="empty" id="releaseCandidateEmpty">Da “Configura e prova”, usa “Invia a Pubblica” dopo aver verificato il modello nella chat.</div>
++          <div id="releaseCandidateContent" hidden>
++            <div class="build-eve-preview" id="releaseCandidateSummary"></div>
++            <div class="prompt-next-action" id="releaseCandidateRules"></div>
++          </div>
++        </div>
++      </section>
++      <section class="panel span-5">
++        <div class="panel-head"><div><h3>Approvazione per Aula Studio</h3><p>Il caricamento richiede sempre una conferma esplicita.</p></div><span class="pill">Approvazione obbligatoria</span></div>
++        <div class="panel-body">
++          <div class="list">
++            <div class="row"><div class="meta"><strong>Configurazione ricevuta</strong><small>Deve arrivare dalla chat di prova.</small></div><span class="tag warn" id="releaseConfigGate">In attesa</span></div>
++            <div class="row"><div class="meta"><strong>Controlli qualità</strong><small>Saranno collegati ai test reali.</small></div><span class="tag warn">Da collegare</span></div>
++            <div class="row"><div class="meta"><strong>Connessione con Aula</strong><small>Invio dell’aggiornamento all’app ufficiale.</small></div><span class="tag red">Non collegata</span></div>
++          </div>
++          <label class="release-approval">
++            <input type="checkbox" id="releaseApprovalCheck" disabled>
++            <span>Confermo di voler caricare questa versione su Aula Studio.</span>
++          </label>
++          <button class="btn primary" id="approveReleaseForAula" style="width:100%;margin-top:12px" disabled>Approva caricamento</button>
++          <button class="btn" id="returnToEveBuilder" style="width:100%;margin-top:8px">Torna a Configura e prova</button>
++          <p class="build-eve-note" id="releaseApprovalNote"><strong>Stato reale:</strong> l’approvazione viene registrata, ma l’invio resterà in attesa finché Aula Studio non sarà collegata.</p>
++        </div>
++      </section>
++    </div>
++  `;
++
++  versionsView.innerHTML = `
++    <div class="grid">
++      <section class="panel span-12">
++        <div class="panel-head">
++          <div><h3>Storico delle versioni pubblicate</h3><p>Qui compariranno soltanto le configurazioni realmente inviate ad Aula.</p></div>
++          <span class="tag violet" id="releaseHistoryCount">0 versioni</span>
++        </div>
++        <div class="panel-body list" id="releaseHistoryList"></div>
++      </section>
++      <section class="panel span-12">
++        <div class="panel-head"><div><h3>Versione in preparazione</h3><p>Non fa ancora parte dello storico pubblicato.</p></div></div>
++        <div class="panel-body" id="releaseDraftSummary"></div>
++      </section>
++    </div>
++  `;
++
++  const render = () => {
++    const candidate = readJson(candidateKey, null);
++    const history = releaseHistory();
++    const empty = document.getElementById("releaseCandidateEmpty");
++    const content = document.getElementById("releaseCandidateContent");
++    const badge = document.getElementById("releaseCandidateBadge");
++    const gate = document.getElementById("releaseConfigGate");
++    const approvalCheck = document.getElementById("releaseApprovalCheck");
++    const approvalButton = document.getElementById("approveReleaseForAula");
++    const approvalNote = document.getElementById("releaseApprovalNote");
++
++    if (!candidate) {
++      empty.hidden = false;
++      content.hidden = true;
++      badge.textContent = "Nessuna configurazione";
++      badge.className = "tag warn";
++      gate.textContent = "In attesa";
++      gate.className = "tag warn";
++      approvalCheck.checked = false;
++      approvalCheck.disabled = true;
++      approvalButton.disabled = true;
++      approvalButton.textContent = "Approva caricamento";
++    } else {
++      empty.hidden = true;
++      content.hidden = false;
++      badge.textContent = candidate.approvedAt
++        ? `Versione ${candidate.version} · Approvata`
++        : `Versione ${candidate.version} · In preparazione`;
++      badge.className = candidate.approvedAt ? "tag" : "tag violet";
++      gate.textContent = "Ricevuta";
++      gate.className = "tag";
++      approvalCheck.disabled = Boolean(candidate.approvedAt);
++      approvalCheck.checked = Boolean(candidate.approvedAt);
++      approvalButton.disabled = Boolean(candidate.approvedAt) || !approvalCheck.checked;
++      approvalButton.textContent = candidate.approvedAt
++        ? `Versione ${candidate.version} approvata`
++        : `Approva Versione ${candidate.version}`;
++      const configuredProfiles = Object.values(candidate.profiles || {}).filter((profile) => profile?.savedAt);
++      const selectedMode = candidate.selectedModel || candidate.config?.mode || "adaptive_explanation";
++      const selectedProfile = candidate.profiles?.[selectedMode] || {};
++      const activeRuleCount = Array.isArray(selectedProfile.ruleIds) ? selectedProfile.ruleIds.length : 0;
++      document.getElementById("releaseCandidateSummary").textContent = [
++        `Versione ${candidate.version} · modello provato: ${modeLabels[selectedMode] || selectedMode}`,
++        `Obiettivo: ${selectedProfile.objective || candidate.config?.mission || "Non specificato"}`,
++        `Regole attive nel modello provato: ${activeRuleCount}`,
++        `Modelli personalizzati: ${configuredProfiles.length}/5`,
++        `Preparata: ${new Date(candidate.preparedAt).toLocaleString("it-IT")}`,
++      ].join("\n");
++      document.getElementById("releaseCandidateRules").textContent =
++        configuredProfiles.length
++          ? `Modelli inclusi: ${configuredProfiles.map((profile) => modeLabels[profile.mode] || profile.mode).join(", ")}.`
++          : "Nessun modello è stato ancora personalizzato.";
++      approvalNote.innerHTML = candidate.approvedAt
++        ? `<strong>Approvazione registrata:</strong> ${new Date(candidate.approvedAt).toLocaleString("it-IT")}. Il caricamento attende il collegamento reale con Aula Studio.`
++        : "<strong>Stato reale:</strong> spunta la conferma per approvare questa versione. Nessun dato verrà inviato finché Aula Studio non sarà collegata.";
++    }
++
++    document.getElementById("releaseHistoryCount").textContent =
++      `${history.length} ${history.length === 1 ? "versione" : "versioni"}`;
++    document.getElementById("releaseHistoryList").innerHTML = history.length
++      ? history.slice().reverse().map((item) => `
++          <div class="row">
++            <div class="meta"><strong>Versione ${item.version}</strong><small>${modeLabels[item.selectedModel || item.config?.mode] || item.selectedModel || item.config?.mode} · inviata ${new Date(item.publishedAt).toLocaleString("it-IT")}</small></div>
++            <span class="tag">Pubblicata</span>
++          </div>
++        `).join("")
++      : '<div class="empty">Nessuna versione è stata ancora inviata ad Aula.</div>';
++    document.getElementById("releaseDraftSummary").innerHTML = candidate
++      ? `<div class="row"><div class="meta"><strong>Versione ${candidate.version}</strong><small>${modeLabels[candidate.selectedModel || candidate.config?.mode] || candidate.selectedModel || candidate.config?.mode} · ${candidate.approvedAt ? "approvata, in attesa di collegamento" : "pronta per l’approvazione"}</small></div><span class="tag warn">Non pubblicata</span></div>`
++      : '<div class="empty">Nessuna versione in preparazione.</div>';
++  };
++
++  const prepareCandidate = (payload) => {
++    const current = readJson(candidateKey, null);
++    const candidate = {
++      version: current?.version || nextVersionNumber(),
++      profiles: payload.profiles || {},
++      selectedModel: payload.selectedModel || "adaptive_explanation",
++      preparedAt: new Date().toISOString(),
++      approvedAt: null,
++      status: "awaiting_approval",
++    };
++    localStorage.setItem(candidateKey, JSON.stringify(candidate));
++    render();
++    if (typeof notify === "function") notify(`Versione ${candidate.version} inviata a Pubblica`);
++    return candidate;
++  };
++
++  window.__EVE_SEND_TO_PUBLISH__ = prepareCandidate;
++  window.addEventListener("eve:send-to-publish", (event) => prepareCandidate(event.detail || {}));
++
++  document.getElementById("returnToEveBuilder")?.addEventListener("click", () => {
++    document.querySelector('[data-view="laboratory"]')?.click();
++  });
++  document.getElementById("releaseApprovalCheck")?.addEventListener("change", (event) => {
++    const candidate = readJson(candidateKey, null);
++    const button = document.getElementById("approveReleaseForAula");
++    button.disabled = !candidate || !event.target.checked;
++  });
++  document.getElementById("approveReleaseForAula")?.addEventListener("click", () => {
++    const candidate = readJson(candidateKey, null);
++    const check = document.getElementById("releaseApprovalCheck");
++    if (!candidate || !check.checked || candidate.approvedAt) return;
++    const approved = {
++      ...candidate,
++      approvedAt: new Date().toISOString(),
++      status: "approved_waiting_connection",
++    };
++    localStorage.setItem(candidateKey, JSON.stringify(approved));
++    render();
++    if (typeof notify === "function") notify(`Versione ${approved.version} approvata; caricamento in attesa del collegamento con Aula`);
++  });
++
++  const publishNav = document.querySelector('[data-view="publish"]');
++  const versionsNav = document.querySelector('[data-view="versions"]');
++  if (publishNav) publishNav.lastChild.textContent = "Pubblica in Aula";
++  if (versionsNav) versionsNav.lastChild.textContent = "Storico pubblicazioni";
++  publishNav?.addEventListener("click", () => {
++    render();
++    const title = document.getElementById("pageTitle");
++    const subtitle = document.getElementById("pageSubtitle");
++    if (title) title.textContent = "Pubblica";
++    if (subtitle) subtitle.textContent = "Controlla la versione preparata e approva esplicitamente il caricamento su Aula Studio.";
++  });
++  versionsNav?.addEventListener("click", () => {
++    render();
++    const title = document.getElementById("pageTitle");
++    const subtitle = document.getElementById("pageSubtitle");
++    if (title) title.textContent = "Storico pubblicazioni";
++    if (subtitle) subtitle.textContent = "Consulta esclusivamente le versioni realmente inviate ad Aula.";
++  });
++
++  render();
++})();
+diff --git a/reference/eve-ai-studio-preview/graphics-performance.js b/reference/eve-ai-studio-preview/graphics-performance.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..812ee50e12288a89fccc5aceab106f9e295c8542
+--- /dev/null
++++ b/reference/eve-ai-studio-preview/graphics-performance.js
+@@ -0,0 +1,60 @@
++(() => {
++  "use strict";
++
++  let animationObserver = null;
++  let mutationObserver = null;
++  const observedElements = new WeakSet();
++
++  function observeAnimatedElement(element) {
++    if (!(element instanceof Element) || observedElements.has(element)) return;
++    if (getComputedStyle(element).animationName === "none") return;
++    observedElements.add(element);
++    animationObserver?.observe(element);
++  }
++
++  function scanAnimatedElements(root = document) {
++    if (root instanceof Element) observeAnimatedElement(root);
++    root.querySelectorAll?.("*").forEach(observeAnimatedElement);
++  }
++
++  function initializeAnimationObserver() {
++    if (typeof IntersectionObserver !== "function") return;
++    animationObserver = new IntersectionObserver(entries => {
++      entries.forEach(entry => {
++        entry.target.classList.toggle("graphics-animation-paused", !entry.isIntersecting);
++      });
++    }, { rootMargin: "100px", threshold: 0.01 });
++
++    const scan = () => scanAnimatedElements(document);
++    if (typeof requestIdleCallback === "function") requestIdleCallback(scan, { timeout: 500 });
++    else setTimeout(scan, 0);
++
++    mutationObserver = new MutationObserver(records => {
++      records.forEach(record => {
++        record.addedNodes.forEach(node => {
++          if (node instanceof Element) scanAnimatedElements(node);
++        });
++      });
++    });
++    mutationObserver.observe(document.body, { childList: true, subtree: true });
++  }
++
++  function syncPageVisibility() {
++    document.body.classList.toggle("graphics-page-hidden", document.hidden);
++  }
++
++  syncPageVisibility();
++  document.body.dataset.graphicsPerformance = "optimized";
++  initializeAnimationObserver();
++  document.addEventListener("visibilitychange", syncPageVisibility, { passive: true });
++
++  window.EveGraphicsPerformance = Object.assign(window.EveGraphicsPerformance || {}, {
++    version: "1.0.0",
++    pausesHiddenPage: true,
++    pausesOffscreenCssAnimations: Boolean(animationObserver),
++    disconnect() {
++      animationObserver?.disconnect();
++      mutationObserver?.disconnect();
++    }
++  });
++})();
+diff --git a/reference/eve-ai-studio-preview/index.html b/reference/eve-ai-studio-preview/index.html
+index 0937dddd61854ec4c3820b88e810cb5f7c5b9432..ce091011743498eb7e1219a80acf3090c41ff7c4 100644
+--- a/reference/eve-ai-studio-preview/index.html
++++ b/reference/eve-ai-studio-preview/index.html
+@@ -4,7 +4,7 @@
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width,initial-scale=1">
+ <title>Eve AI Studio — Anteprima ufficiale</title>
+-<link rel="stylesheet" href="styles.css">
++<link rel="stylesheet" href="styles.css?v=graphics-performance-2">
+ <link rel="stylesheet" href="eve-animation-runtime-v1.2.2/eve-hq-runtime.css">
+ <style>
+ #loader{max-width:620px;margin:20vh auto;padding:32px;text-align:center;color:#ecfbff}
+@@ -23,7 +23,8 @@
+ function loadPreviewScript(source){
+   return new Promise((resolve,reject)=>{
+     const script=document.createElement("script");
+-    script.src=source;
++    const previewRevision=new URLSearchParams(location.search).get("preview");
++    script.src=previewRevision?`${source}?v=${encodeURIComponent(previewRevision)}`:source;
+     script.onload=resolve;
+     script.onerror=()=>reject(new Error(`Il file ${source} non è disponibile.`));
+     document.body.appendChild(script);
+@@ -39,7 +40,6 @@ function loadPreviewScript(source){
+   await loadPreviewScript("eve-animation-runtime-v1.2.2/eve-hq-runtime.js");
+   await loadPreviewScript("animation-library-gallery.js");
+ 
+-  await loadPreviewScript("prompt-workflow.js");
+   await loadPreviewScript("evaluation-workflow.js");
+   await loadPreviewScript("runner-workflow.js");
+   await loadPreviewScript("provider-workflow.js");
+@@ -49,7 +49,12 @@ function loadPreviewScript(source){
+   await loadPreviewScript("source-opening-workflow.js");
+   await loadPreviewScript("research-center-workflow.js");
+   await loadPreviewScript("navigation-compat.js");
++  await loadPreviewScript("model-test-workflow.js");
++  await loadPreviewScript("model-rules-workflow.js");
++  await loadPreviewScript("eve-release-workflow.js");
++  await loadPreviewScript("simple-studio-navigation.js");
+   try{await loadPreviewScript("particles.js")}catch(error){console.warn(error.message)}
++  try{await loadPreviewScript("graphics-performance.js")}catch(error){console.warn(error.message)}
+ })().catch(error=>{
+   document.body.innerHTML=`<main id="loader"><h1>Anteprima non caricata</h1><p>${error.message}</p></main>`;
+ });
+diff --git a/reference/eve-ai-studio-preview/markup-03.js b/reference/eve-ai-studio-preview/markup-03.js
+index e94c5f07e6fdce1af31d16408fffdc713d1f5b9e..e79f70846d4158464459e58fa1870aa3bbd7ddf0 100644
+--- a/reference/eve-ai-studio-preview/markup-03.js
++++ b/reference/eve-ai-studio-preview/markup-03.js
+@@ -82,8 +82,6 @@ window.__EVE_HTML_PARTS=window.__EVE_HTML_PARTS||[];window.__EVE_HTML_PARTS.push
+       <div class="panel-head"><div><h3>Editor della configurazione</h3><p>Ogni salvataggio produce una nuova versione immutabile.</p></div><span class="tag" id="promptStatusBadge">Draft</span></div>
+       <div class="panel-body">
+         <div class="form-grid">
+-          <div class="field"><label for="promptVersionSelect">Versione selezionata</label><select id="promptVersionSelect"></select></div>
+-          <div class="field"><label for="promptName">Nome</label><input id="promptName"></div>
+           <div class="field full"><label for="systemPrompt">Prompt di sistema</label><textarea id="systemPrompt"></textarea></div>
+           <div class="field"><label for="promptMode">Modalità didattica</label><select id="promptMode"><option value="adaptive_explanation">Spiegazione adattiva</option><option value="socratic">Metodo socratico</option><option value="quiz">Quiz e interrogazione</option><option value="correction">Correzione guidata</option><option value="planning">Pianificazione</option></select></div>
+           <div class="field"><label for="promptTone">Tono</label><select id="promptTone"><option value="calm_direct">Calmo e diretto</option><option value="friendly">Amichevole</option><option value="technical">Tecnico</option></select></div>
+@@ -93,13 +91,6 @@ window.__EVE_HTML_PARTS=window.__EVE_HTML_PARTS||[];window.__EVE_HTML_PARTS.push
+           <div class="field"><label for="promptMemory">Memoria</label><select id="promptMemory"><option value="consent">Con consenso</option><option value="session_only">Solo sessione</option><option value="off">Disattivata</option></select></div>
+           <div class="field"><label for="promptTools">Strumenti</label><select id="promptTools"><option value="propose">Solo proposta</option><option value="read_only">Sola lettura</option><option value="confirm">Con conferma</option></select></div>
+         </div>
+-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+-          <button class="btn primary" id="savePromptDraft">Salva nuova bozza</button>
+-          <button class="btn" id="submitPromptReview">Invia in revisione</button>
+-          <button class="btn green" id="approvePromptTests">Test superati</button>
+-          <button class="btn primary" id="publishPromptVersion">Pubblica prompt</button>
+-        </div>
+-        <p id="promptWorkflowMessage" style="color:var(--muted);margin:12px 0 0" aria-live="polite">Seleziona una versione per verificarne contenuto e stato.</p>
+       </div>
+     </section>
+ 
+@@ -142,4 +133,4 @@ window.__EVE_HTML_PARTS=window.__EVE_HTML_PARTS||[];window.__EVE_HTML_PARTS.push
+ </section>
+ 
+ 
+-`);
+\ No newline at end of file
++`);
+diff --git a/reference/eve-ai-studio-preview/model-rules-workflow.js b/reference/eve-ai-studio-preview/model-rules-workflow.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..afe8d1f5fcbaadb4a9958f36f98bc77ff30e22b7
+--- /dev/null
++++ b/reference/eve-ai-studio-preview/model-rules-workflow.js
+@@ -0,0 +1,1358 @@
++(() => {
++  const view = document.getElementById("prompts");
++  const grid = view?.querySelector(":scope > .grid");
++  const systemPrompt = document.getElementById("systemPrompt");
++  const editorPanel = systemPrompt?.closest(".panel");
++  const form = editorPanel?.querySelector(".form-grid");
++  if (!view || !grid || !editorPanel || !form || document.getElementById("behaviorRulesGuide")) return;
++
++  const profilesKey = "eve-studio-model-profiles-v1";
++  const ruleLibraryKey = "eve-studio-rule-library-v1";
++  const activeModelKey = "eve-studio-active-model-v1";
++  const customModelsKey = "eve-studio-custom-models-v1";
++  const ruleLibraryVersion = 3;
++  const modes = ["adaptive_explanation", "socratic", "quiz", "correction", "planning"];
++  const modeLabels = {
++    adaptive_explanation: "Spiegazione adattiva",
++    socratic: "Metodo socratico",
++    quiz: "Quiz e interrogazione",
++    correction: "Correzione guidata",
++    planning: "Pianificazione",
++  };
++  const defaultRules = {
++    adaptive_explanation: "Spiega in modo adattivo usando il contesto autorizzato. Distingui fatti e ipotesi, dichiara l’incertezza e verifica la comprensione dello studente.",
++    socratic: "Guida lo studente con domande progressive e indizi graduati. Non fornire immediatamente la soluzione e usa soltanto il contesto autorizzato.",
++    quiz: "Formula una domanda per volta, attendi la risposta e fornisci feedback formativo. Non modificare i progressi senza conferma.",
++    correction: "Individua l’errore, spiegane il motivo e guida un nuovo tentativo senza sostituirti allo studente.",
++    planning: "Trasforma obiettivi, disponibilità e difficoltà in un piano realistico, verificabile e modificabile dallo studente.",
++  };
++  const defaultObjectives = {
++    adaptive_explanation: "Aiutare lo studente a comprendere un argomento adattando linguaggio, esempi e profondità al suo livello.",
++    socratic: "Guidare lo studente a costruire autonomamente la risposta attraverso domande e indizi progressivi.",
++    quiz: "Verificare la comprensione con domande mirate e feedback formativo sul ragionamento.",
++    correction: "Far riconoscere l’errore, comprenderne la causa e completare un nuovo tentativo consapevole.",
++    planning: "Trasformare obiettivi, tempo disponibile e difficoltà in un percorso di studio realistico e verificabile.",
++  };
++  const customModelDefinitions = (() => {
++    try {
++      const stored = JSON.parse(localStorage.getItem(customModelsKey) || "[]");
++      return Array.isArray(stored)
++        ? stored.filter((item) => item && typeof item.id === "string" && typeof item.name === "string" && typeof item.objective === "string")
++        : [];
++    } catch {
++      return [];
++    }
++  })();
++  customModelDefinitions.forEach((definition) => {
++    if (!modes.includes(definition.id)) modes.push(definition.id);
++    modeLabels[definition.id] = definition.name;
++    defaultObjectives[definition.id] = definition.objective;
++    defaultRules[definition.id] = "";
++  });
++  const defaultRuleItems = modes.filter((mode) => defaultRules[mode]).map((mode) => ({
++    id: `default-${mode}`,
++    text: defaultRules[mode],
++    originMode: mode,
++    createdAt: null,
++    isDefault: true,
++  }));
++
++  const makeStableId = (prefix, text) => {
++    let hash = 2166136261;
++    for (let index = 0; index < text.length; index += 1) {
++      hash ^= text.charCodeAt(index);
++      hash = Math.imul(hash, 16777619);
++    }
++    return `${prefix}-${(hash >>> 0).toString(36)}`;
++  };
++
++  const defaultProfile = (mode) => {
++    const custom = customModelDefinitions.find((definition) => definition.id === mode);
++    if (custom) {
++      const customRuleIds = Array.isArray(custom.ruleIds) ? custom.ruleIds : [];
++      return {
++        mode,
++        objective: custom.objective,
++        tone: custom.tone || "calm_direct",
++        depth: Number(custom.depth || 2),
++        sources: custom.sources || "required",
++        solution: custom.solution || "guided",
++        memory: custom.memory || "session_only",
++        tools: custom.tools || "propose",
++        ruleLibraryVersion,
++        allowEmptyRules: customRuleIds.length === 0,
++        ruleIds: customRuleIds,
++        rules: "",
++        savedAt: custom.createdAt || null,
++      };
++    }
++    return {
++      mode,
++      objective: defaultObjectives[mode],
++      tone: mode === "quiz" ? "friendly" : "calm_direct",
++      depth: mode === "socratic" ? 3 : 2,
++      sources: "required",
++      solution: ["socratic", "quiz", "correction"].includes(mode) ? "never_immediate" : "guided",
++      memory: "session_only",
++      tools: mode === "quiz" ? "confirm" : "propose",
++      ruleLibraryVersion,
++      allowEmptyRules: false,
++      ruleIds: [`default-${mode}`],
++      rules: defaultRules[mode],
++      savedAt: null,
++    };
++  };
++
++  const readJson = (key, fallback) => {
++    try {
++      return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback));
++    } catch {
++      return fallback;
++    }
++  };
++  const loadRuleLibrary = () => {
++    const stored = readJson(ruleLibraryKey, []);
++    const safeStored = Array.isArray(stored)
++      ? stored.filter((item) => item && typeof item.id === "string" && typeof item.text === "string" && item.text.trim())
++      : [];
++    const byId = new Map(defaultRuleItems.map((item) => [item.id, item]));
++    safeStored.forEach((item) => byId.set(item.id, {...item, text: item.text.trim()}));
++    return [...byId.values()];
++  };
++  let ruleLibrary = loadRuleLibrary();
++  const ensureRuleInLibrary = (text, originMode) => {
++    const normalized = String(text || "").trim();
++    if (!normalized) return null;
++    const existing = ruleLibrary.find((item) => item.text.toLocaleLowerCase("it-IT") === normalized.toLocaleLowerCase("it-IT"));
++    if (existing) return existing.id;
++    const id = makeStableId(`rule-${originMode || "shared"}`, normalized);
++    ruleLibrary.push({
++      id,
++      text: normalized,
++      originMode: originMode || "shared",
++      createdAt: new Date().toISOString(),
++      isDefault: false,
++    });
++    return id;
++  };
++  const rulesTextForIds = (ruleIds = []) => ruleIds
++    .map((id) => ruleLibrary.find((item) => item.id === id)?.text)
++    .filter(Boolean)
++    .join("\n\n");
++  const loadProfiles = () => {
++    const stored = readJson(profilesKey, {});
++    return Object.fromEntries(modes.map((mode) => {
++      const storedProfile = stored[mode] || {};
++      const baseProfile = defaultProfile(mode);
++      const allowEmptyRules = Object.hasOwn(storedProfile, "allowEmptyRules")
++        ? Boolean(storedProfile.allowEmptyRules)
++        : Boolean(baseProfile.allowEmptyRules);
++      let ruleIds = Array.isArray(storedProfile.ruleIds)
++        ? storedProfile.ruleIds.filter((id) => ruleLibrary.some((item) => item.id === id))
++        : baseProfile.ruleIds.filter((id) => ruleLibrary.some((item) => item.id === id));
++      if (!ruleIds.length && !allowEmptyRules && typeof storedProfile.rules === "string" && storedProfile.rules.trim()) {
++        const migratedId = ensureRuleInLibrary(storedProfile.rules, mode);
++        if (migratedId) ruleIds = [migratedId];
++      }
++      if (!ruleIds.length && !allowEmptyRules && defaultRules[mode]) ruleIds = [`default-${mode}`];
++      const profile = {
++        ...baseProfile,
++        ...storedProfile,
++        mode,
++        ruleLibraryVersion,
++        allowEmptyRules,
++        ruleIds,
++        rules: rulesTextForIds(ruleIds),
++      };
++      return [mode, profile];
++    }));
++  };
++
++  const originalPanels = [...grid.querySelectorAll(":scope > .panel")];
++  originalPanels.forEach((panel) => {
++    if (panel !== editorPanel) panel.hidden = true;
++  });
++  editorPanel.classList.remove("span-7", "span-8", "span-6", "span-5", "span-4");
++  editorPanel.classList.add("span-12", "model-config-panel");
++
++  const versionField = document.getElementById("promptVersionSelect")?.closest(".field");
++  const nameField = document.getElementById("promptName")?.closest(".field");
++  const modeField = document.getElementById("promptMode")?.closest(".field");
++  const promptField = systemPrompt.closest(".field");
++  let nameInput = document.getElementById("promptName");
++  const objectiveField = document.createElement("div");
++  objectiveField.className = "field full";
++  objectiveField.innerHTML = `
++    <label for="modelObjective">Obiettivo di questo modello</label>
++    <textarea id="modelObjective" maxlength="360" rows="3" placeholder="Descrivi il risultato didattico che questo modello deve aiutare a raggiungere."></textarea>
++  `;
++  form.appendChild(objectiveField);
++  const addModelField = document.createElement("div");
++  addModelField.className = "field model-add-field";
++  addModelField.innerHTML = `
++    <label for="startNewTeachingModel">Aggiungi modello didattico</label>
++    <button class="model-add-trigger" type="button" id="startNewTeachingModel">＋ Crea un nuovo modello</button>
++  `;
++  const creationNameField = nameField || document.createElement("div");
++  if (!nameField) {
++    creationNameField.className = "field full";
++    creationNameField.innerHTML = `
++      <label for="promptName">Nome del nuovo modello</label>
++      <input id="promptName" maxlength="60" placeholder="Per esempio: Ripasso rapido">
++    `;
++    form.appendChild(creationNameField);
++    nameInput = creationNameField.querySelector("#promptName");
++  }
++  const editableIds = ["promptMode", "promptName", "modelObjective", "promptTone", "promptDepth", "promptSources", "promptSolution", "promptMemory", "promptTools"];
++  const editableFields = editableIds
++    .map((id) => document.getElementById(id)?.closest(".field"))
++    .filter(Boolean);
++
++  [...form.querySelectorAll(".field")].forEach((field) => {
++    field.hidden = !editableFields.includes(field) && field !== promptField;
++  });
++  if (versionField) versionField.hidden = true;
++  creationNameField.hidden = true;
++  editableFields.forEach((field) => form.appendChild(field));
++  if (modeField) {
++    modeField.classList.remove("full");
++    form.insertBefore(modeField, form.firstElementChild);
++    modeField.after(addModelField);
++  }
++  if (creationNameField) {
++    creationNameField.classList.add("full");
++    const nameLabel = creationNameField.querySelector("label");
++    if (nameLabel) nameLabel.textContent = "Nome del nuovo modello";
++    if (nameInput) {
++      nameInput.maxLength = 60;
++      nameInput.placeholder = "Per esempio: Ripasso rapido";
++      nameInput.value = "";
++    }
++    addModelField.after(creationNameField);
++    creationNameField.after(objectiveField);
++  } else {
++    addModelField.after(objectiveField);
++  }
++  promptField?.classList.add("full");
++  form.appendChild(promptField);
++
++  const editorTitle = editorPanel.querySelector(".panel-head h3");
++  const editorDescription = editorPanel.querySelector(".panel-head p");
++  const statusBadge = document.getElementById("promptStatusBadge");
++  if (editorTitle) editorTitle.textContent = "Configura il modello didattico";
++  if (editorDescription) editorDescription.textContent = "Definisci obiettivo, tratti, limiti e regole applicati quando lo studente sceglie questo modello.";
++  if (statusBadge) statusBadge.hidden = true;
++
++  const promptLabel = promptField?.querySelector("label");
++  const modeLabel = modeField?.querySelector("label");
++  if (promptLabel) promptLabel.textContent = "Aggiungi una nuova regola alla libreria";
++  if (modeLabel) modeLabel.textContent = "Modello didattico da configurare";
++  systemPrompt.value = "";
++  systemPrompt.placeholder = "Scrivi una regola autonoma, per esempio: dichiara quando le fonti non sono sufficienti.";
++  systemPrompt.rows = 3;
++
++  const newRuleActions = document.createElement("div");
++  newRuleActions.className = "new-rule-actions";
++  newRuleActions.innerHTML = `
++    <button class="btn primary" type="button" id="addBehaviorRule">Aggiungi e attiva la regola</button>
++    <span>La nuova regola resta disponibile anche per gli altri modelli.</span>
++  `;
++  promptField?.appendChild(newRuleActions);
++
++  const ruleLibraryPanel = document.createElement("section");
++  ruleLibraryPanel.id = "ruleLibraryPanel";
++  ruleLibraryPanel.className = "field full rule-library-panel";
++  ruleLibraryPanel.tabIndex = 0;
++  ruleLibraryPanel.setAttribute("aria-describedby", "modelContextHelp");
++  ruleLibraryPanel.innerHTML = `
++    <div class="rule-library-panel__head">
++      <div>
++        <span class="rule-library-panel__eyebrow">Libreria condivisa</span>
++        <h4>Regole disponibili</h4>
++        <p>Spunta le regole che questo modello deve applicare. Togliendo la spunta la regola viene scollegata, ma non cancellata.</p>
++      </div>
++      <span class="tag violet" id="activeRuleCount">0 attive</span>
++    </div>
++    <div class="rule-library-list" id="ruleLibraryList"></div>
++  `;
++  form.appendChild(ruleLibraryPanel);
++
++  const legacyActions = document.getElementById("savePromptDraft")?.parentElement;
++  legacyActions?.remove();
++  const legacyMessage = document.getElementById("promptWorkflowMessage");
++  legacyMessage?.remove();
++
++  const guide = document.createElement("section");
++  guide.id = "behaviorRulesGuide";
++  guide.className = "panel prompt-guide";
++  guide.innerHTML = `
++    <div class="panel-body">
++      <div class="prompt-guide__top">
++        <div>
++          <h3>Un’Eve, cinque modelli didattici</h3>
++          <p>Seleziona il modello da configurare. I parametri salvati verranno applicati quando lo studente sceglierà quel modello dentro Aula.</p>
++        </div>
++        <span class="tag violet">5 modelli configurabili</span>
++      </div>
++      <div class="prompt-guide__steps" aria-label="Percorso di configurazione">
++        <div class="prompt-guide__step"><span>1</span><strong>Scegli il modello</strong><small>Spiegazione, socratico, quiz, correzione o pianificazione.</small></div>
++        <div class="prompt-guide__step"><span>2</span><strong>Imposta i parametri</strong><small>Tono, profondità, fonti, memoria, soluzioni e permessi.</small></div>
++        <div class="prompt-guide__step"><span>3</span><strong>Salva il modello</strong><small>Obiettivo, tratti, limiti e regole restano associati al modello scelto.</small></div>
++        <div class="prompt-guide__step"><span>4</span><strong>Provalo in chat</strong><small>Dalla chat potrai poi inviare l’insieme dei modelli a Pubblica.</small></div>
++      </div>
++      <p class="prompt-technical-note">“Modello didattico” indica il comportamento scelto dall’utente; il provider AI viene configurato separatamente in Connessione AI.</p>
++    </div>
++  `;
++  grid.insertBefore(guide, editorPanel);
++  guide.querySelector(".tag.violet").textContent = `${modes.length} modelli configurabili`;
++
++  const help = document.createElement("p");
++  help.className = "prompt-primary-help";
++  help.textContent = "Le modifiche valgono soltanto per il modello selezionato. Passando a un altro modello ritroverai i suoi parametri e le sue regole.";
++  form.insertBefore(help, promptField);
++
++  const contextHelp = document.createElement("aside");
++  contextHelp.id = "modelContextHelp";
++  contextHelp.className = "model-context-help";
++  contextHelp.setAttribute("role", "tooltip");
++  contextHelp.setAttribute("aria-live", "polite");
++  contextHelp.setAttribute("aria-hidden", "true");
++  contextHelp.innerHTML = `
++    <span class="model-context-help__eyebrow">A cosa serve</span>
++    <h4 id="modelContextHelpTitle">Modello didattico</h4>
++    <p id="modelContextHelpText">Scegli il comportamento che Eve userà quando lo studente selezionerà questo modello dentro Aula.</p>
++    <div class="model-context-help__value" id="modelContextHelpValue">Passa sopra un parametro oppure selezionalo per leggerne la spiegazione.</div>
++  `;
++
++  const configLayout = document.createElement("div");
++  configLayout.className = "model-config-layout";
++  const editorBody = editorPanel.querySelector(".panel-body");
++  editorBody?.insertBefore(configLayout, form);
++  configLayout.append(form);
++  document.body.appendChild(contextHelp);
++
++  const actions = document.createElement("div");
++  actions.className = "build-eve-actions behavior-rules-actions";
++  actions.innerHTML = `
++    <button class="btn primary" id="saveBehaviorRules">Salva modello</button>
++    <button class="btn green" id="tryBehaviorRules">Prova modello</button>
++  `;
++  editorPanel.querySelector(".panel-body")?.appendChild(actions);
++
++  const workingStatus = document.createElement("p");
++  workingStatus.id = "behaviorRulesStatus";
++  workingStatus.className = "prompt-next-action";
++  workingStatus.setAttribute("aria-live", "polite");
++  editorPanel.querySelector(".panel-body")?.appendChild(workingStatus);
++
++  let profiles = loadProfiles();
++  const storedActiveModel = localStorage.getItem(activeModelKey);
++  let currentMode = modes.includes(storedActiveModel) ? storedActiveModel : "adaptive_explanation";
++  let isCreatingModel = false;
++  let draftRuleIds = [];
++  const modeSelect = document.getElementById("promptMode");
++  customModelDefinitions.forEach((definition) => {
++    if (!modeSelect?.querySelector(`option[value="${definition.id}"]`)) {
++      modeSelect?.add(new Option(definition.name, definition.id));
++    }
++  });
++
++  const profileFieldIds = {
++    objective: "modelObjective",
++    tone: "promptTone",
++    depth: "promptDepth",
++    sources: "promptSources",
++    solution: "promptSolution",
++    memory: "promptMemory",
++    tools: "promptTools",
++  };
++
++  const modelDescriptions = {
++    adaptive_explanation: "Adatta linguaggio, profondità ed esempi al livello e alle difficoltà rilevate nello studente.",
++    socratic: "Accompagna lo studente con domande e indizi progressivi, evitando di anticipare la soluzione.",
++    quiz: "Formula domande, attende la risposta e restituisce una valutazione formativa del ragionamento.",
++    correction: "Analizza l’errore, ne spiega la causa e guida un nuovo tentativo controllato.",
++    planning: "Trasforma obiettivi, tempo disponibile e lacune in un percorso di studio realistico.",
++  };
++  customModelDefinitions.forEach((definition) => {
++    modelDescriptions[definition.id] = definition.objective;
++  });
++  const helpDefinitions = {
++    promptMode: {
++      title: "Modello didattico",
++      text: "Stabilisce il tipo di aiuto che l’utente potrà scegliere in Aula. Ogni modello conserva una configurazione indipendente.",
++      detail: (node) => modelDescriptions[node.value] || "",
++    },
++    promptName: {
++      title: "Nome del nuovo modello",
++      text: "È il nome con cui il nuovo comportamento comparirà tra i modelli disponibili in Aula.",
++      detail: (node) => node.value.trim()
++        ? `${node.value.trim().length} caratteri. Usa un nome breve e riconoscibile.`
++        : "Inserisci un nome diverso da quelli già presenti.",
++    },
++    modelObjective: {
++      title: "Obiettivo del modello",
++      text: "Definisce il risultato didattico che Eve deve perseguire quando l’utente sceglie questo modello.",
++      detail: (node) => node.value.trim()
++        ? `${node.value.trim().length} caratteri. Deve descrivere il risultato, non il nome o l’identità di Eve.`
++        : "Inserisci un obiettivo concreto e verificabile.",
++    },
++    promptTone: {
++      title: "Tono della risposta",
++      text: "Definisce lo stile con cui Eve comunica, senza cambiare la correttezza o il contenuto delle spiegazioni.",
++      detail: (node) => `Scelta attuale: ${node.selectedOptions[0]?.textContent || node.value}.`,
++    },
++    promptDepth: {
++      title: "Profondità",
++      text: "Controlla quanto Eve deve essere sintetica o approfondita. Un livello maggiore produce più passaggi, dettagli ed esempi.",
++      detail: (node) => `Livello attuale: ${node.selectedOptions[0]?.textContent || node.value}.`,
++    },
++    promptSources: {
++      title: "Uso delle fonti",
++      text: "Stabilisce quando Eve deve basare la risposta sui materiali autorizzati e mostrare riferimenti verificabili.",
++      detail: (node) => `Regola attuale: ${node.selectedOptions[0]?.textContent || node.value}.`,
++    },
++    promptSolution: {
++      title: "Gestione delle soluzioni",
++      text: "Decide se Eve deve guidare il ragionamento, evitare la soluzione immediata oppure rispondere direttamente.",
++      detail: (node) => `Comportamento attuale: ${node.selectedOptions[0]?.textContent || node.value}.`,
++    },
++    promptMemory: {
++      title: "Memoria",
++      text: "Controlla se il modello può ricordare informazioni tra i messaggi o tra sessioni diverse, sempre nel rispetto del consenso.",
++      detail: (node) => `Memoria attuale: ${node.selectedOptions[0]?.textContent || node.value}.`,
++    },
++    promptTools: {
++      title: "Permessi nell’app",
++      text: "Definisce se Eve può soltanto proporre un’azione, leggere dati autorizzati oppure eseguire dopo una conferma esplicita.",
++      detail: (node) => `Permesso attuale: ${node.selectedOptions[0]?.textContent || node.value}.`,
++    },
++    systemPrompt: {
++      title: "Nuova regola",
++      text: "Scrivi una sola istruzione autonoma. Premendo “Aggiungi” entrerà nella libreria e verrà attivata per il modello selezionato senza sostituire le regole precedenti.",
++      detail: (node) => node.value.trim()
++        ? `${node.value.trim().length} caratteri pronti per essere aggiunti.`
++        : "La regola può definire un obiettivo, un limite, una priorità o quando Eve deve chiedere conferma.",
++    },
++    ruleLibraryPanel: {
++      title: "Libreria delle regole",
++      text: "Contiene tutte le regole create per ogni modello. Le caselle permettono di riutilizzarle e combinarle liberamente.",
++      detail: () => {
++        const active = profiles[currentMode]?.ruleIds?.length || 0;
++        return `${active} regole attive per ${modeLabels[currentMode]}. Togliere una spunta non elimina la regola dalla libreria.`;
++      },
++    },
++  };
++  const optionHelpDefinitions = {
++    promptMode: {
++      adaptive_explanation: ["Spiegazione adattiva", "Adatta linguaggio, esempi e profondità al livello e alle difficoltà rilevate nello studente."],
++      socratic: ["Metodo socratico", "Guida con domande e indizi progressivi, aiutando lo studente a costruire autonomamente la risposta."],
++      quiz: ["Quiz e interrogazione", "Propone una domanda alla volta, attende la risposta e restituisce un feedback formativo."],
++      correction: ["Correzione guidata", "Individua l’errore, ne chiarisce la causa e accompagna lo studente in un nuovo tentativo."],
++      planning: ["Pianificazione", "Trasforma obiettivi, tempo e difficoltà in un percorso di studio realistico e verificabile."],
++    },
++    promptTone: {
++      calm_direct: ["Calmo e diretto", "Usa un linguaggio tranquillo, chiaro e concreto, evitando giri di parole non necessari."],
++      friendly: ["Amichevole", "Comunica in modo caloroso e incoraggiante, mantenendo precisione e rispetto."],
++      technical: ["Tecnico", "Usa terminologia specialistica e formulazioni rigorose adatte a chi conosce già le basi."],
++    },
++    promptDepth: {
++      1: ["1 · Essenziale", "Mostra soltanto i concetti indispensabili con una risposta breve e immediata."],
++      2: ["2 · Normale", "Spiega i passaggi principali e include un esempio quando è utile alla comprensione."],
++      3: ["3 · Approfondita", "Aggiunge motivazioni, collegamenti ed esempi per rendere chiaro il ragionamento completo."],
++      4: ["4 · Massima", "Fornisce una spiegazione estesa, passo per passo, includendo varianti, limiti e casi particolari."],
++    },
++    promptSources: {
++      required: ["Obbligatorie", "Eve deve basarsi sui materiali autorizzati e dichiarare quando le fonti non sono sufficienti."],
++      when_available: ["Quando disponibili", "Eve usa e cita i materiali presenti; se mancano, distingue chiaramente le conoscenze generali."],
++      disabled: ["Disattivate", "Il modello non consulta i materiali collegati e non utilizza il sistema delle fonti."],
++    },
++    promptSolution: {
++      guided: ["Guidata", "Eve accompagna verso la soluzione con passaggi e indizi graduati."],
++      direct: ["Diretta", "Eve fornisce subito la risposta richiesta, aggiungendo la spiegazione necessaria."],
++      never_immediate: ["Mai immediata", "Eve chiede prima un tentativo o propone un indizio, senza anticipare immediatamente la soluzione."],
++    },
++    promptMemory: {
++      consent: ["Con consenso", "Può ricordare informazioni tra sessioni diverse soltanto dopo un consenso esplicito."],
++      session_only: ["Solo sessione", "Ricorda il contesto durante la conversazione corrente e lo interrompe alla fine della sessione."],
++      off: ["Disattivata", "Non conserva informazioni tra i messaggi oltre a ciò che è strettamente necessario alla risposta corrente."],
++    },
++    promptTools: {
++      propose: ["Solo proposta", "Eve descrive l’azione consigliata, ma non modifica alcun dato dell’app."],
++      read_only: ["Sola lettura", "Può consultare i dati autorizzati, senza creare, modificare o eliminare contenuti."],
++      confirm: ["Con conferma", "Può eseguire un’azione soltanto dopo una conferma esplicita dell’utente."],
++    },
++  };
++  customModelDefinitions.forEach((definition) => {
++    optionHelpDefinitions.promptMode[definition.id] = [definition.name, definition.objective];
++  });
++
++  let activeHelpId = "";
++  let pointerFrame = 0;
++  let helpDelayTimer = 0;
++  let pendingHelpId = "";
++  let pendingHelpPoint = null;
++  const helpDelayMs = 2000;
++
++  const positionFieldHelp = (clientX, clientY) => {
++    const gap = 14;
++    const margin = 12;
++    const rect = contextHelp.getBoundingClientRect();
++    let left = clientX + gap;
++    let top = clientY + gap;
++
++    if (left + rect.width > window.innerWidth - margin) left = clientX - rect.width - gap;
++    if (top + rect.height > window.innerHeight - margin) top = clientY - rect.height - gap;
++
++    contextHelp.style.left = `${Math.max(margin, left)}px`;
++    contextHelp.style.top = `${Math.max(margin, top)}px`;
++  };
++
++  const positionHelpBesideField = (field) => {
++    const rect = field.getBoundingClientRect();
++    positionFieldHelp(Math.min(rect.right, window.innerWidth - 24), Math.max(rect.top, 12));
++  };
++
++  const positionHelpBesideMenu = (menu, clientY) => {
++    const gap = 14;
++    const margin = 12;
++    const menuRect = menu.getBoundingClientRect();
++    const helpRect = contextHelp.getBoundingClientRect();
++    let left = menuRect.right + gap;
++    if (left + helpRect.width > window.innerWidth - margin) left = menuRect.left - helpRect.width - gap;
++    const top = Math.min(
++      Math.max(margin, clientY - 24),
++      Math.max(margin, window.innerHeight - helpRect.height - margin),
++    );
++    contextHelp.style.left = `${Math.max(margin, left)}px`;
++    contextHelp.style.top = `${top}px`;
++  };
++
++  const clearActiveHelpField = () => {
++    editableFields.forEach((field) => field.classList.remove("is-help-active"));
++    promptField?.classList.remove("is-help-active");
++    ruleLibraryPanel.classList.remove("is-help-active");
++  };
++
++  const clearPendingHelpField = () => {
++    editableFields.forEach((field) => field.classList.remove("is-help-pending"));
++    promptField?.classList.remove("is-help-pending");
++    ruleLibraryPanel.classList.remove("is-help-pending");
++  };
++
++  const cancelPendingFieldHelp = () => {
++    if (helpDelayTimer) clearTimeout(helpDelayTimer);
++    helpDelayTimer = 0;
++    pendingHelpId = "";
++    pendingHelpPoint = null;
++    clearPendingHelpField();
++  };
++
++  const hideFieldHelp = () => {
++    cancelPendingFieldHelp();
++    activeHelpId = "";
++    if (pointerFrame) {
++      cancelAnimationFrame(pointerFrame);
++      pointerFrame = 0;
++    }
++    contextHelp.classList.remove("is-visible");
++    contextHelp.setAttribute("aria-hidden", "true");
++    clearActiveHelpField();
++  };
++
++  const showFieldHelp = (id, pointerEvent = null) => {
++    const definition = helpDefinitions[id];
++    const node = document.getElementById(id);
++    if (!definition || !node) return;
++    const field = node.closest(".field");
++    clearPendingHelpField();
++    activeHelpId = id;
++    document.getElementById("modelContextHelpTitle").textContent = definition.title;
++    document.getElementById("modelContextHelpText").textContent = definition.text;
++    document.getElementById("modelContextHelpValue").textContent = definition.detail(node);
++    editableFields.forEach((field) => field.classList.toggle("is-help-active", field.contains(node)));
++    promptField?.classList.toggle("is-help-active", id === "systemPrompt");
++    ruleLibraryPanel.classList.toggle("is-help-active", id === "ruleLibraryPanel");
++    contextHelp.classList.add("is-visible");
++    contextHelp.setAttribute("aria-hidden", "false");
++
++    if (pointerEvent && Number.isFinite(pointerEvent.clientX) && Number.isFinite(pointerEvent.clientY)) {
++      positionFieldHelp(pointerEvent.clientX, pointerEvent.clientY);
++    } else if (field) {
++      positionHelpBesideField(field);
++    }
++  };
++
++  const scheduleFieldHelp = (id, pointerEvent = null) => {
++    const point = pointerEvent && Number.isFinite(pointerEvent.clientX) && Number.isFinite(pointerEvent.clientY)
++      ? {clientX: pointerEvent.clientX, clientY: pointerEvent.clientY}
++      : null;
++
++    if (activeHelpId === id) {
++      if (point) positionFieldHelp(point.clientX, point.clientY);
++      return;
++    }
++
++    pendingHelpPoint = point;
++    if (pendingHelpId === id && helpDelayTimer) return;
++
++    cancelPendingFieldHelp();
++    pendingHelpId = id;
++    pendingHelpPoint = point;
++    document.getElementById(id)?.closest(".field")?.classList.add("is-help-pending");
++    helpDelayTimer = setTimeout(() => {
++      const delayedPoint = pendingHelpPoint;
++      helpDelayTimer = 0;
++      pendingHelpId = "";
++      pendingHelpPoint = null;
++      showFieldHelp(id, delayedPoint);
++    }, helpDelayMs);
++  };
++
++  const showOptionHelp = (select, optionButton, pointerPoint = null) => {
++    const definition = optionHelpDefinitions[select.id]?.[optionButton.dataset.value];
++    if (!definition) return;
++    clearPendingHelpField();
++    clearActiveHelpField();
++    activeHelpId = `option:${select.id}:${optionButton.dataset.value}`;
++    document.getElementById("modelContextHelpTitle").textContent = definition[0];
++    document.getElementById("modelContextHelpText").textContent = definition[1];
++    document.getElementById("modelContextHelpValue").textContent = `Valore disponibile per ${select.closest(".field")?.querySelector("label")?.textContent || "questo parametro"}.`;
++    contextHelp.classList.add("is-visible");
++    contextHelp.setAttribute("aria-hidden", "false");
++    const optionRect = optionButton.getBoundingClientRect();
++    const menu = optionButton.closest(".studio-select__menu");
++    if (menu) positionHelpBesideMenu(menu, pointerPoint?.clientY || optionRect.top + optionRect.height / 2);
++  };
++
++  const scheduleOptionHelp = (select, optionButton, pointerEvent = null) => {
++    const key = `option:${select.id}:${optionButton.dataset.value}`;
++    const point = pointerEvent && Number.isFinite(pointerEvent.clientX) && Number.isFinite(pointerEvent.clientY)
++      ? {clientX: pointerEvent.clientX, clientY: pointerEvent.clientY}
++      : null;
++    if (activeHelpId === key) {
++      const menu = optionButton.closest(".studio-select__menu");
++      if (menu) positionHelpBesideMenu(menu, point?.clientY || optionButton.getBoundingClientRect().top);
++      return;
++    }
++    pendingHelpPoint = point;
++    if (pendingHelpId === key && helpDelayTimer) return;
++    cancelPendingFieldHelp();
++    pendingHelpId = key;
++    pendingHelpPoint = point;
++    helpDelayTimer = setTimeout(() => {
++      const delayedPoint = pendingHelpPoint;
++      helpDelayTimer = 0;
++      pendingHelpId = "";
++      pendingHelpPoint = null;
++      showOptionHelp(select, optionButton, delayedPoint);
++    }, helpDelayMs);
++  };
++
++  const customSelects = new Map();
++  const closeCustomSelect = (select, {restoreFocus = false} = {}) => {
++    const custom = customSelects.get(select);
++    if (!custom || custom.menu.hidden) return;
++    custom.menu.hidden = true;
++    custom.trigger.setAttribute("aria-expanded", "false");
++    custom.root.classList.remove("is-open");
++    hideFieldHelp();
++    if (restoreFocus) custom.trigger.focus();
++  };
++  const closeOtherCustomSelects = (currentSelect) => {
++    customSelects.forEach((_custom, select) => {
++      if (select !== currentSelect) closeCustomSelect(select);
++    });
++  };
++
++  const buildCustomSelect = (select) => {
++    const root = document.createElement("div");
++    root.className = "studio-select";
++    const trigger = document.createElement("button");
++    trigger.type = "button";
++    trigger.id = `${select.id}Trigger`;
++    trigger.className = "studio-select__trigger";
++    trigger.setAttribute("aria-haspopup", "listbox");
++    trigger.setAttribute("aria-expanded", "false");
++    const menu = document.createElement("div");
++    menu.className = "studio-select__menu";
++    menu.id = `${select.id}Menu`;
++    menu.setAttribute("role", "listbox");
++    menu.hidden = true;
++    trigger.setAttribute("aria-controls", menu.id);
++
++    const optionButtons = [];
++    const addOptionButton = (option) => {
++      const button = document.createElement("button");
++      button.type = "button";
++      button.className = "studio-select__option";
++      button.dataset.value = option.value;
++      button.setAttribute("role", "option");
++      button.textContent = option.textContent;
++      button.addEventListener("pointerenter", (event) => scheduleOptionHelp(select, button, event));
++      button.addEventListener("pointermove", (event) => {
++        const key = `option:${select.id}:${button.dataset.value}`;
++        if (pendingHelpId === key) pendingHelpPoint = {clientX: event.clientX, clientY: event.clientY};
++        if (activeHelpId === key) positionHelpBesideMenu(menu, event.clientY);
++      });
++      button.addEventListener("pointerleave", hideFieldHelp);
++      button.addEventListener("focusin", () => scheduleOptionHelp(select, button));
++      button.addEventListener("focusout", () => {
++        setTimeout(() => {
++          if (!button.matches(":focus")) hideFieldHelp();
++        }, 0);
++      });
++      button.addEventListener("click", () => {
++        select.value = button.dataset.value;
++        select.dispatchEvent(new Event("change", {bubbles: true}));
++        closeCustomSelect(select, {restoreFocus: true});
++      });
++      button.addEventListener("keydown", (event) => {
++        const currentIndex = optionButtons.indexOf(button);
++        if (event.key === "ArrowDown" || event.key === "ArrowUp") {
++          event.preventDefault();
++          const direction = event.key === "ArrowDown" ? 1 : -1;
++          optionButtons[(currentIndex + direction + optionButtons.length) % optionButtons.length].focus();
++        } else if (event.key === "Escape") {
++          event.preventDefault();
++          closeCustomSelect(select, {restoreFocus: true});
++        }
++      });
++      menu.appendChild(button);
++      optionButtons.push(button);
++      return button;
++    };
++    [...select.options].forEach(addOptionButton);
++
++    const sync = () => {
++      const selected = select.selectedOptions[0];
++      trigger.textContent = selected?.textContent || "";
++      optionButtons.forEach((button) => {
++        const isSelected = button.dataset.value === select.value;
++        button.classList.toggle("is-selected", isSelected);
++        button.setAttribute("aria-selected", String(isSelected));
++      });
++    };
++
++    trigger.addEventListener("pointerdown", hideFieldHelp);
++    trigger.addEventListener("click", () => {
++      const willOpen = menu.hidden;
++      closeOtherCustomSelects(select);
++      hideFieldHelp();
++      menu.hidden = !willOpen;
++      trigger.setAttribute("aria-expanded", String(willOpen));
++      root.classList.toggle("is-open", willOpen);
++      if (willOpen) {
++        const selectedButton = optionButtons.find((button) => button.dataset.value === select.value);
++        selectedButton?.focus();
++      }
++    });
++    trigger.addEventListener("keydown", (event) => {
++      if (["Enter", " ", "ArrowDown", "ArrowUp"].includes(event.key) && menu.hidden) {
++        event.preventDefault();
++        trigger.click();
++      } else if (event.key === "Escape" && !menu.hidden) {
++        event.preventDefault();
++        closeCustomSelect(select, {restoreFocus: true});
++      }
++    });
++
++    const label = select.closest(".field")?.querySelector(`label[for="${select.id}"]`);
++    if (label) label.htmlFor = trigger.id;
++    select.classList.add("native-select-source");
++    select.tabIndex = -1;
++    select.setAttribute("aria-hidden", "true");
++    root.append(trigger, menu);
++    select.after(root);
++    const addOption = (option) => {
++      const button = addOptionButton(option);
++      sync();
++      return button;
++    };
++    customSelects.set(select, {root, trigger, menu, optionButtons, sync, addOption});
++    select._syncStudioSelect = sync;
++    select.addEventListener("change", sync);
++    sync();
++  };
++
++  editableIds
++    .map((id) => document.getElementById(id))
++    .filter((node) => node?.matches("select"))
++    .forEach(buildCustomSelect);
++
++  const createModelPanel = document.createElement("aside");
++  createModelPanel.className = "model-create-panel";
++  createModelPanel.innerHTML = `
++    <div class="model-create-panel__head">
++      <div>
++        <span class="model-create-panel__eyebrow">Nuovo comportamento</span>
++        <h3>Aggiungi modello didattico</h3>
++        <p>Crea un nuovo metodo di assistenza. Dopo il salvataggio potrai modificarlo e provarlo come tutti gli altri modelli.</p>
++      </div>
++      <span class="tag violet">Personalizzato</span>
++    </div>
++    <div class="model-create-form">
++      <div class="field full">
++        <label for="newModelName">Nome del modello</label>
++        <input id="newModelName" maxlength="60" placeholder="Per esempio: Ripasso rapido">
++      </div>
++      <div class="field full">
++        <label for="newModelObjective">Obiettivo</label>
++        <textarea id="newModelObjective" maxlength="360" rows="3" placeholder="Descrivi il risultato didattico che il nuovo modello deve perseguire."></textarea>
++      </div>
++      <div class="field">
++        <label for="newModelTone">Tono</label>
++        <select id="newModelTone">
++          <option value="calm_direct">Calmo e diretto</option>
++          <option value="friendly">Amichevole</option>
++          <option value="technical">Tecnico</option>
++        </select>
++      </div>
++      <div class="field">
++        <label for="newModelDepth">Profondità</label>
++        <select id="newModelDepth">
++          <option value="1">1 · Essenziale</option>
++          <option value="2" selected>2 · Normale</option>
++          <option value="3">3 · Approfondita</option>
++          <option value="4">4 · Massima</option>
++        </select>
++      </div>
++      <div class="field">
++        <label for="newModelSources">Fonti</label>
++        <select id="newModelSources">
++          <option value="required">Obbligatorie</option>
++          <option value="when_available">Quando disponibili</option>
++          <option value="disabled">Disattivate</option>
++        </select>
++      </div>
++      <div class="field">
++        <label for="newModelSolution">Politica soluzione</label>
++        <select id="newModelSolution">
++          <option value="guided">Guidata</option>
++          <option value="direct">Diretta</option>
++          <option value="never_immediate">Mai immediata</option>
++        </select>
++      </div>
++      <div class="field">
++        <label for="newModelMemory">Memoria</label>
++        <select id="newModelMemory">
++          <option value="consent">Con consenso</option>
++          <option value="session_only" selected>Solo sessione</option>
++          <option value="off">Disattivata</option>
++        </select>
++      </div>
++      <div class="field">
++        <label for="newModelTools">Strumenti</label>
++        <select id="newModelTools">
++          <option value="propose">Solo proposta</option>
++          <option value="read_only">Sola lettura</option>
++          <option value="confirm">Con conferma</option>
++        </select>
++      </div>
++      <fieldset class="model-create-rules full">
++        <legend>Regole da applicare subito</legend>
++        <p>Puoi selezionare regole già presenti. Dopo la creazione potrai aggiungerne o rimuoverne altre nella libreria condivisa.</p>
++        <div class="model-create-rules__list" id="newModelRules"></div>
++      </fieldset>
++      <button class="btn primary full" type="button" id="createTeachingModel">Crea e configura il modello</button>
++      <p class="model-create-status full" id="createTeachingModelStatus" aria-live="polite"></p>
++    </div>
++  `;
++  const newModelSelectIds = ["newModelTone", "newModelDepth", "newModelSources", "newModelSolution", "newModelMemory", "newModelTools"];
++  newModelSelectIds
++    .map((id) => document.getElementById(id))
++    .filter(Boolean)
++    .forEach(buildCustomSelect);
++
++  const renderCreateModelRules = () => {
++    const list = document.getElementById("newModelRules");
++    if (!list) return;
++    const checked = new Set([...list.querySelectorAll("input:checked")].map((input) => input.value));
++    list.innerHTML = "";
++    ruleLibrary.forEach((rule) => {
++      const label = document.createElement("label");
++      label.className = "model-create-rule";
++      const checkbox = document.createElement("input");
++      checkbox.type = "checkbox";
++      checkbox.value = rule.id;
++      checkbox.checked = checked.has(rule.id);
++      const copy = document.createElement("span");
++      copy.textContent = rule.text;
++      label.append(checkbox, copy);
++      list.appendChild(label);
++    });
++  };
++  renderCreateModelRules();
++
++  const resetCreateModelForm = () => {
++    document.getElementById("newModelName").value = "";
++    document.getElementById("newModelObjective").value = "";
++    const defaults = {
++      newModelTone: "calm_direct",
++      newModelDepth: "2",
++      newModelSources: "required",
++      newModelSolution: "guided",
++      newModelMemory: "session_only",
++      newModelTools: "propose",
++    };
++    Object.entries(defaults).forEach(([id, value]) => {
++      const select = document.getElementById(id);
++      select.value = value;
++      select._syncStudioSelect?.();
++    });
++    document.querySelectorAll("#newModelRules input").forEach((checkbox) => {
++      checkbox.checked = false;
++    });
++  };
++
++  document.getElementById("createTeachingModel")?.addEventListener("click", () => {
++    const name = document.getElementById("newModelName").value.trim().replace(/\s+/g, " ");
++    const objective = document.getElementById("newModelObjective").value.trim().replace(/\s+/g, " ");
++    const status = document.getElementById("createTeachingModelStatus");
++    if (name.length < 3) {
++      status.textContent = "Inserisci un nome di almeno 3 caratteri.";
++      document.getElementById("newModelName").focus();
++      return;
++    }
++    if (objective.length < 12) {
++      status.textContent = "Descrivi l’obiettivo con almeno 12 caratteri.";
++      document.getElementById("newModelObjective").focus();
++      return;
++    }
++    if (Object.values(modeLabels).some((label) => label.toLocaleLowerCase("it-IT") === name.toLocaleLowerCase("it-IT"))) {
++      status.textContent = "Esiste già un modello con questo nome.";
++      document.getElementById("newModelName").focus();
++      return;
++    }
++
++    const slug = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("it-IT")
++      .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 32) || "modello";
++    let id = `custom-${slug}`;
++    let suffix = 2;
++    while (modes.includes(id)) {
++      id = `custom-${slug}-${suffix}`;
++      suffix += 1;
++    }
++    const ruleIds = [...document.querySelectorAll("#newModelRules input:checked")].map((input) => input.value);
++    const createdAt = new Date().toISOString();
++    const definition = {
++      id,
++      name,
++      objective,
++      tone: document.getElementById("newModelTone").value,
++      depth: Number(document.getElementById("newModelDepth").value),
++      sources: document.getElementById("newModelSources").value,
++      solution: document.getElementById("newModelSolution").value,
++      memory: document.getElementById("newModelMemory").value,
++      tools: document.getElementById("newModelTools").value,
++      ruleIds,
++      createdAt,
++    };
++
++    customModelDefinitions.push(definition);
++    localStorage.setItem(customModelsKey, JSON.stringify(customModelDefinitions));
++    modes.push(id);
++    modeLabels[id] = name;
++    defaultObjectives[id] = objective;
++    defaultRules[id] = "";
++    modelDescriptions[id] = objective;
++    optionHelpDefinitions.promptMode[id] = [name, objective];
++    profiles[id] = {
++      mode: id,
++      objective,
++      tone: definition.tone,
++      depth: definition.depth,
++      sources: definition.sources,
++      solution: definition.solution,
++      memory: definition.memory,
++      tools: definition.tools,
++      ruleLibraryVersion,
++      allowEmptyRules: ruleIds.length === 0,
++      ruleIds,
++      rules: rulesTextForIds(ruleIds),
++      savedAt: createdAt,
++    };
++    localStorage.setItem(profilesKey, JSON.stringify(profiles));
++
++    const option = new Option(name, id);
++    modeSelect.add(option);
++    customSelects.get(modeSelect)?.addOption(option);
++    modeSelect.value = id;
++    modeSelect.dispatchEvent(new Event("change", {bubbles: true}));
++    guide.querySelector(".tag.violet").textContent = `${modes.length} modelli configurabili`;
++    resetCreateModelForm();
++    status.textContent = `${name} creato e aperto nella colonna di configurazione.`;
++    if (typeof notify === "function") notify(`${name} creato`);
++  });
++
++  document.addEventListener("pointerdown", (event) => {
++    customSelects.forEach((custom, select) => {
++      if (!custom.root.contains(event.target)) closeCustomSelect(select);
++    });
++  });
++
++  [...editableIds, "systemPrompt", "ruleLibraryPanel"].forEach((id) => {
++    const node = document.getElementById(id);
++    const field = node?.closest(".field");
++    if (!node || !field) return;
++    node.setAttribute("aria-describedby", "modelContextHelp");
++    field.addEventListener("pointerenter", (event) => scheduleFieldHelp(id, event));
++    field.addEventListener("pointermove", (event) => {
++      const {clientX, clientY} = event;
++      if (pendingHelpId === id) pendingHelpPoint = {clientX, clientY};
++      if (activeHelpId !== id || pointerFrame) return;
++      pointerFrame = requestAnimationFrame(() => {
++        pointerFrame = 0;
++        positionFieldHelp(clientX, clientY);
++      });
++    });
++    field.addEventListener("pointerleave", hideFieldHelp);
++    field.addEventListener("focusin", (event) => {
++      if (event.target instanceof Element && event.target.closest(".studio-select, select")) return;
++      scheduleFieldHelp(id);
++    });
++    field.addEventListener("focusout", () => {
++      setTimeout(() => {
++        if (!field.contains(document.activeElement)) hideFieldHelp();
++      }, 0);
++    });
++    field.addEventListener("click", (event) => {
++      if (event.target instanceof Element && event.target.closest(".studio-select, select")) return;
++      scheduleFieldHelp(id, event);
++    });
++    if (node.matches("select")) {
++      node.addEventListener("pointerdown", hideFieldHelp);
++      node.addEventListener("keydown", (event) => {
++        if (["Enter", " ", "ArrowDown", "ArrowUp"].includes(event.key)) hideFieldHelp();
++      });
++    }
++    node.addEventListener("change", () => {
++      if (activeHelpId === id) showFieldHelp(id);
++    });
++    node.addEventListener("input", () => {
++      if (activeHelpId === id) showFieldHelp(id);
++    });
++  });
++
++  window.addEventListener("scroll", hideFieldHelp, {passive: true});
++  window.addEventListener("resize", hideFieldHelp);
++
++  const persistRuleLibrary = () => {
++    localStorage.setItem(ruleLibraryKey, JSON.stringify(ruleLibrary));
++  };
++  const persistProfiles = () => {
++    localStorage.setItem(profilesKey, JSON.stringify(profiles));
++  };
++  persistRuleLibrary();
++  persistProfiles();
++  const getActiveRuleIds = (mode = currentMode) => {
++    if (isCreatingModel) return draftRuleIds;
++    const ids = profiles[mode]?.ruleIds;
++    return Array.isArray(ids) ? ids : [];
++  };
++  const updateProfileRules = (mode = currentMode) => {
++    const profile = profiles[mode] || defaultProfile(mode);
++    const ruleIds = [...new Set(getActiveRuleIds(mode))].filter((id) => ruleLibrary.some((item) => item.id === id));
++    profiles[mode] = {
++      ...profile,
++      mode,
++      ruleIds,
++      rules: rulesTextForIds(ruleIds),
++    };
++  };
++  const countRuleUsage = (ruleId) => modes.filter((mode) => {
++    const ids = profiles[mode]?.ruleIds;
++    return Array.isArray(ids) && ids.includes(ruleId);
++  }).length;
++  const renderRuleLibrary = () => {
++    const list = document.getElementById("ruleLibraryList");
++    const count = document.getElementById("activeRuleCount");
++    if (!list || !count) return;
++    const selected = new Set(getActiveRuleIds());
++    count.textContent = `${selected.size} ${selected.size === 1 ? "attiva" : "attive"}`;
++    list.innerHTML = "";
++
++    ruleLibrary.forEach((rule) => {
++      const row = document.createElement("label");
++      row.className = `rule-library-row${selected.has(rule.id) ? " is-active" : ""}`;
++      const checkbox = document.createElement("input");
++      checkbox.className = "rule-library-check";
++      checkbox.type = "checkbox";
++      checkbox.value = rule.id;
++      checkbox.checked = selected.has(rule.id);
++      const content = document.createElement("span");
++      content.className = "rule-library-row__content";
++      const text = document.createElement("strong");
++      text.textContent = rule.text;
++      const meta = document.createElement("small");
++      const usage = countRuleUsage(rule.id);
++      meta.textContent = `Creata per ${modeLabels[rule.originMode] || "uso condiviso"} · usata in ${usage} ${usage === 1 ? "modello" : "modelli"}`;
++      content.append(text, meta);
++      row.append(checkbox, content);
++      checkbox.addEventListener("change", () => {
++        const next = new Set(getActiveRuleIds());
++        if (checkbox.checked) next.add(rule.id);
++        else next.delete(rule.id);
++        if (isCreatingModel) {
++          draftRuleIds = [...next];
++          renderRuleLibrary();
++          return;
++        }
++        profiles[currentMode] = {
++          ...(profiles[currentMode] || defaultProfile(currentMode)),
++          ruleIds: [...next],
++          allowEmptyRules: next.size === 0,
++        };
++        updateProfileRules(currentMode);
++        persistProfiles();
++        renderRuleLibrary();
++      });
++      list.appendChild(row);
++    });
++  };
++
++  const readVisibleProfile = (mode = currentMode, {markSaved = false} = {}) => ({
++    mode,
++    ...Object.fromEntries(Object.entries(profileFieldIds).map(([key, id]) => [key, document.getElementById(id)?.value])),
++    depth: Number(document.getElementById("promptDepth")?.value || 2),
++    ruleIds: [...getActiveRuleIds(mode)],
++    rules: rulesTextForIds(getActiveRuleIds(mode)),
++    ruleLibraryVersion,
++    allowEmptyRules: Boolean(profiles[mode]?.allowEmptyRules),
++    savedAt: markSaved ? new Date().toISOString() : profiles[mode]?.savedAt || null,
++  });
++
++  const setCreationUi = (active) => {
++    isCreatingModel = active;
++    editorPanel.classList.toggle("is-creating-model", active);
++    creationNameField.hidden = !active;
++    if (editorTitle) editorTitle.textContent = active ? "Aggiungi modello didattico" : "Configura il modello didattico";
++    if (editorDescription) {
++      editorDescription.textContent = active
++        ? "Inserisci il nome e usa gli stessi parametri già presenti per costruire il nuovo modello."
++        : "Definisci obiettivo, tratti, limiti e regole applicati quando lo studente sceglie questo modello.";
++    }
++    const saveButton = document.getElementById("saveBehaviorRules");
++    if (saveButton) saveButton.textContent = active ? "Crea modello" : "Salva modello";
++    const addButton = document.getElementById("startNewTeachingModel");
++    if (addButton) addButton.textContent = active ? "Nuovo modello in compilazione" : "＋ Crea un nuovo modello";
++  };
++
++  const fillVisibleFields = (profile) => {
++    Object.entries(profileFieldIds).forEach(([key, id]) => {
++      const node = document.getElementById(id);
++      if (node) {
++        node.value = String(profile[key] ?? "");
++        node._syncStudioSelect?.();
++      }
++    });
++  };
++
++  const fillProfile = (mode) => {
++    const profile = profiles[mode] || defaultProfile(mode);
++    setCreationUi(false);
++    if (modeSelect) modeSelect.value = mode;
++    fillVisibleFields(profile);
++    modeSelect?._syncStudioSelect?.();
++    systemPrompt.value = "";
++    updateProfileRules(mode);
++    renderRuleLibrary();
++    workingStatus.textContent = profile.savedAt
++      ? `${modeLabels[mode]} · salvato ${new Date(profile.savedAt).toLocaleString("it-IT")}.`
++      : `${modeLabels[mode]} · usa ancora i parametri iniziali e non è stato personalizzato.`;
++  };
++
++  const beginModelCreation = () => {
++    if (!isCreatingModel) {
++      profiles[currentMode] = readVisibleProfile(currentMode);
++      persistProfiles();
++    }
++    draftRuleIds = [];
++    setCreationUi(true);
++    if (nameInput) nameInput.value = "";
++    fillVisibleFields({
++      objective: "",
++      tone: "calm_direct",
++      depth: 2,
++      sources: "required",
++      solution: "guided",
++      memory: "session_only",
++      tools: "propose",
++    });
++    systemPrompt.value = "";
++    renderRuleLibrary();
++    workingStatus.textContent = "Compila il nome e i parametri, poi premi “Crea modello”.";
++    nameInput?.focus();
++  };
++
++  const createModelFromVisibleFields = ({notifyUser = true} = {}) => {
++    const name = nameInput?.value.trim().replace(/\s+/g, " ") || "";
++    const objective = document.getElementById("modelObjective")?.value.trim().replace(/\s+/g, " ") || "";
++    if (name.length < 3) {
++      workingStatus.textContent = "Inserisci un nome di almeno 3 caratteri.";
++      nameInput?.focus();
++      return null;
++    }
++    if (objective.length < 12) {
++      workingStatus.textContent = "Descrivi l’obiettivo con almeno 12 caratteri.";
++      document.getElementById("modelObjective")?.focus();
++      return null;
++    }
++    if (Object.values(modeLabels).some((label) => label.toLocaleLowerCase("it-IT") === name.toLocaleLowerCase("it-IT"))) {
++      workingStatus.textContent = "Esiste già un modello con questo nome.";
++      nameInput?.focus();
++      return null;
++    }
++
++    const slug = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("it-IT")
++      .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 32) || "modello";
++    let id = `custom-${slug}`;
++    let suffix = 2;
++    while (modes.includes(id)) {
++      id = `custom-${slug}-${suffix}`;
++      suffix += 1;
++    }
++
++    const createdAt = new Date().toISOString();
++    const visible = readVisibleProfile(id, {markSaved: true});
++    const ruleIds = [...new Set(draftRuleIds)].filter((ruleId) => ruleLibrary.some((rule) => rule.id === ruleId));
++    const definition = {
++      id,
++      name,
++      objective,
++      tone: visible.tone,
++      depth: visible.depth,
++      sources: visible.sources,
++      solution: visible.solution,
++      memory: visible.memory,
++      tools: visible.tools,
++      ruleIds,
++      createdAt,
++    };
++
++    customModelDefinitions.push(definition);
++    localStorage.setItem(customModelsKey, JSON.stringify(customModelDefinitions));
++    modes.push(id);
++    modeLabels[id] = name;
++    defaultObjectives[id] = objective;
++    defaultRules[id] = "";
++    modelDescriptions[id] = objective;
++    optionHelpDefinitions.promptMode[id] = [name, objective];
++    profiles[id] = {
++      ...visible,
++      mode: id,
++      objective,
++      ruleLibraryVersion,
++      allowEmptyRules: ruleIds.length === 0,
++      ruleIds,
++      rules: rulesTextForIds(ruleIds),
++      savedAt: createdAt,
++    };
++    persistRuleLibrary();
++    persistProfiles();
++
++    const option = new Option(name, id);
++    modeSelect?.add(option);
++    customSelects.get(modeSelect)?.addOption(option);
++    currentMode = id;
++    localStorage.setItem(activeModelKey, currentMode);
++    guide.querySelector(".tag.violet").textContent = `${modes.length} modelli configurabili`;
++    fillProfile(currentMode);
++    workingStatus.textContent = `${name} creato e pronto per essere modificato o provato.`;
++    if (notifyUser && typeof notify === "function") notify(`${name} creato`);
++    return {profiles: structuredClone(profiles), selectedModel: currentMode, savedAt: createdAt};
++  };
++
++  const saveCurrentModel = ({notifyUser = true} = {}) => {
++    if (isCreatingModel) return createModelFromVisibleFields({notifyUser});
++    profiles[currentMode] = readVisibleProfile(currentMode, {markSaved: true});
++    persistRuleLibrary();
++    persistProfiles();
++
++    localStorage.setItem(activeModelKey, currentMode);
++    window.dispatchEvent(new CustomEvent("eve:model-profile-updated", {
++      detail: {selectedModel: currentMode, profile: structuredClone(profiles[currentMode]), profiles: structuredClone(profiles)},
++    }));
++
++    const configured = Object.values(profiles).filter((profile) => profile.savedAt).length;
++    workingStatus.textContent = `${modeLabels[currentMode]} salvato · ${configured}/${modes.length} modelli personalizzati.`;
++    if (notifyUser && typeof notify === "function") notify(`${modeLabels[currentMode]} salvato`);
++    return {profiles: structuredClone(profiles), selectedModel: currentMode, savedAt: profiles[currentMode].savedAt};
++  };
++
++  modeSelect?.addEventListener("change", () => {
++    if (!isCreatingModel) {
++      profiles[currentMode] = readVisibleProfile(currentMode);
++      persistProfiles();
++    }
++    currentMode = modeSelect.value;
++    fillProfile(currentMode);
++  });
++
++  const addNewRule = () => {
++    const text = systemPrompt.value.trim().replace(/\s+/g, " ");
++    if (text.length < 8) {
++      workingStatus.textContent = "Scrivi una regola di almeno 8 caratteri prima di aggiungerla.";
++      systemPrompt.focus();
++      return;
++    }
++    if (text.length > 500) {
++      workingStatus.textContent = "La regola è troppo lunga: usa al massimo 500 caratteri e separa le istruzioni diverse.";
++      systemPrompt.focus();
++      return;
++    }
++    const id = ensureRuleInLibrary(text, isCreatingModel ? "__new__" : currentMode);
++    const next = new Set(getActiveRuleIds());
++    next.add(id);
++    if (isCreatingModel) {
++      draftRuleIds = [...next];
++      persistRuleLibrary();
++      systemPrompt.value = "";
++      renderRuleLibrary();
++      workingStatus.textContent = "Regola aggiunta al nuovo modello e resa disponibile nella libreria condivisa.";
++      if (typeof notify === "function") notify("Regola aggiunta alla libreria");
++      return;
++    }
++    profiles[currentMode] = {
++      ...(profiles[currentMode] || defaultProfile(currentMode)),
++      ruleIds: [...next],
++      allowEmptyRules: false,
++    };
++    updateProfileRules(currentMode);
++    persistRuleLibrary();
++    persistProfiles();
++    systemPrompt.value = "";
++    renderRuleLibrary();
++    workingStatus.textContent = `Regola aggiunta e attivata per ${modeLabels[currentMode]}. Ora è disponibile anche per gli altri modelli.`;
++    if (typeof notify === "function") notify("Regola aggiunta alla libreria");
++  };
++
++  document.getElementById("addBehaviorRule")?.addEventListener("click", addNewRule);
++  systemPrompt.addEventListener("keydown", (event) => {
++    if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
++      event.preventDefault();
++      addNewRule();
++    }
++  });
++  document.getElementById("startNewTeachingModel")?.addEventListener("click", beginModelCreation);
++  document.getElementById("saveBehaviorRules")?.addEventListener("click", () => saveCurrentModel());
++  document.getElementById("tryBehaviorRules")?.addEventListener("click", () => {
++    const saved = saveCurrentModel();
++    if (!saved) return;
++    localStorage.setItem(activeModelKey, currentMode);
++    document.querySelector('[data-view="laboratory"]')?.click();
++    document.querySelector(".chat-layout")?.scrollIntoView({behavior: "smooth", block: "start"});
++    document.getElementById("chatInput")?.focus();
++  });
++
++  fillProfile(currentMode);
++
++  const promptNav = document.querySelector('[data-view="prompts"]');
++  if (promptNav) promptNav.lastChild.textContent = "Modelli e comportamento";
++  promptNav?.addEventListener("click", () => {
++    const title = document.getElementById("pageTitle");
++    const subtitle = document.getElementById("pageSubtitle");
++    if (title) title.textContent = "Modelli e comportamento";
++    if (subtitle) subtitle.textContent = "Crea e modifica ogni modello definendone obiettivo, tratti, limiti e regole di comportamento.";
++  });
++})();
+diff --git a/reference/eve-ai-studio-preview/model-test-workflow.js b/reference/eve-ai-studio-preview/model-test-workflow.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..bed72ba1e6d56bf3fef6ca59f6171fc3c27c8ddd
+--- /dev/null
++++ b/reference/eve-ai-studio-preview/model-test-workflow.js
+@@ -0,0 +1,208 @@
++(() => {
++  const laboratory = document.getElementById("laboratory");
++  const chatLayout = laboratory?.querySelector(".chat-layout");
++  if (!laboratory || !chatLayout || document.getElementById("modelTestWorkspace")) return;
++
++  const profilesKey = "eve-studio-model-profiles-v1";
++  const activeModelKey = "eve-studio-active-model-v1";
++  const modes = ["adaptive_explanation", "socratic", "quiz", "correction", "planning"];
++  const modeLabels = {
++    adaptive_explanation: "Spiegazione adattiva",
++    socratic: "Metodo socratico",
++    quiz: "Quiz e interrogazione",
++    correction: "Correzione guidata",
++    planning: "Pianificazione",
++  };
++  const sessionModeLabels = {
++    adaptive_explanation: "Spiegazione adattiva",
++    socratic: "Metodo socratico",
++    quiz: "Interrogazione",
++    correction: "Correzione",
++    planning: "Pianificazione",
++  };
++  const parameterLabels = {
++    tone: {
++      calm_direct: "Calmo e diretto",
++      friendly: "Amichevole",
++      technical: "Tecnico",
++    },
++    sources: {
++      required: "Obbligatorie",
++      when_available: "Quando disponibili",
++      disabled: "Disattivate",
++    },
++    solution: {
++      guided: "Guida prima della soluzione",
++      direct: "Risposta diretta",
++      never_immediate: "Mai immediata",
++    },
++    memory: {
++      consent: "Con consenso",
++      session_only: "Solo sessione",
++      off: "Disattivata",
++    },
++    tools: {
++      propose: "Solo proposta",
++      read_only: "Sola lettura",
++      confirm: "Con conferma",
++    },
++  };
++
++  const readJson = (key, fallback) => {
++    try {
++      return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback));
++    } catch {
++      return fallback;
++    }
++  };
++  const loadProfiles = () => readJson(profilesKey, {});
++  const loadActiveMode = () => {
++    const stored = localStorage.getItem(activeModelKey);
++    return modes.includes(stored) ? stored : "adaptive_explanation";
++  };
++
++  const workspace = document.createElement("section");
++  workspace.id = "modelTestWorkspace";
++  workspace.className = "panel model-test-panel";
++  workspace.innerHTML = `
++    <div class="panel-head">
++      <div>
++        <h3>Modello in prova</h3>
++        <p>Qui non modifichi Eve: scegli un modello salvato, provalo nella chat e poi invialo a Pubblica.</p>
++      </div>
++      <span class="tag warn" id="modelTestStatus">Da verificare</span>
++    </div>
++    <div class="panel-body model-test-layout">
++      <div class="field">
++        <label for="modelTestSelect">Modello da provare</label>
++        <select id="modelTestSelect">
++          ${modes.map((mode) => `<option value="${mode}">${modeLabels[mode]}</option>`).join("")}
++        </select>
++      </div>
++      <div class="model-test-summary" id="modelTestSummary"></div>
++      <button class="btn primary" id="sendTestedModelToPublish" type="button">Invia a Pubblica</button>
++    </div>
++    <p class="model-test-note" id="modelTestNote">Le modifiche permanenti si effettuano esclusivamente in “Modelli e comportamento”.</p>
++  `;
++  laboratory.insertBefore(workspace, laboratory.firstElementChild);
++
++  const modelSelect = document.getElementById("modelTestSelect");
++  const sendButton = document.getElementById("sendTestedModelToPublish");
++  let activeMode = loadActiveMode();
++
++  const setSwitch = (selector, enabled) => {
++    const node = document.querySelector(selector);
++    if (!node) return;
++    node.classList.toggle("on", enabled);
++    node.disabled = true;
++    node.setAttribute("aria-disabled", "true");
++  };
++
++  const applyProfileToChat = (profile) => {
++    if (!profile) return;
++    const modeSelect = document.getElementById("modeSelect");
++    const wantedMode = sessionModeLabels[profile.mode];
++    if (modeSelect) {
++      const option = [...modeSelect.options].find((item) => item.textContent === wantedMode);
++      if (option) modeSelect.value = option.value;
++      modeSelect.disabled = true;
++    }
++
++    const depthRange = document.getElementById("depthRange");
++    if (depthRange) {
++      depthRange.value = String(profile.depth || 2);
++      depthRange.dispatchEvent(new Event("input", {bubbles: true}));
++      depthRange.disabled = true;
++    }
++
++    setSwitch('[data-toggle="sources"]', profile.sources === "required");
++    setSwitch('[data-toggle="memory"]', profile.memory === "consent");
++
++    const actionSelect = document.querySelector(".chat-side .control:last-of-type select");
++    if (actionSelect) {
++      actionSelect.selectedIndex = {propose: 0, read_only: 1, confirm: 2}[profile.tools] ?? 0;
++      actionSelect.disabled = true;
++    }
++
++    const sidePanel = document.querySelector(".chat-side");
++    if (sidePanel && !document.getElementById("modelTestReadOnlyNote")) {
++      const note = document.createElement("p");
++      note.id = "modelTestReadOnlyNote";
++      note.className = "model-test-readonly-note";
++      note.textContent = "Parametri applicati dal modello salvato. Per modificarli torna a “Modelli e comportamento”.";
++      sidePanel.insertBefore(note, sidePanel.querySelector(".btn"));
++    }
++  };
++
++  const render = () => {
++    const profiles = loadProfiles();
++    const profile = profiles[activeMode];
++    modelSelect.value = activeMode;
++    localStorage.setItem(activeModelKey, activeMode);
++
++    const status = document.getElementById("modelTestStatus");
++    const summary = document.getElementById("modelTestSummary");
++    const note = document.getElementById("modelTestNote");
++    const activeRules = Array.isArray(profile?.ruleIds) ? profile.ruleIds.length : 0;
++    const isSaved = Boolean(profile?.savedAt);
++
++    status.textContent = isSaved ? "Modello salvato" : "Da salvare";
++    status.className = isSaved ? "tag" : "tag warn";
++    sendButton.disabled = !isSaved;
++    summary.textContent = profile
++      ? [
++          `${modeLabels[activeMode]} · profondità ${profile.depth || 2}/4 · ${activeRules} ${activeRules === 1 ? "regola" : "regole"}`,
++          `Obiettivo: ${profile.objective || "Non definito"}`,
++          `Tono: ${parameterLabels.tone[profile.tone] || profile.tone} · Soluzioni: ${parameterLabels.solution[profile.solution] || profile.solution}`,
++          `Fonti: ${parameterLabels.sources[profile.sources] || profile.sources} · Memoria: ${parameterLabels.memory[profile.memory] || profile.memory} · Azioni: ${parameterLabels.tools[profile.tools] || profile.tools}`,
++        ].join("\n")
++      : `${modeLabels[activeMode]} non è ancora stato configurato.`;
++    note.textContent = isSaved
++      ? `Configurazione salvata ${new Date(profile.savedAt).toLocaleString("it-IT")}. Le modifiche permanenti si effettuano in “Modelli e comportamento”.`
++      : "Salva prima questo modello in “Modelli e comportamento”; poi potrai provarlo e inviarlo a Pubblica.";
++    applyProfileToChat(profile);
++  };
++
++  modelSelect.addEventListener("change", () => {
++    activeMode = modelSelect.value;
++    render();
++  });
++
++  sendButton.addEventListener("click", () => {
++    const profiles = loadProfiles();
++    const profile = profiles[activeMode];
++    if (!profile?.savedAt) {
++      if (typeof notify === "function") notify("Salva il modello prima di inviarlo a Pubblica");
++      return;
++    }
++    const payload = {
++      profiles,
++      selectedModel: activeMode,
++      savedAt: profile.savedAt,
++    };
++    if (typeof window.__EVE_SEND_TO_PUBLISH__ === "function") {
++      window.__EVE_SEND_TO_PUBLISH__(payload);
++    } else {
++      window.dispatchEvent(new CustomEvent("eve:send-to-publish", {detail: payload}));
++    }
++    document.querySelector('[data-view="publish"]')?.click();
++  });
++
++  window.addEventListener("eve:model-profile-updated", (event) => {
++    const selected = event.detail?.selectedModel;
++    if (modes.includes(selected)) activeMode = selected;
++    render();
++  });
++
++  const laboratoryNav = document.querySelector('[data-view="laboratory"]');
++  laboratoryNav?.addEventListener("click", () => {
++    activeMode = loadActiveMode();
++    render();
++    const title = document.getElementById("pageTitle");
++    const subtitle = document.getElementById("pageSubtitle");
++    if (title) title.textContent = "Configura e prova";
++    if (subtitle) subtitle.textContent = "Prova in chat un modello salvato e, quando è pronto, invialo a Pubblica.";
++  });
++
++  render();
++})();
+diff --git a/reference/eve-ai-studio-preview/particles.js b/reference/eve-ai-studio-preview/particles.js
+index bfd9e9f23b120f248da6d3d465cb61442c332476..1a48eda88bc9a16b9f37214ce279e8dc3c24be59 100644
+--- a/reference/eve-ai-studio-preview/particles.js
++++ b/reference/eve-ai-studio-preview/particles.js
+@@ -10,6 +10,9 @@ function startParticleField(){
+   let height=0;
+   let dpr=1;
+   let particles=[];
++  let frameId=0;
++  let resizeFrameId=0;
++  let running=false;
+ 
+   function resize(){
+     dpr=Math.min(window.devicePixelRatio||1,2);
+@@ -34,12 +37,14 @@ function startParticleField(){
+     }));
+   }
+ 
+-  function draw(){
++  function paint(updateParticles){
+     ctx.clearRect(0,0,width,height);
++    const connectionDistance=105;
++    const connectionDistanceSquared=connectionDistance*connectionDistance;
+ 
+     for(let index=0;index<particles.length;index+=1){
+       const particle=particles[index];
+-      if(!reduceMotion){
++      if(updateParticles){
+         particle.x+=particle.vx;
+         particle.y+=particle.vy;
+         particle.pulse+=.008;
+@@ -61,10 +66,13 @@ function startParticleField(){
+ 
+       for(let targetIndex=index+1;targetIndex<particles.length;targetIndex+=1){
+         const target=particles[targetIndex];
+-        const distance=Math.hypot(particle.x-target.x,particle.y-target.y);
+-        if(distance<105){
++        const deltaX=particle.x-target.x;
++        const deltaY=particle.y-target.y;
++        const distanceSquared=deltaX*deltaX+deltaY*deltaY;
++        if(distanceSquared<connectionDistanceSquared){
++          const distance=Math.sqrt(distanceSquared);
+           ctx.beginPath();
+-          ctx.strokeStyle=`rgba(0,223,242,${(1-distance/105)*.045})`;
++          ctx.strokeStyle=`rgba(0,223,242,${(1-distance/connectionDistance)*.045})`;
+           ctx.lineWidth=.6;
+           ctx.moveTo(particle.x,particle.y);
+           ctx.lineTo(target.x,target.y);
+@@ -72,13 +80,59 @@ function startParticleField(){
+         }
+       }
+     }
++  }
++
++  function draw(){
++    frameId=0;
++    if(!running||document.hidden)return;
++    paint(true);
++    frameId=requestAnimationFrame(draw);
++  }
++
++  function start(){
++    if(reduceMotion||running||document.hidden)return;
++    running=true;
++    canvas.dataset.graphicsRunning="true";
++    if(!frameId)frameId=requestAnimationFrame(draw);
++  }
++
++  function stop(){
++    running=false;
++    canvas.dataset.graphicsRunning="false";
++    if(frameId){
++      cancelAnimationFrame(frameId);
++      frameId=0;
++    }
++  }
+ 
+-    if(!reduceMotion)requestAnimationFrame(draw);
++  function scheduleResize(){
++    if(resizeFrameId)return;
++    resizeFrameId=requestAnimationFrame(()=>{
++      resizeFrameId=0;
++      resize();
++      if(reduceMotion||!running)paint(false);
++    });
++  }
++
++  function syncVisibility(){
++    document.body.classList.toggle("graphics-page-hidden",document.hidden);
++    if(document.hidden)stop();
++    else start();
+   }
+ 
+   resize();
+-  window.addEventListener("resize",resize,{passive:true});
+-  draw();
++  paint(false);
++  canvas.dataset.graphicsRunning="false";
++  start();
++  window.addEventListener("resize",scheduleResize,{passive:true});
++  document.addEventListener("visibilitychange",syncVisibility,{passive:true});
++
++  window.EveGraphicsPerformance=Object.assign(window.EveGraphicsPerformance||{},{
++    particleField:{
++      isRunning:()=>running,
++      particleCount:()=>particles.length
++    }
++  });
+ }
+ 
+ startParticleField();
+diff --git a/reference/eve-ai-studio-preview/prompt-workflow.js b/reference/eve-ai-studio-preview/prompt-workflow.js
+deleted file mode 100644
+index 2e931302ee07ea1ebe2f9a216049525d4c467e38..0000000000000000000000000000000000000000
+--- a/reference/eve-ai-studio-preview/prompt-workflow.js
++++ /dev/null
+@@ -1,52 +0,0 @@
+-const promptVersions=[
+- {id:1,number:1,status:"published",active:true,name:"Eve Tutor Base",mode:"adaptive_explanation",prompt:"Sei Eve, tutor didattico di Aula Studio Virtuale. Usa soltanto il contesto autorizzato, mostra le fonti quando richieste, distingui fatti e ipotesi, dichiara l'incertezza e non eseguire azioni senza il livello di autorizzazione necessario. Adatta spiegazioni, esempi e domande al livello dello studente.",parameters:{tone:"calm_direct",depth:2,sources:"required",solution:"guided",memory:"consent",tools:"propose"}},
+- {id:2,number:2,status:"in_review",active:false,name:"Eve Tutor Socratico",mode:"socratic",prompt:"Sei Eve, tutor socratico di Aula Studio Virtuale. Formula domande progressive, usa indizi graduati e non fornire immediatamente la soluzione. Usa soltanto fonti e contesto autorizzati.",parameters:{tone:"calm_direct",depth:3,sources:"required",solution:"never_immediate",memory:"consent",tools:"propose"}},
+- {id:3,number:3,status:"draft",active:false,name:"Eve Quiz Guidato",mode:"quiz",prompt:"Sei Eve in modalità quiz. Formula una domanda per volta, attendi la risposta, valuta il ragionamento e fornisci feedback formativo senza modificare il progresso senza conferma.",parameters:{tone:"friendly",depth:2,sources:"when_available",solution:"never_immediate",memory:"session_only",tools:"confirm"}}
+-];
+-let selectedPromptVersionId=3;
+-const promptStatusLabels={draft:"Bozza",in_review:"In revisione",publishable:"Pubblicabile",published:"Pubblicata",archived:"Archiviata"};
+-function promptById(id){return promptVersions.find(item=>item.id===Number(id))}
+-function promptTagClass(status){return status==="published"?"tag":status==="draft"?"tag warn":status==="archived"?"tag red":"tag violet"}
+-function readPromptEditor(){return {name:document.getElementById("promptName").value.trim(),mode:document.getElementById("promptMode").value,prompt:document.getElementById("systemPrompt").value.trim(),parameters:{tone:document.getElementById("promptTone").value,depth:Number(document.getElementById("promptDepth").value),sources:document.getElementById("promptSources").value,solution:document.getElementById("promptSolution").value,memory:document.getElementById("promptMemory").value,tools:document.getElementById("promptTools").value}}}
+-function renderPromptOptions(){
+- const options=promptVersions.map(v=>`<option value="${v.id}">v${v.number} · ${promptStatusLabels[v.status]} · ${v.name}</option>`).join("");
+- ["promptVersionSelect","promptCompareFrom","promptCompareTo","promptRollbackSource"].forEach(id=>{const select=document.getElementById(id);if(select){const old=select.value;select.innerHTML=options;if(old&&promptById(old))select.value=old}});
+- document.getElementById("promptVersionCount").textContent=promptVersions.length;
+- const active=promptVersions.find(v=>v.active);document.getElementById("promptActiveBadge").textContent=active?`Attiva · v${active.number}`:"Nessuna attiva";
+-}
+-function renderPromptVersion(id){
+- const version=promptById(id);if(!version)return;selectedPromptVersionId=version.id;
+- document.getElementById("promptVersionSelect").value=String(version.id);document.getElementById("promptName").value=version.name;document.getElementById("systemPrompt").value=version.prompt;document.getElementById("promptMode").value=version.mode;document.getElementById("promptTone").value=version.parameters.tone;document.getElementById("promptDepth").value=String(version.parameters.depth);document.getElementById("promptSources").value=version.parameters.sources;document.getElementById("promptSolution").value=version.parameters.solution;document.getElementById("promptMemory").value=version.parameters.memory;document.getElementById("promptTools").value=version.parameters.tools;
+- const badge=document.getElementById("promptStatusBadge");badge.textContent=promptStatusLabels[version.status];badge.className=promptTagClass(version.status);
+- document.getElementById("submitPromptReview").disabled=version.status!=="draft";document.getElementById("approvePromptTests").disabled=version.status!=="in_review";document.getElementById("publishPromptVersion").disabled=version.status!=="publishable";
+- document.getElementById("promptWorkflowMessage").textContent=`v${version.number} · ${promptStatusLabels[version.status]}${version.active?" · configurazione attiva":""}`;
+- renderPromptList();
+-}
+-function renderPromptList(){
+- const list=document.getElementById("promptVersionList");list.innerHTML=promptVersions.slice().sort((a,b)=>b.number-a.number).map(v=>`<div class="row"><div class="meta"><strong>v${v.number} · ${v.name}</strong><small>${promptStatusLabels[v.status]} · ${v.mode}${v.active?" · attiva":""}</small></div><button class="btn prompt-version-open" data-version="${v.id}">Apri</button></div>`).join("");
+- document.querySelectorAll(".prompt-version-open").forEach(button=>button.onclick=()=>renderPromptVersion(button.dataset.version));
+-}
+-function savePromptDraft(){
+- const data=readPromptEditor();if(data.prompt.length<50){notify("Il prompt deve contenere almeno 50 caratteri");return}
+- const next=Math.max(...promptVersions.map(v=>v.number))+1;const id=Math.max(...promptVersions.map(v=>v.id))+1;promptVersions.push({id,number:next,status:"draft",active:false,...data});renderPromptOptions();renderPromptVersion(id);notify(`Bozza v${next} creata senza sovrascrivere lo storico`)
+-}
+-function transitionPrompt(target){
+- const version=promptById(selectedPromptVersionId);if(!version)return;
+- const allowed={draft:["in_review"],in_review:["draft","publishable"],publishable:["draft","published"],published:["archived"],archived:[]};if(!allowed[version.status].includes(target)){notify(`Transizione bloccata: ${version.status} → ${target}`);return}
+- if(target==="published"){promptVersions.filter(v=>v.active&&v.id!==version.id).forEach(v=>{v.active=false;v.status="archived"});version.active=true}
+- version.status=target;renderPromptOptions();renderPromptVersion(version.id);notify(`v${version.number}: ${promptStatusLabels[target]}`)
+-}
+-function comparePromptVersions(){
+- const from=promptById(document.getElementById("promptCompareFrom").value),to=promptById(document.getElementById("promptCompareTo").value);const fields=[];if(from.name!==to.name)fields.push("name");if(from.prompt!==to.prompt)fields.push("system_prompt");if(from.mode!==to.mode)fields.push("didactic_mode");if(from.status!==to.status)fields.push("status");Object.keys(from.parameters).forEach(key=>{if(from.parameters[key]!==to.parameters[key])fields.push(`parameters.${key}`)});document.getElementById("promptDiffList").innerHTML=fields.length?fields.map(field=>`<div class="row"><div class="meta"><strong>${field}</strong><small>Valore differente tra v${from.number} e v${to.number}</small></div><span class="tag warn">Modificato</span></div>`).join(""):'<div class="empty">Nessuna differenza tra le versioni selezionate.</div>';notify(`Confronto prompt v${from.number} → v${to.number} completato`)
+-}
+-function createPromptRollback(){
+- const source=promptById(document.getElementById("promptRollbackSource").value);const next=Math.max(...promptVersions.map(v=>v.number))+1,id=Math.max(...promptVersions.map(v=>v.id))+1;promptVersions.push({...source,id,number:next,status:"draft",active:false,name:`${source.name} · rollback`});document.getElementById("promptRollbackTitle").textContent=`Creata v${next} da v${source.number}`;document.getElementById("promptRollbackText").textContent="La sorgente e tutte le versioni successive sono rimaste disponibili.";document.getElementById("promptRollbackStatus").textContent="Bozza";renderPromptOptions();renderPromptVersion(id);notify("Rollback non distruttivo creato come nuova bozza")
+-}
+-document.getElementById("promptVersionSelect")?.addEventListener("change",event=>renderPromptVersion(event.target.value));
+-document.getElementById("savePromptDraft")?.addEventListener("click",savePromptDraft);
+-document.getElementById("submitPromptReview")?.addEventListener("click",()=>transitionPrompt("in_review"));
+-document.getElementById("approvePromptTests")?.addEventListener("click",()=>transitionPrompt("publishable"));
+-document.getElementById("publishPromptVersion")?.addEventListener("click",()=>transitionPrompt("published"));
+-document.getElementById("comparePromptVersions")?.addEventListener("click",comparePromptVersions);
+-document.getElementById("createPromptRollback")?.addEventListener("click",createPromptRollback);
+-renderPromptOptions();document.getElementById("promptCompareFrom").value="1";document.getElementById("promptCompareTo").value="3";document.getElementById("promptRollbackSource").value="1";renderPromptVersion(3);comparePromptVersions();
+diff --git a/reference/eve-ai-studio-preview/runner-workflow.js b/reference/eve-ai-studio-preview/runner-workflow.js
+index a5f612c403fbce3c11f75a6eff55d7eec6518844..ed77c6b964d30e4ab7fee0dbb8f698880209f734 100644
+--- a/reference/eve-ai-studio-preview/runner-workflow.js
++++ b/reference/eve-ai-studio-preview/runner-workflow.js
+@@ -71,9 +71,9 @@
+           <div class="form-grid">
+             <div class="field"><label for="automaticRunnerPrompt">Versione prompt</label>
+               <select id="automaticRunnerPrompt">
+-                <option value="1">v1 · Eve Tutor Base</option>
+-                <option value="2">v2 · Eve Tutor Socratico</option>
+-                <option value="3" selected>v3 · Eve Quiz Guidato</option>
++                <option value="1">Versione 1 · Spiegazione adattiva</option>
++                <option value="2">Versione 2 · Metodo socratico</option>
++                <option value="3" selected>Versione 3 · Quiz e interrogazione</option>
+               </select>
+             </div>
+             <div class="field"><label for="automaticRunnerMode">Simulazione provider</label>
+diff --git a/reference/eve-ai-studio-preview/simple-studio-navigation.js b/reference/eve-ai-studio-preview/simple-studio-navigation.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..06ad69540acc15d0b98d2d7c3fc2941d4965e725
+--- /dev/null
++++ b/reference/eve-ai-studio-preview/simple-studio-navigation.js
+@@ -0,0 +1,154 @@
++(() => {
++  const nav = document.querySelector(".sidebar .nav");
++  if (!nav || nav.dataset.organized === "true") return;
++
++  const label = nav.previousElementSibling;
++  if (label?.classList.contains("nav-label")) {
++    label.textContent = "Percorso di lavoro";
++  }
++
++  const definitions = [
++    {
++      id: "build",
++      label: "Costruisci Eve",
++      description: "Modelli, comportamento e prova in chat",
++      icon: "✦",
++      views: ["laboratory", "prompts", "providers"],
++    },
++    {
++      id: "knowledge",
++      label: "Conoscenza",
++      description: "Fonti, ricerca e memoria",
++      icon: "⌕",
++      views: ["materials", "rag-materials", "intelligence-research", "memory"],
++    },
++    {
++      id: "appearance",
++      label: "Aspetto",
++      description: "Voce, identità e animazioni",
++      icon: "◉",
++      views: ["animation-library"],
++    },
++    {
++      id: "quality",
++      label: "Controllo qualità",
++      description: "Requisiti, sicurezza e test",
++      icon: "✓",
++      views: ["requirements", "tests"],
++    },
++    {
++      id: "publish",
++      label: "Pubblica",
++      description: "Versioni e rilascio",
++      icon: "↑",
++      views: ["versions", "publish"],
++    },
++  ];
++
++  const existingButtons = [...nav.querySelectorAll(":scope > button[data-view]")];
++  const viewLabels = {
++    laboratory: "Configura e prova",
++    prompts: "Modelli e comportamento",
++    providers: "Connessione AI",
++  };
++  existingButtons.forEach((button) => {
++    const replacement = viewLabels[button.dataset.view];
++    if (replacement && button.lastChild) button.lastChild.textContent = replacement;
++  });
++  const dashboardButton = existingButtons.find((button) => button.dataset.view === "dashboard");
++  const assignedViews = new Set(definitions.flatMap((definition) => definition.views));
++  const unassignedButtons = existingButtons.filter(
++    (button) => button !== dashboardButton && !assignedViews.has(button.dataset.view)
++  );
++
++  const intro = document.createElement("p");
++  intro.className = "studio-nav-intro";
++  intro.textContent = "Scegli cosa vuoi fare. Gli strumenti tecnici restano disponibili dentro ogni area.";
++
++  nav.replaceChildren(intro);
++  nav.classList.add("studio-nav--grouped");
++  nav.dataset.organized = "true";
++
++  if (dashboardButton) {
++    dashboardButton.classList.add("studio-nav-home");
++    nav.appendChild(dashboardButton);
++  }
++
++  const groups = definitions.map((definition) => {
++    const details = document.createElement("details");
++    details.className = "studio-nav-group";
++    details.dataset.group = definition.id;
++
++    const summary = document.createElement("summary");
++    summary.innerHTML = `
++      <span class="studio-nav-group__icon" aria-hidden="true">${definition.icon}</span>
++      <span class="studio-nav-group__copy">
++        <strong>${definition.label}</strong>
++        <small>${definition.description}</small>
++      </span>
++    `;
++
++    const items = document.createElement("div");
++    items.className = "studio-nav-group__items";
++    definition.views.forEach((view) => {
++      const button = existingButtons.find((candidate) => candidate.dataset.view === view);
++      if (button) items.appendChild(button);
++    });
++
++    if (!items.children.length) details.hidden = true;
++    details.append(summary, items);
++    nav.appendChild(details);
++    return details;
++  });
++
++  if (unassignedButtons.length) {
++    const details = document.createElement("details");
++    details.className = "studio-nav-group studio-nav-unassigned";
++    details.innerHTML = `
++      <summary>
++        <span class="studio-nav-group__icon" aria-hidden="true">⋯</span>
++        <span class="studio-nav-group__copy">
++          <strong>Altri strumenti</strong>
++          <small>Funzioni ancora da classificare</small>
++        </span>
++      </summary>
++      <div class="studio-nav-group__items"></div>
++    `;
++    const items = details.querySelector(".studio-nav-group__items");
++    unassignedButtons.forEach((button) => items.appendChild(button));
++    nav.appendChild(details);
++    groups.push(details);
++  }
++
++  const syncCurrentGroup = () => {
++    const activeButton = nav.querySelector("button.active[data-view]");
++    groups.forEach((group) => {
++      const isCurrent = Boolean(activeButton && group.contains(activeButton));
++      group.classList.toggle("is-current", isCurrent);
++      if (isCurrent) group.open = true;
++      else if (activeButton) group.open = false;
++    });
++  };
++
++  groups.forEach((group) => {
++    group.addEventListener("toggle", () => {
++      if (!group.open) return;
++      groups.forEach((other) => {
++        if (other !== group && !other.classList.contains("is-current")) other.open = false;
++      });
++    });
++  });
++
++  nav.addEventListener("click", (event) => {
++    if (!(event.target instanceof Element)) return;
++    const button = event.target.closest("button[data-view]");
++    if (!button) return;
++    requestAnimationFrame(syncCurrentGroup);
++  });
++
++  const observer = new MutationObserver(syncCurrentGroup);
++  nav.querySelectorAll("button[data-view]").forEach((button) => {
++    observer.observe(button, { attributes: true, attributeFilter: ["class"] });
++  });
++  syncCurrentGroup();
++})();
+diff --git a/reference/eve-ai-studio-preview/styles.css b/reference/eve-ai-studio-preview/styles.css
+index c410fa56542573e2d03ef4324a7aadd27b7a9fe3..5ac6714197ad6fef50e6cdbe503c71099ec62fe2 100644
+--- a/reference/eve-ai-studio-preview/styles.css
++++ b/reference/eve-ai-studio-preview/styles.css
+@@ -45,6 +45,9 @@ button,input,textarea,select{font:inherit}button{color:inherit;cursor:pointer}
+ .eve-card::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(135deg,rgba(0,223,242,.07),transparent 42%,rgba(122,124,255,.08));z-index:0}.eve-orb-stage{position:relative;z-index:1;min-height:230px;display:grid;place-items:center;padding:6px 0 0;background:radial-gradient(circle at 50% 42%,rgba(0,223,242,.13),transparent 42%),radial-gradient(circle at 72% 22%,rgba(122,124,255,.12),transparent 32%)}.eve-portrait{height:232px;width:100%;display:block;overflow:visible}.eve-meta{position:relative;z-index:2;padding:14px 15px 16px;border-top:1px solid var(--line);background:linear-gradient(180deg,rgba(15,34,46,.62),rgba(7,19,27,.96))}.eve-line{display:flex;align-items:center;justify-content:space-between;gap:8px}.eve-line h2{font-size:19px;margin:0}.eve-meta p{margin:6px 0 0;color:var(--muted);font-size:12px}
+ .pill{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:11px;background:rgba(0,223,242,.035)}.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 14px var(--green)}
+ .nav-label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:18px 10px 8px;font-weight:800}.nav{display:grid;gap:5px}.nav button{width:100%;min-height:42px;border:1px solid transparent;border-radius:var(--radius-sm);padding:10px 12px;background:transparent;color:var(--muted);text-align:left;display:flex;align-items:center;gap:10px;font-weight:700;transition:transform 160ms ease,background 160ms ease,border-color 160ms ease}.nav button:hover,.nav button.active{transform:translateY(-1px);border-color:color-mix(in srgb,var(--green) 34%,var(--line));background:linear-gradient(180deg,color-mix(in srgb,var(--surface-strong) 88%,var(--green) 7%),var(--surface-strong));color:var(--ink);box-shadow:inset 0 0 0 1px rgba(0,223,242,.03)}.nav .ico{width:22px;text-align:center;font-size:16px;color:var(--green-2)}
++.nav.studio-nav--grouped{display:block}.studio-nav-intro{margin:0 8px 10px;color:var(--muted);font-size:11px;line-height:1.45}.studio-nav-home{margin-bottom:6px}.studio-nav-group{margin:6px 0;border:1px solid color-mix(in srgb,var(--line) 74%,transparent);border-radius:var(--radius-md);background:color-mix(in srgb,var(--surface-strong) 44%,transparent);overflow:hidden;transition:border-color 160ms ease,background 160ms ease}.studio-nav-group[open],.studio-nav-group.is-current{border-color:color-mix(in srgb,var(--green) 28%,var(--line));background:color-mix(in srgb,var(--surface-strong) 76%,transparent)}.studio-nav-group summary{min-height:46px;padding:9px 11px;display:grid;grid-template-columns:27px minmax(0,1fr) 16px;gap:8px;align-items:center;color:var(--ink);cursor:pointer;list-style:none;user-select:none}.studio-nav-group summary::-webkit-details-marker{display:none}.studio-nav-group summary::after{content:"›";color:var(--muted);font-size:20px;line-height:1;transform:rotate(0);transition:transform 160ms ease}.studio-nav-group[open] summary::after{transform:rotate(90deg)}.studio-nav-group__icon{width:27px;height:27px;border:1px solid var(--line);border-radius:9px;display:grid;place-items:center;color:var(--green-2);background:rgba(0,223,242,.045)}.studio-nav-group__copy{min-width:0}.studio-nav-group__copy strong,.studio-nav-group__copy small{display:block}.studio-nav-group__copy strong{font-size:12px}.studio-nav-group__copy small{margin-top:2px;color:var(--muted);font-size:9px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.studio-nav-group__items{padding:0 5px 6px;border-top:1px solid color-mix(in srgb,var(--line) 65%,transparent)}.nav .studio-nav-group__items button{min-height:37px;padding:8px 9px;font-size:11px}.nav .studio-nav-group__items .ico{font-size:13px}.studio-nav-unassigned{margin-top:8px}
++.build-eve-panel{margin-bottom:16px}.build-eve-head{align-items:flex-start}.build-eve-status{display:flex;gap:7px;align-items:center;flex-wrap:wrap}.build-eve-grid{display:grid;grid-template-columns:1.05fr 1fr 1fr;gap:12px}.build-eve-step{padding:14px;border:1px solid var(--line);border-radius:var(--radius-md);background:color-mix(in srgb,var(--surface) 82%,transparent)}.build-eve-step__title{display:flex;gap:9px;align-items:center;margin-bottom:12px}.build-eve-step__number{width:27px;height:27px;border-radius:9px;display:grid;place-items:center;color:var(--accent-text);font-size:11px;font-weight:850;background:linear-gradient(135deg,var(--green-2),var(--green))}.build-eve-step h4{margin:0;font-size:13px}.build-eve-step p{margin:3px 0 0;color:var(--muted);font-size:10px}.build-eve-step .field+.field{margin-top:10px}.build-eve-preview{margin-top:12px;padding:13px 14px;border:1px solid color-mix(in srgb,var(--green) 25%,var(--line));border-radius:var(--radius-md);background:var(--code-bg);color:#cceff4;font:11px/1.65 ui-monospace,SFMono-Regular,Consolas;white-space:pre-wrap}.build-eve-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px}.build-eve-actions__advanced{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto}.build-eve-note{margin:10px 0 0;color:var(--muted);font-size:10px}.build-eve-note strong{color:var(--ink)}
++.prompt-guide{grid-column:1/-1}.prompt-guide__top{display:flex;justify-content:space-between;align-items:flex-start;gap:15px}.prompt-guide__top h3{margin:0 0 5px}.prompt-guide__top p{margin:0;color:var(--muted);max-width:720px}.prompt-guide__steps{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:14px}.prompt-guide__step{padding:12px;border:1px solid var(--line);border-radius:var(--radius-md);background:color-mix(in srgb,var(--surface) 82%,transparent)}.prompt-guide__step span{width:25px;height:25px;display:grid;place-items:center;margin-bottom:8px;border-radius:8px;color:var(--accent-text);font-size:10px;font-weight:850;background:linear-gradient(135deg,var(--green-2),var(--green))}.prompt-guide__step strong,.prompt-guide__step small{display:block}.prompt-guide__step strong{font-size:12px}.prompt-guide__step small{margin-top:3px;color:var(--muted);font-size:10px;line-height:1.4}.prompt-guide__actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.prompt-primary-help{grid-column:1/-1;margin:0 0 12px;padding:11px 12px;border-left:3px solid var(--green);border-radius:0 var(--radius-sm) var(--radius-sm) 0;background:rgba(0,223,242,.045);color:var(--muted);font-size:11px;line-height:1.55}.prompt-parameter-details{margin-top:12px;border:1px solid var(--line);border-radius:var(--radius-md);overflow:hidden}.prompt-parameter-details summary{padding:11px 13px;color:var(--ink);font-size:11px;font-weight:750;cursor:pointer}.prompt-parameter-details__body{padding:12px;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;gap:11px}.prompt-next-action{margin:12px 0 0;padding:11px 12px;border:1px solid color-mix(in srgb,var(--green) 26%,var(--line));border-radius:var(--radius-sm);background:rgba(0,223,242,.035);color:var(--ink);font-size:11px}.prompt-advanced-sections{grid-column:1/-1;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px}.prompt-advanced-sections[hidden]{display:none}.prompt-technical-note{color:var(--muted);font-size:10px}
+ .side-foot{margin-top:22px;padding:12px;border:1px solid var(--line);border-radius:var(--radius-md);background:var(--surface);box-shadow:var(--glow)}.side-foot strong{display:block}.side-foot small{color:var(--muted)}
+ .main{padding:24px 28px 70px;min-width:0}.topbar{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:18px;margin:-24px -28px 22px;padding:17px 28px;background:var(--header-bg);border-bottom:1px solid var(--line);box-shadow:0 10px 35px rgba(0,0,0,.24);backdrop-filter:blur(18px) saturate(130%)}.topbar h1{font-size:clamp(22px,2.2vw,29px);margin:0;letter-spacing:-.03em}.topbar p{margin:3px 0 0;color:var(--muted)}.actions{display:flex;gap:8px;flex-wrap:wrap}
+ .btn{min-height:42px;display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);border-radius:13px;padding:0 15px;background:linear-gradient(180deg,color-mix(in srgb,var(--surface-strong) 90%,var(--green) 4%),var(--surface-strong));box-shadow:var(--glow);color:var(--ink);font-weight:720;transition:transform 160ms ease,background 160ms ease,border-color 160ms ease}.btn:hover{transform:translateY(-1px);border-color:color-mix(in srgb,var(--green) 42%,var(--line))}.btn.primary{color:var(--accent-text);border-color:transparent;background:linear-gradient(135deg,var(--green-2) 0%,var(--green) 42%,#54a8ff 100%);box-shadow:0 0 28px rgba(0,223,242,.22)}.btn.green{color:var(--accent-text);border-color:transparent;background:linear-gradient(135deg,var(--green-2),var(--green))}.btn.danger{color:#ffd7dc;border-color:rgba(255,95,109,.34);background:linear-gradient(180deg,rgba(255,95,109,.09),var(--surface-strong))}.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+@@ -60,5 +63,32 @@ button,input,textarea,select{font:inherit}button{color:inherit;cursor:pointer}
+ .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.field label{display:block;color:var(--muted);font-size:11px;margin:0 0 5px}.field.full{grid-column:1/-1}
+ .toast{position:fixed;right:22px;bottom:22px;z-index:100;max-width:340px;padding:12px 15px;border:1px solid var(--line);border-radius:var(--radius-md);background:var(--floating-bg);box-shadow:var(--shadow),var(--glow);opacity:0;transform:translateY(15px);pointer-events:none;transition:.25s}.toast.show{opacity:1;transform:none}.modal-wrap{position:fixed;inset:0;background:rgba(2,6,11,.82);display:none;place-items:center;z-index:110;padding:20px;backdrop-filter:blur(12px)}.modal-wrap.show{display:grid}.modal{width:min(560px,100%);border:1px solid var(--line);border-radius:var(--radius-lg);background:var(--floating-bg);box-shadow:var(--shadow),var(--glow);padding:20px}.modal h2{margin-top:0}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}.empty{padding:35px;text-align:center;color:var(--muted)}
+ @media(max-width:1050px){.app{grid-template-columns:245px 1fr}.workflow{grid-template-columns:1fr}.metric-row{grid-template-columns:1fr 1fr}.chat-layout{grid-template-columns:1fr}.chat-main{border-right:0;border-bottom:1px solid var(--line)}}
+-@media(max-width:760px){.app{display:block}.sidebar{height:auto;position:relative;border-right:0;border-bottom:1px solid var(--line)}.eve-card{display:grid;grid-template-columns:130px 1fr}.eve-orb-stage{min-height:150px}.eve-portrait{height:150px}.nav{grid-template-columns:repeat(2,1fr)}.main{padding:18px 14px 60px}.topbar{position:relative;margin:-18px -14px 18px;padding:15px 14px;align-items:flex-start;flex-direction:column}.grid,.test-grid{display:block}.panel,.stage{margin-bottom:12px}.span-8,.span-7,.span-6,.span-5,.span-4{margin-bottom:12px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.workflow{display:block}.metric-row{grid-template-columns:1fr 1fr}}
++.prompt-guide__identity{display:grid;gap:4px;margin-top:14px;padding:12px 14px;border:1px solid rgba(0,223,242,.24);border-radius:12px;background:rgba(0,223,242,.06)}.prompt-guide__identity strong{color:var(--green-2)}.prompt-guide__identity span{color:var(--muted);line-height:1.45}
++.model-config-layout{display:grid;grid-template-columns:1fr;gap:16px;align-items:start;width:100%}.model-config-layout .form-grid{width:100%;min-width:0}.model-context-help{position:fixed;z-index:1200;width:310px;max-width:calc(100vw - 24px);padding:15px 16px;border:1px solid color-mix(in srgb,var(--green) 36%,var(--line));border-radius:var(--radius-md);background:linear-gradient(160deg,color-mix(in srgb,var(--green) 10%,#09141d),#09141d);box-shadow:var(--glow),0 14px 42px rgba(0,0,0,.42);pointer-events:none;opacity:0;visibility:hidden;transform:translateY(5px);transition:opacity 120ms ease,transform 120ms ease,visibility 120ms ease}.model-context-help.is-visible{opacity:1;visibility:visible;transform:none}.model-context-help__eyebrow{display:block;margin-bottom:7px;color:var(--green-2);font-size:9px;font-weight:850;letter-spacing:.16em;text-transform:uppercase}.model-context-help h4{margin:0 0 6px;font-size:14px}.model-context-help p{margin:0;color:var(--muted);font-size:10px;line-height:1.5}.model-context-help__value{margin-top:11px;padding:9px 10px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--code-bg);color:var(--ink);font-size:10px;line-height:1.42}.model-config-panel .field select{color-scheme:dark}.model-config-panel .field select option{background:#09141d;color:#e9fbff}.model-config-panel .field select option:checked{background:#123746;color:#fff}.model-config-panel .field{border-radius:var(--radius-sm);transition:background 160ms ease,box-shadow 160ms ease}.model-config-panel .field.is-help-pending input:focus,.model-config-panel .field.is-help-pending select:focus,.model-config-panel .field.is-help-pending textarea:focus{border-color:var(--line);box-shadow:none}.model-config-panel .field.is-help-active{background:rgba(0,223,242,.035);box-shadow:0 0 22px rgba(0,223,242,.055)}
++.native-select-source{position:absolute!important;width:1px!important;height:1px!important;margin:0!important;padding:0!important;border:0!important;opacity:0!important;pointer-events:none!important}.studio-select{position:relative;width:100%}.studio-select__trigger{position:relative;width:100%;min-height:39px;padding:10px 38px 10px 10px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--code-bg);color:var(--ink);text-align:left}.studio-select__trigger::after{content:"⌄";position:absolute;right:12px;top:50%;color:var(--muted);transform:translateY(-55%);transition:transform 150ms ease}.studio-select.is-open .studio-select__trigger{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,223,242,.08)}.studio-select.is-open .studio-select__trigger::after{transform:translateY(-42%) rotate(180deg)}.studio-select__menu{position:absolute;z-index:1100;top:calc(100% + 6px);left:0;right:0;display:grid;gap:4px;padding:6px;border:1px solid color-mix(in srgb,var(--green) 28%,var(--line));border-radius:var(--radius-sm);background:#09141d;box-shadow:0 18px 42px rgba(0,0,0,.55)}.studio-select__menu[hidden]{display:none}.studio-select__option{width:100%;min-height:36px;padding:9px 10px;border:1px solid transparent;border-radius:8px;background:#09141d;color:#e9fbff;text-align:left;transition:background 120ms ease,border-color 120ms ease,color 120ms ease}.studio-select__option:hover,.studio-select__option:focus{outline:none;border-color:rgba(0,223,242,.34);background:#102d39;color:#fff}.studio-select__option.is-selected{border-color:rgba(0,223,242,.42);background:#123746;color:#fff}
++.model-add-trigger{position:relative;width:100%;min-height:39px;padding:10px;border:1px solid color-mix(in srgb,var(--violet) 44%,var(--line));border-radius:var(--radius-sm);background:linear-gradient(145deg,rgba(122,124,255,.11),var(--code-bg));color:#e8e9ff;text-align:left;transition:border-color 150ms ease,background 150ms ease,box-shadow 150ms ease}.model-add-trigger:hover,.model-add-trigger:focus-visible{outline:none;border-color:var(--violet);background:linear-gradient(145deg,rgba(122,124,255,.18),var(--code-bg));box-shadow:0 0 0 3px rgba(122,124,255,.08)}.model-config-panel.is-creating-model .model-add-trigger{border-color:var(--green);color:var(--green-2);box-shadow:0 0 0 3px rgba(0,223,242,.08)}
++.new-rule-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:10px}.new-rule-actions span{color:var(--muted);font-size:10px;line-height:1.4}.rule-library-panel{padding:15px;border:1px solid var(--line);background:rgba(255,255,255,.015)}.rule-library-panel__head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:12px}.rule-library-panel__eyebrow{display:block;margin-bottom:5px;color:var(--green-2);font-size:9px;font-weight:850;letter-spacing:.14em;text-transform:uppercase}.rule-library-panel h4{margin:0 0 5px;font-size:14px}.rule-library-panel p{margin:0;color:var(--muted);font-size:10px;line-height:1.5}.rule-library-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.rule-library-row{display:flex;align-items:flex-start;gap:10px;padding:11px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--surface);cursor:pointer;transition:border-color 150ms ease,background 150ms ease,box-shadow 150ms ease}.rule-library-row:hover{border-color:rgba(0,223,242,.38)}.rule-library-row.is-active{border-color:rgba(0,223,242,.48);background:rgba(0,223,242,.065);box-shadow:inset 0 0 20px rgba(0,223,242,.025)}.rule-library-check{width:16px!important;height:16px;margin:2px 0 0;flex:0 0 16px;accent-color:var(--green)}.rule-library-row__content{display:grid;gap:6px;min-width:0}.rule-library-row__content strong{color:var(--ink);font-size:10px;line-height:1.48}.rule-library-row__content small{color:var(--muted);font-size:9px;line-height:1.4}
++.model-test-panel{margin-bottom:14px}.model-test-layout{display:grid;grid-template-columns:minmax(210px,.7fr) minmax(0,1.8fr) auto;gap:14px;align-items:end}.model-test-summary{min-height:74px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--code-bg);white-space:pre-line;color:var(--muted);font-size:10px;line-height:1.55}.model-test-note,.model-test-readonly-note{margin:0;padding:10px 14px;border-top:1px solid var(--line);color:var(--muted);font-size:10px;line-height:1.45}.model-test-readonly-note{margin:10px 0;border:1px solid var(--line);border-radius:var(--radius-sm);background:rgba(0,223,242,.035)}.release-approval{display:flex;align-items:flex-start;gap:10px;margin-top:14px;padding:12px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--code-bg);cursor:pointer}.release-approval input{width:16px!important;height:16px;margin:1px 0 0;flex:0 0 16px;accent-color:var(--green)}.release-approval span{color:var(--ink);font-size:10px;line-height:1.45}
++
++/* Linguaggio visivo condiviso con Aula Studio: pannelli, titoli e pulsanti. */
++.panel,.stage{border-color:color-mix(in srgb,var(--green) 22%,var(--line));background:linear-gradient(155deg,rgba(214,244,255,.068),rgba(55,91,108,.13) 32%,rgba(8,20,29,.98) 78%),var(--shell-bg);box-shadow:var(--shadow),var(--glow),inset 0 1px 0 rgba(220,247,255,.095),inset 0 0 52px rgba(71,120,142,.065)}
++.panel-head{position:relative;isolation:isolate;padding:19px 22px 16px;border-bottom:1px solid color-mix(in srgb,var(--green-2) 34%,var(--line));background:linear-gradient(105deg,rgba(221,247,253,.19),rgba(78,132,151,.22) 30%,rgba(0,223,242,.13) 56%,rgba(122,124,255,.075) 82%,rgba(12,29,40,.94)),var(--header-bg);box-shadow:inset 0 1px 0 rgba(240,253,255,.16),inset 0 -12px 30px rgba(0,223,242,.035)}
++.panel-head::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:linear-gradient(180deg,var(--green-2),var(--green) 58%,var(--violet));box-shadow:0 0 20px rgba(0,223,242,.28)}
++.panel-head::after{content:"";position:absolute;left:22px;right:22px;bottom:-1px;height:1px;background:linear-gradient(90deg,var(--green),rgba(0,223,242,.18) 42%,transparent 82%)}
++.panel-head h3{font-size:17px;letter-spacing:-.012em}.panel-head p{max-width:820px;line-height:1.5}
++.prompt-guide .panel-body{padding-top:0}.prompt-guide__top{position:relative;margin:0 -19px 17px;padding:19px 22px 17px;border-bottom:1px solid color-mix(in srgb,var(--green-2) 34%,var(--line));background:linear-gradient(105deg,rgba(221,247,253,.19),rgba(78,132,151,.22) 30%,rgba(0,223,242,.13) 56%,rgba(122,124,255,.075) 82%,rgba(12,29,40,.94));box-shadow:inset 0 1px 0 rgba(240,253,255,.16),inset 0 -12px 30px rgba(0,223,242,.035)}
++.prompt-guide__top::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:linear-gradient(180deg,var(--green-2),var(--green) 58%,var(--violet));box-shadow:0 0 20px rgba(0,223,242,.25)}
++.prompt-guide__top h3{font-size:17px;letter-spacing:-.012em}
++.prompt-guide__step,.build-eve-step,.metric,.row,.rule-library-row{background:linear-gradient(180deg,color-mix(in srgb,var(--surface-strong) 86%,var(--green) 3%),color-mix(in srgb,var(--surface) 94%,transparent));box-shadow:inset 0 1px 0 rgba(255,255,255,.018)}
++.prompt-guide__step:hover,.build-eve-step:hover,.metric:hover{border-color:color-mix(in srgb,var(--green) 34%,var(--line));box-shadow:inset 0 1px 0 rgba(255,255,255,.025),0 0 24px rgba(0,223,242,.055)}
++.btn,.model-add-trigger{min-height:42px;border-radius:13px;font-weight:720;background:linear-gradient(180deg,rgba(205,238,248,.105),rgba(37,67,82,.68) 38%,rgba(10,25,35,.96));box-shadow:var(--glow),inset 0 1px 0 rgba(225,249,255,.09);transition:transform 160ms ease,border-color 160ms ease,background 160ms ease,box-shadow 160ms ease}
++.btn:not(:disabled):hover,.model-add-trigger:hover{transform:translateY(-1px);border-color:color-mix(in srgb,var(--green) 42%,var(--line));box-shadow:var(--glow),0 10px 24px rgba(0,0,0,.18)}
++.btn.primary,.btn.green,.model-config-panel.is-creating-model .model-add-trigger{color:var(--accent-text);border-color:transparent;background:linear-gradient(135deg,var(--green-2) 0%,var(--green) 48%,#54a8ff 100%);box-shadow:0 0 28px rgba(0,223,242,.22)}
++.model-add-trigger{color:var(--ink)}.model-config-panel.is-creating-model .model-add-trigger{color:var(--accent-text)}
++.nav button.active{color:#f5fdff;border-color:color-mix(in srgb,var(--green-2) 62%,var(--line));background:linear-gradient(115deg,rgba(218,244,251,.24),rgba(61,105,123,.76) 38%,rgba(0,223,242,.18) 72%,rgba(12,31,43,.97));box-shadow:inset 3px 0 0 var(--green),inset 0 1px 0 rgba(235,252,255,.21),0 0 26px rgba(0,223,242,.15)}
++.nav button.active .ico{color:#d9fbff;text-shadow:0 0 12px rgba(0,223,242,.55)}
++.nav button:focus-visible{outline:2px solid color-mix(in srgb,var(--green-2) 72%,transparent);outline-offset:2px}
++@media(max-width:1050px){.build-eve-grid{grid-template-columns:1fr 1fr}.build-eve-step:first-child{grid-column:1/-1}.model-test-layout{grid-template-columns:1fr 1.4fr}.model-test-layout .btn{grid-column:1/-1}}
++@media(max-width:760px){.app{display:block}.sidebar{height:auto;position:relative;border-right:0;border-bottom:1px solid var(--line)}.eve-card{display:grid;grid-template-columns:130px 1fr}.eve-orb-stage{min-height:150px}.eve-portrait{height:150px}.nav{grid-template-columns:repeat(2,1fr)}.main{padding:18px 14px 60px}.topbar{position:relative;margin:-18px -14px 18px;padding:15px 14px;align-items:flex-start;flex-direction:column}.grid,.test-grid{display:block}.panel,.stage{margin-bottom:12px}.span-8,.span-7,.span-6,.span-5,.span-4{margin-bottom:12px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.workflow{display:block}.metric-row{grid-template-columns:1fr 1fr}.build-eve-grid{display:block}.build-eve-step{margin-bottom:10px}.build-eve-step:first-child{grid-column:auto}.build-eve-actions__advanced{width:100%;margin-left:0}.build-eve-actions .btn{flex:1}.prompt-guide__top{display:block}.prompt-guide__top .tag{margin-top:10px}.prompt-guide__steps{grid-template-columns:1fr 1fr}.prompt-parameter-details__body{display:block}.prompt-parameter-details__body .field+.field{margin-top:10px}.prompt-advanced-sections{display:block}.model-config-layout{grid-template-columns:1fr}.rule-library-list{grid-template-columns:1fr}.rule-library-panel__head{display:block}.rule-library-panel__head .tag{display:inline-block;margin-top:10px}.new-rule-actions .btn{width:100%}.model-test-layout{grid-template-columns:1fr}.model-test-layout .btn{grid-column:auto;width:100%}}
+ @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation-duration:.001ms!important;transition-duration:.001ms!important}#particleField{opacity:.38}}
++.graphics-animation-paused,body.graphics-page-hidden *{animation-play-state:paused!important}
+diff --git a/reference/eve-ai-studio-preview/vendor/README.md b/reference/eve-ai-studio-preview/vendor/README.md
+index 8d1e066482cdfeeb9a69ed66695ccb830f703849..eda87b751a8ec78895ced9ab77aa8bf1b82c697d 100644
+--- a/reference/eve-ai-studio-preview/vendor/README.md
++++ b/reference/eve-ai-studio-preview/vendor/README.md
+@@ -37,8 +37,7 @@ Quando il file viene caricato sul branch `eve-ai-studio`, il workflow `Install E
+ - installa i 64 WebP originali;
+ - elimina i payload alleggeriti;
+ - collega il runtime HQ;
+-- rigenera lo standalone;
+-- prova tutti i 64 stati sia via HTTP sia tramite `file://`;
++- prova tutti i 64 stati nella preview modulare canonica;
+ - salva il risultato sullo stesso branch.
+ 
+ Non rinominare, ricomprimere o modificare l'archivio.
