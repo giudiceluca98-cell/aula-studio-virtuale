@@ -1,0 +1,32 @@
+{
+  "checkpoint": "INTELLIGENCE-0.1",
+  "keywords": [
+    "centro-ricerca",
+    "progetti-apprendimento",
+    "query-pianificate",
+    "quarantena-fonti"
+  ],
+  "tested_sha": "5c96098d97e4d4151fff059d0367fef6fe766475",
+  "generated_at": "2026-07-28T02:07:28.202623+00:00",
+  "passed": false,
+  "states": {
+    "install": "success",
+    "python_compile": "success",
+    "pytest_specific": "success",
+    "standalone_build": "success",
+    "browser_install": "success",
+    "browser_modular_and_file": "success"
+  },
+  "pytest": {
+    "tests": 0,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "service_version": "1.2.0",
+  "web_search_enabled": false,
+  "content_acquisition_enabled": false,
+  "model_training_enabled": false,
+  "modular_preview": true,
+  "standalone_file": true
+}
