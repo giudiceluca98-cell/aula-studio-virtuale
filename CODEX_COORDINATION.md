@@ -238,6 +238,58 @@ Release verificata dal workflow 30373628931. Pubblicati installer NSIS,
 firma e latest.json per la versione 1.2.0-alpha.1 nel repository dedicato.
 ```
 
+### DESKTOP-0.2 — Fluidità, caricamento progressivo e updater
+
+```text
+CHECKPOINT:
+DESKTOP-0.2 — Fluidità, caricamento progressivo e updater
+
+RESPONSABILE:
+Codex grafico/desktop
+
+STATO:
+IN_PROGRESS
+
+BRANCH DI PARTENZA:
+origin/eve-ai-studio @ b8ec526
+
+BRANCH DI LAVORO:
+codex/eve-ai-studio-desktop-performance
+
+OBIETTIVO:
+Correggere il canale alpha dell'updater e caricare logiche e grafica soltanto
+quando la relativa sezione è effettivamente utilizzata.
+
+FILE PRENOTATI:
+- reference/eve-ai-studio-preview/index.html
+- reference/eve-ai-studio-preview/particles.js
+- reference/eve-ai-studio-preview/graphics-performance.js
+- reference/eve-ai-studio-preview/animation-library-gallery.js
+- reference/eve-ai-studio-preview/styles.css
+- eventuale nuovo modulo lazy loader canonico
+- .github/workflows/release-eve-ai-studio-desktop.yml
+- eve-desktop/package.json
+- eve-desktop/src-tauri/tauri.conf.json
+- eve-desktop/src-tauri/Cargo.toml
+- eve-desktop/src-tauri/Cargo.lock
+- test desktop strettamente necessari
+- .codex/tasks/active/eve-ai-studio-desktop-performance.md
+- CODEX_COORDINATION.md, limitatamente a questa scheda
+
+FILE CONDIVISI PRENOTATI:
+- i cinque file canonici elencati sopra, per la durata del checkpoint
+
+DISPONIBILE PER L'ALTRO CODEX:
+NO sui file prenotati; SÌ sugli altri moduli già dichiarati dal suo checkpoint.
+
+NOTE:
+Nessuna demo o sorgente duplicata. Main, demo-canonica e Aula Studio restano
+invariati. Grafica completa e funzioni esistenti restano disponibili.
+Preparata la versione 1.2.0-alpha.2. Sintassi, coerenza versione, build desktop
+e caricamento progressivo verificati localmente; nessun errore JavaScript
+rilevato nell'apertura reale del laboratorio.
+```
+
 ## Attività storiche di Aula Studio
 
 La tabella seguente è conservata come cronologia del precedente flusso di Aula Studio. Non assegna né prenota file di Eve AI Studio e non prevale sulle regole attive sopra.

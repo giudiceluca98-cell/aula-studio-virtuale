@@ -112,6 +112,7 @@
   let assets = [];
   let selected = null;
   let cardImageObserver = null;
+  let initializationPromise = null;
 
   function observeCardImages() {
     const images = grid.querySelectorAll(".animation-card-media img[data-animation-src]");
@@ -141,7 +142,7 @@
     if (title) title.textContent = "Libreria animazioni";
     if (subtitle) subtitle.textContent = "Esplora e prova tutti i 64 stati originali di Eve.";
     window.scrollTo({ top: 0, behavior: "smooth" });
-    requestAnimationFrame(observeCardImages);
+    initializeLibrary().then(() => requestAnimationFrame(observeCardImages)).catch(console.error);
   }
 
   function selectAsset(asset, applyToEve = false) {
@@ -198,17 +199,22 @@
   playButton.addEventListener("click", () => selected && library.setState(selected.id, { restart: true }).catch(console.error));
   [search, priorityFilter, categoryFilter, variantFilter].forEach(control => control.addEventListener("input", render));
 
-  library.getManifest().then(manifest => {
-    assets = Object.values(manifest.assets).sort((a, b) =>
-      a.priority.localeCompare(b.priority) || a.variant.localeCompare(b.variant) || a.id.localeCompare(b.id)
-    );
-    fillFilter(priorityFilter, [...new Set(assets.map(asset => asset.priority))]);
-    fillFilter(categoryFilter, [...new Set(assets.map(asset => asset.category))].sort());
-    fillFilter(variantFilter, [...new Set(assets.map(asset => asset.variant))].sort());
-    selectAsset(assets.find(asset => asset.id === manifest.defaultState) || assets[0], false);
-    render();
-  }).catch(error => {
-    grid.innerHTML = `<div class="animation-library-empty">${escapeHtml(error.message)}</div>`;
-    console.error(error);
-  });
+  function initializeLibrary() {
+    if (initializationPromise) return initializationPromise;
+    initializationPromise = library.getManifest().then(manifest => {
+      assets = Object.values(manifest.assets).sort((a, b) =>
+        a.priority.localeCompare(b.priority) || a.variant.localeCompare(b.variant) || a.id.localeCompare(b.id)
+      );
+      fillFilter(priorityFilter, [...new Set(assets.map(asset => asset.priority))]);
+      fillFilter(categoryFilter, [...new Set(assets.map(asset => asset.category))].sort());
+      fillFilter(variantFilter, [...new Set(assets.map(asset => asset.variant))].sort());
+      selectAsset(assets.find(asset => asset.id === manifest.defaultState) || assets[0], false);
+      render();
+    }).catch(error => {
+      initializationPromise = null;
+      grid.innerHTML = `<div class="animation-library-empty">${escapeHtml(error.message)}</div>`;
+      throw error;
+    });
+    return initializationPromise;
+  }
 })();
