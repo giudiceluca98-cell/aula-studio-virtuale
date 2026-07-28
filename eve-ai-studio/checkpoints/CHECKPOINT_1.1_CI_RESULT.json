@@ -1,14 +1,19 @@
 {
   "checkpoint": "1.1",
-  "tested_sha": "fed86a6b38a62df5447aa19d9e73a72e32211cf0",
-  "generated_at": "2026-07-27T22:34:57.811342+00:00",
+  "tested_sha": "cfbe16fb3ef82ff8c1cf4bd6bccb4440e8966871",
+  "generated_at": "2026-07-28T00:00:57.631661+00:00",
   "passed": false,
   "states": {
-    "python_install": "success",
-    "python_compile": "success",
-    "pytest_cumulative": "success",
-    "javascript_syntax": "failure",
-    "browser_install": "success",
-    "browser_scenarios": "success"
-  }
+    "core_verification": "failure",
+    "python_compile": "unknown",
+    "pytest_cumulative": "failure",
+    "javascript_syntax": "see_log"
+  },
+  "pytest": {
+    "tests": 0,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "browser_verification": "eve-ai-studio/checkpoints/EVE_HQ_FINAL_VERIFICATION.json"
 }

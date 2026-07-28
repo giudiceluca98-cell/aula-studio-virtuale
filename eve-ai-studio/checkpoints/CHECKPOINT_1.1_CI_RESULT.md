@@ -1,66 +1,43 @@
-# Checkpoint 1.1 — Risultato verifica automatica
+# Checkpoint 1.1 — Verifica core automatica
 
-- Commit verificato: `fed86a6b38a62df5447aa19d9e73a72e32211cf0`
-- Data UTC: `2026-07-27T22:34:57.811342+00:00`
-- Esito complessivo: **NON SUPERATO**
+- Commit verificato: `cfbe16fb3ef82ff8c1cf4bd6bccb4440e8966871`
+- Data UTC: `2026-07-28T00:00:57.631661+00:00`
+- Esito: **NON SUPERATO**
 
-## Stati
+- pytest: 0 test, 0 fallimenti, 0 errori, 0 ignorati
 
-| Controllo | Esito |
-|---|---|
-| `python_install` | `success` |
-| `python_compile` | `success` |
-| `pytest_cumulative` | `success` |
-| `javascript_syntax` | `failure` |
-| `browser_install` | `success` |
-| `browser_scenarios` | `success` |
-
-
-## Coda pytest
+## Coda log
 
 ```text
-........................................................................ [ 43%]
-........................................................................ [ 87%]
-.....................                                                    [100%]
-=============================== warnings summary ===============================
-../../../../../../opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/fastapi/testclient.py:1
-  /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
-    from starlette.testclient import TestClient as TestClient  # noqa
-
--- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-- generated xml file: /home/runner/work/aula-studio-virtuale/aula-studio-virtuale/eve-ai-studio/pytest-results.xml -
-165 passed, 1 warning in 10.71s
+Requirement already satisfied: pip in /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages (26.1.2)
+Obtaining file:///home/runner/work/aula-studio-virtuale/aula-studio-virtuale/eve-ai-studio
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'error'
+  error: subprocess-exited-with-error
+  
+  × Getting requirements to build editable did not run successfully.
+  │ exit code: 1
+  ╰─> [14 lines of output]
+      error: Multiple top-level packages discovered in a flat-layout: ['app', 'data', 'checkpoints'].
+      
+      To avoid accidental inclusion of unwanted files or directories,
+      setuptools will not proceed with this build.
+      
+      If you are trying to create a single distribution with multiple packages
+      on purpose, you should not rely on automatic discovery.
+      Instead, consider the following options:
+      
+      1. set up custom discovery (`find` directive with `include` or `exclude`)
+      2. use a `src-layout`
+      3. explicitly set `py_modules` or `packages` with a list of names
+      
+      To find more information, look for "package discovery" on setuptools docs.
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+ERROR: Failed to build 'file:///home/runner/work/aula-studio-virtuale/aula-studio-virtuale/eve-ai-studio' when getting requirements to build editable
 ```
-
-## Coda verifica browser
-
-```text
-Anteprima controllata verificata: 5 materiali, 4 retrieval, 4 chat RAG e 5 aperture fonte.
-```
-
-## Coda JavaScript
-
-```text
-node --check reference/eve-ai-studio-preview/evaluation-workflow.js
-node --check reference/eve-ai-studio-preview/runner-workflow.js
-node --check reference/eve-ai-studio-preview/provider-workflow.js
-node --check reference/eve-ai-studio-preview/materials-workflow.js
-node --check reference/eve-ai-studio-preview/retrieval-workflow.js
-node --check reference/eve-ai-studio-preview/rag-chat-workflow.js
-node --check reference/eve-ai-studio-preview/source-opening-workflow.js
-node --check reference/eve-ai-studio-preview/official-library-loader.js
-node:internal/modules/cjs/loader:1210
-  throw err;
-  ^
-
-Error: Cannot find module '/home/runner/work/aula-studio-virtuale/aula-studio-virtuale/reference/eve-ai-studio-preview/official-library-loader.js'
-    at Module._resolveFilename (node:internal/modules/cjs/loader:1207:15)
-    at node:internal/main/check_syntax:33:20 {
-  code: 'MODULE_NOT_FOUND',
-  requireStack: []
-}
-
-Node.js v20.20.2
-```
-
-Il browser usa un contenitore DOM controllato e carica i file ufficiali `materials-workflow.js`, `retrieval-workflow.js`, `rag-chat-workflow.js` e `source-opening-workflow.js`. I payload compressi della galleria non vengono reinterpretati come moduli sorgente.
