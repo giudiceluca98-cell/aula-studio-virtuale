@@ -23,7 +23,7 @@ jobs:
       RELEASE_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.ref_name }}
       RELEASE_OWNER: giudiceluca98-cell
       RELEASE_REPOSITORY: eve-ai-studio-releases
-      RELEASE_TOKEN: ${{ secrets.AULA_RELEASE_TOKEN }}
+      RELEASE_TOKEN: ${{ secrets.EVE_RELEASE_TOKEN }}
 
     steps:
       - name: Scarica la sorgente canonica
@@ -76,7 +76,7 @@ jobs:
         if: env.RELEASE_TOKEN != ''
         uses: tauri-apps/tauri-action@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.AULA_RELEASE_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.EVE_RELEASE_TOKEN }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
