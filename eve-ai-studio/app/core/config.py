@@ -55,3 +55,11 @@ class EveSettings(BaseSettings):
     research_max_projects_per_room: int = 50
     research_max_queries_per_project: int = 100
     research_max_sources_per_project: int = 500
+
+    research_web_enabled: bool = False
+    research_web_timeout_seconds: float = 10.0
+    research_web_max_bytes: int = 2_000_000
+    research_web_max_redirects: int = 3
+    research_robots_max_bytes: int = 512_000
+    research_robots_required: bool = True
+    research_web_user_agent: str = "EveAulaStudioResearchBot/0.2"
