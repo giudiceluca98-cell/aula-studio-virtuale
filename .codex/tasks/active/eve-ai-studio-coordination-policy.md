@@ -1,9 +1,10 @@
 # GOVERNANCE-0.1 — Sorgente canonica, coordinamento e handoff
 
 - Responsabile: Codex coordinamento
-- Stato: `IN_PROGRESS`
+- Stato: `REVIEW_REQUIRED`
 - Branch di partenza: `origin/eve-ai-studio` @ `13b8822`
 - Branch di lavoro: `codex/eve-ai-studio-coordination-policy`
+- Commit di implementazione: `fda7361`
 - Pull Request: da aprire verso `eve-ai-studio`
 
 ## Obiettivo
@@ -36,4 +37,3 @@ Nessuno. Questa attività non modifica `reference/eve-ai-studio-preview/`.
 - controllo dei collegamenti e dei percorsi citati;
 - ricerca di regole contraddittorie nei documenti attivi;
 - conferma che i file canonici non siano stati modificati.
-

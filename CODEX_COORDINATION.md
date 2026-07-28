@@ -28,7 +28,7 @@ RESPONSABILE:
 Codex coordinamento
 
 STATO:
-IN_PROGRESS
+REVIEW_REQUIRED
 
 BRANCH DI PARTENZA:
 origin/eve-ai-studio @ 13b8822
@@ -53,10 +53,11 @@ MODULI CANONICI MODIFICATI:
 - nessuno
 
 ULTIMO COMMIT:
-non ancora disponibile
+fda7361
 
 DISPONIBILE PER L'ALTRO CODEX:
-NO, fino a pubblicazione e revisione di questa procedura.
+SÌ per lettura e applicazione della procedura; NO per modificare i file
+prenotati fino alla revisione della Pull Request.
 
 ATTIVITÀ CONSENTITE ALL'ALTRO CODEX:
 - continuare esclusivamente sui file già prenotati e dichiarati;
