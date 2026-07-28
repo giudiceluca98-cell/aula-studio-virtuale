@@ -2,6 +2,91 @@
 
 Questo file registra incarichi temporanei, proprietà dei file e dipendenze tra agenti. Gli agenti sono generalisti e possono passare a un'altra materia o funzione dopo la chiusura dell'attività corrente.
 
+## Eve AI Studio — regole attive
+
+La procedura completa e vincolante è in `docs/EVE_AI_STUDIO_COORDINATION.md`.
+
+Fonte unica:
+
+```text
+branch: eve-ai-studio
+cartella: reference/eve-ai-studio-preview/
+ingresso: reference/eve-ai-studio-preview/index.html
+```
+
+Non creare demo alternative, copie HTML, standalone, cartelle preview o sorgenti duplicate. Il flusso sullo stesso checkpoint è sequenziale: Codex funzionale, `READY_FOR_HANDOFF`, approvazione e merge, poi Codex grafico/desktop.
+
+Stati ammessi per Eve AI Studio: `RESERVED`, `IN_PROGRESS`, `FUNCTIONAL_TESTING`, `READY_FOR_HANDOFF`, `UI_INTEGRATION`, `REVIEW_REQUIRED`, `RELEASE_READY`.
+
+### GOVERNANCE-0.1 — Sorgente canonica, coordinamento e handoff
+
+```text
+CHECKPOINT:
+GOVERNANCE-0.1 — Sorgente canonica, coordinamento e handoff
+
+RESPONSABILE:
+Codex coordinamento
+
+STATO:
+IN_PROGRESS
+
+BRANCH DI PARTENZA:
+origin/eve-ai-studio @ 13b8822
+
+BRANCH DI LAVORO:
+codex/eve-ai-studio-coordination-policy
+
+OBIETTIVO:
+Rendere operative nel repository le regole che impediscono duplicati e
+coordinano in sequenza il Codex funzionale e il Codex grafico/desktop.
+
+FILE PRENOTATI:
+- AGENTS.md
+- CODEX_COORDINATION.md
+- docs/EVE_AI_STUDIO_COORDINATION.md
+- .codex/tasks/active/eve-ai-studio-coordination-policy.md
+
+FILE CONDIVISI PRENOTATI:
+- CODEX_COORDINATION.md, limitatamente alla nuova sezione Eve AI Studio
+
+MODULI CANONICI MODIFICATI:
+- nessuno
+
+ULTIMO COMMIT:
+non ancora disponibile
+
+DISPONIBILE PER L'ALTRO CODEX:
+NO, fino a pubblicazione e revisione di questa procedura.
+
+ATTIVITÀ CONSENTITE ALL'ALTRO CODEX:
+- continuare esclusivamente sui file già prenotati e dichiarati;
+- leggere la nuova procedura quando pubblicata.
+
+ATTIVITÀ VIETATE ALL'ALTRO CODEX:
+- creare nuove demo o standalone;
+- modificare i file prenotati da questa attività;
+- iniziare un'integrazione UI senza READY_FOR_HANDOFF.
+
+NOTE:
+Questa attività non modifica la sorgente canonica, il backend, main,
+demo-canonica, Aula Studio, desktop o produzione.
+```
+
+### Stato del checkpoint INTELLIGENCE-0.2
+
+Il codice funzionale di `INTELLIGENCE-0.2 — Acquisizione web controllata e quarantena fonti` risulta già presente sul branch canonico, ma non è ancora registrato un handoff conforme alla procedura nuova. Di conseguenza:
+
+- lo stato coordinativo è `FUNCTIONAL_TESTING`;
+- non è disponibile per interventi grafici o desktop;
+- il Codex funzionale deve pubblicare commit congelato, Pull Request o riferimento equivalente, file congelati, test e documento `CHECKPOINT_INTELLIGENCE_0.2_ACQUISIZIONE_WEB_CONTROLLATA_QUARANTENA_FONTI_HANDOFF.md`;
+- soltanto dopo lo stato esplicito `READY_FOR_HANDOFF` può iniziare un branch `codex/eve-ai-studio-intelligence-0-2-ui-integration`.
+
+I documenti storici che richiedono una preview standalone sono superati: la verifica deve usare esclusivamente la sorgente modulare canonica.
+
+## Attività storiche di Aula Studio
+
+La tabella seguente è conservata come cronologia del precedente flusso di Aula Studio. Non assegna né prenota file di Eve AI Studio e non prevale sulle regole attive sopra.
+
 ## Attività
 
 | Attività | Assegnazione prevista | Branch | Stato | File riservati | File condivisi richiesti | Pull request | Ultimo aggiornamento |
@@ -32,7 +117,7 @@ Stati ammessi: `Disponibile`, `In corso`, `In revisione`, `Bloccato`, `Completat
 
 L'assegnazione è legata all'attività, non al computer. Dopo il merge, lo stesso Codex può prendere in carico un altro corso o una funzione diversa dell'app.
 
-## File condivisi
+## File condivisi storici di Aula Studio
 
 I seguenti percorsi hanno un impatto trasversale e devono essere prenotati esplicitamente prima dell'uso:
 
@@ -59,7 +144,7 @@ Regole:
 4. Se un file è già prenotato, l'altro agente continua sui file non in conflitto oppure apre una successiva attività di integrazione.
 5. Le funzioni già operative dell'area di lavoro non devono essere riprogettate durante un'attività editoriale, salvo richiesta esplicita.
 
-## Procedura di presa in carico
+## Procedura storica di presa in carico Aula Studio
 
 1. Scegliere un'attività con stato `Disponibile` in `.codex/tasks/active/`.
 2. Aggiornare la scheda con agente, branch, stato, file riservati e file condivisi indispensabili.
