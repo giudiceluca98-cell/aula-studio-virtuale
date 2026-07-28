@@ -248,7 +248,7 @@ RESPONSABILE:
 Codex grafico/desktop
 
 STATO:
-IN_PROGRESS
+COMPLETATO
 
 BRANCH DI PARTENZA:
 origin/eve-ai-studio @ b8ec526
@@ -288,6 +288,9 @@ invariati. Grafica completa e funzioni esistenti restano disponibili.
 Preparata la versione 1.2.0-alpha.2. Sintassi, coerenza versione, build desktop
 e caricamento progressivo verificati localmente; nessun errore JavaScript
 rilevato nell'apertura reale del laboratorio.
+PR #82 unita in eve-ai-studio al commit b61d364. Workflow 30380270017
+completato con successo; installer NSIS, firma e latest.json pubblicati nella
+release eve-ai-studio-v1.2.0-alpha.2. Endpoint latest verificato con HTTP 200.
 ```
 
 ## Attività storiche di Aula Studio
