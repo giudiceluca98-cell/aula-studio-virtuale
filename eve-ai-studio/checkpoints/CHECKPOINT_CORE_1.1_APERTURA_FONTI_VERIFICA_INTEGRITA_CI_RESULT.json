@@ -1,5 +1,9 @@
 {
-  "checkpoint": "1.1",
+  "checkpoint": "CORE-1.1",
+  "keywords": [
+    "apertura-fonti",
+    "verifica-integrita"
+  ],
   "tested_sha": "05e5c6a71652f4cfacbc43c22cedb9db5d6c3dd2",
   "generated_at": "2026-07-28T00:05:02.849361+00:00",
   "passed": true,
