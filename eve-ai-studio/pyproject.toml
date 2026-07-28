@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "eve-ai-studio"
-version = "1.1.0"
-description = "Fondazione modulare di Eve con materiali, retrieval, chat RAG citata e apertura verificabile delle fonti"
+version = "1.2.0"
+description = "Eve AI Studio con CORE documentale e centro ricerca INTELLIGENCE controllato"
 requires-python = ">=3.11"
 dependencies = [
   "fastapi>=0.115,<1",
