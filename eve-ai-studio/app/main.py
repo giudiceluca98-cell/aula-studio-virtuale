@@ -10,6 +10,12 @@ from .evaluations.automatic_router import create_automatic_evaluation_router
 from .evaluations.router import create_evaluation_router
 from .evaluations.service import EvaluationService
 from .evaluations.storage import SqliteEvaluationStore
+from .intelligence import (
+    ResearchCenterService,
+    ResearchLimits,
+    SqliteResearchStore,
+    create_research_router,
+)
 from .materials import MaterialLimits, MaterialService, SqliteMaterialStore, create_material_router
 from .models import ChatRequest, ChatResponse, HealthResponse
 from .prompts.router import create_prompt_router
@@ -45,7 +51,7 @@ from .requirements.registry import RequirementNotFoundError, RequirementRegistry
 from .requirements.storage import RequirementVersionNotFoundError, SqliteRequirementStore
 from .sources import SourceOpeningLimits, SourceOpeningService, create_source_router
 
-SERVICE_VERSION = "1.1.0"
+SERVICE_VERSION = "1.2.0"
 
 settings = EveSettings()
 audit = AuditLogger(enabled=settings.audit_enabled)
@@ -122,6 +128,15 @@ source_opening = SourceOpeningService(
         max_context_chars=settings.source_max_context_chars,
     ),
 )
+research_store = SqliteResearchStore(settings.research_db_path)
+research_center = ResearchCenterService(
+    research_store,
+    limits=ResearchLimits(
+        max_projects_per_room=settings.research_max_projects_per_room,
+        max_queries_per_project=settings.research_max_queries_per_project,
+        max_sources_per_project=settings.research_max_sources_per_project,
+    ),
+)
 
 active_prompt_version_id = prompts.status().active_version_id
 if active_prompt_version_id is not None and not evaluation_store.runs_count(
@@ -135,9 +150,10 @@ app = FastAPI(
     version=SERVICE_VERSION,
     description=(
         "Fondazione modulare di Eve con requisiti, prompt, valutazioni, runner, "
-        "provider controllati, materiali, retrieval locale, chat RAG citata e "
-        "apertura verificabile delle fonti. Provider esterni, embedding e database "
-        "vettoriali restano disattivati."
+        "provider controllati, materiali, retrieval locale, chat RAG citata, "
+        "apertura verificabile delle fonti e centro ricerca INTELLIGENCE con "
+        "progetti, query e fonti in quarantena. Rete, acquisizione web, embedding e "
+        "addestramento del modello restano disattivati."
     ),
 )
 app.include_router(create_prompt_router(prompts))
@@ -148,6 +164,7 @@ app.include_router(create_material_router(materials))
 app.include_router(create_retrieval_router(retrieval))
 app.include_router(create_rag_router(rag))
 app.include_router(create_source_router(source_opening))
+app.include_router(create_research_router(research_center))
 
 
 @app.get("/health", response_model=HealthResponse)
