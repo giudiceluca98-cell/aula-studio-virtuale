@@ -1,0 +1,104 @@
+name: Pubblica Eve AI Studio Desktop
+
+on:
+  push:
+    tags:
+      - "eve-ai-studio-v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Versione SemVer senza prefisso (es. 1.2.0-alpha.1)"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    name: Installer Windows e aggiornamento
+    if: github.ref == 'refs/heads/eve-ai-studio' || startsWith(github.ref, 'refs/tags/eve-ai-studio-v')
+    runs-on: windows-latest
+    env:
+      RELEASE_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.ref_name }}
+      RELEASE_OWNER: ${{ vars.EVE_RELEASE_OWNER }}
+      RELEASE_REPOSITORY: ${{ vars.EVE_RELEASE_REPOSITORY }}
+      RELEASE_TOKEN: ${{ secrets.EVE_RELEASE_TOKEN }}
+
+    steps:
+      - name: Scarica la sorgente canonica
+        uses: actions/checkout@v4
+
+      - name: Installa pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Installa Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Installa Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Installa dipendenze desktop
+        run: pnpm --dir eve-desktop install --no-frozen-lockfile
+
+      - name: Verifica configurazione della release
+        shell: pwsh
+        env:
+          SIGNING_PRIVATE_KEY: ${{ secrets.EVE_TAURI_SIGNING_PRIVATE_KEY }}
+          UPDATER_PUBLIC_KEY: ${{ secrets.EVE_TAURI_UPDATER_PUBLIC_KEY }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:RELEASE_OWNER)) { throw "Configura EVE_RELEASE_OWNER." }
+          if ([string]::IsNullOrWhiteSpace($env:RELEASE_REPOSITORY)) { throw "Configura EVE_RELEASE_REPOSITORY." }
+          if ([string]::IsNullOrWhiteSpace($env:SIGNING_PRIVATE_KEY)) { throw "Configura EVE_TAURI_SIGNING_PRIVATE_KEY." }
+          if ([string]::IsNullOrWhiteSpace($env:UPDATER_PUBLIC_KEY)) { throw "Configura EVE_TAURI_UPDATER_PUBLIC_KEY." }
+
+      - name: Verifica versione e build canonica
+        run: |
+          pnpm --dir eve-desktop check:version "$env:RELEASE_VERSION"
+          pnpm --dir eve-desktop test
+
+      - name: Genera configurazione updater
+        env:
+          EVE_TAURI_UPDATER_PUBLIC_KEY: ${{ secrets.EVE_TAURI_UPDATER_PUBLIC_KEY }}
+          EVE_TAURI_UPDATER_ENDPOINT: https://github.com/${{ vars.EVE_RELEASE_OWNER }}/${{ vars.EVE_RELEASE_REPOSITORY }}/releases/latest/download/latest.json
+        run: pnpm --dir eve-desktop release:config
+
+      - name: Crea installer come artifact
+        if: env.RELEASE_TOKEN == ''
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.EVE_TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.EVE_TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: pnpm --dir eve-desktop tauri build --config src-tauri/tauri.release.conf.json
+
+      - name: Crea installer e release automatica
+        if: env.RELEASE_TOKEN != ''
+        uses: tauri-apps/tauri-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.EVE_RELEASE_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.EVE_TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.EVE_TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        with:
+          projectPath: eve-desktop
+          owner: ${{ vars.EVE_RELEASE_OWNER }}
+          repo: ${{ vars.EVE_RELEASE_REPOSITORY }}
+          releaseCommitish: main
+          tagName: eve-ai-studio-v__VERSION__
+          releaseName: "Eve AI Studio v__VERSION__"
+          releaseBody: "Installer ufficiale di Eve AI Studio con aggiornamenti firmati."
+          releaseDraft: false
+          prerelease: true
+          updaterJsonPreferNsis: true
+          uploadUpdaterJson: true
+          uploadUpdaterSignatures: true
+          args: --config src-tauri/tauri.release.conf.json
+
+      - name: Conserva gli installer del workflow
+        uses: actions/upload-artifact@v4
+        with:
+          name: eve-ai-studio-${{ env.RELEASE_VERSION }}
+          path: eve-desktop/src-tauri/target/release/bundle/**
+          if-no-files-found: error

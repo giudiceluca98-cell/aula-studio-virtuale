@@ -21,6 +21,28 @@ Queste regole si applicano all'intero repository. Gli agenti sono generalisti: n
 7. Se non è possibile prenotare un file condiviso, l'integrazione viene affidata a un'attività separata.
 8. Non modificare migrazioni Supabase già applicate. Creare una nuova migrazione incrementale.
 
+## Eve AI Studio canonica
+
+Per qualunque attività relativa a Eve AI Studio, leggere integralmente anche:
+
+`docs/EVE_AI_STUDIO_COORDINATION.md`
+
+Regole inderogabili:
+
+1. Il branch canonico è `eve-ai-studio`.
+2. L'unica sorgente ufficiale è `reference/eve-ai-studio-preview/`.
+3. L'unico punto di ingresso è `reference/eve-ai-studio-preview/index.html`.
+4. Sviluppo, anteprima, verifica, pacchetto desktop e aggiornamenti devono derivare dalla stessa sorgente canonica.
+5. Non creare demo, HTML alternativi, standalone, nuove cartelle preview o copie complete dell'interfaccia.
+6. I documenti storici che citano uno standalone descrivono un flusso superato e non autorizzano a ricrearlo.
+7. Ogni attività parte dall'ultima `origin/eve-ai-studio` e usa un branch `codex/eve-ai-studio-<funzione>`.
+8. Prima di modificare file, registrare checkpoint, branch, stato e prenotazioni in `CODEX_COORDINATION.md`.
+9. I due Codex lavorano in sequenza sullo stesso checkpoint: prima la parte funzionale, poi grafica/UX/desktop.
+10. Il secondo Codex può iniziare soltanto dopo uno stato esplicito `READY_FOR_HANDOFF`, un commit congelato e un documento `HANDOFF`.
+11. Un file presente nel repository non è automaticamente disponibile: fanno fede prenotazioni, stato e handoff pubblicati.
+12. Non modificare `main`, `demo-canonica`, Aula Studio o la produzione durante questo flusso.
+13. Non effettuare merge senza approvazione esplicita dell'utente.
+
 ## Demo canonica
 
 Il branch `demo-canonica` contiene il riferimento visivo e funzionale ufficiale della demo.
