@@ -5,7 +5,7 @@
 - Branch di partenza: `origin/eve-ai-studio` @ `13b8822`
 - Branch di lavoro: `codex/eve-ai-studio-coordination-policy`
 - Commit di implementazione: `fda7361`
-- Pull Request: da aprire verso `eve-ai-studio`
+- Pull Request: [#75](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/75) verso `eve-ai-studio`
 
 ## Obiettivo
 

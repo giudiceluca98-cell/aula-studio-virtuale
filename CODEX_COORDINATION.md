@@ -55,6 +55,9 @@ MODULI CANONICI MODIFICATI:
 ULTIMO COMMIT:
 fda7361
 
+PULL REQUEST:
+https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/75
+
 DISPONIBILE PER L'ALTRO CODEX:
 SÌ per lettura e applicazione della procedura; NO per modificare i file
 prenotati fino alla revisione della Pull Request.
