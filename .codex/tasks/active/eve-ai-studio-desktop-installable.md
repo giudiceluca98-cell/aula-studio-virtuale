@@ -1,12 +1,12 @@
 # DESKTOP-0.1 — Applicazione installabile e aggiornamenti
 
 - Responsabile: Codex grafico/desktop
-- Stato: `FUNCTIONAL_TESTING`
+- Stato: `RELEASE_READY`
 - Branch di partenza: `codex/eve-ai-studio-coordination-policy` @ `238f721`
 - Sorgente applicativa: `origin/eve-ai-studio` @ `13b8822`
 - Branch di lavoro: `codex/eve-ai-studio-desktop-installable`
 - Commit di implementazione: `0a1527d`
-- Pull Request: da aprire verso `eve-ai-studio`
+- Pull Request: implementazione e correzioni unite tramite PR #75, #76, #77, #78 e #79
 
 ## Obiettivo
 
@@ -60,6 +60,9 @@ Nessuno. La sorgente canonica viene letta durante la build e non viene modificat
 - Causa verificata: il token condiviso precedente non poteva creare Release in `eve-ai-studio-releases`.
 - Modifica prevista: usare esclusivamente il segreto cifrato `EVE_RELEASE_TOKEN` nel workflow desktop.
 - Nessun valore segreto viene scritto nel repository o mostrato nei log.
+- Workflow conclusivo: `30373628931`, superato.
+- Release: `eve-ai-studio-v1.2.0-alpha.1`.
+- Asset: installer NSIS, firma e `latest.json` pubblicati in `giudiceluca98-cell/eve-ai-studio-releases`.
 
 ## Risultati locali
 
