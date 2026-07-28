@@ -25,6 +25,7 @@ class EveSettings(BaseSettings):
     evaluations_db_path: str = "data/eve-evaluations.sqlite3"
     provider_telemetry_db_path: str = "data/eve-provider-telemetry.sqlite3"
     materials_db_path: str = "data/eve-materials.sqlite3"
+    research_db_path: str = "data/eve-research.sqlite3"
 
     evaluation_publish_score: float = 85.0
     evaluation_evidence_max_chars: int = 500
@@ -50,3 +51,7 @@ class EveSettings(BaseSettings):
     rag_max_answer_chars: int = 4_000
 
     source_max_context_chars: int = 2_000
+
+    research_max_projects_per_room: int = 50
+    research_max_queries_per_project: int = 100
+    research_max_sources_per_project: int = 500
