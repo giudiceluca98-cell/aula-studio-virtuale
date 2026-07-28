@@ -6,9 +6,9 @@
     "query-pianificate",
     "quarantena-fonti"
   ],
-  "tested_sha": "5c96098d97e4d4151fff059d0367fef6fe766475",
-  "generated_at": "2026-07-28T02:07:28.202623+00:00",
-  "passed": false,
+  "tested_sha": "2ffc4d2b7651bef908f6f33480ab59606a7d0f28",
+  "generated_at": "2026-07-28T02:17:56.533649+00:00",
+  "passed": true,
   "states": {
     "install": "success",
     "python_compile": "success",
@@ -18,7 +18,7 @@
     "browser_modular_and_file": "success"
   },
   "pytest": {
-    "tests": 0,
+    "tests": 15,
     "failures": 0,
     "errors": 0,
     "skipped": 0
