@@ -1,7 +1,7 @@
 # REPOSITORY-0.1 — Riordino GitHub e workflow canonici
 
 - Responsabile: Codex coordinamento
-- Stato: `IN_PROGRESS`
+- Stato: `COMPLETATO`
 - Branch base: `origin/eve-ai-studio` @ `023fbe5`
 - Branch: `codex/eve-ai-studio-repository-cleanup`
 
