@@ -1,0 +1,29 @@
+{
+  "status": "PASSED",
+  "libraryVersion": "1.2.6",
+  "profile": "balanced-v1",
+  "assetsChecked": 64,
+  "postersChecked": 64,
+  "p0Official512Checked": 12,
+  "javascriptFilesChecked": 26,
+  "httpResourcesChecked": 150,
+  "oldRuntimeRemaining": 0,
+  "activeOldRuntimeReferences": 0,
+  "animationFilesRecompressed": 0,
+  "runtimeAssetBytes": 123025352,
+  "runtimePosterBytes": 9387082,
+  "galleryCardsUseStaticPosters": true,
+  "maximumAnimatedGalleryPreviews": 1,
+  "mainPortraitPausedInGallery": true,
+  "adaptiveParticleField": true,
+  "browserRetest": {
+    "status": "PASSED",
+    "url": "http://127.0.0.1:4179/index.html",
+    "galleryCards": 64,
+    "desktopHorizontalOverflow": false,
+    "mobileHorizontalOverflow": false,
+    "consoleErrors": 0,
+    "portraitVersion": "1.2.6",
+    "previewNaturalWidth": 512
+  }
+}

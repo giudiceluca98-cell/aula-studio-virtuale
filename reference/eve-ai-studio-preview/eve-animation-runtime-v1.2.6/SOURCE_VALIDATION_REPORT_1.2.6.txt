@@ -1,0 +1,21 @@
+EVE ANIMATION LIBRARY 1.2.6 — VALIDAZIONE PACCHETTO PULITO
+
+Esito: SUPERATO
+Versione: 1.2.6
+Profilo: official-clean-master
+
+Asset totali: 64
+P0: 12
+P1: 21
+P2: 20
+Compact: 8
+Hero: 3
+
+Animation.json verificati: 64
+Frame PNG verificati: 1861
+File funzionali preservati byte-per-byte: 2148
+File grafici alterati dalla pulizia: 0
+Errori: 0
+
+P0 mantiene la velocità approvata 0,5x e l'output a 30 FPS.
+P1, P2, hero e compact sono invariati.
