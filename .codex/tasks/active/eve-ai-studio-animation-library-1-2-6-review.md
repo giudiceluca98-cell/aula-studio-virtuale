@@ -5,7 +5,7 @@
 - Branch: `codex/eve-ai-studio-animation-library-1-2-6-review`
 - Pull Request: `#84` verso `eve-ai-studio`
 - Base aggiornata: `origin/eve-ai-studio` @ `a508e00`
-- Commit applicativo congelato: `b869e37`
+- Commit applicativo congelato: `6d9ea1a`
 
 ## Obiettivo
 
@@ -54,3 +54,5 @@ approvato.
 - il lint completo segnala un errore preesistente nel file non modificato
   `reference/eve-ai-studio-preview/app.js` e due avvisi preesistenti;
 - nessun merge, release desktop o intervento fuori dal perimetro eseguito.
+- ogni scheda della galleria espone ora il comando diretto
+  `Riproduci su Eve`; verificati 64 pulsanti e cambio stato dell'animazione.

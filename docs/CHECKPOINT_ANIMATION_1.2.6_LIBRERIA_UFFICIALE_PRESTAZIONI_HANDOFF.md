@@ -6,7 +6,8 @@ Stato: `REVIEW_REQUIRED`
 
 - branch: `codex/eve-ai-studio-animation-library-1-2-6-review`;
 - Pull Request: `#84` Draft verso `eve-ai-studio`;
-- commit applicativo: `b869e37` (`Integrate Eve animation library 1.2.6`);
+- commit applicativo iniziale: `b869e37` (`Integrate Eve animation library 1.2.6`);
+- ultimo commit applicativo: `6d9ea1a` (`Add play controls to Eve animation cards`);
 - ingresso unico: `reference/eve-ai-studio-preview/index.html`;
 - anteprima locale verificata: `http://127.0.0.1:4179/index.html`.
 
@@ -22,6 +23,9 @@ Stato: `REVIEW_REQUIRED`
   `install_hq_animation_runtime.py` e
   `vendor/EVE_ANIMATION_RUNTIME_V1.2.2_ORIGINAL.tar.xz`;
 - mantenuto `index.html` come unico file HTML e unica sorgente canonica.
+- aggiunto a ognuna delle 64 schede il pulsante diretto `Riproduci su Eve`,
+  mantenendo separati il comando di selezione dell'anteprima e quello di
+  riproduzione sul ritratto principale.
 
 La galleria usa poster statici per le 64 schede e mantiene una sola animazione
 grande attiva. Il ritratto principale viene sospeso quando la galleria è aperta;
@@ -51,6 +55,10 @@ nel browser integrato:
 - assenza di overflow orizzontale sia desktop sia mobile (viewport 390 × 844);
 - ritorno dalla galleria al ritratto principale funzionante;
 - console browser: 0 errori e 0 avvisi.
+- 64 pulsanti diretti presenti; il click sulla scheda `Thinking Deep Hero` ha
+  selezionato la scheda, aggiornato l'anteprima e impostato lo stato
+  `eve-thinking-deep-hero` sul ritratto Eve;
+- nessun overflow orizzontale desktop dopo l'aggiunta dei nuovi controlli.
 
 ## Limiti residui
 

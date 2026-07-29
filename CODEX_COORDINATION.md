@@ -350,7 +350,7 @@ PULL REQUEST:
 #84 (Draft) verso eve-ai-studio
 
 ULTIMO COMMIT APPLICATIVO:
-b869e37
+6d9ea1a
 
 OBIETTIVO:
 Sostituire il runtime 1.2.2 con Eve Animation Library 1.2.6 nella sola preview
@@ -381,7 +381,8 @@ canonica. Hash, sintassi JavaScript, typecheck, test, build, test Python, 150
 risorse HTTP e layout desktop/mobile verificati. Nessun riferimento eseguibile
 alla versione 1.2.2 e nessun duplicato HTML. Il lint completo conserva un errore
 preesistente in app.js, file non modificato da questa attività. Nessun merge o
-rilascio eseguito.
+rilascio eseguito. Ogni scheda della galleria include il comando diretto
+`Riproduci su Eve`, verificato su tutti i 64 asset.
 ```
 
 ## Attività storiche di Aula Studio
