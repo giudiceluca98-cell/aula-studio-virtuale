@@ -330,6 +330,37 @@ Nessuna demo, standalone o sorgente duplicata. Nessuna modifica a main,
 demo-canonica, Aula Studio o produzione.
 ```
 
+### ANIMATION-1.2.6 — Libreria ufficiale e prestazioni
+
+```text
+RESPONSABILE:
+AndreaGiudice94 / Codex integrazione grafica
+
+STATO:
+RESERVED
+
+BRANCH:
+codex/eve-ai-studio-animation-library-1-2-6-review
+
+PULL REQUEST:
+#84 (Draft) verso eve-ai-studio
+
+OBIETTIVO:
+Sostituire il runtime 1.2.2 con Eve Animation Library 1.2.6 nella sola preview
+canonica, mantenendo 64 asset e il profilo prestazioni approvato.
+
+FILE PRENOTATI:
+Vedere .codex/tasks/active/eve-ai-studio-animation-library-1-2-6-review.md.
+
+VINCOLI:
+Nessuna demo, copia HTML, standalone, cartella preview, modifica ai workflow,
+merge o release. È ammesso un solo task e un solo handoff per questa attività.
+
+NOTE:
+La PR contiene per ora soltanto la prenotazione. L'integrazione applicativa non
+è ancora iniziata.
+```
+
 ## Attività storiche di Aula Studio
 
 La tabella seguente è conservata come cronologia del precedente flusso di Aula Studio. Non assegna né prenota file di Eve AI Studio e non prevale sulle regole attive sopra.
