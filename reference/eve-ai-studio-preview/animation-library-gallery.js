@@ -31,12 +31,15 @@
     .animation-library-preview-stage img{display:block;width:min(100%,420px);height:340px;object-fit:contain;image-rendering:auto}
     .animation-library-preview-meta h3{margin:0 0 8px;font-size:24px}.animation-library-preview-meta p{color:var(--muted)}
     .animation-library-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin-top:16px;contain:layout style}
-    .animation-card{appearance:none;text-align:left;color:var(--text);border:1px solid var(--line);border-radius:15px;background:rgba(7,22,34,.74);padding:10px;transition:.16s ease;min-width:0;contain:layout paint style}
-    .animation-card:hover,.animation-card.active{transform:translateY(-2px);border-color:var(--cyan);box-shadow:0 10px 28px rgba(0,223,242,.12)}
+    .animation-card{text-align:left;color:var(--text);border:1px solid var(--line);border-radius:15px;background:rgba(7,22,34,.74);padding:10px;transition:.16s ease;min-width:0;contain:layout paint style}
+    .animation-card:hover,.animation-card:focus-within,.animation-card.active{transform:translateY(-2px);border-color:var(--cyan);box-shadow:0 10px 28px rgba(0,223,242,.12)}
+    .animation-card-select{appearance:none;display:block;width:100%;padding:0;border:0;background:transparent;text-align:left;color:inherit;cursor:pointer}
     .animation-card-media{height:150px;border-radius:11px;background:radial-gradient(circle,rgba(0,223,242,.12),transparent 66%);display:grid;place-items:center;overflow:hidden}
     .animation-card-media img{width:100%;height:100%;object-fit:contain;image-rendering:auto}
     .animation-card strong{display:block;margin:9px 2px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .animation-card small{display:block;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .animation-card-play{appearance:none;width:100%;min-height:36px;margin-top:9px;padding:7px 9px;border:1px solid rgba(0,223,242,.58);border-radius:10px;background:rgba(0,223,242,.12);color:var(--cyan);font:inherit;font-size:12px;font-weight:800;cursor:pointer;transition:.16s ease}
+    .animation-card-play:hover,.animation-card-play:focus-visible{background:var(--cyan);color:#03121c;box-shadow:0 7px 20px rgba(0,223,242,.2)}
     .animation-library-empty{grid-column:1/-1;padding:28px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:14px}
     @media(max-width:900px){.animation-library-toolbar{grid-template-columns:1fr 1fr}.animation-library-preview{grid-template-columns:1fr}}
     @media(max-width:600px){.animation-library-toolbar{grid-template-columns:1fr}.animation-library-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.animation-card-media{height:120px}}
@@ -211,14 +214,25 @@
     });
     count.textContent = `${visible.length} ${visible.length === 1 ? "animazione" : "animazioni"}`;
     grid.innerHTML = visible.length ? visible.map(asset => `
-      <button type="button" class="animation-card${selected?.id === asset.id ? " active" : ""}" data-asset-id="${escapeHtml(asset.id)}">
-        <span class="animation-card-media"><img data-poster-src="${posterUrl(asset)}" loading="lazy" decoding="async" alt="${escapeHtml(humanize(asset.id))}"></span>
-        <strong>${escapeHtml(humanize(asset.id))}</strong>
-        <small>${escapeHtml(asset.priority)} · ${escapeHtml(asset.variant)} · ${asset.width}px</small>
-      </button>`).join("") : '<div class="animation-library-empty">Nessuna animazione corrisponde ai filtri.</div>';
-    grid.querySelectorAll(".animation-card").forEach(card => card.addEventListener("click", () => {
+      <article class="animation-card${selected?.id === asset.id ? " active" : ""}" data-asset-id="${escapeHtml(asset.id)}">
+        <button type="button" class="animation-card-select" aria-label="Mostra anteprima ${escapeHtml(humanize(asset.id))}">
+          <span class="animation-card-media"><img data-poster-src="${posterUrl(asset)}" loading="lazy" decoding="async" alt="${escapeHtml(humanize(asset.id))}"></span>
+          <strong>${escapeHtml(humanize(asset.id))}</strong>
+          <small>${escapeHtml(asset.priority)} · ${escapeHtml(asset.variant)} · ${asset.width}px</small>
+        </button>
+        <button type="button" class="animation-card-play" aria-label="Riproduci ${escapeHtml(humanize(asset.id))} su Eve">▶ Riproduci su Eve</button>
+      </article>`).join("") : '<div class="animation-library-empty">Nessuna animazione corrisponde ai filtri.</div>';
+    grid.querySelectorAll(".animation-card-select").forEach(button => button.addEventListener("click", () => {
+      const card = button.closest(".animation-card");
       const asset = assets.find(item => item.id === card.dataset.assetId);
       if (asset) selectAsset(asset);
+    }));
+    grid.querySelectorAll(".animation-card-play").forEach(button => button.addEventListener("click", async () => {
+      const card = button.closest(".animation-card");
+      const asset = assets.find(item => item.id === card.dataset.assetId);
+      if (!asset) return;
+      selectAsset(asset);
+      await playAssetOnEve(asset);
     }));
     observeCardImages();
   }
@@ -234,10 +248,13 @@
 
   navButton.addEventListener("click", openLibrary);
   shortcut.addEventListener("click", openLibrary);
-  playButton.addEventListener("click", async () => {
-    if (!selected) return;
+  async function playAssetOnEve(asset) {
     library.resume?.();
-    await library.setState(selected.id, { restart: true }).catch(console.error);
+    await library.setState(asset.id, { restart: true }).catch(console.error);
+  }
+
+  playButton.addEventListener("click", async () => {
+    if (selected) await playAssetOnEve(selected);
   });
   [search, priorityFilter, categoryFilter, variantFilter].forEach(control => control.addEventListener("input", render));
 
