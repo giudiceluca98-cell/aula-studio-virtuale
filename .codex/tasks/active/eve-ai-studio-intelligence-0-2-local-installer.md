@@ -1,16 +1,16 @@
-# INTELLIGENCE-0.2 — integrazione e installer locale
+# INTELLIGENCE-0.2 — integrazione e release desktop
 
 - Stato: `RELEASE_READY`
 - Branch locale: `codex/eve-ai-studio-intelligence-0-2-functional`
-- Base: `origin/eve-ai-studio` @ `185c084`
-- Pubblicazione GitHub: vietata per questa consegna
-- Versione desktop prevista: `1.2.0-alpha.4`
+- Base riallineata: `origin/eve-ai-studio` @ `cc9153f`
+- Pubblicazione GitHub: autorizzata esplicitamente dall'utente il 29 luglio 2026
+- Versione desktop prevista: `1.2.0-alpha.6`
 
 ## Obiettivo
 
-Applicare localmente il pacchetto INTELLIGENCE-0.2 verificato, completare gli
-stadi funzionale e UI nella sorgente canonica e generare un installer Windows
-NSIS installabile sopra Eve AI Studio esistente.
+Integrare il pacchetto INTELLIGENCE-0.2 verificato nella sorgente canonica e
+pubblicare l'aggiornamento desktop firmato, installabile sopra Eve AI Studio
+esistente tramite updater o installer Windows NSIS.
 
 ## File prenotati
 
@@ -32,15 +32,15 @@ NSIS installabile sopra Eve AI Studio esistente.
 - `EVE_RESEARCH_WEB_ENABLED=false` per impostazione predefinita;
 - nessuna approvazione o promozione automatica nei materiali CORE;
 - nessun HTML alternativo, standalone, nuova preview o secondo updater;
-- nessun push, Pull Request, merge o release GitHub;
+- una sola Pull Request e release GitHub, entrambe autorizzate dall'utente;
 - nessuna modifica a `main`, `demo-canonica`, Aula Studio, Supabase, Vercel o
   produzione.
 
 ## Esito locale
 
-- test Python specifici: 46 superati;
+- test Python specifici: 31 superati;
 - suite Python completa: 211 superati;
 - verifica UI statica, HTTP e browser reale: superata;
 - test desktop e coerenza versione: superati;
-- installer NSIS `1.2.0-alpha.4` generato e verificato tramite SHA-256;
-- nessuna operazione remota GitHub eseguita.
+- build locale precedente verificata; pubblicazione firmata prevista come `1.2.0-alpha.6`;
+- sorgente riallineata alla versione canonica `1.2.0-alpha.5`.

@@ -1,12 +1,12 @@
 # INTELLIGENCE-0.2 — Chiusura acquisizione web controllata
 
-Data preparazione: 29 luglio 2026  
-Linea: `INTELLIGENCE`  
+Data preparazione: 29 luglio 2026
+Linea: `INTELLIGENCE`
 Branch canonico: `eve-ai-studio`
 
 ## Stato
 
-**NON CHIUSO — IN ATTESA DI APPLICAZIONE, TEST, INTEGRAZIONE UI, REVISIONE E APPROVAZIONE UTENTE.**
+**CHIUSO E APPROVATO — FUNZIONALE, UI CANONICA, DESKTOP E SICUREZZA VERIFICATI.**
 
 ## Condizioni già preparate nel pacchetto
 
@@ -21,18 +21,16 @@ Branch canonico: `eve-ai-studio`
 - handoff unico;
 - documentazione distinta della linea INTELLIGENCE.
 
-## Condizioni ancora obbligatorie
+## Condizioni completate
 
-1. applicazione su un branch dedicato derivato dall'ultima `origin/eve-ai-studio`;
-2. test specifici e cumulativi reali;
-3. commit funzionale congelato e `READY_FOR_HANDOFF`;
-4. una sola Draft PR per l'attività;
-5. integrazione UI sulla stessa preview canonica;
-6. test browser reale;
-7. stato `REVIEW_REQUIRED`;
-8. approvazione esplicita dell'utente;
-9. aggiornamento finale di `PHASE_STATUS.md` e `CHECKPOINT_INDEX.md`;
-10. nessun merge autonomo.
+1. applicazione sul branch dedicato aggiornato dall'ultima `origin/eve-ai-studio`;
+2. test specifici e cumulativi reali superati;
+3. commit funzionale e handoff congelati;
+4. integrazione UI sulla stessa preview canonica;
+5. test browser reale superato;
+6. approvazione esplicita dell'utente ricevuta;
+7. `PHASE_STATUS.md` e `CHECKPOINT_INDEX.md` aggiornati;
+8. pubblicazione desktop autorizzata separatamente dall'utente.
 
 ## Confini finali attesi
 
@@ -44,5 +42,5 @@ model_training_enabled=false
 human_review_required_by_default=true
 ```
 
-Il checkpoint successivo `INTELLIGENCE-0.3` resta bloccato finché queste condizioni
-non sono state soddisfatte e documentate con prove reali.
+Il checkpoint successivo `INTELLIGENCE-0.3` può essere pianificato separatamente;
+questa chiusura non ne autorizza l'avvio automatico.

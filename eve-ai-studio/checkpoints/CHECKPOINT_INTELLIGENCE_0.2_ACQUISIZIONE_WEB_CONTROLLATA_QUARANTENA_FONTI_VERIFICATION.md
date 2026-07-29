@@ -1,7 +1,7 @@
 # INTELLIGENCE-0.2 — Verifica acquisizione web controllata
 
-Data preparazione: 29 luglio 2026  
-Branch canonico analizzato in sola lettura: `eve-ai-studio`  
+Data preparazione: 29 luglio 2026
+Branch canonico analizzato in sola lettura: `eve-ai-studio`
 Commit osservato: `185c08486d56a684a1b095558ab8860feef8bd43`
 
 ## Stato corrente

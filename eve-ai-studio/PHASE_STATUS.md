@@ -6,7 +6,7 @@
 Branch operativo: eve-ai-studio
 Versione servizio: 1.2.0
 Linea CORE: chiusa e in pausa dopo CORE-1.1
-Linea INTELLIGENCE: INTELLIGENCE-0.1 chiuso; INTELLIGENCE-0.2 prossimo checkpoint
+Linea INTELLIGENCE: INTELLIGENCE-0.2 chiuso e approvato; INTELLIGENCE-0.3 pianificato
 ```
 
 Indice ufficiale:
@@ -74,9 +74,9 @@ eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.1_CENTRO_RICERCA_PROGETTI_AP
 
 ### `INTELLIGENCE-0.2` — Acquisizione web controllata e quarantena fonti
 
-Stato: **prossimo checkpoint; piano da registrare**
+Stato: **chiuso e approvato**
 
-Obiettivo previsto:
+Funzioni verificate:
 
 - ricerca online tramite connettore esplicito;
 - acquisizione HTTP/HTTPS controllata;

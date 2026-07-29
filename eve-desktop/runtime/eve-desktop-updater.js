@@ -9,13 +9,21 @@
   const previewInvoke = async (command) => {
     if (command === "check_for_update") {
       return {
-        version: "1.2.0-alpha.4",
-        currentVersion: "1.2.0-alpha.1",
+        version: "1.2.0-alpha.6",
+        currentVersion: "1.2.0-alpha.5",
         body: "Simulazione locale dell'aggiornamento di Eve AI Studio."
       };
     }
     if (command === "install_pending_update") {
       throw new Error("L'anteprima locale non installa aggiornamenti.");
+    }
+    if (command === "select_local_update") {
+      return {
+        version: "1.2.0-alpha.6",
+        currentVersion: "1.2.0-alpha.5",
+        body: "Installer ufficiale selezionato dal computer.",
+        source: "local"
+      };
     }
     throw new Error("Comando di anteprima non riconosciuto.");
   };
@@ -64,6 +72,9 @@
         <div class="eve-desktop-update-progress" data-update-progress hidden></div>
         <div class="eve-desktop-update-actions">
           <button type="button" class="btn" data-update-check>Controlla ora</button>
+          <button type="button" class="btn" data-update-local>
+            Scegli dal computer
+          </button>
           <button type="button" class="btn primary" data-update-install hidden>
             Scarica e installa
           </button>
@@ -80,6 +91,7 @@
   const messageElement = backdrop.querySelector("[data-update-message]");
   const progressElement = backdrop.querySelector("[data-update-progress]");
   const checkButton = backdrop.querySelector("[data-update-check]");
+  const localButton = backdrop.querySelector("[data-update-local]");
   const installButton = backdrop.querySelector("[data-update-install]");
   const closeButton = backdrop.querySelector(".eve-desktop-update-close");
 
@@ -95,6 +107,7 @@
     installButton.hidden = !state.update;
     progressElement.hidden = !state.checking && !state.installing;
     checkButton.disabled = state.checking || state.installing;
+    localButton.disabled = state.checking || state.installing;
     installButton.disabled = state.checking || state.installing;
   }
 
@@ -152,9 +165,35 @@
     }
   }
 
+  async function selectLocalUpdate() {
+    if (state.checking || state.installing) return;
+    state.checking = true;
+    state.message = "Verifica della release ufficiale e scelta del file…";
+    openDialog();
+    render();
+    try {
+      const update = await invoke("select_local_update");
+      if (!update) {
+        state.message = "Selezione annullata.";
+        return;
+      }
+      state.update = update;
+      state.message =
+        `File ufficiale ${update.version} verificato. ` +
+        "Puoi procedere con l'installazione.";
+    } catch (error) {
+      state.update = null;
+      state.message = `File non accettato: ${String(error)}`;
+    } finally {
+      state.checking = false;
+      render();
+    }
+  }
+
   launcher.addEventListener("click", openDialog);
   closeButton.addEventListener("click", closeDialog);
   checkButton.addEventListener("click", () => checkForUpdates());
+  localButton.addEventListener("click", selectLocalUpdate);
   installButton.addEventListener("click", installUpdate);
   backdrop.addEventListener("click", (event) => {
     if (event.target === backdrop) closeDialog();
@@ -165,6 +204,7 @@
 
   window.EveDesktopUpdates = {
     check: checkForUpdates,
+    selectLocal: selectLocalUpdate,
     install: installUpdate,
     open: openDialog
   };
