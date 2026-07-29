@@ -118,7 +118,7 @@ if (!rustMain.includes('windows_subsystem = "windows"')) {
 }
 
 const runtimeAssets = await readdir(
-  join(dist, "eve-animation-runtime-v1.2.2", "assets"),
+  join(dist, "eve-animation-runtime-v1.2.6", "assets"),
   { recursive: true }
 );
 if (runtimeAssets.filter((item) => item.endsWith(".webp")).length !== 64) {
