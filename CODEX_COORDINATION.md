@@ -87,6 +87,34 @@ Il codice funzionale di `INTELLIGENCE-0.2 — Acquisizione web controllata e qua
 
 I documenti storici che richiedono una preview standalone sono superati: la verifica deve usare esclusivamente la sorgente modulare canonica.
 
+#### Integrazione locale e installer INTELLIGENCE-0.2
+
+```text
+RESPONSABILE:
+Codex integrazione funzionale, UI e desktop locale
+
+STATO:
+IN_PROGRESS
+
+BRANCH LOCALE:
+codex/eve-ai-studio-intelligence-0-2-functional
+
+BASE:
+origin/eve-ai-studio @ 185c084
+
+OBIETTIVO:
+Applicare il pacchetto INTELLIGENCE-0.2 verificato e generare l'installer locale
+Windows NSIS 1.2.0-alpha.4 senza pubblicazioni remote.
+
+FILE PRENOTATI:
+Vedere .codex/tasks/active/eve-ai-studio-intelligence-0-2-local-installer.md.
+
+VINCOLI:
+Nessun push, PR, merge o release GitHub. Nessuna demo, standalone, copia HTML,
+nuova preview o secondo updater. Main, demo-canonica, Aula Studio, Supabase,
+Vercel e produzione restano invariati.
+```
+
 ### DESKTOP-0.1 — Applicazione installabile e aggiornamenti
 
 Handoff operativo completo:
