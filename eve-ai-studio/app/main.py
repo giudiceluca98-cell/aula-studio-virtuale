@@ -11,9 +11,12 @@ from .evaluations.router import create_evaluation_router
 from .evaluations.service import EvaluationService
 from .evaluations.storage import SqliteEvaluationStore
 from .intelligence import (
+    ControlledWebAcquirer,
     ResearchCenterService,
     ResearchLimits,
+    SqliteAcquisitionStore,
     SqliteResearchStore,
+    WebAcquisitionPolicy,
     create_research_router,
 )
 from .materials import MaterialLimits, MaterialService, SqliteMaterialStore, create_material_router
@@ -129,6 +132,18 @@ source_opening = SourceOpeningService(
     ),
 )
 research_store = SqliteResearchStore(settings.research_db_path)
+research_acquisition_store = SqliteAcquisitionStore(settings.research_db_path)
+research_acquirer = ControlledWebAcquirer(
+    policy=WebAcquisitionPolicy(
+        enabled=settings.research_web_enabled,
+        timeout_seconds=settings.research_web_timeout_seconds,
+        max_bytes=settings.research_web_max_bytes,
+        max_redirects=settings.research_web_max_redirects,
+        robots_max_bytes=settings.research_robots_max_bytes,
+        user_agent=settings.research_web_user_agent,
+        require_robots=settings.research_robots_required,
+    )
+)
 research_center = ResearchCenterService(
     research_store,
     limits=ResearchLimits(
@@ -136,6 +151,8 @@ research_center = ResearchCenterService(
         max_queries_per_project=settings.research_max_queries_per_project,
         max_sources_per_project=settings.research_max_sources_per_project,
     ),
+    acquisition_store=research_acquisition_store,
+    acquirer=research_acquirer,
 )
 
 active_prompt_version_id = prompts.status().active_version_id
@@ -152,8 +169,9 @@ app = FastAPI(
         "Fondazione modulare di Eve con requisiti, prompt, valutazioni, runner, "
         "provider controllati, materiali, retrieval locale, chat RAG citata, "
         "apertura verificabile delle fonti e centro ricerca INTELLIGENCE con "
-        "progetti, query e fonti in quarantena. Rete, acquisizione web, embedding e "
-        "addestramento del modello restano disattivati."
+        "progetti, query, acquisizione URL controllata e quarantena. La rete resta "
+        "opt-in e disattivata per impostazione predefinita; ricerca generalista, "
+        "embedding e addestramento del modello restano esclusi."
     ),
 )
 app.include_router(create_prompt_router(prompts))

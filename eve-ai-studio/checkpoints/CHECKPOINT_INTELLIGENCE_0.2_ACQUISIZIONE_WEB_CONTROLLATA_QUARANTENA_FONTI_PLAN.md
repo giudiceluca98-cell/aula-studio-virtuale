@@ -72,5 +72,5 @@ GET  /v1/intelligence/research/projects/{project_id}/sources/{source_id}/documen
 5. acquisizione possibile soltanto quando il flag server-side è attivo;
 6. contenuto non promosso automaticamente a conoscenza;
 7. API e isolamento per aula verificati;
-8. preview e standalone aggiornati;
+8. preview canonica modulare aggiornata e verificata; nessun file standalone creato;
 9. suite specifica e cumulativa verdi.

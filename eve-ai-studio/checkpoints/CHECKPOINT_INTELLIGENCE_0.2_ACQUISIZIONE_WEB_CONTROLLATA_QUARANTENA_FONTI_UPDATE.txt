@@ -1,0 +1,274 @@
+EVE AI STUDIO — LINEA INTELLIGENCE
+CHECKPOINT INTELLIGENCE-0.2
+ACQUISIZIONE WEB CONTROLLATA E QUARANTENA DELLE FONTI
+
+Data preparazione pacchetto: 29 luglio 2026
+Repository sorgente: giudiceluca98-cell/aula-studio-virtuale
+Branch canonico letto in sola lettura: eve-ai-studio
+Commit osservato: 185c08486d56a684a1b095558ab8860feef8bd43
+Stato coordinativo osservato: FUNCTIONAL_TESTING
+Scritture effettuate su GitHub da questa lavorazione: NESSUNA
+
+======================================================================
+1. SCOPO
+======================================================================
+
+Completare il checkpoint già parzialmente presente nel branch senza riscrivere il
+lavoro valido e senza introdurre ricerca generalista, crawling, approvazione automatica,
+embedding o addestramento del modello.
+
+Il checkpoint consente esclusivamente l'acquisizione esplicita del contenuto di URL già
+registrati nel centro ricerca. Ogni documento acquisito resta esterno, non fidato,
+separato dai materiali CORE e in attesa di revisione umana.
+
+======================================================================
+2. COSA ERA GIÀ PRESENTE E PERCHÉ È STATO CONSERVATO
+======================================================================
+
+Nel branch erano già presenti componenti tecnici sostanziali di INTELLIGENCE-0.2:
+
+- app/core/config.py con i limiti server-side e il flag opt-in;
+- app/intelligence/models.py con eventi e documento in quarantena;
+- app/intelligence/web_acquisition.py con URL guard, DNS, IP pinning, TLS,
+  redirect, robots.txt, MIME e limiti byte;
+- app/intelligence/acquisition_storage.py con eventi e contenuti acquisiti;
+- app/intelligence/service.py con orchestrazione, estrazione e SHA-256;
+- app/intelligence/router.py con API dedicate;
+- app/intelligence/__init__.py con gli export pubblici.
+
+Questi moduli non vengono sostituiti. La soluzione riusa il codice esistente perché:
+
+- riduce il rischio di regressioni;
+- conserva i contratti già progettati;
+- evita duplicazioni;
+- mantiene separate le linee CORE e INTELLIGENCE;
+- rispetta la regola secondo cui il modello non autorizza né esegue direttamente.
+
+======================================================================
+3. LACUNE REALI TROVATE
+======================================================================
+
+1. app/main.py costruiva ResearchCenterService senza SqliteAcquisitionStore e senza
+   ControlledWebAcquirer. Di conseguenza le API esistevano ma il modulo risultava non
+   disponibile nell'app principale.
+
+2. .env.example non documentava le variabili già previste in EveSettings.
+
+3. Il controllo robots.txt veniva eseguito soltanto sulla destinazione iniziale. Una
+   catena di redirect poteva raggiungere un nuovo URL senza ricontrollare le regole di
+   accesso applicabili a quella destinazione.
+
+4. Non esisteva una suite specifica per le protezioni e i contratti di 0.2.
+
+5. La preview canonica mostrava ancora INTELLIGENCE-0.1 e non rappresentava il nuovo
+   flusso. Una prima proposta di sostituzione riduceva le funzioni precedenti; è stata
+   scartata. Il modulo UI finale preserva creazione progetto, query e registrazione URL
+   e aggiunge la pipeline di acquisizione senza eliminare nulla.
+
+6. Mancavano UPDATE, VERIFICATION, CI_RESULT, CLOSURE e HANDOFF conformi alle regole
+   correnti.
+
+======================================================================
+4. MODIFICHE FUNZIONALI PREPARATE
+======================================================================
+
+4.1 Wiring dell'app principale
+
+File:
+- eve-ai-studio/app/main.py
+
+Interventi:
+- import di ControlledWebAcquirer;
+- import di SqliteAcquisitionStore;
+- import di WebAcquisitionPolicy;
+- costruzione dello store acquisizioni sul database ricerca già esistente;
+- costruzione della policy dai valori EveSettings;
+- iniezione esplicita di store e acquirer in ResearchCenterService;
+- descrizione del servizio aggiornata per distinguere modulo disponibile e rete opt-in.
+
+Risultato atteso con configurazione predefinita:
+
+checkpoint=INTELLIGENCE-0.2
+content_acquisition_available=true
+content_acquisition_enabled=false
+web_search_enabled=false
+model_training_enabled=false
+
+4.2 Configurazione documentata
+
+File:
+- eve-ai-studio/.env.example
+
+Variabili aggiunte:
+
+EVE_RESEARCH_WEB_ENABLED=false
+EVE_RESEARCH_WEB_TIMEOUT_SECONDS=10
+EVE_RESEARCH_WEB_MAX_BYTES=2000000
+EVE_RESEARCH_WEB_MAX_REDIRECTS=3
+EVE_RESEARCH_ROBOTS_MAX_BYTES=512000
+EVE_RESEARCH_ROBOTS_REQUIRED=true
+EVE_RESEARCH_WEB_USER_AGENT=EveAulaStudioResearchBot/0.2
+
+Il valore predefinito resta false.
+
+4.3 Robots su ogni destinazione della catena
+
+File:
+- eve-ai-studio/app/intelligence/web_acquisition.py
+
+Intervento:
+- la routine di follow riceve il parametro check_robots;
+- prima di ogni richiesta al contenuto, compresa ogni destinazione ottenuta tramite
+  redirect, viene verificato robots.txt quando la policy lo richiede;
+- il recupero di robots.txt usa la stessa pipeline controllata ma disattiva il controllo
+  ricorsivo per evitare cicli;
+- un redirect verso un percorso o host non consentito viene bloccato prima del download
+  del contenuto finale.
+
+Motivo:
+Il rispetto di robots.txt deve seguire l'URL realmente visitato, non soltanto il primo
+URL inserito dall'utente.
+
+4.4 Suite specifica
+
+Nuovo file:
+- eve-ai-studio/tests/test_intelligence_acquisition.py
+
+Copertura prevista:
+- flag disattivato per impostazione predefinita;
+- schemi, credenziali e porte non consentite;
+- IPv4 e IPv6 private, loopback, link-local e non globali;
+- connessione fissata all'IP già validato;
+- nessun proxy ereditato dall'ambiente;
+- robots deny e robots unavailable in modalità fail-closed;
+- robots rivalidato dopo redirect;
+- limite redirect;
+- blocco del downgrade HTTPS → HTTP;
+- rivalidazione SSRF della destinazione redirect;
+- rifiuto di compressione inattesa;
+- allowlist MIME;
+- limite byte;
+- persistenza dell'evento;
+- SHA-256;
+- estrazione HTML senza script;
+- stato quarantined obbligatorio;
+- content_trust=untrusted_web_content;
+- instructions_executable=false;
+- idempotenza senza refresh;
+- isolamento room_id;
+- API con flag OFF e ON;
+- nessuna approvazione o promozione automatica.
+
+======================================================================
+5. MODIFICA UI PREPARATA COME SECONDO STADIO
+======================================================================
+
+File canonico già esistente:
+- reference/eve-ai-studio-preview/research-center-workflow.js
+
+Non vengono creati:
+- nuovi HTML;
+- copie di index.html;
+- standalone;
+- nuove cartelle preview;
+- seconde demo.
+
+La nuova versione del modulo:
+- conserva tutte le funzioni dimostrative di INTELLIGENCE-0.1;
+- conserva creazione progetto;
+- conserva aggiunta query;
+- conserva registrazione fonte candidata;
+- aggiunge selezione fonte e pipeline di acquisizione;
+- dichiara esplicitamente che si tratta di simulazione UI;
+- non esegue fetch o altra rete;
+- mostra flag rete OFF;
+- mostra SSRF, robots, redirect, limiti e checksum;
+- mostra il documento come untrusted_web_content;
+- mostra instructions_executable=false;
+- mostra l'assenza di promozione nei materiali CORE.
+
+La modifica UI deve essere applicata soltanto dopo il passaggio funzionale
+READY_FOR_HANDOFF e dopo verifica delle prenotazioni correnti.
+
+======================================================================
+6. FILE CHE IL PACCHETTO NON MODIFICA
+======================================================================
+
+- main;
+- demo-canonica;
+- Aula Studio;
+- reference/demo-aula-studio-virtuale-canonica.html;
+- eve-canonical-integration-v2;
+- Vercel;
+- Supabase;
+- produzione;
+- segreti o token;
+- workflow GitHub;
+- index.html;
+- app.js;
+- styles.css;
+- libreria animazioni 1.2.6;
+- applicazione desktop;
+- repository delle release.
+
+======================================================================
+7. FUNZIONI ESPLICITAMENTE ESCLUSE
+======================================================================
+
+- motore di ricerca generalista;
+- esecuzione automatica delle query planned;
+- crawling ricorsivo;
+- login, cookie o autenticazione web;
+- browser JavaScript per il download;
+- PDF, Office, immagini, audio e video;
+- approvazione automatica;
+- inserimento automatico nei materiali CORE;
+- embedding;
+- retrieval semantico o ibrido;
+- provider AI reale;
+- generazione AI;
+- addestramento del modello.
+
+======================================================================
+8. STATO CORRETTO DEL CHECKPOINT
+======================================================================
+
+Questo pacchetto contiene implementazione, test, UI non regressiva, applicatore,
+verificatore, rollback e documentazione.
+
+Non dichiara falsamente il checkpoint chiuso.
+
+Stato prima dell'applicazione sul repository completo:
+FUNCTIONAL_TESTING
+
+Transizioni richieste:
+
+1. applicazione funzionale su un solo branch dedicato;
+2. test specifici e cumulativi reali;
+3. READY_FOR_HANDOFF con commit congelato e una sola Draft PR;
+4. integrazione UI sul flusso previsto dalle regole correnti;
+5. test browser reale della preview canonica;
+6. REVIEW_REQUIRED;
+7. approvazione esplicita dell'utente;
+8. chiusura formale di INTELLIGENCE-0.2.
+
+======================================================================
+9. PERCHÉ NON È STATO CARICATO NULLA SU GITHUB
+======================================================================
+
+L'utente ha richiesto espressamente che questa lavorazione non effettui più scritture
+su GitHub. Il repository è stato consultato esclusivamente in lettura per ricostruire lo
+stato reale del branch eve-ai-studio.
+
+Il risultato viene consegnato come archivio locale scaricabile da fornire a Codex.
+Codex dovrà confrontare la base corrente, rispettare prenotazioni e coordinamento e
+applicare soltanto le modifiche previste.
+
+======================================================================
+10. PROSSIMO CHECKPOINT
+======================================================================
+
+INTELLIGENCE-0.3 — Affidabilità fonti, conflitti e revisione.
+
+Non deve iniziare finché INTELLIGENCE-0.2 non ha test reali, handoff, integrazione UI,
+revisione e approvazione conclusiva.

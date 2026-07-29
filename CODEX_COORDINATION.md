@@ -78,14 +78,44 @@ demo-canonica, Aula Studio, desktop o produzione.
 
 ### Stato del checkpoint INTELLIGENCE-0.2
 
-Il codice funzionale di `INTELLIGENCE-0.2 — Acquisizione web controllata e quarantena fonti` risulta già presente sul branch canonico, ma non è ancora registrato un handoff conforme alla procedura nuova. Di conseguenza:
-
-- lo stato coordinativo è `FUNCTIONAL_TESTING`;
-- non è disponibile per interventi grafici o desktop;
-- il Codex funzionale deve pubblicare commit congelato, Pull Request o riferimento equivalente, file congelati, test e documento `CHECKPOINT_INTELLIGENCE_0.2_ACQUISIZIONE_WEB_CONTROLLATA_QUARANTENA_FONTI_HANDOFF.md`;
-- soltanto dopo lo stato esplicito `READY_FOR_HANDOFF` può iniziare un branch `codex/eve-ai-studio-intelligence-0-2-ui-integration`.
+`INTELLIGENCE-0.2 — Acquisizione web controllata e quarantena fonti` ha completato
+implementazione funzionale, UI canonica, test specifici e cumulativi, verifica
+browser e prova desktop. L'utente ha approvato esplicitamente integrazione e
+pubblicazione desktop il 29 luglio 2026. Stato coordinativo: `RELEASE_READY`.
 
 I documenti storici che richiedono una preview standalone sono superati: la verifica deve usare esclusivamente la sorgente modulare canonica.
+
+#### Integrazione e release INTELLIGENCE-0.2
+
+```text
+RESPONSABILE:
+Codex integrazione funzionale, UI e desktop
+
+STATO:
+RELEASE_READY
+
+BRANCH LOCALE:
+codex/eve-ai-studio-intelligence-0-2-functional
+
+BASE:
+origin/eve-ai-studio @ cc9153f
+
+OBIETTIVO:
+Applicare il pacchetto INTELLIGENCE-0.2 verificato e pubblicare l'aggiornamento
+desktop firmato Windows NSIS 1.2.0-alpha.6.
+
+FILE PRENOTATI:
+Vedere .codex/tasks/active/eve-ai-studio-intelligence-0-2-local-installer.md.
+
+VINCOLI:
+Una sola PR e una sola release autorizzate dall'utente. Nessuna demo,
+standalone, copia HTML, nuova preview o secondo updater. Main, demo-canonica,
+Aula Studio, Supabase, Vercel e produzione restano invariati.
+
+ESITO:
+Funzionale, UI canonica, browser reale e desktop verificati. Release firmata
+1.2.0-alpha.6 autorizzata e pronta per il workflow ufficiale.
+```
 
 ### DESKTOP-0.1 — Applicazione installabile e aggiornamenti
 

@@ -7,7 +7,7 @@ Eve AI Studio usa due linee di sviluppo indipendenti:
 - `CORE` — piattaforma tecnica già sviluppata: sicurezza, requisiti, prompt, valutazioni, provider, materiali, retrieval, RAG e apertura delle fonti;
 - `INTELLIGENCE` — nuova evoluzione di Eve: ricerca online, acquisizione controllata, memoria, apprendimento e capacità AI.
 
-La linea `CORE` è **chiusa e in pausa dopo CORE-1.1**. La linea `INTELLIGENCE` ha chiuso **INTELLIGENCE-0.1** e prosegue con **INTELLIGENCE-0.2**.
+La linea `CORE` è **chiusa e in pausa dopo CORE-1.1**. La linea `INTELLIGENCE` ha chiuso **INTELLIGENCE-0.2**; `INTELLIGENCE-0.3` resta pianificato.
 
 ## Convenzione obbligatoria dei nomi
 
@@ -56,7 +56,7 @@ Non esiste un `CORE-1.2` approvato o avviato.
 | ID | Parole chiave ufficiali | Stato/obiettivo |
 |---|---|---|
 | `INTELLIGENCE-0.1` | Centro ricerca, progetti apprendimento | chiuso e approvato |
-| `INTELLIGENCE-0.2` | Acquisizione web controllata, quarantena fonti | prossimo checkpoint attivo |
+| `INTELLIGENCE-0.2` | Acquisizione web controllata, quarantena fonti | chiuso e approvato |
 | `INTELLIGENCE-0.3` | Affidabilità fonti, conflitti, revisione | pianificato |
 | `INTELLIGENCE-0.4` | Memoria semantica, embedding, retrieval ibrido | pianificato |
 | `INTELLIGENCE-0.5` | Provider AI reale, generazione citata | pianificato |

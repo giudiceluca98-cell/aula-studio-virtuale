@@ -1,0 +1,132 @@
+{
+  "checkpoint": "INTELLIGENCE-0.2",
+  "status": "static_and_http_passed_browser_real_pending",
+  "prepared_at": "2026-07-29",
+  "source_repository": "giudiceluca98-cell/aula-studio-virtuale",
+  "source_branch_read_only": "eve-ai-studio",
+  "source_commit_observed": "185c08486d56a684a1b095558ab8860feef8bd43",
+  "github_written_by_package_author": false,
+  "package_checks": {
+    "python_tools_syntax": "passed",
+    "python_test_syntax": "passed",
+    "preview_javascript_syntax": "passed",
+    "no_new_html": "passed",
+    "no_workflow_payload": "passed",
+    "synthetic_functional_apply": "passed",
+    "synthetic_idempotence": "passed",
+    "synthetic_ui_apply_and_http_smoke": "passed",
+    "synthetic_rollback": "passed",
+    "sha256_manifest": "passed"
+  },
+  "repository_checks": {
+    "compileall": "not_run",
+    "intelligence_specific_pytest": "not_run",
+    "full_pytest": "not_run",
+    "main_wiring_probe": "not_run",
+    "javascript_syntax": "not_run",
+    "canonical_http_smoke": "not_run",
+    "browser_real": "not_run",
+    "git_diff_check": "not_run"
+  },
+  "closed": false,
+  "last_verification": {
+    "checkpoint": "INTELLIGENCE-0.2",
+    "stage": "ui",
+    "verified_at": "2026-07-29T15:56:26+00:00",
+    "status": "static_and_http_passed_browser_real_pending",
+    "repository": "C:\\Users\\mazzo\\Documents\\Codex\\2026-07-26\\files-mentioned-by-the-user-eve\\work\\aula-studio-virtuale-release-1.2.6",
+    "git": {
+      "available": true,
+      "branch": "codex/eve-ai-studio-intelligence-0-2-functional",
+      "head": "2f63fe35816d82b046ad1d4d4b9f1f1091f798a1",
+      "safe_branch": true,
+      "changed_paths": [
+        "reference/eve-ai-studio-preview/research-center-workflow.js"
+      ],
+      "forbidden_paths": [],
+      "unexpected_paths": [],
+      "html_changes": [],
+      "scope_ok": true,
+      "warnings": []
+    },
+    "checks": {
+      "static_markers": {
+        "passed": true,
+        "files": {
+          "reference/eve-ai-studio-preview/research-center-workflow.js": {
+            "exists": true,
+            "missing_markers": [],
+            "sha256": "545bd38202df60d4df795c115c52c9c02787f1dfd5dd64d97afa69be2f667147"
+          },
+          "reference/eve-ai-studio-preview/index.html": {
+            "exists": true,
+            "missing_markers": [],
+            "sha256": "3369c8a170271faea202f3168e71a988b2c7020f7ea87860f50f14e2123db869"
+          }
+        }
+      },
+      "node_check": {
+        "command": [
+          "node",
+          "--check",
+          "research-center-workflow.js"
+        ],
+        "returncode": 0,
+        "passed": true,
+        "stdout": "",
+        "stderr": "",
+        "duration_seconds": 0.094
+      },
+      "canonical_http_smoke": {
+        "passed": true,
+        "base_url": "http://127.0.0.1:58246",
+        "requests": [
+          {
+            "path": "index.html",
+            "status": 200,
+            "bytes": 2757,
+            "sha256": "3369c8a170271faea202f3168e71a988b2c7020f7ea87860f50f14e2123db869"
+          },
+          {
+            "path": "research-center-workflow.js",
+            "status": 200,
+            "bytes": 20201,
+            "sha256": "545bd38202df60d4df795c115c52c9c02787f1dfd5dd64d97afa69be2f667147"
+          }
+        ],
+        "external_network_used": false
+      },
+      "no_preview_fetch": {
+        "passed": true,
+        "external_network_used": false
+      },
+      "browser_real": {
+        "passed": false,
+        "required": true,
+        "reason": "Eseguire verifica browser reale separata prima di REVIEW_REQUIRED."
+      },
+      "git_diff_check": {
+        "command": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "returncode": 0,
+        "passed": true,
+        "stdout": "",
+        "stderr": "warning: in the working copy of 'reference/eve-ai-studio-preview/research-center-workflow.js', LF will be replaced by CRLF the next time Git touches it\n",
+        "duration_seconds": 0.098
+      },
+      "diff_scope": {
+        "passed": true,
+        "forbidden_paths": [],
+        "unexpected_paths": [],
+        "html_changes": []
+      }
+    },
+    "github_written": false,
+    "browser_real_required_before_closure": true,
+    "checkpoint_closed": false,
+    "result_file": "C:\\Users\\mazzo\\Documents\\Codex\\2026-07-26\\files-mentioned-by-the-user-eve\\work\\i02\\INTELLIGENCE_0.2_CHECKPOINT_CODEX_PACKAGE\\results\\VERIFY_ui_20260729T155626Z.json"
+  }
+}
