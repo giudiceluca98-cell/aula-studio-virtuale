@@ -99,6 +99,9 @@ if (
 const tauriConfig = JSON.parse(
   await readFile(join(desktopRoot, "src-tauri", "tauri.conf.json"), "utf8")
 );
+if (!tauriConfig.plugins?.updater || !Array.isArray(tauriConfig.plugins.updater.endpoints)) {
+  throw new Error("La configurazione updater locale deve essere un oggetto valido.");
+}
 if (tauriConfig.build?.frontendDist !== "../frontend-dist") {
   throw new Error("Tauri non usa la build generata dalla sorgente canonica.");
 }
@@ -115,6 +118,34 @@ const rustMain = await readFile(
 );
 if (!rustMain.includes('windows_subsystem = "windows"')) {
   throw new Error("La build Windows aprirebbe una console separata.");
+}
+
+const rustLibrary = await readFile(
+  join(desktopRoot, "src-tauri", "src", "lib.rs"),
+  "utf8"
+);
+for (const expected of [
+  "select_local_update",
+  "verify_local_signature",
+  "update.install(bytes)"
+]) {
+  if (!rustLibrary.includes(expected)) {
+    throw new Error(`Il backend updater locale non contiene ${expected}.`);
+  }
+}
+
+const updaterRuntime = await readFile(
+  join(desktopRoot, "runtime", "eve-desktop-updater.js"),
+  "utf8"
+);
+for (const expected of [
+  "Scegli dal computer",
+  'invoke("select_local_update")',
+  "File ufficiale"
+]) {
+  if (!updaterRuntime.includes(expected)) {
+    throw new Error(`L'interfaccia updater locale non contiene ${expected}.`);
+  }
 }
 
 const runtimeAssets = await readdir(
