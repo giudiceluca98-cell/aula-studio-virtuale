@@ -303,7 +303,7 @@ RESPONSABILE:
 Codex coordinamento
 
 STATO:
-IN_PROGRESS
+COMPLETATO
 
 BRANCH:
 codex/eve-ai-studio-repository-cleanup
@@ -326,8 +326,12 @@ SÌ sui file applicativi della libreria 1.2.6; NO sui file di coordinamento e
 workflow durante questa pulizia.
 
 NOTE:
-Nessuna demo, standalone o sorgente duplicata. Nessuna modifica a main,
-demo-canonica, Aula Studio o produzione.
+Workflow canonici corretti e verificati; attività concluse archiviate; PR #84
+compattata senza integrare contenuti applicativi; sette branch già uniti o
+contenuti nel canonico rimossi. Il branch legacy divergente
+`eve-canonical-integration-v2` resta isolato: contiene la vecchia demo monolitica
+1.2.2 e non deve essere usato o unito. Nessuna modifica a main, demo-canonica,
+Aula Studio o produzione.
 ```
 
 ### ANIMATION-1.2.6 — Libreria ufficiale e prestazioni
@@ -370,12 +374,12 @@ La tabella seguente è conservata come cronologia del precedente flusso di Aula 
 | Attività | Assegnazione prevista | Branch | Stato | File riservati | File condivisi richiesti | Pull request | Ultimo aggiornamento |
 |---|---|---|---|---|---|---|---|
 | Correzione pubblicazione checkpoint 1.4 autonomo | Codex | `agent/phase4-publisher-fix` | In corso | `scripts/apply-phase4-alpha1.py`, scheda attività | `CODEX_COORDINATION.md` | Da aprire verso `demo-canonica` | 2026-07-23 |
-| Logo circolare ufficiale dell'app | Codex | `agent/app-round-logo` | In revisione | asset logo, componente brand, metadati, presentazione, autenticazione, dashboard e test | `src/components/catalog/catalog-explorer.tsx`, `src/components/room/study-room.tsx` | [PR #60](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/60) | 2026-07-22 |
-| Fedeltà pannello Eve e area di lavoro alla demo ufficiale | Codex | `agent/eve-panel-reference-fidelity` | In revisione | `globals.css`, workspace lezione, Eve Voice e test | nessuno | [PR #57](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/57) · confronto visivo completato; controlli superati | 2026-07-22 |
+| Logo circolare ufficiale dell'app | Codex | `agent/app-round-logo` | Completato | asset logo, componente brand, metadati, presentazione, autenticazione, dashboard e test | `src/components/catalog/catalog-explorer.tsx`, `src/components/room/study-room.tsx` | [PR #60](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/60) | 2026-07-22 |
+| Fedeltà pannello Eve e area di lavoro alla demo ufficiale | Codex | `agent/eve-panel-reference-fidelity` | Completato | `globals.css`, workspace lezione, Eve Voice e test | nessuno | [PR #57](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/57) · confronto visivo completato; controlli superati | 2026-07-22 |
 | Completamento fedele demo e parità tra temi | Codex | `agent/complete-demo-layout` | Completato | intro completa, workspace lezione, Eve, centro messaggi, CSS e test | nessuno | Intro demo, layout condiviso, Eve Voice completa e chat flottanti verificati; pronto per pubblicazione | 2026-07-22 |
 | Tema Futuristica Focus e aggiornamenti master | Codex | `agent/futuristic-focus-theme` | In revisione | temi, CSS, impostazioni, centro messaggi, Eve lezione/esercizi, migrazione 0017 e test | `src/components/room/study-room.tsx`, `programming-lesson-workspace.tsx`, `src/hooks/use-room-realtime.ts`, `src/lib/types.ts`, `supabase/migrations/0017_message_center.sql` | — | 2026-07-22 |
 | Controlli di lettura e scorrimento dell’aula | Codex | `agent/lesson-reading-controls` | In revisione | `programming-lesson-workspace.tsx`, test dedicato | `src/components/room/study-room.tsx` | — | 2026-07-22 |
-| Integrazione Modulo 1 · Lezioni 1.1 e 1.2 | Codex | `agent/integrate-programming-module-1` | In revisione | Artefatti 1.1/1.2, aggregatore, progressi e test | `src/lib/catalog/roadmap.ts` | [PR #29](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/29) | 2026-07-21 |
+| Integrazione Modulo 1 · Lezioni 1.1 e 1.2 | Codex | `agent/integrate-programming-module-1` | Completato | Artefatti 1.1/1.2, aggregatore, progressi e test | `src/lib/catalog/roadmap.ts` | [PR #29](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/29) | 2026-07-21 |
 | Correzione e coerenza contenuti · Programmazione da zero | Codex | `agent/correct-programming-content` | Completato | Artefatti 0.1–0.9 interessati, aggregatore e test mirati | Nessuno | [PR #28](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/28) | 2026-07-21 |
 | Completamento Programmazione da zero · Lezione 0.3 | Codex — contenuto ufficiale 0.3 convertito in codice | `codex/programming-zero-lesson-0-3` | Completato | Artefatto 0.3, aggregatore, progressi e test | Nessuno | [PR #4](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/4) | 2026-07-21 |
 | Completamento Programmazione da zero · Lezione 0.4 | Codex — contenuto ufficiale 0.4 convertito in codice | `codex/programming-zero-lesson-0-4` | Completato | Artefatto 0.4, aggregatore, progressi e test | Nessuno | [PR #9](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/9) | 2026-07-21 |
