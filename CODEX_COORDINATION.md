@@ -293,6 +293,43 @@ completato con successo; installer NSIS, firma e latest.json pubblicati nella
 release eve-ai-studio-v1.2.0-alpha.2. Endpoint latest verificato con HTTP 200.
 ```
 
+### REPOSITORY-0.1 — Riordino GitHub e workflow canonici
+
+```text
+CHECKPOINT:
+REPOSITORY-0.1 — Riordino GitHub e workflow canonici
+
+RESPONSABILE:
+Codex coordinamento
+
+STATO:
+IN_PROGRESS
+
+BRANCH:
+codex/eve-ai-studio-repository-cleanup
+
+OBIETTIVO:
+Correggere workflow incoerenti con la preview modulare, archiviare attività
+concluse, ripulire la PR #84 e rimuovere branch remoti certamente superati.
+
+FILE PRENOTATI:
+- .github/workflows/eve-ai-studio-checks.yml
+- .github/workflows/eve-hq-final-verification.yml
+- .github/workflows/eve-intelligence-0.1-checks.yml
+- .github/workflows/eve-ai-studio-install-hq-animations.yml
+- .codex/tasks/active e completed, limitatamente alle attività verificate
+- docs/EVE_AI_STUDIO_COORDINATION.md
+- CODEX_COORDINATION.md, limitatamente a questa scheda
+
+DISPONIBILE PER L'ALTRO CODEX:
+SÌ sui file applicativi della libreria 1.2.6; NO sui file di coordinamento e
+workflow durante questa pulizia.
+
+NOTE:
+Nessuna demo, standalone o sorgente duplicata. Nessuna modifica a main,
+demo-canonica, Aula Studio o produzione.
+```
+
 ## Attività storiche di Aula Studio
 
 La tabella seguente è conservata come cronologia del precedente flusso di Aula Studio. Non assegna né prenota file di Eve AI Studio e non prevale sulle regole attive sopra.
