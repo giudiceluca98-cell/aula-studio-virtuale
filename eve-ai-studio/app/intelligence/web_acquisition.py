@@ -161,8 +161,9 @@ class UrlGuard:
     @staticmethod
     def _address_is_safe(value: str) -> bool:
         address = ipaddress.ip_address(value)
-        if address.ipv4_mapped is not None:
-            address = address.ipv4_mapped
+        mapped_address = getattr(address, "ipv4_mapped", None)
+        if mapped_address is not None:
+            address = mapped_address
         return bool(
             address.is_global
             and not address.is_private
@@ -404,11 +405,14 @@ class ControlledWebAcquirer:
         *,
         max_bytes: int,
         allowed_media_types: tuple[str, ...] | None,
+        check_robots: bool = False,
     ) -> tuple[ResolvedWebTarget, RawWebResponse, tuple[str, ...], tuple[str, ...]]:
         current = self.guard.resolve(url)
         chain: list[str] = []
         all_ips: list[str] = []
         for redirect_index in range(self.policy.max_redirects + 1):
+            if check_robots and not self._robots_allowed(current):
+                raise RobotsDeniedError("robots.txt non consente l'acquisizione")
             for value in current.addresses:
                 if value not in all_ips:
                     all_ips.append(value)
@@ -489,17 +493,13 @@ class ControlledWebAcquirer:
             raise WebAccessDisabledError("L'acquisizione web è disattivata dal server")
 
         initial = self.guard.resolve(url)
-        robots_allowed = True
-        if self.policy.require_robots:
-            robots_allowed = self._robots_allowed(initial)
-            if not robots_allowed:
-                raise RobotsDeniedError("robots.txt non consente l'acquisizione")
-
         final, response, redirect_chain, resolved_ips = self._follow(
             initial.url,
             max_bytes=self.policy.max_bytes,
             allowed_media_types=self.policy.allowed_media_types,
+            check_robots=self.policy.require_robots,
         )
+        robots_allowed = True
         if not 200 <= response.status < 300:
             raise WebHttpStatusError(response.status)
         media_type = self._validate_payload(response, self.policy.allowed_media_types)
