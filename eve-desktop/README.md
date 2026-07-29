@@ -24,6 +24,20 @@ eve-desktop/src-tauri/target/release/bundle/nsis/
 
 La build locale è installabile ma non riceve aggiornamenti firmati. L'updater viene attivato nella build di release.
 
+## Aggiornamento da file locale
+
+La build di release offre anche **Scegli dal computer**. Il file selezionato
+viene accettato soltanto quando:
+
+- esiste una release online ufficiale più recente per la stessa versione;
+- il nome corrisponde all'installer Windows x64 annunciato;
+- i byte dell'installer superano la verifica con la firma e la chiave pubblica
+  del canale updater ufficiale.
+
+L'installazione riutilizza il plugin Tauri updater esistente. Non è presente
+un secondo meccanismo di aggiornamento e un installer arbitrario non viene mai
+eseguito.
+
 ## Aggiornamenti firmati
 
 Configurare nel repository GitHub:

@@ -89,6 +89,58 @@ I documenti storici che richiedono una preview standalone sono superati: la veri
 
 ### DESKTOP-0.1 — Applicazione installabile e aggiornamenti
 
+#### DESKTOP-0.3 — Aggiornamento firmato da file locale
+
+```text
+CHECKPOINT:
+DESKTOP-0.3 — Selezione locale di un aggiornamento ufficiale firmato
+
+RESPONSABILE:
+Codex desktop
+
+STATO:
+REVIEW_REQUIRED
+
+BRANCH DI PARTENZA:
+origin/eve-ai-studio @ 185c084
+
+BRANCH DI LAVORO:
+codex/eve-ai-studio-local-updates
+
+OBIETTIVO:
+Affiancare al controllo online la selezione dal computer dell'installer
+ufficiale corrispondente alla release online, riutilizzando verifica firma e
+installazione del solo updater Tauri esistente.
+
+FILE PRENOTATI:
+- eve-desktop/runtime/eve-desktop-updater.js
+- eve-desktop/runtime/eve-desktop.css
+- eve-desktop/src-tauri/src/lib.rs
+- eve-desktop/src-tauri/Cargo.toml
+- eve-desktop/src-tauri/Cargo.lock
+- eve-desktop/src-tauri/tauri.conf.json
+- eve-desktop/src-tauri/capabilities/default.json
+- eve-desktop/scripts/test-desktop-build.mjs
+- eve-desktop/README.md
+- .codex/tasks/active/eve-ai-studio-local-updates.md
+- CODEX_COORDINATION.md, limitatamente a questa scheda
+
+FILE CONDIVISI PRENOTATI:
+- nessuno
+
+MODULI CANONICI MODIFICATI:
+- nessuno
+
+NOTE:
+Nessuna demo, copia HTML, standalone o secondo updater. Main, demo-canonica,
+Aula Studio, Vercel e produzione restano invariati. Nessun pacchetto locale
+viene accettato senza una release online corrispondente e firma valida.
+
+TEST:
+node --check, test desktop, check:version, cargo check, build Tauri/NSIS,
+verifica browser reale e avvio dell'eseguibile completati con successo.
+```
+
 Handoff operativo completo:
 `docs/CHECKPOINT_DESKTOP_0.1_INSTALLER_RELEASE_HANDOFF.md`
 
