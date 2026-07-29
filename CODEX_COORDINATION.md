@@ -341,13 +341,16 @@ RESPONSABILE:
 AndreaGiudice94 / Codex integrazione grafica
 
 STATO:
-RESERVED
+REVIEW_REQUIRED
 
 BRANCH:
 codex/eve-ai-studio-animation-library-1-2-6-review
 
 PULL REQUEST:
 #84 (Draft) verso eve-ai-studio
+
+ULTIMO COMMIT APPLICATIVO:
+b869e37
 
 OBIETTIVO:
 Sostituire il runtime 1.2.2 con Eve Animation Library 1.2.6 nella sola preview
@@ -360,9 +363,25 @@ VINCOLI:
 Nessuna demo, copia HTML, standalone, cartella preview, modifica ai workflow,
 merge o release. È ammesso un solo task e un solo handoff per questa attività.
 
+DISPONIBILE PER L'ALTRO CODEX:
+NO sui file prenotati fino alla revisione e all'approvazione dell'utente.
+
+ATTIVITÀ CONSENTITE ALL'ALTRO CODEX:
+- leggere e collaudare il commit applicativo congelato;
+- lasciare osservazioni sulla stessa Draft Pull Request.
+
+ATTIVITÀ VIETATE ALL'ALTRO CODEX:
+- modificare in parallelo i file prenotati;
+- creare demo, standalone, copie o nuove Pull Request per la stessa attività;
+- effettuare merge o pubblicare una release desktop.
+
 NOTE:
-La PR contiene per ora soltanto la prenotazione. L'integrazione applicativa non
-è ancora iniziata.
+Integrati il runtime ufficiale 1.2.6, 64 asset e 64 poster nella sola preview
+canonica. Hash, sintassi JavaScript, typecheck, test, build, test Python, 150
+risorse HTTP e layout desktop/mobile verificati. Nessun riferimento eseguibile
+alla versione 1.2.2 e nessun duplicato HTML. Il lint completo conserva un errore
+preesistente in app.js, file non modificato da questa attività. Nessun merge o
+rilascio eseguito.
 ```
 
 ## Attività storiche di Aula Studio
