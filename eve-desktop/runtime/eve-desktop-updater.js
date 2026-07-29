@@ -9,7 +9,7 @@
   const previewInvoke = async (command) => {
     if (command === "check_for_update") {
       return {
-        version: "1.2.0-alpha.4",
+        version: "1.2.0-alpha.5",
         currentVersion: "1.2.0-alpha.3",
         body: "Simulazione locale dell'aggiornamento di Eve AI Studio."
       };
@@ -19,7 +19,7 @@
     }
     if (command === "select_local_update") {
       return {
-        version: "1.2.0-alpha.4",
+        version: "1.2.0-alpha.5",
         currentVersion: "1.2.0-alpha.3",
         body: "Installer ufficiale selezionato dal computer.",
         source: "local"
