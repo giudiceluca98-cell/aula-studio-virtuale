@@ -94,7 +94,7 @@ RESPONSABILE:
 Codex integrazione funzionale, UI e desktop locale
 
 STATO:
-IN_PROGRESS
+RELEASE_READY
 
 BRANCH LOCALE:
 codex/eve-ai-studio-intelligence-0-2-functional
@@ -113,6 +113,10 @@ VINCOLI:
 Nessun push, PR, merge o release GitHub. Nessuna demo, standalone, copia HTML,
 nuova preview o secondo updater. Main, demo-canonica, Aula Studio, Supabase,
 Vercel e produzione restano invariati.
+
+ESITO:
+Funzionale, UI canonica, browser reale e desktop verificati. Installer NSIS
+1.2.0-alpha.4 generato localmente con checksum; nessuna pubblicazione remota.
 ```
 
 ### DESKTOP-0.1 — Applicazione installabile e aggiornamenti

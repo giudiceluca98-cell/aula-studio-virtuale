@@ -98,22 +98,22 @@ Controlli UI:
 Fino ad allora il checkpoint non deve essere indicato come chiuso.
 
 <!-- AUTO-VERIFICATION-START -->
-## Verifica automatica 2026-07-29T15:55:29+00:00
+## Verifica automatica 2026-07-29T15:56:26+00:00
 
-- Stage: `functional`
-- Stato: **failed_or_incomplete**
+- Stage: `ui`
+- Stato: **static_and_http_passed_browser_real_pending**
 - Branch: `codex/eve-ai-studio-intelligence-0-2-functional`
-- HEAD: `823b719222abdd2d6d799714e3c59b186a89bd18`
+- HEAD: `2f63fe35816d82b046ad1d4d4b9f1f1091f798a1`
 - Browser reale: **NON ESEGUITO DA QUESTO SCRIPT**
 
 ### Controlli
 - `static_markers`: PASS
-- `compileall`: PASS
-- `specific_pytest`: PASS
-- `full_pytest`: PASS
-- `main_wiring_probe`: PASS
+- `node_check`: PASS
+- `canonical_http_smoke`: PASS
+- `no_preview_fetch`: PASS
+- `browser_real`: FAIL/PENDING
 - `git_diff_check`: PASS
-- `diff_scope`: FAIL/PENDING
+- `diff_scope`: PASS
 
 Il checkpoint resta aperto finché non sono presenti test browser reali, revisione e approvazione utente.
 <!-- AUTO-VERIFICATION-END -->

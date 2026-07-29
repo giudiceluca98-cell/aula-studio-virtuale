@@ -1,6 +1,6 @@
 # INTELLIGENCE-0.2 — integrazione e installer locale
 
-- Stato: `IN_PROGRESS`
+- Stato: `RELEASE_READY`
 - Branch locale: `codex/eve-ai-studio-intelligence-0-2-functional`
 - Base: `origin/eve-ai-studio` @ `185c084`
 - Pubblicazione GitHub: vietata per questa consegna
@@ -35,3 +35,12 @@ NSIS installabile sopra Eve AI Studio esistente.
 - nessun push, Pull Request, merge o release GitHub;
 - nessuna modifica a `main`, `demo-canonica`, Aula Studio, Supabase, Vercel o
   produzione.
+
+## Esito locale
+
+- test Python specifici: 46 superati;
+- suite Python completa: 211 superati;
+- verifica UI statica, HTTP e browser reale: superata;
+- test desktop e coerenza versione: superati;
+- installer NSIS `1.2.0-alpha.4` generato e verificato tramite SHA-256;
+- nessuna operazione remota GitHub eseguita.
