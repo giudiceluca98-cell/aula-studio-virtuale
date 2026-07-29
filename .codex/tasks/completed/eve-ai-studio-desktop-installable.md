@@ -4,7 +4,7 @@ Handoff per il Codex successivo:
 `docs/CHECKPOINT_DESKTOP_0.1_INSTALLER_RELEASE_HANDOFF.md`
 
 - Responsabile: Codex grafico/desktop
-- Stato: `RELEASE_READY`
+- Stato: `COMPLETATO`
 - Branch di partenza: `codex/eve-ai-studio-coordination-policy` @ `238f721`
 - Sorgente applicativa: `origin/eve-ai-studio` @ `13b8822`
 - Branch di lavoro: `codex/eve-ai-studio-desktop-installable`
