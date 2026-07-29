@@ -2,178 +2,78 @@ name: Eve AI Studio checks
 
 on:
   push:
-    branches:
-      - eve-ai-studio
+    branches: [eve-ai-studio]
     paths:
       - "eve-ai-studio/**"
-      - "reference/eve-ai-studio-preview/**/*.js"
+      - "reference/eve-ai-studio-preview/**"
+      - ".github/workflows/eve-ai-studio-checks.yml"
+  pull_request:
+    branches: [eve-ai-studio]
+    paths:
+      - "eve-ai-studio/**"
+      - "reference/eve-ai-studio-preview/**"
       - ".github/workflows/eve-ai-studio-checks.yml"
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: eve-ai-studio-core-${{ github.ref }}
+  group: eve-ai-studio-core-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   verify-core:
-    if: github.event_name == 'workflow_dispatch' || !contains(github.event.head_commit.message, '[skip eve core ci]')
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
     steps:
-      - name: Checkout eve-ai-studio
-        uses: actions/checkout@v4
-        with:
-          ref: eve-ai-studio
-          fetch-depth: 0
+      - uses: actions/checkout@v4
 
-      - name: Python 3.11
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: pip
           cache-dependency-path: eve-ai-studio/pyproject.toml
 
-      - name: Node 20
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
 
-      - name: Installa progetto e dipendenze di test
-        id: install
-        continue-on-error: true
+      - name: Installa servizio e dipendenze di test
         run: |
-          set -o pipefail
-          python -m pip install --upgrade pip 2>&1 | tee eve-core-install.txt
-          python -m pip install -e "eve-ai-studio[dev]" 2>&1 | tee -a eve-core-install.txt
+          python -m pip install --upgrade pip
+          python -m pip install -e "eve-ai-studio[dev]"
 
       - name: Compila Python
-        id: compile
-        continue-on-error: true
         working-directory: eve-ai-studio
-        run: |
-          set -o pipefail
-          python -m compileall -q app tests 2>&1 | tee ../eve-core-compile.txt
+        run: python -m compileall -q app tests
 
       - name: Esegue suite cumulativa
-        id: pytest
-        continue-on-error: true
         working-directory: eve-ai-studio
-        run: |
-          set -o pipefail
-          python -m pytest -q --junitxml=pytest-results.xml 2>&1 | tee ../eve-core-pytest.txt
+        run: python -m pytest -q --junitxml=pytest-results.xml
 
-      - name: Verifica sintassi JavaScript reale
-        id: javascript
-        continue-on-error: true
+      - name: Verifica tutti i JavaScript della sorgente canonica
+        shell: bash
         run: |
-          set -o pipefail
-          files=(
-            reference/eve-ai-studio-preview/checkpoint-04-patch.js
-            reference/eve-ai-studio-preview/prompt-compat.js
-            reference/eve-ai-studio-preview/app.js
-            reference/eve-ai-studio-preview/prompt-workflow.js
-            reference/eve-ai-studio-preview/evaluation-workflow.js
-            reference/eve-ai-studio-preview/runner-workflow.js
-            reference/eve-ai-studio-preview/provider-workflow.js
-            reference/eve-ai-studio-preview/materials-workflow.js
-            reference/eve-ai-studio-preview/retrieval-workflow.js
-            reference/eve-ai-studio-preview/rag-chat-workflow.js
-            reference/eve-ai-studio-preview/source-opening-workflow.js
-            reference/eve-ai-studio-preview/research-center-workflow.js
-            reference/eve-ai-studio-preview/navigation-compat.js
-            reference/eve-ai-studio-preview/animation-library-gallery.js
-            reference/eve-ai-studio-preview/eve-animation-runtime-v1.2.2/eve-hq-runtime.js
-          )
-          : > eve-core-javascript.txt
-          for file in "${files[@]}"; do
-            test -f "$file"
-            echo "node --check $file" | tee -a eve-core-javascript.txt
-            node --check "$file" 2>&1 | tee -a eve-core-javascript.txt
-          done
+          set -euo pipefail
+          while IFS= read -r -d '' file; do
+            node --check "$file"
+          done < <(find reference/eve-ai-studio-preview -type f -name '*.js' -print0)
 
-      - name: Registra rapporto core autorevole
+      - name: Verifica unicità della sorgente canonica
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s reference/eve-ai-studio-preview/index.html
+          test ! -e reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html
+          test ! -e reference/eve-ai-studio-preview/build_standalone.py
+          test "$(find reference/eve-ai-studio-preview -maxdepth 1 -type f -name '*.html' | wc -l)" -eq 1
+
+      - uses: actions/upload-artifact@v4
         if: always()
-        env:
-          INSTALL: ${{ steps.install.outcome }}
-          COMPILE: ${{ steps.compile.outcome }}
-          PYTEST: ${{ steps.pytest.outcome }}
-          JAVASCRIPT: ${{ steps.javascript.outcome }}
-          TESTED_SHA: ${{ github.sha }}
-        run: |
-          python3 - <<'PY'
-          import json, os
-          from datetime import datetime, timezone
-          from pathlib import Path
-          import xml.etree.ElementTree as ET
-
-          states = {
-              'install': os.environ.get('INSTALL', 'not_run'),
-              'python_compile': os.environ.get('COMPILE', 'not_run'),
-              'pytest_cumulative': os.environ.get('PYTEST', 'not_run'),
-              'javascript_syntax': os.environ.get('JAVASCRIPT', 'not_run'),
-          }
-          passed = all(value == 'success' for value in states.values())
-          counts = {'tests': 0, 'failures': 0, 'errors': 0, 'skipped': 0}
-          junit = Path('eve-ai-studio/pytest-results.xml')
-          if junit.exists():
-              root = ET.parse(junit).getroot()
-              counts = {key: int(float(root.attrib.get(key, 0))) for key in counts}
-
-          result = {
-              'checkpoint': 'CORE-1.1',
-              'keywords': ['apertura-fonti', 'verifica-integrita'],
-              'tested_sha': os.environ.get('TESTED_SHA'),
-              'generated_at': datetime.now(timezone.utc).isoformat(),
-              'passed': passed,
-              'states': states,
-              'pytest': counts,
-              'browser_verification': 'eve-ai-studio/checkpoints/EVE_HQ_FINAL_VERIFICATION.json',
-          }
-          base = Path('eve-ai-studio/checkpoints')
-          base.mkdir(parents=True, exist_ok=True)
-          json_path = base / 'CHECKPOINT_CORE_1.1_APERTURA_FONTI_VERIFICA_INTEGRITA_CI_RESULT.json'
-          md_path = base / 'CHECKPOINT_CORE_1.1_APERTURA_FONTI_VERIFICA_INTEGRITA_CI_RESULT.md'
-          json_path.write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
-
-          markdown = f"""# Checkpoint CORE-1.1 — Apertura fonti e verifica integrità — Verifica core automatica
-
-- Commit verificato: `{result['tested_sha']}`
-- Data UTC: `{result['generated_at']}`
-- Esito: **{'SUPERATO' if passed else 'NON SUPERATO'}**
-
-## Controlli
-
-| Controllo | Esito |
-|---|---|
-"""
-          for name, state in states.items():
-              markdown += f"| `{name}` | `{state}` |\n"
-          markdown += f"""
-
-## Pytest
-
-- test: {counts['tests']}
-- fallimenti: {counts['failures']}
-- errori: {counts['errors']}
-- ignorati: {counts['skipped']}
-
-La verifica browser, le 64 animazioni HQ, la galleria e lo standalone `file://`
-sono controllati separatamente dal workflow `eve-hq-final-verification.yml`.
-"""
-          md_path.write_text(markdown, encoding='utf-8')
-          PY
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add eve-ai-studio/checkpoints/CHECKPOINT_CORE_1.1_APERTURA_FONTI_VERIFICA_INTEGRITA_CI_RESULT.json eve-ai-studio/checkpoints/CHECKPOINT_CORE_1.1_APERTURA_FONTI_VERIFICA_INTEGRITA_CI_RESULT.md
-          git commit -m "ci: aggiorna verifica core Eve CORE-1.1 [skip eve core ci]" || exit 0
-          git pull --rebase origin eve-ai-studio
-          git push origin HEAD:eve-ai-studio
-
-      - name: Applica esito del gate core
-        if: steps.install.outcome != 'success' || steps.compile.outcome != 'success' || steps.pytest.outcome != 'success' || steps.javascript.outcome != 'success'
-        run: exit 1
+        with:
+          name: eve-ai-studio-core-results
+          path: eve-ai-studio/pytest-results.xml
+          if-no-files-found: warn
+          retention-days: 14

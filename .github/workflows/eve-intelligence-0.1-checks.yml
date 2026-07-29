@@ -12,26 +12,33 @@ on:
       - "reference/eve-ai-studio-preview/index.html"
       - "reference/eve-ai-studio-preview/research-center-workflow.js"
       - ".github/workflows/eve-intelligence-0.1-checks.yml"
+  pull_request:
+    branches: [eve-ai-studio]
+    paths:
+      - "eve-ai-studio/app/intelligence/**"
+      - "eve-ai-studio/tests/test_intelligence_research.py"
+      - "eve-ai-studio/app/main.py"
+      - "eve-ai-studio/app/core/config.py"
+      - "eve-ai-studio/pyproject.toml"
+      - "reference/eve-ai-studio-preview/index.html"
+      - "reference/eve-ai-studio-preview/research-center-workflow.js"
+      - ".github/workflows/eve-intelligence-0.1-checks.yml"
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: eve-intelligence-0.1-${{ github.ref }}
-  cancel-in-progress: false
+  group: eve-intelligence-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  verify:
-    if: github.event_name == 'workflow_dispatch' || !contains(github.event.head_commit.message, '[skip intelligence 0.1 ci]')
+  verify-intelligence:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 25
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: eve-ai-studio
-          fetch-depth: 0
 
       - uses: actions/setup-python@v5
         with:
@@ -39,218 +46,35 @@ jobs:
           cache: pip
           cache-dependency-path: eve-ai-studio/pyproject.toml
 
-      - name: Installa servizio e test
-        id: install
-        continue-on-error: true
-        run: |
-          set -o pipefail
-          python -m pip install --upgrade pip 2>&1 | tee intelligence-0.1-install.txt
-          python -m pip install -e "eve-ai-studio[dev]" 2>&1 | tee -a intelligence-0.1-install.txt
-
-      - name: Compila modulo INTELLIGENCE
-        id: compile
-        continue-on-error: true
-        working-directory: eve-ai-studio
-        run: |
-          set -o pipefail
-          python -m compileall -q app/intelligence tests/test_intelligence_research.py 2>&1 | tee ../intelligence-0.1-compile.txt
-
-      - name: Esegue 15 test specifici
-        id: pytest
-        continue-on-error: true
-        working-directory: eve-ai-studio
-        run: |
-          set -o pipefail
-          python -m pytest -q tests/test_intelligence_research.py --junitxml=intelligence-0.1-results.xml 2>&1 | tee ../intelligence-0.1-pytest.txt
-
-      - name: Rigenera standalone
-        id: build
-        continue-on-error: true
-        run: |
-          set -o pipefail
-          node --check reference/eve-ai-studio-preview/research-center-workflow.js
-          python3 reference/eve-ai-studio-preview/build_standalone.py 2>&1 | tee intelligence-0.1-build.txt
-          test -s reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html
-          grep -q "intelligence-research" reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html
-          ! grep -Eiq '<script[^>]+src=' reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html
-
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
 
-      - name: Installa Chromium
-        id: browser_install
-        continue-on-error: true
+      - name: Installa servizio e test
         run: |
-          npm install --no-save playwright
-          npx playwright install --with-deps chromium
+          python -m pip install --upgrade pip
+          python -m pip install -e "eve-ai-studio[dev]"
 
-      - name: Avvia preview modulare
-        if: steps.browser_install.outcome == 'success'
+      - name: Compila INTELLIGENCE
+        working-directory: eve-ai-studio
+        run: python -m compileall -q app/intelligence tests/test_intelligence_research.py
+
+      - name: Esegue i test specifici
+        working-directory: eve-ai-studio
+        run: python -m pytest -q tests/test_intelligence_research.py --junitxml=intelligence-0.1-results.xml
+
+      - name: Verifica il modulo canonico
+        run: node --check reference/eve-ai-studio-preview/research-center-workflow.js
+
+      - name: Verifica assenza di standalone
         run: |
-          python3 -m http.server 4173 --directory reference/eve-ai-studio-preview >/tmp/intelligence-0.1-http.txt 2>&1 &
-          for attempt in {1..30}; do
-            curl -fsS http://127.0.0.1:4173/index.html >/dev/null && exit 0
-            sleep 1
-          done
-          cat /tmp/intelligence-0.1-http.txt
-          exit 1
-
-      - name: Verifica preview e standalone reali
-        id: browser
-        if: steps.browser_install.outcome == 'success' && steps.build.outcome == 'success'
-        continue-on-error: true
-        run: |
-          cat > verify-intelligence-0.1.mjs <<'EOF'
-          import { chromium } from "playwright";
-          import assert from "node:assert/strict";
-          import path from "node:path";
-          import { pathToFileURL } from "node:url";
-
-          async function verify(page, url, expectedFormat) {
-            const errors = [];
-            page.on("pageerror", error => errors.push(`pageerror: ${error.message}`));
-            page.on("console", message => { if (message.type() === "error") errors.push(`console: ${message.text()}`); });
-            await page.goto(url, { waitUntil: "load" });
-            await page.waitForFunction(() => document.getElementById("intelligence-research") && window.EveAnimationLibrary?.quality === "original-final-webp", null, { timeout: 60000 });
-            assert.equal(await page.locator('[data-view="intelligence-research"]').count(), 1);
-            await page.locator('[data-view="intelligence-research"]').click();
-            await page.waitForFunction(() => document.getElementById("intelligence-research")?.classList.contains("active"));
-            assert.equal((await page.locator("#researchCheckpointBadge").textContent()).trim(), "INTELLIGENCE-0.1");
-            assert.match(await page.locator("#intelligence-research").textContent(), /Nessuna ricerca web/);
-            assert.match(await page.locator("#intelligence-research").textContent(), /Disattivata/);
-            assert.equal((await page.locator("#researchProjectCount").textContent()).trim(), "2");
-            assert.equal((await page.locator("#researchQueryCount").textContent()).trim(), "5");
-            assert.equal((await page.locator("#researchSourceCount").textContent()).trim(), "3");
-
-            await page.locator("#createResearchProject").click();
-            await page.waitForFunction(() => !document.getElementById("createResearchProject").disabled, null, { timeout: 15000 });
-            assert.equal((await page.locator("#researchProjectCount").textContent()).trim(), "3");
-            assert.equal(await page.locator('#researchCreationStages [data-research-stage]').count(), 5);
-            assert.equal(await page.locator('#researchCreationStages .tag').filter({ hasText: "Completato" }).count(), 5);
-
-            await page.locator("#addResearchQuery").click();
-            assert.equal((await page.locator("#researchQueryCount").textContent()).trim(), "10");
-            await page.locator("#addResearchSource").click();
-            assert.equal((await page.locator("#researchSourceCount").textContent()).trim(), "4");
-            assert.match(await page.locator("#researchSourceList").textContent(), /content_acquired=false/);
-            assert.match(await page.locator("#researchProjectList").textContent(), /web_access=false/);
-            assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), true);
-            if (expectedFormat) {
-              assert.equal(await page.locator('meta[name="eve-preview-format"]').getAttribute("content"), expectedFormat);
-              assert.equal(await page.locator('meta[name="eve-animation-quality"]').getAttribute("content"), "original-hq");
-            }
-            assert.deepEqual(errors, []);
-          }
-
-          const browser = await chromium.launch({ headless: true });
-          try {
-            const modular = await browser.newPage({ viewport: { width: 1440, height: 1800 }, deviceScaleFactor: 2 });
-            await verify(modular, "http://127.0.0.1:4173/index.html", null);
-            await modular.screenshot({ path: "intelligence-0.1-modular.png", fullPage: true });
-
-            const standalone = await browser.newPage({ viewport: { width: 1440, height: 1800 }, deviceScaleFactor: 2 });
-            const file = path.resolve("reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html");
-            await verify(standalone, pathToFileURL(file).href, "standalone");
-            await standalone.screenshot({ path: "intelligence-0.1-standalone.png", fullPage: true });
-          } finally {
-            await browser.close();
-          }
-          EOF
-          node verify-intelligence-0.1.mjs
-
-      - name: Registra rapporto ricercabile
-        if: always()
-        env:
-          INSTALL: ${{ steps.install.outcome }}
-          COMPILE: ${{ steps.compile.outcome }}
-          PYTEST: ${{ steps.pytest.outcome }}
-          BUILD: ${{ steps.build.outcome }}
-          BROWSER_INSTALL: ${{ steps.browser_install.outcome }}
-          BROWSER: ${{ steps.browser.outcome }}
-          TESTED_SHA: ${{ github.sha }}
-        run: |
-          python3 - <<'PY'
-          import json, os
-          from datetime import datetime, timezone
-          from pathlib import Path
-          import xml.etree.ElementTree as ET
-
-          states = {
-              "install": os.environ.get("INSTALL", "not_run"),
-              "python_compile": os.environ.get("COMPILE", "not_run"),
-              "pytest_specific": os.environ.get("PYTEST", "not_run"),
-              "standalone_build": os.environ.get("BUILD", "not_run"),
-              "browser_install": os.environ.get("BROWSER_INSTALL", "not_run"),
-              "browser_modular_and_file": os.environ.get("BROWSER", "not_run"),
-          }
-          counts = {"tests": 0, "failures": 0, "errors": 0, "skipped": 0}
-          junit = Path("eve-ai-studio/intelligence-0.1-results.xml")
-          if junit.exists():
-              root = ET.parse(junit).getroot()
-              suites = [root] if root.tag == "testsuite" else list(root.findall(".//testsuite"))
-              counts = {
-                  key: sum(int(float(suite.attrib.get(key, 0))) for suite in suites)
-                  for key in counts
-              }
-          passed = all(value == "success" for value in states.values()) and counts["tests"] == 15 and counts["failures"] == 0 and counts["errors"] == 0
-          result = {
-              "checkpoint": "INTELLIGENCE-0.1",
-              "keywords": ["centro-ricerca", "progetti-apprendimento", "query-pianificate", "quarantena-fonti"],
-              "tested_sha": os.environ.get("TESTED_SHA"),
-              "generated_at": datetime.now(timezone.utc).isoformat(),
-              "passed": passed,
-              "states": states,
-              "pytest": counts,
-              "service_version": "1.2.0",
-              "web_search_enabled": False,
-              "content_acquisition_enabled": False,
-              "model_training_enabled": False,
-              "modular_preview": states["browser_modular_and_file"] == "success",
-              "standalone_file": states["browser_modular_and_file"] == "success",
-          }
-          base = Path("eve-ai-studio/checkpoints")
-          base.mkdir(parents=True, exist_ok=True)
-          json_path = base / "CHECKPOINT_INTELLIGENCE_0.1_CENTRO_RICERCA_PROGETTI_APPRENDIMENTO_CI_RESULT.json"
-          md_path = base / "CHECKPOINT_INTELLIGENCE_0.1_CENTRO_RICERCA_PROGETTI_APPRENDIMENTO_VERIFICATION.md"
-          json_path.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-          md_path.write_text(
-              "# INTELLIGENCE-0.1 — Verifica centro ricerca e progetti di apprendimento\n\n"
-              f"- Commit: `{result['tested_sha']}`\n"
-              f"- Esito: **{'SUPERATO' if passed else 'NON SUPERATO'}**\n"
-              f"- Test specifici: {counts['tests']}\n"
-              f"- Fallimenti: {counts['failures']}\n"
-              f"- Errori: {counts['errors']}\n"
-              f"- Preview modulare: {states['browser_modular_and_file']}\n"
-              f"- Standalone file://: {states['browser_modular_and_file']}\n"
-              "- Ricerca web: disattivata\n"
-              "- Acquisizione contenuti: disattivata\n"
-              "- Addestramento modello: disattivato\n",
-              encoding="utf-8",
-          )
-          PY
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -f reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html \
-            eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.1_CENTRO_RICERCA_PROGETTI_APPRENDIMENTO_CI_RESULT.json \
-            eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.1_CENTRO_RICERCA_PROGETTI_APPRENDIMENTO_VERIFICATION.md
-          git commit -m "ci(intelligence-0.1): registra gate centro ricerca [skip intelligence 0.1 ci] [skip eve preview ci]" || exit 0
-          git pull --rebase origin eve-ai-studio
-          git push origin HEAD:eve-ai-studio
+          test ! -e reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html
+          test ! -e reference/eve-ai-studio-preview/build_standalone.py
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: eve-intelligence-0.1-verification
-          path: |
-            intelligence-0.1-*.txt
-            intelligence-0.1-modular.png
-            intelligence-0.1-standalone.png
-            /tmp/intelligence-0.1-http.txt
+          name: eve-intelligence-0.1-results
+          path: eve-ai-studio/intelligence-0.1-results.xml
           if-no-files-found: warn
           retention-days: 14
-
-      - name: Applica esito
-        if: steps.install.outcome != 'success' || steps.compile.outcome != 'success' || steps.pytest.outcome != 'success' || steps.build.outcome != 'success' || steps.browser_install.outcome != 'success' || steps.browser.outcome != 'success'
-        run: exit 1

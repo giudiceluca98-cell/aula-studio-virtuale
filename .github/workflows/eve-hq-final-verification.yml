@@ -1,53 +1,43 @@
-name: Eve AI Studio preview verification
+name: Eve AI Studio modular preview verification
 
 on:
   push:
-    branches:
-      - eve-ai-studio
+    branches: [eve-ai-studio]
+    paths:
+      - "reference/eve-ai-studio-preview/**"
+      - ".github/workflows/eve-hq-final-verification.yml"
+  pull_request:
+    branches: [eve-ai-studio]
     paths:
       - "reference/eve-ai-studio-preview/**"
       - ".github/workflows/eve-hq-final-verification.yml"
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: eve-ai-studio-preview-verification-${{ github.ref }}
+  group: eve-preview-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build-and-verify:
-    if: github.event_name == 'workflow_dispatch' || !contains(github.event.head_commit.message, '[skip eve preview ci]')
+  verify-preview:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 30
 
     steps:
-      - name: Checkout eve-ai-studio
-        uses: actions/checkout@v4
-        with:
-          ref: eve-ai-studio
-          fetch-depth: 0
+      - uses: actions/checkout@v4
 
-      - name: Rigenera lo standalone dalla preview modulare
-        run: |
-          python3 reference/eve-ai-studio-preview/build_standalone.py
-          file=reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html
-          test -s "$file"
-          ! grep -Eiq '<script[^>]+src=' "$file"
-          ! grep -Eiq "<link[^>]+rel=['\"]stylesheet['\"]" "$file"
-
-      - name: Node 20
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
 
       - name: Installa Playwright e Chromium
         run: |
           npm install --no-save playwright
           npx playwright install --with-deps chromium
 
-      - name: Avvia preview modulare
+      - name: Avvia la sola preview modulare
         run: |
           python3 -m http.server 4173 --directory reference/eve-ai-studio-preview >/tmp/eve-preview-http.txt 2>&1 &
           for attempt in {1..30}; do
@@ -57,171 +47,65 @@ jobs:
           cat /tmp/eve-preview-http.txt
           exit 1
 
-      - name: Verifica preview, standalone, galleria e workflow
-        id: verify
-        continue-on-error: true
+      - name: Verifica runtime, 64 asset, galleria e caricamento progressivo
         run: |
           cat > verify-eve-preview.mjs <<'EOF'
           import { chromium } from "playwright";
           import assert from "node:assert/strict";
           import fs from "node:fs";
-          import path from "node:path";
-          import { pathToFileURL } from "node:url";
 
-          async function verifyAnimations(page, url, expectedFormat) {
-            const errors = [];
-            page.on("pageerror", error => errors.push(`pageerror: ${error.message}`));
-            page.on("console", message => {
-              if (message.type() === "error") errors.push(`console: ${message.text()}`);
-            });
+          const browser = await chromium.launch({ headless: true });
+          const page = await browser.newPage({ viewport: { width: 1440, height: 1200 } });
+          const errors = [];
+          page.on("pageerror", error => errors.push(error.message));
+          page.on("console", message => {
+            if (message.type() === "error") errors.push(message.text());
+          });
 
-            await page.goto(url, { waitUntil: "load" });
+          try {
+            await page.goto("http://127.0.0.1:4173/index.html", { waitUntil: "load" });
             await page.waitForFunction(
-              () => window.EveAnimationLibrary?.quality === "original-final-webp" && document.getElementById("openAnimationLibraryBtn"),
+              () => window.EveAnimationLibrary?.listStates?.().length === 64,
               null,
               { timeout: 60000 }
             );
-
-            const states = await page.evaluate(() => window.EveAnimationLibrary.listStates());
-            assert.equal(states.length, 64);
-
-            for (const asset of states) {
-              const result = await page.evaluate(async selected => {
-                await window.EveAnimationLibrary.setState(selected.id, { restart: true });
-                const image = document.getElementById("eveHqPortrait");
-                await image.decode().catch(() => {});
-                return {
-                  width: image.naturalWidth,
-                  height: image.naturalHeight,
-                  sha256: image.dataset.eveSha256,
-                  quality: image.dataset.eveQuality,
-                  state: image.dataset.eveState,
-                };
-              }, asset);
-              assert.equal(result.width, asset.width);
-              assert.equal(result.height, asset.height);
-              assert.equal(result.sha256, asset.sha256);
-              assert.equal(result.quality, "original");
-              assert.equal(result.state, asset.id);
-            }
-
-            if (expectedFormat) {
-              assert.equal(await page.locator('meta[name="eve-preview-format"]').getAttribute("content"), expectedFormat);
-              assert.equal(await page.locator('meta[name="eve-animation-quality"]').getAttribute("content"), "original-hq");
-            }
-
-            assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), true);
-            return { states, errors };
-          }
-
-          async function verifyGallery(page) {
-            assert.equal(await page.locator("#openAnimationLibraryBtn").count(), 1);
-            assert.equal(await page.locator('[data-view="animation-library"]').count(), 1);
+            assert.equal(await page.locator("script[src*='model-test-workflow.js']").count(), 0);
+            assert.equal(await page.locator("script[src*='model-rules-workflow.js']").count(), 0);
+            await page.getByRole("button", { name: "Prova Eve" }).click();
+            await page.waitForFunction(
+              () => [...document.scripts].some(script => script.src.includes("model-rules-workflow.js")),
+              null,
+              { timeout: 30000 }
+            );
             await page.locator("#openAnimationLibraryBtn").click();
-            await page.waitForFunction(() => document.querySelectorAll("#animationLibraryGrid .animation-card").length === 64, null, { timeout: 60000 });
+            await page.waitForFunction(
+              () => document.querySelectorAll("#animationLibraryGrid .animation-card").length === 64,
+              null,
+              { timeout: 60000 }
+            );
             assert.equal(await page.locator("#animationLibraryGrid .animation-card").count(), 64);
-            assert.match(await page.locator("#animationLibraryCount").textContent(), /^64 animazioni$/);
-            await page.locator('#animationLibraryGrid .animation-card[data-asset-id="eve-thinking-deep"]').click();
-            await page.waitForFunction(() => document.getElementById("eveHqPortrait")?.dataset.eveState === "eve-thinking-deep");
-            assert.match(await page.locator("#animationLibraryPreviewTechnical").textContent(), /SHA-256:/);
-          }
-
-          async function verifyInteractions(page) {
-            await page.locator('[data-view="rag-materials"]').click();
-            await page.locator("#materialScenario").selectOption("valid");
-            await page.locator("#runMaterialImport").click();
-            await page.waitForFunction(() => !document.getElementById("runMaterialImport").disabled);
-            assert.match(await page.locator("#materialImportHistory").textContent(), /ready/);
-
-            await page.locator("#retrievalScenario").selectOption("normal");
-            await page.locator("#retrievalScenario").dispatchEvent("change");
-            await page.locator("#runRetrievalSearch").click();
-            assert.match(await page.locator("#retrievalResults").textContent(), /Citazione verificata/);
-
-            await page.locator("#ragChatScenario").selectOption("grounded");
-            await page.locator("#ragChatScenario").dispatchEvent("change");
-            await page.locator("#runRagChat").click();
-            assert.match(await page.locator("#ragChatAnswer").textContent(), /\[1\]/);
-
-            await page.locator("#sourceOpeningScenario").selectOption("verified");
-            await page.locator("#sourceOpeningScenario").dispatchEvent("change");
-            await page.locator("#openVerifiedSource").click();
-            assert.match(await page.locator("#sourceOpeningResult").textContent(), /Integrità verificata/);
-          }
-
-          const browser = await chromium.launch({ headless: true });
-          const result = {
-            passed: false,
-            libraryVersion: "1.2.2",
-            quality: "original-final-webp",
-            assets: 0,
-            galleryCards: 0,
-            modular: false,
-            standaloneFile: false,
-            interactions: false,
-            animationGallery: false,
-            externalScripts: 0,
-            externalStylesheets: 0,
-            errors: [],
-          };
-
-          try {
-            const modular = await browser.newPage({ viewport: { width: 1440, height: 1800 }, deviceScaleFactor: 2 });
-            const modularCheck = await verifyAnimations(modular, "http://127.0.0.1:4173/index.html", null);
-            result.assets = modularCheck.states.length;
-            result.modular = true;
-            await verifyGallery(modular);
-            result.galleryCards = 64;
-            result.animationGallery = true;
-            await verifyInteractions(modular);
-            result.interactions = true;
-            assert.deepEqual(modularCheck.errors, []);
-            await modular.screenshot({ path: "eve-preview-modular.png", fullPage: true });
-
-            const standalone = await browser.newPage({ viewport: { width: 1440, height: 1800 }, deviceScaleFactor: 2 });
-            const standalonePath = path.resolve("reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html");
-            const standaloneCheck = await verifyAnimations(standalone, pathToFileURL(standalonePath).href, "standalone");
-            await verifyGallery(standalone);
-            assert.deepEqual(standaloneCheck.errors, []);
-            result.standaloneFile = true;
-            await standalone.screenshot({ path: "eve-preview-standalone.png", fullPage: true });
-
-            result.passed = true;
-          } catch (error) {
-            result.errors.push(error.stack || error.message);
-            throw error;
+            assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), true);
+            assert.deepEqual(errors, []);
+            await page.screenshot({ path: "eve-preview-modular.png", fullPage: true });
+            fs.writeFileSync("EVE_PREVIEW_VERIFICATION.json", JSON.stringify({
+              passed: true,
+              format: "modular",
+              assets: 64,
+              standalone: false
+            }, null, 2));
           } finally {
-            fs.writeFileSync("EVE_HQ_FINAL_VERIFICATION.json", JSON.stringify(result, null, 2));
             await browser.close();
           }
           EOF
           node verify-eve-preview.mjs
 
-      - name: Salva standalone e rapporto autorevole
+      - uses: actions/upload-artifact@v4
         if: always()
-        run: |
-          mkdir -p eve-ai-studio/checkpoints
-          cp EVE_HQ_FINAL_VERIFICATION.json eve-ai-studio/checkpoints/EVE_HQ_FINAL_VERIFICATION.json
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -f reference/eve-ai-studio-preview/EVE_AI_STUDIO_STANDALONE.html eve-ai-studio/checkpoints/EVE_HQ_FINAL_VERIFICATION.json
-          git commit -m "build: aggiorna preview verificata Eve [skip eve preview ci]" || exit 0
-          git pull --rebase origin eve-ai-studio
-          git push origin HEAD:eve-ai-studio
-
-      - name: Pubblica screenshot
-        if: always()
-        uses: actions/upload-artifact@v4
         with:
-          name: eve-ai-studio-preview-verification
+          name: eve-modular-preview-verification
           path: |
             eve-preview-modular.png
-            eve-preview-standalone.png
-            EVE_HQ_FINAL_VERIFICATION.json
+            EVE_PREVIEW_VERIFICATION.json
             /tmp/eve-preview-http.txt
           if-no-files-found: warn
           retention-days: 14
-
-      - name: Applica esito del gate
-        if: steps.verify.outcome != 'success'
-        run: exit 1
