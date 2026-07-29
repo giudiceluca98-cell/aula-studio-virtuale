@@ -65,7 +65,7 @@ jobs:
           try {
             await page.goto("http://127.0.0.1:4173/index.html", { waitUntil: "load" });
             await page.waitForFunction(
-              () => window.EveAnimationLibrary?.listStates?.().length === 64,
+              async () => (await window.EveAnimationLibrary?.listStates?.())?.length === 64,
               null,
               { timeout: 60000 }
             );
