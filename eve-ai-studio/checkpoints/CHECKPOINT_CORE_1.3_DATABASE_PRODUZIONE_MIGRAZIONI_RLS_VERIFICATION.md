@@ -9,9 +9,13 @@ Controlli locali del pacchetto:
 - smoke HTTP della preview canonica;
 - nessuna seconda pagina HTML e nessun fetch nella preview.
 
-Da eseguire obbligatoriamente da Codex:
+Verificati su GitHub:
 - migrazione su PostgreSQL/Supabase temporaneo;
-- test ruoli e cross-room reali;
-- backup/restore e rollback;
+- test ruoli, cross-room e `service_role`;
+- backup di schema e dati e rollback protetto;
 - suite completa, lint, typecheck e build;
-- installer alpha.9 e collaudo desktop.
+- controlli generali, preview modulare e INTELLIGENCE.
+
+Resta obbligatorio:
+- installer alpha.9 e collaudo desktop;
+- approvazione esplicita dell'utente prima del merge.

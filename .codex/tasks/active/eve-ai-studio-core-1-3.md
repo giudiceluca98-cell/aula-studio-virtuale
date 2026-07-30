@@ -1,6 +1,6 @@
 # CORE-1.3 — Database di produzione, migrazioni e RLS
 
-- Stato: `FUNCTIONAL_TESTING`
+- Stato: `REVIEW_REQUIRED`
 - Branch: `codex/eve-ai-studio-core-1-3`
 - Base contenutistica: `eve-ai-studio` dopo merge PR #93
 - Baseline desktop: `1.2.0-alpha.8`
@@ -42,4 +42,7 @@ database di produzione e importazione disattivati per impostazione predefinita.
 - archivio esterno verificato:
   `77a46038c2b8db01b058e4d7c9903bc7e48994b28bb17a29387c9977038bc77f`;
 - verificatore e applicazione locale: `PASS`;
-- test automatici, database temporaneo, preview e build: in corso.
+- test automatici, database temporaneo, RLS, backup, rollback, preview e
+  build: `PASS` nei workflow GitHub del 2026-07-30;
+- nessun database remoto o di produzione modificato;
+- resta il collaudo desktop alpha.9 prima di merge e chiusura.

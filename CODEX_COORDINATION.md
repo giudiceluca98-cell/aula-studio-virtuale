@@ -543,7 +543,7 @@ rilascio eseguito. Ogni scheda della galleria include il comando diretto
 
 ### CORE-1.3 — Database di produzione, migrazioni e RLS
 
-- Stato: `FUNCTIONAL_TESTING`
+- Stato: `REVIEW_REQUIRED`
 - Branch: `codex/eve-ai-studio-core-1-3`
 - Base: `eve-ai-studio` dopo merge PR #93
 - Baseline desktop: `1.2.0-alpha.8`
@@ -555,9 +555,11 @@ rilascio eseguito. Ogni scheda della galleria include il comando diretto
   canonica.
 
 Entrambi i feature flag restano disattivati. Nessun SQL remoto o di
-produzione è autorizzato. Prima della Draft PR e della release di prova sono
-obbligatori i test su PostgreSQL/Supabase temporaneo. Nessun merge è consentito
-prima del collaudo desktop alpha.9 e dell'approvazione esplicita dell'utente.
+produzione è stato eseguito. Migrazioni, RLS, isolamento cross-room,
+`service_role`, backup, rollback, suite, typecheck, lint, build e preview sono
+verdi nei workflow GitHub del 2026-07-30. La PR #94 resta Draft. Nessun merge
+è consentito prima del collaudo desktop alpha.9 e dell'approvazione esplicita
+dell'utente.
 
 ## Attività storiche di Aula Studio
 

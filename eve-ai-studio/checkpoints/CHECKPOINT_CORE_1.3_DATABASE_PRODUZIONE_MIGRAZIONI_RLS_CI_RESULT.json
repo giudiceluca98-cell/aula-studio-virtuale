@@ -1,7 +1,7 @@
 {
   "checkpoint": "CORE-1.3",
-  "status": "FUNCTIONAL_TESTING",
-  "local_validation_date": "2026-07-29",
+  "status": "REVIEW_REQUIRED",
+  "local_validation_date": "2026-07-30",
   "checks": {
     "package_integrity": "PASS",
     "python_tools_syntax": "PASS",
@@ -12,17 +12,26 @@
     "canonical_preview_http_smoke": "PASS",
     "isolated_typescript_compile": "PASS",
     "legacy_import_determinism_smoke": "PASS",
-    "rollback_files": "PASS"
+    "rollback_files": "PASS",
+    "full_repository_vitest": "PASS",
+    "full_typecheck_lint_build": "PASS",
+    "postgres_supabase_migration": "PASS",
+    "rls_role_matrix": "PASS",
+    "service_role_access": "PASS",
+    "temporary_database_backup": "PASS",
+    "protected_rollback": "PASS",
+    "github_ci": "PASS"
   },
   "not_executed": {
-    "full_repository_vitest": "Dipendenze npm non disponibili nel registry di questa sessione",
-    "full_typecheck_lint_build": "Da eseguire da Codex sul checkout completo",
-    "postgres_supabase_migration": "Richiede database temporaneo",
-    "rls_role_matrix": "Richiede database temporaneo e utenti di prova",
-    "desktop_build_and_install": "Da eseguire da Codex per alpha.9",
-    "github_ci": false
+    "desktop_build_and_install": "Da eseguire per alpha.9 dopo la revisione funzionale"
+  },
+  "github_workflow_runs": {
+    "eve_ai_studio_checks": 30541693722,
+    "modular_preview_verification": 30541693723,
+    "intelligence_checks": 30541693744,
+    "core_1_3_database_checks": 30541693728
   },
   "remote_database_modified": false,
-  "github_modified": false,
+  "github_modified": true,
   "checkpoint_closed": false
 }
