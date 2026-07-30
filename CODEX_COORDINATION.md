@@ -151,10 +151,46 @@ FILE CONDIVISI PRENOTATI:
   per consentire la release di prova dal branch
 
 VINCOLI:
-Una sola Draft PR. Collaudo e approvazione utente completati; merge autorizzato.
-Stato finale PENDING_USER_DESKTOP_APPROVAL, non CLOSED. Nessuna demo, standalone,
-copia HTML, nuova preview, modifica a main, demo-canonica, Aula Studio, Supabase,
-Vercel o produzione.
+Una sola Draft PR. Collaudo, approvazione utente e merge completati.
+INTELLIGENCE-0.3 è `CLOSED`. Nessuna demo, standalone, copia HTML, nuova
+preview, modifica a main, demo-canonica, Aula Studio, Supabase, Vercel o
+produzione.
+```
+
+### CORE-1.2 — Architettura unificata features/eve e adapter prototipi
+
+```text
+RESPONSABILE:
+Codex integrazione funzionale, UI e desktop di prova
+
+STATO:
+CLOSED
+
+BRANCH:
+codex/eve-ai-studio-core-1-2
+
+BASE:
+eve-ai-studio dopo merge PR #92 @ fbc7619
+
+OBIETTIVO:
+Integrare l'architettura modulare features/eve, la composizione server-side e
+l'adapter esplicito dei prototipi FastAPI. Preparare alpha.8 per il collaudo
+senza merge preventivo nella canonica.
+
+FILE PRENOTATI:
+Tutti i file elencati in
+.codex/tasks/active/eve-ai-studio-core-1-2.md e nel manifest CORE-1.2.
+
+FILE CONDIVISI PRENOTATI:
+- reference/eve-ai-studio-preview/index.html
+- CODEX_COORDINATION.md, limitatamente a questa sezione
+- .github/workflows/release-eve-ai-studio-desktop.yml, soltanto se necessario
+  per consentire la release di prova dal branch
+
+VINCOLI:
+EVE_CORE_INTEGRATION_ENABLED=false per impostazione predefinita. Token e URL
+interni soltanto server-side. Una sola Draft PR, nessun merge o CLOSED prima
+del collaudo desktop alpha.8 e dell'approvazione esplicita dell'utente.
 ```
 
 #### DESKTOP-0.3 — Aggiornamento firmato da file locale

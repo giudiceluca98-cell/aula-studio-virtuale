@@ -43,7 +43,7 @@ Le due linee hanno numerazione indipendente.
 | `CORE-0.9` | Retrieval locale, citazioni | chiuso e approvato |
 | `CORE-1.0` | Chat RAG grounded, fonti | chiuso e approvato |
 | `CORE-1.1` | Apertura fonti, verifica integrità | chiuso e approvato |
-| `CORE-1.2` | Architettura unificata e adapter dei prototipi | pianificato; bloccato fino al Gate C |
+| `CORE-1.2` | Architettura unificata e adapter dei prototipi | chiuso e approvato; release `1.2.0-alpha.8` |
 
 ## Linea INTELLIGENCE
 

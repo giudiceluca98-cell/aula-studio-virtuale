@@ -17,7 +17,7 @@ permissions:
 jobs:
   windows:
     name: Installer Windows e aggiornamento
-    if: github.ref == 'refs/heads/eve-ai-studio' || github.ref == 'refs/heads/codex/eve-ai-studio-intelligence-0-3' || startsWith(github.ref, 'refs/tags/eve-ai-studio-v')
+    if: github.ref == 'refs/heads/eve-ai-studio' || github.ref == 'refs/heads/codex/eve-ai-studio-core-1-2' || startsWith(github.ref, 'refs/tags/eve-ai-studio-v')
     runs-on: windows-latest
     env:
       RELEASE_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.ref_name }}

@@ -1,0 +1,16 @@
+{
+  "checkpoint": "CORE-1.2",
+  "status": "PACKAGE_VERIFIED",
+  "closure": false,
+  "dependency": "INTELLIGENCE-0.3 CLOSED",
+  "tests": {
+    "typescript_transpile": "pass",
+    "javascript_syntax": "pass",
+    "preview_no_fetch": "pass",
+    "scope": "pass",
+    "apply_idempotent": "pass",
+    "rollback": "pass",
+    "repository_pnpm_suite": "pending_codex",
+    "desktop_alpha_8": "pending_codex_and_user"
+  }
+}

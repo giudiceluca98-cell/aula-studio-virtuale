@@ -34,7 +34,7 @@
       label: "Controllo qualità",
       description: "Requisiti, sicurezza e test",
       icon: "✓",
-      views: ["requirements", "tests"],
+      views: ["requirements", "tests", "core-architecture"],
     },
     {
       id: "publish",

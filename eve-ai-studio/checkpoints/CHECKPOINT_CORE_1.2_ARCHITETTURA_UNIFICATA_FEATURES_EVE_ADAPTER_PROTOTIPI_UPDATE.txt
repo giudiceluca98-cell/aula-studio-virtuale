@@ -1,0 +1,20 @@
+CHECKPOINT: CORE-1.2 — ARCHITETTURA UNIFICATA FEATURES/EVE E ADAPTER DEI PROTOTIPI
+
+Lavoro preparato:
+- introdotti dieci confini funzionali sotto src/features/eve;
+- aggiunto registro tipizzato delle capacità e maturità reale;
+- aggiunto config server-only senza variabili NEXT_PUBLIC;
+- aggiunto adapter FastAPI limitato ai probe health, requirements, materials e research;
+- aggiunti timeout, no redirect, content-type JSON, limite byte e redazione degli errori;
+- aggiunto compositore server e route diagnostica non cacheabile;
+- aggiunti test statici degli import vietati e test dell'adapter con fetch iniettato;
+- aggiunta vista CORE-1.2 nella preview canonica, senza rete reale e senza nuovo HTML.
+
+Perché:
+Il piano richiede una struttura di produzione capace di riutilizzare i prototipi verificati senza duplicarli. Il browser riceve soltanto contratti e stato redatto; configurazione e rete restano sul server.
+
+Limiti:
+- nessuna capacità applicativa nuova viene attivata;
+- la route è diagnostica;
+- il collegamento reale richiede endpoint interno e flag esplicito;
+- CORE-1.2 non è chiuso prima di INTELLIGENCE-0.3 CLOSED e del collaudo desktop alpha.8.
