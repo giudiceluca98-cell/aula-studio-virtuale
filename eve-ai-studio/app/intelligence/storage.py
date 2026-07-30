@@ -505,6 +505,58 @@ class SqliteResearchStore:
             ).fetchall()
         return [self._row_to_source(row) for row in rows]
 
+
+    def get_source_candidate(
+        self,
+        project_id: str,
+        source_id: int,
+        room_id: str,
+    ) -> ResearchSourceCandidate:
+        with self._lock:
+            self._require_project_row(project_id, room_id)
+            row = self._connection.execute(
+                """
+                SELECT * FROM research_source_candidates
+                WHERE source_id = ? AND project_id = ?
+                """,
+                (source_id, project_id),
+            ).fetchone()
+        if row is None:
+            from .errors import ResearchSourceNotFoundError
+
+            raise ResearchSourceNotFoundError(source_id)
+        return self._row_to_source(row)
+
+    def set_source_review_state(
+        self,
+        project_id: str,
+        source_id: int,
+        room_id: str,
+        *,
+        status: ResearchSourceStatus,
+        trust_level: str,
+    ) -> ResearchSourceCandidate:
+        now = utc_now()
+        with self._lock, self._connection:
+            self._require_project_row(project_id, room_id)
+            cursor = self._connection.execute(
+                """
+                UPDATE research_source_candidates
+                SET status = ?, trust_level = ?
+                WHERE source_id = ? AND project_id = ?
+                """,
+                (status.value, trust_level, source_id, project_id),
+            )
+            if cursor.rowcount != 1:
+                from .errors import ResearchSourceNotFoundError
+
+                raise ResearchSourceNotFoundError(source_id)
+            self._connection.execute(
+                "UPDATE research_projects SET updated_at = ? WHERE project_id = ?",
+                (now, project_id),
+            )
+        return self.get_source_candidate(project_id, source_id, room_id)
+
     def list_transition_events(
         self,
         project_id: str,

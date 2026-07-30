@@ -573,6 +573,73 @@ class SqliteMaterialStore:
             for row in rows
         ]
 
+
+    def deactivate_material(self, material_id: str, room_id: str) -> None:
+        """Remove a material from active retrieval without deleting versions or audit history."""
+        now = utc_now()
+        with self.connection() as connection:
+            connection.execute("BEGIN IMMEDIATE")
+            row = connection.execute(
+                "SELECT room_id FROM materials WHERE material_id = ?",
+                (material_id,),
+            ).fetchone()
+            if row is None:
+                connection.rollback()
+                raise MaterialNotFoundError()
+            if row["room_id"] != room_id:
+                connection.rollback()
+                raise MaterialRoomMismatchError()
+            connection.execute(
+                "UPDATE materials SET current_version_id = NULL, updated_at = ? WHERE material_id = ?",
+                (now, material_id),
+            )
+            connection.commit()
+
+    def activate_material_version(
+        self,
+        material_id: str,
+        version_id: int,
+        room_id: str,
+    ) -> None:
+        now = utc_now()
+        with self.connection() as connection:
+            connection.execute("BEGIN IMMEDIATE")
+            row = connection.execute(
+                """
+                SELECT m.room_id, v.status
+                FROM materials m
+                JOIN material_versions v ON v.material_id = m.material_id
+                WHERE m.material_id = ? AND v.version_id = ?
+                """,
+                (material_id, version_id),
+            ).fetchone()
+            if row is None:
+                connection.rollback()
+                raise MaterialVersionNotFoundError()
+            if row["room_id"] != room_id:
+                connection.rollback()
+                raise MaterialRoomMismatchError()
+            if row["status"] != MaterialStatus.READY.value:
+                connection.rollback()
+                raise MaterialVersionNotFoundError()
+            connection.execute(
+                "UPDATE materials SET current_version_id = ?, updated_at = ? WHERE material_id = ?",
+                (version_id, now, material_id),
+            )
+            connection.commit()
+
+    def is_material_active(self, material_id: str, room_id: str) -> bool:
+        with self.connection() as connection:
+            row = connection.execute(
+                "SELECT room_id, current_version_id FROM materials WHERE material_id = ?",
+                (material_id,),
+            ).fetchone()
+        if row is None:
+            raise MaterialNotFoundError()
+        if row["room_id"] != room_id:
+            raise MaterialRoomMismatchError()
+        return row["current_version_id"] is not None
+
     def catalog_counts(self) -> dict[str, int]:
         with self.connection() as connection:
             material_total = int(

@@ -16,6 +16,7 @@ class MaterialSourceType(str, Enum):
     UPLOAD = "upload"
     PASTED_TEXT = "pasted_text"
     GENERATED = "generated"
+    RESEARCH_PROMOTION = "research_promotion"
 
 
 class MaterialImportRequest(BaseModel):

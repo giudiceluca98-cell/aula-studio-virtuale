@@ -1,0 +1,145 @@
+CHECKPOINT INTELLIGENCE-0.3
+REVISIONE UMANA, QUALITÀ E PROMOZIONE CONTROLLATA
+
+STATO DEL DOCUMENTO
+
+Pacchetto funzionale locale preparato per Codex.
+Non costituisce chiusura definitiva.
+La chiusura richiede test nel checkout reale, generazione della release desktop,
+installazione e approvazione dell'utente.
+
+BASELINE
+
+- INTELLIGENCE-0.2 chiuso e approvato;
+- release installata: Eve AI Studio 1.2.0-alpha.6;
+- linea CORE invariata e in pausa dopo CORE-1.1;
+- prossimo checkpoint: INTELLIGENCE-0.3;
+- Gate B del piano coordinato soddisfatto.
+
+COSA È STATO IMPLEMENTATO
+
+1. Modello di revisione umana
+
+Sono stati aggiunti:
+
+- stato under_review;
+- stati finali approved e rejected;
+- stati di invalidazione expired e superseded;
+- identità e ruolo del revisore;
+- motivazione obbligatoria;
+- metadati autore, editore, data, licenza e lingua;
+- cinque punteggi qualità compresi tra 0 e 100;
+- legame immutabile con source_id, project_id, room_id e acquisition_id.
+
+2. Sicurezza dei contenuti
+
+È stato aggiunto uno scanner deterministico che segnala indicatori come:
+
+- tentativi di ignorare istruzioni precedenti;
+- richieste del system prompt;
+- esfiltrazione di segreti;
+- istruzioni di esecuzione di strumenti o comandi;
+- override di ruolo;
+- linguaggio di jailbreak.
+
+Lo scanner non approva e non rifiuta alcuna fonte.
+Una fonte segnalata può essere approvata soltanto dopo presa d'atto esplicita.
+
+3. Persistenza e audit
+
+Nuove tabelle:
+
+- research_source_reviews;
+- research_review_events;
+- research_source_promotions.
+
+Gli eventi registrano avvio, decisione, scadenza, promozione e revoca.
+
+4. Confronto versioni
+
+Il servizio confronta le due acquisizioni riuscite più recenti e restituisce:
+
+- checksum modificato;
+- URL finale modificato;
+- differenza dimensione;
+- differenza caratteri estratti;
+- ID delle acquisizioni.
+
+Una nuova acquisizione invalida la revisione della versione precedente.
+Il vecchio materiale promosso rimane storico e attivo finché non viene revocato.
+
+5. Promozione controllata verso CORE
+
+La promozione:
+
+- è disattivata per impostazione predefinita;
+- richiede una revisione approved;
+- richiede che l'acquisition_id approvato sia ancora quello corrente;
+- richiede un attore e una idempotency key;
+- utilizza il servizio materiali CORE già verificato;
+- crea source_type research_promotion;
+- conserva tutta la provenienza nei metadati;
+- restituisce lo stesso risultato alla ripetizione della stessa chiave.
+
+6. Revoca
+
+La revoca:
+
+- richiede identità e motivazione;
+- imposta la promozione su revoked;
+- imposta la fonte su expired oppure superseded;
+- azzera current_version_id soltanto quando non esistono altre promozioni attive;
+- esclude quindi il materiale dal retrieval;
+- non cancella materiale, versioni, chunk, revisione o audit.
+
+7. API
+
+Sono state aggiunte API per:
+
+- coda revisioni;
+- avvio revisione;
+- decisione;
+- eventi;
+- confronto versioni;
+- promozione;
+- lettura promozione attiva;
+- revoca.
+
+8. Preview canonica
+
+È stato aggiornato esclusivamente:
+
+reference/eve-ai-studio-preview/research-center-workflow.js
+
+La preview permette di simulare:
+
+- avvio revisione;
+- approvazione e rifiuto;
+- obbligo di presa d'atto dei rischi;
+- promozione idempotente;
+- revoca;
+- acquisizione di una nuova versione e scadenza della revisione.
+
+La preview non esegue fetch, non modifica database e dichiara esplicitamente la
+simulazione UI.
+
+È stata aggiornata soltanto l'etichetta del loader nell'unico index.html canonico.
+Non è stato creato alcun secondo HTML.
+
+PERCHÉ È STATO FATTO
+
+INTELLIGENCE-0.2 ha reso possibile acquisire contenuti esterni in sicurezza, ma il
+semplice download non rende una fonte corretta, aggiornata o autorizzata. Questo
+checkpoint inserisce il passaggio umano e tracciabile necessario prima che il
+contenuto possa influenzare il retrieval CORE.
+
+LIMITI VOLUTI
+
+- nessun provider AI;
+- nessuna approvazione automatica;
+- nessun embedding;
+- nessuna ricerca generalista;
+- nessuna cancellazione distruttiva;
+- promozione OFF per impostazione predefinita;
+- scanner euristico dichiarato come supporto, non come classificatore infallibile;
+- confronto versioni basato su metadati e checksum, non su diff semantico.

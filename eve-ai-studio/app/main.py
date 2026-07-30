@@ -14,7 +14,9 @@ from .intelligence import (
     ControlledWebAcquirer,
     ResearchCenterService,
     ResearchLimits,
+    ResearchReviewPolicy,
     SqliteAcquisitionStore,
+    SqliteReviewStore,
     SqliteResearchStore,
     WebAcquisitionPolicy,
     create_research_router,
@@ -133,6 +135,7 @@ source_opening = SourceOpeningService(
 )
 research_store = SqliteResearchStore(settings.research_db_path)
 research_acquisition_store = SqliteAcquisitionStore(settings.research_db_path)
+research_review_store = SqliteReviewStore(settings.research_db_path)
 research_acquirer = ControlledWebAcquirer(
     policy=WebAcquisitionPolicy(
         enabled=settings.research_web_enabled,
@@ -153,6 +156,12 @@ research_center = ResearchCenterService(
     ),
     acquisition_store=research_acquisition_store,
     acquirer=research_acquirer,
+    review_store=research_review_store,
+    material_service=materials,
+    review_policy=ResearchReviewPolicy(
+        review_enabled=settings.research_review_enabled,
+        promotion_enabled=settings.research_promotion_enabled,
+    ),
 )
 
 active_prompt_version_id = prompts.status().active_version_id
@@ -169,9 +178,10 @@ app = FastAPI(
         "Fondazione modulare di Eve con requisiti, prompt, valutazioni, runner, "
         "provider controllati, materiali, retrieval locale, chat RAG citata, "
         "apertura verificabile delle fonti e centro ricerca INTELLIGENCE con "
-        "progetti, query, acquisizione URL controllata e quarantena. La rete resta "
-        "opt-in e disattivata per impostazione predefinita; ricerca generalista, "
-        "embedding e addestramento del modello restano esclusi."
+        "progetti, acquisizione URL controllata, revisione umana attribuibile e "
+        "promozione esplicita verso i materiali CORE. Rete e promozione restano "
+        "opt-in; nessun punteggio approva automaticamente una fonte e embedding o "
+        "addestramento del modello restano esclusi."
     ),
 )
 app.include_router(create_prompt_router(prompts))
