@@ -56,11 +56,12 @@ jobs:
 
       - name: Verifica versione e build canonica
         run: |
-          pnpm --dir eve-desktop check:version "$env:RELEASE_VERSION"
+          node eve-desktop/scripts/check-version.mjs "$env:RELEASE_VERSION"
           pnpm --dir eve-desktop test
 
       - name: Genera configurazione updater
         env:
+          EVE_DESKTOP_RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
           EVE_TAURI_UPDATER_PUBLIC_KEY: ${{ secrets.TAURI_UPDATER_PUBLIC_KEY }}
           EVE_TAURI_UPDATER_ENDPOINT: https://github.com/giudiceluca98-cell/eve-ai-studio-releases/releases/latest/download/latest.json
         run: pnpm --dir eve-desktop release:config

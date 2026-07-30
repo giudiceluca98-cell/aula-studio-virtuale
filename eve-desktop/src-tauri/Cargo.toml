@@ -1,6 +1,6 @@
 [package]
 name = "eve-ai-studio-desktop"
-version = "1.2.0-alpha.8"
+version = "1.2.0-alpha.9"
 description = "Eve AI Studio desktop"
 authors = ["Aula Studio Virtuale"]
 edition = "2021"
