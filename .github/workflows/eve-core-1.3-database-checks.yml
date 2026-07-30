@@ -53,8 +53,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          pg_dump "$PGURL" --format=custom --file=/tmp/core-1.3-before-rollback.dump
-          test -s /tmp/core-1.3-before-rollback.dump
+          supabase db dump --local --file /tmp/core-1.3-before-rollback-schema.sql
+          supabase db dump --local --data-only --use-copy --file /tmp/core-1.3-before-rollback-data.sql
+          test -s /tmp/core-1.3-before-rollback-schema.sql
+          test -s /tmp/core-1.3-before-rollback-data.sql
           if psql "$PGURL" -v ON_ERROR_STOP=1 -f supabase/rollback/0018_eve_core_production_data.down.sql; then
             echo "Il rollback distruttivo non protetto doveva fallire" >&2
             exit 1
