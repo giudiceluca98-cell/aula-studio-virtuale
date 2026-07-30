@@ -28,7 +28,7 @@ RESPONSABILE:
 Codex coordinamento
 
 STATO:
-CLOSED
+REVIEW_REQUIRED
 
 BRANCH DI PARTENZA:
 origin/eve-ai-studio @ 13b8822
@@ -164,7 +164,7 @@ RESPONSABILE:
 Codex integrazione funzionale, UI e desktop di prova
 
 STATO:
-REVIEW_REQUIRED
+CLOSED
 
 BRANCH:
 codex/eve-ai-studio-core-1-2
