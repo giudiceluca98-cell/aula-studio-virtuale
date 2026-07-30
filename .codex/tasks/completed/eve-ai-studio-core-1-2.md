@@ -1,6 +1,6 @@
 # CORE-1.2 — Architettura unificata features/eve e adapter prototipi
 
-- Stato: `REVIEW_REQUIRED`
+- Stato: `CLOSED`
 - Branch: `codex/eve-ai-studio-core-1-2`
 - Base contenutistica: `eve-ai-studio` dopo merge PR #92, commit `fbc7619`
 - Baseline desktop: `1.2.0-alpha.7`
@@ -51,6 +51,8 @@ l'integrazione disattivata per impostazione predefinita.
 - preview canonica: navigazione, simulazione dei quattro adapter e sei
   controlli architetturali verificati nel browser.
 - Draft PR: `#93`, aperta verso `eve-ai-studio`.
+- Release firmata: `1.2.0-alpha.8`, workflow `30537590636`.
+- Collaudo e chiusura approvati dall'utente il 30 luglio 2026.
 
 Il lint globale resta bloccato da artefatti desktop preesistenti sotto
 `eve-desktop/frontend-dist/` e `eve-desktop/src-tauri/target/`; i file nuovi e

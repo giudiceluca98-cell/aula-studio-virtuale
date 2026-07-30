@@ -28,7 +28,7 @@ RESPONSABILE:
 Codex coordinamento
 
 STATO:
-REVIEW_REQUIRED
+CLOSED
 
 BRANCH DI PARTENZA:
 origin/eve-ai-studio @ 13b8822
