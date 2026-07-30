@@ -9,13 +9,6 @@ values
   ('f1000000-0000-0000-0000-000000000003', 'member-core13@example.test'),
   ('f1000000-0000-0000-0000-000000000004', 'outsider-core13@example.test');
 
-insert into public.profiles (id, display_name)
-values
-  ('f1000000-0000-0000-0000-000000000001', 'Owner CORE 1.3'),
-  ('f1000000-0000-0000-0000-000000000002', 'Admin CORE 1.3'),
-  ('f1000000-0000-0000-0000-000000000003', 'Member CORE 1.3'),
-  ('f1000000-0000-0000-0000-000000000004', 'Outsider CORE 1.3');
-
 insert into public.study_rooms (id, name, invite_code, created_by)
 values
   ('f2000000-0000-0000-0000-000000000001', 'Room A CORE 1.3', 'CORE13A1', 'f1000000-0000-0000-0000-000000000001'),
