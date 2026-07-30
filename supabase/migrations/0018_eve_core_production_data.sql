@@ -379,6 +379,8 @@ revoke insert, update, delete on public.eve_audit_events from anon, authenticate
 grant select on public.eve_schema_metadata to authenticated;
 grant select, insert, update, delete on public.eve_prompt_families, public.eve_prompt_versions, public.eve_material_assets, public.eve_material_versions, public.eve_material_chunks, public.eve_research_projects, public.eve_research_sources, public.eve_source_reviews, public.eve_source_promotions, public.eve_conversations, public.eve_messages to authenticated;
 grant select on public.eve_audit_events to authenticated;
+grant select, insert, update, delete on public.eve_schema_metadata, public.eve_prompt_families, public.eve_prompt_versions, public.eve_material_assets, public.eve_material_versions, public.eve_material_chunks, public.eve_research_projects, public.eve_research_sources, public.eve_source_reviews, public.eve_source_promotions, public.eve_conversations, public.eve_messages, public.eve_import_batches, public.eve_import_items to service_role;
+grant select, insert on public.eve_audit_events to service_role;
 
 insert into public.eve_schema_metadata(key, value)
 values
