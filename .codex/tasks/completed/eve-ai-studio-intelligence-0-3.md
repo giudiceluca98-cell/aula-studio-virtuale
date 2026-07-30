@@ -1,10 +1,10 @@
 # INTELLIGENCE-0.3 — revisione umana e promozione controllata
 
-- Stato: `FUNCTIONAL_TESTING`
+- Stato: `CLOSED`
 - Branch: `codex/eve-ai-studio-intelligence-0-3`
 - Base: `origin/eve-ai-studio` @ `72278e1`
 - Versione desktop di prova: `1.2.0-alpha.7`
-- Stato finale previsto: `PENDING_USER_DESKTOP_APPROVAL`
+- Approvazione desktop: completata il `2026-07-30`
 
 ## Obiettivo
 
@@ -44,7 +44,7 @@ firmata di prova senza unire il branch nella canonica prima del collaudo utente.
 - `EVE_RESEARCH_REVIEW_ENABLED=true`;
 - `EVE_RESEARCH_PROMOTION_ENABLED=false` per impostazione predefinita;
 - nessuna approvazione automatica;
-- nessun merge in `eve-ai-studio` prima del collaudo utente;
+- merge in `eve-ai-studio` autorizzato dopo il collaudo utente;
 - una sola Draft PR e una sola release di prova;
 - nessuna demo, copia HTML, standalone o nuova cartella preview;
 - nessuna modifica a `main`, `demo-canonica`, Aula Studio, Supabase, Vercel o

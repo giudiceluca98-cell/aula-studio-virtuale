@@ -7,7 +7,7 @@ Branch operativo: eve-ai-studio
 Versione servizio: 1.2.0
 Release desktop di partenza: 1.2.0-alpha.6
 Linea CORE: chiusa e in pausa dopo CORE-1.1
-Linea INTELLIGENCE: INTELLIGENCE-0.2 chiuso e approvato; INTELLIGENCE-0.3 in FUNCTIONAL_TESTING
+Linea INTELLIGENCE: INTELLIGENCE-0.3 chiuso e approvato
 ```
 
 Indice ufficiale:
@@ -80,9 +80,9 @@ Funzioni verificate:
 
 ### `INTELLIGENCE-0.3` — Revisione umana, qualità e promozione controllata
 
-Stato: **FUNCTIONAL_TESTING — pacchetto locale preparato, non chiuso**
+Stato: **chiuso e approvato**
 
-Release desktop di prova proposta: `1.2.0-alpha.7`.
+Release desktop approvata: `1.2.0-alpha.7`.
 
 Funzioni candidate al collaudo:
 
@@ -96,11 +96,12 @@ Funzioni candidate al collaudo:
 - revoca che disattiva il materiale dal retrieval senza eliminare la cronologia;
 - promozione disattivata per impostazione predefinita.
 
-La chiusura richiede applicazione sull'ultima `origin/eve-ai-studio`, test Codex, release firmata, installazione desktop sopra `alpha.6`, collaudo dell'utente e approvazione esplicita.
+Test Codex, release firmata, installazione desktop sopra `alpha.6`, collaudo
+dell'utente e approvazione esplicita sono stati completati il `2026-07-30`.
 
 ### `INTELLIGENCE-0.4` — Ricerca web e pianificazione delle query
 
-Stato: **pianificato; bloccato fino alla chiusura di INTELLIGENCE-0.3**
+Stato: **pianificato; sbloccato dal Gate C**
 
 ### `INTELLIGENCE-0.5` — Ingestione documentale avanzata e crawling limitato
 

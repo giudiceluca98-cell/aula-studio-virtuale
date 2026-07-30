@@ -8,7 +8,7 @@ Eve AI Studio usa due linee di sviluppo indipendenti:
 - `INTELLIGENCE` — ricerca online, acquisizione controllata, revisione, qualità del corpus e capacità AI.
 
 La linea `CORE` è chiusa e in pausa dopo `CORE-1.1`.
-La linea `INTELLIGENCE` ha chiuso `INTELLIGENCE-0.2`; `INTELLIGENCE-0.3` è in `FUNCTIONAL_TESTING`.
+La linea `INTELLIGENCE` ha chiuso e approvato `INTELLIGENCE-0.3`.
 
 ## Convenzione obbligatoria dei nomi
 
@@ -51,8 +51,8 @@ Le due linee hanno numerazione indipendente.
 |---|---|---|
 | `INTELLIGENCE-0.1` | Centro ricerca, progetti apprendimento | chiuso e approvato |
 | `INTELLIGENCE-0.2` | Acquisizione web controllata, quarantena fonti | chiuso e approvato; release installata `1.2.0-alpha.6` |
-| `INTELLIGENCE-0.3` | Revisione umana, qualità, promozione controllata | FUNCTIONAL_TESTING; release proposta `1.2.0-alpha.7` |
-| `INTELLIGENCE-0.4` | Ricerca web, pianificazione query | pianificato; dipende da 0.3 |
+| `INTELLIGENCE-0.3` | Revisione umana, qualità, promozione controllata | chiuso e approvato; release `1.2.0-alpha.7` |
+| `INTELLIGENCE-0.4` | Ricerca web, pianificazione query | pianificato; sbloccato dal Gate C |
 | `INTELLIGENCE-0.5` | Ingestione documentale avanzata, crawling limitato | pianificato |
 | `INTELLIGENCE-0.6` | Embedding, indice vettoriale, retrieval ibrido | pianificato |
 | `INTELLIGENCE-0.7` | Freschezza, contraddizioni, salute fonti | pianificato |
@@ -65,9 +65,10 @@ eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.3_REVISIONE_UMANA_QUALITA_PR
 eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.3_REVISIONE_UMANA_QUALITA_PROMOZIONE_CONTROLLATA_VERIFICATION.md
 eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.3_REVISIONE_UMANA_QUALITA_PROMOZIONE_CONTROLLATA_CI_RESULT.md
 eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.3_REVISIONE_UMANA_QUALITA_PROMOZIONE_CONTROLLATA_HANDOFF.md
+eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.3_REVISIONE_UMANA_QUALITA_PROMOZIONE_CONTROLLATA_CLOSURE.md
 ```
 
-La `CLOSURE` definitiva non deve essere prodotta o approvata prima del collaudo desktop dell'utente.
+La `CLOSURE` definitiva è stata approvata dopo il collaudo desktop dell'utente.
 
 ## Regole permanenti
 

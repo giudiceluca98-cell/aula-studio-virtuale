@@ -2,22 +2,17 @@
 
 ## Stato
 
-`FUNCTIONAL_TESTING`
+`CLOSED`
 
-Non indicare `READY_FOR_HANDOFF`, `RELEASE_READY` o `CLOSED` prima di avere:
-
-- test reali verdi nell'ultima origin/eve-ai-studio;
-- commit funzionale congelato;
-- release desktop firmata;
-- installazione e test dell'utente;
-- approvazione esplicita.
+Test reali, release firmata, installazione, collaudo desktop e approvazione
+esplicita dell'utente sono stati completati il `2026-07-30`.
 
 ## Baseline
 
 - branch sorgente: `eve-ai-studio`;
 - checkpoint precedente: INTELLIGENCE-0.2 chiuso;
-- release installata dall'utente: `1.2.0-alpha.6`;
-- release di prova proposta: `1.2.0-alpha.7`.
+- release precedente: `1.2.0-alpha.6`;
+- release approvata: `1.2.0-alpha.7`.
 
 ## Implementazione
 

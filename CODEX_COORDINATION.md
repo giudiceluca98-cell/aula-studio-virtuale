@@ -126,7 +126,7 @@ RESPONSABILE:
 Codex integrazione funzionale, UI e desktop di prova
 
 STATO:
-FUNCTIONAL_TESTING
+CLOSED — approvato dall'utente il 2026-07-30
 
 BRANCH:
 codex/eve-ai-studio-intelligence-0-3
@@ -151,7 +151,7 @@ FILE CONDIVISI PRENOTATI:
   per consentire la release di prova dal branch
 
 VINCOLI:
-Una sola Draft PR. Nessun merge prima del collaudo e dell'approvazione utente.
+Una sola Draft PR. Collaudo e approvazione utente completati; merge autorizzato.
 Stato finale PENDING_USER_DESKTOP_APPROVAL, non CLOSED. Nessuna demo, standalone,
 copia HTML, nuova preview, modifica a main, demo-canonica, Aula Studio, Supabase,
 Vercel o produzione.
