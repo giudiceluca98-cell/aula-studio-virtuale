@@ -164,7 +164,7 @@ RESPONSABILE:
 Codex integrazione funzionale, UI e desktop di prova
 
 STATO:
-RESERVED
+IN_PROGRESS
 
 BRANCH:
 codex/eve-ai-studio-core-1-2

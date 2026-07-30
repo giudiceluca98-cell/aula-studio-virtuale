@@ -1,6 +1,6 @@
 # CORE-1.2 — Architettura unificata features/eve e adapter prototipi
 
-- Stato: `RESERVED`
+- Stato: `FUNCTIONAL_TESTING`
 - Branch: `codex/eve-ai-studio-core-1-2`
 - Base contenutistica: `eve-ai-studio` dopo merge PR #92, commit `fbc7619`
 - Baseline desktop: `1.2.0-alpha.7`
@@ -38,3 +38,19 @@ l'integrazione disattivata per impostazione predefinita.
 - una sola Draft PR;
 - nessun merge e nessuna chiusura prima del collaudo desktop alpha.8 e
   dell'approvazione esplicita dell'utente.
+
+## Verifiche locali
+
+- verificatore del pacchetto CORE-1.2: `PASS`;
+- test mirati Vitest: `10/10`;
+- suite Vitest completa: `181/181`;
+- suite FastAPI cumulativa: `224/224` (un avviso di deprecazione esterno);
+- TypeScript: `PASS`;
+- lint dei file CORE-1.2: `PASS`;
+- build Next.js: `PASS`;
+- preview canonica: navigazione, simulazione dei quattro adapter e sei
+  controlli architetturali verificati nel browser.
+
+Il lint globale resta bloccato da artefatti desktop preesistenti sotto
+`eve-desktop/frontend-dist/` e `eve-desktop/src-tauri/target/`; i file nuovi e
+modificati per CORE-1.2 non introducono errori lint.
