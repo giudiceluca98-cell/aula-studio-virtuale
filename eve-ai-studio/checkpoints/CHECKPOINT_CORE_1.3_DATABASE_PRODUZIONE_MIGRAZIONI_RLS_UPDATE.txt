@@ -1,0 +1,5 @@
+CORE-1.3 UPDATE — PACCHETTO LOCALE
+
+Preparati migrazione 0018, rollback protetto, contratti database, configurazione OFF, status autenticato, import planner deterministico, esecutore server-only, test statici e funzionali, documentazione e anteprima canonica.
+
+Il pacchetto non ha applicato SQL a Supabase, non ha importato database SQLite, non ha effettuato commit o pubblicazioni e non dichiara il checkpoint chiuso.

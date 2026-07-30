@@ -333,3 +333,20 @@ percorso/aula rimane idempotente e produce checklist semanticamente distinte.
    audio/video e screen sharing restano fase 4.
 7. CSP, CSRF sui cookie-based route, validazione Zod e verifica magic bytes sono
    controlli applicativi e non possono essere espressi interamente in RLS.
+
+## CORE-1.3 — schema di produzione Eve
+
+La migrazione `0018_eve_core_production_data.sql` introduce il confine persistente di Eve senza attivarlo automaticamente. Le tabelle sono separate per `room_id`, usano chiavi esterne composite quando una relazione attraversa aula, corso, conversazione o materiale, e hanno RLS attiva.
+
+Principi:
+
+- `EVE_PRODUCTION_DATABASE_ENABLED=false` e `EVE_SQLITE_IMPORT_ENABLED=false` per impostazione predefinita;
+- import SQLite solo server-side con service role e batch idempotenti;
+- `eve_audit_events` append-only;
+- import staging non accessibile ad `anon` o `authenticated`;
+- conversazioni private al proprietario e alla relativa aula;
+- fonti INTELLIGENCE promosse con collegamento esplicito a revisione e materiale;
+- nessuna migrazione viene applicata al database remoto dal pacchetto locale;
+- rollback distruttivo bloccato finché non viene impostata esplicitamente la variabile di sessione dopo un backup verificato.
+
+Il file `supabase/rollback/0018_eve_core_production_data.down.sql` è un runbook tecnico, non una procedura automatica da eseguire durante il normale deploy.

@@ -541,6 +541,24 @@ rilascio eseguito. Ogni scheda della galleria include il comando diretto
 `Riproduci su Eve`, verificato su tutti i 64 asset.
 ```
 
+### CORE-1.3 — Database di produzione, migrazioni e RLS
+
+- Stato: `FUNCTIONAL_TESTING`
+- Branch: `codex/eve-ai-studio-core-1-3`
+- Base: `eve-ai-studio` dopo merge PR #93
+- Baseline desktop: `1.2.0-alpha.8`
+- Release di prova prevista: `1.2.0-alpha.9`
+- File riservati: `.env.example`, `docs/DATABASE.md`,
+  `src/app/api/eve/database/**`, `src/features/eve/data/**`,
+  `src/features/eve/contracts.ts`, `src/features/eve/server/composition.ts`,
+  migrazione e rollback 0018, test database, checkpoint CORE-1.3 e preview
+  canonica.
+
+Entrambi i feature flag restano disattivati. Nessun SQL remoto o di
+produzione è autorizzato. Prima della Draft PR e della release di prova sono
+obbligatori i test su PostgreSQL/Supabase temporaneo. Nessun merge è consentito
+prima del collaudo desktop alpha.9 e dell'approvazione esplicita dell'utente.
+
 ## Attività storiche di Aula Studio
 
 La tabella seguente è conservata come cronologia del precedente flusso di Aula Studio. Non assegna né prenota file di Eve AI Studio e non prevale sulle regole attive sopra.
