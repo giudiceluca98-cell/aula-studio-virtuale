@@ -3,6 +3,11 @@
   const main = document.querySelector(".main");
   if (!nav || !main || document.getElementById("intelligence-research")) return;
 
+  const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[char]));
+  const wait = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
+
   const navButton = document.createElement("button");
   navButton.dataset.view = "intelligence-research";
   navButton.innerHTML = '<span class="ico">⌕</span>Ricerca e apprendimento';
@@ -17,329 +22,406 @@
       <section class="panel span-12">
         <div class="panel-head">
           <div>
-            <h3>Centro ricerca e acquisizione controllata</h3>
-            <p>INTELLIGENCE-0.2 — progetti, query e fonti candidate restano separati dall'acquisizione URL, che è opt-in, tracciata e sempre in quarantena.</p>
+            <h3>Centro ricerca, revisione e promozione controllata</h3>
+            <p>INTELLIGENCE-0.3 — il download resta separato dalla revisione umana e soltanto una decisione attribuibile può autorizzare la promozione verso i materiali CORE.</p>
           </div>
-          <span class="tag violet" id="researchCheckpointBadge">INTELLIGENCE-0.2</span>
+          <span class="tag violet" id="researchCheckpointBadge">INTELLIGENCE-0.3</span>
         </div>
         <div class="panel-body">
           <div class="metric-row">
-            <div class="metric"><small>Progetti</small><strong id="researchProjectCount">2</strong><div class="progress"><span style="width:40%"></span></div></div>
-            <div class="metric"><small>Query pianificate</small><strong id="researchQueryCount">5</strong><div class="progress"><span style="width:55%"></span></div></div>
-            <div class="metric"><small>Fonti candidate</small><strong id="researchSourceCount">3</strong><div class="progress"><span style="width:45%;background:var(--warn)"></span></div></div>
-            <div class="metric"><small>Acquisizioni riuscite</small><strong id="researchAcquisitionCount">1</strong><div class="progress"><span style="width:30%;background:var(--green)"></span></div></div>
+            <div class="metric"><small>Fonti acquisite</small><strong id="researchAcquisitionCount">0</strong><div class="progress"><span style="width:65%;background:var(--green)"></span></div></div>
+            <div class="metric"><small>In revisione</small><strong id="researchReviewCount">0</strong><div class="progress"><span style="width:45%;background:var(--warn)"></span></div></div>
+            <div class="metric"><small>Approvate</small><strong id="researchApprovedCount">0</strong><div class="progress"><span style="width:35%;background:var(--green)"></span></div></div>
+            <div class="metric"><small>Promozioni CORE attive</small><strong id="researchPromotionCount">0</strong><div class="progress"><span style="width:25%;background:var(--violet)"></span></div></div>
           </div>
-        </div>
-      </section>
-
-      <section class="panel span-7">
-        <div class="panel-head">
-          <div><h3>Nuovo progetto di apprendimento</h3><p>Definisce obiettivo, materia, livello e piano; non avvia automaticamente rete o provider esterni.</p></div>
-          <span class="pill">Revisione umana obbligatoria</span>
-        </div>
-        <div class="panel-body">
-          <div class="form-grid">
-            <div class="field"><label for="researchRoom">Aula</label><select id="researchRoom"><option>room-python-zero</option><option>room-matematica</option></select></div>
-            <div class="field"><label for="researchDomain">Materia o campo</label><input id="researchDomain" value="Informatica"></div>
-            <div class="field"><label for="researchTitle">Titolo</label><input id="researchTitle" value="Programmazione da zero"></div>
-            <div class="field"><label for="researchLevel">Livello</label><input id="researchLevel" value="Principiante → universitario"></div>
-            <div class="field" style="grid-column:1/-1"><label for="researchObjective">Obiettivo</label><textarea id="researchObjective" rows="4">Costruire una base didattica completa, verificabile e progressiva sulla programmazione.</textarea></div>
-            <div class="field" style="grid-column:1/-1"><label for="researchTopics">Argomenti iniziali</label><input id="researchTopics" value="algoritmi, variabili, controllo di flusso, funzioni"></div>
-          </div>
-          <button class="btn green" id="createResearchProject" style="width:100%;margin-top:12px">Crea progetto controllato</button>
-          <div class="list" id="researchCreationStages" style="margin-top:12px"></div>
         </div>
       </section>
 
       <section class="panel span-5">
         <div class="panel-head">
-          <div><h3>Confini del checkpoint</h3><p>Disponibilità del modulo e accesso web attivo sono stati separati esplicitamente.</p></div>
-          <span class="tag warn">Flag rete OFF</span>
+          <div><h3>Regole non negoziabili</h3><p>La preview simula il contratto UI; i controlli reali restano server-side.</p></div>
+          <span class="pill">Simulazione dichiarata</span>
         </div>
         <div class="panel-body list">
-          <div class="row"><div class="meta"><strong>Progetti e obiettivi</strong><small>Persistenza, isolamento per aula e stati tracciati</small></div><span class="tag">Attivi</span></div>
-          <div class="row"><div class="meta"><strong>Query di ricerca</strong><small>Catalogate come planned; nessun motore generalista le esegue</small></div><span class="tag violet">Pianificate</span></div>
-          <div class="row"><div class="meta"><strong>Fonti candidate</strong><small>URL e metadati restano non fidati fino alla revisione</small></div><span class="tag warn">Quarantena</span></div>
-          <div class="row"><div class="meta"><strong>Acquisizione URL esplicito</strong><small>Disponibile soltanto con EVE_RESEARCH_WEB_ENABLED=true</small></div><span class="tag warn">Opt-in</span></div>
-          <div class="row"><div class="meta"><strong>Promozione nei materiali CORE</strong><small>Nessuna approvazione, ingestione o embedding automatici</small></div><span class="tag red">Esclusa</span></div>
-          <div class="row"><div class="meta"><strong>Addestramento del modello</strong><small>Nessuna modifica automatica dei pesi o del comportamento</small></div><span class="tag red">Disattivato</span></div>
+          <div class="row"><div class="meta"><strong>Acquisizione ≠ approvazione</strong><small>Ogni documento web resta non fidato e in quarantena.</small></div><span class="tag warn">Separati</span></div>
+          <div class="row"><div class="meta"><strong>Decisione umana</strong><small>Revisore, motivazione, punteggi e provenienza vengono registrati.</small></div><span class="tag">Obbligatoria</span></div>
+          <div class="row"><div class="meta"><strong>Punteggi qualità</strong><small>Non approvano mai automaticamente una fonte.</small></div><span class="tag red">Solo supporto</span></div>
+          <div class="row"><div class="meta"><strong>Prompt injection</strong><small>Le segnalazioni richiedono presa d'atto esplicita prima dell'approvazione.</small></div><span class="tag warn">Controllata</span></div>
+          <div class="row"><div class="meta"><strong>Promozione CORE</strong><small>Esplicita, idempotente, tracciata e revocabile.</small></div><span class="tag violet">Opt-in</span></div>
+          <div class="row"><div class="meta"><strong>Revoca</strong><small>Rimuove il materiale dal retrieval senza cancellarne la cronologia.</small></div><span class="tag">Reversibile</span></div>
         </div>
-      </section>
-
-      <section class="panel span-12">
-        <div class="panel-head">
-          <div><h3>Progetti per aula</h3><p>Ogni progetto mantiene piano, query, fonti ed eventi senza accedere alle altre aule.</p></div>
-          <span class="pill" id="researchCatalogBadge">2 progetti</span>
-        </div>
-        <div class="panel-body list" id="researchProjectList"></div>
-      </section>
-
-      <section class="panel span-6">
-        <div class="panel-head">
-          <div><h3>Query pianificate</h3><p>Le query non vengono eseguite da questo checkpoint: servono a organizzare il lavoro di ricerca.</p></div>
-          <button class="btn" id="addResearchQuery">Aggiungi query</button>
-        </div>
-        <div class="panel-body list" id="researchQueryList"></div>
-      </section>
-
-      <section class="panel span-6">
-        <div class="panel-head">
-          <div><h3>Quarantena fonti</h3><p>Un URL registrato non diventa automaticamente contenuto acquisito o conoscenza approvata.</p></div>
-          <button class="btn" id="addResearchSource">Registra URL</button>
-        </div>
-        <div class="panel-body list" id="researchSourceList"></div>
       </section>
 
       <section class="panel span-7">
         <div class="panel-head">
-          <div>
-            <h3>Pipeline di acquisizione controllata</h3>
-            <p>Simulazione UI dichiarata: la preview non effettua richieste reali e non sostituisce i controlli server-side.</p>
-          </div>
-          <span class="pill">Simulazione UI dichiarata</span>
+          <div><h3>Coda di revisione umana</h3><p>Seleziona una fonte acquisita e completa il ciclo di revisione.</p></div>
+          <span class="pill" id="reviewQueueBadge">0 da verificare</span>
+        </div>
+        <div class="panel-body list" id="reviewQueue"></div>
+      </section>
+
+      <section class="panel span-7">
+        <div class="panel-head">
+          <div><h3>Scheda di revisione</h3><p>Metadati, qualità e rischi restano collegati all'acquisizione esatta.</p></div>
+          <span class="tag warn" id="selectedReviewStatus">quarantined</span>
         </div>
         <div class="panel-body">
           <div class="form-grid">
-            <div class="field"><label for="acquisitionRoom">Aula</label><select id="acquisitionRoom"><option>room-python-zero</option><option>room-matematica</option></select></div>
-            <div class="field"><label for="acquisitionSource">Fonte candidata</label><select id="acquisitionSource"></select></div>
-            <div class="field" style="grid-column:1/-1"><label for="acquisitionUrl">URL registrato</label><input id="acquisitionUrl" readonly></div>
+            <div class="field"><label for="reviewSource">Fonte</label><select id="reviewSource"></select></div>
+            <div class="field"><label for="reviewerId">Revisore</label><input id="reviewerId" value="docente-01"></div>
+            <div class="field"><label for="reviewAuthor">Autore</label><input id="reviewAuthor" value="Dipartimento di Informatica"></div>
+            <div class="field"><label for="reviewPublisher">Editore</label><input id="reviewPublisher" value="Università dimostrativa"></div>
+            <div class="field"><label for="reviewLicense">Licenza</label><input id="reviewLicense" value="CC BY 4.0"></div>
+            <div class="field"><label for="reviewLanguage">Lingua</label><input id="reviewLanguage" value="it"></div>
+            <div class="field"><label for="scoreQuality">Qualità</label><input id="scoreQuality" type="number" min="0" max="100" value="90"></div>
+            <div class="field"><label for="scoreAuthority">Autorevolezza</label><input id="scoreAuthority" type="number" min="0" max="100" value="88"></div>
+            <div class="field"><label for="scoreFreshness">Aggiornamento</label><input id="scoreFreshness" type="number" min="0" max="100" value="94"></div>
+            <div class="field"><label for="scoreRelevance">Pertinenza</label><input id="scoreRelevance" type="number" min="0" max="100" value="96"></div>
+            <div class="field"><label for="scoreCompleteness">Completezza</label><input id="scoreCompleteness" type="number" min="0" max="100" value="84"></div>
+            <div class="field" style="grid-column:1/-1"><label for="reviewRationale">Motivazione obbligatoria</label><textarea id="reviewRationale" rows="3">Fonte pertinente, verificabile e adeguata al percorso didattico.</textarea></div>
           </div>
-          <button class="btn green" id="simulateAcquisition" style="width:100%;margin-top:12px">Simula controllo e quarantena</button>
-          <div class="list" id="acquisitionStages" style="margin-top:12px"></div>
+          <label style="display:flex;gap:10px;align-items:flex-start;margin-top:12px"><input id="riskAcknowledged" type="checkbox"><span><strong>Ho verificato le segnalazioni di sicurezza</strong><br><small>Necessario soltanto quando il contenuto presenta indicatori sospetti.</small></span></label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
+            <button class="btn" id="startReview">Avvia revisione</button>
+            <button class="btn green" id="approveReview">Approva con motivazione</button>
+            <button class="btn" id="rejectReview">Rifiuta</button>
+          </div>
+          <div class="list" id="reviewStages" style="margin-top:12px"></div>
         </div>
       </section>
 
       <section class="panel span-5">
         <div class="panel-head">
-          <div><h3>Documento acquisito</h3><p>Il testo resta dato esterno non fidato; le istruzioni contenute non sono eseguibili.</p></div>
-          <span class="tag warn">untrusted_web_content</span>
+          <div><h3>Analisi sicurezza e provenienza</h3><p>Indicatori deterministici per il revisore, mai una decisione automatica.</p></div>
+          <span class="tag" id="riskSeverity">none</span>
         </div>
-        <div class="panel-body list" id="quarantinedDocument"></div>
+        <div class="panel-body list" id="reviewEvidence"></div>
+      </section>
+
+      <section class="panel span-7">
+        <div class="panel-head">
+          <div><h3>Promozione verso i materiali CORE</h3><p>È disponibile soltanto dopo un'approvazione valida dell'acquisizione corrente.</p></div>
+          <span class="tag red" id="promotionFlag">Opt-in server-side</span>
+        </div>
+        <div class="panel-body">
+          <div class="form-grid">
+            <div class="field"><label for="promotionTitle">Titolo materiale</label><input id="promotionTitle" value="Manuale didattico controllato"></div>
+            <div class="field"><label for="idempotencyKey">Idempotency key</label><input id="idempotencyKey" value="promotion-source-11-v1"></div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
+            <button class="btn green" id="promoteSource">Promuovi esplicitamente</button>
+            <button class="btn" id="revokePromotion">Revoca promozione</button>
+          </div>
+          <div class="list" id="promotionResult" style="margin-top:12px"></div>
+        </div>
+      </section>
+
+      <section class="panel span-5">
+        <div class="panel-head">
+          <div><h3>Confronto versioni</h3><p>Una nuova acquisizione scade la revisione precedente, senza alterare il materiale storico già approvato.</p></div>
+          <button class="btn" id="simulateNewVersion">Simula nuova versione</button>
+        </div>
+        <div class="panel-body list" id="versionComparison"></div>
       </section>
     </div>`;
   main.appendChild(view);
 
-  const projects = [
-    {id:"research-a14c",room:"room-python-zero",title:"Programmazione da zero",domain:"Informatica",level:"Principiante → universitario",status:"active",queries:3,sources:2},
-    {id:"research-b82e",room:"room-matematica",title:"Matematica completa",domain:"Matematica",level:"Primaria → università",status:"draft",queries:2,sources:1}
-  ];
-  const queries = [
-    "curricolo programmazione dalle basi agli algoritmi",
-    "manuali universitari introduttivi Python",
-    "errori comuni principianti programmazione",
-    "progressione didattica algebra primaria università",
-    "fonti istituzionali competenze matematiche"
-  ];
   const sources = [
     {
-      id:11,
-      project:"research-a14c",
-      room:"room-python-zero",
-      url:"https://example.edu/computer-science",
-      publisher:"Università dimostrativa",
-      status:"quarantined",
-      trustLevel:"unreviewed_acquired",
-      acquired:true,
-      acquisition:"succeeded",
-      sha256:"29b87b0f…f91a",
-      mediaType:"text/html",
-      bytes:18432
+      id: 11,
+      project: "research-a14c",
+      room: "room-python-zero",
+      title: "Curricolo di programmazione",
+      url: "https://example.edu/computer-science",
+      acquisitionId: 101,
+      sha256: "29b87b0f…f91a",
+      previousSha256: null,
+      bytes: 18432,
+      acquired: true,
+      status: "quarantined",
+      reviewStatus: null,
+      reviewId: null,
+      suspicious: false,
+      flags: [],
+      severity: "none",
+      rationale: null,
+      scores: null,
+      promotion: null
     },
     {
-      id:12,
-      project:"research-a14c",
-      room:"room-python-zero",
-      url:"https://example.org/python-curriculum",
-      publisher:"Ente didattico dimostrativo",
-      status:"quarantined",
-      trustLevel:"unreviewed",
-      acquired:false,
-      acquisition:"not_started"
+      id: 12,
+      project: "research-a14c",
+      room: "room-python-zero",
+      title: "Pagina con istruzioni sospette",
+      url: "https://example.org/python-curriculum",
+      acquisitionId: 102,
+      sha256: "7d2f66ca…930b",
+      previousSha256: null,
+      bytes: 12390,
+      acquired: true,
+      status: "quarantined",
+      reviewStatus: null,
+      reviewId: null,
+      suspicious: true,
+      flags: ["ignore_previous_instructions", "tool_execution_instruction"],
+      severity: "high",
+      rationale: null,
+      scores: null,
+      promotion: null
     },
     {
-      id:21,
-      project:"research-b82e",
-      room:"room-matematica",
-      url:"https://example.edu/mathematics",
-      publisher:"Dipartimento dimostrativo",
-      status:"quarantined",
-      trustLevel:"unreviewed",
-      acquired:false,
-      acquisition:"not_started"
+      id: 21,
+      project: "research-b82e",
+      room: "room-matematica",
+      title: "Competenze matematiche",
+      url: "https://example.edu/mathematics",
+      acquisitionId: 201,
+      sha256: "1ab98e34…551c",
+      previousSha256: null,
+      bytes: 21600,
+      acquired: true,
+      status: "under_review",
+      reviewStatus: "under_review",
+      reviewId: 3,
+      suspicious: false,
+      flags: [],
+      severity: "none",
+      rationale: null,
+      scores: null,
+      promotion: null
     }
   ];
 
-  let nextSourceId = 30;
-  const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+  let nextReviewId = 4;
+  let nextMaterialId = 71;
 
-  function selectedAcquisitionSource() {
-    const value = document.getElementById("acquisitionSource")?.value;
-    return sources.find(item => String(item.id) === value) || sources[0];
+  const selectedSource = () => {
+    const value = Number(document.getElementById("reviewSource")?.value);
+    return sources.find(source => source.id === value) || sources[0];
+  };
+
+  const scoreValues = () => ({
+    quality: Number(document.getElementById("scoreQuality").value),
+    authority: Number(document.getElementById("scoreAuthority").value),
+    freshness: Number(document.getElementById("scoreFreshness").value),
+    relevance: Number(document.getElementById("scoreRelevance").value),
+    completeness: Number(document.getElementById("scoreCompleteness").value)
+  });
+
+  function notify(message) {
+    window.notify?.(message);
   }
 
-  function syncAcquisitionSource() {
-    const source = selectedAcquisitionSource();
-    if (!source) return;
-    const room = document.getElementById("acquisitionRoom");
-    if (room && Array.from(room.options).some(option => option.value === source.room)) room.value = source.room;
-    document.getElementById("acquisitionUrl").value = source.url;
-    document.getElementById("quarantinedDocument").innerHTML = source.acquired ? `
-      <div class="row"><div class="meta"><strong>Stato</strong><small>quarantined · trust=untrusted_web_content · instructions_executable=false</small></div><span class="tag warn">Revisione richiesta</span></div>
-      <div class="row"><div class="meta"><strong>Provenienza</strong><small>${escapeHtml(source.url)} · ${escapeHtml(source.mediaType)} · ${source.bytes} byte</small></div><span class="tag">${escapeHtml(source.sha256)}</span></div>
-      <div class="row"><div class="meta"><strong>Separazione CORE</strong><small>Nessun materiale, chunk, embedding o risposta RAG creati automaticamente</small></div><span class="tag red">Non promosso</span></div>
-    ` : `
-      <div class="row"><div class="meta"><strong>Nessun documento acquisito</strong><small>L'URL resta un metadato candidato. Il server deve autorizzare esplicitamente l'acquisizione.</small></div><span class="tag warn">In attesa</span></div>
-    `;
+  function renderEvidence(source) {
+    const evidence = document.getElementById("reviewEvidence");
+    const severity = document.getElementById("riskSeverity");
+    severity.textContent = source.severity;
+    severity.className = source.suspicious ? "tag red" : "tag";
+    evidence.innerHTML = `
+      <div class="row"><div class="meta"><strong>Acquisizione vincolata</strong><small>ID ${source.acquisitionId} · SHA-256 ${escapeHtml(source.sha256)} · ${source.bytes} byte</small></div><span class="tag">Immutabile</span></div>
+      <div class="row"><div class="meta"><strong>URL finale</strong><small>${escapeHtml(source.url)}</small></div><span class="tag violet">Provenienza</span></div>
+      <div class="row"><div class="meta"><strong>Prompt injection</strong><small>${source.flags.length ? escapeHtml(source.flags.join(", ")) : "Nessun indicatore deterministico rilevato"}</small></div><span class="${source.suspicious ? "tag red" : "tag"}">${source.suspicious ? "Segnalata" : "Non rilevata"}</span></div>
+      <div class="row"><div class="meta"><strong>Decisione automatica</strong><small>L'analisi non può approvare o rifiutare la fonte.</small></div><span class="tag red">Vietata</span></div>`;
+  }
+
+  function renderPromotion(source) {
+    const node = document.getElementById("promotionResult");
+    if (!source.promotion) {
+      node.innerHTML = `<div class="row"><div class="meta"><strong>Nessuna promozione attiva</strong><small>Il documento non partecipa al retrieval CORE.</small></div><span class="tag warn">Non promosso</span></div>`;
+      return;
+    }
+    node.innerHTML = `
+      <div class="row"><div class="meta"><strong>${source.promotion.status === "active" ? "Materiale CORE attivo" : "Promozione revocata"}</strong><small>${escapeHtml(source.promotion.materialId)} · version ${source.promotion.versionId} · key ${escapeHtml(source.promotion.key)}</small></div><span class="${source.promotion.status === "active" ? "tag" : "tag red"}">${source.promotion.status}</span></div>
+      <div class="row"><div class="meta"><strong>Cronologia preservata</strong><small>Revisione ${source.reviewId}, acquisizione ${source.acquisitionId} e materiale restano collegati.</small></div><span class="tag violet">Audit</span></div>`;
+  }
+
+  function renderVersions(source) {
+    const changed = Boolean(source.previousSha256 && source.previousSha256 !== source.sha256);
+    document.getElementById("versionComparison").innerHTML = `
+      <div class="row"><div class="meta"><strong>Acquisizione corrente</strong><small>ID ${source.acquisitionId} · ${escapeHtml(source.sha256)}</small></div><span class="tag">Corrente</span></div>
+      <div class="row"><div class="meta"><strong>Versione precedente</strong><small>${source.previousSha256 ? escapeHtml(source.previousSha256) : "Nessuna acquisizione precedente"}</small></div><span class="${changed ? "tag warn" : "tag"}">${changed ? "Checksum cambiato" : "Non disponibile"}</span></div>
+      <div class="row"><div class="meta"><strong>Effetto sulla revisione</strong><small>${changed ? "La revisione precedente è expired; serve una nuova decisione umana." : "La revisione resta legata all'acquisizione visualizzata."}</small></div><span class="${changed ? "tag red" : "tag"}">${changed ? "Scaduta" : "Coerente"}</span></div>`;
   }
 
   function render() {
-    document.getElementById("researchProjectCount").textContent = String(projects.length);
-    document.getElementById("researchQueryCount").textContent = String(queries.length);
-    document.getElementById("researchSourceCount").textContent = String(sources.length);
-    document.getElementById("researchAcquisitionCount").textContent = String(sources.filter(item => item.acquisition === "succeeded").length);
-    document.getElementById("researchCatalogBadge").textContent = `${projects.length} progetti`;
+    document.getElementById("researchAcquisitionCount").textContent = String(sources.filter(source => source.acquired).length);
+    document.getElementById("researchReviewCount").textContent = String(sources.filter(source => source.reviewStatus === "under_review").length);
+    document.getElementById("researchApprovedCount").textContent = String(sources.filter(source => source.reviewStatus === "approved").length);
+    document.getElementById("researchPromotionCount").textContent = String(sources.filter(source => source.promotion?.status === "active").length);
+    document.getElementById("reviewQueueBadge").textContent = `${sources.filter(source => source.acquired && !["approved", "rejected"].includes(source.reviewStatus)).length} da verificare`;
 
-    document.getElementById("researchProjectList").innerHTML = projects.map(item => `
-      <div class="row"><div class="meta"><strong>${escapeHtml(item.title)}</strong><small>${escapeHtml(item.id)} · ${escapeHtml(item.room)} · ${escapeHtml(item.domain)} · ${escapeHtml(item.level)} · ${item.queries} query · ${item.sources} fonti · isolamento aula attivo</small></div><span class="${item.status === "active" ? "tag" : "tag warn"}">${item.status}</span></div>`).join("");
-
-    document.getElementById("researchQueryList").innerHTML = queries.map((text, index) => `
-      <div class="row"><div class="meta"><strong>Query ${index + 1}</strong><small>${escapeHtml(text)} · stato planned · nessuna esecuzione automatica</small></div><span class="tag violet">Pianificata</span></div>`).join("");
-
-    document.getElementById("researchSourceList").innerHTML = sources.map(item => `
-      <div class="row"><div class="meta"><strong>${escapeHtml(item.publisher)}</strong><small>${escapeHtml(item.url)} · room=${escapeHtml(item.room)} · status=${item.status} · trust_level=${item.trustLevel} · content_acquired=${item.acquired} · acquisition=${item.acquisition}${item.sha256 ? ` · sha256=${escapeHtml(item.sha256)}` : ""}</small></div><span class="${item.acquired ? "tag" : "tag warn"}">${item.acquired ? "Acquisita / quarantena" : "Solo candidata"}</span></div>`).join("");
-
-    const selector = document.getElementById("acquisitionSource");
+    const selector = document.getElementById("reviewSource");
     const previous = selector.value;
-    selector.innerHTML = sources.map(item => `<option value="${item.id}">${escapeHtml(item.publisher)}</option>`).join("");
-    selector.value = sources.some(item => String(item.id) === previous) ? previous : String(sources[0]?.id || "");
-    syncAcquisitionSource();
+    selector.innerHTML = sources.map(source => `<option value="${source.id}">${escapeHtml(source.title)} · ${source.room}</option>`).join("");
+    selector.value = sources.some(source => String(source.id) === previous) ? previous : String(sources[0].id);
+
+    document.getElementById("reviewQueue").innerHTML = sources.map(source => `
+      <button class="row" data-review-source="${source.id}" style="width:100%;text-align:left">
+        <div class="meta"><strong>${escapeHtml(source.title)}</strong><small>${escapeHtml(source.room)} · acquisition=${source.acquisitionId} · source_status=${source.status} · review=${source.reviewStatus || "not_started"}</small></div>
+        <span class="${source.reviewStatus === "approved" ? "tag" : source.reviewStatus === "rejected" ? "tag red" : "tag warn"}">${source.reviewStatus || "Da revisionare"}</span>
+      </button>`).join("");
+    document.querySelectorAll("[data-review-source]").forEach(button => button.addEventListener("click", () => {
+      selector.value = button.dataset.reviewSource;
+      syncSelectedSource();
+    }));
+    syncSelectedSource();
   }
+
+  function syncSelectedSource() {
+    const source = selectedSource();
+    if (!source) return;
+    const status = document.getElementById("selectedReviewStatus");
+    status.textContent = source.reviewStatus || source.status;
+    status.className = source.reviewStatus === "approved" ? "tag" : source.reviewStatus === "rejected" ? "tag red" : "tag warn";
+    document.getElementById("idempotencyKey").value = `promotion-source-${source.id}-acq-${source.acquisitionId}`;
+    document.getElementById("promotionTitle").value = source.title;
+    document.getElementById("riskAcknowledged").checked = false;
+    renderEvidence(source);
+    renderPromotion(source);
+    renderVersions(source);
+  }
+
+  async function animateStages(stages) {
+    const node = document.getElementById("reviewStages");
+    node.innerHTML = stages.map((stage, index) => `<div class="row" data-review-stage="${index}"><div class="meta"><strong>${index + 1}. ${stage[0]}</strong><small>${stage[1]}</small></div><span class="tag warn">In attesa</span></div>`).join("");
+    for (let index = 0; index < stages.length; index += 1) {
+      const tag = node.querySelector(`[data-review-stage="${index}"] .tag`);
+      tag.className = "tag violet";
+      tag.textContent = "In corso";
+      await wait(180);
+      tag.className = "tag";
+      tag.textContent = "Registrato";
+    }
+  }
+
+  document.getElementById("reviewSource").addEventListener("change", syncSelectedSource);
+
+  document.getElementById("startReview").addEventListener("click", async () => {
+    const source = selectedSource();
+    if (!source) return;
+    window.EveAnimationLibrary?.setState?.("eve-reading");
+    await animateStages([
+      ["Identità revisore", "La decisione sarà attribuita al revisore indicato"],
+      ["Acquisizione corrente", `La revisione viene fissata all'acquisition_id ${source.acquisitionId}`],
+      ["Analisi deterministica", "Indicatori sospetti mostrati senza decisioni automatiche"],
+      ["Stato under_review", "La fonte resta fuori dai materiali CORE"]
+    ]);
+    source.reviewId ||= nextReviewId++;
+    source.reviewStatus = "under_review";
+    source.status = "under_review";
+    render();
+    window.EveAnimationLibrary?.setState?.("eve-confirmation-needed");
+    notify("Revisione avviata: nessuna approvazione automatica");
+  });
+
+  document.getElementById("approveReview").addEventListener("click", async () => {
+    const source = selectedSource();
+    const rationale = document.getElementById("reviewRationale").value.trim();
+    if (source.reviewStatus !== "under_review") return notify("Avvia prima la revisione della fonte selezionata");
+    if (rationale.length < 10) return notify("La motivazione di approvazione è obbligatoria");
+    if (source.suspicious && !document.getElementById("riskAcknowledged").checked) return notify("Conferma di aver verificato le segnalazioni di sicurezza");
+    const scores = scoreValues();
+    if (Object.values(scores).some(value => !Number.isFinite(value) || value < 0 || value > 100)) return notify("Tutti i punteggi devono essere compresi tra 0 e 100");
+    window.EveAnimationLibrary?.setState?.("eve-test-running");
+    await animateStages([
+      ["Motivazione", "La decisione non dipende soltanto dal punteggio"],
+      ["Metadati", "Autore, editore, licenza e lingua vengono collegati"],
+      ["Rischi", source.suspicious ? "Presa d'atto registrata" : "Nessun indicatore deterministico"],
+      ["Approvazione", "La fonte è approvata ma non ancora promossa"]
+    ]);
+    source.reviewStatus = "approved";
+    source.status = "approved";
+    source.rationale = rationale;
+    source.scores = scores;
+    render();
+    window.EveAnimationLibrary?.setState?.("eve-success");
+    notify("Fonte approvata: la promozione CORE richiede ancora un'azione separata");
+  });
+
+  document.getElementById("rejectReview").addEventListener("click", async () => {
+    const source = selectedSource();
+    const rationale = document.getElementById("reviewRationale").value.trim();
+    if (source.reviewStatus !== "under_review") return notify("Avvia prima la revisione");
+    if (rationale.length < 10) return notify("La motivazione di rifiuto è obbligatoria");
+    await animateStages([
+      ["Motivazione", "Il rifiuto viene attribuito al revisore"],
+      ["Stato rejected", "La fonte non può essere promossa"],
+      ["Cronologia", "Acquisizione e decisione restano consultabili"]
+    ]);
+    source.reviewStatus = "rejected";
+    source.status = "rejected";
+    source.rationale = rationale;
+    render();
+    window.EveAnimationLibrary?.setState?.("eve-error-supportive");
+    notify("Fonte rifiutata con motivazione registrata");
+  });
+
+  document.getElementById("promoteSource").addEventListener("click", async () => {
+    const source = selectedSource();
+    if (source.reviewStatus !== "approved") return notify("Soltanto una fonte approvata può essere promossa");
+    if (source.promotion?.status === "active") return notify("Promozione idempotente: il materiale è già attivo");
+    const key = document.getElementById("idempotencyKey").value.trim();
+    if (key.length < 8) return notify("L'idempotency key deve contenere almeno 8 caratteri");
+    if (!window.confirm?.("Promuovere questa acquisizione approvata nei materiali CORE?")) return;
+    window.EveAnimationLibrary?.setState?.("eve-publishing");
+    await animateStages([
+      ["Verifica revisione", `Review ${source.reviewId} approvata e acquisition ${source.acquisitionId} corrente`],
+      ["Idempotenza", `Chiave ${key}`],
+      ["Import CORE", "Contenuto, provenienza e metadati vengono collegati"],
+      ["Retrieval", "Il materiale diventa consultabile soltanto dopo l'import riuscito"]
+    ]);
+    source.promotion = {
+      status: "active",
+      materialId: `material-research-${nextMaterialId++}`,
+      versionId: 1,
+      key
+    };
+    render();
+    window.EveAnimationLibrary?.setState?.("eve-published");
+    notify("Promozione simulata: materiale CORE attivo e tracciato");
+  });
+
+  document.getElementById("revokePromotion").addEventListener("click", async () => {
+    const source = selectedSource();
+    if (source.promotion?.status !== "active") return notify("Non esiste una promozione attiva da revocare");
+    if (!window.confirm?.("Revocare il materiale dal retrieval mantenendo la cronologia?")) return;
+    window.EveAnimationLibrary?.setState?.("eve-rollback");
+    await animateStages([
+      ["Revoca attribuita", "Attore e motivazione vengono registrati"],
+      ["Disattivazione retrieval", "current_version_id viene rimosso senza cancellare le versioni"],
+      ["Stato superseded", "Fonte e revisione restano nella cronologia"]
+    ]);
+    source.promotion.status = "revoked";
+    source.reviewStatus = "superseded";
+    source.status = "superseded";
+    render();
+    window.EveAnimationLibrary?.setState?.("eve-success");
+    notify("Promozione revocata: cronologia preservata");
+  });
+
+  document.getElementById("simulateNewVersion").addEventListener("click", () => {
+    const source = selectedSource();
+    source.previousSha256 = source.sha256;
+    source.sha256 = `new-${source.id}-${Date.now().toString(16)}…sha`;
+    source.acquisitionId += 1000;
+    source.bytes += 768;
+    if (["under_review", "approved"].includes(source.reviewStatus)) {
+      source.reviewStatus = "expired";
+      source.status = "expired";
+    }
+    render();
+    window.EveAnimationLibrary?.setState?.("eve-version-created");
+    notify("Nuova acquisizione simulata: la revisione precedente è scaduta");
+  });
 
   function openResearchView() {
     document.querySelectorAll(".view").forEach(node => node.classList.toggle("active", node.id === "intelligence-research"));
     document.querySelectorAll(".nav button").forEach(node => node.classList.toggle("active", node === navButton));
-    document.getElementById("pageTitle").textContent = "Ricerca e apprendimento";
-    document.getElementById("pageSubtitle").textContent = "Progetta la ricerca e acquisisci URL espliciti senza promozione automatica della conoscenza.";
-    window.scrollTo({top:0, behavior:"smooth"});
+    document.getElementById("pageTitle").textContent = "Revisione e qualità delle fonti";
+    document.getElementById("pageSubtitle").textContent = "Valuta, approva, promuovi e revoca le fonti senza confondere acquisizione e conoscenza autorizzata.";
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   navButton.addEventListener("click", openResearchView);
-  document.getElementById("acquisitionSource").addEventListener("change", syncAcquisitionSource);
-
-  const creationStages = [
-    ["Validazione obiettivo", "Titolo, dominio, lingua, livello e argomenti"],
-    ["Isolamento aula", "Il progetto è visibile solo nel room_id selezionato"],
-    ["Persistenza SQLite", "Progetto e cronologia degli stati vengono salvati"],
-    ["Piano query", "Le query restano planned e non effettuano rete"],
-    ["Revisione umana", "Le fonti entrano sempre come non fidate e in quarantena"]
-  ];
-
-  document.getElementById("createResearchProject").addEventListener("click", async event => {
-    const button = event.currentTarget;
-    button.disabled = true;
-    const stagesNode = document.getElementById("researchCreationStages");
-    stagesNode.innerHTML = creationStages.map((stage, index) => `<div class="row" data-research-stage="${index}"><div class="meta"><strong>${index + 1}. ${stage[0]}</strong><small>${stage[1]}</small></div><span class="tag warn">In attesa</span></div>`).join("");
-    window.EveAnimationLibrary?.setState?.("eve-thinking");
-    for (let index = 0; index < creationStages.length; index += 1) {
-      const row = stagesNode.querySelector(`[data-research-stage="${index}"]`);
-      const tag = row.querySelector(".tag");
-      tag.className = "tag violet";
-      tag.textContent = "In corso";
-      await new Promise(resolve => setTimeout(resolve, 180));
-      tag.className = "tag";
-      tag.textContent = "Completato";
-    }
-    const title = document.getElementById("researchTitle").value.trim() || "Progetto senza titolo";
-    const room = document.getElementById("researchRoom").value;
-    const topics = document.getElementById("researchTopics").value.split(",").map(value => value.trim()).filter(Boolean);
-    projects.unshift({
-      id:`research-demo-${String(projects.length + 1).padStart(2,"0")}`,
-      room,
-      title,
-      domain:document.getElementById("researchDomain").value.trim() || "Generale",
-      level:document.getElementById("researchLevel").value.trim() || "Da definire",
-      status:"draft",
-      queries:topics.length,
-      sources:0
-    });
-    topics.forEach(topic => queries.unshift(`${topic} fonti didattiche verificabili`));
-    render();
-    window.EveAnimationLibrary?.setState?.("eve-success");
-    button.disabled = false;
-    window.notify?.("Progetto creato: nessuna ricerca o acquisizione automatica avviata");
-  });
-
-  document.getElementById("addResearchQuery").addEventListener("click", () => {
-    queries.unshift("nuova query didattica pianificata");
-    if (projects[0]) projects[0].queries += 1;
-    render();
-    window.EveAnimationLibrary?.setState?.("eve-processing");
-  });
-
-  document.getElementById("addResearchSource").addEventListener("click", () => {
-    const project = projects[0];
-    const source = {
-      id:nextSourceId++,
-      project:project?.id || "research-demo",
-      room:project?.room || "room-python-zero",
-      url:`https://example.org/new-candidate-${nextSourceId}`,
-      publisher:"Fonte candidata dimostrativa",
-      status:"quarantined",
-      trustLevel:"unreviewed",
-      acquired:false,
-      acquisition:"not_started"
-    };
-    sources.unshift(source);
-    if (project) project.sources += 1;
-    render();
-    document.getElementById("acquisitionSource").value = String(source.id);
-    syncAcquisitionSource();
-    window.EveAnimationLibrary?.setState?.("eve-confirmation-needed");
-  });
-
-  const acquisitionStages = [
-    ["Feature flag server-side", "Il flusso reale parte soltanto con EVE_RESEARCH_WEB_ENABLED=true"],
-    ["Validazione URL e porta", "Solo HTTP/HTTPS completi, senza credenziali, porte 80 e 443"],
-    ["DNS e protezione SSRF", "Blocco reti private, loopback, link-local, multicast e indirizzi riservati"],
-    ["robots.txt fail-closed", "Controllo della destinazione iniziale e di ogni destinazione raggiunta tramite redirect"],
-    ["Redirect, TLS e IP pinning", "Ogni destinazione viene rivalidata e il downgrade HTTPS viene bloccato"],
-    ["Limiti risposta", "Timeout, Content-Length, byte massimi, MIME testuali e nessuna compressione inattesa"],
-    ["Estrazione e checksum", "Testo locale normalizzato e SHA-256 dei byte originali"],
-    ["Quarantena obbligatoria", "trust=untrusted_web_content; instructions_executable=false; nessuna promozione CORE"]
-  ];
-
-  document.getElementById("simulateAcquisition").addEventListener("click", async event => {
-    const button = event.currentTarget;
-    const source = selectedAcquisitionSource();
-    if (!source) return;
-    button.disabled = true;
-    const stagesNode = document.getElementById("acquisitionStages");
-    stagesNode.innerHTML = acquisitionStages.map((stage, index) => `<div class="row" data-acquisition-stage="${index}"><div class="meta"><strong>${index + 1}. ${stage[0]}</strong><small>${stage[1]}</small></div><span class="tag warn">In attesa</span></div>`).join("");
-    window.EveAnimationLibrary?.setState?.("eve-searching");
-
-    for (let index = 0; index < acquisitionStages.length; index += 1) {
-      const row = stagesNode.querySelector(`[data-acquisition-stage="${index}"]`);
-      const tag = row.querySelector(".tag");
-      tag.className = "tag violet";
-      tag.textContent = "In corso";
-      await new Promise(resolve => setTimeout(resolve, 170));
-      tag.className = "tag";
-      tag.textContent = "Superato";
-    }
-
-    source.acquired = true;
-    source.acquisition = "succeeded";
-    source.trustLevel = "unreviewed_acquired";
-    source.sha256 = "local-preview…sha256";
-    source.mediaType = "text/html";
-    source.bytes = 12288;
-    render();
-    document.getElementById("acquisitionSource").value = String(source.id);
-    syncAcquisitionSource();
-    window.EveAnimationLibrary?.setState?.("eve-success");
-    window.notify?.("Simulazione completata: documento ancora in quarantena");
-    button.disabled = false;
-  });
-
   render();
 })();

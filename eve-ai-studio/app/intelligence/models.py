@@ -21,9 +21,30 @@ class ResearchQueryStatus(str, Enum):
 
 class ResearchSourceStatus(str, Enum):
     QUARANTINED = "quarantined"
-    REVIEW_REQUIRED = "review_required"
+    UNDER_REVIEW = "under_review"
+    REVIEW_REQUIRED = "review_required"  # compatibilità con INTELLIGENCE-0.1/0.2
     APPROVED = "approved"
     REJECTED = "rejected"
+    EXPIRED = "expired"
+    SUPERSEDED = "superseded"
+
+
+class ResearchReviewStatus(str, Enum):
+    UNDER_REVIEW = "under_review"
+    APPROVED = "approved"
+    REJECTED = "rejected"
+    EXPIRED = "expired"
+    SUPERSEDED = "superseded"
+
+
+class ResearchReviewDecision(str, Enum):
+    APPROVE = "approve"
+    REJECT = "reject"
+
+
+class ResearchPromotionStatus(str, Enum):
+    ACTIVE = "active"
+    REVOKED = "revoked"
 
 
 class ResearchAcquisitionStatus(str, Enum):
@@ -262,6 +283,170 @@ class ResearchTransitionEvent(BaseModel):
     created_at: str
 
 
+
+
+class ResearchReviewStartRequest(BaseModel):
+    reviewer_id: str = Field(min_length=2, max_length=160)
+    reviewer_role: str = Field(default="reviewer", min_length=2, max_length=80)
+
+    @field_validator("reviewer_id", "reviewer_role")
+    @classmethod
+    def clean_identity(cls, value: str) -> str:
+        value = value.strip()
+        if not value:
+            raise ValueError("L'identità del revisore è obbligatoria")
+        return value
+
+
+class ResearchQualityScores(BaseModel):
+    quality: int = Field(ge=0, le=100)
+    authority: int = Field(ge=0, le=100)
+    freshness: int = Field(ge=0, le=100)
+    relevance: int = Field(ge=0, le=100)
+    completeness: int = Field(ge=0, le=100)
+
+
+class ResearchSafetyAnalysis(BaseModel):
+    suspicious_content: bool = False
+    prompt_injection_detected: bool = False
+    severity: str = Field(default="none", max_length=32)
+    flags: list[str] = Field(default_factory=list)
+
+
+class ResearchReviewDecisionRequest(BaseModel):
+    decision: ResearchReviewDecision
+    reviewer_id: str = Field(min_length=2, max_length=160)
+    rationale: str = Field(min_length=10, max_length=4_000)
+    title: str | None = Field(default=None, max_length=500)
+    author: str | None = Field(default=None, max_length=300)
+    publisher: str | None = Field(default=None, max_length=300)
+    published_at: str | None = Field(default=None, max_length=64)
+    license_name: str | None = Field(default=None, max_length=200)
+    language: str | None = Field(default=None, min_length=2, max_length=16)
+    scores: ResearchQualityScores | None = None
+    risk_acknowledged: bool = False
+
+    @field_validator(
+        "reviewer_id", "rationale", "title", "author", "publisher",
+        "published_at", "license_name", "language"
+    )
+    @classmethod
+    def clean_review_text(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        value = value.strip()
+        return value or None
+
+
+class ResearchPromotionRequest(BaseModel):
+    actor_id: str = Field(min_length=2, max_length=160)
+    idempotency_key: str = Field(min_length=8, max_length=128)
+    title: str | None = Field(default=None, max_length=500)
+    source_label: str | None = Field(default=None, max_length=240)
+
+    @field_validator("actor_id", "idempotency_key", "title", "source_label")
+    @classmethod
+    def clean_promotion_text(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        value = value.strip()
+        return value or None
+
+
+class ResearchPromotionRevocationRequest(BaseModel):
+    actor_id: str = Field(min_length=2, max_length=160)
+    rationale: str = Field(min_length=10, max_length=4_000)
+    source_status: ResearchReviewStatus = ResearchReviewStatus.SUPERSEDED
+
+    @field_validator("actor_id", "rationale")
+    @classmethod
+    def clean_revocation_text(cls, value: str) -> str:
+        value = value.strip()
+        if not value:
+            raise ValueError("Il campo non può essere vuoto")
+        return value
+
+    @field_validator("source_status")
+    @classmethod
+    def validate_revocation_status(cls, value: ResearchReviewStatus) -> ResearchReviewStatus:
+        if value not in {ResearchReviewStatus.EXPIRED, ResearchReviewStatus.SUPERSEDED}:
+            raise ValueError("La revoca può impostare soltanto expired o superseded")
+        return value
+
+
+class ResearchSourceReview(BaseModel):
+    review_id: int
+    source_id: int
+    project_id: str
+    room_id: str
+    acquisition_id: int
+    status: ResearchReviewStatus
+    reviewer_id: str
+    reviewer_role: str
+    rationale: str | None = None
+    title: str | None = None
+    author: str | None = None
+    publisher: str | None = None
+    published_at: str | None = None
+    license_name: str | None = None
+    language: str | None = None
+    scores: ResearchQualityScores | None = None
+    safety_analysis: ResearchSafetyAnalysis
+    risk_acknowledged: bool
+    created_at: str
+    updated_at: str
+    decided_at: str | None = None
+
+
+class ResearchSourceReviewListResponse(BaseModel):
+    total: int
+    items: list[ResearchSourceReview]
+
+
+class ResearchReviewEvent(BaseModel):
+    event_id: int
+    review_id: int
+    source_id: int
+    project_id: str
+    room_id: str
+    event_type: str
+    actor_id: str
+    rationale: str | None = None
+    payload: dict[str, Any] = Field(default_factory=dict)
+    created_at: str
+
+
+class ResearchPromotion(BaseModel):
+    promotion_id: int
+    review_id: int
+    source_id: int
+    project_id: str
+    room_id: str
+    acquisition_id: int
+    material_id: str
+    version_id: int
+    idempotency_key: str
+    status: ResearchPromotionStatus
+    promoted_by: str
+    promoted_at: str
+    revoked_by: str | None = None
+    revoked_at: str | None = None
+    revocation_reason: str | None = None
+
+
+class ResearchSourceVersionComparison(BaseModel):
+    source_id: int
+    project_id: str
+    current_acquisition_id: int
+    previous_acquisition_id: int | None = None
+    checksum_changed: bool
+    final_url_changed: bool
+    size_delta: int | None = None
+    extracted_chars_delta: int | None = None
+    current_sha256: str
+    previous_sha256: str | None = None
+
+
 class ResearchCenterStatus(BaseModel):
     persistent: bool
     schema_version: int
@@ -272,6 +457,13 @@ class ResearchCenterStatus(BaseModel):
     total_queries: int
     quarantined_sources: int
     successful_acquisitions: int = 0
+    review_available: bool = False
+    review_enabled: bool = False
+    promotion_enabled: bool = False
+    under_review_sources: int = 0
+    approved_sources: int = 0
+    rejected_sources: int = 0
+    active_promotions: int = 0
     web_search_enabled: bool
     content_acquisition_available: bool = False
     content_acquisition_enabled: bool

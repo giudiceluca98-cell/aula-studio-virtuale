@@ -1,0 +1,24 @@
+{
+  "checkpoint": "INTELLIGENCE-0.3",
+  "title": "Revisione umana, qualità e promozione controllata",
+  "status": "FUNCTIONAL_TESTING",
+  "baseline_release": "1.2.0-alpha.6",
+  "target_test_release": "1.2.0-alpha.7",
+  "local_results": {
+    "specific_tests": {"passed": 13, "failed": 0},
+    "cumulative_python_tests": {"passed": 193, "failed": 0},
+    "python_compile": "passed",
+    "javascript_syntax": "passed",
+    "preview_contract": "passed",
+    "http_smoke": "passed"
+  },
+  "pending": [
+    "apply_on_latest_origin_eve_ai_studio",
+    "real_browser_verification",
+    "desktop_build",
+    "signed_release",
+    "install_over_alpha_6",
+    "user_approval"
+  ],
+  "closed": false
+}

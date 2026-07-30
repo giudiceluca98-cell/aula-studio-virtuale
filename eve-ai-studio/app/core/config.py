@@ -63,3 +63,5 @@ class EveSettings(BaseSettings):
     research_robots_max_bytes: int = 512_000
     research_robots_required: bool = True
     research_web_user_agent: str = "EveAulaStudioResearchBot/0.2"
+    research_review_enabled: bool = True
+    research_promotion_enabled: bool = False

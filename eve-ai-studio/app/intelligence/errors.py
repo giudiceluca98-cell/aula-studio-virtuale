@@ -27,3 +27,27 @@ class ResearchTransitionError(ResearchError):
 
 class ResearchLimitError(ResearchError):
     pass
+
+
+class ResearchReviewNotFoundError(KeyError):
+    pass
+
+
+class ResearchPromotionNotFoundError(KeyError):
+    pass
+
+
+class ResearchReviewStateError(ResearchError):
+    pass
+
+
+class ResearchStaleReviewError(ResearchError):
+    pass
+
+
+class ResearchReviewDisabledError(ResearchError):
+    pass
+
+
+class ResearchPromotionDisabledError(ResearchError):
+    pass

@@ -5,8 +5,9 @@
 ```text
 Branch operativo: eve-ai-studio
 Versione servizio: 1.2.0
+Release desktop di partenza: 1.2.0-alpha.6
 Linea CORE: chiusa e in pausa dopo CORE-1.1
-Linea INTELLIGENCE: INTELLIGENCE-0.2 chiuso e approvato; INTELLIGENCE-0.3 pianificato
+Linea INTELLIGENCE: INTELLIGENCE-0.2 chiuso e approvato; INTELLIGENCE-0.3 in FUNCTIONAL_TESTING
 ```
 
 Indice ufficiale:
@@ -38,7 +39,7 @@ eve-ai-studio/CHECKPOINT_INDEX.md
 | `CORE-1.0` | Chat RAG grounded e fonti | chiuso e approvato |
 | `CORE-1.1` | Apertura fonti e verifica integrità | chiuso e approvato |
 
-Non esiste un piano `CORE-1.2`.
+Il prossimo checkpoint coordinato della linea CORE è `CORE-1.2`, ma non viene avviato o chiuso prima del Gate C previsto dal piano coordinato.
 
 ## Roadmap INTELLIGENCE
 
@@ -60,70 +61,82 @@ Verificato:
 - limiti per progetto, query e fonti;
 - API dedicate;
 - sezione della preview ufficiale;
-- 15 test specifici, zero fallimenti ed errori;
-- preview modulare e standalone `file://` superati.
-
-Documenti autorevoli:
-
-```text
-eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.1_CENTRO_RICERCA_PROGETTI_APPRENDIMENTO_PLAN.md
-eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.1_CENTRO_RICERCA_PROGETTI_APPRENDIMENTO_CI_RESULT.json
-eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.1_CENTRO_RICERCA_PROGETTI_APPRENDIMENTO_VERIFICATION.md
-eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.1_CENTRO_RICERCA_PROGETTI_APPRENDIMENTO_CLOSURE.md
-```
+- 15 test specifici, zero fallimenti ed errori.
 
 ### `INTELLIGENCE-0.2` — Acquisizione web controllata e quarantena fonti
 
-Stato: **chiuso e approvato**
+Stato: **chiuso, approvato, pubblicato e installato come `1.2.0-alpha.6`**
 
 Funzioni verificate:
 
-- ricerca online tramite connettore esplicito;
-- acquisizione HTTP/HTTPS controllata;
+- acquisizione HTTP/HTTPS controllata tramite URL esplicito;
 - protezione SSRF e blocco delle reti private;
 - limiti di dimensione, tempo, redirect e MIME;
 - metadati, checksum e cronologia delle acquisizioni;
-- rispetto delle regole di accesso delle fonti;
+- controllo `robots.txt` della destinazione iniziale e dei redirect;
 - contenuti sempre in quarantena dopo il download;
-- nessun apprendimento o approvazione automatica.
+- nessun apprendimento o approvazione automatica;
+- nessuna promozione automatica nei materiali CORE.
 
-### `INTELLIGENCE-0.3` — Affidabilità fonti, conflitti e revisione
+### `INTELLIGENCE-0.3` — Revisione umana, qualità e promozione controllata
+
+Stato: **FUNCTIONAL_TESTING — pacchetto locale preparato, non chiuso**
+
+Release desktop di prova proposta: `1.2.0-alpha.7`.
+
+Funzioni candidate al collaudo:
+
+- coda di revisione attribuibile e isolata per aula;
+- stati `under_review`, `approved`, `rejected`, `expired`, `superseded`;
+- analisi deterministica di contenuti sospetti e indicatori di prompt injection;
+- motivazione obbligatoria e punteggi qualità non decisionali;
+- confronto tra acquisizioni della stessa fonte;
+- promozione esplicita e idempotente verso i materiali CORE;
+- provenienza completa tra fonte, acquisizione, revisione, promozione e materiale;
+- revoca che disattiva il materiale dal retrieval senza eliminare la cronologia;
+- promozione disattivata per impostazione predefinita.
+
+La chiusura richiede applicazione sull'ultima `origin/eve-ai-studio`, test Codex, release firmata, installazione desktop sopra `alpha.6`, collaudo dell'utente e approvazione esplicita.
+
+### `INTELLIGENCE-0.4` — Ricerca web e pianificazione delle query
+
+Stato: **pianificato; bloccato fino alla chiusura di INTELLIGENCE-0.3**
+
+### `INTELLIGENCE-0.5` — Ingestione documentale avanzata e crawling limitato
 
 Stato: **pianificato**
 
-### `INTELLIGENCE-0.4` — Memoria semantica, embedding e retrieval ibrido
+### `INTELLIGENCE-0.6` — Embedding, indice vettoriale e retrieval ibrido
 
 Stato: **pianificato**
 
-### `INTELLIGENCE-0.5` — Provider AI reale e generazione citata
+### `INTELLIGENCE-0.7` — Freschezza, contraddizioni e salute delle fonti
 
 Stato: **pianificato**
 
-### `INTELLIGENCE-0.6` — Apprendimento didattico, scrittura e personalizzazione
-
-Stato: **pianificato**
-
-### `INTELLIGENCE-0.7` — Aggiornamento continuo e manutenzione conoscenza
-
-Stato: **pianificato**
-
-## Protezioni rispettate
+## Protezioni rispettate dal pacchetto INTELLIGENCE-0.3
 
 Non modificati:
 
 - `main`;
 - `demo-canonica`;
 - `reference/demo-aula-studio-virtuale-canonica.html`;
-- app ufficiale;
-- `eve-canonical-integration-v2`;
-- pacchetto master Eve Animation Library 1.2.2.
+- Aula Studio e produzione;
+- Supabase;
+- repository delle release;
+- Eve Animation Library 1.2.6.
 
-Non eseguiti durante `INTELLIGENCE-0.1`:
+Il workflow desktop accetta temporaneamente anche il branch esatto
+`codex/eve-ai-studio-intelligence-0-3`, così la release firmata di prova
+`1.2.0-alpha.7` può essere collaudata prima del merge. Versione e anteprima
+dell'updater desktop sono state aggiornate in modo coerente alla release di prova.
 
-- ricerca web reale;
+Non introdotti:
+
+- approvazione automatica;
 - provider AI reale;
 - embedding;
 - addestramento del modello;
-- pull request;
-- merge;
-- integrazione nella produzione.
+- demo alternative;
+- copie di `index.html`;
+- standalone o nuove cartelle preview.

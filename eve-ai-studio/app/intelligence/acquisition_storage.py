@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import sqlite3
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from threading import RLock
@@ -23,6 +24,22 @@ ACQUISITION_SCHEMA_VERSION = 1
 
 def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+
+@dataclass(frozen=True, slots=True)
+class AcquiredDocumentPayload:
+    source_id: int
+    project_id: str
+    acquisition_id: int
+    requested_url: str
+    final_url: str
+    media_type: str
+    size_bytes: int
+    sha256: str
+    raw_content: bytes
+    extracted_text: str
+    extracted_chars: int
+    created_at: str
 
 
 class SqliteAcquisitionStore:
@@ -416,6 +433,79 @@ class SqliteAcquisitionStore:
             instructions_executable=False,
             created_at=str(row["created_at"]),
         )
+
+
+    def get_document_payload(
+        self,
+        project_id: str,
+        source_id: int,
+        room_id: str,
+    ) -> AcquiredDocumentPayload:
+        with self._lock:
+            self._require_source_row(project_id, source_id, room_id)
+            row = self._connection.execute(
+                """
+                SELECT * FROM research_acquired_documents
+                WHERE source_id = ? AND project_id = ?
+                """,
+                (source_id, project_id),
+            ).fetchone()
+        if row is None:
+            raise ResearchDocumentNotFoundError(source_id)
+        return AcquiredDocumentPayload(
+            source_id=int(row["source_id"]),
+            project_id=str(row["project_id"]),
+            acquisition_id=int(row["acquisition_id"]),
+            requested_url=str(row["requested_url"]),
+            final_url=str(row["final_url"]),
+            media_type=str(row["media_type"]),
+            size_bytes=int(row["size_bytes"]),
+            sha256=str(row["sha256"]),
+            raw_content=bytes(row["raw_content"]),
+            extracted_text=str(row["extracted_text"]),
+            extracted_chars=int(row["extracted_chars"]),
+            created_at=str(row["created_at"]),
+        )
+
+    def latest_successful_event(
+        self,
+        project_id: str,
+        source_id: int,
+        room_id: str,
+    ) -> ResearchAcquisitionEvent:
+        with self._lock:
+            self._require_source_row(project_id, source_id, room_id)
+            row = self._connection.execute(
+                """
+                SELECT * FROM research_acquisition_events
+                WHERE source_id = ? AND project_id = ? AND status = ?
+                ORDER BY acquisition_id DESC LIMIT 1
+                """,
+                (source_id, project_id, ResearchAcquisitionStatus.SUCCEEDED.value),
+            ).fetchone()
+        if row is None:
+            raise ResearchDocumentNotFoundError(source_id)
+        return self._row_to_event(row)
+
+    def successful_events(
+        self,
+        project_id: str,
+        source_id: int,
+        room_id: str,
+        *,
+        limit: int = 2,
+    ) -> list[ResearchAcquisitionEvent]:
+        with self._lock:
+            self._require_source_row(project_id, source_id, room_id)
+            rows = self._connection.execute(
+                """
+                SELECT * FROM research_acquisition_events
+                WHERE source_id = ? AND project_id = ? AND status = ?
+                ORDER BY acquisition_id DESC LIMIT ?
+                """,
+                (source_id, project_id, ResearchAcquisitionStatus.SUCCEEDED.value, limit),
+            ).fetchall()
+        return [self._row_to_event(row) for row in rows]
 
     def count_successful(self) -> int:
         with self._lock:

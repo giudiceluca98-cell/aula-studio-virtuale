@@ -4,14 +4,15 @@
 
 Eve AI Studio usa due linee di sviluppo indipendenti:
 
-- `CORE` — piattaforma tecnica già sviluppata: sicurezza, requisiti, prompt, valutazioni, provider, materiali, retrieval, RAG e apertura delle fonti;
-- `INTELLIGENCE` — nuova evoluzione di Eve: ricerca online, acquisizione controllata, memoria, apprendimento e capacità AI.
+- `CORE` — piattaforma tecnica: sicurezza, requisiti, prompt, valutazioni, provider, materiali, retrieval, RAG e apertura delle fonti;
+- `INTELLIGENCE` — ricerca online, acquisizione controllata, revisione, qualità del corpus e capacità AI.
 
-La linea `CORE` è **chiusa e in pausa dopo CORE-1.1**. La linea `INTELLIGENCE` ha chiuso **INTELLIGENCE-0.2**; `INTELLIGENCE-0.3` resta pianificato.
+La linea `CORE` è chiusa e in pausa dopo `CORE-1.1`.
+La linea `INTELLIGENCE` ha chiuso `INTELLIGENCE-0.2`; `INTELLIGENCE-0.3` è in `FUNCTIONAL_TESTING`.
 
 ## Convenzione obbligatoria dei nomi
 
-Ogni documento di checkpoint deve usare il formato:
+Ogni documento di checkpoint usa il formato:
 
 ```text
 CHECKPOINT_<LINEA>_<VERSIONE>_<PAROLE_CHIAVE>_<TIPO_FILE>.<estensione>
@@ -25,9 +26,9 @@ Tipi di file:
 - `CI_RESULT` — risultato automatico;
 - `CLOSURE` — approvazione e chiusura definitiva.
 
-Le due linee hanno numerazione indipendente. Non è ammesso indicare soltanto `Checkpoint 1.2` senza specificare linea e parole chiave.
+Le due linee hanno numerazione indipendente.
 
-## Linea CORE — piattaforma tecnica storica
+## Linea CORE
 
 | ID | Parole chiave ufficiali | Stato |
 |---|---|---|
@@ -42,43 +43,37 @@ Le due linee hanno numerazione indipendente. Non è ammesso indicare soltanto `C
 | `CORE-0.9` | Retrieval locale, citazioni | chiuso e approvato |
 | `CORE-1.0` | Chat RAG grounded, fonti | chiuso e approvato |
 | `CORE-1.1` | Apertura fonti, verifica integrità | chiuso e approvato |
+| `CORE-1.2` | Architettura unificata e adapter dei prototipi | pianificato; bloccato fino al Gate C |
 
-Un eventuale prossimo checkpoint di questa linea continuerà da:
-
-```text
-CORE-1.2_<PAROLE_CHIAVE_DA_DEFINIRE>
-```
-
-Non esiste un `CORE-1.2` approvato o avviato.
-
-## Linea INTELLIGENCE — nuova AI interna ad Aula Studio
+## Linea INTELLIGENCE
 
 | ID | Parole chiave ufficiali | Stato/obiettivo |
 |---|---|---|
 | `INTELLIGENCE-0.1` | Centro ricerca, progetti apprendimento | chiuso e approvato |
-| `INTELLIGENCE-0.2` | Acquisizione web controllata, quarantena fonti | chiuso e approvato |
-| `INTELLIGENCE-0.3` | Affidabilità fonti, conflitti, revisione | pianificato |
-| `INTELLIGENCE-0.4` | Memoria semantica, embedding, retrieval ibrido | pianificato |
-| `INTELLIGENCE-0.5` | Provider AI reale, generazione citata | pianificato |
-| `INTELLIGENCE-0.6` | Apprendimento didattico, scrittura, personalizzazione | pianificato |
-| `INTELLIGENCE-0.7` | Aggiornamento continuo, manutenzione conoscenza | pianificato |
+| `INTELLIGENCE-0.2` | Acquisizione web controllata, quarantena fonti | chiuso e approvato; release installata `1.2.0-alpha.6` |
+| `INTELLIGENCE-0.3` | Revisione umana, qualità, promozione controllata | FUNCTIONAL_TESTING; release proposta `1.2.0-alpha.7` |
+| `INTELLIGENCE-0.4` | Ricerca web, pianificazione query | pianificato; dipende da 0.3 |
+| `INTELLIGENCE-0.5` | Ingestione documentale avanzata, crawling limitato | pianificato |
+| `INTELLIGENCE-0.6` | Embedding, indice vettoriale, retrieval ibrido | pianificato |
+| `INTELLIGENCE-0.7` | Freschezza, contraddizioni, salute fonti | pianificato |
 
-Chiusura `INTELLIGENCE-0.1`:
-
-```text
-eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.1_CENTRO_RICERCA_PROGETTI_APPRENDIMENTO_CLOSURE.md
-```
-
-Il piano successivo deve chiamarsi:
+## Documenti del checkpoint attivo
 
 ```text
-eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.2_ACQUISIZIONE_WEB_CONTROLLATA_QUARANTENA_FONTI_PLAN.md
+eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.3_REVISIONE_UMANA_QUALITA_PROMOZIONE_CONTROLLATA_PLAN.md
+eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.3_REVISIONE_UMANA_QUALITA_PROMOZIONE_CONTROLLATA_UPDATE.txt
+eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.3_REVISIONE_UMANA_QUALITA_PROMOZIONE_CONTROLLATA_VERIFICATION.md
+eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.3_REVISIONE_UMANA_QUALITA_PROMOZIONE_CONTROLLATA_CI_RESULT.md
+eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.3_REVISIONE_UMANA_QUALITA_PROMOZIONE_CONTROLLATA_HANDOFF.md
 ```
+
+La `CLOSURE` definitiva non deve essere prodotta o approvata prima del collaudo desktop dell'utente.
 
 ## Regole permanenti
 
-1. Un checkpoint `CORE` non include ricerca autonoma o apprendimento web.
-2. Un checkpoint `INTELLIGENCE` può riutilizzare servizi CORE approvati, senza riscriverne la cronologia.
-3. Ogni nuovo checkpoint nasce con un file `PLAN` prima del codice; l'approvazione preventiva dell'utente consente poi l'avanzamento senza pause intermedie.
-4. Ogni commit, rapporto e documento deve indicare linea, versione e parole chiave.
-5. I file storici mantengono il loro contenuto; il nome serve a renderli immediatamente ricercabili.
+1. Un checkpoint `CORE` non viene salvato come `INTELLIGENCE` e viceversa.
+2. Un checkpoint `INTELLIGENCE` può riutilizzare servizi CORE approvati senza riscriverne la cronologia.
+3. Ogni nuovo checkpoint nasce con un `PLAN` prima del codice.
+4. Ogni rapporto indica linea, versione e parole chiave.
+5. La preview canonica resta in `reference/eve-ai-studio-preview/` con un solo `index.html`.
+6. Nessun checkpoint viene dichiarato chiuso soltanto perché appare nell'interfaccia.

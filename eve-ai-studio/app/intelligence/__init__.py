@@ -1,10 +1,16 @@
-from .acquisition_storage import SqliteAcquisitionStore
+from .acquisition_storage import AcquiredDocumentPayload, SqliteAcquisitionStore
 from .errors import (
     ResearchConflictError,
     ResearchDocumentNotFoundError,
     ResearchError,
     ResearchLimitError,
     ResearchProjectNotFoundError,
+    ResearchPromotionDisabledError,
+    ResearchPromotionNotFoundError,
+    ResearchReviewDisabledError,
+    ResearchReviewNotFoundError,
+    ResearchReviewStateError,
+    ResearchStaleReviewError,
     ResearchSourceNotFoundError,
     ResearchTransitionError,
 )
@@ -29,10 +35,26 @@ from .models import (
     ResearchSourceCandidateCreateRequest,
     ResearchSourceCandidateListResponse,
     ResearchSourceStatus,
+    ResearchPromotion,
+    ResearchPromotionRequest,
+    ResearchPromotionRevocationRequest,
+    ResearchPromotionStatus,
+    ResearchQualityScores,
+    ResearchReviewDecision,
+    ResearchReviewDecisionRequest,
+    ResearchReviewEvent,
+    ResearchReviewStartRequest,
+    ResearchReviewStatus,
+    ResearchSafetyAnalysis,
+    ResearchSourceReview,
+    ResearchSourceReviewListResponse,
+    ResearchSourceVersionComparison,
     ResearchTransitionEvent,
 )
 from .router import create_research_router
-from .service import ResearchCenterService, ResearchLimits
+from .review_analysis import analyze_untrusted_content
+from .review_storage import SqliteReviewStore
+from .service import ResearchCenterService, ResearchLimits, ResearchReviewPolicy
 from .storage import SqliteResearchStore
 from .web_acquisition import (
     ControlledWebAcquirer,
@@ -79,4 +101,28 @@ __all__ = [
     "UrlGuard",
     "WebAcquisitionPolicy",
     "create_research_router",
+    "AcquiredDocumentPayload",
+    "ResearchPromotion",
+    "ResearchPromotionRequest",
+    "ResearchPromotionRevocationRequest",
+    "ResearchPromotionStatus",
+    "ResearchQualityScores",
+    "ResearchReviewDecision",
+    "ResearchReviewDecisionRequest",
+    "ResearchReviewDisabledError",
+    "ResearchReviewEvent",
+    "ResearchReviewNotFoundError",
+    "ResearchReviewPolicy",
+    "ResearchReviewStartRequest",
+    "ResearchReviewStateError",
+    "ResearchReviewStatus",
+    "ResearchSafetyAnalysis",
+    "ResearchSourceReview",
+    "ResearchSourceReviewListResponse",
+    "ResearchSourceVersionComparison",
+    "ResearchStaleReviewError",
+    "ResearchPromotionDisabledError",
+    "ResearchPromotionNotFoundError",
+    "SqliteReviewStore",
+    "analyze_untrusted_content",
 ]
