@@ -552,7 +552,8 @@ rilascio eseguito. Ogni scheda della galleria include il comando diretto
   `src/app/api/eve/database/**`, `src/features/eve/data/**`,
   `src/features/eve/contracts.ts`, `src/features/eve/server/composition.ts`,
   migrazione e rollback 0018, test database, checkpoint CORE-1.3 e preview
-  canonica.
+  canonica. Il workflow desktop è riservato soltanto per autorizzare questo
+  branch alla release alpha.9 di prova.
 
 Entrambi i feature flag restano disattivati. Nessun SQL remoto o di
 produzione è stato eseguito. Migrazioni, RLS, isolamento cross-room,

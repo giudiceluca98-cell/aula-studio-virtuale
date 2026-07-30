@@ -26,6 +26,8 @@ database di produzione e importazione disattivati per impostazione predefinita.
 - `eve-ai-studio/checkpoints/CHECKPOINT_CORE_1.3_*`
 - `reference/eve-ai-studio-preview/index.html`
 - `reference/eve-ai-studio-preview/database-production-workflow.js`
+- `.github/workflows/release-eve-ai-studio-desktop.yml`, limitatamente
+  all'autorizzazione del branch CORE-1.3 per la release alpha.9 di prova
 - questa scheda e la sezione CORE-1.3 in `CODEX_COORDINATION.md`
 
 ## Vincoli
