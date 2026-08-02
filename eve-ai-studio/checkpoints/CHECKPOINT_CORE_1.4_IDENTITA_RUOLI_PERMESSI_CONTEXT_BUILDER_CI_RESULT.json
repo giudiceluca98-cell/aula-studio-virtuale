@@ -1,0 +1,23 @@
+{
+  "checkpoint": "CORE-1.4",
+  "status": "FUNCTIONAL_TESTING",
+  "local_package_checks": {
+    "python_tools_syntax": "PASS",
+    "preview_javascript_syntax": "PASS",
+    "preview_no_fetch": "PASS",
+    "manifest_hashes": "PASS",
+    "anti_drift_dry_run": "PASS",
+    "idempotent_second_apply": "PASS",
+    "canonical_http_smoke": "PASS"
+  },
+  "not_claimed": [
+    "full_vitest",
+    "full_typecheck",
+    "lint",
+    "next_build",
+    "temporary_supabase_rls",
+    "signed_desktop_build",
+    "desktop_installation"
+  ],
+  "release_target": "1.2.0-alpha.11"
+}

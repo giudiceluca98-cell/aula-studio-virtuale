@@ -1,12 +1,13 @@
-name: Eve CORE 1.3 database checks
+name: Eve CORE database checks
 
 on:
   push:
-    branches: [codex/eve-ai-studio-core-1-3]
+    branches: [codex/eve-ai-studio-core-1-3, codex/eve-ai-studio-core-1-4]
     paths:
       - "supabase/**"
       - "src/features/eve/data/**"
       - "tests/eve-database-*.test.ts"
+      - "tests/eve-context-*.test.ts"
       - ".github/workflows/eve-core-1.3-database-checks.yml"
   pull_request:
     branches: [eve-ai-studio]
@@ -14,6 +15,7 @@ on:
       - "supabase/**"
       - "src/features/eve/data/**"
       - "tests/eve-database-*.test.ts"
+      - "tests/eve-context-*.test.ts"
       - ".github/workflows/eve-core-1.3-database-checks.yml"
   workflow_dispatch:
 
@@ -46,6 +48,11 @@ jobs:
         env:
           PGURL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
         run: psql "$PGURL" -v ON_ERROR_STOP=1 -f supabase/tests/core_1_3_rls.sql
+
+      - name: Verifica CORE 1.4 ruoli, isolamento e audit minimizzato
+        env:
+          PGURL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+        run: psql "$PGURL" -v ON_ERROR_STOP=1 -f supabase/tests/core_1_4_rls.sql
 
       - name: Verifica backup e rollback protetto
         env:

@@ -28,7 +28,7 @@ RESPONSABILE:
 Codex coordinamento
 
 STATO:
-REVIEW_REQUIRED
+CLOSED — collaudo desktop alpha.10 approvato dall'utente il 2026-08-02
 
 BRANCH DI PARTENZA:
 origin/eve-ai-studio @ 13b8822
@@ -630,8 +630,67 @@ generati, fuori dal perimetro del checkpoint.
 RELEASE DI PROVA:
 Workflow 30724903788 completato con successo. Pubblicati installer NSIS, firma
 e latest.json nella release eve-ai-studio-v1.2.0-alpha.10. Il manifest dichiara
-1.2.0-alpha.10 e punta all'asset firmato Windows. La PR #95 resta Draft e non
-deve essere unita prima del collaudo e della nuova approvazione dell'utente.
+1.2.0-alpha.10 e punta all'asset firmato Windows. Il collaudo è stato approvato
+esplicitamente dall'utente e la PR #95 è stata unita in `eve-ai-studio` al
+commit `7b18ee8` il 2026-08-02.
+```
+
+### CORE-1.4 — Identità, ruoli, permessi e Context Builder
+
+```text
+RESPONSABILE:
+Codex integrazione funzionale, UI canonica e desktop di prova
+
+STATO:
+FUNCTIONAL_TESTING
+
+BRANCH:
+codex/eve-ai-studio-core-1-4
+
+BASE:
+origin/eve-ai-studio @ 7b18ee8
+
+OBIETTIVO:
+Costruire server-side un contesto minimo verificato da sessione autenticata,
+appartenenza aula, ruoli, RLS e materiali autorizzati. Preparare alpha.11
+soltanto dopo tutti i test verdi.
+
+FILE PRENOTATI:
+- .env.example
+- docs/EVE_CONTEXT_SECURITY.md
+- eve-ai-studio/checkpoints/CHECKPOINT_CORE_1.4_*
+- reference/eve-ai-studio-preview/identity-context-workflow.js
+- reference/eve-ai-studio-preview/index.html
+- src/app/api/eve/context/route.ts
+- src/features/eve/context/**
+- src/features/eve/contracts.ts
+- src/features/eve/registry.ts
+- src/features/eve/server/composition.ts
+- supabase/migrations/0019_eve_identity_roles_context.sql
+- supabase/rollback/0019_eve_identity_roles_context.down.sql
+- tests/eve-context-*.test.ts
+- supabase/tests/core_1_4_rls.sql
+- .github/workflows/eve-core-1.3-database-checks.yml
+- .github/workflows/release-eve-ai-studio-desktop.yml
+- eve-desktop/package.json
+- eve-desktop/runtime/eve-desktop-updater.js
+- eve-desktop/src-tauri/Cargo.toml
+- eve-desktop/src-tauri/Cargo.lock
+- eve-desktop/src-tauri/tauri.conf.json
+- CODEX_COORDINATION.md, limitatamente a questa scheda
+
+FILE CONDIVISI PRENOTATI:
+- reference/eve-ai-studio-preview/index.html
+- supabase/migrations/0019_eve_identity_roles_context.sql
+- .github/workflows/eve-core-1.3-database-checks.yml, limitatamente a CORE-1.4
+
+VINCOLI:
+Il client non può fornire userId o ruoli autorizzativi. Il testo selezionato non
+deve essere persistito nell'audit; il segreto Context Builder non deve apparire
+nella UI o nei log. Nessuna demo, standalone, copia HTML, nuova preview,
+modifica a main, demo-canonica, Aula Studio, Supabase remoto, Vercel o
+produzione. Una sola Draft PR e nessun merge prima del collaudo alpha.11 e di
+una nuova approvazione esplicita dell'utente.
 ```
 
 ## Attività storiche di Aula Studio
