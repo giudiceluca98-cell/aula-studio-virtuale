@@ -642,7 +642,7 @@ RESPONSABILE:
 Codex integrazione funzionale, UI canonica e desktop di prova
 
 STATO:
-FUNCTIONAL_TESTING
+REVIEW_REQUIRED
 
 BRANCH:
 codex/eve-ai-studio-core-1-4
@@ -689,8 +689,11 @@ Il client non può fornire userId o ruoli autorizzativi. Il testo selezionato no
 deve essere persistito nell'audit; il segreto Context Builder non deve apparire
 nella UI o nei log. Nessuna demo, standalone, copia HTML, nuova preview,
 modifica a main, demo-canonica, Aula Studio, Supabase remoto, Vercel o
-produzione. Una sola Draft PR e nessun merge prima del collaudo alpha.11 e di
-una nuova approvazione esplicita dell'utente.
+produzione. Draft PR #96 aperta verso eve-ai-studio. Release desktop di collaudo
+eve-ai-studio-v1.2.0-alpha.11 pubblicata con installer, firma e latest.json.
+Tutti i workflow, inclusi i due test Supabase temporanei, sono verdi. Nessun
+merge prima del collaudo alpha.11 e di una nuova approvazione esplicita
+dell'utente.
 ```
 
 ## Attività storiche di Aula Studio

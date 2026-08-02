@@ -1,6 +1,6 @@
 {
   "checkpoint": "CORE-1.4",
-  "status": "FUNCTIONAL_TESTING",
+  "status": "REVIEW_REQUIRED",
   "local_package_checks": {
     "python_tools_syntax": "PASS",
     "preview_javascript_syntax": "PASS",
@@ -10,14 +10,17 @@
     "idempotent_second_apply": "PASS",
     "canonical_http_smoke": "PASS"
   },
-  "not_claimed": [
-    "full_vitest",
-    "full_typecheck",
-    "lint",
-    "next_build",
-    "temporary_supabase_rls",
-    "signed_desktop_build",
-    "desktop_installation"
-  ],
+  "codex_checks": {
+    "full_vitest_208": "PASS",
+    "full_typecheck": "PASS",
+    "targeted_lint": "PASS",
+    "next_build": "PASS",
+    "pytest_236": "PASS",
+    "temporary_supabase_rls": "PASS",
+    "rollback_dependency_order": "PASS",
+    "signed_desktop_build": "PASS",
+    "updater_manifest": "PASS"
+  },
+  "not_claimed": ["desktop_installation_user_acceptance"],
   "release_target": "1.2.0-alpha.11"
 }

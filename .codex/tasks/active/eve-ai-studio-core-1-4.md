@@ -1,10 +1,11 @@
 # CORE-1.4 — Identità, ruoli, permessi e Context Builder
 
-- Stato: `FUNCTIONAL_TESTING`
+- Stato: `REVIEW_REQUIRED`
 - Responsabile: Codex integrazione funzionale, UI canonica e desktop di prova
 - Branch: `codex/eve-ai-studio-core-1-4`
 - Base: `origin/eve-ai-studio @ 7b18ee8`
-- Pull Request: da aprire verso `eve-ai-studio`
+- Pull Request: [#96](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/96) verso `eve-ai-studio`
+- Release desktop di collaudo: [1.2.0-alpha.11](https://github.com/giudiceluca98-cell/eve-ai-studio-releases/releases/tag/eve-ai-studio-v1.2.0-alpha.11)
 
 ## Obiettivo
 
