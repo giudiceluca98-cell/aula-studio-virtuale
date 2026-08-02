@@ -13,6 +13,10 @@ from .errors import (
     ResearchStaleReviewError,
     ResearchSourceNotFoundError,
     ResearchTransitionError,
+    ResearchSearchDisabledError,
+    ResearchSearchExecutionNotFoundError,
+    ResearchSearchProviderError,
+    ResearchSearchProviderUnavailableError,
 )
 from .models import (
     ResearchAcquisitionEvent,
@@ -50,11 +54,25 @@ from .models import (
     ResearchSourceReviewListResponse,
     ResearchSourceVersionComparison,
     ResearchTransitionEvent,
+    ResearchSearchExecuteRequest,
+    ResearchSearchExecution,
+    ResearchSearchExecutionListResponse,
+    ResearchSearchExecutionStatus,
+    ResearchSearchFilters,
+    ResearchSearchResult,
 )
 from .router import create_research_router
 from .review_analysis import analyze_untrusted_content
 from .review_storage import SqliteReviewStore
-from .service import ResearchCenterService, ResearchLimits, ResearchReviewPolicy
+from .service import (
+    ResearchCenterService, ResearchLimits, ResearchReviewPolicy, ResearchSearchPolicy,
+)
+from .search_provider import (
+    SearchProviderItem, SearchProviderRegistry, SearchProviderRequest,
+    SearchProviderResponse, StaticSearchProvider, filter_and_rank_items,
+    normalize_search_url,
+)
+from .search_storage import SqliteSearchStore
 from .storage import SqliteResearchStore
 from .web_acquisition import (
     ControlledWebAcquirer,
@@ -125,4 +143,23 @@ __all__ = [
     "ResearchPromotionNotFoundError",
     "SqliteReviewStore",
     "analyze_untrusted_content",
+    "ResearchSearchDisabledError",
+    "ResearchSearchExecution",
+    "ResearchSearchExecutionListResponse",
+    "ResearchSearchExecutionNotFoundError",
+    "ResearchSearchExecutionStatus",
+    "ResearchSearchExecuteRequest",
+    "ResearchSearchFilters",
+    "ResearchSearchPolicy",
+    "ResearchSearchProviderError",
+    "ResearchSearchProviderUnavailableError",
+    "ResearchSearchResult",
+    "SearchProviderItem",
+    "SearchProviderRegistry",
+    "SearchProviderRequest",
+    "SearchProviderResponse",
+    "SqliteSearchStore",
+    "StaticSearchProvider",
+    "filter_and_rank_items",
+    "normalize_search_url",
 ]

@@ -22,10 +22,10 @@
       <section class="panel span-12">
         <div class="panel-head">
           <div>
-            <h3>Centro ricerca, revisione e promozione controllata</h3>
-            <p>INTELLIGENCE-0.3 — il download resta separato dalla revisione umana e soltanto una decisione attribuibile può autorizzare la promozione verso i materiali CORE.</p>
+            <h3>Centro ricerca, provider, revisione e promozione controllata</h3>
+            <p>INTELLIGENCE-0.4 — le query pianificate possono essere eseguite tramite provider configurabili; i risultati diventano soltanto candidati in quarantena, mai acquisizioni automatiche.</p>
           </div>
-          <span class="tag violet" id="researchCheckpointBadge">INTELLIGENCE-0.3</span>
+          <span class="tag violet" id="researchCheckpointBadge">INTELLIGENCE-0.4</span>
         </div>
         <div class="panel-body">
           <div class="metric-row">
@@ -33,6 +33,30 @@
             <div class="metric"><small>In revisione</small><strong id="researchReviewCount">0</strong><div class="progress"><span style="width:45%;background:var(--warn)"></span></div></div>
             <div class="metric"><small>Approvate</small><strong id="researchApprovedCount">0</strong><div class="progress"><span style="width:35%;background:var(--green)"></span></div></div>
             <div class="metric"><small>Promozioni CORE attive</small><strong id="researchPromotionCount">0</strong><div class="progress"><span style="width:25%;background:var(--violet)"></span></div></div>
+          </div>
+        </div>
+      </section>
+
+
+
+      <section class="panel span-12" id="searchProviderPanel">
+        <div class="panel-head">
+          <div><h3>Query → provider → candidati in quarantena</h3><p>Simulazione UI dichiarata: provider disattivati per default, limiti per aula/utente, deduplicazione URL, motivazione del ranking e nessuna acquisizione automatica.</p></div>
+          <span class="tag warn" id="searchFeatureFlag">EVE_RESEARCH_SEARCH_ENABLED=false</span>
+        </div>
+        <div class="panel-body">
+          <div class="form-grid">
+            <div class="field"><label for="searchPlannedQuery">Query pianificata</label><select id="searchPlannedQuery"><option value="q1">curricolo programmazione introduttivo</option><option value="q2">manuali universitari Python recenti</option></select></div>
+            <div class="field"><label for="searchProvider">Provider</label><select id="searchProvider"><option>provider-accademico</option><option>provider-fallback</option></select></div>
+            <div class="field"><label for="searchIncludedDomain">Dominio incluso</label><input id="searchIncludedDomain" value="example.edu"></div>
+            <div class="field"><label for="searchLanguage">Lingua</label><input id="searchLanguage" value="it"></div>
+            <div class="field"><label for="searchMaxResults">Risultati massimi</label><input id="searchMaxResults" type="number" min="1" max="50" value="5"></div>
+            <div class="field"><label for="searchRegisterCandidates">Registrazione</label><select id="searchRegisterCandidates"><option value="yes">Candidati in quarantena</option><option value="no">Solo anteprima risultati</option></select></div>
+          </div>
+          <button class="btn green" id="simulateProviderSearch" style="width:100%;margin-top:12px">Simula esecuzione controllata</button>
+          <div class="grid" style="margin-top:12px">
+            <div class="panel span-5"><div class="panel-head"><div><h3>Audit esecuzione</h3><p>Retry, fallback, costo e limiti.</p></div><span class="pill" id="searchExecutionBadge">0 esecuzioni</span></div><div class="panel-body list" id="searchExecutionStages"></div></div>
+            <div class="panel span-7"><div class="panel-head"><div><h3>Risultati normalizzati</h3><p>Ranking motivato e URL deduplicati.</p></div><span class="tag violet" id="searchResultBadge">0 risultati</span></div><div class="panel-body list" id="searchResultList"></div></div>
           </div>
         </div>
       </section>
@@ -125,6 +149,35 @@
       </section>
     </div>`;
   main.appendChild(view);
+
+
+
+  const searchExecutions = [];
+  const providerResults = [
+    {url:"https://example.edu/course?utm_source=newsletter&b=2&a=1#intro", title:"Curricolo verificabile", publisher:"Example University", score:0.95, language:"it", reason:"dominio accademico"},
+    {url:"https://example.edu/course?a=1&b=2", title:"Duplicato URL canonico", publisher:"Example University", score:0.51, language:"it", reason:"stesso contenuto"},
+    {url:"https://example.org/manual", title:"Manuale alternativo", publisher:"Ente didattico", score:0.77, language:"it", reason:"pertinenza didattica"}
+  ];
+  const normalizePreviewUrl = value => {
+    const url = new URL(value);
+    ["utm_source","utm_medium","utm_campaign","fbclid","gclid"].forEach(key => url.searchParams.delete(key));
+    url.hash = "";
+    url.hostname = url.hostname.toLowerCase();
+    url.searchParams.sort();
+    return url.toString().replace(/\/$/, url.pathname === "/" ? "/" : "");
+  };
+  function renderSearchResults(execution) {
+    const list = document.getElementById("searchResultList");
+    const badge = document.getElementById("searchResultBadge");
+    if (!execution) {
+      list.innerHTML = '<div class="row"><div class="meta"><strong>Nessuna esecuzione</strong><small>La preview non contatta provider reali.</small></div><span class="tag warn">OFF</span></div>';
+      badge.textContent = "0 risultati";
+      return;
+    }
+    badge.textContent = `${execution.results.length} risultati`;
+    list.innerHTML = execution.results.map(item => `<div class="row"><div class="meta"><strong>${escapeHtml(item.title)}</strong><small>${escapeHtml(item.url)} · score=${item.score.toFixed(2)} · ${escapeHtml(item.reason)} · source_id=${item.sourceId ?? "non registrato"} · content_acquired=false</small></div><span class="${item.sourceId ? "tag warn" : "tag violet"}">${item.sourceId ? "Quarantena" : "Solo risultato"}</span></div>`).join("");
+  }
+
 
   const sources = [
     {
@@ -417,11 +470,58 @@
   function openResearchView() {
     document.querySelectorAll(".view").forEach(node => node.classList.toggle("active", node.id === "intelligence-research"));
     document.querySelectorAll(".nav button").forEach(node => node.classList.toggle("active", node === navButton));
-    document.getElementById("pageTitle").textContent = "Revisione e qualità delle fonti";
-    document.getElementById("pageSubtitle").textContent = "Valuta, approva, promuovi e revoca le fonti senza confondere acquisizione e conoscenza autorizzata.";
+    document.getElementById("pageTitle").textContent = "Ricerca provider e qualità delle fonti";
+    document.getElementById("pageSubtitle").textContent = "Esegui query controllate, registra candidati in quarantena e mantieni revisione e promozione separate.";
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
+
+
+  document.getElementById("simulateProviderSearch").addEventListener("click", async () => {
+    const button = document.getElementById("simulateProviderSearch");
+    const stages = document.getElementById("searchExecutionStages");
+    const domain = document.getElementById("searchIncludedDomain").value.trim().toLowerCase();
+    const register = document.getElementById("searchRegisterCandidates").value === "yes";
+    const maxResults = Math.max(1, Math.min(50, Number(document.getElementById("searchMaxResults").value) || 5));
+    const provider = document.getElementById("searchProvider").value;
+    button.disabled = true;
+    document.getElementById("searchFeatureFlag").textContent = "Simulazione: flag temporaneamente ON";
+    const steps = [
+      ["Limiti server-side", "Aula, utente, progetto, giorno e massimo risultati"],
+      ["Provider configurabile", `${provider} con timeout, retry e fallback`],
+      ["Normalizzazione URL", "Schema, credenziali, dominio, frammenti e tracking"],
+      ["Deduplicazione", "Un solo risultato per URL normalizzato"],
+      ["Ranking motivato", "Score e motivazioni conservati nell'audit"],
+      ["Quarantena", register ? "Candidati registrati senza acquisizione" : "Risultati non registrati"]
+    ];
+    stages.innerHTML = steps.map((step,index) => `<div class="row" data-search-step="${index}"><div class="meta"><strong>${index+1}. ${step[0]}</strong><small>${step[1]}</small></div><span class="tag warn">In attesa</span></div>`).join("");
+    window.EveAnimationLibrary?.setState?.("eve-searching");
+    for (let index=0; index<steps.length; index+=1) {
+      const tag = stages.querySelector(`[data-search-step="${index}"] .tag`);
+      tag.className = "tag violet"; tag.textContent = "In corso"; await wait(150);
+      tag.className = "tag"; tag.textContent = "Superato";
+    }
+    const unique = new Map();
+    providerResults.forEach(item => {
+      const normalized = normalizePreviewUrl(item.url);
+      const host = new URL(normalized).hostname;
+      if (domain && !(host === domain || host.endsWith(`.${domain}`))) return;
+      const previous = unique.get(normalized);
+      if (!previous || item.score > previous.score) unique.set(normalized, {...item,url:normalized});
+    });
+    const results = [...unique.values()].sort((a,b) => b.score-a.score).slice(0,maxResults).map((item,index) => ({...item,sourceId:register ? 400+searchExecutions.length*10+index : null}));
+    const execution = {id:searchExecutions.length+1, provider, attempts:provider.includes("fallback") ? 2 : 1, cost:0.12, results};
+    searchExecutions.push(execution);
+    document.getElementById("searchExecutionBadge").textContent = `${searchExecutions.length} esecuzioni`;
+    renderSearchResults(execution);
+    document.getElementById("searchFeatureFlag").textContent = "EVE_RESEARCH_SEARCH_ENABLED=false";
+    window.EveAnimationLibrary?.setState?.("eve-success");
+    notify(register ? "Risultati registrati come candidati: nessuna acquisizione avviata" : "Anteprima risultati completata senza registrazione");
+    button.disabled = false;
+  });
+
+
   navButton.addEventListener("click", openResearchView);
+  renderSearchResults(null);
   render();
 })();

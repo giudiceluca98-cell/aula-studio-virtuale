@@ -3,6 +3,7 @@ from __future__ import annotations
 import base64
 import hashlib
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import PurePosixPath
 from urllib.parse import urlsplit
 
@@ -19,6 +20,9 @@ from .errors import (
     ResearchReviewDisabledError,
     ResearchReviewStateError,
     ResearchStaleReviewError,
+    ResearchSearchDisabledError,
+    ResearchSearchProviderError,
+    ResearchSearchProviderUnavailableError,
 )
 from .models import (
     ResearchAcquisitionEvent,
@@ -50,10 +54,19 @@ from .models import (
     ResearchSourceStatus,
     ResearchSourceVersionComparison,
     ResearchTransitionEvent,
+    ResearchSearchExecuteRequest,
+    ResearchSearchExecution,
+    ResearchSearchExecutionListResponse,
+    ResearchSearchResult,
+    ResearchQueryStatus,
 )
 from .review_analysis import analyze_untrusted_content
 from .review_storage import SqliteReviewStore
 from .storage import SqliteResearchStore
+from .search_provider import (
+    SearchProviderRegistry, SearchProviderRequest, filter_and_rank_items,
+)
+from .search_storage import SqliteSearchStore
 from .web_acquisition import (
     ControlledWebAcquirer,
     InvalidWebUrlError,
@@ -80,6 +93,18 @@ class ResearchLimits:
 class ResearchReviewPolicy:
     review_enabled: bool = True
     promotion_enabled: bool = False
+
+
+@dataclass(frozen=True)
+class ResearchSearchPolicy:
+    enabled: bool = False
+    timeout_seconds: float = 8.0
+    max_results: int = 20
+    max_executions_per_project: int = 100
+    max_executions_per_room_day: int = 200
+    max_executions_per_actor_day: int = 50
+    max_retries: int = 1
+    provider_order: tuple[str, ...] = ()
 
 
 _BLOCKED_ACQUISITION_ERRORS = (
@@ -109,6 +134,9 @@ class ResearchCenterService:
         review_store: SqliteReviewStore | None = None,
         material_service: MaterialService | None = None,
         review_policy: ResearchReviewPolicy | None = None,
+        search_store: SqliteSearchStore | None = None,
+        search_providers: SearchProviderRegistry | None = None,
+        search_policy: ResearchSearchPolicy | None = None,
     ) -> None:
         self.store = store
         self.limits = limits or ResearchLimits()
@@ -117,56 +145,74 @@ class ResearchCenterService:
         self.review_store = review_store
         self.material_service = material_service
         self.review_policy = review_policy or ResearchReviewPolicy()
+        self.search_store = search_store
+        self.search_providers = search_providers
+        self.search_policy = search_policy or ResearchSearchPolicy()
+
 
     def status(self) -> ResearchCenterStatus:
-        base = self.store.raw_status(
-            max_projects_per_room=self.limits.max_projects_per_room,
-            max_queries_per_project=self.limits.max_queries_per_project,
-            max_sources_per_project=self.limits.max_sources_per_project,
-        )
-        acquisition_available = self.acquisition_store is not None and self.acquirer is not None
-        review_available = (
-            acquisition_available
-            and self.review_store is not None
-            and self.material_service is not None
-        )
-        policy = self.acquirer.policy if self.acquirer is not None else None
-        review_counts = self.review_store.counts() if self.review_store is not None else {}
-        return base.model_copy(
-            update={
-                "checkpoint": (
-                    "INTELLIGENCE-0.3"
-                    if review_available
-                    else "INTELLIGENCE-0.2" if acquisition_available else "INTELLIGENCE-0.1"
-                ),
-                "stage": (
-                    "human_review_quality_explicit_core_promotion"
-                    if review_available
-                    else "controlled_web_acquisition_quarantine_no_approval"
-                    if acquisition_available
-                    else "research_projects_and_source_catalog_no_network"
-                ),
-                "successful_acquisitions": (
-                    self.acquisition_store.count_successful()
-                    if self.acquisition_store is not None
-                    else 0
-                ),
-                "review_available": review_available,
-                "review_enabled": review_available and self.review_policy.review_enabled,
-                "promotion_enabled": review_available and self.review_policy.promotion_enabled,
-                "under_review_sources": review_counts.get("under_review_sources", 0),
-                "approved_sources": review_counts.get("approved_sources", 0),
-                "rejected_sources": review_counts.get("rejected_sources", 0),
-                "active_promotions": review_counts.get("active_promotions", 0),
-                "web_search_enabled": False,
-                "content_acquisition_available": acquisition_available,
-                "content_acquisition_enabled": bool(policy and policy.enabled),
-                "model_training_enabled": False,
-                "max_acquisition_bytes": policy.max_bytes if policy else 0,
-                "max_redirects": policy.max_redirects if policy else 0,
-                "robots_required": policy.require_robots if policy else True,
-            }
-        )
+            base = self.store.raw_status(
+                max_projects_per_room=self.limits.max_projects_per_room,
+                max_queries_per_project=self.limits.max_queries_per_project,
+                max_sources_per_project=self.limits.max_sources_per_project,
+            )
+            acquisition_available = self.acquisition_store is not None and self.acquirer is not None
+            review_available = (
+                acquisition_available
+                and self.review_store is not None
+                and self.material_service is not None
+            )
+            search_available = self.search_store is not None and self.search_providers is not None
+            policy = self.acquirer.policy if self.acquirer is not None else None
+            review_counts = self.review_store.counts() if self.review_store is not None else {}
+            provider_count = len(self.search_providers.names) if self.search_providers is not None else 0
+            return base.model_copy(
+                update={
+                    "checkpoint": (
+                        "INTELLIGENCE-0.4" if search_available else
+                        "INTELLIGENCE-0.3" if review_available else
+                        "INTELLIGENCE-0.2" if acquisition_available else "INTELLIGENCE-0.1"
+                    ),
+                    "stage": (
+                        "provider_search_query_to_quarantined_candidates" if search_available else
+                        "human_review_quality_explicit_core_promotion" if review_available else
+                        "controlled_web_acquisition_quarantine_no_approval" if acquisition_available else
+                        "research_projects_and_source_catalog_no_network"
+                    ),
+                    "successful_acquisitions": (
+                        self.acquisition_store.count_successful()
+                        if self.acquisition_store is not None else 0
+                    ),
+                    "review_available": review_available,
+                    "review_enabled": review_available and self.review_policy.review_enabled,
+                    "promotion_enabled": review_available and self.review_policy.promotion_enabled,
+                    "under_review_sources": review_counts.get("under_review_sources", 0),
+                    "approved_sources": review_counts.get("approved_sources", 0),
+                    "rejected_sources": review_counts.get("rejected_sources", 0),
+                    "active_promotions": review_counts.get("active_promotions", 0),
+                    "search_available": search_available,
+                    "search_provider_count": provider_count,
+                    "search_execution_count": (
+                        self.search_store.count_executions() if self.search_store is not None else 0
+                    ),
+                    "search_result_count": (
+                        self.search_store.count_results() if self.search_store is not None else 0
+                    ),
+                    "max_search_results": self.search_policy.max_results if search_available else 0,
+                    "max_search_executions_per_room_day": (
+                        self.search_policy.max_executions_per_room_day if search_available else 0
+                    ),
+                    "web_search_enabled": bool(
+                        search_available and self.search_policy.enabled and provider_count > 0
+                    ),
+                    "content_acquisition_available": acquisition_available,
+                    "content_acquisition_enabled": bool(policy and policy.enabled),
+                    "model_training_enabled": False,
+                    "max_acquisition_bytes": policy.max_bytes if policy else 0,
+                    "max_redirects": policy.max_redirects if policy else 0,
+                    "robots_required": policy.require_robots if policy else True,
+                }
+            )
 
     def create_project(self, request: ResearchProjectCreateRequest) -> ResearchProjectDetail:
         if self.store.count_projects(request.room_id) >= self.limits.max_projects_per_room:
@@ -583,3 +629,166 @@ class ResearchCenterService:
             trust_level="human_review_promotion_revoked",
         )
         return revoked
+
+
+    def _require_search_components(self) -> tuple[SqliteSearchStore, SearchProviderRegistry]:
+        if not self.search_policy.enabled:
+            raise ResearchSearchDisabledError("La ricerca web è disattivata dal server")
+        if self.search_store is None or self.search_providers is None:
+            raise ResearchSearchProviderUnavailableError(
+                "Il modulo provider di ricerca non è configurato"
+            )
+        return self.search_store, self.search_providers
+
+    def execute_query(
+        self,
+        project_id: str,
+        query_id: int,
+        room_id: str,
+        request: ResearchSearchExecuteRequest,
+    ) -> ResearchSearchExecution:
+        search_store, providers = self._require_search_components()
+        project = self.store.get_project(project_id, room_id)
+        if project.status == ResearchProjectStatus.ARCHIVED:
+            raise ResearchTransitionError("Un progetto archiviato non può eseguire query")
+        query = self.store.get_query(project_id, query_id, room_id)
+        today = datetime.now(timezone.utc).date().isoformat()
+        if search_store.count_executions(project_id=project_id) >= self.search_policy.max_executions_per_project:
+            raise ResearchLimitError("Limite delle esecuzioni per progetto raggiunto")
+        if search_store.count_executions(room_id=room_id, day_prefix=today) >= self.search_policy.max_executions_per_room_day:
+            raise ResearchLimitError("Limite giornaliero delle ricerche per aula raggiunto")
+        if search_store.count_executions(room_id=room_id, actor_id=request.actor_id, day_prefix=today) >= self.search_policy.max_executions_per_actor_day:
+            raise ResearchLimitError("Limite giornaliero delle ricerche per utente raggiunto")
+        effective_limit = min(request.max_results, self.search_policy.max_results)
+        provider_order = providers.resolve(request.provider, self.search_policy.provider_order)
+        execution_id = search_store.begin(
+            query_id=query_id,
+            project_id=project_id,
+            room_id=room_id,
+            actor_id=request.actor_id,
+            provider_name=request.provider or "auto",
+            filters=request.filters,
+            requested_limit=effective_limit,
+        )
+        self.store.set_query_status(project_id, query_id, room_id, ResearchQueryStatus.RUNNING)
+        attempts = 0
+        failures: list[str] = []
+        try:
+            for provider in provider_order:
+                for _retry in range(self.search_policy.max_retries + 1):
+                    attempts += 1
+                    try:
+                        response = provider.search(
+                            SearchProviderRequest(
+                                text=query.text,
+                                language=request.filters.language or query.language,
+                                purpose=query.purpose,
+                                max_results=effective_limit,
+                                timeout_seconds=self.search_policy.timeout_seconds,
+                                included_domains=tuple(request.filters.included_domains),
+                                excluded_domains=tuple(request.filters.excluded_domains),
+                                published_after=request.filters.published_after,
+                                published_before=request.filters.published_before,
+                                source_types=tuple(request.filters.source_types),
+                            )
+                        )
+                    except (TimeoutError, ResearchSearchProviderError) as error:
+                        failures.append(f"{provider.name}:{error.__class__.__name__}")
+                        continue
+                    ranked = filter_and_rank_items(
+                        response.items,
+                        included_domains=request.filters.included_domains,
+                        excluded_domains=request.filters.excluded_domains,
+                        language=request.filters.language,
+                        published_after=request.filters.published_after,
+                        published_before=request.filters.published_before,
+                        source_types=request.filters.source_types,
+                        max_results=effective_limit,
+                    )
+                    results: list[ResearchSearchResult] = []
+                    for rank, (item, normalized_url, reasons) in enumerate(ranked, start=1):
+                        source_id: int | None = None
+                        if request.register_candidates:
+                            existing = self.store.find_source_candidate_by_url(
+                                project_id, room_id, normalized_url
+                            )
+                            if existing is None:
+                                candidate = self.add_source_candidate(
+                                    project_id,
+                                    room_id,
+                                    ResearchSourceCandidateCreateRequest(
+                                        url=normalized_url,
+                                        title=item.title,
+                                        publisher=item.publisher,
+                                        published_at=item.published_at,
+                                        notes="Registrata da ricerca provider; acquisizione non avviata.",
+                                        metadata={
+                                            "search_execution_id": execution_id,
+                                            "search_provider": provider.name,
+                                            "search_rank": rank,
+                                            "ranking_reasons": list(reasons),
+                                            "provider_score": item.score,
+                                            "source_type": item.source_type,
+                                            "language": item.language,
+                                            **item.metadata,
+                                        },
+                                    ),
+                                )
+                                source_id = candidate.source_id
+                            else:
+                                source_id = existing.source_id
+                        results.append(
+                            ResearchSearchResult(
+                                rank=rank,
+                                original_url=item.url,
+                                normalized_url=normalized_url,
+                                title=item.title,
+                                snippet=item.snippet,
+                                publisher=item.publisher,
+                                published_at=item.published_at,
+                                language=item.language,
+                                source_type=item.source_type,
+                                provider_score=item.score,
+                                ranking_reasons=list(reasons),
+                                metadata=item.metadata,
+                                source_id=source_id,
+                            )
+                        )
+                    execution = search_store.complete(
+                        execution_id,
+                        provider_name=provider.name,
+                        attempts=attempts,
+                        cost_units=response.cost_units,
+                        provider_request_id=response.provider_request_id,
+                        results=results,
+                    )
+                    self.store.set_query_status(
+                        project_id, query_id, room_id, ResearchQueryStatus.SUCCEEDED
+                    )
+                    return execution
+            raise ResearchSearchProviderError(
+                "Tutti i provider di ricerca hanno fallito: " + ", ".join(failures)
+            )
+        except Exception as error:
+            search_store.fail(
+                execution_id,
+                attempts=attempts,
+                error_code=getattr(error, 'code', error.__class__.__name__),
+            )
+            self.store.set_query_status(
+                project_id, query_id, room_id, ResearchQueryStatus.FAILED
+            )
+            raise
+
+    def list_search_executions(
+        self, project_id: str, query_id: int, room_id: str, *, limit: int = 100
+    ) -> ResearchSearchExecutionListResponse:
+        if self.search_store is None:
+            raise ResearchSearchProviderUnavailableError("Archivio ricerche non configurato")
+        self.store.get_query(project_id, query_id, room_id)
+        return self.search_store.list_for_query(project_id, query_id, room_id, limit=limit)
+
+    def get_search_execution(self, execution_id: int, room_id: str) -> ResearchSearchExecution:
+        if self.search_store is None:
+            raise ResearchSearchProviderUnavailableError("Archivio ricerche non configurato")
+        return self.search_store.get(execution_id, room_id=room_id)

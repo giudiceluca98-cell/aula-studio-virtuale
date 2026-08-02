@@ -51,3 +51,19 @@ class ResearchReviewDisabledError(ResearchError):
 
 class ResearchPromotionDisabledError(ResearchError):
     pass
+
+
+class ResearchSearchDisabledError(ResearchError):
+    pass
+
+
+class ResearchSearchProviderUnavailableError(ResearchError):
+    pass
+
+
+class ResearchSearchProviderError(ResearchError):
+    pass
+
+
+class ResearchSearchExecutionNotFoundError(KeyError):
+    pass

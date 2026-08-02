@@ -15,8 +15,11 @@ from .intelligence import (
     ResearchCenterService,
     ResearchLimits,
     ResearchReviewPolicy,
+    ResearchSearchPolicy,
+    SearchProviderRegistry,
     SqliteAcquisitionStore,
     SqliteReviewStore,
+    SqliteSearchStore,
     SqliteResearchStore,
     WebAcquisitionPolicy,
     create_research_router,
@@ -136,6 +139,9 @@ source_opening = SourceOpeningService(
 research_store = SqliteResearchStore(settings.research_db_path)
 research_acquisition_store = SqliteAcquisitionStore(settings.research_db_path)
 research_review_store = SqliteReviewStore(settings.research_db_path)
+research_search_store = SqliteSearchStore(settings.research_db_path)
+# Nessun provider reale viene registrato automaticamente: attivazione esplicita richiesta.
+research_search_providers = SearchProviderRegistry()
 research_acquirer = ControlledWebAcquirer(
     policy=WebAcquisitionPolicy(
         enabled=settings.research_web_enabled,
@@ -162,6 +168,21 @@ research_center = ResearchCenterService(
         review_enabled=settings.research_review_enabled,
         promotion_enabled=settings.research_promotion_enabled,
     ),
+    search_store=research_search_store,
+    search_providers=research_search_providers,
+    search_policy=ResearchSearchPolicy(
+        enabled=settings.research_search_enabled,
+        timeout_seconds=settings.research_search_timeout_seconds,
+        max_results=settings.research_search_max_results,
+        max_executions_per_project=settings.research_search_max_executions_per_project,
+        max_executions_per_room_day=settings.research_search_max_executions_per_room_day,
+        max_executions_per_actor_day=settings.research_search_max_executions_per_actor_day,
+        max_retries=settings.research_search_max_retries,
+        provider_order=tuple(
+            value.strip() for value in settings.research_search_provider_order.split(",")
+            if value.strip()
+        ),
+    ),
 )
 
 active_prompt_version_id = prompts.status().active_version_id
@@ -178,8 +199,8 @@ app = FastAPI(
         "Fondazione modulare di Eve con requisiti, prompt, valutazioni, runner, "
         "provider controllati, materiali, retrieval locale, chat RAG citata, "
         "apertura verificabile delle fonti e centro ricerca INTELLIGENCE con "
-        "progetti, acquisizione URL controllata, revisione umana attribuibile e "
-        "promozione esplicita verso i materiali CORE. Rete e promozione restano "
+        "progetti, acquisizione URL controllata, revisione umana attribuibile, "
+        "promozione esplicita e provider di ricerca configurabili. Ricerca, rete e promozione restano "
         "opt-in; nessun punteggio approva automaticamente una fonte e embedding o "
         "addestramento del modello restano esclusi."
     ),

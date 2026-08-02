@@ -18,6 +18,10 @@ from .errors import (
     ResearchSourceNotFoundError,
     ResearchStaleReviewError,
     ResearchTransitionError,
+    ResearchSearchDisabledError,
+    ResearchSearchExecutionNotFoundError,
+    ResearchSearchProviderError,
+    ResearchSearchProviderUnavailableError,
 )
 from .models import (
     ResearchAcquisitionEvent,
@@ -47,6 +51,9 @@ from .models import (
     ResearchSourceReviewListResponse,
     ResearchSourceVersionComparison,
     ResearchTransitionEvent,
+    ResearchSearchExecuteRequest,
+    ResearchSearchExecution,
+    ResearchSearchExecutionListResponse,
 )
 from .service import ResearchCenterService
 from .web_acquisition import (
@@ -74,9 +81,11 @@ def _http_error(error: Exception) -> HTTPException:
         return HTTPException(status_code=404, detail="Revisione non trovata")
     if isinstance(error, ResearchPromotionNotFoundError):
         return HTTPException(status_code=404, detail="Promozione attiva non trovata")
+    if isinstance(error, ResearchSearchExecutionNotFoundError):
+        return HTTPException(status_code=404, detail="Esecuzione di ricerca non trovata")
     if isinstance(
         error,
-        (WebAccessDisabledError, ResearchReviewDisabledError, ResearchPromotionDisabledError),
+        (WebAccessDisabledError, ResearchReviewDisabledError, ResearchPromotionDisabledError, ResearchSearchDisabledError),
     ):
         return HTTPException(status_code=503, detail=str(error))
     if isinstance(
@@ -113,6 +122,8 @@ def _http_error(error: Exception) -> HTTPException:
             ResearchTransitionError,
             ResearchReviewStateError,
             ResearchStaleReviewError,
+            ResearchSearchProviderUnavailableError,
+            ResearchSearchProviderError,
         ),
     ):
         return HTTPException(status_code=409, detail=str(error))
@@ -394,6 +405,56 @@ def create_research_router(service: ResearchCenterService) -> APIRouter:
             )
         except Exception as error:
             raise _http_error(error) from error
+
+
+    @router.post(
+        "/projects/{project_id}/queries/{query_id}/execute",
+        response_model=ResearchSearchExecution,
+        status_code=201,
+    )
+    async def execute_search_query(
+        project_id: str,
+        query_id: int,
+        request: ResearchSearchExecuteRequest,
+        room_id: str = Query(min_length=1, max_length=120),
+    ) -> ResearchSearchExecution:
+        try:
+            return await run_in_threadpool(
+                service.execute_query, project_id, query_id, room_id, request
+            )
+        except Exception as error:
+            raise _http_error(error) from error
+
+    @router.get(
+        "/projects/{project_id}/queries/{query_id}/executions",
+        response_model=ResearchSearchExecutionListResponse,
+    )
+    async def list_search_executions(
+        project_id: str,
+        query_id: int,
+        room_id: str = Query(min_length=1, max_length=120),
+        limit: int = Query(default=100, ge=1, le=500),
+    ) -> ResearchSearchExecutionListResponse:
+        try:
+            return service.list_search_executions(
+                project_id, query_id, room_id, limit=limit
+            )
+        except Exception as error:
+            raise _http_error(error) from error
+
+    @router.get(
+        "/executions/{execution_id}",
+        response_model=ResearchSearchExecution,
+    )
+    async def get_search_execution(
+        execution_id: int,
+        room_id: str = Query(min_length=1, max_length=120),
+    ) -> ResearchSearchExecution:
+        try:
+            return service.get_search_execution(execution_id, room_id)
+        except Exception as error:
+            raise _http_error(error) from error
+
 
     @router.get("/projects/{project_id}/events", response_model=list[ResearchTransitionEvent])
     async def list_transition_events(

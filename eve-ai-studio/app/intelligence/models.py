@@ -17,6 +17,10 @@ class ResearchProjectStatus(str, Enum):
 
 class ResearchQueryStatus(str, Enum):
     PLANNED = "planned"
+    RUNNING = "running"
+    SUCCEEDED = "succeeded"
+    FAILED = "failed"
+    BLOCKED = "blocked"
 
 
 class ResearchSourceStatus(str, Enum):
@@ -447,6 +451,95 @@ class ResearchSourceVersionComparison(BaseModel):
     previous_sha256: str | None = None
 
 
+
+class ResearchSearchExecutionStatus(str, Enum):
+    RUNNING = "running"
+    SUCCEEDED = "succeeded"
+    FAILED = "failed"
+    BLOCKED = "blocked"
+
+
+class ResearchSearchFilters(BaseModel):
+    included_domains: list[str] = Field(default_factory=list, max_length=30)
+    excluded_domains: list[str] = Field(default_factory=list, max_length=100)
+    language: str | None = Field(default=None, min_length=2, max_length=16)
+    published_after: str | None = Field(default=None, max_length=32)
+    published_before: str | None = Field(default=None, max_length=32)
+    source_types: list[str] = Field(default_factory=list, max_length=20)
+
+    @field_validator("included_domains", "excluded_domains", "source_types")
+    @classmethod
+    def clean_search_lists(cls, values: list[str]) -> list[str]:
+        return _clean_unique(values, max_items=100)
+
+    @field_validator("language", "published_after", "published_before")
+    @classmethod
+    def clean_search_optional(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        value = value.strip()
+        return value or None
+
+
+class ResearchSearchExecuteRequest(BaseModel):
+    actor_id: str = Field(min_length=2, max_length=160)
+    provider: str | None = Field(default=None, min_length=2, max_length=80)
+    max_results: int = Field(default=10, ge=1, le=50)
+    register_candidates: bool = True
+    filters: ResearchSearchFilters = Field(default_factory=ResearchSearchFilters)
+
+    @field_validator("actor_id", "provider")
+    @classmethod
+    def clean_search_identity(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        value = value.strip()
+        return value or None
+
+
+class ResearchSearchResult(BaseModel):
+    result_id: int | None = None
+    execution_id: int | None = None
+    rank: int
+    original_url: str
+    normalized_url: str
+    title: str
+    snippet: str = ""
+    publisher: str | None = None
+    published_at: str | None = None
+    language: str | None = None
+    source_type: str = "web"
+    provider_score: float = 0.0
+    ranking_reasons: list[str] = Field(default_factory=list)
+    metadata: dict[str, Any] = Field(default_factory=dict)
+    source_id: int | None = None
+
+
+class ResearchSearchExecution(BaseModel):
+    execution_id: int
+    query_id: int
+    project_id: str
+    room_id: str
+    actor_id: str
+    provider_name: str
+    status: ResearchSearchExecutionStatus
+    filters: ResearchSearchFilters
+    requested_limit: int
+    attempts: int
+    result_count: int
+    cost_units: float
+    provider_request_id: str | None = None
+    error_code: str | None = None
+    created_at: str
+    completed_at: str | None = None
+    results: list[ResearchSearchResult] = Field(default_factory=list)
+
+
+class ResearchSearchExecutionListResponse(BaseModel):
+    total: int
+    items: list[ResearchSearchExecution]
+
+
 class ResearchCenterStatus(BaseModel):
     persistent: bool
     schema_version: int
@@ -464,6 +557,12 @@ class ResearchCenterStatus(BaseModel):
     approved_sources: int = 0
     rejected_sources: int = 0
     active_promotions: int = 0
+    search_available: bool = False
+    search_provider_count: int = 0
+    search_execution_count: int = 0
+    search_result_count: int = 0
+    max_search_results: int = 0
+    max_search_executions_per_room_day: int = 0
     web_search_enabled: bool
     content_acquisition_available: bool = False
     content_acquisition_enabled: bool

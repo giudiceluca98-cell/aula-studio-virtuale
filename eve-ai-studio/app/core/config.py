@@ -65,3 +65,11 @@ class EveSettings(BaseSettings):
     research_web_user_agent: str = "EveAulaStudioResearchBot/0.2"
     research_review_enabled: bool = True
     research_promotion_enabled: bool = False
+    research_search_enabled: bool = False
+    research_search_timeout_seconds: float = 8.0
+    research_search_max_results: int = 20
+    research_search_max_executions_per_project: int = 100
+    research_search_max_executions_per_room_day: int = 200
+    research_search_max_executions_per_actor_day: int = 50
+    research_search_max_retries: int = 1
+    research_search_provider_order: str = ""

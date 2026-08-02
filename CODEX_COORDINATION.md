@@ -543,7 +543,7 @@ rilascio eseguito. Ogni scheda della galleria include il comando diretto
 
 ### CORE-1.3 — Database di produzione, migrazioni e RLS
 
-- Stato: `REVIEW_REQUIRED`
+- Stato: `CLOSED` — collaudo desktop alpha.9 approvato dall'utente il 2026-08-02
 - Branch: `codex/eve-ai-studio-core-1-3`
 - Base: `eve-ai-studio` dopo merge PR #93
 - Baseline desktop: `1.2.0-alpha.8`
@@ -558,9 +558,81 @@ rilascio eseguito. Ogni scheda della galleria include il comando diretto
 Entrambi i feature flag restano disattivati. Nessun SQL remoto o di
 produzione è stato eseguito. Migrazioni, RLS, isolamento cross-room,
 `service_role`, backup, rollback, suite, typecheck, lint, build e preview sono
-verdi nei workflow GitHub del 2026-07-30. La PR #94 resta Draft. Nessun merge
-è consentito prima del collaudo desktop alpha.9 e dell'approvazione esplicita
-dell'utente.
+verdi nei workflow GitHub del 2026-07-30. Il collaudo desktop alpha.9 è stato
+approvato esplicitamente dall'utente e la PR #94 è stata unita in
+`eve-ai-studio` al commit `87a6901` il 2026-08-02.
+
+### INTELLIGENCE-0.4 — Ricerca web e pianificazione delle query
+
+```text
+RESPONSABILE:
+Codex integrazione funzionale, UI canonica e desktop di prova
+
+STATO:
+REVIEW_REQUIRED
+
+BRANCH:
+codex/eve-ai-studio-intelligence-0-4
+
+BASE:
+origin/eve-ai-studio @ 87a6901
+
+OBIETTIVO:
+Integrare il flusso query → provider → risultati → candidati, mantenendo rete
+e provider disattivati per impostazione predefinita, senza acquisizione,
+approvazione, embedding o training automatici. Preparare alpha.10 soltanto
+dopo tutti i test verdi.
+
+FILE PRENOTATI:
+- eve-ai-studio/.env.example
+- eve-ai-studio/app/core/config.py
+- eve-ai-studio/app/intelligence/__init__.py
+- eve-ai-studio/app/intelligence/errors.py
+- eve-ai-studio/app/intelligence/models.py
+- eve-ai-studio/app/intelligence/router.py
+- eve-ai-studio/app/intelligence/search_provider.py
+- eve-ai-studio/app/intelligence/search_storage.py
+- eve-ai-studio/app/intelligence/service.py
+- eve-ai-studio/app/intelligence/storage.py
+- eve-ai-studio/app/main.py
+- eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.4_*
+- eve-ai-studio/tests/test_intelligence_search.py
+- reference/eve-ai-studio-preview/research-center-workflow.js
+- .github/workflows/release-eve-ai-studio-desktop.yml
+- eve-desktop/package.json
+- eve-desktop/runtime/eve-desktop-updater.js
+- eve-desktop/src-tauri/Cargo.toml
+- eve-desktop/src-tauri/Cargo.lock
+- eve-desktop/src-tauri/tauri.conf.json
+- CODEX_COORDINATION.md, limitatamente a questa scheda
+
+FILE CONDIVISI PRENOTATI:
+- nessuno dei file condivisi elencati nella procedura canonica
+
+VINCOLI:
+Una sola Draft PR verso eve-ai-studio. Nessuna demo, standalone, copia HTML,
+nuova preview, modifica a main, demo-canonica, Aula Studio, Supabase, Vercel o
+produzione. Nessun merge prima del collaudo desktop alpha.10 e di una nuova
+approvazione esplicita dell'utente.
+
+ULTIMO COMMIT:
+dace16f
+
+PULL REQUEST:
+https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/95
+
+TEST:
+12 test Python specifici, 236 test Python cumulativi e 194 test Vitest verdi;
+typecheck, build, node --check, lint mirato, test desktop e browser reale verdi.
+Il lint globale conserva errori preesistenti in app.js e negli artefatti Tauri
+generati, fuori dal perimetro del checkpoint.
+
+RELEASE DI PROVA:
+Workflow 30724903788 completato con successo. Pubblicati installer NSIS, firma
+e latest.json nella release eve-ai-studio-v1.2.0-alpha.10. Il manifest dichiara
+1.2.0-alpha.10 e punta all'asset firmato Windows. La PR #95 resta Draft e non
+deve essere unita prima del collaudo e della nuova approvazione dell'utente.
+```
 
 ## Attività storiche di Aula Studio
 

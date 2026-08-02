@@ -1,0 +1,33 @@
+{
+  "checkpoint": "INTELLIGENCE-0.4",
+  "status": "FUNCTIONAL_TESTING",
+  "local_validation": {
+    "package_integrity": "PASS",
+    "python_compileall": "PASS",
+    "specific_pytest": {
+      "status": "PASS",
+      "passed": 12,
+      "failed": 0
+    },
+    "cumulative_pytest": {
+      "status": "PASS",
+      "passed": 205,
+      "failed": 0
+    },
+    "javascript_syntax": "PASS",
+    "preview_no_fetch": "PASS",
+    "canonical_http_smoke": "PASS",
+    "anti_drift_dry_run": "PASS",
+    "idempotent_second_apply": "PASS",
+    "second_apply_operations": 0,
+    "rollback": "PASS",
+    "rollback_mismatches": 0
+  },
+  "not_executed_or_claimed": [
+    "GitHub Actions",
+    "provider di ricerca reale",
+    "build desktop firmata",
+    "installazione updater alpha.10",
+    "test desktop dell’utente"
+  ]
+}

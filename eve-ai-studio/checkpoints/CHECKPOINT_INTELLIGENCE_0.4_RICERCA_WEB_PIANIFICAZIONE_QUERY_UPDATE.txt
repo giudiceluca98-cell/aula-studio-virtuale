@@ -1,0 +1,1 @@
+INTELLIGENCE-0.4 aggiunge provider registry, storage audit delle esecuzioni, filtri, limiti, retry/fallback, normalizzazione/deduplicazione, ranking motivato e registrazione controllata dei candidati. I provider restano non configurati e disattivati per default. Nessun risultato viene acquisito, approvato o promosso automaticamente.
