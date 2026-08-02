@@ -1,0 +1,16 @@
+CORE-1.4 — UPDATE TRASFERIBILE
+
+Implementati nel payload:
+- contratti Context Builder e ruoli;
+- configurazione server-only e flag OFF;
+- repository Supabase vincolato a room_id;
+- builder con verifica identità, corso, conversazione, materiali e posizione;
+- HMAC, TTL, nonce e verifica integrità;
+- audit append-only redatto;
+- migrazione 0019 e rollback protetto;
+- route GET/POST autenticata;
+- composizione CORE aggiornata;
+- test mirati;
+- anteprima interattiva canonica.
+
+Nessun database remoto, branch o release è stato modificato da questo pacchetto.
