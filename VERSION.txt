@@ -1,5 +1,5 @@
 Aula Studio Virtuale
-Versione: 1.4.0-alpha.4
+Versione: 1.4.0-alpha.5
 Fonte: demo canonica ufficiale con ottimizzazione grafica fase 1 e build modulare per rotta
 Commit base: 26144ca281d78c1668f64251fb836b67ee3b68cd
 Git blob HTML: 62c3d3fd9716000bd8066aae6a6b7dd392e44f26

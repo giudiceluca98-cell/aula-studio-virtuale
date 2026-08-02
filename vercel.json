@@ -15,6 +15,10 @@
       "destination": "/catalog/index.html"
     },
     {
+      "source": "/agenda",
+      "destination": "/agenda/index.html"
+    },
+    {
       "source": "/download",
       "destination": "/download/index.html"
     },

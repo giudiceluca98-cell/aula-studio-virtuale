@@ -5462,12 +5462,12 @@ print(nome)</div>
 
 
   /* ==========================================================
-     CONSOLIDAMENTO MATERIALI + CHECKLIST — 1.4.0-alpha.4
+     CONSOLIDAMENTO MATERIALI + CHECKLIST — 1.4.0-alpha.5
      ========================================================== */
   (() => {
     "use strict";
 
-    const VERSION = "1.4.0-alpha.4";
+    const VERSION = "1.4.0-alpha.5";
     window.AULA_DEMO_VERSION = VERSION;
     window.AULA_PHASE3_CONSOLIDATION = {
       version: "1.3.0-alpha.10",
