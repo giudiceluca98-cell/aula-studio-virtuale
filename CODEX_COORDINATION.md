@@ -703,7 +703,7 @@ RESPONSABILE:
 Codex integrazione funzionale, UI canonica e desktop di prova
 
 STATO:
-FUNCTIONAL_TESTING
+REVIEW_REQUIRED
 
 BRANCH:
 codex/eve-ai-studio-core-1-5
@@ -745,6 +745,11 @@ o autorizzazione nel client. Nessuna demo, standalone, copia HTML, nuova preview
 modifica a main, demo-canonica, Supabase remoto, Vercel o produzione. Una sola
 Draft PR e nessun merge prima del collaudo alpha.12 e di una nuova approvazione
 esplicita dell'utente.
+
+ESITO:
+Draft PR #97 aperta verso eve-ai-studio. Verifiche GitHub verdi e release di
+collaudo eve-ai-studio-v1.2.0-alpha.12 pubblicata con installer, firma e
+latest.json. Nessun merge eseguito; attesa approvazione dopo collaudo desktop.
 ```
 
 ## Attività storiche di Aula Studio

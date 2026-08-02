@@ -1,6 +1,6 @@
 {
   "checkpoint": "CORE-1.5",
-  "status": "FUNCTIONAL_TESTING",
+  "status": "REVIEW_REQUIRED",
   "release_target": "1.2.0-alpha.12",
   "local_package_checks": {
     "payload_hashes": "PASS",
@@ -13,13 +13,18 @@
     "canonical_http_smoke": "PASS",
     "typescript_core_contracts": "PASS"
   },
-  "not_claimed": [
-    "full_typecheck",
-    "full_vitest",
-    "lint",
-    "next_build",
-    "real_browser_accessibility",
-    "signed_desktop_build",
-    "desktop_installation"
-  ]
+  "integration_checks": {
+    "full_typecheck": "PASS",
+    "full_vitest": "PASS (43 files, 224 tests)",
+    "targeted_lint": "PASS",
+    "next_build": "PASS",
+    "real_browser_accessibility": "PASS",
+    "github_pr_checks": "PASS",
+    "signed_desktop_build": "PASS",
+    "release_assets_and_latest_json": "PASS"
+  },
+  "known_environment_limit": "Full lint cannot traverse the pre-existing eve-ai-studio/.pytest_cache directory because of EPERM.",
+  "pull_request": "https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/97",
+  "release": "https://github.com/giudiceluca98-cell/eve-ai-studio-releases/releases/tag/eve-ai-studio-v1.2.0-alpha.12",
+  "not_claimed": ["desktop_installation", "user_acceptance", "merge"]
 }
