@@ -22,6 +22,9 @@ from .errors import (
     ResearchSearchExecutionNotFoundError,
     ResearchSearchProviderError,
     ResearchSearchProviderUnavailableError,
+    ResearchAdvancedIngestionDisabledError, ResearchDocumentFormatError, ResearchDocumentTooLargeError,
+    ResearchDocumentEncryptedError, ResearchArchiveRejectedError, ResearchExtractionError,
+    ResearchCrawlDisabledError, ResearchCrawlLimitError,
 )
 from .models import (
     ResearchAcquisitionEvent,
@@ -54,6 +57,8 @@ from .models import (
     ResearchSearchExecuteRequest,
     ResearchSearchExecution,
     ResearchSearchExecutionListResponse,
+    ResearchAdvancedImportRequest, ResearchIngestedDocument, ResearchIngestionEventListResponse,
+    ResearchCrawlRequest, ResearchCrawlRun,
 )
 from .service import ResearchCenterService
 from .web_acquisition import (
@@ -85,7 +90,7 @@ def _http_error(error: Exception) -> HTTPException:
         return HTTPException(status_code=404, detail="Esecuzione di ricerca non trovata")
     if isinstance(
         error,
-        (WebAccessDisabledError, ResearchReviewDisabledError, ResearchPromotionDisabledError, ResearchSearchDisabledError),
+        (WebAccessDisabledError, ResearchReviewDisabledError, ResearchPromotionDisabledError, ResearchSearchDisabledError, ResearchAdvancedIngestionDisabledError, ResearchCrawlDisabledError),
     ):
         return HTTPException(status_code=503, detail=str(error))
     if isinstance(
@@ -99,7 +104,7 @@ def _http_error(error: Exception) -> HTTPException:
             WebEncodingError,
             RobotsDeniedError,
             RobotsUnavailableError,
-            MaterialError,
+            MaterialError, ResearchDocumentFormatError, ResearchDocumentTooLargeError, ResearchDocumentEncryptedError, ResearchArchiveRejectedError, ResearchExtractionError, ResearchCrawlLimitError,
         ),
     ):
         return HTTPException(
@@ -465,5 +470,32 @@ def create_research_router(service: ResearchCenterService) -> APIRouter:
             return service.list_transition_events(project_id, room_id)
         except Exception as error:
             raise _http_error(error) from error
+
+
+
+    @router.post("/projects/{project_id}/documents/import", response_model=ResearchIngestedDocument, status_code=201)
+    async def import_advanced_document(project_id: str, request: ResearchAdvancedImportRequest, room_id: str = Query(min_length=1,max_length=120)) -> ResearchIngestedDocument:
+        try: return await run_in_threadpool(service.import_advanced_document,project_id,room_id,request)
+        except Exception as error: raise _http_error(error) from error
+
+    @router.get("/projects/{project_id}/documents/imports", response_model=ResearchIngestionEventListResponse)
+    async def list_advanced_ingestions(project_id: str, room_id: str = Query(min_length=1,max_length=120), limit: int = Query(default=100,ge=1,le=500)) -> ResearchIngestionEventListResponse:
+        try: return service.list_advanced_ingestions(project_id,room_id,limit=limit)
+        except Exception as error: raise _http_error(error) from error
+
+    @router.get("/documents/{document_id}", response_model=ResearchIngestedDocument)
+    async def get_ingested_document(document_id: int, room_id: str = Query(min_length=1,max_length=120)) -> ResearchIngestedDocument:
+        try: return service.get_ingested_document(document_id,room_id)
+        except Exception as error: raise _http_error(error) from error
+
+    @router.post("/projects/{project_id}/sources/{source_id}/crawl", response_model=ResearchCrawlRun, status_code=201)
+    async def crawl_source(project_id: str, source_id: int, request: ResearchCrawlRequest, room_id: str = Query(min_length=1,max_length=120)) -> ResearchCrawlRun:
+        try: return await run_in_threadpool(service.crawl_source,project_id,source_id,room_id,request)
+        except Exception as error: raise _http_error(error) from error
+
+    @router.get("/crawls/{crawl_id}", response_model=ResearchCrawlRun)
+    async def get_crawl(crawl_id: int, room_id: str = Query(min_length=1,max_length=120)) -> ResearchCrawlRun:
+        try: return service.get_crawl(crawl_id,room_id)
+        except Exception as error: raise _http_error(error) from error
 
     return router

@@ -1,3 +1,6 @@
+from .advanced_ingestion import AdvancedDocumentExtractor, AdvancedIngestionPolicy, ExtractedAdvancedDocument, ExtractedSegment
+from .ingestion_storage import SqliteIngestionStore
+from .limited_crawler import CrawlPolicy, LimitedCrawler, CrawlResult, CrawledPagePayload
 from .acquisition_storage import AcquiredDocumentPayload, SqliteAcquisitionStore
 from .errors import (
     ResearchConflictError,
@@ -17,6 +20,9 @@ from .errors import (
     ResearchSearchExecutionNotFoundError,
     ResearchSearchProviderError,
     ResearchSearchProviderUnavailableError,
+    ResearchAdvancedIngestionDisabledError, ResearchDocumentFormatError, ResearchDocumentTooLargeError,
+    ResearchDocumentEncryptedError, ResearchArchiveRejectedError, ResearchExtractionError,
+    ResearchCrawlDisabledError, ResearchCrawlLimitError,
 )
 from .models import (
     ResearchAcquisitionEvent,
@@ -60,6 +66,8 @@ from .models import (
     ResearchSearchExecutionStatus,
     ResearchSearchFilters,
     ResearchSearchResult,
+    ResearchAdvancedImportRequest, ResearchIngestedDocument, ResearchIngestionEvent, ResearchIngestionEventListResponse, ResearchIngestionStatus, ResearchDuplicateKind,
+    ResearchCrawlRequest, ResearchCrawlRun, ResearchCrawlPage, ResearchCrawlStatus,
 )
 from .router import create_research_router
 from .review_analysis import analyze_untrusted_content
@@ -162,4 +170,29 @@ __all__ = [
     "StaticSearchProvider",
     "filter_and_rank_items",
     "normalize_search_url",
+    "AdvancedDocumentExtractor",
+    "AdvancedIngestionPolicy",
+    "SqliteIngestionStore",
+    "CrawlPolicy",
+    "LimitedCrawler",
+    "CrawlResult",
+    "CrawledPagePayload",
+    "ResearchAdvancedImportRequest",
+    "ResearchIngestedDocument",
+    "ResearchIngestionEvent",
+    "ResearchIngestionEventListResponse",
+    "ResearchIngestionStatus",
+    "ResearchDuplicateKind",
+    "ResearchCrawlRequest",
+    "ResearchCrawlRun",
+    "ResearchCrawlPage",
+    "ResearchCrawlStatus",
+    "ResearchAdvancedIngestionDisabledError",
+    "ResearchDocumentFormatError",
+    "ResearchDocumentTooLargeError",
+    "ResearchDocumentEncryptedError",
+    "ResearchArchiveRejectedError",
+    "ResearchExtractionError",
+    "ResearchCrawlDisabledError",
+    "ResearchCrawlLimitError",
 ]

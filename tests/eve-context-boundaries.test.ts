@@ -31,6 +31,6 @@ describe("CORE-1.4 confini Context Builder", () => {
     const env = read(".env.example");
     expect(env).toContain("EVE_CONTEXT_BUILDER_ENABLED=false");
     expect(env).toContain("EVE_CONTEXT_SHARED_SELECTION_ENABLED=false");
-    expect(env).toContain("EVE_CONTEXT_SIGNING_SECRET=\n");
+    expect(env).toMatch(/EVE_CONTEXT_SIGNING_SECRET=\r?\n/);
   });
 });

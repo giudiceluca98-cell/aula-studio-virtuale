@@ -11,7 +11,7 @@ from .evaluations.router import create_evaluation_router
 from .evaluations.service import EvaluationService
 from .evaluations.storage import SqliteEvaluationStore
 from .intelligence import (
-    ControlledWebAcquirer,
+    ControlledWebAcquirer, AdvancedDocumentExtractor, AdvancedIngestionPolicy, SqliteIngestionStore, CrawlPolicy, LimitedCrawler,
     ResearchCenterService,
     ResearchLimits,
     ResearchReviewPolicy,
@@ -153,6 +153,11 @@ research_acquirer = ControlledWebAcquirer(
         require_robots=settings.research_robots_required,
     )
 )
+research_ingestion_store = SqliteIngestionStore(settings.research_db_path)
+research_ingestion_policy = AdvancedIngestionPolicy(enabled=settings.research_advanced_ingestion_enabled,max_document_bytes=settings.research_advanced_max_bytes,max_extracted_chars=settings.research_advanced_max_text_chars,max_archive_files=settings.research_advanced_max_archive_files,max_archive_uncompressed_bytes=settings.research_advanced_max_archive_bytes,max_pdf_pages=settings.research_advanced_max_pdf_pages,max_segments=settings.research_advanced_max_segments,near_duplicate_threshold=settings.research_near_duplicate_threshold)
+research_advanced_extractor = AdvancedDocumentExtractor(research_ingestion_policy)
+research_crawl_policy = CrawlPolicy(enabled=settings.research_crawl_enabled,max_depth=settings.research_crawl_max_depth,max_pages=settings.research_crawl_max_pages,max_total_bytes=settings.research_crawl_max_total_bytes,same_domain_only=True)
+research_crawler = LimitedCrawler(research_acquirer,research_crawl_policy)
 research_center = ResearchCenterService(
     research_store,
     limits=ResearchLimits(
@@ -170,6 +175,11 @@ research_center = ResearchCenterService(
     ),
     search_store=research_search_store,
     search_providers=research_search_providers,
+    ingestion_store=research_ingestion_store,
+    advanced_extractor=research_advanced_extractor,
+    ingestion_policy=research_ingestion_policy,
+    crawler=research_crawler,
+    crawl_policy=research_crawl_policy,
     search_policy=ResearchSearchPolicy(
         enabled=settings.research_search_enabled,
         timeout_seconds=settings.research_search_timeout_seconds,

@@ -752,6 +752,57 @@ collaudo eve-ai-studio-v1.2.0-alpha.12 pubblicata con installer, firma e
 latest.json. Nessun merge eseguito; attesa approvazione dopo collaudo desktop.
 ```
 
+### INTELLIGENCE-0.5 — Ingestione documentale avanzata e crawling limitato
+
+```text
+RESPONSABILE:
+Codex integrazione funzionale, UI canonica e desktop di prova
+
+STATO:
+REVIEW_REQUIRED
+
+BRANCH:
+codex/eve-ai-studio-intelligence-0-5
+
+BASE:
+origin/eve-ai-studio @ 377b1d6
+
+OBIETTIVO:
+Integrare ingestione sicura di PDF, DOCX ed EPUB, deduplicazione deterministica
+e crawling same-domain limitato, mantenendo i contenuti in quarantena e senza
+eseguire macro, script, istruzioni o promozioni automatiche.
+
+FILE PRENOTATI:
+- eve-ai-studio/.env.example
+- eve-ai-studio/app/core/config.py
+- eve-ai-studio/app/intelligence/**
+- eve-ai-studio/app/main.py
+- eve-ai-studio/pyproject.toml
+- eve-ai-studio/tests/test_intelligence_ingestion.py
+- tests/eve-context-boundaries.test.ts, sola correzione CRLF/LF
+- eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.5_*
+- reference/eve-ai-studio-preview/research-center-workflow.js
+- .github/workflows/release-eve-ai-studio-desktop.yml
+- eve-desktop/package.json
+- eve-desktop/runtime/eve-desktop-updater.js
+- eve-desktop/src-tauri/Cargo.toml
+- eve-desktop/src-tauri/Cargo.lock
+- eve-desktop/src-tauri/tauri.conf.json
+- CODEX_COORDINATION.md, limitatamente a questa scheda
+
+VINCOLI:
+Una sola Draft PR verso eve-ai-studio. Nessuna demo, standalone, copia HTML,
+nuova preview, modifica a main, demo-canonica, Aula Studio, Supabase remoto,
+Vercel o produzione. Nessun merge o release desktop senza test verdi, collaudo
+e autorizzazione esplicita dell'utente.
+
+ESITO:
+Draft PR #98. Verifiche pacchetto, 12 test specifici, 248 test Python, 224 test
+web, typecheck, build, lint mirato, desktop alpha.13 e browser reale verdi.
+Corretti redirect cross-domain nel crawler e test CRLF/LF. Nessun merge o
+rilascio eseguito; attesa autorizzazione alla release desktop di collaudo.
+```
+
 ## Attività storiche di Aula Studio
 
 La tabella seguente è conservata come cronologia del precedente flusso di Aula Studio. Non assegna né prenota file di Eve AI Studio e non prevale sulle regole attive sopra.

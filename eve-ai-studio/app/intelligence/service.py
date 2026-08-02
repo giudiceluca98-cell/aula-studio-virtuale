@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import base64
+import binascii
 import hashlib
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -13,6 +14,9 @@ from app.materials.models import MaterialImportRequest, MaterialSourceType
 from app.materials.service import MaterialService
 
 from .acquisition_storage import SqliteAcquisitionStore
+from .advanced_ingestion import AdvancedDocumentExtractor, AdvancedIngestionPolicy
+from .ingestion_storage import SqliteIngestionStore
+from .limited_crawler import CrawlPolicy, LimitedCrawler
 from .errors import (
     ResearchConflictError,
     ResearchLimitError,
@@ -23,6 +27,9 @@ from .errors import (
     ResearchSearchDisabledError,
     ResearchSearchProviderError,
     ResearchSearchProviderUnavailableError,
+    ResearchAdvancedIngestionDisabledError,
+    ResearchDocumentTooLargeError,
+    ResearchCrawlDisabledError,
 )
 from .models import (
     ResearchAcquisitionEvent,
@@ -59,6 +66,8 @@ from .models import (
     ResearchSearchExecutionListResponse,
     ResearchSearchResult,
     ResearchQueryStatus,
+    ResearchAdvancedImportRequest, ResearchIngestedDocument, ResearchIngestionEventListResponse,
+    ResearchCrawlRequest, ResearchCrawlRun,
 )
 from .review_analysis import analyze_untrusted_content
 from .review_storage import SqliteReviewStore
@@ -137,6 +146,11 @@ class ResearchCenterService:
         search_store: SqliteSearchStore | None = None,
         search_providers: SearchProviderRegistry | None = None,
         search_policy: ResearchSearchPolicy | None = None,
+        ingestion_store: SqliteIngestionStore | None = None,
+        advanced_extractor: AdvancedDocumentExtractor | None = None,
+        ingestion_policy: AdvancedIngestionPolicy | None = None,
+        crawler: LimitedCrawler | None = None,
+        crawl_policy: CrawlPolicy | None = None,
     ) -> None:
         self.store = store
         self.limits = limits or ResearchLimits()
@@ -148,6 +162,11 @@ class ResearchCenterService:
         self.search_store = search_store
         self.search_providers = search_providers
         self.search_policy = search_policy or ResearchSearchPolicy()
+        self.ingestion_store = ingestion_store
+        self.advanced_extractor = advanced_extractor
+        self.ingestion_policy = ingestion_policy or AdvancedIngestionPolicy()
+        self.crawler = crawler
+        self.crawl_policy = crawl_policy or CrawlPolicy()
 
 
     def status(self) -> ResearchCenterStatus:
@@ -166,14 +185,18 @@ class ResearchCenterService:
             policy = self.acquirer.policy if self.acquirer is not None else None
             review_counts = self.review_store.counts() if self.review_store is not None else {}
             provider_count = len(self.search_providers.names) if self.search_providers is not None else 0
+            ingestion_available = self.ingestion_store is not None and self.advanced_extractor is not None
+            crawl_available = self.ingestion_store is not None and self.crawler is not None
             return base.model_copy(
                 update={
                     "checkpoint": (
+                        "INTELLIGENCE-0.5" if ingestion_available else
                         "INTELLIGENCE-0.4" if search_available else
                         "INTELLIGENCE-0.3" if review_available else
                         "INTELLIGENCE-0.2" if acquisition_available else "INTELLIGENCE-0.1"
                     ),
                     "stage": (
+                        "advanced_documents_and_limited_crawl_quarantine" if ingestion_available else
                         "provider_search_query_to_quarantined_candidates" if search_available else
                         "human_review_quality_explicit_core_promotion" if review_available else
                         "controlled_web_acquisition_quarantine_no_approval" if acquisition_available else
@@ -211,6 +234,14 @@ class ResearchCenterService:
                     "max_acquisition_bytes": policy.max_bytes if policy else 0,
                     "max_redirects": policy.max_redirects if policy else 0,
                     "robots_required": policy.require_robots if policy else True,
+                    "advanced_ingestion_available": ingestion_available,
+                    "advanced_ingestion_enabled": bool(ingestion_available and self.ingestion_policy.enabled),
+                    "ingested_document_count": self.ingestion_store.count_documents() if self.ingestion_store else 0,
+                    "crawl_available": crawl_available,
+                    "crawl_enabled": bool(crawl_available and self.crawl_policy.enabled),
+                    "crawl_count": self.ingestion_store.count_crawls() if self.ingestion_store else 0,
+                    "max_crawl_depth": self.crawl_policy.max_depth if crawl_available else 0,
+                    "max_crawl_pages": self.crawl_policy.max_pages if crawl_available else 0,
                 }
             )
 
@@ -792,3 +823,56 @@ class ResearchCenterService:
         if self.search_store is None:
             raise ResearchSearchProviderUnavailableError("Archivio ricerche non configurato")
         return self.search_store.get(execution_id, room_id=room_id)
+
+    def _require_advanced_ingestion(self) -> tuple[SqliteIngestionStore, AdvancedDocumentExtractor]:
+        if not self.ingestion_policy.enabled:
+            raise ResearchAdvancedIngestionDisabledError("L'ingestione avanzata è disattivata dal server")
+        if self.ingestion_store is None or self.advanced_extractor is None:
+            raise ResearchConflictError("Il modulo di ingestione avanzata non è configurato")
+        return self.ingestion_store, self.advanced_extractor
+
+    def import_advanced_document(self, project_id: str, room_id: str, request: ResearchAdvancedImportRequest) -> ResearchIngestedDocument:
+        store, extractor = self._require_advanced_ingestion()
+        existing = store.get_event_by_key(room_id, request.idempotency_key)
+        if existing is not None:
+            if existing.project_id != project_id or existing.filename != request.filename:
+                raise ResearchConflictError("Idempotency key già usata per un'altra importazione")
+            if existing.document_id is None:
+                raise ResearchConflictError("Importazione idempotente non completata")
+            return store.get_document(existing.document_id, room_id)
+        maximum=((self.ingestion_policy.max_document_bytes+2)//3)*4+8
+        if len(request.content_base64)>maximum: raise ResearchDocumentTooLargeError()
+        try: content=base64.b64decode(request.content_base64,validate=True)
+        except (binascii.Error,ValueError) as exc: raise ResearchConflictError("Contenuto base64 non valido") from exc
+        ingestion_id=store.begin_import(project_id=project_id,room_id=room_id,source_id=request.source_id,actor_id=request.actor_id,idempotency_key=request.idempotency_key,filename=request.filename,media_type=request.media_type)
+        try:
+            extracted=extractor.extract(filename=request.filename,media_type=request.media_type,content=content)
+            return store.complete_import(ingestion_id=ingestion_id,project_id=project_id,room_id=room_id,source_id=request.source_id,content=content,extracted=extracted,near_threshold=self.ingestion_policy.near_duplicate_threshold)
+        except Exception as error:
+            store.fail_import(ingestion_id,getattr(error,'code',error.__class__.__name__))
+            raise
+
+    def list_advanced_ingestions(self, project_id: str, room_id: str, *, limit: int = 100) -> ResearchIngestionEventListResponse:
+        if self.ingestion_store is None: raise ResearchConflictError("Archivio ingestione non configurato")
+        items=self.ingestion_store.list_events(project_id,room_id,limit=limit)
+        return ResearchIngestionEventListResponse(total=len(items),items=items)
+
+    def get_ingested_document(self, document_id: int, room_id: str) -> ResearchIngestedDocument:
+        if self.ingestion_store is None: raise ResearchConflictError("Archivio ingestione non configurato")
+        return self.ingestion_store.get_document(document_id,room_id)
+
+    def crawl_source(self, project_id: str, source_id: int, room_id: str, request: ResearchCrawlRequest) -> ResearchCrawlRun:
+        if not self.crawl_policy.enabled: raise ResearchCrawlDisabledError("Il crawling è disattivato dal server")
+        if self.ingestion_store is None or self.crawler is None: raise ResearchConflictError("Crawler limitato non configurato")
+        source=self.store.get_source_candidate(project_id,source_id,room_id)
+        crawl_id=self.ingestion_store.begin_crawl(project_id=project_id,source_id=source_id,room_id=room_id,actor_id=request.actor_id,root_url=source.url)
+        try:
+            result=self.crawler.crawl(source.url,max_depth=request.max_depth,max_pages=request.max_pages)
+            return self.ingestion_store.complete_crawl(crawl_id,result)
+        except Exception as error:
+            self.ingestion_store.fail_crawl(crawl_id,getattr(error,'code',error.__class__.__name__))
+            raise
+
+    def get_crawl(self, crawl_id: int, room_id: str) -> ResearchCrawlRun:
+        if self.ingestion_store is None: raise ResearchConflictError("Archivio crawl non configurato")
+        return self.ingestion_store.get_crawl(crawl_id,room_id)

@@ -23,9 +23,9 @@
         <div class="panel-head">
           <div>
             <h3>Centro ricerca, provider, revisione e promozione controllata</h3>
-            <p>INTELLIGENCE-0.4 — le query pianificate possono essere eseguite tramite provider configurabili; i risultati diventano soltanto candidati in quarantena, mai acquisizioni automatiche.</p>
+            <p>INTELLIGENCE-0.5 — le query pianificate possono essere eseguite tramite provider configurabili; i risultati diventano soltanto candidati in quarantena, mai acquisizioni automatiche.</p>
           </div>
-          <span class="tag violet" id="researchCheckpointBadge">INTELLIGENCE-0.4</span>
+          <span class="tag violet" id="researchCheckpointBadge">INTELLIGENCE-0.5</span>
         </div>
         <div class="panel-body">
           <div class="metric-row">
@@ -523,5 +523,17 @@
 
   navButton.addEventListener("click", openResearchView);
   renderSearchResults(null);
+
+  const ingestionGrid = view.querySelector('.grid');
+  if (ingestionGrid && !document.getElementById('advancedIngestionPanel')) {
+    const panel=document.createElement('section'); panel.id='advancedIngestionPanel'; panel.className='panel span-7';
+    panel.innerHTML=`<div class="panel-head"><div><h3>Ingestione documentale avanzata</h3><p>INTELLIGENCE-0.5 — PDF, DOCX ed EPUB vengono estratti localmente, senza macro, script o promozione automatica.</p></div><span class="tag warn">Flag OFF</span></div><div class="panel-body"><div class="form-grid"><div class="field"><label>Formato</label><select id="advancedFormat"><option>PDF nativo</option><option>DOCX senza macro</option><option>EPUB</option></select></div><div class="field"><label>Deduplicazione</label><select id="advancedDuplicate"><option>Nessun duplicato</option><option>Duplicato esatto</option><option>Quasi duplicato</option></select></div></div><button class="btn green" id="simulateAdvancedIngestion" style="width:100%;margin-top:12px">Simula estrazione e quarantena</button><div class="list" id="advancedIngestionStages" style="margin-top:12px"></div></div>`;
+    const crawl=document.createElement('section');crawl.className='panel span-5';crawl.innerHTML=`<div class="panel-head"><div><h3>Crawling strettamente limitato</h3><p>Solo stesso dominio, profondità e pagine limitate; ogni URL passa dai controlli SSRF e robots.</p></div><span class="tag warn">OFF di default</span></div><div class="panel-body"><div class="field"><label>Profondità</label><select id="crawlDepth"><option>0</option><option selected>1</option></select></div><div class="field"><label>Pagine massime</label><select id="crawlPages"><option>3</option><option selected>10</option></select></div><button class="btn" id="simulateLimitedCrawl" style="width:100%;margin-top:12px">Simula crawl limitato</button><div class="list" id="crawlStages" style="margin-top:12px"></div></div>`;
+    ingestionGrid.append(panel,crawl);
+    const run=async(id,target,stages)=>{const button=document.getElementById(id);button.disabled=true;const node=document.getElementById(target);node.innerHTML=stages.map((s,i)=>`<div class="row" data-stage="${i}"><div class="meta"><strong>${i+1}. ${s[0]}</strong><small>${s[1]}</small></div><span class="tag warn">In attesa</span></div>`).join('');for(let i=0;i<stages.length;i++){const tag=node.querySelector(`[data-stage="${i}"] .tag`);tag.className='tag violet';tag.textContent='In corso';await new Promise(r=>setTimeout(r,150));tag.className='tag';tag.textContent='Superato'}button.disabled=false;window.notify?.('Simulazione completata: contenuto ancora non fidato')};
+    document.getElementById('simulateAdvancedIngestion').addEventListener('click',()=>run('simulateAdvancedIngestion','advancedIngestionStages',[["Limiti e formato","Byte, pagine, archivio e MIME"],["Rifiuto contenuti attivi","Macro, relazioni esterne, password e script"],["Estrazione verificabile","Pagine, paragrafi e spine EPUB con locator"],["Deduplicazione","SHA-256 e somiglianza testuale deterministica"],["Quarantena","instructions_executable=false; nessuna promozione CORE"]]));
+    document.getElementById('simulateLimitedCrawl').addEventListener('click',()=>run('simulateLimitedCrawl','crawlStages',[["URL radice","Fonte già registrata"],["Controlli rete","SSRF, DNS, robots, redirect e TLS"],["Confini","Stesso dominio, profondità e numero pagine"],["Budget","Byte totali e arresto tracciato"],["Quarantena pagine","Nessun JavaScript eseguito o materiale CORE creato"]]));
+  }
+
   render();
 })();
