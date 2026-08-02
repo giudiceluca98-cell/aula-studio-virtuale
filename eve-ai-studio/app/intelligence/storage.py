@@ -634,3 +634,47 @@ class SqliteResearchStore:
             max_queries_per_project=max_queries_per_project,
             max_sources_per_project=max_sources_per_project,
         )
+
+
+    def get_query(self, project_id: str, query_id: int, room_id: str) -> ResearchQuery:
+        with self._lock:
+            self._require_project_row(project_id, room_id)
+            row = self._connection.execute(
+                "SELECT * FROM research_queries WHERE query_id = ? AND project_id = ?",
+                (query_id, project_id),
+            ).fetchone()
+        if row is None:
+            from .errors import ResearchConflictError
+            raise ResearchConflictError("Query di ricerca non trovata nel progetto")
+        return self._row_to_query(row)
+
+
+    def set_query_status(
+        self,
+        project_id: str,
+        query_id: int,
+        room_id: str,
+        status: ResearchQueryStatus,
+    ) -> ResearchQuery:
+        with self._lock, self._connection:
+            self._require_project_row(project_id, room_id)
+            cursor = self._connection.execute(
+                "UPDATE research_queries SET status = ? WHERE query_id = ? AND project_id = ?",
+                (status.value, query_id, project_id),
+            )
+            if cursor.rowcount != 1:
+                from .errors import ResearchConflictError
+                raise ResearchConflictError("Query di ricerca non trovata nel progetto")
+        return self.get_query(project_id, query_id, room_id)
+
+
+    def find_source_candidate_by_url(
+        self, project_id: str, room_id: str, url: str
+    ) -> ResearchSourceCandidate | None:
+        with self._lock:
+            self._require_project_row(project_id, room_id)
+            row = self._connection.execute(
+                "SELECT * FROM research_source_candidates WHERE project_id = ? AND url = ?",
+                (project_id, url),
+            ).fetchone()
+        return self._row_to_source(row) if row is not None else None
