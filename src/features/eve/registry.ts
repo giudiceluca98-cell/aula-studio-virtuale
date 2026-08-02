@@ -19,7 +19,7 @@ const feature = (
 
 export const EVE_FEATURE_REGISTRY = Object.freeze([
   feature("ui", "prototype_adapter", false, "EVE_PANEL_ENABLED", ["context-builder", "animation-library-1.2.6"], "Pannello laterale ed espanso con ingressi lezione, catalogo e aula; nessun segreto o provider nel client."),
-  feature("agent", "prototype_adapter", true, "EVE_CORE_INTEGRATION_ENABLED", ["fastapi.health"], "Orchestrazione server-side attraverso adapter tipizzati."),
+  feature("agent", "prototype_adapter", true, "EVE_EXTERNAL_PROVIDERS_ENABLED", ["fastapi.providers", "mock-fallback", "circuit-breaker"], "Provider reale server-side con output strutturato, budget, rate limit, fallback e circuit breaker."),
   feature("prompts", "prototype_adapter", true, "EVE_CORE_INTEGRATION_ENABLED", ["fastapi.requirements"], "Contratti prompt e versioni senza accesso diretto dalla UI."),
   feature("context", "prototype_adapter", true, "EVE_CONTEXT_BUILDER_ENABLED", ["supabase.identity", "supabase.rls"], "Identità autenticata, ruoli, permessi e contesto minimizzato verificati sul server."),
   feature("retrieval", "prototype_adapter", true, "EVE_CORE_INTEGRATION_ENABLED", ["fastapi.materials", "fastapi.research"], "Adapter ai prototipi di materiali, retrieval e Intelligence."),

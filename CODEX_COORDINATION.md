@@ -803,6 +803,47 @@ Corretti redirect cross-domain nel crawler e test CRLF/LF. Nessun merge o
 rilascio eseguito; attesa autorizzazione alla release desktop di collaudo.
 ```
 
+### CORE-1.6 — Provider AI reale, segreti, budget e fallback
+
+```text
+RESPONSABILE:
+Codex integrazione funzionale, UI canonica e desktop di prova
+
+STATO:
+REVIEW_REQUIRED
+
+BRANCH:
+codex/eve-ai-studio-core-1-6
+
+BASE:
+origin/eve-ai-studio @ c821798
+
+OBIETTIVO:
+Integrare un adapter OpenAI-compatible opt-in con segreti esclusivamente
+server-side, output strutturato, budget, rate limit, circuit breaker e fallback.
+
+FILE PRENOTATI:
+- tutti i file elencati nel manifest CORE-1.6
+- .codex/tasks/active/eve-ai-studio-core-1-6.md
+- CODEX_COORDINATION.md, limitatamente a questa scheda
+
+FILE CONDIVISI PRENOTATI:
+- reference/eve-ai-studio-preview/index.html
+
+VINCOLI:
+EVE_EXTERNAL_PROVIDERS_ENABLED=false per impostazione predefinita. Nessuna
+chiave reale nel repository, client, UI, errori o telemetria. Nessuna demo,
+standalone, copia HTML o nuova preview. Main, demo-canonica, Aula Studio,
+Supabase remoto, Vercel e produzione restano invariati. Una sola Draft PR;
+nessun merge o release senza autorizzazione esplicita.
+
+TEST:
+10 test Python specifici, 271 cumulativi e 227 test web verdi; typecheck,
+lint mirato e build Next.js verdi. Il lint globale conserva un errore
+preesistente fuori perimetro in reference/eve-ai-studio-preview/app.js.
+Versione desktop predisposta come 1.2.0-alpha.15; nessun merge o rilascio.
+```
+
 ## Attività storiche di Aula Studio
 
 ### INTELLIGENCE-0.6 — Embedding, indice vettoriale e retrieval ibrido

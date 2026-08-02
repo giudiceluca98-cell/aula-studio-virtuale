@@ -38,8 +38,7 @@ from .providers import (
     ManagedEveProvider,
     ProviderOrchestrator,
     ProviderTelemetryStore,
-    build_default_catalog,
-    build_default_profiles,
+    build_provider_runtime,
 )
 from .providers.orchestrator import ProviderBudgetExceededError, ProviderExecutionError
 from .providers.router import create_provider_router
@@ -69,15 +68,15 @@ SERVICE_VERSION = "1.2.0"
 settings = EveSettings()
 audit = AuditLogger(enabled=settings.audit_enabled)
 
-provider_catalog = build_default_catalog(
-    external_providers_enabled=settings.external_providers_enabled
-)
-execution_profiles = build_default_profiles()
+provider_runtime = build_provider_runtime(settings)
+provider_catalog = provider_runtime.catalog
+execution_profiles = provider_runtime.profiles
 provider_telemetry = ProviderTelemetryStore(settings.provider_telemetry_db_path)
 provider_orchestrator = ProviderOrchestrator(
     provider_catalog,
     execution_profiles,
     provider_telemetry,
+    runtime_guard=provider_runtime.guard,
 )
 evaluation_provider = ManagedEveProvider(
     provider_orchestrator,
@@ -236,8 +235,9 @@ app = FastAPI(
         "progetti, acquisizione URL controllata, revisione umana attribuibile, "
         "promozione esplicita e provider di ricerca configurabili. Ricerca, rete e promozione restano "
         "opt-in; nessun punteggio approva automaticamente una fonte. Embedding versionati "
-        "e retrieval ibrido sono disponibili soltanto sotto feature flag; addestramento del "
-        "modello resta escluso."
+        "e retrieval ibrido sono disponibili soltanto sotto feature flag; provider reali "
+        "restano opt-in, server-side e protetti da budget, fallback e circuit breaker; "
+        "addestramento del modello escluso."
     ),
 )
 app.include_router(create_prompt_router(prompts))

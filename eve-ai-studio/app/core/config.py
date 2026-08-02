@@ -32,6 +32,28 @@ class EveSettings(BaseSettings):
     evaluation_latency_budget_ms: float = 750.0
 
     external_providers_enabled: bool = False
+    external_provider_key: str = "openai-compatible"
+    external_provider_label: str = "Provider OpenAI-compatible"
+    external_provider_base_url: str = ""
+    external_provider_api_key: str = ""
+    external_provider_model: str = ""
+    external_provider_model_label: str = "Modello esterno configurato"
+    external_provider_timeout_seconds: float = 20.0
+    external_provider_max_response_bytes: int = 262_144
+    external_provider_temperature: float = 0.2
+    external_provider_max_output_tokens: int = 2_000
+    external_provider_context_window: int = 128_000
+    external_provider_input_cost_per_million_usd: float = 0.0
+    external_provider_output_cost_per_million_usd: float = 0.0
+    provider_rate_limit_per_minute: int = 30
+    provider_circuit_failure_threshold: int = 3
+    provider_circuit_recovery_seconds: float = 60.0
+    chat_production_max_input_tokens: int = 12_000
+    chat_production_max_output_tokens: int = 4_000
+    chat_production_max_total_tokens: int = 16_000
+    chat_production_max_cost_per_run_usd: float = 0.25
+    chat_production_daily_token_budget: int = 250_000
+    chat_production_daily_cost_budget_usd: float = 5.0
     chat_execution_profile: str = "chat-development"
     evaluation_execution_profile: str = "evaluation-safe"
 
