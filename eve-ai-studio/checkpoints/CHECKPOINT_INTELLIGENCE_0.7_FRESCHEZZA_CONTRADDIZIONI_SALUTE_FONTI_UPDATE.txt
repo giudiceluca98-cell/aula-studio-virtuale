@@ -1,0 +1,14 @@
+INTELLIGENCE-0.7 — UPDATE LOCALE TRASFERIBILE
+
+Sono stati preparati ledger SQLite di policy, snapshot salute, stato corrente,
+contraddizioni e report corpus. Il servizio separa disponibilità, freschezza,
+provenienza e coerenza; produce un punteggio informativo che non può modificare lo
+stato di revisione o promozione.
+
+Il ricontrollo usa l'acquisizione web controllata già esistente. Se il checksum è
+invariato, non crea una nuova acquisizione. Se cambia, crea una nuova acquisizione in
+quarantena, preserva i riferimenti precedenti e rende necessaria una nuova review.
+404/410 diventano `removed`; gli errori temporanei usano backoff.
+
+Il registro conflitti conserva claim, locator, autore del segnale e motivazione. La
+preferenza richiede una persona e non viene dedotta automaticamente dai punteggi.

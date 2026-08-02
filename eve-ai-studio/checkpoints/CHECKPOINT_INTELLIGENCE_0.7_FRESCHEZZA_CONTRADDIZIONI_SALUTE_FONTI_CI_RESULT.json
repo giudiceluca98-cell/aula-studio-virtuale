@@ -1,0 +1,21 @@
+{
+  "checkpoint": "INTELLIGENCE-0.7",
+  "status": "REVIEW_REQUIRED",
+  "results": {
+    "package_and_manifest": "PASS",
+    "specific_python_tests": "10 passed",
+    "cumulative_python_tests": "281 passed, 1 external deprecation warning",
+    "typescript_tests": "227 passed in 44 files",
+    "typescript_typecheck": "PASS",
+    "targeted_lint": "PASS",
+    "next_production_build": "PASS",
+    "canonical_browser": "PASS: 5 freshness states, human conflict review, no console errors",
+    "desktop_version_prepared": "1.2.0-alpha.16"
+  },
+  "claims": {
+    "github_actions": false,
+    "desktop_build": false,
+    "signed_release": false
+  },
+  "required_release": "1.2.0-alpha.16"
+}

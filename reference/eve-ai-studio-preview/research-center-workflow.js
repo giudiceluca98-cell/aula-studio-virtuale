@@ -552,3 +552,104 @@
 
   render();
 })();
+
+(() => {
+  const view = document.getElementById("intelligence-research");
+  const grid = view?.querySelector(".grid");
+  if (!grid || document.getElementById("sourceHealthPanel")) return;
+
+  const sourceHealth = document.createElement("section");
+  sourceHealth.id = "sourceHealthPanel";
+  sourceHealth.className = "panel span-7";
+  sourceHealth.innerHTML = `
+    <div class="panel-head">
+      <div><h3>Freschezza e salute delle fonti</h3><p>INTELLIGENCE-0.7 — ricontrollo pianificabile, checksum, scadenza e cronologia senza approvazione automatica.</p></div>
+      <span class="tag warn">Recheck OFF</span>
+    </div>
+    <div class="panel-body">
+      <div class="form-grid">
+        <div class="field"><label>Esito simulato</label><select id="healthScenario"><option value="unchanged">Disponibile / invariata</option><option value="changed">Modificata</option><option value="stale">Obsoleta</option><option value="removed">Rimossa (404/410)</option><option value="unavailable">Temporaneamente non disponibile</option></select></div>
+        <div class="field"><label>Scadenza massima</label><select id="healthExpiry"><option>30 giorni</option><option selected>180 giorni</option><option>365 giorni</option></select></div>
+      </div>
+      <button class="btn green" id="simulateSourceHealth" style="width:100%;margin-top:12px">Simula ricontrollo controllato</button>
+      <div class="list" id="sourceHealthStages" style="margin-top:12px"></div>
+    </div>`;
+
+  const conflicts = document.createElement("section");
+  conflicts.className = "panel span-5";
+  conflicts.innerHTML = `
+    <div class="panel-head"><div><h3>Contraddizioni e preferenze motivate</h3><p>Il sistema segnala il conflitto; una persona decide se preferire una fonte, conservarle entrambe o scartare il segnale.</p></div><span class="tag warn">Nessun vincitore automatico</span></div>
+    <div class="panel-body">
+      <div class="field"><label>Conflitto</label><select id="conflictScenario"><option>Valore numerico discordante</option><option>Data non coerente</option><option>Versione differente</option><option>Ambito non confrontabile</option></select></div>
+      <div class="field"><label>Decisione umana</label><select id="conflictDecision"><option>Preferisci fonte più recente</option><option>Mantieni entrambe con nota</option><option>Segnale non valido</option></select></div>
+      <button class="btn" id="simulateConflictResolution" style="width:100%;margin-top:12px">Simula revisione del conflitto</button>
+      <div class="list" id="conflictStages" style="margin-top:12px"></div>
+    </div>`;
+
+  const report = document.createElement("section");
+  report.className = "panel span-12";
+  report.innerHTML = `
+    <div class="panel-head"><div><h3>Report di copertura e affidabilità del corpus</h3><p>Metriche separate per disponibilità, freschezza, provenienza e coerenza. Il punteggio non modifica review o promozioni.</p></div><span class="pill">Storico preservato</span></div>
+    <div class="panel-body">
+      <div class="metric-row">
+        <div class="metric"><small>Fonti controllate</small><strong id="healthCheckedMetric">18/24</strong><div class="progress"><span style="width:75%"></span></div></div>
+        <div class="metric"><small>Salute media</small><strong id="healthScoreMetric">82</strong><div class="progress"><span style="width:82%;background:var(--green)"></span></div></div>
+        <div class="metric"><small>Da verificare</small><strong id="healthAttentionMetric">4</strong><div class="progress"><span style="width:30%;background:var(--warn)"></span></div></div>
+        <div class="metric"><small>Conflitti aperti</small><strong id="healthConflictMetric">2</strong><div class="progress"><span style="width:20%;background:var(--red)"></span></div></div>
+      </div>
+      <div class="list" id="corpusHealthNotes" style="margin-top:12px">
+        <div class="row"><div class="meta"><strong>Regola di sicurezza</strong><small>health_score_can_approve=false · automatic_promotion=false</small></div><span class="tag">Attiva</span></div>
+        <div class="row"><div class="meta"><strong>Citazioni storiche</strong><small>Acquisition ID, checksum, material_id e version_id restano collegati</small></div><span class="tag violet">Preservate</span></div>
+      </div>
+    </div>`;
+  grid.append(sourceHealth, conflicts, report);
+
+  const animate = async (buttonId, targetId, stages) => {
+    const button = document.getElementById(buttonId);
+    const node = document.getElementById(targetId);
+    button.disabled = true;
+    node.innerHTML = stages.map((stage,index) => `<div class="row" data-health-stage="${index}"><div class="meta"><strong>${index+1}. ${stage[0]}</strong><small>${stage[1]}</small></div><span class="tag warn">In attesa</span></div>`).join("");
+    for (let index=0; index<stages.length; index+=1) {
+      const tag = node.querySelector(`[data-health-stage="${index}"] .tag`);
+      tag.className = "tag violet"; tag.textContent = "In corso";
+      await new Promise(resolve => setTimeout(resolve, 150));
+      tag.className = "tag"; tag.textContent = "Registrato";
+    }
+    button.disabled = false;
+  };
+
+  document.getElementById("simulateSourceHealth").addEventListener("click", async () => {
+    const scenario = document.getElementById("healthScenario").value;
+    const labels = {
+      unchanged: ["Checksum invariato", "Fonte corrente; nessuna nuova acquisizione"],
+      changed: ["Checksum differente", "Nuova acquisizione in quarantena e review scaduta"],
+      stale: ["Scadenza superata", "Fonte segnalata come obsoleta senza rifiuto automatico"],
+      removed: ["HTTP 404/410", "Fonte rimossa; citazioni storiche ancora disponibili"],
+      unavailable: ["Errore temporaneo", "Backoff e nuovo controllo pianificato"]
+    };
+    window.EveAnimationLibrary?.setState?.("eve-searching");
+    await animate("simulateSourceHealth", "sourceHealthStages", [
+      ["Policy effettiva", `Scadenza ${document.getElementById("healthExpiry").value} e intervallo di recheck`],
+      ["Acquisizione controllata", "SSRF, DNS, robots, redirect, TLS e limiti già approvati"],
+      labels[scenario],
+      ["Dimensioni separate", "Disponibilità, freschezza, provenienza e coerenza"],
+      ["Cronologia", "Snapshot immutabile con acquisition_id, checksum e riferimenti CORE"],
+      ["Nessuna approvazione", "Il punteggio salute non modifica review o promozione"]
+    ]);
+    window.EveAnimationLibrary?.setState?.(scenario === "removed" ? "eve-error-supportive" : "eve-success");
+    window.notify?.("Simulazione salute fonte completata senza richieste di rete reali");
+  });
+
+  document.getElementById("simulateConflictResolution").addEventListener("click", async () => {
+    window.EveAnimationLibrary?.setState?.("eve-confirmation-needed");
+    await animate("simulateConflictResolution", "conflictStages", [
+      ["Evidenze", "Claim e locator delle due fonti vengono conservati"],
+      ["Contesto", "Freschezza, provenienza e qualità sono mostrati separatamente"],
+      ["Decisione", document.getElementById("conflictDecision").value],
+      ["Motivazione obbligatoria", "La preferenza è attribuita a una persona"],
+      ["Storico", "Il conflitto resta consultabile anche dopo la risoluzione"]
+    ]);
+    window.EveAnimationLibrary?.setState?.("eve-success");
+    window.notify?.("Conflitto risolto nella simulazione: nessun vincitore scelto automaticamente");
+  });
+})();

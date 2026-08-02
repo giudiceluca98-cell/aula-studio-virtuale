@@ -120,3 +120,12 @@ class EveSettings(BaseSettings):
     research_hybrid_semantic_weight: float = 0.65
     research_hybrid_lexical_weight: float = 0.35
     research_hybrid_lexical_fallback: bool = True
+
+    research_source_health_enabled: bool = False
+    research_source_recheck_enabled: bool = False
+    research_source_conflicts_enabled: bool = False
+    research_corpus_reporting_enabled: bool = True
+    research_source_default_max_age_days: int = 180
+    research_source_recheck_interval_hours: int = 168
+    research_source_max_due_per_run: int = 25
+    research_source_max_consecutive_failures: int = 3

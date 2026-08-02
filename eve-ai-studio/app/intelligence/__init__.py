@@ -1,3 +1,8 @@
+from .freshness_errors import (CorpusReportingDisabledError, SourceConflictNotFoundError, SourceConflictStateError, SourceConflictTrackingDisabledError, SourceHealthDisabledError, SourceHealthError, SourceHealthNotFoundError, SourceHealthStateError, SourceRecheckDisabledError)
+from .freshness_models import (CorpusHealthReport, CorpusProjectCoverage, SourceAvailabilityStatus, SourceConflict, SourceConflictCreateRequest, SourceConflictListResponse, SourceConflictResolution, SourceConflictResolveRequest, SourceConflictStatus, SourceConflictType, SourceConsistencyStatus, SourceFreshnessPolicyRequest, SourceFreshnessPolicyView, SourceFreshnessStatus, SourceHealthBatchRequest, SourceHealthBatchResult, SourceHealthCheckKind, SourceHealthCheckRequest, SourceHealthComponents, SourceHealthListResponse, SourceHealthServiceStatus, SourceHealthSnapshot, SourceHealthState, SourceHealthSummaryStatus, SourceReplacementRequest)
+from .freshness_router import create_source_health_router
+from .freshness_storage import SqliteSourceHealthStore
+from .source_health import SourceHealthPolicy, SourceHealthService
 from .embedding_provider import EmbeddingBatch, EmbeddingProvider, DeterministicHashEmbeddingProvider
 from .hybrid_retrieval import HybridRetrievalPolicy, HybridRetrievalService
 from .semantic_models import (EmbeddingIndexRequest, EmbeddingJob, EmbeddingJobStatus, HybridSearchRequest, HybridSearchHit, HybridSearchResponse, RetrievalEvaluationRequest, RetrievalEvaluationResult, SemanticIndexDeleteResult, SemanticIndexStatus)
@@ -92,6 +97,7 @@ from .web_acquisition import (
     PinnedHttpTransport,
     UrlGuard,
     WebAcquisitionPolicy,
+    WebFetchResult,
 )
 
 __all__ = [
@@ -131,6 +137,7 @@ __all__ = [
     "SqliteResearchStore",
     "UrlGuard",
     "WebAcquisitionPolicy",
+    "WebFetchResult",
     "create_research_router",
     "AcquiredDocumentPayload",
     "ResearchPromotion",
@@ -217,4 +224,42 @@ __all__ = [
     "SemanticIndexStatus",
     "SqliteHybridIndexStore",
     "create_semantic_retrieval_router",
+    "CorpusReportingDisabledError",
+    "SourceConflictNotFoundError",
+    "SourceConflictStateError",
+    "SourceConflictTrackingDisabledError",
+    "SourceHealthDisabledError",
+    "SourceHealthError",
+    "SourceHealthNotFoundError",
+    "SourceHealthStateError",
+    "SourceRecheckDisabledError",
+    "CorpusHealthReport",
+    "CorpusProjectCoverage",
+    "SourceAvailabilityStatus",
+    "SourceConflict",
+    "SourceConflictCreateRequest",
+    "SourceConflictListResponse",
+    "SourceConflictResolution",
+    "SourceConflictResolveRequest",
+    "SourceConflictStatus",
+    "SourceConflictType",
+    "SourceConsistencyStatus",
+    "SourceFreshnessPolicyRequest",
+    "SourceFreshnessPolicyView",
+    "SourceFreshnessStatus",
+    "SourceHealthBatchRequest",
+    "SourceHealthBatchResult",
+    "SourceHealthCheckKind",
+    "SourceHealthCheckRequest",
+    "SourceHealthComponents",
+    "SourceHealthListResponse",
+    "SourceHealthServiceStatus",
+    "SourceHealthSnapshot",
+    "SourceHealthState",
+    "SourceHealthSummaryStatus",
+    "SourceReplacementRequest",
+    "SqliteSourceHealthStore",
+    "SourceHealthPolicy",
+    "SourceHealthService",
+    "create_source_health_router",
 ]
