@@ -1,0 +1,23 @@
+{
+  "checkpoint": "INTELLIGENCE-0.6",
+  "status": "REVIEW_REQUIRED",
+  "claims": {
+    "github_actions": false,
+    "desktop_build": false,
+    "signed_release": false
+  },
+  "local_results": {
+    "package_verification": "PASS",
+    "specific_python": "13 passed",
+    "cumulative_python": "261 passed",
+    "web_tests": "224 passed",
+    "typecheck": "PASS",
+    "next_build": "PASS",
+    "targeted_lint": "PASS"
+  },
+  "corrections": [
+    "normalized Windows CRLF in the extracted apply validator",
+    "excluded segments whose promotion was revoked after indexing"
+  ],
+  "required_release": "1.2.0-alpha.14"
+}

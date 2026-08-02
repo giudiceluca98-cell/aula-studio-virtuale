@@ -23,6 +23,11 @@ from .intelligence import (
     SqliteResearchStore,
     WebAcquisitionPolicy,
     create_research_router,
+    DeterministicHashEmbeddingProvider,
+    HybridRetrievalPolicy,
+    HybridRetrievalService,
+    SqliteHybridIndexStore,
+    create_semantic_retrieval_router,
 )
 from .materials import MaterialLimits, MaterialService, SqliteMaterialStore, create_material_router
 from .models import ChatRequest, ChatResponse, HealthResponse
@@ -158,6 +163,25 @@ research_ingestion_policy = AdvancedIngestionPolicy(enabled=settings.research_ad
 research_advanced_extractor = AdvancedDocumentExtractor(research_ingestion_policy)
 research_crawl_policy = CrawlPolicy(enabled=settings.research_crawl_enabled,max_depth=settings.research_crawl_max_depth,max_pages=settings.research_crawl_max_pages,max_total_bytes=settings.research_crawl_max_total_bytes,same_domain_only=True)
 research_crawler = LimitedCrawler(research_acquirer,research_crawl_policy)
+research_embedding_provider = DeterministicHashEmbeddingProvider(
+    model=settings.research_embedding_model,
+    dimensions=settings.research_embedding_dimensions,
+)
+research_hybrid_store = SqliteHybridIndexStore(settings.research_db_path)
+research_hybrid_retrieval = HybridRetrievalService(
+    research_hybrid_store, material_store, research_embedding_provider,
+    policy=HybridRetrievalPolicy(
+        embeddings_enabled=settings.research_embeddings_enabled,
+        retrieval_enabled=settings.research_hybrid_retrieval_enabled,
+        lexical_fallback_enabled=settings.research_hybrid_lexical_fallback,
+        semantic_weight=settings.research_hybrid_semantic_weight,
+        lexical_weight=settings.research_hybrid_lexical_weight,
+        minimum_score=settings.research_hybrid_min_score,
+        max_results=settings.research_hybrid_max_results,
+        max_candidates=settings.research_hybrid_max_candidates,
+        batch_size=settings.research_embedding_batch_size,
+    ),
+)
 research_center = ResearchCenterService(
     research_store,
     limits=ResearchLimits(
@@ -211,8 +235,9 @@ app = FastAPI(
         "apertura verificabile delle fonti e centro ricerca INTELLIGENCE con "
         "progetti, acquisizione URL controllata, revisione umana attribuibile, "
         "promozione esplicita e provider di ricerca configurabili. Ricerca, rete e promozione restano "
-        "opt-in; nessun punteggio approva automaticamente una fonte e embedding o "
-        "addestramento del modello restano esclusi."
+        "opt-in; nessun punteggio approva automaticamente una fonte. Embedding versionati "
+        "e retrieval ibrido sono disponibili soltanto sotto feature flag; addestramento del "
+        "modello resta escluso."
     ),
 )
 app.include_router(create_prompt_router(prompts))
@@ -224,6 +249,7 @@ app.include_router(create_retrieval_router(retrieval))
 app.include_router(create_rag_router(rag))
 app.include_router(create_source_router(source_opening))
 app.include_router(create_research_router(research_center))
+app.include_router(create_semantic_retrieval_router(research_hybrid_retrieval))
 
 
 @app.get("/health", response_model=HealthResponse)

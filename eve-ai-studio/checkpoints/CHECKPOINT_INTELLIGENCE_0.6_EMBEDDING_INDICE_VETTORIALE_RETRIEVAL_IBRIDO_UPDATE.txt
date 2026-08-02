@@ -1,0 +1,13 @@
+INTELLIGENCE-0.6 — UPDATE LOCALE TRASFERIBILE
+
+Sono stati preparati provider embedding tipizzato, provider deterministico locale,
+store SQLite dell'indice, job idempotenti, servizio di retrieval ibrido, API,
+configurazione server-side, test e anteprima canonica.
+
+La pipeline accetta soltanto materiali CORE collegati a una promozione INTELLIGENCE
+attiva nella stessa aula e nella stessa versione. Ogni segmento conserva locator,
+SHA-256, provider, modello e dimensioni. Il retrieval combina score semantico e
+lessicale, applica soglia, reranking e deduplicazione. Se il provider fallisce può
+usare il fallback lessicale, se esplicitamente consentito.
+
+Nessun provider esterno è configurato automaticamente. I flag restano OFF.
