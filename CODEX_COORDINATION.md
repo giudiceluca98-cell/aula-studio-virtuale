@@ -844,6 +844,48 @@ preesistente fuori perimetro in reference/eve-ai-studio-preview/app.js.
 Versione desktop predisposta come 1.2.0-alpha.15; nessun merge o rilascio.
 ```
 
+### INTELLIGENCE-0.7 — Freschezza, contraddizioni e salute delle fonti
+
+```text
+RESPONSABILE:
+Codex integrazione funzionale, UI canonica e desktop di prova
+
+STATO:
+REVIEW_REQUIRED
+
+BRANCH:
+codex/eve-ai-studio-intelligence-0-7
+
+BASE:
+origin/eve-ai-studio @ d88268b
+
+OBIETTIVO:
+Integrare policy di freschezza, ricontrolli due invocabili esternamente,
+snapshot storici, conflitti e report affidabilità senza decisioni automatiche.
+
+FILE PRENOTATI:
+- tutti i 18 file elencati nel manifest INTELLIGENCE-0.7
+- .codex/tasks/active/eve-ai-studio-intelligence-0-7.md
+- CODEX_COORDINATION.md, limitatamente a questa scheda
+
+FILE CONDIVISI PRENOTATI:
+- reference/eve-ai-studio-preview/research-center-workflow.js
+
+VINCOLI:
+Feature flag conservativi e isolamento per aula. Nessuna cancellazione dello
+storico, approvazione o promozione automatica, risoluzione automatica dei
+conflitti, scheduler nascosto, rete client-side, nuovo HTML, demo, standalone
+o sorgente duplicata. Main, demo-canonica, Aula Studio, Supabase remoto,
+Vercel e produzione restano invariati. Una sola Draft PR; nessun merge o
+release desktop senza test e autorizzazioni esplicite separate.
+
+TEST:
+10 test Python specifici, 281 cumulativi e 227 test web verdi; typecheck,
+lint mirato, build Next.js e browser canonico verdi. Corretto il payload UI
+preservando INTELLIGENCE-0.6. Desktop predisposto come 1.2.0-alpha.16;
+nessun merge o rilascio eseguito.
+```
+
 ## Attività storiche di Aula Studio
 
 ### INTELLIGENCE-0.6 — Embedding, indice vettoriale e retrieval ibrido

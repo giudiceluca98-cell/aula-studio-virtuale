@@ -28,6 +28,10 @@ from .intelligence import (
     HybridRetrievalService,
     SqliteHybridIndexStore,
     create_semantic_retrieval_router,
+    SqliteSourceHealthStore,
+    SourceHealthPolicy,
+    SourceHealthService,
+    create_source_health_router,
 )
 from .materials import MaterialLimits, MaterialService, SqliteMaterialStore, create_material_router
 from .models import ChatRequest, ChatResponse, HealthResponse
@@ -181,6 +185,24 @@ research_hybrid_retrieval = HybridRetrievalService(
         batch_size=settings.research_embedding_batch_size,
     ),
 )
+research_source_health_store = SqliteSourceHealthStore(settings.research_db_path)
+research_source_health = SourceHealthService(
+    research_source_health_store,
+    research_store,
+    research_acquisition_store,
+    research_review_store,
+    research_acquirer,
+    policy=SourceHealthPolicy(
+        health_enabled=settings.research_source_health_enabled,
+        recheck_enabled=settings.research_source_recheck_enabled,
+        conflict_tracking_enabled=settings.research_source_conflicts_enabled,
+        reporting_enabled=settings.research_corpus_reporting_enabled,
+        default_max_age_days=settings.research_source_default_max_age_days,
+        default_recheck_interval_hours=settings.research_source_recheck_interval_hours,
+        max_due_per_run=settings.research_source_max_due_per_run,
+        max_consecutive_failures=settings.research_source_max_consecutive_failures,
+    ),
+)
 research_center = ResearchCenterService(
     research_store,
     limits=ResearchLimits(
@@ -250,6 +272,7 @@ app.include_router(create_rag_router(rag))
 app.include_router(create_source_router(source_opening))
 app.include_router(create_research_router(research_center))
 app.include_router(create_semantic_retrieval_router(research_hybrid_retrieval))
+app.include_router(create_source_health_router(research_source_health))
 
 
 @app.get("/health", response_model=HealthResponse)
