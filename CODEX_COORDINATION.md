@@ -759,7 +759,7 @@ RESPONSABILE:
 Codex integrazione funzionale, UI canonica e desktop di prova
 
 STATO:
-IN_PROGRESS
+REVIEW_REQUIRED
 
 BRANCH:
 codex/eve-ai-studio-intelligence-0-5
@@ -779,6 +779,7 @@ FILE PRENOTATI:
 - eve-ai-studio/app/main.py
 - eve-ai-studio/pyproject.toml
 - eve-ai-studio/tests/test_intelligence_ingestion.py
+- tests/eve-context-boundaries.test.ts, sola correzione CRLF/LF
 - eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.5_*
 - reference/eve-ai-studio-preview/research-center-workflow.js
 - .github/workflows/release-eve-ai-studio-desktop.yml
@@ -794,6 +795,12 @@ Una sola Draft PR verso eve-ai-studio. Nessuna demo, standalone, copia HTML,
 nuova preview, modifica a main, demo-canonica, Aula Studio, Supabase remoto,
 Vercel o produzione. Nessun merge o release desktop senza test verdi, collaudo
 e autorizzazione esplicita dell'utente.
+
+ESITO:
+Draft PR #98. Verifiche pacchetto, 12 test specifici, 248 test Python, 224 test
+web, typecheck, build, lint mirato, desktop alpha.13 e browser reale verdi.
+Corretti redirect cross-domain nel crawler e test CRLF/LF. Nessun merge o
+rilascio eseguito; attesa autorizzazione alla release desktop di collaudo.
 ```
 
 ## Attività storiche di Aula Studio

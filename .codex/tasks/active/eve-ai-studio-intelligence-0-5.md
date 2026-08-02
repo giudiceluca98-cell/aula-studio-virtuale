@@ -1,6 +1,6 @@
 # INTELLIGENCE-0.5 — Ingestione documentale avanzata e crawling limitato
 
-- Stato: `IN_PROGRESS`
+- Stato: `REVIEW_REQUIRED`
 - Responsabile: Codex integrazione funzionale, UI canonica e desktop di prova
 - Branch: `codex/eve-ai-studio-intelligence-0-5`
 - Base: `origin/eve-ai-studio @ 377b1d6`
@@ -21,6 +21,7 @@ automaticamente.
 - `eve-ai-studio/app/main.py`
 - `eve-ai-studio/pyproject.toml`
 - `eve-ai-studio/tests/test_intelligence_ingestion.py`
+- `tests/eve-context-boundaries.test.ts`, sola correzione CRLF/LF
 - `eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.5_*`
 - `reference/eve-ai-studio-preview/research-center-workflow.js`
 - `.github/workflows/release-eve-ai-studio-desktop.yml`
@@ -37,3 +38,9 @@ Una sola Draft PR verso `eve-ai-studio`. Nessuna demo, standalone, copia HTML,
 nuova preview, modifica a `main`, `demo-canonica`, Aula Studio, Supabase remoto,
 Vercel o produzione. Nessun merge o release desktop senza test verdi, collaudo
 e autorizzazione esplicita dell'utente.
+
+## Esito integrazione
+
+Pacchetto, suite Python e web, build, desktop e browser reale verificati. La
+Draft PR #98 è pronta per la build firmata alpha.13 di collaudo. Nessun merge o
+rilascio è stato eseguito.

@@ -67,3 +67,21 @@ class ResearchSearchProviderError(ResearchError):
 
 class ResearchSearchExecutionNotFoundError(KeyError):
     pass
+
+
+class ResearchAdvancedIngestionDisabledError(ResearchError):
+    code = "advanced_ingestion_disabled"
+class ResearchDocumentFormatError(ResearchError):
+    code = "document_format_rejected"
+class ResearchDocumentTooLargeError(ResearchError):
+    code = "document_too_large"
+class ResearchDocumentEncryptedError(ResearchError):
+    code = "document_encrypted"
+class ResearchArchiveRejectedError(ResearchError):
+    code = "archive_rejected"
+class ResearchExtractionError(ResearchError):
+    code = "document_extraction_failed"
+class ResearchCrawlDisabledError(ResearchError):
+    code = "crawl_disabled"
+class ResearchCrawlLimitError(ResearchError):
+    code = "crawl_limit_exceeded"

@@ -1,0 +1,1 @@
+INTELLIGENCE-0.5 aggiunge estrazione locale controllata di PDF/DOCX/EPUB, segmenti con locator, deduplicazione esatta e near-duplicate, storage di quarantena e crawler limitato che riusa le protezioni di INTELLIGENCE-0.2. Nessun contenuto viene promosso automaticamente.

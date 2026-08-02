@@ -1,0 +1,29 @@
+{
+  "checkpoint": "INTELLIGENCE-0.5",
+  "status": "REVIEW_REQUIRED",
+  "results": {
+    "package_and_payload_hashes": "PASS",
+    "verify_package": "PASS",
+    "specific_python_tests": "PASS (12)",
+    "cumulative_python_tests": "PASS (248)",
+    "web_tests": "PASS (43 files, 224 tests)",
+    "typecheck": "PASS",
+    "next_build": "PASS",
+    "targeted_lint": "PASS",
+    "desktop_alpha_13": "PASS",
+    "real_browser": "PASS"
+  },
+  "corrections": [
+    "Windows CRLF false drift in extracted apply tool",
+    "cross-domain and scheme-changing redirects blocked by limited crawler",
+    "CORE-1.4 environment test accepts LF and CRLF"
+  ],
+  "pull_request": "https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/98",
+  "known_environment_limit": "Full ESLint cannot traverse the local eve-ai-studio/.pytest_cache directory because of EPERM.",
+  "claims_not_made": [
+    "signed desktop build",
+    "desktop user acceptance",
+    "real Internet crawl",
+    "merge"
+  ]
+}

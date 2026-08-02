@@ -73,3 +73,15 @@ class EveSettings(BaseSettings):
     research_search_max_executions_per_actor_day: int = 50
     research_search_max_retries: int = 1
     research_search_provider_order: str = ""
+    research_advanced_ingestion_enabled: bool = False
+    research_advanced_max_bytes: int = 12_000_000
+    research_advanced_max_text_chars: int = 4_000_000
+    research_advanced_max_archive_files: int = 2_000
+    research_advanced_max_archive_bytes: int = 48_000_000
+    research_advanced_max_pdf_pages: int = 1_000
+    research_advanced_max_segments: int = 5_000
+    research_near_duplicate_threshold: float = 0.88
+    research_crawl_enabled: bool = False
+    research_crawl_max_depth: int = 1
+    research_crawl_max_pages: int = 10
+    research_crawl_max_total_bytes: int = 5_000_000

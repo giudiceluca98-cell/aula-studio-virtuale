@@ -574,3 +574,66 @@ class ResearchCenterStatus(BaseModel):
     max_acquisition_bytes: int = 0
     max_redirects: int = 0
     robots_required: bool = True
+    advanced_ingestion_available: bool = False
+    advanced_ingestion_enabled: bool = False
+    ingested_document_count: int = 0
+    crawl_available: bool = False
+    crawl_enabled: bool = False
+    crawl_count: int = 0
+    max_crawl_depth: int = 0
+    max_crawl_pages: int = 0
+
+
+class ResearchIngestionStatus(str, Enum):
+    RUNNING = "running"
+    SUCCEEDED = "succeeded"
+    FAILED = "failed"
+    REJECTED = "rejected"
+
+class ResearchDuplicateKind(str, Enum):
+    NONE = "none"
+    EXACT = "exact"
+    NEAR = "near"
+
+class ResearchAdvancedImportRequest(BaseModel):
+    actor_id: str = Field(min_length=2,max_length=160)
+    idempotency_key: str = Field(min_length=8,max_length=128)
+    filename: str = Field(min_length=1,max_length=255)
+    media_type: str = Field(min_length=1,max_length=160)
+    content_base64: str = Field(min_length=1)
+    source_id: int | None = Field(default=None,ge=1)
+    metadata: dict[str,Any] = Field(default_factory=dict)
+
+class ResearchIngestionEvent(BaseModel):
+    ingestion_id:int; project_id:str; room_id:str; source_id:int|None=None; actor_id:str
+    idempotency_key:str; filename:str; media_type:str; status:ResearchIngestionStatus
+    document_id:int|None=None; error_code:str|None=None; created_at:str; completed_at:str|None=None
+
+class ResearchIngestionEventListResponse(BaseModel):
+    total:int; items:list[ResearchIngestionEvent]
+
+class ResearchIngestedDocument(BaseModel):
+    document_id:int; project_id:str; room_id:str; source_id:int|None=None; ingestion_id:int
+    filename:str; media_type:str; format_name:str; size_bytes:int; sha256:str
+    extracted_text:str; extracted_chars:int; segment_count:int
+    duplicate_kind:ResearchDuplicateKind; duplicate_of_document_id:int|None=None
+    content_trust:str; instructions_executable:bool; metadata:dict[str,Any]=Field(default_factory=dict); created_at:str
+
+class ResearchCrawlStatus(str, Enum):
+    RUNNING="running"; SUCCEEDED="succeeded"; FAILED="failed"; BLOCKED="blocked"
+
+class ResearchCrawlRequest(BaseModel):
+    actor_id:str=Field(min_length=2,max_length=160)
+    max_depth:int=Field(default=1,ge=0,le=3)
+    max_pages:int=Field(default=10,ge=1,le=50)
+
+class ResearchCrawlPage(BaseModel):
+    crawl_page_id:int; url:str; depth:int; media_type:str; size_bytes:int; sha256:str
+    extracted_text:str; discovered_links:list[str]=Field(default_factory=list)
+    content_trust:str; instructions_executable:bool
+
+class ResearchCrawlRun(BaseModel):
+    crawl_id:int; project_id:str; room_id:str; source_id:int; actor_id:str; root_url:str
+    status:ResearchCrawlStatus; page_count:int; total_bytes:int; truncated:bool
+    error_code:str|None=None; created_at:str; completed_at:str|None=None
+    pages:list[ResearchCrawlPage]=Field(default_factory=list)
