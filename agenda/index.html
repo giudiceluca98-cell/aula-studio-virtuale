@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#07111f">
+  <meta name="description" content="Agenda personale sincronizzata di Aula Studio">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="stylesheet" href="/assets/css/agenda.css">
+  <title>Agenda · Aula Studio</title>
+</head>
+<body>
+  <a class="skip-link" href="#agendaMain">Vai all’agenda</a>
+  <header class="topbar">
+    <a class="brand" href="/dashboard" aria-label="Torna alla scrivania"><span class="brand-mark">A</span><span>Aula Studio</span></a>
+    <nav aria-label="Navigazione principale">
+      <a href="/dashboard">Scrivania</a><a href="/room/">Aula</a><a href="/catalog">Catalogo</a><a class="active" href="/agenda" aria-current="page">Agenda</a>
+    </nav>
+    <div class="session-tools"><span id="connectionBadge" class="status-badge">Connessione…</span><button id="themeButton" class="icon-button" aria-label="Cambia tema">◐</button><button id="settingsButton" class="icon-button" aria-label="Impostazioni Agenda">⚙</button></div>
+  </header>
+
+  <main id="agendaMain" class="agenda-shell">
+    <section id="authGate" class="auth-card" hidden>
+      <p class="eyebrow">Agenda personale</p><h1>Accedi per sincronizzare i tuoi impegni</h1>
+      <p>Gli eventi sono privati e disponibili su tutti i tuoi dispositivi.</p>
+      <form id="authForm"><label>Email<input id="authEmail" type="email" autocomplete="email" required></label><label>Password<input id="authPassword" type="password" autocomplete="current-password" minlength="6" required></label><button class="primary" type="submit">Accedi</button><button id="registerButton" class="secondary" type="button">Crea account</button></form>
+      <p id="authMessage" class="form-message" role="alert"></p>
+    </section>
+
+    <section id="agendaApp" hidden>
+      <div class="agenda-heading">
+        <div><p class="eyebrow">Il tuo tempo, in ordine</p><h1 id="periodTitle">Agenda</h1></div>
+        <div class="heading-actions"><button id="todayButton" class="secondary">Oggi</button><button id="newEventButton" class="primary">＋ Nuovo evento</button></div>
+      </div>
+      <div class="agenda-controls">
+        <div class="period-nav"><button id="previousButton" aria-label="Periodo precedente">‹</button><button id="nextButton" aria-label="Periodo successivo">›</button></div>
+        <div id="viewSwitcher" class="segmented" role="tablist" aria-label="Visualizzazione">
+          <button data-view="day" role="tab">Giorno</button><button data-view="week" role="tab">Settimana</button><button data-view="month" role="tab">Mese</button><button data-view="upcoming" role="tab">Prossimi</button>
+        </div>
+      </div>
+      <div class="agenda-layout">
+        <aside class="agenda-sidebar">
+          <section class="panel mini-calendar-panel"><div class="panel-title"><h2>Data</h2></div><input id="datePicker" type="date" aria-label="Scegli una data"></section>
+          <section class="panel"><div class="panel-title"><h2>Riepilogo</h2></div><div id="summary" class="summary-grid"></div></section>
+          <section class="panel desktop-only"><div class="panel-title"><h2>Categorie</h2></div><div id="categoryLegend" class="category-legend"></div></section>
+        </aside>
+        <section class="calendar-panel panel" aria-label="Calendario">
+          <div id="loadingState" class="loading-state" aria-live="polite">Caricamento agenda…</div>
+          <div id="calendarView" class="calendar-view" tabindex="-1"></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <button id="mobileAddButton" class="floating-add" aria-label="Aggiungi evento" hidden>＋</button>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <dialog id="eventDialog" class="sheet-dialog">
+    <form id="eventForm" method="dialog">
+      <header><div><p class="eyebrow">Agenda</p><h2 id="eventDialogTitle">Nuovo evento</h2></div><button type="button" class="icon-button close-dialog" aria-label="Chiudi">×</button></header>
+      <input id="eventId" type="hidden">
+      <div class="form-grid">
+        <label class="wide">Titolo<input id="eventTitle" maxlength="160" required></label>
+        <label>Inizio<input id="eventStart" type="datetime-local" required></label><label>Fine<input id="eventEnd" type="datetime-local" required></label>
+        <label class="check-label"><input id="eventAllDay" type="checkbox"> Intera giornata</label>
+        <label>Categoria<select id="eventCategory"></select></label><label>Colore<input id="eventColor" type="color" value="#22d3ee"></label>
+        <label>Stato<select id="eventStatus"><option value="confirmed">Confermato</option><option value="tentative">Da confermare</option><option value="completed">Completato</option></select></label>
+        <label>Ricorrenza<select id="eventRecurrence"><option value="">Nessuna</option><option value="daily">Ogni giorno</option><option value="weekly">Ogni settimana</option><option value="weekdays">Giorni feriali</option><option value="monthly">Ogni mese</option><option value="yearly">Ogni anno</option><option value="custom">Personalizzata (RRULE)</option></select></label>
+        <label id="rruleLabel" class="wide" hidden>Regola RRULE<input id="eventRrule" placeholder="FREQ=WEEKLY;BYDAY=MO,WE;COUNT=10"></label>
+        <label>Luogo<input id="eventLocation" maxlength="300"></label><label>Collegamento<input id="eventUrl" type="url" maxlength="2048" placeholder="https://"></label>
+        <label class="wide">Note<textarea id="eventDescription" maxlength="10000" rows="4"></textarea></label>
+        <fieldset class="wide"><legend>Promemoria</legend><div id="reminderOptions" class="check-grid"></div></fieldset>
+      </div>
+      <p id="eventError" class="form-message" role="alert"></p>
+      <footer><button id="deleteEventButton" type="button" class="danger" hidden>Elimina</button><button id="duplicateEventButton" type="button" class="secondary" hidden>Duplica</button><span class="grow"></span><button type="button" class="secondary close-dialog">Annulla</button><button class="primary" value="save">Salva evento</button></footer>
+    </form>
+  </dialog>
+
+  <dialog id="settingsDialog" class="sheet-dialog settings-dialog">
+    <form id="settingsForm" method="dialog"><header><div><p class="eyebrow">Agenda</p><h2>Impostazioni</h2></div><button type="button" class="icon-button close-dialog" aria-label="Chiudi">×</button></header>
+      <div class="settings-sections">
+        <section><h3>Preferenze</h3><div class="form-grid"><label>Vista iniziale<select id="settingDefaultView"><option value="day">Giorno</option><option value="week">Settimana</option><option value="month">Mese</option><option value="upcoming">Prossimi</option></select></label><label>Primo giorno<select id="settingWeekStart"><option value="1">Lunedì</option><option value="0">Domenica</option></select></label><label>Fuso orario<input id="settingTimezone" list="timezones"></label><label>Formato ora<select id="settingHourFormat"><option value="24">24 ore</option><option value="12">12 ore</option></select></label><label>Promemoria predefinito<select id="settingDefaultReminder"><option value="">Nessuno</option><option value="0">All’inizio</option><option value="5">5 minuti</option><option value="10">10 minuti</option><option value="15">15 minuti</option><option value="30">30 minuti</option><option value="60">1 ora</option><option value="1440">1 giorno</option></select></label></div></section>
+        <section><h3>Notifiche</h3><p id="notificationStatus">Verifica in corso…</p><div class="button-row"><button id="enableNotifications" type="button" class="primary">Attiva notifiche</button><button id="testNotification" type="button" class="secondary">Invia notifica di prova</button></div><p id="iosHelp" class="help" hidden>Su iPhone/iPad aggiungi prima Aula Studio alla schermata Home, poi aprila da lì e attiva le notifiche.</p><label class="check-label"><input id="settingHideDetails" type="checkbox"> Nascondi i dettagli delle notifiche</label></section>
+        <section><h3>Ore silenziose</h3><label class="check-label"><input id="settingQuietEnabled" type="checkbox"> Attiva ore silenziose</label><div class="form-grid"><label>Da<input id="settingQuietStart" type="time"></label><label>A<input id="settingQuietEnd" type="time"></label><label>Comportamento<select id="settingQuietBehavior"><option value="delay">Posticipa</option><option value="skip">Non inviare</option></select></label></div></section>
+        <section><div class="section-heading"><h3>Categorie</h3><button id="addCategoryButton" type="button" class="secondary">＋ Categoria</button></div><div id="categoryManager"></div></section>
+        <section><h3>Dispositivi registrati</h3><div id="deviceManager"></div></section>
+        <section><h3>Dati</h3><div class="button-row"><button id="loadDemoButton" type="button" class="secondary">Carica programma di esempio</button><button id="exportButton" type="button" class="secondary">Esporta JSON</button><button id="deleteAllButton" type="button" class="danger">Elimina dati Agenda</button></div></section>
+      </div>
+      <footer><button type="button" class="secondary close-dialog">Annulla</button><button class="primary" value="save">Salva impostazioni</button></footer>
+    </form>
+  </dialog>
+  <datalist id="timezones"><option value="Europe/Rome"><option value="UTC"><option value="Europe/London"><option value="America/New_York"><option value="Asia/Tokyo"></datalist>
+  <script src="/assets/vendor/supabase.js"></script>
+  <script src="/assets/vendor/rrule.min.js"></script>
+  <script type="module" src="/assets/js/agenda/agenda.js"></script>
+</body>
+</html>

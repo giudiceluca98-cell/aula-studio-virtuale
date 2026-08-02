@@ -9,7 +9,7 @@
     if (command === "check_for_update") {
       return {
         version: "1.4.0-alpha.5",
-        currentVersion: "1.4.0-alpha.4",
+        currentVersion: "1.4.0-alpha.5",
         body: "Simulazione locale: pannello aggiornamenti funzionante."
       };
     }

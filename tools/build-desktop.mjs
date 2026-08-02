@@ -11,6 +11,7 @@ if (!desktopDist.startsWith(`${root}\\`) && !desktopDist.startsWith(`${root}/`))
 
 // La demo canonica resta l'unica fonte. Prima rigeneriamo sempre le rotte web.
 await import("./build-modular.mjs");
+await import("./build-agenda.mjs");
 
 await rm(desktopDist, { recursive: true, force: true });
 await mkdir(desktopDist, { recursive: true });
@@ -19,7 +20,10 @@ const files = [
   "index.html",
   "dashboard/index.html",
   "catalog/index.html",
+  "agenda/index.html",
   "room/index.html",
+  "manifest.webmanifest",
+  "sw.js",
   "assets/aula-cursor.svg",
   "assets/aula-pointer.svg"
 ];
@@ -41,6 +45,7 @@ const routeReplacements = [
   ['presentation: "/"', 'presentation: "/index.html"'],
   ['dashboard: "/dashboard"', 'dashboard: "/dashboard/index.html"'],
   ['catalog: "/catalog"', 'catalog: "/catalog/index.html"'],
+  ['agenda: "/agenda"', 'agenda: "/agenda/index.html"'],
   ['aula: "/room/"', 'aula: "/room/index.html"'],
   ['window.location.assign("/catalog?from=aula")', 'window.location.assign("/catalog/index.html?from=aula")']
 ];
@@ -79,6 +84,7 @@ for (const relativePath of [
   "index.html",
   "dashboard/index.html",
   "catalog/index.html",
+  "agenda/index.html",
   "room/index.html"
 ]) {
   const htmlPath = join(desktopDist, relativePath);

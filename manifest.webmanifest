@@ -1,0 +1,4 @@
+{
+  "name":"Aula Studio Virtuale","short_name":"Aula Studio","description":"Aula condivisa e agenda personale","start_url":"/","scope":"/","display":"standalone","background_color":"#050b14","theme_color":"#07111f","lang":"it",
+  "icons":[{"src":"/assets/aula-cursor.svg","sizes":"any","type":"image/svg+xml","purpose":"any"}]
+}

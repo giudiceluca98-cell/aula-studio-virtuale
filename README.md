@@ -4,7 +4,7 @@ Questo repository pubblica come sito ufficiale la **demo canonica** di Aula Stud
 
 ## Versione pubblicata
 
-- versione: `1.4.0-alpha.4`
+- versione: `1.4.0-alpha.5`
 - branch sorgente: `demo-canonica`
 - file canonico: `demo-aula-studio-virtuale-canonica.html`
 
@@ -19,6 +19,9 @@ Il file canonico resta la fonte editoriale verificabile. Prima dell'anteprima o 
 - `catalog/index.html`: Catalogo ed Eve;
 - `download/index.html`: pagina pubblica che individua l'installer Windows più recente;
 - `room/index.html`: aula e strumenti di studio;
+- `agenda/index.html`: agenda personale sincronizzata, notifiche e impostazioni;
+- `supabase/migrations/`: schema, indici e policy RLS dell’Agenda;
+- `api/agenda/`: funzioni server per configurazione e Web Push;
 - `assets/css/`: fogli di stile filtrati per pagina;
 - `assets/js/`: controller JavaScript separati per pagina;
 - `assets/aula-cursor.svg`: cursore grafico nativo per la pagina;
@@ -34,7 +37,7 @@ Il portale non carica più i dati del Catalogo o il motore dell'aula. La dashboa
 Usare Node.js 20 o successivo:
 
 ```powershell
-node tools/build-modular.mjs
+pnpm build:web
 ```
 
 I file generati vengono mantenuti nel repository per consentire a Vercel di pubblicare il progetto statico senza una fase di build remota. Non vanno modificati manualmente: ogni cambiamento parte dal file canonico o dal generatore.
