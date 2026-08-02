@@ -626,6 +626,12 @@ TEST:
 typecheck, build, node --check, lint mirato, test desktop e browser reale verdi.
 Il lint globale conserva errori preesistenti in app.js e negli artefatti Tauri
 generati, fuori dal perimetro del checkpoint.
+
+RELEASE DI PROVA:
+Workflow 30724903788 completato con successo. Pubblicati installer NSIS, firma
+e latest.json nella release eve-ai-studio-v1.2.0-alpha.10. Il manifest dichiara
+1.2.0-alpha.10 e punta all'asset firmato Windows. La PR #95 resta Draft e non
+deve essere unita prima del collaudo e della nuova approvazione dell'utente.
 ```
 
 ## Attività storiche di Aula Studio

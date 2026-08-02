@@ -53,3 +53,12 @@ merge senza un nuovo collaudo e l'approvazione esplicita dell'utente.
 - `node --check`, lint mirato e test desktop superati.
 - Preview canonica verificata via HTTP e browser reale senza errori console.
 - Lint globale: soli errori preesistenti in `app.js` e artefatti Tauri generati.
+
+## Release desktop di prova
+
+- Workflow: [30724903788](https://github.com/giudiceluca98-cell/aula-studio-virtuale/actions/runs/30724903788), completato.
+- Release: [eve-ai-studio-v1.2.0-alpha.10](https://github.com/giudiceluca98-cell/eve-ai-studio-releases/releases/tag/eve-ai-studio-v1.2.0-alpha.10).
+- Asset: installer NSIS, firma updater e `latest.json` presenti.
+- SHA-256 installer: `e64cb8cbcf6215a29ab95c66abb3e63ccad5e83749d6c59d462177060ae1177e`.
+- SHA-256 `latest.json`: `7da7a98690b0463edc0fa096dcbe309f71ab4463429e1018f95fd44623bb0ed6`.
+- Il merge resta vietato fino al collaudo e all'approvazione dell'utente.

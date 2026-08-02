@@ -16,3 +16,8 @@ test Vitest, typecheck, build, sintassi e lint mirato JavaScript, test desktop e
 preview canonica via browser reale. Nessuna demo, standalone, copia HTML o nuova
 cartella preview è stata creata. Il merge resta vietato fino al collaudo desktop
 alpha.10 e alla nuova approvazione esplicita dell'utente.
+
+La release di prova `eve-ai-studio-v1.2.0-alpha.10` è stata pubblicata dal
+workflow `30724903788` con installer NSIS, firma updater e `latest.json`.
+Il manifest dichiara correttamente `1.2.0-alpha.10`. SHA-256 installer:
+`e64cb8cbcf6215a29ab95c66abb3e63ccad5e83749d6c59d462177060ae1177e`.
