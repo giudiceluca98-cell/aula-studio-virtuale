@@ -1,0 +1,9 @@
+CORE-1.6 — UPDATE TRASFERIBILE
+
+Implementati adapter provider reale, configurazione redatta, output JSON, profilo
+chat-production, fallback mock, budget, rate limit, circuit breaker, telemetria e
+stato server-side. Nessuna chiave reale è inclusa nel pacchetto e nessun provider è
+attivato per default.
+
+Release target: 1.2.0-alpha.15.
+Stato: FUNCTIONAL_TESTING.

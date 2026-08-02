@@ -57,8 +57,17 @@ export interface EveCompositionUiSummary {
   entryPoints: readonly ["lesson", "catalog", "room"];
 }
 
+export interface EveCompositionProviderSummary {
+  state: "disabled" | "misconfigured" | "ready";
+  providerKey: string;
+  modelKey: string | null;
+  profileKey: string;
+  secretConfigured: boolean;
+  fallback: "mock";
+}
+
 export interface EveCompositionStatus {
-  checkpoint: "CORE-1.5";
+  checkpoint: "CORE-1.6";
   integrationEnabled: boolean;
   architectureReady: boolean;
   serviceConfigured: boolean;
@@ -68,6 +77,7 @@ export interface EveCompositionStatus {
   database: EveCompositionDatabaseSummary;
   context: EveCompositionContextSummary;
   ui: EveCompositionUiSummary;
+  provider: EveCompositionProviderSummary;
 }
 
 export type EveRole = "student" | "teacher" | "author" | "admin";

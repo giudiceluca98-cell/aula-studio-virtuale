@@ -17,6 +17,7 @@ from .models import (
 )
 from .profiles import ExecutionProfileRegistry
 from .telemetry import ProviderTelemetryStore, utc_now
+from .runtime import ProviderCircuitOpenError, ProviderRuntimeGuard, ProviderRuntimeStatus
 
 
 class ProviderExecutionError(RuntimeError):
@@ -61,10 +62,23 @@ class ProviderOrchestrator:
         catalog: ProviderCatalog,
         profiles: ExecutionProfileRegistry,
         telemetry: ProviderTelemetryStore,
+        runtime_guard: ProviderRuntimeGuard | None = None,
     ) -> None:
         self.catalog = catalog
         self.profiles = profiles
         self.telemetry = telemetry
+        self.runtime_guard = runtime_guard
+
+    def runtime_status(self) -> ProviderRuntimeStatus:
+        if self.runtime_guard is None:
+            return ProviderRuntimeStatus(
+                enabled=False,
+                requests_per_minute=0,
+                circuit_failure_threshold=0,
+                circuit_recovery_seconds=0,
+                circuits=[],
+            )
+        return self.runtime_guard.status()
 
     def status(self) -> ProviderCatalogStatus:
         providers = self.catalog.providers()
@@ -95,6 +109,9 @@ class ProviderOrchestrator:
                 f"Il profilo {profile_key} non è destinato a {purpose}"
             )
 
+        if self.runtime_guard is not None:
+            self.runtime_guard.check_rate(profile_key)
+
         input_tokens = estimate_tokens(request)
         if input_tokens > profile.max_input_tokens:
             raise ProviderBudgetExceededError("Budget token input superato")
@@ -120,6 +137,24 @@ class ProviderOrchestrator:
                 last_error = "ExternalProviderNotAllowed"
                 continue
 
+            target_key = f"{target.provider_key}:{target.model_key}"
+            if self.runtime_guard is not None:
+                try:
+                    self.runtime_guard.before_attempt(target_key)
+                except ProviderCircuitOpenError as exc:
+                    last_error = type(exc).__name__[:120]
+                    attempts.append(
+                        ProviderAttempt(
+                            provider_key=target.provider_key,
+                            model_key=target.model_key,
+                            attempt_number=0,
+                            duration_ms=0,
+                            status="skipped",
+                            error_code=last_error,
+                        )
+                    )
+                    continue
+
             for attempt_number in range(1, profile.retry.max_attempts_per_target + 1):
                 chosen_provider = target.provider_key
                 chosen_model = target.model_key
@@ -130,6 +165,8 @@ class ProviderOrchestrator:
                         provider.generate(request),
                         timeout=profile.retry.timeout_ms / 1_000,
                     )
+                    if self.runtime_guard is not None:
+                        self.runtime_guard.record_success(target_key)
                     attempt_duration = (perf_counter() - attempt_started) * 1_000
                     attempts.append(
                         ProviderAttempt(
@@ -196,6 +233,8 @@ class ProviderOrchestrator:
                 except ProviderBudgetExceededError:
                     raise
                 except Exception as exc:
+                    if self.runtime_guard is not None:
+                        self.runtime_guard.record_failure(target_key)
                     last_error = type(exc).__name__[:120]
                     attempts.append(
                         ProviderAttempt(

@@ -1,0 +1,29 @@
+{
+  "checkpoint": "CORE-1.6",
+  "status": "REVIEW_REQUIRED",
+  "release_target": "1.2.0-alpha.15",
+  "local_package_checks": {
+    "payload_hashes": "PASS",
+    "python_tools_syntax": "PASS",
+    "preview_javascript_syntax": "PASS",
+    "preview_no_fetch": "PASS",
+    "anti_drift_dry_run": "PASS",
+    "idempotent_second_apply": "PASS",
+    "canonical_http_smoke": "PASS",
+    "provider_specific_tests": "10 passed",
+    "python_cumulative_suite": "271 passed, 1 deprecation warning",
+    "python_compileall": "PASS",
+    "typescript_tests": "227 passed in 44 files",
+    "typescript_typecheck": "PASS",
+    "typescript_targeted_lint": "PASS",
+    "next_production_build": "PASS",
+    "global_lint": "PRE-EXISTING: reference/eve-ai-studio-preview/app.js @next/next/no-assign-module-variable"
+  },
+  "not_claimed": [
+    "real_external_provider_call",
+    "github_actions",
+    "signed_desktop_build",
+    "desktop_installation",
+    "user_approval"
+  ]
+}

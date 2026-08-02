@@ -110,3 +110,18 @@ class ProviderExecutionResult(BaseModel):
     telemetry: ProviderExecutionTelemetry
 
     model_config = {"arbitrary_types_allowed": True}
+
+
+class ProviderCircuitStatus(BaseModel):
+    target_key: str
+    state: str
+    failures: int
+    retry_after_seconds: float | None = None
+
+
+class ProviderRuntimeStatus(BaseModel):
+    enabled: bool
+    requests_per_minute: int
+    circuit_failure_threshold: int
+    circuit_recovery_seconds: float
+    circuits: list[ProviderCircuitStatus] = Field(default_factory=list)

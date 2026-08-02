@@ -8,6 +8,7 @@ from .models import (
     ProviderCatalogStatus,
     ProviderDescriptor,
     ProviderExecutionTelemetry,
+    ProviderRuntimeStatus,
 )
 from .orchestrator import ProviderOrchestrator
 
@@ -30,6 +31,10 @@ def create_provider_router(orchestrator: ProviderOrchestrator) -> APIRouter:
     @router.get("/profiles", response_model=list[ExecutionProfile])
     async def provider_profiles() -> list[ExecutionProfile]:
         return orchestrator.profiles.list()
+
+    @router.get("/runtime", response_model=ProviderRuntimeStatus)
+    async def provider_runtime() -> ProviderRuntimeStatus:
+        return orchestrator.runtime_status()
 
     @router.get("/telemetry", response_model=list[ProviderExecutionTelemetry])
     async def provider_telemetry(
