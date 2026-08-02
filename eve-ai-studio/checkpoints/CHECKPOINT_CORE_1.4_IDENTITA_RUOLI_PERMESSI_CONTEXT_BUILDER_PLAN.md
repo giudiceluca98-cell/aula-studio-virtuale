@@ -1,6 +1,6 @@
 # CORE-1.4 — Identità, ruoli, permessi e Context Builder — PLAN
 
-Stato iniziale: `PLANNED`  
+Stato iniziale: `PLANNED`
 Dipendenze: `CORE-1.3`, con sequenza coordinata fino a `INTELLIGENCE-0.4`.
 
 ## Obiettivo
