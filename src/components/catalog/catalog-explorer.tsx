@@ -9,6 +9,7 @@ import {
   Languages, Loader2, Plus, Route, Search, ShieldCheck, Sparkles, X,
 } from "lucide-react";
 import { AppLogo } from "@/components/brand/app-logo";
+import { EvePanelTrigger } from "@/features/eve/ui";
 import type {
   CatalogFilters, CatalogInterpretation, CatalogMaterial, CatalogTopic,
   LearningPathDraft, RankedCatalogMaterial, WebResourceType,
@@ -270,7 +271,7 @@ export function CatalogExplorer({ preferredRoomId }: { preferredRoomId?: string 
       <nav className="mx-auto flex max-w-7xl items-center justify-between">
         <Link href={preferredRoomId ? `/room/${preferredRoomId}` : "/dashboard"} className="button-secondary px-3 py-2"><ArrowLeft size={16} /> {preferredRoomId ? "Torna all’aula" : "Scrivania"}</Link>
         <div className="flex items-center gap-2 text-sm font-bold"><AppLogo size="sm" showName label="Catalogo" priority /></div>
-        <span className="flex items-center gap-2 rounded-full bg-white px-3 py-2 text-xs font-bold shadow-sm"><Bot size={16} className="text-moss-700" /> Eve</span>
+        <EvePanelTrigger entryPoint="catalog" context={{ roomId: roomId || preferredRoomId, query: query.trim() || undefined }} aria-label="Apri Eve nel catalogo" className="rounded-full bg-white px-3 py-2 text-xs font-bold shadow-sm"><Bot size={16} className="text-moss-700" /> Eve</EvePanelTrigger>
       </nav>
 
       <section className="mx-auto max-w-4xl pb-8 pt-14 text-center">

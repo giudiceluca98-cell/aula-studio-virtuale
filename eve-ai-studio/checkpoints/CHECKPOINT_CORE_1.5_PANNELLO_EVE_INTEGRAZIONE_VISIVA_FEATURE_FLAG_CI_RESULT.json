@@ -1,0 +1,25 @@
+{
+  "checkpoint": "CORE-1.5",
+  "status": "FUNCTIONAL_TESTING",
+  "release_target": "1.2.0-alpha.12",
+  "local_package_checks": {
+    "payload_hashes": "PASS",
+    "python_tools_syntax": "PASS",
+    "preview_javascript_syntax": "PASS",
+    "preview_no_fetch": "PASS",
+    "provider_no_fetch": "PASS",
+    "anti_drift_dry_run": "PASS",
+    "idempotent_second_apply": "PASS",
+    "canonical_http_smoke": "PASS",
+    "typescript_core_contracts": "PASS"
+  },
+  "not_claimed": [
+    "full_typecheck",
+    "full_vitest",
+    "lint",
+    "next_build",
+    "real_browser_accessibility",
+    "signed_desktop_build",
+    "desktop_installation"
+  ]
+}

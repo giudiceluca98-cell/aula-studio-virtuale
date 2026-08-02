@@ -6,6 +6,7 @@ import type { LessonProgressState } from "@/lib/programming-lesson-progress";
 import { usePythonRunner } from "@/hooks/use-python-runner";
 import { EveLessonAudio } from "@/components/room/eve-lesson-audio";
 import { ExerciseVoiceAssistant } from "@/components/room/exercise-voice-assistant";
+import { EvePanelTrigger } from "@/features/eve/ui";
 
 interface PublicLesson {
   id: string; title: string; level: string; estimatedMinutes: number; description: string; objectives: readonly string[]; lessonTitles: readonly string[];
@@ -213,7 +214,7 @@ export function ProgrammingLessonWorkspace({ roomId, materialId, lesson, initial
             <button type="button" className="eve-panel-toggle" onClick={() => { if (evePanelCollapsed) toggleEvePanel(); }} aria-expanded={!evePanelCollapsed} aria-label={evePanelCollapsed ? "Apri il pannello di Eve" : "Eve disponibile"}>
               <span className="eve-rest-mascot" aria-hidden="true"><span className="eve-rest-ring" /><span className="eve-rest-orb" /><span className="eve-rest-face"><span className="eve-rest-eyes"><span className="eve-rest-eye" /><span className="eve-rest-eye" /></span><span className="eve-rest-mouth" /></span></span>
             </button>
-            <div className="eve-identity-copy"><p>Eve · tutor e assistente vocale</p><div className="eve-presence-row"><span className="eve-presence">● Disponibile</span><button type="button" className="eve-detach-toggle" aria-pressed={eveDetached} onClick={() => setEveDetached((value) => !value)}>{eveDetached ? "Riaggancia Eve" : "Sgancia durante audio"}</button></div></div>
+            <div className="eve-identity-copy"><p>Eve · tutor e assistente vocale</p><div className="eve-presence-row"><span className="eve-presence">● Disponibile</span><EvePanelTrigger entryPoint="lesson" context={{ roomId, materialId, lessonId: selectedLessonId, sectionId: section.id }} className="eve-detach-toggle">Apri pannello completo</EvePanelTrigger><button type="button" className="eve-detach-toggle" aria-pressed={eveDetached} onClick={() => setEveDetached((value) => !value)}>{eveDetached ? "Riaggancia Eve" : "Sgancia durante audio"}</button></div></div>
           </div>
           {!evePanelCollapsed && <>
             <section className="eve-guidance"><p className="eve-guidance-label">Prossimo passo</p><h3>{eve.title}</h3><p>{eve.message}</p>{eve.sectionIds.length > 0 && <div className="eve-review-links">{eve.sectionIds.map((id) => { const index = lesson.sections.findIndex((item) => item.id === id); return index >= 0 ? <button key={id} onClick={() => openSection(index)}>Ripassa {lesson.sections[index].title}</button> : null; })}</div>}<button onClick={() => void act({ type: "review_requested", eventId: eventId() })}><RotateCcw size={12} /> Chiedi un suggerimento</button></section>

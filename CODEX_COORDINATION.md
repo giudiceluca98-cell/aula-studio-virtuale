@@ -696,6 +696,57 @@ merge prima del collaudo alpha.11 e di una nuova approvazione esplicita
 dell'utente.
 ```
 
+### CORE-1.5 — Pannello Eve e integrazione visiva
+
+```text
+RESPONSABILE:
+Codex integrazione funzionale, UI canonica e desktop di prova
+
+STATO:
+FUNCTIONAL_TESTING
+
+BRANCH:
+codex/eve-ai-studio-core-1-5
+
+BASE:
+origin/eve-ai-studio @ 661bc56
+
+OBIETTIVO:
+Integrare un pannello Eve unico sotto feature flag server-side con ingressi da
+lezione, catalogo e aula. Preparare alpha.12 soltanto dopo tutti i test verdi.
+
+FILE PRENOTATI:
+- .env.example
+- docs/EVE_PANEL_INTEGRATION.md
+- eve-ai-studio/checkpoints/CHECKPOINT_CORE_1.5_*
+- reference/eve-ai-studio-preview/eve-panel-workflow.js
+- reference/eve-ai-studio-preview/index.html
+- src/app/layout.tsx
+- src/app/api/eve/ui/status/route.ts
+- src/components/catalog/catalog-explorer.tsx
+- src/components/room/programming-lesson-workspace.tsx
+- src/components/room/study-room.tsx
+- src/features/eve/contracts.ts
+- src/features/eve/registry.ts
+- src/features/eve/server/composition.ts
+- src/features/eve/ui/**
+- tests/eve-panel-*.test.ts
+- .github/workflows/release-eve-ai-studio-desktop.yml
+- eve-desktop/package.json
+- eve-desktop/runtime/eve-desktop-updater.js
+- eve-desktop/src-tauri/Cargo.toml
+- eve-desktop/src-tauri/Cargo.lock
+- eve-desktop/src-tauri/tauri.conf.json
+- CODEX_COORDINATION.md, limitatamente a questa scheda
+
+VINCOLI:
+Il flag resta OFF per default e viene deciso dal server. Nessun provider, segreto
+o autorizzazione nel client. Nessuna demo, standalone, copia HTML, nuova preview,
+modifica a main, demo-canonica, Supabase remoto, Vercel o produzione. Una sola
+Draft PR e nessun merge prima del collaudo alpha.12 e di una nuova approvazione
+esplicita dell'utente.
+```
+
 ## Attività storiche di Aula Studio
 
 La tabella seguente è conservata come cronologia del precedente flusso di Aula Studio. Non assegna né prenota file di Eve AI Studio e non prevale sulle regole attive sopra.
