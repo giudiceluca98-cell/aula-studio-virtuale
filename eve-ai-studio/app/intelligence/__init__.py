@@ -1,3 +1,8 @@
+from .embedding_provider import EmbeddingBatch, EmbeddingProvider, DeterministicHashEmbeddingProvider
+from .hybrid_retrieval import HybridRetrievalPolicy, HybridRetrievalService
+from .semantic_models import (EmbeddingIndexRequest, EmbeddingJob, EmbeddingJobStatus, HybridSearchRequest, HybridSearchHit, HybridSearchResponse, RetrievalEvaluationRequest, RetrievalEvaluationResult, SemanticIndexDeleteResult, SemanticIndexStatus)
+from .semantic_router import create_semantic_retrieval_router
+from .vector_storage import SqliteHybridIndexStore
 from .advanced_ingestion import AdvancedDocumentExtractor, AdvancedIngestionPolicy, ExtractedAdvancedDocument, ExtractedSegment
 from .ingestion_storage import SqliteIngestionStore
 from .limited_crawler import CrawlPolicy, LimitedCrawler, CrawlResult, CrawledPagePayload
@@ -195,4 +200,21 @@ __all__ = [
     "ResearchExtractionError",
     "ResearchCrawlDisabledError",
     "ResearchCrawlLimitError",
+    "EmbeddingBatch",
+    "EmbeddingProvider",
+    "DeterministicHashEmbeddingProvider",
+    "HybridRetrievalPolicy",
+    "HybridRetrievalService",
+    "EmbeddingIndexRequest",
+    "EmbeddingJob",
+    "EmbeddingJobStatus",
+    "HybridSearchRequest",
+    "HybridSearchHit",
+    "HybridSearchResponse",
+    "RetrievalEvaluationRequest",
+    "RetrievalEvaluationResult",
+    "SemanticIndexDeleteResult",
+    "SemanticIndexStatus",
+    "SqliteHybridIndexStore",
+    "create_semantic_retrieval_router",
 ]

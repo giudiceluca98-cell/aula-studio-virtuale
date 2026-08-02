@@ -85,3 +85,16 @@ class EveSettings(BaseSettings):
     research_crawl_max_depth: int = 1
     research_crawl_max_pages: int = 10
     research_crawl_max_total_bytes: int = 5_000_000
+
+    research_embeddings_enabled: bool = False
+    research_hybrid_retrieval_enabled: bool = False
+    research_embedding_provider: str = "deterministic-local"
+    research_embedding_model: str = "hash-embedding-v1"
+    research_embedding_dimensions: int = 96
+    research_embedding_batch_size: int = 32
+    research_hybrid_max_results: int = 10
+    research_hybrid_max_candidates: int = 1_000
+    research_hybrid_min_score: float = 0.15
+    research_hybrid_semantic_weight: float = 0.65
+    research_hybrid_lexical_weight: float = 0.35
+    research_hybrid_lexical_fallback: bool = True

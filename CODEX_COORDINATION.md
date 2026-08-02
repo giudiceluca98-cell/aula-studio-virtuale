@@ -805,6 +805,58 @@ rilascio eseguito; attesa autorizzazione alla release desktop di collaudo.
 
 ## Attività storiche di Aula Studio
 
+### INTELLIGENCE-0.6 — Embedding, indice vettoriale e retrieval ibrido
+
+```text
+RESPONSABILE:
+Codex integrazione funzionale, UI canonica e desktop di prova
+
+STATO:
+REVIEW_REQUIRED
+
+BRANCH:
+codex/eve-ai-studio-intelligence-0-6
+
+BASE:
+origin/eve-ai-studio @ 1bc0178
+
+OBIETTIVO:
+Integrare embedding versionati, indice vettoriale e retrieval ibrido soltanto
+sul corpus approvato, con isolamento per aula e fallback lessicale dichiarato.
+
+FILE PRENOTATI:
+- eve-ai-studio/.env.example
+- eve-ai-studio/app/core/config.py
+- eve-ai-studio/app/intelligence/__init__.py
+- eve-ai-studio/app/intelligence/embedding_provider.py
+- eve-ai-studio/app/intelligence/hybrid_retrieval.py
+- eve-ai-studio/app/intelligence/semantic_errors.py
+- eve-ai-studio/app/intelligence/semantic_models.py
+- eve-ai-studio/app/intelligence/semantic_router.py
+- eve-ai-studio/app/intelligence/vector_storage.py
+- eve-ai-studio/app/main.py
+- eve-ai-studio/checkpoints/CHECKPOINT_INTELLIGENCE_0.6_*
+- eve-ai-studio/tests/test_intelligence_hybrid_retrieval.py
+- reference/eve-ai-studio-preview/research-center-workflow.js
+- .codex/tasks/active/eve-ai-studio-intelligence-0-6.md
+- CODEX_COORDINATION.md, limitatamente a questa scheda
+
+FILE CONDIVISI PRENOTATI:
+- nessuno dei file condivisi elencati nella procedura canonica
+
+VINCOLI:
+Feature flag OFF per impostazione predefinita. Nessuna indicizzazione di
+quarantena o contenuti non promossi, nessun provider o segreto nel client,
+nessuna demo, standalone, copia HTML o nuova preview. Main, demo-canonica,
+Aula Studio, Supabase remoto, Vercel e produzione restano invariati. Una sola
+Draft PR verso eve-ai-studio; nessun merge o release senza autorizzazione.
+
+TEST:
+13 test Python specifici, 261 test Python cumulativi e 224 test web verdi;
+typecheck, build Next.js, lint mirato, test/versione desktop e browser HTTP
+canonico verdi. Corretto il filtro delle promozioni revocate e il badge UI 0.6.
+```
+
 La tabella seguente è conservata come cronologia del precedente flusso di Aula Studio. Non assegna né prenota file di Eve AI Studio e non prevale sulle regole attive sopra.
 
 ## Attività

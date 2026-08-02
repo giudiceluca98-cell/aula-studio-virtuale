@@ -23,9 +23,9 @@
         <div class="panel-head">
           <div>
             <h3>Centro ricerca, provider, revisione e promozione controllata</h3>
-            <p>INTELLIGENCE-0.5 — le query pianificate possono essere eseguite tramite provider configurabili; i risultati diventano soltanto candidati in quarantena, mai acquisizioni automatiche.</p>
+            <p>INTELLIGENCE-0.6 — ricerca controllata, indice semantico versionato e retrieval ibrido operano soltanto su materiali approvati.</p>
           </div>
-          <span class="tag violet" id="researchCheckpointBadge">INTELLIGENCE-0.5</span>
+          <span class="tag violet" id="researchCheckpointBadge">INTELLIGENCE-0.6</span>
         </div>
         <div class="panel-body">
           <div class="metric-row">
@@ -533,6 +533,21 @@
     const run=async(id,target,stages)=>{const button=document.getElementById(id);button.disabled=true;const node=document.getElementById(target);node.innerHTML=stages.map((s,i)=>`<div class="row" data-stage="${i}"><div class="meta"><strong>${i+1}. ${s[0]}</strong><small>${s[1]}</small></div><span class="tag warn">In attesa</span></div>`).join('');for(let i=0;i<stages.length;i++){const tag=node.querySelector(`[data-stage="${i}"] .tag`);tag.className='tag violet';tag.textContent='In corso';await new Promise(r=>setTimeout(r,150));tag.className='tag';tag.textContent='Superato'}button.disabled=false;window.notify?.('Simulazione completata: contenuto ancora non fidato')};
     document.getElementById('simulateAdvancedIngestion').addEventListener('click',()=>run('simulateAdvancedIngestion','advancedIngestionStages',[["Limiti e formato","Byte, pagine, archivio e MIME"],["Rifiuto contenuti attivi","Macro, relazioni esterne, password e script"],["Estrazione verificabile","Pagine, paragrafi e spine EPUB con locator"],["Deduplicazione","SHA-256 e somiglianza testuale deterministica"],["Quarantena","instructions_executable=false; nessuna promozione CORE"]]));
     document.getElementById('simulateLimitedCrawl').addEventListener('click',()=>run('simulateLimitedCrawl','crawlStages',[["URL radice","Fonte già registrata"],["Controlli rete","SSRF, DNS, robots, redirect e TLS"],["Confini","Stesso dominio, profondità e numero pagine"],["Budget","Byte totali e arresto tracciato"],["Quarantena pagine","Nessun JavaScript eseguito o materiale CORE creato"]]));
+  }
+
+
+  const semanticGrid = view.querySelector('.grid');
+  if (semanticGrid && !document.getElementById('hybridRetrievalPanel')) {
+    const indexPanel=document.createElement('section');
+    indexPanel.id='hybridRetrievalPanel';indexPanel.className='panel span-6';
+    indexPanel.innerHTML=`<div class="panel-head"><div><h3>Indice semantico versionato</h3><p>INTELLIGENCE-0.6 — indicizza soltanto materiali con promozione attiva, separati per aula, modello e versione.</p></div><span class="tag warn">Embedding OFF</span></div><div class="panel-body"><div class="form-grid"><div class="field"><label>Provider</label><select id="embeddingProvider"><option>deterministic-local / hash-embedding-v1</option><option disabled>provider esterno non configurato</option></select></div><div class="field"><label>Materiale approvato</label><select id="semanticMaterial"><option>material-research-801 · v1</option><option>material-research-802 · v1</option></select></div></div><button class="btn green" id="simulateSemanticIndex" style="width:100%;margin-top:12px">Simula indicizzazione idempotente</button><div class="list" id="semanticIndexStages" style="margin-top:12px"></div></div>`;
+    const retrievalPanel=document.createElement('section');
+    retrievalPanel.className='panel span-6';
+    retrievalPanel.innerHTML=`<div class="panel-head"><div><h3>Retrieval ibrido verificabile</h3><p>Lessicale + semantico + filtri strutturati, con fallback lessicale e locator obbligatorio.</p></div><span class="tag warn">Retrieval OFF</span></div><div class="panel-body"><div class="field"><label for="hybridQuery">Query</label><input id="hybridQuery" value="come funzionano algoritmi e variabili"></div><div class="form-grid"><div class="field"><label>Modalità</label><select id="hybridMode"><option>Hybrid</option><option>Lexical fallback</option></select></div><div class="field"><label>Soglia minima</label><input id="hybridThreshold" type="number" min="0" max="1" step="0.05" value="0.15"></div></div><button class="btn" id="simulateHybridSearch" style="width:100%;margin-top:12px">Simula retrieval</button><div class="list" id="hybridResults" style="margin-top:12px"></div></div>`;
+    semanticGrid.append(indexPanel,retrievalPanel);
+    const animateSemantic=async(buttonId,target,steps)=>{const button=document.getElementById(buttonId);button.disabled=true;const node=document.getElementById(target);node.innerHTML=steps.map((s,i)=>`<div class="row" data-semantic-stage="${i}"><div class="meta"><strong>${i+1}. ${s[0]}</strong><small>${s[1]}</small></div><span class="tag warn">In attesa</span></div>`).join('');for(let i=0;i<steps.length;i++){const tag=node.querySelector(`[data-semantic-stage="${i}"] .tag`);tag.className='tag violet';tag.textContent='In corso';await new Promise(r=>setTimeout(r,150));tag.className='tag';tag.textContent='Superato'}button.disabled=false};
+    document.getElementById('simulateSemanticIndex').addEventListener('click',async()=>{window.EveAnimationLibrary?.setState?.('eve-processing');await animateSemantic('simulateSemanticIndex','semanticIndexStages',[["Promozione attiva","Materiale e versione autorizzati nell'aula"],["Job idempotente","Chiave, provider, modello e dimensioni versionati"],["Chunk verificabili","Ogni vettore conserva char:start-end e SHA-256"],["Isolamento","Indice separato per room_id e permessi"],["Persistenza","Ricostruzione e cancellazione esplicite"]]);window.EveAnimationLibrary?.setState?.('eve-success');window.notify?.('Simulazione indice completata: nessun provider esterno contattato')});
+    document.getElementById('simulateHybridSearch').addEventListener('click',async()=>{const mode=document.getElementById('hybridMode').value;window.EveAnimationLibrary?.setState?.('eve-searching');await animateSemantic('simulateHybridSearch','hybridResults',[["Filtri server-side","Aula, progetto, fonte e materiale"],["Candidati lessicali","Termini, frequenza e deduplicazione SHA-256"],["Punteggio semantico",mode==='Hybrid'?"Coseno su modello e dimensioni compatibili":"Provider indisponibile: fallback lessicale"],["Reranking","Pesi, soglia e bonus frase esatta"],["Citazioni","Solo risultati con locator verificabile"],["Metriche","Latenza, token, costo, precision@k e recall@k"]]);window.EveAnimationLibrary?.setState?.('eve-success');window.notify?.(`Retrieval simulato in modalità ${mode}`)});
   }
 
   render();
