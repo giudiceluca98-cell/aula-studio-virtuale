@@ -54,7 +54,7 @@ jobs:
           PGURL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
         run: psql "$PGURL" -v ON_ERROR_STOP=1 -f supabase/tests/core_1_4_rls.sql
 
-      - name: Verifica backup e rollback protetto
+      - name: Verifica backup e rollback protetto in ordine inverso
         env:
           PGURL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
         shell: bash
@@ -64,6 +64,16 @@ jobs:
           supabase db dump --local --data-only --use-copy --file /tmp/core-1.3-before-rollback-data.sql
           test -s /tmp/core-1.3-before-rollback-schema.sql
           test -s /tmp/core-1.3-before-rollback-data.sql
+          if psql "$PGURL" -v ON_ERROR_STOP=1 -f supabase/rollback/0019_eve_identity_roles_context.down.sql; then
+            echo "Il rollback CORE-1.4 non protetto doveva fallire" >&2
+            exit 1
+          fi
+          {
+            echo "set app.eve_allow_destructive_rollback = 'true';"
+            cat supabase/rollback/0019_eve_identity_roles_context.down.sql
+          } | psql "$PGURL" -v ON_ERROR_STOP=1
+          test "$(psql "$PGURL" -Atc "select to_regclass('public.eve_room_roles') is null")" = "t"
+          test "$(psql "$PGURL" -Atc "select to_regclass('public.eve_context_audit_events') is null")" = "t"
           if psql "$PGURL" -v ON_ERROR_STOP=1 -f supabase/rollback/0018_eve_core_production_data.down.sql; then
             echo "Il rollback distruttivo non protetto doveva fallire" >&2
             exit 1
