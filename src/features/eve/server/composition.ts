@@ -2,6 +2,7 @@ import "server-only";
 import { readEveServiceConfig } from "@/lib/ai/eve-service-config";
 import { readEveContextStatus } from "../context/status";
 import { readEveDatabaseStatus } from "../data/status";
+import { readEvePanelStatus } from "../ui/status";
 import { EveFastApiAdapter } from "../adapters/fastapi/client";
 import type { EveCompositionStatus, EveServiceProbe } from "../contracts";
 import { EVE_FEATURE_REGISTRY } from "../registry";
@@ -23,6 +24,7 @@ export async function composeEveStatus(): Promise<EveCompositionStatus> {
   const config = readEveServiceConfig();
   const db = await readEveDatabaseStatus();
   const context = readEveContextStatus();
+  const ui = readEvePanelStatus();
   const database = {
     state: db.state,
     schemaVersion: db.observedSchemaVersion,
@@ -30,7 +32,7 @@ export async function composeEveStatus(): Promise<EveCompositionStatus> {
   };
   if (!config.enabled) {
     return {
-      checkpoint: "CORE-1.4",
+      checkpoint: "CORE-1.5",
       integrationEnabled: false,
       architectureReady: true,
       serviceConfigured: Boolean(process.env.EVE_CORE_SERVICE_URL),
@@ -39,6 +41,7 @@ export async function composeEveStatus(): Promise<EveCompositionStatus> {
       probes: [disabled("health"), disabled("requirements"), disabled("materials"), disabled("research")],
       database,
       context,
+      ui,
     };
   }
   const adapter = new EveFastApiAdapter(config);
@@ -63,7 +66,7 @@ export async function composeEveStatus(): Promise<EveCompositionStatus> {
     }),
   );
   return {
-    checkpoint: "CORE-1.4",
+    checkpoint: "CORE-1.5",
     integrationEnabled: true,
     architectureReady: true,
     serviceConfigured: true,
@@ -72,5 +75,6 @@ export async function composeEveStatus(): Promise<EveCompositionStatus> {
     probes,
     database,
     context,
+    ui,
   };
 }

@@ -1,7 +1,15 @@
-import type { EveCompositionStatus } from "../contracts";
-export interface EveUiStatus { label: string; severity: "ok" | "warning" | "disabled"; }
-export function toEveUiStatus(status: EveCompositionStatus): EveUiStatus {
-  if (!status.integrationEnabled) return { label: "Adapter prototipi disattivato", severity: "disabled" };
-  if (status.probes.some((probe) => probe.state === "unavailable")) return { label: "Adapter parzialmente disponibile", severity: "warning" };
-  return { label: "Architettura CORE collegata", severity: "ok" };
-}
+export type {
+  EvePanelAction,
+  EvePanelClientConfig,
+  EvePanelContextReference,
+  EvePanelEntryPoint,
+  EvePanelMode,
+  EvePanelOpenRequest,
+  EvePanelState,
+  EvePanelViewState,
+  EvePanelVisibleMode,
+} from "./contracts";
+export { EvePanelProvider, useEvePanel } from "./eve-panel-provider";
+export { EvePanelTrigger } from "./eve-panel-trigger";
+export { requestEvePanelClose, requestEvePanelOpen, requestEvePanelToggle } from "./events";
+export { INITIAL_EVE_PANEL_STATE, reduceEvePanelState } from "./state";

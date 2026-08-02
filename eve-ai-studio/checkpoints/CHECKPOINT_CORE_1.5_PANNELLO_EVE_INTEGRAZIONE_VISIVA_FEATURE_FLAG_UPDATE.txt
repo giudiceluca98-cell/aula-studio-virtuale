@@ -1,0 +1,15 @@
+CORE-1.5 — UPDATE TRASFERIBILE
+
+Payload preparato:
+- EvePanelProvider globale sotto configurazione server-side;
+- pannello laterale ed espanso;
+- trigger in lezione, catalogo e aula;
+- stati UI completi e bozza locale;
+- focus, Escape, scorciatoia e focus trap;
+- mobile, reduced motion e preferenza modalità;
+- bridge non obbligatorio verso Animation Library 1.2.6;
+- endpoint /api/eve/ui/status;
+- composizione CORE aggiornata;
+- test e preview canonica.
+
+Nessun provider o dato remoto viene attivato dal pacchetto.

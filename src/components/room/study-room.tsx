@@ -67,6 +67,7 @@ import {
 import { RoomContentRemovalDialog } from "./room-content-removal-dialog";
 import { MaterialWorkspaceViewer } from "./material-workspace-viewer";
 import { MessageCenter } from "./message-center";
+import { EvePanelTrigger } from "@/features/eve/ui";
 
 const statusLabels: Record<UiStatus, string> = {
   online: "Online ora",
@@ -1399,6 +1400,7 @@ export function StudyRoom({ roomId }: { roomId: string }) {
               <span className="hidden md:inline">Chiamata</span>
               {activeCall && <span aria-hidden="true" className="absolute -right-0.5 -top-0.5 size-2.5 rounded-full border-2 border-white bg-moss-500" />}
             </button>
+            <EvePanelTrigger entryPoint="room" context={{ roomId }} aria-label="Apri Eve nell’aula" className="button-secondary px-3"><Sparkles size={15} /><span className="hidden md:inline">Eve</span></EvePanelTrigger>
             <button onClick={() => setSummaryOpen(true)} aria-label="Apri riepilogo automatico per Tatiana" className="button-primary px-3"><Sparkles size={15} /><span className="hidden md:inline">Riepilogo per Tatiana</span></button>
             <Link href={`/room/${roomId}/settings`} aria-label="Impostazioni" className="grid size-10 place-items-center rounded-xl border border-black/[0.08] bg-white text-black/50 hover:text-ink"><Settings size={17} /></Link>
           </div>

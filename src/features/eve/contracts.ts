@@ -48,8 +48,17 @@ export interface EveCompositionContextSummary {
   sharedSelectionEnabled: boolean;
 }
 
+export interface EveCompositionUiSummary {
+  state: "disabled" | "ready" | "misconfigured";
+  defaultMode: "side" | "expanded";
+  allowExpanded: boolean;
+  restorePreference: boolean;
+  animationRuntime: "eve-animation-library-1.2.6";
+  entryPoints: readonly ["lesson", "catalog", "room"];
+}
+
 export interface EveCompositionStatus {
-  checkpoint: "CORE-1.4";
+  checkpoint: "CORE-1.5";
   integrationEnabled: boolean;
   architectureReady: boolean;
   serviceConfigured: boolean;
@@ -58,6 +67,7 @@ export interface EveCompositionStatus {
   probes: readonly EveServiceProbe[];
   database: EveCompositionDatabaseSummary;
   context: EveCompositionContextSummary;
+  ui: EveCompositionUiSummary;
 }
 
 export type EveRole = "student" | "teacher" | "author" | "admin";
