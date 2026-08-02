@@ -1,10 +1,11 @@
 # INTELLIGENCE-0.4 — Ricerca web e pianificazione delle query
 
-- Stato: `IN_PROGRESS`
+- Stato: `REVIEW_REQUIRED`
 - Responsabile: Codex integrazione funzionale, UI canonica e desktop di prova
 - Branch: `codex/eve-ai-studio-intelligence-0-4`
 - Base: `origin/eve-ai-studio @ 87a6901`
-- Pull Request: da aprire verso `eve-ai-studio`
+- Ultimo commit applicativo: `dace16f`
+- Pull Request: [#95](https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/95) verso `eve-ai-studio`
 
 ## Obiettivo
 
@@ -42,3 +43,13 @@ Una sola Draft PR. Nessuna demo, standalone, copia HTML o cartella preview.
 Nessuna modifica a `main`, `demo-canonica`, Aula Studio, Supabase, Vercel o
 produzione. La release desktop alpha.10 è solo di prova e non autorizza il
 merge senza un nuovo collaudo e l'approvazione esplicita dell'utente.
+
+## Verifiche
+
+- 12 test Python specifici superati.
+- 236 test Python cumulativi superati.
+- 194 test Vitest superati.
+- Typecheck e build superati.
+- `node --check`, lint mirato e test desktop superati.
+- Preview canonica verificata via HTTP e browser reale senza errori console.
+- Lint globale: soli errori preesistenti in `app.js` e artefatti Tauri generati.

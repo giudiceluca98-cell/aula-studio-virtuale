@@ -569,7 +569,7 @@ RESPONSABILE:
 Codex integrazione funzionale, UI canonica e desktop di prova
 
 STATO:
-IN_PROGRESS
+REVIEW_REQUIRED
 
 BRANCH:
 codex/eve-ai-studio-intelligence-0-4
@@ -614,6 +614,18 @@ Una sola Draft PR verso eve-ai-studio. Nessuna demo, standalone, copia HTML,
 nuova preview, modifica a main, demo-canonica, Aula Studio, Supabase, Vercel o
 produzione. Nessun merge prima del collaudo desktop alpha.10 e di una nuova
 approvazione esplicita dell'utente.
+
+ULTIMO COMMIT:
+dace16f
+
+PULL REQUEST:
+https://github.com/giudiceluca98-cell/aula-studio-virtuale/pull/95
+
+TEST:
+12 test Python specifici, 236 test Python cumulativi e 194 test Vitest verdi;
+typecheck, build, node --check, lint mirato, test desktop e browser reale verdi.
+Il lint globale conserva errori preesistenti in app.js e negli artefatti Tauri
+generati, fuori dal perimetro del checkpoint.
 ```
 
 ## Attività storiche di Aula Studio
