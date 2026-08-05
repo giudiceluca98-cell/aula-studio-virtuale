@@ -1,6 +1,6 @@
 [package]
 name = "aula-studio-virtuale"
-version = "1.4.0-alpha.11"
+version = "1.4.0-alpha.12"
 description = "Aula Studio Virtuale desktop"
 authors = ["Aula Studio Virtuale"]
 edition = "2021"

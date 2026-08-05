@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 const root=resolve(join(dirname(fileURLToPath(import.meta.url)),".."));
 await mkdir(join(root,"assets","css"),{recursive:true});await mkdir(join(root,"assets","js","agenda"),{recursive:true});await mkdir(join(root,"assets","vendor"),{recursive:true});
 await cp(join(root,"src","agenda","agenda.css"),join(root,"assets","css","agenda.css"));
+await cp(join(root,"src","agenda","agenda-theme.css"),join(root,"assets","css","agenda-theme.css"));
 let agendaSource=await readFile(join(root,"src","agenda","agenda.js"),"utf8");
 let coreSource=await readFile(join(root,"src","agenda","core.js"),"utf8");
 coreSource=coreSource.replace(

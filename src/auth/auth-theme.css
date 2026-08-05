@@ -1,0 +1,30 @@
+body.light {
+  color-scheme: light;
+  --bg: #eef7fb;
+  --panel: #ffffff;
+  --line: #91afc0;
+  --text: #102532;
+  --muted: #58707f;
+  --cyan: #007f9a;
+  --green: #008f74;
+  --danger: #a43143;
+  background:
+    radial-gradient(circle at 14% 8%, #ccebf4 0, transparent 34rem),
+    radial-gradient(circle at 88% 82%, #dfdcfa 0, transparent 34rem),
+    var(--bg);
+}
+
+body.light .auth-form label { color: #294654; }
+body.light .auth-form input {
+  border-color: #7699ad;
+  background: #ffffff;
+  color: #102532;
+}
+body.light .auth-feedback { background: #e2f2f8; color: #173b4b; }
+body.light .auth-aside {
+  background: linear-gradient(145deg, #d9f2f7, #e4e6fa 56%, #f0e1f5);
+  color: #17313e;
+}
+body.light .auth-aside-label { color: #006f88; }
+body.light .auth-stat { border-color: #17485d33; background: #ffffffb8; }
+body.light .auth-stat span { color: #365666; }

@@ -9,13 +9,14 @@
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="stylesheet" href="/assets/css/auth.css">
   <link rel="stylesheet" href="/assets/css/agenda.css">
+  <link rel="stylesheet" href="/assets/css/agenda-theme.css">
   <title>Agenda · Aula Studio</title>
 </head>
 <body data-auth-required="true">
   <script>
     try {
       const visual = JSON.parse(localStorage.getItem("aula-demo-layout-reale") || "{}");
-      document.body.classList.toggle("light", visual.dark === false || visual.theme === "light");
+      document.body.classList.toggle("light", visual.theme === "light");
     } catch {}
   </script>
   <a class="skip-link" href="#agendaMain">Vai all’agenda</a>
