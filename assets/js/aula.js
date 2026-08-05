@@ -5462,12 +5462,12 @@ print(nome)</div>
 
 
   /* ==========================================================
-     CONSOLIDAMENTO MATERIALI + CHECKLIST — 1.4.0-alpha.8
+     CONSOLIDAMENTO MATERIALI + CHECKLIST — 1.4.0-alpha.9
      ========================================================== */
   (() => {
     "use strict";
 
-    const VERSION = "1.4.0-alpha.8";
+    const VERSION = "1.4.0-alpha.9";
     window.AULA_DEMO_VERSION = VERSION;
     window.AULA_PHASE3_CONSOLIDATION = {
       version: "1.3.0-alpha.10",
@@ -6084,6 +6084,7 @@ print(nome)</div>
 if (typeof activateExercise === "function") window.activateExercise = activateExercise;
 if (typeof archiveActiveChat === "function") window.archiveActiveChat = archiveActiveChat;
 if (typeof askEveContextualHelp === "function") window.askEveContextualHelp = askEveContextualHelp;
+if (typeof assign === "function") window.assign = assign;
 if (typeof aulaMaterialAddOpen === "function") window.aulaMaterialAddOpen = aulaMaterialAddOpen;
 if (typeof aulaMaterialDiagnosticsOpen === "function") window.aulaMaterialDiagnosticsOpen = aulaMaterialDiagnosticsOpen;
 if (typeof aulaMaterialImport === "function") window.aulaMaterialImport = aulaMaterialImport;

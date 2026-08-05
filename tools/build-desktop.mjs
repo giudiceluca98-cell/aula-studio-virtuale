@@ -100,13 +100,14 @@ const desktopAgendaBundle = [
   await readFile(join(desktopDist, "assets", "js", "agenda", "core.js"), "utf8"),
   await readFile(join(desktopDist, "assets", "js", "agenda", "agenda.js"), "utf8")
 ].map(stripModuleSyntax).join("\n\n");
+const desktopAgendaSource = `window.addEventListener("error", (event) => {\n` +
+  `  const app = document.getElementById("agendaApp");\n` +
+  `  const loading = document.getElementById("loadingState");\n` +
+  `  if (app && loading) { app.hidden = false; loading.hidden = false; loading.textContent = "Agenda non disponibile: " + event.message; }\n` +
+  `});\n\n${desktopAgendaBundle}`;
 await writeFile(
   join(desktopDist, "assets", "js", "agenda-desktop.js"),
-  `window.addEventListener("error", (event) => {\n` +
-    `  const app = document.getElementById("agendaApp");\n` +
-    `  const loading = document.getElementById("loadingState");\n` +
-    `  if (app && loading) { app.hidden = false; loading.hidden = false; loading.textContent = "Agenda non disponibile: " + event.message; }\n` +
-    `});\n\n${desktopAgendaBundle}`,
+  desktopAgendaSource,
   "utf8"
 );
 
@@ -128,12 +129,16 @@ for (const relativePath of [
     .replaceAll('href="/catalog"', 'href="/catalog/index.html"')
     .replaceAll('href="/agenda"', 'href="/agenda/index.html"')
     .replaceAll('href="/room/"', 'href="/room/index.html"');
+  html = html.replaceAll(
+    "window.location.assign('/agenda')",
+    "window.location.assign('/agenda/index.html')"
+  );
   html = html.replace(/<a\b[^>]*data-web-install[^>]*>[\s\S]*?<\/a>/g, "");
   if (relativePath === "agenda/index.html") {
     html = html
       .replace('  <script type="module" src="/assets/js/auth/session.js"></script>\n', "")
       .replace('  <script type="module" src="/assets/js/agenda/agenda.js"></script>\n',
-        '  <script src="/assets/js/agenda-desktop.js"></script>\n');
+        `  <script data-desktop-agenda>\n${desktopAgendaSource.replaceAll("</script", "<\\/script")}\n</script>\n`);
   }
   html = html.replace(
     "</body>",

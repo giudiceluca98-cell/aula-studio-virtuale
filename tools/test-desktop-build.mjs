@@ -52,11 +52,14 @@ if (webPortal.includes("desktop-updater.js")) {
 }
 
 const desktopAgenda = await readFile(join(dist, "agenda", "index.html"), "utf8");
-if (!desktopAgenda.includes('/assets/js/agenda-desktop.js')) {
-  throw new Error("L'Agenda desktop non usa il bundle compatibile con WebView2.");
+if (!desktopAgenda.includes('data-desktop-agenda')) {
+  throw new Error("L'Agenda desktop non include direttamente il bundle compatibile con WebView2.");
 }
 if (desktopAgenda.includes('type="module" src="/assets/js/agenda/agenda.js"')) {
   throw new Error("L'Agenda desktop contiene ancora il modulo ES non compatibile.");
+}
+if (!desktopAgenda.includes('setConnection();')) {
+  throw new Error("Il bundle Agenda incorporato non contiene l'avvio della connessione.");
 }
 if (!webPortal.includes('href="/download"')) {
   throw new Error("Il portale web non contiene il collegamento all'installer.");
