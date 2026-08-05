@@ -136,9 +136,17 @@ for (const relativePath of [
   html = html.replace(/<a\b[^>]*data-web-install[^>]*>[\s\S]*?<\/a>/g, "");
   if (relativePath === "agenda/index.html") {
     html = html
-      .replace('  <script type="module" src="/assets/js/auth/session.js"></script>\n', "")
-      .replace('  <script type="module" src="/assets/js/agenda/agenda.js"></script>\n',
-        `  <script data-desktop-agenda>\n${desktopAgendaSource.replaceAll("</script", "<\\/script")}\n</script>\n`);
+      .replace(/\s*<script\s+type=["']module["']\s+src=["']\/assets\/js\/auth\/session\.js["']>\s*<\/script>\s*/i, "\n")
+      .replace(
+        /\s*<script\s+type=["']module["']\s+src=["']\/assets\/js\/agenda\/agenda\.js["']>\s*<\/script>\s*/i,
+        '\n  <script src="/assets/js/agenda-desktop.js" data-desktop-agenda></script>\n'
+      );
+    if (/type=["']module["'][^>]+\/assets\/js\/(?:auth\/session|agenda\/agenda)\.js/i.test(html)) {
+      throw new Error("La pagina Agenda desktop contiene ancora moduli ES non compatibili.");
+    }
+    if (!html.includes('data-desktop-agenda')) {
+      throw new Error("Il bundle classico dell'Agenda non è stato collegato alla pagina desktop.");
+    }
   }
   html = html.replace(
     "</body>",

@@ -12,6 +12,12 @@
   <title>Agenda · Aula Studio</title>
 </head>
 <body data-auth-required="true">
+  <script>
+    try {
+      const visual = JSON.parse(localStorage.getItem("aula-demo-layout-reale") || "{}");
+      document.body.classList.toggle("light", visual.dark === false || visual.theme === "light");
+    } catch {}
+  </script>
   <a class="skip-link" href="#agendaMain">Vai all’agenda</a>
   <header class="topbar">
     <a class="brand" href="/dashboard" aria-label="Torna alla scrivania"><span class="brand-mark">A</span><span>Aula Studio</span></a>

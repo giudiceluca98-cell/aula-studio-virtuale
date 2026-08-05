@@ -58,6 +58,11 @@ jobs:
       - name: Verifica versione
         run: node tools/check-release-version.mjs "$env:RELEASE_VERSION"
 
+      - name: Verifica build Agenda desktop
+        run: |
+          pnpm build:desktop
+          pnpm test:desktop
+
       - name: Genera configurazione updater
         env:
           TAURI_UPDATER_PUBLIC_KEY: ${{ secrets.TAURI_UPDATER_PUBLIC_KEY }}
