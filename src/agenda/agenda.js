@@ -1,6 +1,6 @@
 import { cacheGet,cacheSet,queueAdd,queueAll,queueRemove } from "./offline.js";
 import { dateKey,escapeText,expandEvents,localInputValue,occupiedMetrics,recurrenceRule,reminderRows,startOfDay,startOfWeek,viewRange,DAY } from "./core.js";
-import { apiUrl,getAuthContext,redirectToLogin } from "../auth/session.js";
+import { apiUrl,getAuthContext,isDesktopApp,redirectToLogin } from "../auth/session.js";
 
 const $=(id)=>document.getElementById(id);const locale="it-IT";
 const state={supabase:null,user:null,session:null,events:[],visible:[],categories:[],preferences:null,anchor:new Date(),view:innerWidth<700?"day":"week",range:null,editing:null,loading:false};
