@@ -50,7 +50,7 @@ function writeVisualPreferences(next) {
 
 function applySharedVisualPreferences() {
   const preferences = readVisualPreferences();
-  document.body.classList.toggle("dark", Boolean(preferences.dark));
+  document.body.classList.toggle("dark", preferences.theme === "light");
   document.body.dataset.graphicsMode = ["full", "optimized", "reduced"].includes(preferences.graphicsMode)
     ? preferences.graphicsMode
     : "optimized";
@@ -59,7 +59,8 @@ function applySharedVisualPreferences() {
 function toggleDarkMode() {
   document.body.classList.toggle("dark");
   const preferences = readVisualPreferences();
-  preferences.dark = document.body.classList.contains("dark");
+  preferences.theme = document.body.classList.contains("dark") ? "light" : "dark";
+  preferences.dark = preferences.theme === "light";
   writeVisualPreferences(preferences);
 }
 

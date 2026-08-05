@@ -4,7 +4,7 @@ Questo repository pubblica come sito ufficiale la **demo canonica** di Aula Stud
 
 ## Versione pubblicata
 
-- versione: `1.4.0-alpha.11`
+- versione: `1.4.0-alpha.12`
 - branch sorgente: `demo-canonica`
 - file canonico: `demo-aula-studio-virtuale-canonica.html`
 

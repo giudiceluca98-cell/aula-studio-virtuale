@@ -5265,6 +5265,7 @@ print(nome)</div>
       const serializable = {
         ...state,
         completedSections: [...state.completedSections],
+        theme: document.body.classList.contains("dark") ? "light" : "dark",
         dark: document.body.classList.contains("dark")
       };
       try {
@@ -5313,7 +5314,7 @@ print(nome)</div>
         state.modulesPanelCollapsed = Boolean(saved.modulesPanelCollapsed);
         state.graphicsMode = graphicsModes.has(saved.graphicsMode) ? saved.graphicsMode : "optimized";
         state.chat = normalizeChatState(saved.chat);
-        if (saved.dark) document.body.classList.add("dark");
+        document.body.classList.toggle("dark", saved.theme === "light");
       } catch (error) {
         console.warn("Stato demo non valido", error);
       }
@@ -5467,7 +5468,7 @@ print(nome)</div>
   (() => {
     "use strict";
 
-    const VERSION = "1.4.0-alpha.11";
+    const VERSION = "1.4.0-alpha.12";
     window.AULA_DEMO_VERSION = VERSION;
     window.AULA_PHASE3_CONSOLIDATION = {
       version: "1.3.0-alpha.10",

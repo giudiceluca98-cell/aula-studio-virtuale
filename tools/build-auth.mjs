@@ -19,8 +19,15 @@ const page = (mode) => {
   <meta name="aula-demo-version" content="${version}">
   <title>${register ? "Registrati" : "Accedi"} · Aula Studio Virtuale</title>
   <link rel="stylesheet" href="/assets/css/auth.css">
+  <link rel="stylesheet" href="/assets/css/auth-theme.css">
 </head>
 <body data-auth-mode="${mode}">
+  <script>
+    try {
+      const visual = JSON.parse(localStorage.getItem("aula-demo-layout-reale") || "{}");
+      document.body.classList.toggle("light", visual.theme === "light");
+    } catch {}
+  </script>
   <main class="auth-layout">
     <section class="auth-main">
       <a class="auth-brand" href="/" data-auth-link="/"><span class="auth-brand-mark">A</span><span>Aula Studio Virtuale</span></a>
@@ -59,6 +66,7 @@ for (const mode of ["login", "register"]) {
 await mkdir(join(root, "assets", "css"), { recursive: true });
 await mkdir(join(root, "assets", "js", "auth"), { recursive: true });
 await cp(join(root, "src", "auth", "auth.css"), join(root, "assets", "css", "auth.css"));
+await cp(join(root, "src", "auth", "auth-theme.css"), join(root, "assets", "css", "auth-theme.css"));
 await cp(join(root, "src", "auth", "session.js"), join(root, "assets", "js", "auth", "session.js"));
 await cp(join(root, "src", "auth", "auth-page.js"), join(root, "assets", "js", "auth", "auth-page.js"));
 

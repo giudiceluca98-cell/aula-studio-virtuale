@@ -1,0 +1,24 @@
+body.light button {
+  border-color: #789bad;
+  background: #e3eef4;
+  color: #102334;
+}
+
+body.light button:hover { border-color: #3f7188; background: #d3e5ee; }
+body.light .primary {
+  border-color: #087f96;
+  background: linear-gradient(135deg, #087f96, #5548b8);
+  color: #ffffff;
+}
+body.light .danger { border-color: #a84a5b; background: #f9dce2; color: #7b2635; }
+body.light .segmented { border-color: #8ba8b9; background: #dceaf1; }
+body.light .segmented button { border-color: transparent; background: transparent; color: #405c6d; }
+body.light .segmented button[aria-selected="true"] {
+  background: #ffffff;
+  color: #102334;
+  box-shadow: inset 0 0 0 1px #789bad;
+}
+body.light .month-day-number { background: transparent; }
+body.light .month-day.today .month-day-number { background: #087f96; color: #ffffff; }
+body.light .calendar-event { color: #07131f; }
+body.light .calendar-event span { color: #173746; }

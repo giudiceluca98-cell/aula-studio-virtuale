@@ -45,14 +45,26 @@ test("la build desktop include accesso, registrazione e client Supabase", async 
 });
 
 test("Agenda mantiene il tema scuro quando non è stato scelto esplicitamente il chiaro", async () => {
-  const [source, page] = await Promise.all([
+  const [source, page, agendaTheme, authBuilder, authTheme, modularBuilder, canonical] = await Promise.all([
     read("../src/agenda/agenda.js"),
-    read("../agenda/index.html")
+    read("../agenda/index.html"),
+    read("../src/agenda/agenda-theme.css"),
+    read("../tools/build-auth.mjs"),
+    read("../src/auth/auth-theme.css"),
+    read("../tools/build-modular.mjs"),
+    read("../demo-aula-studio-virtuale-canonica.html")
   ]);
-  assert.match(source, /visual\.dark===false\|\|visual\.theme==="light"/);
-  assert.doesNotMatch(source, /classList\.toggle\("light",!visual\.dark\)/);
+  assert.match(source, /classList\.toggle\("light",visual\.theme==="light"\)/);
+  assert.doesNotMatch(source, /visual\.dark===false/);
   assert.match(source, /getAuthContext,isDesktopApp,redirectToLogin/);
-  assert.match(page, /document\.body\.classList\.toggle\("light", visual\.dark === false/);
+  assert.match(page, /document\.body\.classList\.toggle\("light", visual\.theme === "light"/);
+  assert.match(agendaTheme, /body\.light button/);
+  assert.match(authBuilder, /auth-theme\.css/);
+  assert.match(authTheme, /body\.light/);
+  assert.match(modularBuilder, /classList\.toggle\("dark", preferences\.theme === "light"\)/);
+  assert.doesNotMatch(modularBuilder, /Boolean\(preferences\.dark\)/);
+  assert.match(canonical, /theme: document\.body\.classList\.contains\("dark"\) \? "light" : "dark"/);
+  assert.match(canonical, /data-aula-theme-contrast/);
 });
 
 test("la build desktop elimina la vecchia cache e mostra la versione corrente", async () => {
