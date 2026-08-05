@@ -1,7 +1,7 @@
 use std::sync::Mutex;
 
 use serde::Serialize;
-use tauri::{AppHandle, State};
+use tauri::{webview::PageLoadEvent, AppHandle, State};
 use tauri_plugin_updater::{Update, UpdaterExt};
 
 #[derive(Default)]
@@ -69,6 +69,29 @@ async fn install_pending_update(
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_updater::Builder::new().build())
+        .on_page_load(|webview, payload| {
+            if payload.event() == PageLoadEvent::Finished {
+                let version = env!("CARGO_PKG_VERSION");
+                let cleanup = format!(r#"
+                    (() => {{
+                      const marker = "aula-desktop-cache-reset";
+                      if (localStorage.getItem(marker) === "{version}") return;
+                      Promise.all([
+                        "serviceWorker" in navigator
+                          ? navigator.serviceWorker.getRegistrations().then(items => Promise.all(items.map(item => item.unregister())))
+                          : Promise.resolve(),
+                        "caches" in window
+                          ? caches.keys().then(keys => Promise.all(keys.map(key => caches.delete(key))))
+                          : Promise.resolve()
+                      ]).finally(() => {{
+                        localStorage.setItem(marker, "{version}");
+                        location.reload();
+                      }});
+                    }})();
+                "#);
+                let _ = webview.eval(&cleanup);
+            }
+        })
         .manage(PendingUpdate::default())
         .invoke_handler(tauri::generate_handler![
             check_for_update,

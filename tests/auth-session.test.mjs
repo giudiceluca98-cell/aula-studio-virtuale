@@ -49,3 +49,15 @@ test("Agenda mantiene il tema scuro quando non è stato scelto esplicitamente il
   assert.match(source, /visual\.dark===false\|\|visual\.theme==="light"/);
   assert.doesNotMatch(source, /classList\.toggle\("light",!visual\.dark\)/);
 });
+
+test("la build desktop elimina la vecchia cache e mostra la versione corrente", async () => {
+  const [builder, rust] = await Promise.all([
+    read("../tools/build-modular.mjs"),
+    read("../src-tauri/src/lib.rs")
+  ]);
+  assert.match(builder, /aula-demo-version" content="\$\{appVersion\}"/);
+  assert.doesNotMatch(builder, /aula-demo-version" content="1\.4\.0-alpha\.5"/);
+  assert.match(rust, /getRegistrations\(\)/);
+  assert.match(rust, /caches\.keys\(\)/);
+  assert.match(rust, /aula-desktop-cache-reset/);
+});
