@@ -1,6 +1,8 @@
 
 const routeUrls = {
   presentation: "/",
+  login: "/login",
+  register: "/register",
   dashboard: "/dashboard",
   catalog: "/catalog",
   aula: "/room/"

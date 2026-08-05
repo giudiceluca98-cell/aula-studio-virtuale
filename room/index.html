@@ -7,8 +7,10 @@
   <meta name="aula-build" content="modular-routes-1" />
   <title>Aula Studio Virtuale — Programmazione in Python</title>
   <link rel="stylesheet" href="/assets/css/aula.css" />
+  <link rel="stylesheet" href="/assets/css/auth.css" />
+  <script>document.documentElement.dataset.authState="checking";</script>
 </head>
-<body data-portal-route="aula">
+<body data-portal-route="aula" data-auth-required="true">
 <section class="portal-view portal-aula-view" id="portalAula">
   <div class="app">
     <header class="primary-header">
@@ -706,6 +708,8 @@
   <div class="toast" id="toast"></div>
 
   
+  <script src="/assets/vendor/supabase.js"></script>
+  <script type="module" src="/assets/js/auth/session.js"></script>
   <script type="module" src="/assets/js/aula.js"></script>
 </body>
 </html>

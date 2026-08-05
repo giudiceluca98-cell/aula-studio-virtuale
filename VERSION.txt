@@ -1,17 +1,20 @@
 Aula Studio Virtuale
-Versione: 1.4.0-alpha.5
+Versione: 1.4.0-alpha.6
 Fonte: demo canonica ufficiale con ottimizzazione grafica fase 1 e build modulare per rotta
-Commit base: 26144ca281d78c1668f64251fb836b67ee3b68cd
-Git blob HTML: 62c3d3fd9716000bd8066aae6a6b7dd392e44f26
-SHA-256 HTML: f6867c6484c826fb37daf30e83955017fcd62540819eecd005ea91f2850b2c8a
+Commit base: e9d39bf6f14853c2333af02c4e102807b5e58b11
+Git blob HTML: b8c8c56a983625e3208445dc43a2ddbb6efedf0f
+SHA-256 HTML: 705a374a60f05cd3d7f351e0a425bf0ce5f0f0d2c5b9761c22dc9b0ed2dba777
 Build: modular-routes-1
-SHA-256 portale: a4def6633663226e8d77b6553d67774e1c81630258f20be3d80021bd09440e50
-SHA-256 dashboard: de982b16f103b779d4a91b63980402b8becb1c11b23868fdebb848c43742569c
-SHA-256 catalogo: 04443fb167a6b8830b89dc2b79043f71bbb006e21544db797c1f44fd41d79070
-SHA-256 download: 9a33a12377007ecc7f621fb8f379e231f96d3699876045480073214051b44225
-SHA-256 aula: e414648b36dd48864d9463a7d4e876c76cd457583fc476302a72831ab2af7bdc
-SHA-256 cursore: bccdef94c94c583b3a2efba12668f6ec508ebb6b9064a046912048c8dc405211
-SHA-256 puntatore: a33a6ee72e25c4882b6d46150ef53b56deedd7b73e83319bf5f552ecdcf967e8
+SHA-256 portale: 1d56cd5d7600778521d9908b2538d06528e91400f9a55e8410da86689d910b83
+SHA-256 dashboard: d62504513cc9a08110c4f89c79ecf835e7b675553e5fae0a97a11e36f134d2fc
+SHA-256 catalogo: 0c89b964a9b4deb11cbf11e0101e421cecc908dcb0bf58e01a8c437c266f3105
+SHA-256 download: 78a9c799c503bd94fa77a186d355a6c160be4a4f68b6ee2da381e53f618e0b70
+SHA-256 aula: 554ca4c679dfcbd41cf71e583df801d1ad51e79a0565aaf1f2feb20e27a67fc3
+SHA-256 agenda: 750b92524e813c2449b8a9d4715f69cc41eab0bba4ba87ff5abd762a7bb852db
+SHA-256 login: 62a18530fb43548ba4bfd000bf87d1aa859e2852a201b656ff2e6fea966d8e5b
+SHA-256 registrazione: c15e11a9330143120fde68f5ec14bea03b02cf20880aff679cf90860542c8f47
+SHA-256 cursore: aac03fb9ac02355479eaf4e5072ab1a515f750584ed65e73099030eb93de11ac
+SHA-256 puntatore: ef8602d11cf005c7683fe5eb9cc032850d14e08fb0caf82c491520c9164cbfad
 Desktop: Tauri 2, installer Windows NSIS per utente corrente
 Desktop build: tools/build-desktop.mjs -> desktop-dist (generato, non versionato)
 Aggiornamenti: pulsante Sincronizza riutilizzato nell'app desktop, release firmate, controllo ogni 6 ore e conferma manuale prima dell'installazione

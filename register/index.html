@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#050b14">
+  <meta name="aula-demo-version" content="1.4.0-alpha.6">
+  <title>Registrati · Aula Studio Virtuale</title>
+  <link rel="stylesheet" href="/assets/css/auth.css">
+</head>
+<body data-auth-mode="register">
+  <main class="auth-layout">
+    <section class="auth-main">
+      <a class="auth-brand" href="/" data-auth-link="/"><span class="auth-brand-mark">A</span><span>Aula Studio Virtuale</span></a>
+      <div class="auth-card">
+        <p class="eyebrow">Una nuova stanza ti aspetta</p>
+        <h1>Studiare pesa meno, insieme.</h1>
+        <p class="auth-copy">Crea il tuo profilo, conferma l’email e poi invita le persone con cui vuoi condividere il percorso.</p>
+        <form id="authForm" class="auth-form">
+          <label>Come vuoi essere chiamato?<input id="authDisplayName" name="displayName" type="text" minlength="2" maxlength="40" autocomplete="name" placeholder="Luca" required></label>
+          <label>Email<input id="authEmail" name="email" type="email" maxlength="254" autocomplete="email" placeholder="nome@esempio.it" required></label>
+          <label>Password<input id="authPassword" name="password" type="password" minlength="8" maxlength="128" autocomplete="new-password" placeholder="Almeno 8 caratteri" required></label>
+          <p id="authFeedback" class="auth-feedback" role="status" aria-live="polite" hidden></p>
+          <button id="authSubmit" class="auth-submit" type="submit">Crea il profilo</button>
+        </form>
+        <p class="auth-switch">Hai già un profilo? <a href="/login" data-auth-link="/login">Accedi</a></p>
+      </div>
+    </section>
+    <aside class="auth-aside" aria-label="Aula Studio Virtuale">
+      <div class="auth-aside-label">Una stanza, il vostro ritmo</div>
+      <blockquote class="auth-quote">“Non serve essere nello stesso posto per sentirsi dalla stessa parte.”</blockquote>
+      <div class="auth-stats"><div class="auth-stat"><strong>Live</strong><span>presenza condivisa</span></div><div class="auth-stat"><strong>Focus</strong><span>tempo di studio</span></div><div class="auth-stat"><strong>Eve</strong><span>assistenza didattica</span></div></div>
+    </aside>
+  </main>
+  <script src="/assets/vendor/supabase.js"></script>
+  <script type="module" src="/assets/js/auth/auth-page.js"></script>
+</body>
+</html>

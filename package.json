@@ -1,11 +1,12 @@
 {
   "name": "aula-studio-virtuale",
   "private": true,
-  "version": "1.4.0-alpha.5",
+  "version": "1.4.0-alpha.6",
   "type": "module",
   "scripts": {
+    "build:auth": "node tools/build-auth.mjs",
     "build:agenda": "node tools/build-agenda.mjs",
-    "build:web": "node tools/build-modular.mjs && node tools/build-agenda.mjs",
+    "build:web": "node tools/build-modular.mjs && node tools/build-agenda.mjs && node tools/build-auth.mjs",
     "build:desktop": "node tools/build-desktop.mjs",
     "desktop:dev": "tauri dev",
     "desktop:build": "tauri build",

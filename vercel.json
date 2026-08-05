@@ -11,6 +11,14 @@
       "destination": "/dashboard/index.html"
     },
     {
+      "source": "/login",
+      "destination": "/login/index.html"
+    },
+    {
+      "source": "/register",
+      "destination": "/register/index.html"
+    },
+    {
       "source": "/catalog",
       "destination": "/catalog/index.html"
     },

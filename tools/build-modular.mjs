@@ -52,14 +52,20 @@ const cleanRoot = (html, id) => html
   .replace(new RegExp(`(<section[^>]+id="${id}"[^>]*)\\shidden([^>]*>)`), "$1$2")
   .replace(/\n\s*<div class="portal-toast" id="portalToast"[^>]*><\/div>\s*$/m, "\n");
 
-const portalMarkup = cleanRoot(source.slice(presentationStart, dashboardStart), "portalPresentation");
-const dashboardMarkup = cleanRoot(source.slice(dashboardStart, catalogStart), "portalDashboard");
+const portalMarkup = cleanRoot(source.slice(presentationStart, dashboardStart), "portalPresentation")
+  .replaceAll("navigatePortal('dashboard')", "navigatePortal('register')")
+  .replace('onclick="navigatePortal(\'register\')">Accedi', 'onclick="navigatePortal(\'login\')">Accedi');
+const dashboardMarkup = cleanRoot(source.slice(dashboardStart, catalogStart), "portalDashboard")
+  .replace("<h1>Ciao, Luca.</h1>", '<h1>Ciao, <span data-auth-display-name>studente</span>.</h1>')
+  .replace('<button class="portal-button" type="button" onclick="navigatePortal(\'presentation\')">Esci</button>', '<button class="portal-button" type="button" data-auth-logout>Esci</button>');
 const catalogMarkup = cleanRoot(source.slice(catalogStart, aulaStart), "portalCatalog");
 const aulaMarkup = cleanRoot(source.slice(aulaStart, mainScriptStart), "portalAula");
 
 const sharedRuntime = `
 const routeUrls = {
   presentation: "/",
+  login: "/login",
+  register: "/register",
   dashboard: "/dashboard",
   catalog: "/catalog",
   aula: "/room/"
@@ -460,6 +466,13 @@ const outputs = {
 };
 
 function htmlDocument({ title, route, markup }) {
+  const protectedRoute = ["dashboard", "catalog", "aula"].includes(route);
+  const authHead = protectedRoute
+    ? '  <link rel="stylesheet" href="/assets/css/auth.css" />\n  <script>document.documentElement.dataset.authState="checking";</script>'
+    : "";
+  const authScripts = protectedRoute
+    ? '  <script src="/assets/vendor/supabase.js"></script>\n  <script type="module" src="/assets/js/auth/session.js"></script>'
+    : "";
   return `<!doctype html>
 <html lang="it">
 <head>
@@ -469,10 +482,12 @@ function htmlDocument({ title, route, markup }) {
   <meta name="aula-build" content="modular-routes-1" />
   <title>${title}</title>
   <link rel="stylesheet" href="/assets/css/${route}.css" />
+${authHead}
 </head>
-<body data-portal-route="${route}">
+<body data-portal-route="${route}"${protectedRoute ? ' data-auth-required="true"' : ""}>
 ${markup}
   ${route === "aula" ? "" : '<div class="portal-toast" id="portalToast" aria-live="polite"></div>'}
+${authScripts}
   <script type="module" src="/assets/js/${route}.js"></script>
 </body>
 </html>

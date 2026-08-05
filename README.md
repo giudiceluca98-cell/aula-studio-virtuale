@@ -4,7 +4,7 @@ Questo repository pubblica come sito ufficiale la **demo canonica** di Aula Stud
 
 ## Versione pubblicata
 
-- versione: `1.4.0-alpha.5`
+- versione: `1.4.0-alpha.6`
 - branch sorgente: `demo-canonica`
 - file canonico: `demo-aula-studio-virtuale-canonica.html`
 
@@ -16,12 +16,15 @@ Il file canonico resta la fonte editoriale verificabile. Prima dell'anteprima o 
 - `tools/build-modular.mjs`: generatore deterministico delle pagine modulari;
 - `index.html`: portale iniziale;
 - `dashboard/index.html`: scrivania e gestione delle stanze;
+- `login/index.html` e `register/index.html`: accesso email/password condiviso da web e desktop;
 - `catalog/index.html`: Catalogo ed Eve;
 - `download/index.html`: pagina pubblica che individua l'installer Windows più recente;
 - `room/index.html`: aula e strumenti di studio;
 - `agenda/index.html`: agenda personale sincronizzata, notifiche e impostazioni;
 - `supabase/migrations/`: schema, indici e policy RLS dell’Agenda;
 - `api/agenda/`: funzioni server per configurazione e Web Push;
+- `api/auth/config.js`: configurazione pubblica del client Auth, senza chiavi segrete;
+- `src/auth/`: sessione unica, protezione delle rotte, registrazione e logout;
 - `assets/css/`: fogli di stile filtrati per pagina;
 - `assets/js/`: controller JavaScript separati per pagina;
 - `assets/aula-cursor.svg`: cursore grafico nativo per la pagina;
@@ -31,6 +34,15 @@ Il file canonico resta la fonte editoriale verificabile. Prima dell'anteprima o 
 - `README.md`: documentazione essenziale.
 
 Il portale non carica più i dati del Catalogo o il motore dell'aula. La dashboard non carica il contenuto didattico. Il Catalogo carica le proprie schede soltanto sulla rotta `/catalog`. L'aula contiene esclusivamente il corso e gli strumenti che le appartengono.
+
+## Account e sessione condivisa
+
+Il portale resta pubblico. Scrivania, aula, Catalogo e Agenda richiedono invece
+lo stesso account Supabase. La registrazione salva il nome nel profilo Auth e,
+quando la conferma email è attiva, mostra esplicitamente che occorre aprire il
+messaggio ricevuto. L'Agenda non possiede un secondo modulo di accesso: riusa
+la sessione centrale. Anche l'app Windows conserva la sessione nel proprio
+WebView e usa gli stessi account già presenti nel progetto Supabase.
 
 ## Generazione locale
 
