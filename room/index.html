@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="aula-demo-version" content="1.4.0-alpha.8" />
+  <meta name="aula-demo-version" content="1.4.0-alpha.9" />
   <meta name="aula-build" content="modular-routes-1" />
   <title>Aula Studio Virtuale — Programmazione in Python</title>
   <link rel="stylesheet" href="/assets/css/aula.css" />
@@ -41,6 +41,9 @@
         <button class="action-button" type="button" onclick="portalDashboardOpenCatalogForRoom('python-room')">
           <span>▤</span><span class="label">Catalogo</span>
         </button>
+        <button class="action-button agenda-shortcut" type="button" onclick="window.location.assign('/agenda')">
+          <span>▦</span><span class="label">Agenda</span>
+        </button>
         <button class="action-button" type="button" onclick="openModal('chiamata')">
           <span>⌕</span><span class="label">Chiamata</span>
         </button>
@@ -52,7 +55,6 @@
     </header>
 
     <nav class="secondary-nav" aria-label="Strumenti dell'aula">
-      <button class="nav-button" type="button" onclick="window.location.assign('/agenda')"><span class="nav-icon">▦</span>Agenda</button>
       <button class="nav-button" type="button" onclick="openDrawer('corsi')"><span class="nav-icon">▣</span>Corsi</button>
       <button class="nav-button" type="button" onclick="openDrawer('materiali')"><span class="nav-icon">▧</span>Materiali</button>
       <button class="nav-button" type="button" onclick="openDrawer('checklist')"><span class="nav-icon">☷</span>Checklist</button>
