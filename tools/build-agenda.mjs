@@ -7,7 +7,13 @@ await mkdir(join(root,"assets","css"),{recursive:true});await mkdir(join(root,"a
 await cp(join(root,"src","agenda","agenda.css"),join(root,"assets","css","agenda.css"));
 let agendaSource=await readFile(join(root,"src","agenda","agenda.js"),"utf8");
 let coreSource=await readFile(join(root,"src","agenda","core.js"),"utf8");
-coreSource=coreSource.replace('import rrulePackage from "rrule";\nconst { RRule, rrulestr } = rrulePackage;','const { RRule, rrulestr } = globalThis.rrule;');
+coreSource=coreSource.replace(
+  /import rrulePackage from ["']rrule["'];\r?\nconst \{ RRule, rrulestr \} = rrulePackage;/,
+  "const { RRule, rrulestr } = globalThis.rrule;"
+);
+if (/from\s+["']rrule["']/.test(coreSource)) {
+  throw new Error("La build Agenda contiene ancora l'import browser non valido di rrule.");
+}
 await writeFile(join(root,"assets","js","agenda","agenda.js"),agendaSource);
 await writeFile(join(root,"assets","js","agenda","core.js"),coreSource);
 await cp(join(root,"src","agenda","offline.js"),join(root,"assets","js","agenda","offline.js"));

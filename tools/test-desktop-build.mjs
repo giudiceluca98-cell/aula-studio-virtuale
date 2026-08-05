@@ -61,6 +61,22 @@ if (desktopAgenda.includes('type="module" src="/assets/js/agenda/agenda.js"')) {
 if (!desktopAgenda.includes('setConnection();')) {
   throw new Error("Il bundle Agenda incorporato non contiene l'avvio della connessione.");
 }
+const agendaCore = await readFile(
+  join(dist, "assets", "js", "agenda", "core.js"),
+  "utf8"
+);
+const agendaBundle = await readFile(
+  join(dist, "assets", "js", "agenda-desktop.js"),
+  "utf8"
+);
+for (const [label, source] of [["core Agenda", agendaCore], ["bundle Agenda", agendaBundle]]) {
+  if (/from\s+["']rrule["']/.test(source)) {
+    throw new Error(`${label}: import rrule non compatibile con WebView2.`);
+  }
+  if (!source.includes("const { RRule, rrulestr } = globalThis.rrule;")) {
+    throw new Error(`${label}: libreria rrule globale non collegata.`);
+  }
+}
 if (!webPortal.includes('href="/download"')) {
   throw new Error("Il portale web non contiene il collegamento all'installer.");
 }
