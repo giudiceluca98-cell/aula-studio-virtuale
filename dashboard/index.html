@@ -7,8 +7,10 @@
   <meta name="aula-build" content="modular-routes-1" />
   <title>Aula Studio Virtuale — Le tue stanze</title>
   <link rel="stylesheet" href="/assets/css/dashboard.css" />
+  <link rel="stylesheet" href="/assets/css/auth.css" />
+  <script>document.documentElement.dataset.authState="checking";</script>
 </head>
-<body data-portal-route="dashboard">
+<body data-portal-route="dashboard" data-auth-required="true">
 <section class="portal-view portal-dashboard" id="portalDashboard">
     <header class="portal-header">
       <div class="portal-container portal-navbar">
@@ -23,7 +25,7 @@
           <button class="portal-nav-link optional" type="button" onclick="window.location.assign('/agenda')">Agenda</button>
           <a class="portal-button" data-web-install href="/download">Installa app</a>
           <button class="portal-button" type="button" onclick="toggleDarkMode()">Tema</button>
-          <button class="portal-button" type="button" onclick="navigatePortal('presentation')">Esci</button>
+          <button class="portal-button" type="button" data-auth-logout>Esci</button>
         </nav>
       </div>
     </header>
@@ -33,7 +35,7 @@
         <div class="portal-dashboard-top">
           <div>
             <div class="portal-eyebrow">La tua scrivania</div>
-            <h1>Ciao, Luca.</h1>
+            <h1>Ciao, <span data-auth-display-name>studente</span>.</h1>
             <p class="portal-section-copy">Scegli una stanza, riprendi lo studio oppure aprine una nuova.</p>
           </div>
 
@@ -375,6 +377,8 @@
 
   
   <div class="portal-toast" id="portalToast" aria-live="polite"></div>
+  <script src="/assets/vendor/supabase.js"></script>
+  <script type="module" src="/assets/js/auth/session.js"></script>
   <script type="module" src="/assets/js/dashboard.js"></script>
 </body>
 </html>

@@ -12,12 +12,15 @@ if (!desktopDist.startsWith(`${root}\\`) && !desktopDist.startsWith(`${root}/`))
 // La demo canonica resta l'unica fonte. Prima rigeneriamo sempre le rotte web.
 await import("./build-modular.mjs");
 await import("./build-agenda.mjs");
+await import("./build-auth.mjs");
 
 await rm(desktopDist, { recursive: true, force: true });
 await mkdir(desktopDist, { recursive: true });
 
 const files = [
   "index.html",
+  "login/index.html",
+  "register/index.html",
   "dashboard/index.html",
   "catalog/index.html",
   "agenda/index.html",
@@ -40,9 +43,14 @@ await cp(join(root, "assets", "css"), join(desktopDist, "assets", "css"), {
 await cp(join(root, "assets", "js"), join(desktopDist, "assets", "js"), {
   recursive: true
 });
+await cp(join(root, "assets", "vendor"), join(desktopDist, "assets", "vendor"), {
+  recursive: true
+});
 
 const routeReplacements = [
   ['presentation: "/"', 'presentation: "/index.html"'],
+  ['login: "/login"', 'login: "/login/index.html"'],
+  ['register: "/register"', 'register: "/register/index.html"'],
   ['dashboard: "/dashboard"', 'dashboard: "/dashboard/index.html"'],
   ['catalog: "/catalog"', 'catalog: "/catalog/index.html"'],
   ['agenda: "/agenda"', 'agenda: "/agenda/index.html"'],
@@ -82,6 +90,8 @@ await writeFile(
 
 for (const relativePath of [
   "index.html",
+  "login/index.html",
+  "register/index.html",
   "dashboard/index.html",
   "catalog/index.html",
   "agenda/index.html",
@@ -89,6 +99,13 @@ for (const relativePath of [
 ]) {
   const htmlPath = join(desktopDist, relativePath);
   let html = await readFile(htmlPath, "utf8");
+  html = html
+    .replaceAll('href="/login"', 'href="/login/index.html"')
+    .replaceAll('href="/register"', 'href="/register/index.html"')
+    .replaceAll('href="/dashboard"', 'href="/dashboard/index.html"')
+    .replaceAll('href="/catalog"', 'href="/catalog/index.html"')
+    .replaceAll('href="/agenda"', 'href="/agenda/index.html"')
+    .replaceAll('href="/room/"', 'href="/room/index.html"');
   html = html.replace(/<a\b[^>]*data-web-install[^>]*>[\s\S]*?<\/a>/g, "");
   html = html.replace(
     "</body>",

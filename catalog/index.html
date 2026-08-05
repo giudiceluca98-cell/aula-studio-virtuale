@@ -7,8 +7,10 @@
   <meta name="aula-build" content="modular-routes-1" />
   <title>Aula Studio Virtuale — Catalogo intelligente</title>
   <link rel="stylesheet" href="/assets/css/catalog.css" />
+  <link rel="stylesheet" href="/assets/css/auth.css" />
+  <script>document.documentElement.dataset.authState="checking";</script>
 </head>
-<body data-portal-route="catalog">
+<body data-portal-route="catalog" data-auth-required="true">
 <section class="portal-view catalog-demo-view" id="portalCatalog" data-catalog-demo-version="1.1.0-alpha.1">
     <header class="portal-header">
       <div class="portal-container portal-navbar">
@@ -241,6 +243,8 @@
 
   
   <div class="portal-toast" id="portalToast" aria-live="polite"></div>
+  <script src="/assets/vendor/supabase.js"></script>
+  <script type="module" src="/assets/js/auth/session.js"></script>
   <script type="module" src="/assets/js/catalog.js"></script>
 </body>
 </html>

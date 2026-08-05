@@ -7,6 +7,7 @@
   <meta name="aula-build" content="modular-routes-1" />
   <title>Aula Studio Virtuale — Presentazione</title>
   <link rel="stylesheet" href="/assets/css/presentation.css" />
+
 </head>
 <body data-portal-route="presentation">
 <section class="portal-view portal-presentation" id="portalPresentation">
@@ -23,8 +24,8 @@
           <button class="portal-nav-link optional" type="button" onclick="portalScrollTo('portalEve')">Eve</button>
           <button class="portal-button" type="button" onclick="toggleDarkMode()">Tema</button>
           <a class="portal-button" data-web-install href="/download">Installa app</a>
-          <button class="portal-button" type="button" onclick="navigatePortal('dashboard')">Accedi</button>
-          <button class="portal-button primary" type="button" onclick="navigatePortal('dashboard')">Crea la tua aula →</button>
+          <button class="portal-button" type="button" onclick="navigatePortal('login')">Accedi</button>
+          <button class="portal-button primary" type="button" onclick="navigatePortal('register')">Crea la tua aula →</button>
         </nav>
       </div>
     </header>
@@ -46,7 +47,7 @@
             </p>
 
             <div class="portal-actions">
-              <button class="portal-button primary large" type="button" onclick="navigatePortal('dashboard')">
+              <button class="portal-button primary large" type="button" onclick="navigatePortal('register')">
                 Inizia gratuitamente →
               </button>
               <button class="portal-button large" type="button" onclick="portalScrollTo('portalHow')">
@@ -407,7 +408,7 @@
                 Crea la stanza, scegli il materiale e invita le persone che vuoi avere accanto.
               </p>
             </div>
-            <button class="portal-button primary large" type="button" onclick="navigatePortal('dashboard')">
+            <button class="portal-button primary large" type="button" onclick="navigatePortal('register')">
               Crea la tua aula →
             </button>
           </div>
@@ -425,6 +426,7 @@
 
   
   <div class="portal-toast" id="portalToast" aria-live="polite"></div>
+
   <script type="module" src="/assets/js/presentation.js"></script>
 </body>
 </html>

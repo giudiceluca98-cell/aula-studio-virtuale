@@ -16,9 +16,13 @@ const requiredAny = (...names) => {
   throw new Error(`Configura almeno una tra: ${names.join(", ")}`);
 };
 
-export const publicConfig = () => ({
+export const publicAuthConfig = () => ({
   supabaseUrl: requiredAny("SUPABASE_URL", "NEXT_PUBLIC_SUPABASE_URL"),
-  supabaseAnonKey: requiredAny("SUPABASE_ANON_KEY", "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY"),
+  supabaseAnonKey: requiredAny("SUPABASE_ANON_KEY", "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY")
+});
+
+export const publicConfig = () => ({
+  ...publicAuthConfig(),
   vapidPublicKey: required("VAPID_PUBLIC_KEY")
 });
 
@@ -44,7 +48,8 @@ export function json(res, status, body) {
 
 export function allow(req, res, methods) {
   const origin = String(req.headers.origin || "");
-  if (["tauri://localhost","http://tauri.localhost","https://tauri.localhost"].includes(origin)) {
+  const trustedDevelopmentOrigin = /^https?:\/\/(?:localhost|127\.0\.0\.1|192\.168\.\d{1,3}\.\d{1,3})(?::\d+)?$/.test(origin);
+  if (["tauri://localhost","http://tauri.localhost","https://tauri.localhost"].includes(origin) || trustedDevelopmentOrigin) {
     res.setHeader("Access-Control-Allow-Origin", origin);
     res.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
     res.setHeader("Access-Control-Allow-Methods", [...methods,"OPTIONS"].join(", "));
