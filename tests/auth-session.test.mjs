@@ -43,3 +43,9 @@ test("la build desktop include accesso, registrazione e client Supabase", async 
   assert.match(source, /assets", "vendor/);
   assert.match(source, /build-auth\.mjs/);
 });
+
+test("Agenda mantiene il tema scuro quando non è stato scelto esplicitamente il chiaro", async () => {
+  const source = await read("../src/agenda/agenda.js");
+  assert.match(source, /visual\.dark===false\|\|visual\.theme==="light"/);
+  assert.doesNotMatch(source, /classList\.toggle\("light",!visual\.dark\)/);
+});
