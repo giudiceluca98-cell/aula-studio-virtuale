@@ -88,6 +88,28 @@ await writeFile(
   "utf8"
 );
 
+// WebView2 può rifiutare la catena di moduli ES caricata dall'origine asset
+// dell'app installata. L'Agenda usa quindi un unico script classico nella build
+// desktop, lasciando invariati i moduli separati della versione web.
+const stripModuleSyntax = (source) => source
+  .replace(/^import\s+[^;]+;\s*$/gm, "")
+  .replace(/^export\s+/gm, "");
+const desktopAgendaBundle = [
+  await readFile(join(desktopDist, "assets", "js", "auth", "session.js"), "utf8"),
+  await readFile(join(desktopDist, "assets", "js", "agenda", "offline.js"), "utf8"),
+  await readFile(join(desktopDist, "assets", "js", "agenda", "core.js"), "utf8"),
+  await readFile(join(desktopDist, "assets", "js", "agenda", "agenda.js"), "utf8")
+].map(stripModuleSyntax).join("\n\n");
+await writeFile(
+  join(desktopDist, "assets", "js", "agenda-desktop.js"),
+  `window.addEventListener("error", (event) => {\n` +
+    `  const app = document.getElementById("agendaApp");\n` +
+    `  const loading = document.getElementById("loadingState");\n` +
+    `  if (app && loading) { app.hidden = false; loading.hidden = false; loading.textContent = "Agenda non disponibile: " + event.message; }\n` +
+    `});\n\n${desktopAgendaBundle}`,
+  "utf8"
+);
+
 for (const relativePath of [
   "index.html",
   "login/index.html",
@@ -107,6 +129,12 @@ for (const relativePath of [
     .replaceAll('href="/agenda"', 'href="/agenda/index.html"')
     .replaceAll('href="/room/"', 'href="/room/index.html"');
   html = html.replace(/<a\b[^>]*data-web-install[^>]*>[\s\S]*?<\/a>/g, "");
+  if (relativePath === "agenda/index.html") {
+    html = html
+      .replace('  <script type="module" src="/assets/js/auth/session.js"></script>\n', "")
+      .replace('  <script type="module" src="/assets/js/agenda/agenda.js"></script>\n',
+        '  <script src="/assets/js/agenda-desktop.js"></script>\n');
+  }
   html = html.replace(
     "</body>",
     '  <script src="/assets/js/desktop-window.js"></script>\n' +

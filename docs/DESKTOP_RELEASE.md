@@ -91,7 +91,7 @@ Il workflow non scrive questi valori nei file web e non li espone all'app.
    ```powershell
    pnpm build:web
    pnpm build:desktop
-   pnpm release:check-version -- 1.4.0-alpha.6
+   pnpm release:check-version -- 1.4.0-alpha.7
    ```
 
 4. Aprire l'anteprima IP e controllare portale, dashboard, Catalogo e aula.
@@ -99,8 +99,8 @@ Il workflow non scrive questi valori nei file web e non li espone all'app.
 6. Creare e inviare il tag corrispondente:
 
    ```powershell
-   git tag v1.4.0-alpha.6
-   git push origin v1.4.0-alpha.6
+   git tag v1.4.0-alpha.7
+   git push origin v1.4.0-alpha.7
    ```
 
 7. Il workflow GitHub:
@@ -117,7 +117,7 @@ soltanto dopo la conferma dell'utente.
 ## Versioni alpha e stabili
 
 Il livello di maturità resta nel numero SemVer, per esempio
-`1.4.0-alpha.6`. Il workflow pubblica comunque la release GitHub come release
+`1.4.0-alpha.7`. Il workflow pubblica comunque la release GitHub come release
 normale: l'endpoint statico `/releases/latest/download/latest.json` usato
 dall'updater di Tauri ignora infatti le release marcate come prerelease. Prima
 di distribuire una versione stabile conviene usare un numero senza suffisso,

@@ -20,6 +20,7 @@ const requiredFiles = [
   "assets/js/aula.js",
   "assets/js/desktop-window.js",
   "assets/js/desktop-updater.js",
+  "assets/js/agenda-desktop.js",
   "desktop-build.json"
 ];
 
@@ -48,6 +49,14 @@ for (const relativePath of desktopPages) {
 const webPortal = await readFile(join(root, "index.html"), "utf8");
 if (webPortal.includes("desktop-updater.js")) {
   throw new Error("La build web non deve caricare il controller desktop.");
+}
+
+const desktopAgenda = await readFile(join(dist, "agenda", "index.html"), "utf8");
+if (!desktopAgenda.includes('/assets/js/agenda-desktop.js')) {
+  throw new Error("L'Agenda desktop non usa il bundle compatibile con WebView2.");
+}
+if (desktopAgenda.includes('type="module" src="/assets/js/agenda/agenda.js"')) {
+  throw new Error("L'Agenda desktop contiene ancora il modulo ES non compatibile.");
 }
 if (!webPortal.includes('href="/download"')) {
   throw new Error("Il portale web non contiene il collegamento all'installer.");
