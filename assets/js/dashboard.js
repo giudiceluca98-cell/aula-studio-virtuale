@@ -1,3 +1,18 @@
+import { getAuthContext } from "./auth/session.js";
+import {
+  ROOM_CACHE_KEY,
+  createRemoteRoom,
+  deleteRemoteRoom,
+  enqueueRoomOperation,
+  flushRoomOutbox,
+  isRemoteRoomId,
+  isRetryableSyncError,
+  joinRemoteRoom,
+  leaveRemoteRoom,
+  loadRemoteRooms,
+  migrateLegacyRooms,
+  rotateRemoteInvite
+} from "./sync/room-sync.js";
 
 const routeUrls = {
   presentation: "/",
@@ -555,7 +570,15 @@ applySharedVisualPreferences();
       portalDashboardRoomManageBusy = true;
       portalDashboardRenderRoomManage();
       portalDashboardRoomManageStatus("Chiusura della presenza e della membership…");
-      await new Promise((resolve) => window.setTimeout(resolve, 520));
+      try {
+        const { client } = await portalDashboardSyncContext();
+        await leaveRemoteRoom(client, roomId);
+      } catch (error) {
+        portalDashboardRoomManageBusy = false;
+        portalDashboardRenderRoomManage();
+        portalDashboardRoomManageStatus(`Uscita non completata: ${error.message}`, "error");
+        return;
+      }
       portalDashboardRemoveRoomLocally(roomId);
       portalDashboardRoomManageBusy = false;
       const message = room.role === "owner"
@@ -594,11 +617,17 @@ applySharedVisualPreferences();
       portalDashboardRoomManageStatus("Eliminazione sicura in corso…");
 
       portalDashboardSetDeleteStep("portalRoomDeleteStepAccess");
-      await new Promise((resolve) => window.setTimeout(resolve, 360));
-      portalDashboardSetDeleteStep("portalRoomDeleteStepFiles", ["portalRoomDeleteStepAccess"]);
-      await new Promise((resolve) => window.setTimeout(resolve, 420));
-      portalDashboardSetDeleteStep("portalRoomDeleteStepData", ["portalRoomDeleteStepAccess", "portalRoomDeleteStepFiles"]);
-      await new Promise((resolve) => window.setTimeout(resolve, 420));
+      try {
+        const { client } = await portalDashboardSyncContext();
+        portalDashboardSetDeleteStep("portalRoomDeleteStepFiles", ["portalRoomDeleteStepAccess"]);
+        await deleteRemoteRoom(client, roomId);
+        portalDashboardSetDeleteStep("portalRoomDeleteStepData", ["portalRoomDeleteStepAccess", "portalRoomDeleteStepFiles"]);
+      } catch (error) {
+        portalDashboardRoomManageBusy = false;
+        portalDashboardRenderRoomManage();
+        portalDashboardRoomManageStatus(`Eliminazione non completata: ${error.message}`, "error");
+        return;
+      }
       portalDashboardSetDeleteStep("", ["portalRoomDeleteStepAccess", "portalRoomDeleteStepFiles", "portalRoomDeleteStepData"]);
 
       portalDashboardRemoveRoomLocally(roomId);
@@ -607,8 +636,8 @@ applySharedVisualPreferences();
       if (dialog) dialog.hidden = true;
       document.body.classList.remove("portal-room-manage-open");
       portalDashboardManagedRoomId = null;
-      portalDashboardFeedback(`La stanza “${room.name}” è stata eliminata dalla demo locale.`, "success");
-      portalNotify("Stanza eliminata dalla demo");
+      portalDashboardFeedback(`La stanza “${room.name}” è stata eliminata da Aula Studio.`, "success");
+      portalNotify("Stanza eliminata e sincronizzata");
     }
 
     window.addEventListener("keydown", (event) => {
@@ -792,14 +821,22 @@ applySharedVisualPreferences();
       portalDashboardInviteBusy = true;
       portalDashboardRenderInviteDialog();
       portalDashboardInviteStatus("Revoca del codice precedente in corso…");
-      await new Promise((resolve) => window.setTimeout(resolve, 460));
-      const next = portalDashboardRotatedCode(room);
+      let nextCode;
+      try {
+        const { client } = await portalDashboardSyncContext();
+        nextCode = await rotateRemoteInvite(client, room.id);
+      } catch (error) {
+        portalDashboardInviteBusy = false;
+        portalDashboardRenderInviteDialog();
+        portalDashboardInviteStatus(`Codice non aggiornato: ${error.message}`, "error");
+        return;
+      }
       const rotatedAt = new Date().toISOString();
       portalDashboardState.rooms = portalDashboardState.rooms.map((item) => item.id === room.id
         ? {
             ...item,
-            inviteCode: next.code,
-            inviteRevision: next.revision,
+            inviteCode: nextCode,
+            inviteRevision: Math.max(0, Number(item.inviteRevision || 0)) + 1,
             inviteRotatedAt: rotatedAt,
             lastActivity: "Adesso · Codice invito rigenerato"
           }
@@ -809,7 +846,7 @@ applySharedVisualPreferences();
       portalDashboardInviteBusy = false;
       portalDashboardHideInviteConfirmation();
       portalDashboardRenderInviteDialog();
-      portalDashboardInviteStatus(`Nuovo codice attivo: ${next.code}. Il precedente è stato revocato.`, "success");
+      portalDashboardInviteStatus(`Nuovo codice attivo: ${nextCode}. Il precedente è stato revocato.`, "success");
       portalNotify("Nuovo codice invito creato");
     }
 
@@ -1018,7 +1055,7 @@ applySharedVisualPreferences();
        DASHBOARD REALE — CREATE E JOIN DETERMINISTICI
        ========================================================== */
 
-    const portalDashboardRoomsStorageKey = "aula-demo-dashboard-rooms-v1";
+    const portalDashboardRoomsStorageKey = ROOM_CACHE_KEY;
     const portalDashboardDefaultRooms = [
       {
         id: "python-room",
@@ -1057,7 +1094,10 @@ applySharedVisualPreferences();
       working: null,
       loading: false,
       retryAction: null,
-      rooms: []
+      rooms: [],
+      client: null,
+      userId: null,
+      syncing: false
     };
 
     function portalDashboardEscape(value) {
@@ -1075,12 +1115,13 @@ applySharedVisualPreferences();
         id: String(room.id),
         name: String(room.name).slice(0, 60),
         inviteCode: String(room.inviteCode).toUpperCase().slice(0, 64),
-        role: room.role === "owner" ? "owner" : "member",
+        role: ["owner", "admin", "member"].includes(room.role) ? room.role : "member",
         online: Math.max(0, Math.min(99, Number(room.online || 0))),
         lastActivity: String(room.lastActivity || "Nessuna attività recente").slice(0, 120),
         createdAt: Number(room.createdAt || Date.now()),
         inviteRevision: Math.max(0, Number(room.inviteRevision || 0)),
-        inviteRotatedAt: room.inviteRotatedAt ? String(room.inviteRotatedAt) : null
+        inviteRotatedAt: room.inviteRotatedAt ? String(room.inviteRotatedAt) : null,
+        syncState: room.syncState === "pending" ? "pending" : isRemoteRoomId(room.id) ? "synced" : "local"
       };
     }
 
@@ -1093,6 +1134,46 @@ applySharedVisualPreferences();
         localStorage.setItem(portalDashboardRoomsStorageKey, JSON.stringify(portalDashboardState.rooms));
       } catch {
         portalDashboardFeedback("La stanza è disponibile per questa sessione, ma il browser non consente il salvataggio locale.", "error");
+      }
+    }
+
+    async function portalDashboardSyncContext() {
+      if (portalDashboardState.client && portalDashboardState.userId) return portalDashboardState;
+      const context = await getAuthContext();
+      if (!context?.session || !context?.user?.id) throw new Error("Accedi per sincronizzare le stanze.");
+      portalDashboardState.client = context.client;
+      portalDashboardState.userId = context.user.id;
+      return portalDashboardState;
+    }
+
+    async function portalDashboardSynchronize(options = {}) {
+      if (portalDashboardState.syncing) return false;
+      portalDashboardState.syncing = true;
+      try {
+        const { client, userId } = await portalDashboardSyncContext();
+        const cachedRooms = [...portalDashboardState.rooms];
+        const migration = options.migrate === false
+          ? { rooms: await loadRemoteRooms(client, userId), migrated: 0 }
+          : await migrateLegacyRooms({ client, userId, storage: localStorage, localRooms: cachedRooms });
+        const flushed = await flushRoomOutbox({ client, userId, storage: localStorage });
+        portalDashboardState.rooms = (flushed.rooms?.length || !migration.rooms?.length ? flushed.rooms : migration.rooms)
+          .map(portalDashboardNormalizeRoom)
+          .filter(Boolean);
+        portalDashboardSaveRooms();
+        portalDashboardRenderRooms();
+        portalDashboardCatalogSync();
+        if (options.announce || migration.migrated || flushed.processed) {
+          const changes = migration.migrated + flushed.processed;
+          portalDashboardFeedback(changes
+            ? `${changes} ${changes === 1 ? "modifica sincronizzata" : "modifiche sincronizzate"} con Aula Studio.`
+            : "Stanze sincronizzate con Aula Studio.", "success");
+        }
+        return true;
+      } catch (error) {
+        if (options.announce) portalDashboardFeedback(`Sincronizzazione in attesa: ${error.message}`, "error");
+        return false;
+      } finally {
+        portalDashboardState.syncing = false;
       }
     }
 
@@ -1192,24 +1273,42 @@ applySharedVisualPreferences();
 
       portalDashboardFieldFeedback("portalRoomName", "portalCreateRoomHelp", "Creazione della stanza in corso…");
       portalDashboardSetWorking("create", true);
-      await new Promise((resolve) => window.setTimeout(resolve, 420));
-      const room = {
-        id: portalDashboardRoomId(name),
-        name,
-        inviteCode: portalDashboardCodeFromName(name),
-        role: "owner",
-        online: 1,
-        lastActivity: "Adesso · Stanza creata",
-        createdAt: Date.now()
-      };
-      portalDashboardState.rooms.unshift(room);
-      portalDashboardSaveRooms();
-      portalDashboardRenderRooms();
-      if (input) input.value = "";
-      portalDashboardFieldFeedback("portalRoomName", "portalCreateRoomHelp", "Da 3 a 60 caratteri. Gli spazi iniziali e finali vengono rimossi.");
-      portalDashboardSetWorking("create", false);
-      portalDashboardFeedback(`Stanza “${name}” creata. Codice invito: ${room.inviteCode}`, "success");
-      portalNotify("Stanza creata nella demo");
+      try {
+        const { client } = await portalDashboardSyncContext();
+        const room = await createRemoteRoom(client, name);
+        portalDashboardState.rooms.unshift(room);
+        portalDashboardSaveRooms();
+        portalDashboardRenderRooms();
+        if (input) input.value = "";
+        portalDashboardFieldFeedback("portalRoomName", "portalCreateRoomHelp", "Da 3 a 60 caratteri. Gli spazi iniziali e finali vengono rimossi.");
+        portalDashboardFeedback(`Stanza “${name}” creata e sincronizzata. Codice invito: ${room.inviteCode}`, "success");
+        portalNotify("Stanza sincronizzata con Aula Studio");
+      } catch (error) {
+        if (isRetryableSyncError(error, navigator.onLine)) {
+          const room = {
+            id: portalDashboardRoomId(name),
+            name,
+            inviteCode: "IN ATTESA",
+            role: "owner",
+            online: 1,
+            lastActivity: "Adesso · Sincronizzazione in attesa",
+            createdAt: Date.now(),
+            syncState: "pending"
+          };
+          enqueueRoomOperation(localStorage, "create", { name, legacyId: room.id });
+          portalDashboardState.rooms.unshift(room);
+          portalDashboardSaveRooms();
+          portalDashboardRenderRooms();
+          if (input) input.value = "";
+          portalDashboardFeedback(`Stanza “${name}” salvata sul dispositivo. Sarà sincronizzata automaticamente appena torna la connessione.`, "success");
+          portalNotify("Modifica salvata, sincronizzazione in attesa");
+        } else {
+          portalDashboardFieldFeedback("portalRoomName", "portalCreateRoomHelp", error.message || "Non è stato possibile creare la stanza.", "error");
+          portalDashboardFeedback(`Creazione non riuscita: ${error.message}`, "error");
+        }
+      } finally {
+        portalDashboardSetWorking("create", false);
+      }
     }
 
     async function portalDashboardJoinRoom(event) {
@@ -1227,8 +1326,6 @@ applySharedVisualPreferences();
 
       portalDashboardFieldFeedback("portalInviteCode", "portalJoinRoomHelp", "Verifica del codice in corso…");
       portalDashboardSetWorking("join", true);
-      await new Promise((resolve) => window.setTimeout(resolve, 420));
-      if (portalDashboardHandleDemoJoinError(code, input)) return;
       const localRoom = portalDashboardState.rooms.find((room) => room.inviteCode === code);
       if (localRoom) {
         portalDashboardSetWorking("join", false);
@@ -1237,33 +1334,32 @@ applySharedVisualPreferences();
         portalDashboardRenderRooms();
         return;
       }
-      const invitedRoom = portalDashboardInvites[code];
-      if (!invitedRoom) {
-        portalDashboardSetWorking("join", false);
-        portalDashboardFieldFeedback("portalInviteCode", "portalJoinRoomHelp", "Codice errato o non più valido. Prova STUDY2026.", "error");
-        portalDashboardFeedback("Non è stato possibile entrare: il codice non corrisponde a una stanza attiva.", "error");
-        portalDashboardShowState("invalid-code", "Codice non valido", "Il codice non corrisponde a una stanza attiva oppure è stato revocato. Nessuna stanza è stata aggiunta.", { code, focus: false });
-        input?.focus();
-        return;
-      }
-
-      const existing = portalDashboardState.rooms.find((room) => room.id === invitedRoom.id || room.inviteCode === code);
-      if (existing) {
-        portalDashboardSetWorking("join", false);
-        portalDashboardFieldFeedback("portalInviteCode", "portalJoinRoomHelp", "Sei già membro di questa stanza.");
-        portalDashboardFeedback(`La stanza “${existing.name}” è già presente nella tua scrivania.`, "success");
+      try {
+        const { client, userId } = await portalDashboardSyncContext();
+        const roomId = await joinRemoteRoom(client, code);
+        portalDashboardState.rooms = await loadRemoteRooms(client, userId);
+        portalDashboardSaveRooms();
         portalDashboardRenderRooms();
-        return;
+        const joined = portalDashboardState.rooms.find((room) => room.id === roomId);
+        if (input) input.value = "";
+        portalDashboardFieldFeedback("portalInviteCode", "portalJoinRoomHelp", "Il codice non distingue maiuscole e minuscole.");
+        portalDashboardFeedback(`Ingresso completato${joined ? ` nella stanza “${joined.name}”` : ""}.`, "success");
+        portalNotify("Ingresso sincronizzato con Aula Studio");
+      } catch (error) {
+        if (isRetryableSyncError(error, navigator.onLine)) {
+          enqueueRoomOperation(localStorage, "join", { inviteCode: code });
+          if (input) input.value = "";
+          portalDashboardFieldFeedback("portalInviteCode", "portalJoinRoomHelp", "Ingresso salvato: sarà verificato quando torna la connessione.");
+          portalDashboardFeedback("Codice salvato sul dispositivo. L’ingresso verrà sincronizzato automaticamente.", "success");
+        } else {
+          portalDashboardFieldFeedback("portalInviteCode", "portalJoinRoomHelp", "Codice errato, scaduto o revocato.", "error");
+          portalDashboardFeedback(`Non è stato possibile entrare: ${error.message}`, "error");
+          portalDashboardShowState("invalid-code", "Codice non valido", "Il codice non corrisponde a una stanza attiva oppure è stato revocato. Nessuna stanza è stata aggiunta.", { code, focus: false });
+          input?.focus();
+        }
+      } finally {
+        portalDashboardSetWorking("join", false);
       }
-
-      portalDashboardState.rooms.unshift({ ...invitedRoom, createdAt: Date.now() });
-      portalDashboardSaveRooms();
-      portalDashboardRenderRooms();
-      if (input) input.value = "";
-      portalDashboardFieldFeedback("portalInviteCode", "portalJoinRoomHelp", "Il codice non distingue maiuscole e minuscole.");
-      portalDashboardSetWorking("join", false);
-      portalDashboardFeedback(`Ingresso completato nella stanza “${invitedRoom.name}”.`, "success");
-      portalNotify("Ingresso nella stanza completato");
     }
 
     async function portalDashboardInit() {
@@ -1271,9 +1367,8 @@ applySharedVisualPreferences();
       if (!portalDashboardState.initialized) {
         portalDashboardState.initialized = true;
         portalDashboardSetLoading(true);
-        await new Promise((resolve) => window.setTimeout(resolve, 460));
         const loadResult = portalDashboardLoadRooms();
-        portalDashboardSetLoading(false);
+        portalDashboardRenderRooms();
         if (!loadResult?.ok) {
           const storageBlocked = loadResult?.reason === "storage-blocked";
           portalDashboardShowState(
@@ -1285,11 +1380,18 @@ applySharedVisualPreferences();
             { focus: false }
           );
         }
+        await portalDashboardSynchronize({ migrate: true });
+        portalDashboardSetLoading(false);
       }
       portalDashboardRenderRooms();
       portalDashboardCatalogSync();
       portalDashboardSetWorking("", false);
     }
+
+    window.addEventListener("online", () => void portalDashboardSynchronize({ migrate: true, announce: true }));
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible" && navigator.onLine) void portalDashboardSynchronize({ migrate: true });
+    });
 
 
     /* ==========================================================

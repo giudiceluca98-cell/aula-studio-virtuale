@@ -111,6 +111,20 @@ await writeFile(
   "utf8"
 );
 
+// Anche la Dashboard ora importa il motore di sincronizzazione delle stanze.
+// Nella build installata lo uniamo alla sessione per evitare dipendenze da
+// moduli ES caricati attraverso l'origine asset di WebView2.
+const desktopDashboardBundle = [
+  await readFile(join(desktopDist, "assets", "js", "auth", "session.js"), "utf8"),
+  await readFile(join(desktopDist, "assets", "js", "sync", "room-sync.js"), "utf8"),
+  await readFile(join(desktopDist, "assets", "js", "dashboard.js"), "utf8")
+].map(stripModuleSyntax).join("\n\n");
+await writeFile(
+  join(desktopDist, "assets", "js", "dashboard-desktop.js"),
+  desktopDashboardBundle,
+  "utf8"
+);
+
 for (const relativePath of [
   "index.html",
   "login/index.html",
@@ -146,6 +160,20 @@ for (const relativePath of [
     }
     if (!html.includes('data-desktop-agenda')) {
       throw new Error("Il bundle classico dell'Agenda non è stato collegato alla pagina desktop.");
+    }
+  }
+  if (relativePath === "dashboard/index.html") {
+    html = html
+      .replace(/\s*<script\s+type=["']module["']\s+src=["']\/assets\/js\/auth\/session\.js["']>\s*<\/script>\s*/i, "\n")
+      .replace(
+        /\s*<script\s+type=["']module["']\s+src=["']\/assets\/js\/dashboard\.js["']>\s*<\/script>\s*/i,
+        '\n  <script src="/assets/js/dashboard-desktop.js" data-desktop-dashboard></script>\n'
+      );
+    if (/type=["']module["'][^>]+\/assets\/js\/(?:auth\/session|dashboard)\.js/i.test(html)) {
+      throw new Error("La Dashboard desktop contiene ancora moduli ES non compatibili.");
+    }
+    if (!html.includes('data-desktop-dashboard')) {
+      throw new Error("Il bundle classico della Dashboard non è stato collegato alla pagina desktop.");
     }
   }
   html = html.replace(

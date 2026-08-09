@@ -21,6 +21,7 @@ const requiredFiles = [
   "assets/js/desktop-window.js",
   "assets/js/desktop-updater.js",
   "assets/js/agenda-desktop.js",
+  "assets/js/dashboard-desktop.js",
   "desktop-build.json"
 ];
 
@@ -54,6 +55,19 @@ if (webPortal.includes("desktop-updater.js")) {
 const desktopAgenda = await readFile(join(dist, "agenda", "index.html"), "utf8");
 if (!desktopAgenda.includes('data-desktop-agenda')) {
   throw new Error("L'Agenda desktop non include direttamente il bundle compatibile con WebView2.");
+}
+const desktopDashboard = await readFile(join(dist, "dashboard", "index.html"), "utf8");
+if (!desktopDashboard.includes('data-desktop-dashboard') || !desktopDashboard.includes('src="/assets/js/dashboard-desktop.js"')) {
+  throw new Error("La Dashboard desktop non carica il bundle di sincronizzazione compatibile con WebView2.");
+}
+if (/<script\b[^>]*type=["']module["'][^>]*src=["']\/assets\/js\/(?:auth\/session|dashboard)\.js["']/i.test(desktopDashboard)) {
+  throw new Error("La Dashboard desktop contiene ancora moduli ES non compatibili.");
+}
+const dashboardBundle = await readFile(join(dist, "assets", "js", "dashboard-desktop.js"), "utf8");
+for (const expected of ["create_study_room", "join_study_room", "aula-room-sync-outbox-v1"]) {
+  if (!dashboardBundle.includes(expected)) {
+    throw new Error(`Il bundle Dashboard non contiene la sincronizzazione richiesta: ${expected}.`);
+  }
 }
 if (/<script\b[^>]*type=["']module["'][^>]*src=["']\/assets\/js\/(?:auth\/session|agenda\/agenda)\.js["']/i.test(desktopAgenda)) {
   throw new Error("L'Agenda desktop contiene ancora il modulo ES non compatibile.");

@@ -975,23 +975,6 @@ body.dark .portal-button.primary{
       opacity: 0.5;
       cursor: not-allowed;
     }
-.portal-dashboard-test-codes{
-      margin: 7px 0 0;
-      color: var(--muted);
-      font-size: 8px;
-      line-height: 1.55;
-    }
-.portal-dashboard-test-codes code{
-      display: inline-block;
-      margin: 2px 2px 0 0;
-      padding: 2px 5px;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      color: var(--green-2);
-      background: rgba(0,223,242,0.04);
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 8px;
-    }
 .portal-room-loading-grid{
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
