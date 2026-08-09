@@ -4,6 +4,7 @@ import { readEveContextStatus } from "../context/status";
 import { readEveDatabaseStatus } from "../data/status";
 import { readEvePanelStatus } from "../ui/status";
 import { readExternalProviderStatus } from "../agent/provider-status";
+import { readEveMvpStatus } from "../mvp/status";
 import { EveFastApiAdapter } from "../adapters/fastapi/client";
 import type { EveCompositionStatus, EveServiceProbe } from "../contracts";
 import { EVE_FEATURE_REGISTRY } from "../registry";
@@ -27,6 +28,7 @@ export async function composeEveStatus(): Promise<EveCompositionStatus> {
   const context = readEveContextStatus();
   const ui = readEvePanelStatus();
   const providerStatus = readExternalProviderStatus();
+  const mvp = readEveMvpStatus();
   const provider = {
     state: providerStatus.state,
     providerKey: providerStatus.providerKey,
@@ -42,7 +44,7 @@ export async function composeEveStatus(): Promise<EveCompositionStatus> {
   };
   if (!config.enabled) {
     return {
-      checkpoint: "CORE-1.6",
+      checkpoint: "CORE-1.7",
       integrationEnabled: false,
       architectureReady: true,
       serviceConfigured: Boolean(process.env.EVE_CORE_SERVICE_URL),
@@ -53,6 +55,7 @@ export async function composeEveStatus(): Promise<EveCompositionStatus> {
       context,
       ui,
       provider,
+      mvp,
     };
   }
   const adapter = new EveFastApiAdapter(config);
@@ -77,7 +80,7 @@ export async function composeEveStatus(): Promise<EveCompositionStatus> {
     }),
   );
   return {
-    checkpoint: "CORE-1.6",
+    checkpoint: "CORE-1.7",
     integrationEnabled: true,
     architectureReady: true,
     serviceConfigured: true,
@@ -88,5 +91,6 @@ export async function composeEveStatus(): Promise<EveCompositionStatus> {
     context,
     ui,
     provider,
+    mvp,
   };
 }

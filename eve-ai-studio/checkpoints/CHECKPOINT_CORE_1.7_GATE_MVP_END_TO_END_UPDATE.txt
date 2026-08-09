@@ -1,0 +1,7 @@
+CORE-1.7 — UPDATE
+
+Implementati contratti e servizio Gate MVP, adapter POST allowlist, route same-origin,
+migrazione RLS per run e feedback, integrazione del pannello Eve, apertura verificabile
+delle fonti e preview interattiva canonica. Nessuna memoria o azione automatica.
+Il checkpoint non è chiuso: mancano test Codex completi, build alpha.17, installazione
+desktop, collaudo utente e approvazione esplicita.

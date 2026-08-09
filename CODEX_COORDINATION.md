@@ -886,6 +886,52 @@ preservando INTELLIGENCE-0.6. Desktop predisposto come 1.2.0-alpha.16;
 nessun merge o rilascio eseguito.
 ```
 
+### CORE-1.7 — Gate MVP end-to-end
+
+```text
+RESPONSABILE:
+Codex integrazione funzionale, UI canonica e desktop di prova
+
+STATO:
+IN_PROGRESS
+
+BRANCH:
+codex/eve-ai-studio-core-1-7
+
+BASE:
+origin/eve-ai-studio @ 2862b89
+
+OBIETTIVO:
+Integrare il percorso MVP autenticato completo con materiali autorizzati,
+citazioni verificabili, isolamento per aula, feedback attribuibile e feature
+flag OFF per default. Preparare alpha.17 soltanto dopo tutti i test verdi.
+
+FILE PRENOTATI:
+- tutti i file elencati nel manifest CORE-1.7
+- .codex/tasks/active/eve-ai-studio-core-1-7.md
+- metadati desktop alpha.17
+- .github/workflows/release-eve-ai-studio-desktop.yml, sola allowlist del branch
+- CODEX_COORDINATION.md, limitatamente a questa scheda
+
+FILE CONDIVISI PRENOTATI:
+- reference/eve-ai-studio-preview/index.html
+- supabase/migrations/0020_eve_mvp_gate.sql
+
+VINCOLI:
+Feature flag OFF per default. Nessun segreto nel client, retrieval cross-room,
+risposta grounded senza citazioni, memoria o azione automatica, feedback usato
+come verità automatica, demo, standalone, copia HTML o nuova preview. Main,
+demo-canonica, Aula Studio, Supabase remoto, Vercel e produzione restano
+invariati. Una sola Draft PR; nessun merge o release senza autorizzazioni
+esplicite separate.
+
+NOTE:
+Il sidecar SHA-256 esterno del pacchetto è errato; lo ZIP reale calcola
+59517e1450afcecb52588607447ff9d673ff7252bbd07859226c43d317736b16,
+mentre tutti i 49 hash interni passano. Il payload viene integrato con merge a
+tre vie per preservare CORE-1.6 e INTELLIGENCE-0.7.
+```
+
 ## Attività storiche di Aula Studio
 
 ### INTELLIGENCE-0.6 — Embedding, indice vettoriale e retrieval ibrido
