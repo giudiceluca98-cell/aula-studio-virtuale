@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="aula-demo-version" content="1.4.0-alpha.12" />
+  <meta name="aula-demo-version" content="1.4.0-alpha.13" />
   <meta name="aula-build" content="modular-routes-1" />
   <title>Aula Studio Virtuale — Le tue stanze</title>
   <link rel="stylesheet" href="/assets/css/dashboard.css" />
@@ -90,8 +90,8 @@
             <div class="portal-room-icon">＋</div>
             <h3>Crea una stanza</h3>
             <p>
-              Assegna un nome al nuovo spazio. La demo genera un codice privato
-              e salva la stanza soltanto in questo browser.
+              Assegna un nome al nuovo spazio. Aula genera un codice privato e
+              sincronizza la stanza con il tuo account su tutti i dispositivi.
             </p>
             <div class="portal-input-row">
               <input class="portal-input" id="portalRoomName" name="roomName" type="text" minlength="3" maxlength="60" autocomplete="off" placeholder="Es. Preparazione esame" aria-describedby="portalCreateRoomHelp">
@@ -104,15 +104,14 @@
             <div class="portal-room-icon">⌑</div>
             <h3>Entra con un invito</h3>
             <p>
-              Inserisci il codice ricevuto da chi ha creato la stanza. Per provare il flusso
-              usa <strong>STUDY2026</strong> oppure <strong>MATEMATICA24</strong>.
+              Inserisci il codice ricevuto da chi ha creato la stanza. L’ingresso viene
+              verificato dal server e associato al tuo account.
             </p>
             <div class="portal-input-row">
               <input class="portal-input" id="portalInviteCode" name="inviteCode" type="text" minlength="8" maxlength="64" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="CODICE INVITO" aria-describedby="portalJoinRoomHelp">
               <button class="portal-button" id="portalJoinRoomButton" type="submit">Entra</button>
             </div>
             <p class="portal-form-help" id="portalJoinRoomHelp">Il codice non distingue maiuscole e minuscole.</p>
-            <p class="portal-dashboard-test-codes">Stati demo: <code>ARCHIVIATA26</code> <code>NEGATO2026</code> <code>OFFLINE2026</code></p>
           </form>
         </div>
 
@@ -301,7 +300,7 @@
         <div class="portal-room-manage-status" id="portalRoomManageStatus" role="status" aria-live="polite"></div>
 
         <div class="portal-room-manage-privacy">
-          <strong>Demo locale.</strong> La stanza viene rimossa solo dal salvataggio di questo browser. Nell’app ufficiale l’uscita usa `leave_study_room`; la cancellazione usa un flusso server owner-only che blocca prima gli accessi, pulisce Storage e poi elimina il database.
+          <strong>Sincronizzazione sicura.</strong> Uscita e cancellazione vengono autorizzate dal server. La memoria locale conserva soltanto una cache per continuare a mostrare la scrivania durante brevi interruzioni di rete.
         </div>
       </div>
     </section>
@@ -350,7 +349,7 @@
         <div class="portal-invite-status" id="portalInviteStatus" role="status" aria-live="polite"></div>
 
         <div class="portal-invite-privacy">
-          <strong>Demo locale.</strong> Copia, revoca e rigenerazione sono salvate soltanto in questo browser. Nell’app ufficiale la rotazione passa dalla RPC protetta `rotate_room_invite` e il permesso viene verificato dal server.
+          <strong>Invito protetto.</strong> La rigenerazione passa dal server, revoca il codice precedente e viene consentita soltanto a chi possiede il ruolo necessario.
         </div>
       </div>
     </section>

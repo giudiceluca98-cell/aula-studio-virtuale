@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { cp, mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -130,6 +130,21 @@ applySharedVisualPreferences();
 `;
 
 const dashboardScript = [
+  `import { getAuthContext } from "./auth/session.js";
+import {
+  ROOM_CACHE_KEY,
+  createRemoteRoom,
+  deleteRemoteRoom,
+  enqueueRoomOperation,
+  flushRoomOutbox,
+  isRemoteRoomId,
+  isRetryableSyncError,
+  joinRemoteRoom,
+  leaveRemoteRoom,
+  loadRemoteRooms,
+  migrateLegacyRooms,
+  rotateRemoteInvite
+} from "./sync/room-sync.js";`,
   sharedRuntime,
   mainScript.slice(dashboardLogicStart, catalogContextStart),
   mainScript.slice(catalogContextStart, catalogLogicStart),
@@ -418,7 +433,7 @@ function inlineHandlerNames(markup) {
   const names = new Set();
   for (const attribute of markup.matchAll(/\son(?:click|change|input|submit|keydown|keyup|pointerdown)=["']([^"']+)["']/g)) {
     for (const call of attribute[1].matchAll(/\b([A-Za-z_$][\w$]*)\s*\(/g)) {
-      if (!["if", "preventDefault"].includes(call[1])) names.add(call[1]);
+      if (!["if", "preventDefault", "assign"].includes(call[1])) names.add(call[1]);
     }
   }
   return [...names].sort();
@@ -506,6 +521,9 @@ for (const output of Object.values(outputs)) {
   await writeFile(cssPath, routeCss(output.markup, output.script), "utf8");
   await writeFile(jsPath, exposeInlineHandlers(output.script, output.markup), "utf8");
 }
+
+await mkdir(join(root, "assets", "js", "sync"), { recursive: true });
+await cp(join(root, "src", "sync", "room-sync.js"), join(root, "assets", "js", "sync", "room-sync.js"));
 
 const releaseOwner = "giudiceluca98-cell";
 const releaseRepository = "aula-studio-virtuale-releases";

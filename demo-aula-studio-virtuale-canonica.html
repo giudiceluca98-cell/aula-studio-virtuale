@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="aula-demo-version" content="1.4.0-alpha.12" />
+  <meta name="aula-demo-version" content="1.4.0-alpha.13" />
   <title>Aula Studio Virtuale — Presentazione</title>
   <style>
     :root {
@@ -10722,7 +10722,7 @@ display: none !important;
 
   </style>
 
-  <style data-aula-version="1.4.0-alpha.12">
+  <style data-aula-version="1.4.0-alpha.13">
 
     /* ==========================================================
        CONSOLIDAMENTO MATERIALI + CHECKLIST — 1.4.0-alpha.9
@@ -11582,6 +11582,7 @@ display: none !important;
         <nav class="portal-nav" aria-label="Navigazione dashboard">
           <button class="portal-nav-link optional" type="button" onclick="navigatePortal('presentation')">Presentazione</button>
           <button class="portal-nav-link optional" type="button" onclick="navigatePortal('aula')">Apri aula</button>
+          <button class="portal-nav-link optional" type="button" onclick="window.location.assign('/agenda')">Agenda</button>
           <a class="portal-button" data-web-install href="/download">Installa app</a>
           <button class="portal-button" type="button" onclick="toggleDarkMode()">Tema</button>
           <button class="portal-button" type="button" onclick="navigatePortal('presentation')">Esci</button>
@@ -11649,8 +11650,8 @@ display: none !important;
             <div class="portal-room-icon">＋</div>
             <h3>Crea una stanza</h3>
             <p>
-              Assegna un nome al nuovo spazio. La demo genera un codice privato
-              e salva la stanza soltanto in questo browser.
+              Assegna un nome al nuovo spazio. Aula genera un codice privato e
+              sincronizza la stanza con il tuo account su tutti i dispositivi.
             </p>
             <div class="portal-input-row">
               <input class="portal-input" id="portalRoomName" name="roomName" type="text" minlength="3" maxlength="60" autocomplete="off" placeholder="Es. Preparazione esame" aria-describedby="portalCreateRoomHelp">
@@ -11663,15 +11664,14 @@ display: none !important;
             <div class="portal-room-icon">⌑</div>
             <h3>Entra con un invito</h3>
             <p>
-              Inserisci il codice ricevuto da chi ha creato la stanza. Per provare il flusso
-              usa <strong>STUDY2026</strong> oppure <strong>MATEMATICA24</strong>.
+              Inserisci il codice ricevuto da chi ha creato la stanza. L’ingresso viene
+              verificato dal server e associato al tuo account.
             </p>
             <div class="portal-input-row">
               <input class="portal-input" id="portalInviteCode" name="inviteCode" type="text" minlength="8" maxlength="64" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="CODICE INVITO" aria-describedby="portalJoinRoomHelp">
               <button class="portal-button" id="portalJoinRoomButton" type="submit">Entra</button>
             </div>
             <p class="portal-form-help" id="portalJoinRoomHelp">Il codice non distingue maiuscole e minuscole.</p>
-            <p class="portal-dashboard-test-codes">Stati demo: <code>ARCHIVIATA26</code> <code>NEGATO2026</code> <code>OFFLINE2026</code></p>
           </form>
         </div>
 
@@ -11860,7 +11860,7 @@ display: none !important;
         <div class="portal-room-manage-status" id="portalRoomManageStatus" role="status" aria-live="polite"></div>
 
         <div class="portal-room-manage-privacy">
-          <strong>Demo locale.</strong> La stanza viene rimossa solo dal salvataggio di questo browser. Nell’app ufficiale l’uscita usa `leave_study_room`; la cancellazione usa un flusso server owner-only che blocca prima gli accessi, pulisce Storage e poi elimina il database.
+          <strong>Sincronizzazione sicura.</strong> Uscita e cancellazione vengono autorizzate dal server. La memoria locale conserva soltanto una cache per continuare a mostrare la scrivania durante brevi interruzioni di rete.
         </div>
       </div>
     </section>
@@ -11909,7 +11909,7 @@ display: none !important;
         <div class="portal-invite-status" id="portalInviteStatus" role="status" aria-live="polite"></div>
 
         <div class="portal-invite-privacy">
-          <strong>Demo locale.</strong> Copia, revoca e rigenerazione sono salvate soltanto in questo browser. Nell’app ufficiale la rotazione passa dalla RPC protetta `rotate_room_invite` e il permesso viene verificato dal server.
+          <strong>Invito protetto.</strong> La rigenerazione passa dal server, revoca il codice precedente e viene consentita soltanto a chi possiede il ruolo necessario.
         </div>
       </div>
     </section>
@@ -11943,6 +11943,7 @@ display: none !important;
         </button>
         <nav class="portal-nav" aria-label="Navigazione Catalogo">
           <button class="portal-button catalog-demo-back-button catalog-demo-aula-button" id="catalogDemoBackToAula" type="button" onclick="navigatePortal('aula')" hidden>← Aula condivisa</button>
+          <button class="portal-button" type="button" onclick="window.location.assign('/agenda')">Agenda</button>
           <button class="portal-button catalog-demo-back-button" type="button" onclick="navigatePortal('dashboard')">← Scrivania</button>
           <button class="portal-button catalog-demo-theme-button" type="button" onclick="toggleDarkMode()">Tema</button>
           <span class="portal-status">✦ Eve · percorso locale</span>
@@ -16108,7 +16109,15 @@ print(nome)</div>
       portalDashboardRoomManageBusy = true;
       portalDashboardRenderRoomManage();
       portalDashboardRoomManageStatus("Chiusura della presenza e della membership…");
-      await new Promise((resolve) => window.setTimeout(resolve, 520));
+      try {
+        const { client } = await portalDashboardSyncContext();
+        await leaveRemoteRoom(client, roomId);
+      } catch (error) {
+        portalDashboardRoomManageBusy = false;
+        portalDashboardRenderRoomManage();
+        portalDashboardRoomManageStatus(`Uscita non completata: ${error.message}`, "error");
+        return;
+      }
       portalDashboardRemoveRoomLocally(roomId);
       portalDashboardRoomManageBusy = false;
       const message = room.role === "owner"
@@ -16147,11 +16156,17 @@ print(nome)</div>
       portalDashboardRoomManageStatus("Eliminazione sicura in corso…");
 
       portalDashboardSetDeleteStep("portalRoomDeleteStepAccess");
-      await new Promise((resolve) => window.setTimeout(resolve, 360));
-      portalDashboardSetDeleteStep("portalRoomDeleteStepFiles", ["portalRoomDeleteStepAccess"]);
-      await new Promise((resolve) => window.setTimeout(resolve, 420));
-      portalDashboardSetDeleteStep("portalRoomDeleteStepData", ["portalRoomDeleteStepAccess", "portalRoomDeleteStepFiles"]);
-      await new Promise((resolve) => window.setTimeout(resolve, 420));
+      try {
+        const { client } = await portalDashboardSyncContext();
+        portalDashboardSetDeleteStep("portalRoomDeleteStepFiles", ["portalRoomDeleteStepAccess"]);
+        await deleteRemoteRoom(client, roomId);
+        portalDashboardSetDeleteStep("portalRoomDeleteStepData", ["portalRoomDeleteStepAccess", "portalRoomDeleteStepFiles"]);
+      } catch (error) {
+        portalDashboardRoomManageBusy = false;
+        portalDashboardRenderRoomManage();
+        portalDashboardRoomManageStatus(`Eliminazione non completata: ${error.message}`, "error");
+        return;
+      }
       portalDashboardSetDeleteStep("", ["portalRoomDeleteStepAccess", "portalRoomDeleteStepFiles", "portalRoomDeleteStepData"]);
 
       portalDashboardRemoveRoomLocally(roomId);
@@ -16160,8 +16175,8 @@ print(nome)</div>
       if (dialog) dialog.hidden = true;
       document.body.classList.remove("portal-room-manage-open");
       portalDashboardManagedRoomId = null;
-      portalDashboardFeedback(`La stanza “${room.name}” è stata eliminata dalla demo locale.`, "success");
-      portalNotify("Stanza eliminata dalla demo");
+      portalDashboardFeedback(`La stanza “${room.name}” è stata eliminata da Aula Studio.`, "success");
+      portalNotify("Stanza eliminata e sincronizzata");
     }
 
     window.addEventListener("keydown", (event) => {
@@ -16345,14 +16360,22 @@ print(nome)</div>
       portalDashboardInviteBusy = true;
       portalDashboardRenderInviteDialog();
       portalDashboardInviteStatus("Revoca del codice precedente in corso…");
-      await new Promise((resolve) => window.setTimeout(resolve, 460));
-      const next = portalDashboardRotatedCode(room);
+      let nextCode;
+      try {
+        const { client } = await portalDashboardSyncContext();
+        nextCode = await rotateRemoteInvite(client, room.id);
+      } catch (error) {
+        portalDashboardInviteBusy = false;
+        portalDashboardRenderInviteDialog();
+        portalDashboardInviteStatus(`Codice non aggiornato: ${error.message}`, "error");
+        return;
+      }
       const rotatedAt = new Date().toISOString();
       portalDashboardState.rooms = portalDashboardState.rooms.map((item) => item.id === room.id
         ? {
             ...item,
-            inviteCode: next.code,
-            inviteRevision: next.revision,
+            inviteCode: nextCode,
+            inviteRevision: Math.max(0, Number(item.inviteRevision || 0)) + 1,
             inviteRotatedAt: rotatedAt,
             lastActivity: "Adesso · Codice invito rigenerato"
           }
@@ -16362,7 +16385,7 @@ print(nome)</div>
       portalDashboardInviteBusy = false;
       portalDashboardHideInviteConfirmation();
       portalDashboardRenderInviteDialog();
-      portalDashboardInviteStatus(`Nuovo codice attivo: ${next.code}. Il precedente è stato revocato.`, "success");
+      portalDashboardInviteStatus(`Nuovo codice attivo: ${nextCode}. Il precedente è stato revocato.`, "success");
       portalNotify("Nuovo codice invito creato");
     }
 
@@ -16571,7 +16594,7 @@ print(nome)</div>
        DASHBOARD REALE — CREATE E JOIN DETERMINISTICI
        ========================================================== */
 
-    const portalDashboardRoomsStorageKey = "aula-demo-dashboard-rooms-v1";
+    const portalDashboardRoomsStorageKey = ROOM_CACHE_KEY;
     const portalDashboardDefaultRooms = [
       {
         id: "python-room",
@@ -16610,7 +16633,10 @@ print(nome)</div>
       working: null,
       loading: false,
       retryAction: null,
-      rooms: []
+      rooms: [],
+      client: null,
+      userId: null,
+      syncing: false
     };
 
     function portalDashboardEscape(value) {
@@ -16628,12 +16654,13 @@ print(nome)</div>
         id: String(room.id),
         name: String(room.name).slice(0, 60),
         inviteCode: String(room.inviteCode).toUpperCase().slice(0, 64),
-        role: room.role === "owner" ? "owner" : "member",
+        role: ["owner", "admin", "member"].includes(room.role) ? room.role : "member",
         online: Math.max(0, Math.min(99, Number(room.online || 0))),
         lastActivity: String(room.lastActivity || "Nessuna attività recente").slice(0, 120),
         createdAt: Number(room.createdAt || Date.now()),
         inviteRevision: Math.max(0, Number(room.inviteRevision || 0)),
-        inviteRotatedAt: room.inviteRotatedAt ? String(room.inviteRotatedAt) : null
+        inviteRotatedAt: room.inviteRotatedAt ? String(room.inviteRotatedAt) : null,
+        syncState: room.syncState === "pending" ? "pending" : isRemoteRoomId(room.id) ? "synced" : "local"
       };
     }
 
@@ -16646,6 +16673,46 @@ print(nome)</div>
         localStorage.setItem(portalDashboardRoomsStorageKey, JSON.stringify(portalDashboardState.rooms));
       } catch {
         portalDashboardFeedback("La stanza è disponibile per questa sessione, ma il browser non consente il salvataggio locale.", "error");
+      }
+    }
+
+    async function portalDashboardSyncContext() {
+      if (portalDashboardState.client && portalDashboardState.userId) return portalDashboardState;
+      const context = await getAuthContext();
+      if (!context?.session || !context?.user?.id) throw new Error("Accedi per sincronizzare le stanze.");
+      portalDashboardState.client = context.client;
+      portalDashboardState.userId = context.user.id;
+      return portalDashboardState;
+    }
+
+    async function portalDashboardSynchronize(options = {}) {
+      if (portalDashboardState.syncing) return false;
+      portalDashboardState.syncing = true;
+      try {
+        const { client, userId } = await portalDashboardSyncContext();
+        const cachedRooms = [...portalDashboardState.rooms];
+        const migration = options.migrate === false
+          ? { rooms: await loadRemoteRooms(client, userId), migrated: 0 }
+          : await migrateLegacyRooms({ client, userId, storage: localStorage, localRooms: cachedRooms });
+        const flushed = await flushRoomOutbox({ client, userId, storage: localStorage });
+        portalDashboardState.rooms = (flushed.rooms?.length || !migration.rooms?.length ? flushed.rooms : migration.rooms)
+          .map(portalDashboardNormalizeRoom)
+          .filter(Boolean);
+        portalDashboardSaveRooms();
+        portalDashboardRenderRooms();
+        portalDashboardCatalogSync();
+        if (options.announce || migration.migrated || flushed.processed) {
+          const changes = migration.migrated + flushed.processed;
+          portalDashboardFeedback(changes
+            ? `${changes} ${changes === 1 ? "modifica sincronizzata" : "modifiche sincronizzate"} con Aula Studio.`
+            : "Stanze sincronizzate con Aula Studio.", "success");
+        }
+        return true;
+      } catch (error) {
+        if (options.announce) portalDashboardFeedback(`Sincronizzazione in attesa: ${error.message}`, "error");
+        return false;
+      } finally {
+        portalDashboardState.syncing = false;
       }
     }
 
@@ -16745,24 +16812,42 @@ print(nome)</div>
 
       portalDashboardFieldFeedback("portalRoomName", "portalCreateRoomHelp", "Creazione della stanza in corso…");
       portalDashboardSetWorking("create", true);
-      await new Promise((resolve) => window.setTimeout(resolve, 420));
-      const room = {
-        id: portalDashboardRoomId(name),
-        name,
-        inviteCode: portalDashboardCodeFromName(name),
-        role: "owner",
-        online: 1,
-        lastActivity: "Adesso · Stanza creata",
-        createdAt: Date.now()
-      };
-      portalDashboardState.rooms.unshift(room);
-      portalDashboardSaveRooms();
-      portalDashboardRenderRooms();
-      if (input) input.value = "";
-      portalDashboardFieldFeedback("portalRoomName", "portalCreateRoomHelp", "Da 3 a 60 caratteri. Gli spazi iniziali e finali vengono rimossi.");
-      portalDashboardSetWorking("create", false);
-      portalDashboardFeedback(`Stanza “${name}” creata. Codice invito: ${room.inviteCode}`, "success");
-      portalNotify("Stanza creata nella demo");
+      try {
+        const { client } = await portalDashboardSyncContext();
+        const room = await createRemoteRoom(client, name);
+        portalDashboardState.rooms.unshift(room);
+        portalDashboardSaveRooms();
+        portalDashboardRenderRooms();
+        if (input) input.value = "";
+        portalDashboardFieldFeedback("portalRoomName", "portalCreateRoomHelp", "Da 3 a 60 caratteri. Gli spazi iniziali e finali vengono rimossi.");
+        portalDashboardFeedback(`Stanza “${name}” creata e sincronizzata. Codice invito: ${room.inviteCode}`, "success");
+        portalNotify("Stanza sincronizzata con Aula Studio");
+      } catch (error) {
+        if (isRetryableSyncError(error, navigator.onLine)) {
+          const room = {
+            id: portalDashboardRoomId(name),
+            name,
+            inviteCode: "IN ATTESA",
+            role: "owner",
+            online: 1,
+            lastActivity: "Adesso · Sincronizzazione in attesa",
+            createdAt: Date.now(),
+            syncState: "pending"
+          };
+          enqueueRoomOperation(localStorage, "create", { name, legacyId: room.id });
+          portalDashboardState.rooms.unshift(room);
+          portalDashboardSaveRooms();
+          portalDashboardRenderRooms();
+          if (input) input.value = "";
+          portalDashboardFeedback(`Stanza “${name}” salvata sul dispositivo. Sarà sincronizzata automaticamente appena torna la connessione.`, "success");
+          portalNotify("Modifica salvata, sincronizzazione in attesa");
+        } else {
+          portalDashboardFieldFeedback("portalRoomName", "portalCreateRoomHelp", error.message || "Non è stato possibile creare la stanza.", "error");
+          portalDashboardFeedback(`Creazione non riuscita: ${error.message}`, "error");
+        }
+      } finally {
+        portalDashboardSetWorking("create", false);
+      }
     }
 
     async function portalDashboardJoinRoom(event) {
@@ -16780,8 +16865,6 @@ print(nome)</div>
 
       portalDashboardFieldFeedback("portalInviteCode", "portalJoinRoomHelp", "Verifica del codice in corso…");
       portalDashboardSetWorking("join", true);
-      await new Promise((resolve) => window.setTimeout(resolve, 420));
-      if (portalDashboardHandleDemoJoinError(code, input)) return;
       const localRoom = portalDashboardState.rooms.find((room) => room.inviteCode === code);
       if (localRoom) {
         portalDashboardSetWorking("join", false);
@@ -16790,33 +16873,32 @@ print(nome)</div>
         portalDashboardRenderRooms();
         return;
       }
-      const invitedRoom = portalDashboardInvites[code];
-      if (!invitedRoom) {
-        portalDashboardSetWorking("join", false);
-        portalDashboardFieldFeedback("portalInviteCode", "portalJoinRoomHelp", "Codice errato o non più valido. Prova STUDY2026.", "error");
-        portalDashboardFeedback("Non è stato possibile entrare: il codice non corrisponde a una stanza attiva.", "error");
-        portalDashboardShowState("invalid-code", "Codice non valido", "Il codice non corrisponde a una stanza attiva oppure è stato revocato. Nessuna stanza è stata aggiunta.", { code, focus: false });
-        input?.focus();
-        return;
-      }
-
-      const existing = portalDashboardState.rooms.find((room) => room.id === invitedRoom.id || room.inviteCode === code);
-      if (existing) {
-        portalDashboardSetWorking("join", false);
-        portalDashboardFieldFeedback("portalInviteCode", "portalJoinRoomHelp", "Sei già membro di questa stanza.");
-        portalDashboardFeedback(`La stanza “${existing.name}” è già presente nella tua scrivania.`, "success");
+      try {
+        const { client, userId } = await portalDashboardSyncContext();
+        const roomId = await joinRemoteRoom(client, code);
+        portalDashboardState.rooms = await loadRemoteRooms(client, userId);
+        portalDashboardSaveRooms();
         portalDashboardRenderRooms();
-        return;
+        const joined = portalDashboardState.rooms.find((room) => room.id === roomId);
+        if (input) input.value = "";
+        portalDashboardFieldFeedback("portalInviteCode", "portalJoinRoomHelp", "Il codice non distingue maiuscole e minuscole.");
+        portalDashboardFeedback(`Ingresso completato${joined ? ` nella stanza “${joined.name}”` : ""}.`, "success");
+        portalNotify("Ingresso sincronizzato con Aula Studio");
+      } catch (error) {
+        if (isRetryableSyncError(error, navigator.onLine)) {
+          enqueueRoomOperation(localStorage, "join", { inviteCode: code });
+          if (input) input.value = "";
+          portalDashboardFieldFeedback("portalInviteCode", "portalJoinRoomHelp", "Ingresso salvato: sarà verificato quando torna la connessione.");
+          portalDashboardFeedback("Codice salvato sul dispositivo. L’ingresso verrà sincronizzato automaticamente.", "success");
+        } else {
+          portalDashboardFieldFeedback("portalInviteCode", "portalJoinRoomHelp", "Codice errato, scaduto o revocato.", "error");
+          portalDashboardFeedback(`Non è stato possibile entrare: ${error.message}`, "error");
+          portalDashboardShowState("invalid-code", "Codice non valido", "Il codice non corrisponde a una stanza attiva oppure è stato revocato. Nessuna stanza è stata aggiunta.", { code, focus: false });
+          input?.focus();
+        }
+      } finally {
+        portalDashboardSetWorking("join", false);
       }
-
-      portalDashboardState.rooms.unshift({ ...invitedRoom, createdAt: Date.now() });
-      portalDashboardSaveRooms();
-      portalDashboardRenderRooms();
-      if (input) input.value = "";
-      portalDashboardFieldFeedback("portalInviteCode", "portalJoinRoomHelp", "Il codice non distingue maiuscole e minuscole.");
-      portalDashboardSetWorking("join", false);
-      portalDashboardFeedback(`Ingresso completato nella stanza “${invitedRoom.name}”.`, "success");
-      portalNotify("Ingresso nella stanza completato");
     }
 
     async function portalDashboardInit() {
@@ -16824,9 +16906,8 @@ print(nome)</div>
       if (!portalDashboardState.initialized) {
         portalDashboardState.initialized = true;
         portalDashboardSetLoading(true);
-        await new Promise((resolve) => window.setTimeout(resolve, 460));
         const loadResult = portalDashboardLoadRooms();
-        portalDashboardSetLoading(false);
+        portalDashboardRenderRooms();
         if (!loadResult?.ok) {
           const storageBlocked = loadResult?.reason === "storage-blocked";
           portalDashboardShowState(
@@ -16838,11 +16919,18 @@ print(nome)</div>
             { focus: false }
           );
         }
+        await portalDashboardSynchronize({ migrate: true });
+        portalDashboardSetLoading(false);
       }
       portalDashboardRenderRooms();
       portalDashboardCatalogSync();
       portalDashboardSetWorking("", false);
     }
+
+    window.addEventListener("online", () => void portalDashboardSynchronize({ migrate: true, announce: true }));
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible" && navigator.onLine) void portalDashboardSynchronize({ migrate: true });
+    });
 
 
     /* ==========================================================
@@ -20154,7 +20242,7 @@ print(nome)</div>
     makeFloatingPanelDraggable(document.getElementById("chatPanel"));
   </script>
 
-  <script data-aula-version="1.4.0-alpha.12">
+  <script data-aula-version="1.4.0-alpha.13">
 
   /* ==========================================================
      CONSOLIDAMENTO MATERIALI + CHECKLIST — 1.4.0-alpha.9
@@ -20162,7 +20250,7 @@ print(nome)</div>
   (() => {
     "use strict";
 
-    const VERSION = "1.4.0-alpha.12";
+    const VERSION = "1.4.0-alpha.13";
     window.AULA_DEMO_VERSION = VERSION;
     window.AULA_PHASE3_CONSOLIDATION = {
       version: "1.3.0-alpha.10",
@@ -20774,6 +20862,6 @@ print(nome)</div>
   })();
 
   </script>
-  <!-- AULA STUDIO VIRTUALE — CHECKPOINT AUTONOMO 1.4.0-alpha.12 -->
+  <!-- AULA STUDIO VIRTUALE — CHECKPOINT AUTONOMO 1.4.0-alpha.13 -->
 </body>
 </html>
