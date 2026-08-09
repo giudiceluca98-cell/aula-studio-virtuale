@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import fs from "node:fs";
 
 const sql = fs.readFileSync("supabase/migrations/0020_eve_mvp_gate.sql", "utf8");
+const rollback = fs.readFileSync("supabase/rollback/0020_eve_mvp_gate.down.sql", "utf8");
+const workflow = fs.readFileSync(".github/workflows/eve-core-1.3-database-checks.yml", "utf8");
 
 describe("CORE-1.7 migrazione MVP", () => {
   it("crea run e feedback con RLS", () => {
@@ -27,5 +29,14 @@ describe("CORE-1.7 migrazione MVP", () => {
     expect(sql).toContain("foreign key (response_message_id, conversation_id, room_id)");
     expect(sql).not.toContain("foreign key (user_message_id) references");
     expect(sql).not.toContain("foreign key (response_message_id) references");
+  });
+
+  it("rimuove CORE-1.7 prima dei rollback precedenti e solo con consenso", () => {
+    expect(rollback).toContain("app.eve_allow_destructive_rollback");
+    expect(rollback).toContain("drop table if exists public.eve_response_feedback");
+    expect(rollback).toContain("drop table if exists public.eve_mvp_runs");
+    expect(rollback).toContain("drop index if exists public.eve_messages_id_conversation_room_unique");
+    expect(workflow.indexOf("0020_eve_mvp_gate.down.sql"))
+      .toBeLessThan(workflow.indexOf("0019_eve_identity_roles_context.down.sql"));
   });
 });
