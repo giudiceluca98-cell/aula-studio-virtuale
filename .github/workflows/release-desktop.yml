@@ -100,7 +100,7 @@ jobs:
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         run: pnpm tauri build ${{ matrix.tauri_args }}
 
-      - name: Crea/aggiorna release Windows + ARM64
+      - name: Crea/aggiorna unica release firmata Windows + ARM64
         if: env.RELEASE_TOKEN != ''
         uses: tauri-apps/tauri-action@v1
         env:
@@ -113,7 +113,7 @@ jobs:
           releaseCommitish: main
           tagName: v__VERSION__
           releaseName: "Aula Studio Virtuale v__VERSION__"
-          releaseBody: "Installer ufficiali di Aula Studio Virtuale per Windows x64 e Raspberry Pi/Linux ARM64. L'applicazione usa questa release per gli aggiornamenti firmati."
+          releaseBody: "Installer ufficiali di Aula Studio Virtuale per Windows x64 e Raspberry Pi/Linux ARM64. Entrambe le piattaforme usano questo stesso feed GitHub per gli aggiornamenti firmati."
           releaseDraft: false
           prerelease: false
           updaterJsonPreferNsis: true
