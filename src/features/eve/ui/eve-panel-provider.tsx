@@ -13,7 +13,7 @@ import {
   type ReactNode,
 } from "react";
 import { Expand, Minimize2, X } from "lucide-react";
-import type { EveMvpRunResponse, EveMvpSourceOpenResponse } from "../mvp/contracts";
+import type { EveChatDepth, EveGroundedChatResponse, EveGroundedChatSourceResponse, EveGroundedStatement } from "../chat/contracts";
 import type {
   EvePanelClientConfig,
   EvePanelContextReference,
@@ -22,7 +22,7 @@ import type {
 } from "./contracts";
 import { EVE_PANEL_CLOSE_EVENT, EVE_PANEL_OPEN_EVENT, EVE_PANEL_TOGGLE_EVENT } from "./events";
 import { INITIAL_EVE_PANEL_STATE, reduceEvePanelState } from "./state";
-import { openEveMvpSource, runEveMvp, sendEveMvpFeedback } from "./mvp-client";
+import { openEveGroundedChatSource, runEveGroundedChat, sendEveGroundedChatFeedback } from "./chat-client";
 import { EvePanelAvatar } from "./eve-panel-avatar";
 import styles from "./eve-panel.module.css";
 
@@ -57,8 +57,9 @@ function visibleContext(context: EvePanelContextReference): Array<[string, strin
 export function EvePanelProvider({ config, children }: { config: EvePanelClientConfig; children: ReactNode }) {
   const [state, dispatch] = useReducer(reduceEvePanelState, INITIAL_EVE_PANEL_STATE);
   const [draft, setDraft] = useState("");
-  const [answer, setAnswer] = useState<EveMvpRunResponse | null>(null);
-  const [openedSource, setOpenedSource] = useState<EveMvpSourceOpenResponse | null>(null);
+  const [answer, setAnswer] = useState<EveGroundedChatResponse | null>(null);
+  const [openedSource, setOpenedSource] = useState<EveGroundedChatSourceResponse | null>(null);
+  const [depth, setDepth] = useState<EveChatDepth>("normal");
   const [feedbackState, setFeedbackState] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const previousFocus = useRef<HTMLElement | null>(null);
@@ -167,8 +168,10 @@ export function EvePanelProvider({ config, children }: { config: EvePanelClientC
     setFeedbackState(null);
     dispatch({ type: "set_view_state", viewState: "loading", notice: "Verifico contesto, fonti e provider…" });
     try {
-      const result = await runEveMvp({
-        question,
+      const result = await runEveGroundedChat({
+        message: question,
+        depth,
+        allowGeneralKnowledge: false,
         roomId: state.context.roomId,
         courseId: state.context.courseId,
         primaryMaterialId: state.context.materialId,
@@ -180,18 +183,18 @@ export function EvePanelProvider({ config, children }: { config: EvePanelClientC
       });
       setAnswer(result);
       setDraft("");
-      dispatch({ type: "set_view_state", viewState: "ready", notice: result.grounded ? "Risposta verificata con fonti autorizzate." : "Nessuna fonte sufficiente: Eve ha dichiarato il limite." });
+      dispatch({ type: "set_view_state", viewState: "ready", notice: result.notFound ? "Nessuna fonte sufficiente: Eve ha dichiarato il limite." : result.grounded ? "Risposta grounded con fonti verificabili." : "Conoscenza generale etichettata senza fonti materiali." });
     } catch (error) {
-      dispatch({ type: "set_view_state", viewState: "error", notice: error instanceof Error ? error.message : "Gate MVP non disponibile" });
+      dispatch({ type: "set_view_state", viewState: "error", notice: error instanceof Error ? error.message : "Chat grounded non disponibile" });
     } finally {
       setSubmitting(false);
     }
-  }, [draft, state.context, submitting]);
+  }, [depth, draft, state.context, submitting]);
 
-  const openCitation = useCallback(async (citation: EveMvpRunResponse["citations"][number]) => {
+  const openCitation = useCallback(async (citation: EveGroundedChatResponse["citations"][number]) => {
     if (!state.context.roomId) return;
     try {
-      const source = await openEveMvpSource({
+      const source = await openEveGroundedChatSource({
         roomId: state.context.roomId,
         materialId: citation.materialId,
         locator: citation.locator,
@@ -206,7 +209,7 @@ export function EvePanelProvider({ config, children }: { config: EvePanelClientC
   const sendFeedback = useCallback(async (rating: "helpful" | "not_helpful") => {
     if (!answer || !state.context.roomId) return;
     try {
-      await sendEveMvpFeedback({
+      await sendEveGroundedChatFeedback({
         roomId: state.context.roomId,
         conversationId: answer.conversationId,
         responseMessageId: answer.responseMessageId,
@@ -239,7 +242,7 @@ export function EvePanelProvider({ config, children }: { config: EvePanelClientC
           <header className={styles.header}>
             <div className={styles.identity}>
               <EvePanelAvatar state={state.viewState} />
-              <div><strong id="eve-global-panel-title">Eve</strong><small>{contextLabel(state.entryPoint)} · Gate MVP CORE-1.7</small></div>
+              <div><strong id="eve-global-panel-title">Eve</strong><small>{contextLabel(state.entryPoint)} · Chat grounded CORE-2.0</small></div>
             </div>
             <div className={styles.actions}>
               {state.mode === "expanded"
@@ -256,13 +259,14 @@ export function EvePanelProvider({ config, children }: { config: EvePanelClientC
               {state.viewState === "empty" && <div className={styles.stateBox}><div><strong>Contesto non disponibile</strong><p>{state.notice}</p></div></div>}
               {state.viewState === "error" && <div className={styles.stateBox}><div><strong>Non posso completare la richiesta</strong><p>{state.notice ?? "Errore redatto."}</p></div></div>}
               {state.viewState === "ready" && <>
-                {!answer && <section className={styles.card}><h3>Gate MVP pronto</h3><p>Identità, aula, materiali, retrieval, provider, citazioni e feedback vengono verificati. Nessuna memoria o azione permanente nasce automaticamente.</p></section>}
+                {!answer && <section className={styles.card}><h3>Chat contestuale grounded</h3><p>La chat resta privata, usa il contesto minimo verificato e distingue fatti, ipotesi e suggerimenti. Le fonti materiali non possono essere inventate.</p></section>}
                 <section className={styles.card}><h3>Contesto proposto dalla pagina</h3>{contextEntries.length ? <div className={styles.contextGrid}>{contextEntries.map(([key, item]) => <div className={styles.contextRow} key={key}><span>{key}</span><code>{item}</code></div>)}</div> : <p>Nessun identificativo fornito.</p>}</section>
                 {answer && <section className={styles.card}>
                   <h3>Risposta di Eve</h3>
                   <p className={styles.answer}>{answer.answer}</p>
-                  <div className={styles.answerMeta}><span>{answer.grounded ? "Grounded" : "Fonte insufficiente"}</span><span>Incertezza: {answer.uncertainty}</span><span>{answer.provider} / {answer.model}</span></div>
-                  {answer.citations.length > 0 && <div className={styles.citationList}>{answer.citations.map((citation) => <button key={`${citation.materialId}-${citation.chunkId}`} className={styles.citationButton} onClick={() => openCitation(citation)}><strong>[{citation.rank}] {citation.title}</strong><small>{citation.locator} · SHA {citation.textSha256.slice(0, 10)}…</small></button>)}</div>}
+                  <div className={styles.answerMeta}><span>{answer.notFound ? "Non trovato" : answer.grounded ? "Grounded" : "Generale etichettato"}</span><span>Profondità: {answer.depth}</span><span>Incertezza: {answer.uncertainty}</span><span>{answer.provider} / {answer.model}</span>{answer.fallbackUsed && <span>Fallback sicuro</span>}</div>
+                  {([ ["Fatti", answer.facts], ["Ipotesi", answer.hypotheses], ["Suggerimenti", answer.suggestions] ] as const).map(([title, statements]) => statements.length > 0 && <div className={styles.structuredSection} key={title}><h4>{title}</h4>{statements.map((item: EveGroundedStatement, index: number) => <div className={styles.statement} key={`${title}-${index}`}><p>{item.text}</p><small>{item.basis === "material" ? `Materiale · ${item.citationIds.join(", ")}` : "Conoscenza generale dichiarata"} · confidenza {item.confidence}</small></div>)}</div>)}
+                  {answer.citations.length > 0 && <div className={styles.citationList}>{answer.citations.map((citation) => <button key={`${citation.materialId}-${citation.chunkId}`} className={styles.citationButton} onClick={() => openCitation(citation)}><strong>[{citation.id}] {citation.title}</strong><small>{citation.locator} · SHA {citation.textSha256.slice(0, 10)}…</small></button>)}</div>}
                   {answer.feedbackEnabled && <div className={styles.feedbackRow}><button onClick={() => sendFeedback("helpful")}>Utile</button><button onClick={() => sendFeedback("not_helpful")}>Da migliorare</button><small>{feedbackState}</small></div>}
                 </section>}
                 {openedSource && <section className={styles.card}><h3>Fonte verificata</h3><p>{openedSource.contextText}</p><div className={styles.answerMeta}><span>{openedSource.locator}</span><span>Integrità: {openedSource.integrityVerified ? "OK" : "KO"}</span><span>Istruzioni eseguibili: no</span></div></section>}
@@ -271,7 +275,7 @@ export function EvePanelProvider({ config, children }: { config: EvePanelClientC
             </div>
             <div className={styles.composer}>
               <textarea value={draft} onChange={(event: ChangeEvent<HTMLTextAreaElement>) => setDraft(event.target.value)} maxLength={8000} placeholder="Fai una domanda sul materiale autorizzato…" aria-label="Domanda per Eve" />
-              <div className={styles.composerFooter}><small>Nessuna memoria o azione automatica</small><button className={styles.primary} onClick={submitDraft} disabled={!draft.trim() || !state.context.roomId || submitting}>{submitting ? "Verifico…" : "Chiedi a Eve"}</button></div>
+              <div className={styles.depthRow}><label htmlFor="eve-chat-depth">Profondità</label><select id="eve-chat-depth" value={depth} onChange={(event: ChangeEvent<HTMLSelectElement>) => setDepth(event.target.value as EveChatDepth)}><option value="brief">Breve</option><option value="normal">Normale</option><option value="deep">Approfondita</option></select></div><div className={styles.composerFooter}><small>Chat privata · fonti verificabili · nessuna memoria o azione automatica</small><button className={styles.primary} onClick={submitDraft} disabled={!draft.trim() || !state.context.roomId || submitting}>{submitting ? "Verifico…" : "Chiedi a Eve"}</button></div>
             </div>
           </div>
         </aside>

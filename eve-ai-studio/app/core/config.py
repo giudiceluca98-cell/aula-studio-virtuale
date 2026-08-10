@@ -55,6 +55,7 @@ class EveSettings(BaseSettings):
     chat_production_daily_token_budget: int = 250_000
     chat_production_daily_cost_budget_usd: float = 5.0
     chat_execution_profile: str = "chat-development"
+    grounded_chat_execution_profile: str = "chat-production"
     evaluation_execution_profile: str = "evaluation-safe"
 
     material_max_bytes: int = 2_000_000
