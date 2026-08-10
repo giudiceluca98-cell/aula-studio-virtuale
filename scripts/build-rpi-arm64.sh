@@ -6,6 +6,11 @@ if [[ "$(uname -m)" != "aarch64" ]]; then
   exit 1
 fi
 
+echo "ATTENZIONE: questa e' una build locale di sviluppo/test."
+echo "Non contiene la configurazione release firmata dell'updater Tauri."
+echo "Per l'installazione definitiva su Eve Tab usare scripts/install-rpi-arm64-release.sh"
+echo
+
 FREE_KB="$(df --output=avail -k / | tail -1 | tr -d ' ')"
 if (( FREE_KB < 6291456 )); then
   echo "ERROR: at least 6 GiB free space is required before building." >&2
@@ -34,7 +39,7 @@ if ! command -v pnpm >/dev/null 2>&1; then
   fi
 fi
 
-pnpm install --frozen-lockfile
+pnpm install --no-frozen-lockfile
 pnpm build:desktop
 pnpm tauri build --config src-tauri/tauri.rpi.conf.json --bundles deb,appimage
 
@@ -45,7 +50,7 @@ mkdir -p "$HOME/Scaricati" "$HOME/Downloads"
 
 if [[ -n "$DEB" ]]; then
   cp -f "$DEB" "$HOME/Scaricati/"
-  echo "DEB ready: $DEB"
+  echo "DEB dev ready: $DEB"
 else
   echo "WARNING: DEB bundle not found." >&2
 fi
@@ -53,13 +58,12 @@ fi
 if [[ -n "$APPIMAGE" ]]; then
   chmod +x "$APPIMAGE"
   cp -f "$APPIMAGE" "$HOME/Scaricati/"
-  echo "AppImage ready: $APPIMAGE"
+  echo "AppImage dev ready: $APPIMAGE"
 else
   echo "WARNING: AppImage bundle not found." >&2
 fi
 
 echo
-if [[ -n "$DEB" ]]; then
-  echo "Install with:"
-  echo "  sudo apt install ./$(realpath --relative-to="$PWD" "$DEB")"
-fi
+echo "Build locale completata (DEV, updater release non incorporato)."
+echo "Per installare la versione definitiva auto-aggiornabile:"
+echo "  ./scripts/install-rpi-arm64-release.sh"
