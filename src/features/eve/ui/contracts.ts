@@ -11,6 +11,8 @@ export interface EvePanelContextReference {
   sectionId?: string;
   query?: string;
   sourceLabel?: string;
+  selectedText?: string;
+  selectionLocator?: string;
 }
 
 export interface EvePanelOpenRequest {

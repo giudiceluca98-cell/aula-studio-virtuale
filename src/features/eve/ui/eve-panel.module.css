@@ -37,3 +37,14 @@
 @keyframes pulse { 0%,100%{transform:scale(.96);opacity:.55}50%{transform:scale(1.08);opacity:1} }
 @media (max-width: 767px) { .side { top:auto; right:8px; bottom:8px; left:8px; width:auto; max-height:78dvh; border-radius:22px; } .expanded { inset:6px; border-radius:20px; } }
 @media (prefers-reduced-motion: reduce) { .avatar::after { animation:none; } .panel,.backdrop { scroll-behavior:auto; } }
+.answer { color: rgba(234,252,255,.82) !important; white-space: pre-wrap; }
+.answerMeta { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+.answerMeta span { border-radius:999px; padding:5px 8px; color:#bff8ff; background:rgba(88,219,235,.09); font-size:8.5px; }
+.citationList { display:grid; gap:7px; margin-top:11px; }
+.citationButton { display:grid; width:100%; gap:4px; border:1px solid rgba(143,243,255,.13); border-radius:11px; padding:9px 10px; color:#eaffff; background:rgba(255,255,255,.035); text-align:left; }
+.citationButton strong { font-size:9.5px; }
+.citationButton small { color:rgba(234,252,255,.54); font-size:8px; }
+.citationButton:focus-visible,.feedbackRow button:focus-visible { outline:2px solid #7af3ff; outline-offset:2px; }
+.feedbackRow { display:flex; flex-wrap:wrap; align-items:center; gap:7px; margin-top:11px; }
+.feedbackRow button { border:1px solid rgba(143,243,255,.14); border-radius:10px; padding:7px 9px; color:#dffcff; background:rgba(255,255,255,.04); font-size:8.5px; }
+.feedbackRow small { color:rgba(234,252,255,.52); font-size:8px; }

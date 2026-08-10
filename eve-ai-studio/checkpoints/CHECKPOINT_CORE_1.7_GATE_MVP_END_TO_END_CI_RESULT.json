@@ -1,0 +1,19 @@
+{
+  "checkpoint": "CORE-1.7",
+  "status": "REVIEW_REQUIRED",
+  "local_validation": {
+    "targeted_tests_passed": 12,
+    "web_tests_passed": 239,
+    "python_tests_passed": 284,
+    "typecheck": true,
+    "targeted_lint": true,
+    "next_build": true,
+    "non_blocking_warnings": 1
+  },
+  "claims": {
+    "github_actions": false,
+    "desktop_build": false,
+    "signed_release": false
+  },
+  "required_release": "1.2.0-alpha.17"
+}

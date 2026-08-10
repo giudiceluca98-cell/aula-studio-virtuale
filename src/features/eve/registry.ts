@@ -27,7 +27,7 @@ export const EVE_FEATURE_REGISTRY = Object.freeze([
   feature("tools", "planned", true, null, [], "Confine riservato agli strumenti tipizzati e autorizzati."),
   feature("voice", "existing_ui_contract", false, "NEXT_PUBLIC_EVE_VOICE_ENABLED", [], "Contratti degli stati voce già presenti, senza acquisizione nascosta."),
   feature("safety", "contract_ready", true, "EVE_CORE_INTEGRATION_ENABLED", [], "Decisioni di sicurezza applicate dal codice server-side."),
-  feature("evaluation", "prototype_adapter", true, "EVE_CORE_INTEGRATION_ENABLED", ["fastapi.requirements"], "Evidenze e gate collegabili ai runner FastAPI esistenti."),
+  feature("evaluation", "prototype_adapter", true, "EVE_MVP_GATE_ENABLED", ["fastapi.rag", "fastapi.sources", "supabase.feedback"], "Gate MVP end-to-end con contesto, fonti autorizzate, risposta citata, apertura fonte e feedback."),
 ] satisfies readonly EveFeatureDescriptor[]);
 
 export function getEveFeatureDescriptor(key: EveFeatureLayer): EveFeatureDescriptor {
