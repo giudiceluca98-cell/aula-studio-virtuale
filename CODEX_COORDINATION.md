@@ -893,7 +893,7 @@ RESPONSABILE:
 Codex integrazione funzionale, UI canonica e desktop di prova
 
 STATO:
-IN_PROGRESS
+FUNCTIONAL_TESTING
 
 BRANCH:
 codex/eve-ai-studio-core-1-7
@@ -984,6 +984,52 @@ TEST:
 13 test Python specifici, 261 test Python cumulativi e 224 test web verdi;
 typecheck, build Next.js, lint mirato, test/versione desktop e browser HTTP
 canonico verdi. Corretto il filtro delle promozioni revocate e il badge UI 0.6.
+```
+
+### CORE-2.0 — Chat contestuale grounded con modello reale
+
+```text
+RESPONSABILE:
+Codex integrazione locale funzionale e UI canonica
+
+STATO:
+IN_PROGRESS
+
+BRANCH:
+codex/eve-ai-studio-core-2-0
+
+BASE:
+origin/eve-ai-studio @ 8915e4d
+
+OBIETTIVO:
+Integrare localmente una chat privata e contestuale con citazioni verificabili,
+conoscenza generale disattivata per impostazione predefinita e nessuna memoria
+o azione automatica.
+
+FILE PRENOTATI:
+- tutti i file elencati in MANIFEST_CORE_2.0.json
+- supabase/rollback/0021_eve_grounded_chat.down.sql
+- .github/workflows/database-migrations.yml limitatamente all'ordine rollback 0021
+- .codex/tasks/active/eve-ai-studio-core-2-0.md
+- CODEX_COORDINATION.md, limitatamente a questa scheda
+
+FILE CONDIVISI PRENOTATI:
+- reference/eve-ai-studio-preview/index.html
+- supabase/migrations/0021_eve_grounded_chat.sql
+- supabase/rollback/0021_eve_grounded_chat.down.sql
+- .github/workflows/database-migrations.yml limitatamente all'ordine rollback 0021
+
+VINCOLI:
+Solo analisi, integrazione e test locali autorizzati. Nessun push, merge,
+release, modifica del database remoto o segreto client-side. Il pacchetto viene
+integrato a tre vie perché la baseline dichiarata precede le correzioni
+approvate di CORE-1.7; tali correzioni non devono essere sovrascritte.
+
+ESITO LOCALE:
+286 test Python, 248 test web, typecheck, lint mirato e build Next.js verdi.
+Corrette persistenza privilegiata, FK composite, policy RLS e rollback 0021.
+Restano prova PostgreSQL/Supabase multiutente e provider reale prima di
+REVIEW_REQUIRED.
 ```
 
 La tabella seguente è conservata come cronologia del precedente flusso di Aula Studio. Non assegna né prenota file di Eve AI Studio e non prevale sulle regole attive sopra.

@@ -7,6 +7,8 @@ import {
   type FastApiHealthResponse,
   type FastApiMvpPath,
   type FastApiPath,
+  type FastApiModelChatRequest,
+  type FastApiModelChatResponse,
   type FastApiProbePath,
   type FastApiRagChatRequest,
   type FastApiRagChatResponse,
@@ -111,6 +113,10 @@ export class EveFastApiAdapter {
 
   researchStatus(): Promise<FastApiCatalogStatus> {
     return this.getJson(FASTAPI_PROBE_PATHS.research);
+  }
+
+  modelChat(request: FastApiModelChatRequest): Promise<FastApiModelChatResponse> {
+    return this.requestJson<FastApiModelChatResponse>("/v1/chat", { method: "POST", body: JSON.stringify(request) });
   }
 
   ragChat(request: FastApiRagChatRequest): Promise<FastApiRagChatResponse> {

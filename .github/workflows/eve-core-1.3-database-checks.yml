@@ -64,6 +64,14 @@ jobs:
           supabase db dump --local --data-only --use-copy --file /tmp/core-1.3-before-rollback-data.sql
           test -s /tmp/core-1.3-before-rollback-schema.sql
           test -s /tmp/core-1.3-before-rollback-data.sql
+          if psql "$PGURL" -v ON_ERROR_STOP=1 -f supabase/rollback/0021_eve_grounded_chat.down.sql; then
+            echo "Il rollback CORE-2.0 non protetto doveva fallire" >&2
+            exit 1
+          fi
+          {
+            echo "set app.eve_allow_destructive_rollback = 'true';"
+            cat supabase/rollback/0021_eve_grounded_chat.down.sql
+          } | psql "$PGURL" -v ON_ERROR_STOP=1
           if psql "$PGURL" -v ON_ERROR_STOP=1 -f supabase/rollback/0020_eve_mvp_gate.down.sql; then
             echo "Il rollback CORE-1.7 non protetto doveva fallire" >&2
             exit 1

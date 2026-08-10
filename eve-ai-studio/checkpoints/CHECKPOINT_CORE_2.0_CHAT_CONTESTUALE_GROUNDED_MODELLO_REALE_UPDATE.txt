@@ -1,0 +1,7 @@
+CORE-2.0 — UPDATE
+
+Preparato il modulo src/features/eve/chat, l'orchestrazione RAG → provider reale, il
+registry delle citazioni, la validazione dell'output strutturato, il fallback sicuro,
+le route same-origin, la migrazione privata con RLS e l'aggiornamento del pannello Eve.
+La conoscenza generale resta disattivata per default ed è sempre etichettata quando
+abilitata. Nessuna memoria o azione automatica.

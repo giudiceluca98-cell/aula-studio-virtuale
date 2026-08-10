@@ -1,0 +1,16 @@
+{
+  "checkpoint": "CORE-2.0",
+  "status": "FUNCTIONAL_TESTING",
+  "required_release": "1.2.0-alpha.18",
+  "local_validation_date": "2026-08-10",
+  "python_tests": 286,
+  "web_tests": 248,
+  "typecheck": true,
+  "targeted_lint": true,
+  "next_build": true,
+  "temporary_database": false,
+  "real_provider": false,
+  "github_actions": false,
+  "desktop_build": false,
+  "signed_release": false
+}

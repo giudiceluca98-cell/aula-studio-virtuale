@@ -292,9 +292,14 @@ async def chat(request: ChatRequest) -> ChatResponse:
         raise HTTPException(503, "Eve è disattivata")
     try:
         validate_context_size(request, settings.max_context_chars)
+        profile_key = (
+            settings.grounded_chat_execution_profile
+            if request.mode == "grounded-structured"
+            else settings.chat_execution_profile
+        )
         execution = await provider_orchestrator.execute(
             request,
-            profile_key=settings.chat_execution_profile,
+            profile_key=profile_key,
             purpose="chat",
         )
         response = execution.response

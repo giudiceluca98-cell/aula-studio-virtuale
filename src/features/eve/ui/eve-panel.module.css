@@ -48,3 +48,11 @@
 .feedbackRow { display:flex; flex-wrap:wrap; align-items:center; gap:7px; margin-top:11px; }
 .feedbackRow button { border:1px solid rgba(143,243,255,.14); border-radius:10px; padding:7px 9px; color:#dffcff; background:rgba(255,255,255,.04); font-size:8.5px; }
 .feedbackRow small { color:rgba(234,252,255,.52); font-size:8px; }
+.structuredSection { display:grid; gap:7px; margin-top:12px; }
+.structuredSection h4 { color:#bdf9ff; font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:.08em; }
+.statement { border-left:2px solid rgba(122,243,255,.42); padding:7px 9px; background:rgba(255,255,255,.025); }
+.statement p { margin:0; color:rgba(234,252,255,.78); }
+.statement small { display:block; margin-top:4px; color:rgba(234,252,255,.47); font-size:8px; }
+.depthRow { display:flex; margin-bottom:8px; align-items:center; justify-content:space-between; gap:10px; }
+.depthRow label { color:rgba(234,252,255,.62); font-size:9px; }
+.depthRow select { border:1px solid rgba(143,243,255,.14); border-radius:9px; padding:6px 8px; color:#eaffff; background:#0b222b; font-size:9px; }

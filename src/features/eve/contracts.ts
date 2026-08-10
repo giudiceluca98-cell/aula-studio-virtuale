@@ -67,7 +67,7 @@ export interface EveCompositionProviderSummary {
 }
 
 export interface EveCompositionStatus {
-  checkpoint: "CORE-1.7";
+  checkpoint: "CORE-2.0";
   integrationEnabled: boolean;
   architectureReady: boolean;
   serviceConfigured: boolean;
@@ -79,6 +79,7 @@ export interface EveCompositionStatus {
   ui: EveCompositionUiSummary;
   provider: EveCompositionProviderSummary;
   mvp: import("./mvp/contracts").EveMvpStatus;
+  chat: import("./chat/contracts").EveGroundedChatStatus;
 }
 
 export type EveRole = "student" | "teacher" | "author" | "admin";

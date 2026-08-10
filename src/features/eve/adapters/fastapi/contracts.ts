@@ -19,7 +19,8 @@ export type FastApiProbePath =
   | "/v1/materials/status"
   | "/v1/intelligence/research/status";
 export type FastApiMvpPath = "/v1/rag/chat" | "/v1/sources/open";
-export type FastApiPath = FastApiProbePath | FastApiMvpPath;
+export type FastApiGroundedChatPath = "/v1/chat";
+export type FastApiPath = FastApiProbePath | FastApiMvpPath | FastApiGroundedChatPath;
 
 export const FASTAPI_PROBE_PATHS = Object.freeze({
   health: "/health",
@@ -128,4 +129,25 @@ export interface FastApiSourceOpenResponse {
   content_trust: string;
   instructions_executable: boolean;
   navigation: Readonly<Record<string, unknown>>;
+}
+
+
+export interface FastApiModelChatRequest {
+  message: string;
+  context: FastApiStudyContext;
+  mode: "grounded-structured";
+}
+
+export interface FastApiModelSourceReference {
+  title: string;
+  locator?: string | null;
+}
+
+export interface FastApiModelChatResponse {
+  message: string;
+  provider: string;
+  model: string;
+  uncertainty: string;
+  sources: readonly FastApiModelSourceReference[];
+  proposed_actions: readonly Readonly<Record<string, unknown>>[];
 }
