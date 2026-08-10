@@ -16,7 +16,7 @@ trap 'rm -rf "$TMP_DIR"' EXIT
 command -v curl >/dev/null 2>&1 || { echo "ERROR: curl non disponibile." >&2; exit 1; }
 command -v python3 >/dev/null 2>&1 || { echo "ERROR: python3 non disponibile." >&2; exit 1; }
 
-printf '[1/5] Cerco l\'ultima release ARM64 di Aula Studio...\n'
+printf '[1/6] Cerco l\''ultima release ARM64 di Aula Studio...\n'
 curl -fsSL \
   -H 'Accept: application/vnd.github+json' \
   -H 'X-GitHub-Api-Version: 2022-11-28' \
@@ -25,7 +25,6 @@ curl -fsSL \
 readarray -t RELEASE_INFO < <(python3 - "$TMP_DIR/release.json" <<'PY'
 import json, re, sys
 from pathlib import Path
-
 payload = json.loads(Path(sys.argv[1]).read_text())
 assets = payload.get('assets') or []
 appimages = [a for a in assets if str(a.get('name', '')).lower().endswith('.appimage')]
@@ -45,18 +44,28 @@ ASSET_NAME="${RELEASE_INFO[1]:-AulaStudioVirtuale.AppImage}"
 DOWNLOAD_URL="${RELEASE_INFO[2]:-}"
 [[ "$DOWNLOAD_URL" == https://* ]] || { echo "ERROR: URL AppImage non valida." >&2; exit 1; }
 
-printf '[2/5] Download %s (%s)...\n' "$ASSET_NAME" "$TAG"
+printf '[2/6] Download %s (%s)...\n' "$ASSET_NAME" "$TAG"
 curl -fL --retry 3 --retry-delay 2 "$DOWNLOAD_URL" -o "$TMP_DIR/AulaStudioVirtuale.AppImage"
 chmod 0755 "$TMP_DIR/AulaStudioVirtuale.AppImage"
 
-printf '[3/5] Installazione AppImage Eve...\n'
+printf '[3/6] Verifica architettura AppImage...\n'
+if command -v file >/dev/null 2>&1; then
+  FILE_DESC="$(file -b "$TMP_DIR/AulaStudioVirtuale.AppImage")"
+  echo "$FILE_DESC"
+  echo "$FILE_DESC" | grep -Eqi 'aarch64|ARM aarch64' || {
+    echo "ERROR: l'asset scaricato non risulta ARM64/aarch64." >&2
+    exit 1
+  }
+fi
+
+printf '[4/6] Installazione AppImage Eve...\n'
 mkdir -p "$APP_DIR"
 if [[ -f "$APP_PATH" ]]; then
   cp -a "$APP_PATH" "$APP_PATH.previous"
 fi
 install -m 0755 "$TMP_DIR/AulaStudioVirtuale.AppImage" "$APP_PATH"
 
-printf '[4/5] Creo launcher stabile Eve...\n'
+printf '[5/6] Creo launcher stabile Eve...\n'
 cat > "$TMP_DIR/eve-aula-native" <<'EOF'
 #!/usr/bin/env bash
 set -Eeuo pipefail
@@ -68,12 +77,11 @@ fi
 exec "$APP" "$@"
 EOF
 chmod 0755 "$TMP_DIR/eve-aula-native"
-
 sudo install -m 0755 "$TMP_DIR/eve-aula-native" /usr/local/bin/eve-aula-native
 sudo mkdir -p /opt/eve/apps/aula-studio-virtuale
 sudo ln -sfn /usr/local/bin/eve-aula-native /opt/eve/apps/aula-studio-virtuale/aula-studio-virtuale
 
-printf '[5/5] Verifica...\n'
+printf '[6/6] Verifica...\n'
 test -x "$APP_PATH"
 test -x /usr/local/bin/eve-aula-native
 
@@ -81,5 +89,5 @@ echo
 echo "Aula Studio Virtuale ARM64 release installata: $TAG"
 echo "AppImage: $APP_PATH"
 echo "Launcher Eve: /usr/local/bin/eve-aula-native"
-echo "Questa e' la variante da usare per gli aggiornamenti Tauri firmati da GitHub."
+echo "Questa e' la variante updater-enabled da usare per gli aggiornamenti Tauri firmati da GitHub."
 echo "Avvio manuale: eve-aula-native"
