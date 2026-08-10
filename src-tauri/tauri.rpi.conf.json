@@ -20,6 +20,7 @@
   "bundle": {
     "active": true,
     "targets": ["deb", "appimage"],
+    "icon": ["icons/icon.png"],
     "createUpdaterArtifacts": false
   }
 }
