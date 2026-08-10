@@ -39,35 +39,7 @@ if ! command -v pnpm >/dev/null 2>&1; then
   fi
 fi
 
-# Tauri generate_context! richiede un'icona valida anche quando il bundle
-# Linux non ha ancora asset grafici dedicati nel repository.
-if [[ ! -f src-tauri/icons/icon.png ]]; then
-  echo "Genero src-tauri/icons/icon.png per la build ARM64..."
-  mkdir -p src-tauri/icons
-  python3 - <<'PY'
-from pathlib import Path
-import struct, zlib
-w = h = 128
-# RGBA: sfondo Eve/Aula blu notte con bordo ciano semplice.
-rows = []
-for y in range(h):
-    row = bytearray([0])
-    for x in range(w):
-        border = x < 6 or y < 6 or x >= w-6 or y >= h-6
-        if border:
-            rgba = (65, 200, 255, 255)
-        else:
-            rgba = (5, 11, 20, 255)
-        row.extend(rgba)
-    rows.append(bytes(row))
-raw = b''.join(rows)
-def chunk(kind, data):
-    return struct.pack('>I', len(data)) + kind + data + struct.pack('>I', zlib.crc32(kind + data) & 0xffffffff)
-png = b'\x89PNG\r\n\x1a\n' + chunk(b'IHDR', struct.pack('>IIBBBBB', w, h, 8, 6, 0, 0, 0)) + chunk(b'IDAT', zlib.compress(raw, 9)) + chunk(b'IEND', b'')
-Path('src-tauri/icons/icon.png').write_bytes(png)
-PY
-fi
-
+python3 tools/ensure-tauri-icon.py
 pnpm install --no-frozen-lockfile
 pnpm build:desktop
 pnpm tauri build --config src-tauri/tauri.rpi.conf.json --bundles deb,appimage
