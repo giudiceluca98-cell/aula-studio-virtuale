@@ -68,6 +68,10 @@ jobs:
       - name: Installa dipendenze
         run: pnpm install --no-frozen-lockfile
 
+      - name: Prepara icona Tauri ARM64
+        if: matrix.platform == 'linux-aarch64'
+        run: python3 tools/ensure-tauri-icon.py
+
       - name: Controlla configurazione pubblica
         shell: bash
         env:
