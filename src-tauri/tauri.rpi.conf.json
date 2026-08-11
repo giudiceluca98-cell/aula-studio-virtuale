@@ -20,7 +20,13 @@
   "bundle": {
     "active": true,
     "targets": ["deb", "appimage"],
-    "icon": ["icons/icon.png"],
-    "createUpdaterArtifacts": false
+    "createUpdaterArtifacts": false,
+    "icon": ["icons/icon.png"]
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "",
+      "endpoints": []
+    }
   }
 }
