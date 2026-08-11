@@ -15,9 +15,23 @@ permissions:
   contents: read
 
 jobs:
-  windows:
-    name: Installer Windows e aggiornamento
-    runs-on: windows-latest
+  desktop:
+    name: ${{ matrix.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Windows x64
+            runner: windows-latest
+            platform: windows-x64
+            tauri_args: --config src-tauri/tauri.release.conf.json
+          - name: Raspberry Pi Linux ARM64
+            runner: ubuntu-24.04-arm
+            platform: linux-aarch64
+            tauri_args: --config src-tauri/tauri.rpi.conf.json --config src-tauri/tauri.release.conf.json --bundles appimage
+
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 60
     env:
       RELEASE_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.ref_name }}
       RELEASE_OWNER: ${{ vars.AULA_RELEASE_OWNER }}
@@ -27,6 +41,16 @@ jobs:
     steps:
       - name: Scarica il sorgente
         uses: actions/checkout@v4
+
+      - name: Dipendenze Linux/Tauri
+        if: matrix.platform == 'linux-aarch64'
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential pkg-config curl wget file patchelf \
+            libssl-dev libgtk-3-dev libwebkit2gtk-4.1-dev \
+            libayatana-appindicator3-dev librsvg2-dev libxdo-dev
 
       - name: Installa pnpm
         uses: pnpm/action-setup@v4
@@ -44,39 +68,43 @@ jobs:
       - name: Installa dipendenze
         run: pnpm install --no-frozen-lockfile
 
+      - name: Prepara icona Tauri ARM64
+        if: matrix.platform == 'linux-aarch64'
+        run: python3 tools/ensure-tauri-icon.py
+
       - name: Controlla configurazione pubblica
-        shell: pwsh
+        shell: bash
         env:
           SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           UPDATER_PUBLIC_KEY: ${{ secrets.TAURI_UPDATER_PUBLIC_KEY }}
         run: |
-          if ([string]::IsNullOrWhiteSpace($env:RELEASE_OWNER)) { throw "Configura la variabile AULA_RELEASE_OWNER." }
-          if ([string]::IsNullOrWhiteSpace($env:RELEASE_REPOSITORY)) { throw "Configura la variabile AULA_RELEASE_REPOSITORY." }
-          if ([string]::IsNullOrWhiteSpace($env:SIGNING_PRIVATE_KEY)) { throw "Configura TAURI_SIGNING_PRIVATE_KEY." }
-          if ([string]::IsNullOrWhiteSpace($env:UPDATER_PUBLIC_KEY)) { throw "Configura TAURI_UPDATER_PUBLIC_KEY." }
+          test -n "$RELEASE_OWNER" || { echo "Configura AULA_RELEASE_OWNER." >&2; exit 1; }
+          test -n "$RELEASE_REPOSITORY" || { echo "Configura AULA_RELEASE_REPOSITORY." >&2; exit 1; }
+          test -n "$SIGNING_PRIVATE_KEY" || { echo "Configura TAURI_SIGNING_PRIVATE_KEY." >&2; exit 1; }
+          test -n "$UPDATER_PUBLIC_KEY" || { echo "Configura TAURI_UPDATER_PUBLIC_KEY." >&2; exit 1; }
 
       - name: Verifica versione
-        run: node tools/check-release-version.mjs "$env:RELEASE_VERSION"
+        run: node tools/check-release-version.mjs "${{ env.RELEASE_VERSION }}"
 
-      - name: Verifica build Agenda desktop
+      - name: Verifica build desktop
         run: |
           pnpm build:desktop
           pnpm test:desktop
 
-      - name: Genera configurazione updater
+      - name: Genera configurazione updater firmata
         env:
           TAURI_UPDATER_PUBLIC_KEY: ${{ secrets.TAURI_UPDATER_PUBLIC_KEY }}
           TAURI_UPDATER_ENDPOINT: https://github.com/${{ vars.AULA_RELEASE_OWNER }}/${{ vars.AULA_RELEASE_REPOSITORY }}/releases/latest/download/latest.json
         run: node tools/create-tauri-release-config.mjs
 
-      - name: Crea installer come artifact
+      - name: Crea installer come artifact senza pubblicazione
         if: env.RELEASE_TOKEN == ''
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
-        run: pnpm tauri build --config src-tauri/tauri.release.conf.json
+        run: pnpm tauri build ${{ matrix.tauri_args }}
 
-      - name: Crea installer e release automatica
+      - name: Crea/aggiorna unica release firmata Windows + ARM64
         if: env.RELEASE_TOKEN != ''
         uses: tauri-apps/tauri-action@v1
         env:
@@ -87,19 +115,19 @@ jobs:
           owner: ${{ vars.AULA_RELEASE_OWNER }}
           repo: ${{ vars.AULA_RELEASE_REPOSITORY }}
           releaseCommitish: main
-          tagName: v__VERSION__
-          releaseName: "Aula Studio Virtuale v__VERSION__"
-          releaseBody: "Installer ufficiale di Aula Studio Virtuale. L'applicazione controlla questa release per gli aggiornamenti."
+          tagName: ${{ startsWith(env.RELEASE_VERSION, 'v') && env.RELEASE_VERSION || format('v{0}', env.RELEASE_VERSION) }}
+          releaseName: Aula Studio Virtuale ${{ startsWith(env.RELEASE_VERSION, 'v') && env.RELEASE_VERSION || format('v{0}', env.RELEASE_VERSION) }}
+          releaseBody: "Installer ufficiali di Aula Studio Virtuale per Windows x64 e Raspberry Pi/Linux ARM64. Entrambe le piattaforme usano questo stesso feed GitHub per gli aggiornamenti firmati."
           releaseDraft: false
           prerelease: false
           updaterJsonPreferNsis: true
           uploadUpdaterJson: true
           uploadUpdaterSignatures: true
-          args: --config src-tauri/tauri.release.conf.json
+          args: ${{ matrix.tauri_args }}
 
-      - name: Conserva gli installer del workflow
+      - name: Conserva installer del workflow
         uses: actions/upload-artifact@v4
         with:
-          name: aula-studio-virtuale-${{ env.RELEASE_VERSION }}
+          name: aula-studio-virtuale-${{ matrix.platform }}-${{ env.RELEASE_VERSION }}
           path: src-tauri/target/release/bundle/**
           if-no-files-found: error
