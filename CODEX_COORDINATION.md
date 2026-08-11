@@ -18,6 +18,60 @@ Non creare demo alternative, copie HTML, standalone, cartelle preview o sorgenti
 
 Stati ammessi per Eve AI Studio: `RESERVED`, `IN_PROGRESS`, `FUNCTIONAL_TESTING`, `READY_FOR_HANDOFF`, `UI_INTEGRATION`, `REVIEW_REQUIRED`, `RELEASE_READY`.
 
+### DESKTOP-RPI-0.1 — Pacchetto Linux ARM64 per Eve Tab
+
+```text
+CHECKPOINT:
+DESKTOP-RPI-0.1 — Pacchetto Linux ARM64 per Eve Tab
+
+RESPONSABILE:
+Codex desktop Raspberry Pi
+
+STATO:
+REVIEW_REQUIRED
+
+BRANCH DI PARTENZA:
+origin/eve-ai-studio @ 8915e4d
+
+BRANCH DI LAVORO:
+codex/eve-ai-studio-desktop-rpi-arm64
+
+OBIETTIVO:
+Produrre e collaudare Eve AI Studio nativa Linux ARM64 sul Raspberry Pi 5,
+derivandola esclusivamente dalla sorgente canonica e rendendola avviabile da
+Eve Tab senza modificare boot o autostart.
+
+FILE PRENOTATI:
+- eve-desktop/src-tauri/tauri.rpi.conf.json (nuovo)
+- eve-desktop/scripts/install-rpi-arm64-release.sh (nuovo)
+- .codex/tasks/active/eve-ai-studio-desktop-rpi-arm64.md (nuovo)
+- CODEX_COORDINATION.md, limitatamente a questa scheda
+
+FILE CONDIVISI PRENOTATI:
+- nessuno
+
+MODULI CANONICI MODIFICATI:
+- nessuno
+
+DISPONIBILE PER L'ALTRO CODEX:
+SÌ, esclusi i file prenotati sopra.
+
+ATTIVITÀ CONSENTITE ALL'ALTRO CODEX:
+- continuare CORE-2.0 e gli altri checkpoint sui file già dichiarati.
+
+ATTIVITÀ VIETATE ALL'ALTRO CODEX:
+- modificare in parallelo i file prenotati da DESKTOP-RPI-0.1;
+- includere contenuti non uniti di CORE-2.0 nel pacchetto Raspberry.
+
+NOTE:
+Nessuna demo, standalone o sorgente duplicata. La build deriva da
+reference/eve-ai-studio-preview/. Main, demo-canonica, Aula Studio, produzione,
+boot e autostart restano invariati. Nessun merge o rilascio senza approvazione.
+Build Tauri ARM64, deb e AppImage completate sul Raspberry Pi 5. AppImage
+installata nel percorso stabile di Eve Tab e avvio del tile verificato con
+GDK_BACKEND=x11, finestra 1024x572 e rendering pulito.
+```
+
 ### GOVERNANCE-0.1 — Sorgente canonica, coordinamento e handoff
 
 ```text
