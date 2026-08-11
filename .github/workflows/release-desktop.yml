@@ -115,8 +115,8 @@ jobs:
           owner: ${{ vars.AULA_RELEASE_OWNER }}
           repo: ${{ vars.AULA_RELEASE_REPOSITORY }}
           releaseCommitish: main
-          tagName: v__VERSION__
-          releaseName: "Aula Studio Virtuale v__VERSION__"
+          tagName: ${{ startsWith(env.RELEASE_VERSION, 'v') && env.RELEASE_VERSION || format('v{0}', env.RELEASE_VERSION) }}
+          releaseName: Aula Studio Virtuale ${{ startsWith(env.RELEASE_VERSION, 'v') && env.RELEASE_VERSION || format('v{0}', env.RELEASE_VERSION) }}
           releaseBody: "Installer ufficiali di Aula Studio Virtuale per Windows x64 e Raspberry Pi/Linux ARM64. Entrambe le piattaforme usano questo stesso feed GitHub per gli aggiornamenti firmati."
           releaseDraft: false
           prerelease: false
