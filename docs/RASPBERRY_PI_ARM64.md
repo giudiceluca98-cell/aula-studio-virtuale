@@ -95,7 +95,12 @@ Lo script controlla l'architettura, lo spazio libero, installa le dipendenze e c
 
 ## Eve Tab
 
-La finestra Raspberry e configurata per 1024×600, senza decorazioni desktop, ridimensionabile e compatibile con la modalita portrait gestita da Eve Tab.
+La finestra Raspberry e configurata per 1024×600, si apre massimizzata senza
+decorazioni desktop ed e ridimensionabile. Il launcher nativo forza soltanto per
+Aula il backend GTK X11/XWayland: sul Raspberry Pi 5 evita la corruzione del
+renderer DMABUF Wayland mantenendo l'accelerazione V3D. Non viene usato
+`WEBKIT_DISABLE_DMABUF_RENDERER=1`, che forza un percorso molto piu pesante per
+la CPU.
 
 Eve deve preferire `/opt/eve/apps/aula-studio-virtuale/aula-studio-virtuale` e usare il fallback web locale soltanto se la app nativa non e disponibile.
 

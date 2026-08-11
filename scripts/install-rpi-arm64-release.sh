@@ -74,6 +74,9 @@ if [[ ! -x "$APP" ]]; then
   echo "Aula Studio Virtuale ARM64 non installata: $APP" >&2
   exit 1
 fi
+# WebKitGTK's native Wayland DMABUF renderer is corrupted on Raspberry Pi 5.
+# XWayland keeps V3D acceleration enabled and avoids the CPU-heavy software path.
+export GDK_BACKEND=x11
 exec "$APP" "$@"
 EOF
 chmod 0755 "$TMP_DIR/eve-aula-native"
